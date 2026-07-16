@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 283.46 283.46" style="enable-background:new 0 0 283.46 283.46;" xml:space="preserve">
+<style type="text/css">
+	.st0{display:none;}
+	.st1{font-family:'TimesNewRomanPS-ItalicMT';}
+	.st2{font-size:18px;}
+	.st3{font-family:'TimesNewRomanPSMT';}
+	.st4{display:inline;}
+	.st5{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st6{display:inline;fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st7{font-family:'Times-Roman';}
+	.st8{fill:none;stroke:#1D1D1B;stroke-miterlimit:10;}
+	.st9{fill:#1D1D1B;}
+	.st10{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
+</style>
+<text transform="matrix(1 0 0 1 173.7903 123.0243)" class="st0 st1 st2">R</text>
+<text transform="matrix(1 0 0 1 201.1843 71.3663)" class="st0 st3 st2">Objekt</text>
+<text transform="matrix(1 0 0 1 175.8965 55.0908)" class="st0 st3 st2">v</text>
+<text transform="matrix(1 0 0 1 165.2656 87.4668)" class="st0 st3 st2">a</text>
+<g id="bewegt" class="st0">
+	<g class="st4">
+		<g>
+			<line class="st5" x1="190.92" y1="83.51" x2="161.26" y2="58.31"/>
+			<g>
+				<path d="M156.66,54.4c2.85,1.04,6.7,1.95,9.59,1.91l-4.39,2.51l-1.77,4.74C159.66,60.69,158.14,57.04,156.66,54.4z"/>
+			</g>
+		</g>
+	</g>
+	<g class="st4">
+		<g>
+			<line class="st5" x1="188.43" y1="81.04" x2="165.78" y2="108"/>
+			<g>
+				<path d="M161.9,112.62c1.02-2.85,1.91-6.71,1.85-9.6l2.54,4.38l4.75,1.74C168.18,109.58,164.53,111.12,161.9,112.62z"/>
+			</g>
+		</g>
+	</g>
+	<line class="st6" x1="141.73" y1="141.73" x2="190.92" y2="83.51"/>
+	<circle class="st4" cx="190.92" cy="83.51" r="7.89"/>
+</g>
+<g id="statisch">
+	<text transform="matrix(1 0 0 1 154.4346 18.9736)" class="st7 st2">y</text>
+	<text transform="matrix(1 0 0 1 260.6846 146.2764)" class="st7 st2">x</text>
+	<circle class="st8" cx="141.73" cy="141.73" r="76.85"/>
+	<g>
+		<g>
+			<line class="st8" x1="141.73" y1="231.85" x2="141.73" y2="33.89"/>
+			<g>
+				<path class="st9" d="M141.73,27.86c1.05,2.84,2.85,6.36,4.76,8.55l-4.76-1.72l-4.75,1.72C138.88,34.22,140.68,30.7,141.73,27.86
+					z"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st8" x1="53.51" y1="141.73" x2="248.07" y2="141.73"/>
+			<g>
+				<path class="st9" d="M254.11,141.73c-2.84,1.05-6.36,2.85-8.55,4.76l1.72-4.76l-1.72-4.75
+					C247.74,138.88,251.27,140.68,254.11,141.73z"/>
+			</g>
+		</g>
+	</g>
+	<text transform="matrix(1 0 0 1 127.3416 158.7647)" class="st3 st2">z</text>
+	<circle class="st10" cx="141.59" cy="141.9" r="5.5"/>
+	<circle cx="141.59" cy="141.73" r="1.71"/>
+</g>
+</svg>

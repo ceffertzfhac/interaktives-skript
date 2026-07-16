@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+.DS_Store.*
+*/.DS_Store
+*/.DS_Store.*
+DS_Store.sec
+__MACOSX/
+
+# Sync / editor temp files with a 6-char suffix, e.g. foo.png.VgMgrS, index.html.nE3j4o
+*.*.??????
+
+# Duplicate archive snapshot (already tracked as Archiv/)
+Archiv.zip
