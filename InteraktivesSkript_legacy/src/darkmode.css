@@ -1,0 +1,86 @@
+:root {
+/*  --fh: #00b1ab;*/
+  --bg: #2c2c2c;
+}
+body {
+    color:#ddd;
+    background-color: #1b1b1b;
+}
+#content {
+    background-color: var(--bg);
+    box-shadow: 0px 0px 18px #000;
+}
+.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung {
+    border: 1px solid #444;
+    background-color: #262626;
+    color:#ccc;
+}
+#vertical_line {
+    border-left: 2px solid #555;
+}
+#header {
+    background-color: var(--bg);
+    box-shadow: 0px 0px 5px #000000aa;
+    border-bottom: 1px solid #1b1b1b;
+}
+.navbar_button {
+    background-color: var(--bg);
+    color:#ccc;
+    border-bottom: 1px solid #1b1b1b;
+}
+.navbar_button:hover {
+    background-color: #222;
+}
+.navbar_button:active {
+    background-color: #1b1b1b;
+}
+.highlight_box_title {
+    border-bottom: 1px solid #555;
+}
+.grafik-container-inner {
+    background-color: var(--bg);
+}
+line, ellipse, polyline, circle {
+    stroke: #ddd;
+}
+.point {
+    fill:#ddd;
+}
+#arrow {
+    fill:#ddd;
+}
+img {
+    filter: invert(1) hue-rotate(180deg) saturate(3);
+    mix-blend-mode: lighten;
+}
+#kontakt {
+    background-color: var(--bg);
+}
+#toc_content {
+    background-color: #222;
+    box-shadow: 0px 15px 18px #000;
+}
+#zoom {
+    background-color: var(--bg);
+}
+h3 {
+    color:#fff;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+   background-color: #777;
+}
+    
+input[type="range"]::-moz-range-track {
+   background-color: #777;
+}
+.gc_title{
+    color:#ccc;
+}
+.zoom_maximize, .zoom_minimize {
+    filter: invert(1) hue-rotate(180deg) saturate(10);
+    mix-blend-mode: lighten;
+}
+.darkmode_icon {
+    filter: invert(1) hue-rotate(180deg) saturate(10);
+    mix-blend-mode: lighten;
+}

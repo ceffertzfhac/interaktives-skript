@@ -8,10 +8,10 @@ A static, single-page interactive physics script (German, topic: rotational moti
 
 ## Running it
 
-Serve the `InteraktivesSkript/` directory with any static server and open `index.html`. MathJax and qrjs2 load from CDN, so a network connection is needed; a local server avoids `file://` quirks with relative paths:
+Serve the `InteraktivesSkript_WIP/` directory with any static server and open `index.html`. MathJax and qrjs2 load from CDN, so a network connection is needed; a local server avoids `file://` quirks with relative paths:
 
 ```
-cd InteraktivesSkript
+cd InteraktivesSkript_WIP
 python3 -m http.server 8000
 # open http://localhost:8000/
 ```
@@ -20,14 +20,20 @@ There is nothing to build, lint, or test. To verify a change, reload the page an
 
 ## Repository layout
 
-- `InteraktivesSkript/` — the actual site (everything below lives here)
+The repo holds **two parallel copies of the site**:
+
+- `InteraktivesSkript_WIP/` — **the working copy. All edits go here.** This is the only folder you should modify.
+- `InteraktivesSkript_legacy/` — a **frozen baseline** snapshot of the site as of the split. Do not edit; it exists for reference/diffing against WIP. Both folders started byte-identical.
+
+Inside either site folder the structure is the same:
   - `index.html` — the whole document: prose sections, inline SVG figures, slider controls, MathJax `$$…$$` / `\[…\]` / `\(…\)` formulas
   - `src/script.js` — ~2800 lines of vanilla JS, the entire app logic
   - `src/styles.css`, `src/darkmode.css` — styles; `darkmode.css` is loaded but `disabled` and toggled at runtime
   - `bilder/` — static figure PNGs/SVGs used in static mode and prose
   - `src/assets/` — SVG/PNG icons injected into highlight boxes
-- `Archiv/` — an older snapshot of the same site (reference only, not linked/active)
-- `__MACOSX/`, `*.DS_Store`, `Archiv.zip` — macOS zip metadata/junk; ignore, do not edit
+  - `Archiv/` — an older snapshot of the same site nested inside (reference only, not linked/active)
+
+`__MACOSX/`, `*.DS_Store`, `Archiv.zip` — macOS zip metadata/junk; ignored, do not edit.
 
 ## Architecture
 
@@ -61,4 +67,4 @@ When adding/modifying a figure, keep the `gcN` / `svgN` / `rangeN_*` / `updateN`
 - **MathJax note**: `reload_mathjax()` calls `MathJax.Hub.Queue(...)`, which is the *v2* API — the page actually loads MathJax **v3**, so this call is effectively a no-op/stale. If typeset-refresh behavior matters for your change, verify it actually re-renders rather than assuming the call works.
 - The file has many commented-out blocks and a couple of duplicate definitions (e.g. `animate6` is defined twice; the second wins). Be careful editing around these.
 - Content and code comments are in German; match the surrounding language when editing prose or comments.
-- `Archiv/` is a historical copy — do not propagate changes into it; treat `InteraktivesSkript/` as the sole source of truth.
+- Only edit `InteraktivesSkript_WIP/`. `InteraktivesSkript_legacy/` is a frozen baseline — never modify it. Within WIP, `Archiv/` is a historical copy and should likewise be left alone.
