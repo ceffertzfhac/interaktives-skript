@@ -6,19 +6,10 @@
         <title>Physik Skript</title>
         <link rel="stylesheet" href="src/styles.css">
         <link id="darkmode_stylesheet" rel="stylesheet" href="src/darkmode.css" disabled="true">
-        <!--
-        <script type="text/x-mathjax-config">
-        MathJax.Hub.Register.StartupHook("End Jax",function () {
-          return MathJax.Hub.setRenderer("SVG");
-        });
-        </script>
-        -->
         
-        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
-        <script src="https://cdn.jsdelivr.net/gh/englishextra/qrjs2@latest/js/qrjs2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/englishextra/qrjs2@0.1.12/js/qrjs2.min.js" integrity="sha384-dGptHqaP5AGRc3+qdh8CmS8E2WEAs/swpat25AVKvKjdC/uoH5WSAhnk0yAZQjmv" crossorigin="anonymous"></script>
         <script src="src/script.js"></script>
         <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-svg.js"></script>
-       <!--<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_SVG"></script>-->
 
     </head>
     <body onload="init()">
@@ -28,11 +19,8 @@
                 <div class="navbar_button" onclick="toc()">Inhaltsverzeichnis</div>
                 <div class="navbar_button" onclick="init_print()">Drucken</div>
                 <div class="navbar_button" onclick="kontakt()">Kontakt</div>
-                <!--<button onclick="toc()">Inhaltsverzeichnis</button>
-                <button onclick="init_print()">Drucken</button>-->
             </div> 
             <div class="darkmode_icon" onclick="toggle_darkmode()"></div>
-            <!--<img src="src/assets/logo.png" id="logo">-->
         </div>
         <div id="zoom_overlay" class="hidden" onclick="close_zoom()"></div>
         <div id="zoom" class="hidden">
@@ -87,7 +75,6 @@
                 </marker>
             </defs>
         </svg>
-
 
         
         
@@ -149,7 +136,6 @@ Die Grundbegriffe der Dynamik sind der Impuls, die Kraft, die Energie und die Le
                         
                                                 
 
-
                         
                         
                                  </section>
@@ -192,7 +178,6 @@ $$ s_y(t)^2=  R^2 \ \sin^2(\frac{2\pi}{T}t)$$
 also:
 
 $$s_x^2+s_y^2=R^2$$
-
 
 oder 
 
@@ -406,7 +391,6 @@ R=\sqrt{r_x^2+r_y^2}
 \tan{\left(\varphi\right)=\frac{r_y}{r_x}}
                             \]
 
-
                         </div>
                         
                         <div class="aufgabe">
@@ -469,7 +453,6 @@ Seine Winkelgeschwindigkeit beträgt somit 360°/(60 s) oder \( \frac{\pi}{60} \
                                 <div class="grafik-container-inner">
                                     <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
                                     <svg id="svg32" viewBox="-150 -150 300 300">
-
 
                                         <line id="line32_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
                                         <circle id="point32" class="point" cx="0" cy="-100" r="6" d3="0,0,0"></circle> 
@@ -534,7 +517,6 @@ Seine Winkelgeschwindigkeit beträgt somit 360°/(60 s) oder \( \frac{\pi}{60} \
                                     </select>
                                     <input type="button" value="Pause" id="pause32" onclick="pause(this);animate32()">
                                     <input type="button" value="Reset" id="" onclick="reset()">
-
 
                                 </div>
                             </div> 
@@ -612,7 +594,6 @@ Der Zusammenhang zwischen Winkel und Winkelgeschwindigkeit ist:
                                 <div class="grafik-container-inner">
                                     <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
                                     <svg id="svg51" viewBox="-150 -150 300 300">
-
 
                                         <line id="line51_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
                                         <circle id="point51" class="point" cx="0" cy="-100" r="6" d3="0,0,0"></circle> 
@@ -693,10 +674,7 @@ Der Zusammenhang zwischen Winkel und Winkelgeschwindigkeit ist:
                                         <option value="3">Iso</option>
                                     </select>
                                     <input type="button" value="Pause" id="pause51" onclick="pause(this);animate51()">
-                                    <!--<input type="button" value="Reset" id="" onclick="location.reload()">-->
                                     <input type="button" value="Reset" id="" onclick="reset()">
-
-
 
                                 </div>
                             </div>    
@@ -784,7 +762,6 @@ Mit \(  R\cdot\dot{\omega}\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\ri
                                     <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
                                     <svg id="svg31" viewBox="-150 -150 300 300">
 
-
                                         <line id="line31_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
                                         <circle id="point31" class="point" cx="0" cy="-100" r="6" d3="0,0,0"></circle> 
                                         
@@ -852,7 +829,6 @@ Mit \(  R\cdot\dot{\omega}\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\ri
                                     </select>
                                     <input type="button" value="Pause" id="pause31" onclick="pause(this);animate31()">
                                     <input type="button" value="Reset" id="" onclick="reset()">
-
 
                                 </div>
                             </div> 
@@ -1034,7 +1010,6 @@ Im Allgemeinen sind diese Größen 3-D Vektoren. Außerdem sind alle Größen ze
                                     <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
                                     <svg id="svg3" viewBox="-150 -150 300 300">
 
-
                                         <line id="line3_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
                                         <circle id="point3" class="point" cx="0" cy="-100" r="6" d3="0,0,0"></circle> 
                                         
@@ -1107,7 +1082,6 @@ Im Allgemeinen sind diese Größen 3-D Vektoren. Außerdem sind alle Größen ze
                                     </select>
                                     <input type="button" value="Pause" id="pause3" onclick="pause(this);animate3()">
                                     <input type="button" value="Reset" id="" onclick="reset()">
-
 
                                 </div>
                             </div> 
@@ -1212,7 +1186,6 @@ Damit folgt für den Betrag: \( \left|d\vec{r}\right|=Rd\varphi \), diesen Zusam
 
                                     <input type="button" value="Reset" id="" onclick="reset()">
 
-
                                 </div>
                             </div>
                                 
@@ -1306,7 +1279,6 @@ Genau wie die Bahnbeschleunigung ist die Winkelbeschleunigung im Allgemeinen ein
                                     <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
                                     <svg id="svg5" viewBox="-150 -150 300 300">
 
-
                                         <line id="line5_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
                                         <circle id="point5" class="point" cx="0" cy="-100" r="6" d3="0,0,0"></circle> 
                                         
@@ -1397,10 +1369,7 @@ Genau wie die Bahnbeschleunigung ist die Winkelbeschleunigung im Allgemeinen ein
                                         <option value="3" selected>Iso</option>
                                     </select>
                                     <input type="button" value="Pause" id="pause5" onclick="pause(this);animate5()">
-                                    <!--<input type="button" value="Reset" id="" onclick="location.reload()">-->
                                     <input type="button" value="Reset" id="" onclick="reset()">
-
-
 
                                 </div>
                             </div>    
@@ -1470,10 +1439,6 @@ Bei einer Kreisbewegung mit veränderlicher Winkelgeschwindigkeit setzt sich die
                                     <line id="line8_v_r" class="color1" x1="0" y1="0" d31="0,0,0" d32="50,0,0" x2="-50" y2="50" marker-end="url(#arrow_color1)"></line>
                                     <line id="line8_w" class="color2" x1="0" y1="0" d31="0,0,0" d32="50,0,0" x2="0" y2="0" marker-end="url(#arrow_color2)"></line>
                                     <line id="line8_a" class="color3" x1="0" y1="0" d31="0,0,0" d32="50,0,0" x2="0" y2="0" marker-end="url(#arrow_color3)"></line>
-
-
-
-
 
                                     <foreignObject id="fo8_x" x="0" y="0" width="200" height="100">
                                         <div class="fo_inner">
@@ -1546,7 +1511,6 @@ Bei einer Kreisbewegung mit veränderlicher Winkelgeschwindigkeit setzt sich die
 Im vorangegangenen Abschnitt hatten wir gesehen, dass sich die Bahnbeschleunigung, welche ein Objekt auf einer Kreisbahn erfährt, im Allgemeinen aus einer Radialbeschleunigung (Vektor der Radialbeschleunigung zeigt in Richtung des Kreismittelpunktes), welche bei allen Kreisbewegungen vorhanden sein muss, und einer Tangentailbeschleunigung, welche entlang der entgegen der Kreisbahn in tangenialer Richtung zeigt, und nur vorhanden ist, wenn sich die Winkelgeschwindigkeit ändert, zusammensetzt. 
                         <br>
 Für die Bahngeschwindigkeit hatten wir im Abschnitt zur <a href="#toc_6">Winkelgeschwindigkeit als Vektor</a> die Formel \( \vec{v} = \vec{\omega}\times \vec{r} \) betrachtet, aus welcher folgt, dass die Bahngeschwindigkeit für ein Objekt auf einer Kreisbahn immer tangential zeigt.  Was passiert jedoch, wenn der Geschwindigkeitsvektor des Objektes zusätzlich auch eine radiale Geschwindigkeitskomponente aufweist, also ganz allgemein \( \vec{v} = \vec{v}_r + \vec{v}_t \)? Dann verändert das Objekt den Radius seiner Bahn; zeigt \( \vec{v}_r \) nach innen, so wird der Radius der Bahn mit der Zeit kleiner und zeigt \( \vec{v}_r \) nach außen, so wird der Radius größer. Man erhält eine Spiralbahn, bei der sich der Bahnradius mit der Zeit verändert.                   
-                                              <!--  <div class="space"></div>  -->
                         <div style="height:200px"></div>
 
                             </section>                 

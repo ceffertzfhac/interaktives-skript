@@ -5,15 +5,8 @@ var auto_print = false; //Safari blocks autoprint...
 var speed_factor = 1;
 
 function init() {
-    //rotate('bild',50);
     generate_highlight_boxes();
-    //document.getElementsByTagName("svg")[0].setAttribute("viewBox", "-150 -150 300 300");
-    //transform_init();
-    //update();
-    //changeView();
     safari_bug();
-    //qr_test();
-    space(); 
     generate_toc();
     offsetAnchor();
     make_static();
@@ -22,7 +15,6 @@ function init() {
     }
     from_qr();
     check_print();
-    //wait_reload_mathjax(); //das ist ein bug fix, da sonst tex manchmal gar nicht gerendert wird. Aber kann es sein, dass das dazu führt, dass es manchmal zwei mal hintereinander gerendert wird?
 }
 function update_all() {
     update1();
@@ -36,28 +28,10 @@ function update_all() {
     update8();
 }
 
-
-
 function ge(element_id) { 
     return document.getElementById(element_id);
 }
-/*
-function rotate(element_id,angle) {
-    ge(element_id).style.transform="rotate("+(50-angle)+"deg)";
-    
-    ge("gc1_r").style.transform="translate("+(60*Math.cos(-(angle-20)*Math.PI/180)+135)+"px, "+(60*Math.sin(-(angle-20)*Math.PI/180)+130)+"px)";
-} 
-*/
 
-/*
-const el = document.querySelector(".myElement")
-const observer = new IntersectionObserver( 
-  ([e]) => e.target.classList.toggle("is-pinned", e.intersectionRatio < 1),
-  { threshold: [1] }
-);
-
-observer.observe(el);
-*/
 function show(element_id) {
     ge(element_id).classList.remove("hidden");
 }
@@ -113,60 +87,6 @@ function generate_highlight_boxes() {
 function capitalizeFirstLetter(string) { //foo -> Foo
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
-    
-    
-    
-    /*
-    
-    a = document.getElementsByClassName("lernziel");
-    for (let i=0; i < a.length; i++) {
-        a_content = a[i].innerHTML;
-        a[i].innerHTML="";
-        a_title = document.createElement("div");
-        a_title.setAttribute("class","highlight_box_title");
-        a_title.innerHTML="Lernziel";
-        a[i].appendChild(a_title);
-        
-        a_img = document.createElement("img");
-        a_img.setAttribute("src","src/assets/target.svg");
-        a_img.setAttribute("class","highlight_box_img");
-        a[i].appendChild(a_img);
-        
-        a[i].innerHTML+=a_content;
-    }
-    a = document.getElementsByClassName("motivation");
-    for (let i=0; i < a.length; i++) {
-        a_content = a[i].innerHTML;
-        a[i].innerHTML="";
-        a_title = document.createElement("div");
-        a_title.setAttribute("class","highlight_box_title");
-        a_title.innerHTML="Motivation";
-        a[i].appendChild(a_title);
-        
-        a_img = document.createElement("img");
-        a_img.setAttribute("src","src/assets/star.svg");
-        a_img.setAttribute("class","highlight_box_img");
-        a[i].appendChild(a_img);
-        
-        a[i].innerHTML+=a_content;
-    }
-    a = document.getElementsByClassName("wiederholung");
-    for (let i=0; i < a.length; i++) {
-        a_content = a[i].innerHTML;
-        a[i].innerHTML="";
-        a_title = document.createElement("div");
-        a_title.setAttribute("class","highlight_box_title");
-        a_title.innerHTML="Wiederholung";
-        a[i].appendChild(a_title);
-        
-        a_img = document.createElement("img");
-        a_img.setAttribute("src","src/assets/head.svg");
-        a_img.setAttribute("class","highlight_box_img");
-        a[i].appendChild(a_img);
-        
-        a[i].innerHTML+=a_content;
-    }
-    */
 }
 
 function changeView() {
@@ -247,17 +167,13 @@ function transform_init() {
 }
 function transform_polyline(element_id,perspective){
     pl = ge(element_id);
-    //console.log("Transform Polyline "+element_id+" p3d = '"+pl.getAttribute("p3d") +"'");
-    //console.log(element_id);
     if(pl.getAttribute("p3d") == ""){
-        console.log("p3d = ''");
         p = ""
         return p;
     }
     else {
         p = "";
         if (pl.getAttribute("p3d").includes(" ")) {
-            //console.log("includes space");
             p3d = pl.getAttribute("p3d").split(" ");
             for (let i=0; i < p3d.length-1;i++) {
                 p3d[i] =  p3d[i].split(",");
@@ -268,7 +184,6 @@ function transform_polyline(element_id,perspective){
         else {
             p3d = pl.getAttribute("p3d").split(",");            
             p = to2d(p3d,perspective);
-            //console.log("#"+p3d+"#");
         }
 
         pl.setAttribute("points",p);
@@ -291,38 +206,6 @@ function norm(e) { //normiert Vektor e=element_id
     }
     return v;
 }
-/*
-function test() {
-    v = ga("ellipse1","d3");
-    v[2] = ge("range_z1").value*100;
-    ge("ellipse1").setAttribute("d3",v);
-    transform_ellipse("ellipse1");
-}
-function move_circle(phi){
-    v = new Array(3);
-    v[0] = Math.cos(phi)*50;
-    v[1] = Math.sin(phi)*50;
-    v[2] = ge("range_z1").value*100;
-    ge("circle1").setAttribute("cx",to2d(v)[0]);
-    ge("circle1").setAttribute("cy",to2d(v)[1]);
-    ge("fo1").setAttribute("x",to2d(v)[0]);
-    ge("fo1").setAttribute("y",to2d(v)[1]);
-    ge("line4").setAttribute("d32",v);
-    transform_line("line4");
-    
-}
-
-function line(svg,d31,d32){ //z.b. line(ge("svg1"),[0,0,0],[50,50,50])
-    const newLine = document.createElementNS("http://www.w3.org/2000/svg", "line")
-    //const newLine = document.createElement("line");
-    element_id = "line"+(document.getElementsByTagName("line").length+1);
-    newLine.setAttribute("id",element_id);
-    newLine.setAttribute("d31",d31);
-    newLine.setAttribute("d32",d32);
-    svg.appendChild(newLine);
-    transform_line(element_id);
-}
-*/
 function update() {
     svg = ge("svg1");
     pl = ge("poly2");
@@ -339,12 +222,6 @@ function update() {
     
 
     
-    /*
-    fo[0].classList.remove("fixed");
-    fo[1].classList.remove("fixed");
-    fo[2].classList.remove("fixed");
-    fo[3].classList.remove("fixed");
-    */
     var p3d = "";
     for(let i=0; i<linspace; i++) {
         let p = pl.points.appendItem(svg.createSVGPoint());
@@ -382,17 +259,6 @@ function update() {
     
     
 }
-/*
-function drawCircle3D() {
-    for(let i = 0; i < 100; i++) {
-        let p = newPolyLine.points.appendItem(svg.createSVGPoint());
-        p.x = i * 1;
-        p.y = 50;
-        
-    }
-}
-*/
-
 
 function safari_bug() { //mit Positionierung von Text im SVG
     const IS_SAFARI = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
@@ -436,11 +302,7 @@ function to_fraction(value) {
     return r;
 }
 
-
-
 function find_rational( value, maxdenom ) {
-  //console.clear();
-  //console.log( "Looking up: " + value );
   let best = { numerator: 1, denominator: 1, error: Math.abs(value - 1) }
   if ( !maxdenom ) maxdenom = 10000;
   for ( let denominator = 1; best.error > 0 && denominator <= maxdenom; denominator++ ) {
@@ -450,17 +312,11 @@ function find_rational( value, maxdenom ) {
     best.numerator = numerator;
     best.denominator = denominator;
     best.error = error;
-    /*console.log( "Intermediate result: "
-                   + best.numerator + "/" + best.denominator
-                   + " (" + ( best.numerator/best.denominator)
-                   + " error " + best.error + " )" );*/
   }
-  //console.log( "Final result: " + JSON.stringify( best ) );
   return best;
 }
 
 function degree_to_fraction(value){ //180 -> 1/2 , 181 -> 181/360
-    //console.log(gcd_rec(value,360));
     gcd = gcd_rec(value,180);
     z = parseInt(value/gcd);
     n = parseInt(180/gcd);
@@ -483,14 +339,6 @@ function gcd_rec(a, b) { //größter gemeinsamer Teiler
     }
 }
 
-
-
-function space() {
-    s = document.getElementsByClassName("space");
-    for(let i = 0; i < s.length; i++) {
-        s[i].innerHTML="<h3 class='inhaltsverzeichnis'>2.5."+(i+1)+" Weitere Kreisbahnen</h3>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. <br>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. <br>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. <br>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. <br>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. <br><br>";
-    }
-}
 function toggle_body_scroll() {
     const cl = document.body.classList;
     if(cl.contains("no_scroll")) {
@@ -529,13 +377,7 @@ function zoom(parent_gc) {
     if(zoom_faktor > 3){
         zoom_faktor = 3;
     }
-    /*
-    else if(zoom_faktor < 1.1){
-        zoom_faktor = 1.3;
-    }
-    */
     
-    console.log("Zoom-Faktor = " + zoom_faktor);
     target_div.setAttribute("style","transform: scale("+zoom_faktor+");");   
     ge("zoom").setAttribute("style","width: " + (zoom_faktor*tw+20) + "px;height: " + (zoom_faktor*th+20) + "px;");  
     document.querySelector(".zoom_button").classList.add("zoom_minimize");
@@ -566,7 +408,6 @@ function check_print() { //check if this page was just opened in a new tab for p
         print_page();
     }
 }
-
 
 function print_page() {
     var pc = ge("print_container");
@@ -601,8 +442,6 @@ window.addEventListener('afterprint', (event) => {
     window.history.replaceState(null, null, window.location.pathname);
 });
 
-
-
 function create_qr(element_id) {
     var div_container = document.createElement("div");
     var link = location.href.split("?")[0].split("#")[0]+"?g="+element_id;
@@ -619,7 +458,6 @@ function create_qr(element_id) {
     //ge(element_id).appendChild(div);
     div_container.appendChild(div);
     div_container.setAttribute("class","qr_container");
-        console.log(text);
 
     var title2 = document.createElement("div");
     title2.setAttribute("class","qr_title");
@@ -687,8 +525,6 @@ function generate_toc(){
         h[i].setAttribute("id","toc_"+i);
         t = h[i].innerHTML;
         toc_c.innerHTML += "<a href='#" + h[i].id + "' class='toc_" + h[i].tagName + "'>" + t + "</a><br>";
-        //console.log(h[i].innerHTML);
-          //  console.log(i);
     }
 
     return h;
@@ -709,23 +545,9 @@ function offsetAnchor() {
     }
 }
 window.addEventListener("hashchange", offsetAnchor);
-//window.setTimeout(offsetAnchor, 100);
-
-
-/*
-window.addEventListener('scroll', (event) => {
-    remove_hashtag_url();
-});
-function remove_hashtag_url(){
-    window.location.href = window.location.href.split("#")[0];
-}
-*/
-
 
 function pause(button) {
     //let gc_id = button.parentElement.parentElement.id.replace("gc","");
-    //console.log(gc_id);
-    //console.log(button.value);
     if(button.value == "Pause") {
         button.value = "Play";
     }
@@ -772,28 +594,24 @@ function make_static(){ //interaktives Skript statisch machen für Evaluation
     }
 }
 
-
-/*
-
-                        <div id="gc7" class="grafik-container">
-                            <div class="grafik-container-inner">
-                                <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
-                                <img src="bilder/abb84.png" class="grafik" id="bild7" draggable="false">
-                            </div>
-                        </div>
-*/
-function test(){ //wenn man "falls" unter "Kontakt" drückt
+// Osterei (Evaluation): Im Kontakt-Block sind einzelne Buchstaben klickbar.
+//  - "ll" in "Falls"  -> test()           schaltet interaktiv/statisch um (make_static)
+//  - "tt" in "bitte"  -> reload_mathjax()  re-rendert alle Formeln
+// Bewusst gehalten, da test() der einzige Runtime-Weg ist, den statischen Modus
+// (interaktiv=false) ohne Code-Änderung einzuschalten.
+function test(){
     interaktiv = !interaktiv;
     make_static();
 }
+// MathJax v3 hat kein MathJax.Hub mehr (v2-API). typesetPromise() rendert
+// (bzw. re-rendert) alle Formeln im Dokument; ohne geladenes MathJax no-op.
 function reload_mathjax(){
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise();
+    }
 }
 function wait_reload_mathjax(){
-    setTimeout(function(){
-        reload_mathjax();
-        console.log("Mathjax reloaded");
-    }, 2000);
+    setTimeout(reload_mathjax, 2000);
 }
 function toggle_darkmode(){
     darkmode_on = !darkmode_on;
@@ -805,14 +623,7 @@ function toggle_darkmode(){
     }
 }
 
-
-
-
-
-
 /*******USER FUNCTIONS*******/
-
-
 
 function update1(){
     svg = ge("svg1");
@@ -871,10 +682,6 @@ function update1(){
     }
 }
 
-
-
-
-
 function update9(koords){
     svg = ge("svg9");
     pl = ge("poly9_angle");
@@ -893,9 +700,6 @@ function update9(koords){
     }
     else if(koords == "xy"){
         phi = Math.atan(koord_y/koord_x);
-        /*if(phi < 0) {
-            phi = phi + Math.PI;
-        }*/
         if(koord_x >= 0 && koord_y >= 0) { }
         else if(koord_x < 0 && koord_y >= 0) { phi = phi + Math.PI; }
         else if(koord_x < 0 && koord_y < 0) { phi = phi + Math.PI; }
@@ -972,12 +776,6 @@ function update9(koords){
         hide("poly9_angle");
     }
 }
-
-
-
-
-
-
 
 var gc3_n = 0; //number of revolutions of phi
 
@@ -1079,7 +877,6 @@ function update3(){
         if(gc3_n != 0) {
             //phi_span.innerHTML += " + " + gc3_n + " \\(*\\) 360°";
             phi_span.innerHTML += " + " + gc3_n + " * 360°";
-            //MathJax.Hub.Queue(["Typeset", MathJax.Hub, p]);
         }
     }
     else {
@@ -1136,7 +933,6 @@ function update3(){
     }
 }
 
-
 var animate3_runs = false;
 function condition3() {
     let ome = parseFloat(ge("range3_w").value);
@@ -1192,21 +988,8 @@ function do_animation3() {
     }
 
     
-    //console.log("do_animate3");
     update3();
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 var gc32_n = 0; //number of revolutions of phi
 
@@ -1272,7 +1055,6 @@ function update32(){
     ge("line32_v").setAttribute("y2",to2d(v2,perspective)[1]);
     
 
-
     
     
     transform_polyline("poly32_circle",perspective);
@@ -1300,7 +1082,6 @@ function update32(){
         if(gc32_n != 0) {
             //phi_span.innerHTML += " + " + gc3_n + " \\(*\\) 360°";
             phi_span.innerHTML += " + " + gc32_n + " * 360°";
-            //MathJax.Hub.Queue(["Typeset", MathJax.Hub, p]);
         }
     }
     else {
@@ -1346,7 +1127,6 @@ function update32(){
         ge("pause32").setAttribute("disabled","true");
     }
 }
-
 
 var animate32_runs = false;
 function condition32() {
@@ -1403,27 +1183,8 @@ function do_animation32() {
     }
 
     
-    //console.log("do_animate3");
     update32();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 var gc31_n = 0; //number of revolutions of phi
 
@@ -1523,7 +1284,6 @@ function update31(){
         if(gc31_n != 0) {
             //phi_span.innerHTML += " + " + gc3_n + " \\(*\\) 360°";
             phi_span.innerHTML += " + " + gc31_n + " * 360°";
-            //MathJax.Hub.Queue(["Typeset", MathJax.Hub, p]);
         }
     }
     else {
@@ -1573,7 +1333,6 @@ function update31(){
         ge("pause31").setAttribute("disabled","true");
     }
 }
-
 
 var animate31_runs = false;
 function condition31() {
@@ -1630,17 +1389,8 @@ function do_animation31() {
     }
 
     
-    //console.log("do_animate3");
     update31();
 }
-
-
-
-
-
-
-
-
 
 function update4() {
     img = ge("img4-1");
@@ -1651,9 +1401,6 @@ function update4() {
         img.src="bilder/image003.png";
     }
 }
-
-
-
 
 var gc5_n = 0; //number of revolutions of phi
 
@@ -1666,7 +1413,6 @@ function update5(){
     phi_degree = Math.round(phi/Math.PI * 180);
     omega = parseFloat(ge("range5_w").value);
     alpha = parseFloat(ge("range5_a").value);
-
 
     
     transform_line("line5_phi",perspective);
@@ -1777,7 +1523,6 @@ function update5(){
         if(gc5_n != 0) {
             //phi_span.innerHTML += " + " + gc3_n + " \\(*\\) 360°";
             phi_span.innerHTML += " + " + gc5_n + " * 360°";
-            //MathJax.Hub.Queue(["Typeset", MathJax.Hub, p]);
         }
     }
     else {
@@ -1850,7 +1595,6 @@ function update5(){
     }
 }
 
-
 var animate5_runs = false;
 function condition5() {
     let ome = parseFloat(ge("range5_w").value);
@@ -1918,9 +1662,7 @@ function do_animation5() {
     
     hide("range5_w_span_min");
     hide("range5_w_span_max");
-    //console.log("do_animate3");
     if(Math.abs(ome) >= 1) {
-        //console.log("stop");
         alp = 0;
         ge("range5_a").value = 0;
         
@@ -1938,15 +1680,6 @@ function do_animation5() {
     update5();
 }
 
-
-
-
-
-
-
-
-
-
 var gc51_n = 0; //number of revolutions of phi
 
 function update51(){
@@ -1958,7 +1691,6 @@ function update51(){
     phi_degree = Math.round(phi/Math.PI * 180);
     omega = parseFloat(ge("range51_w").value);
     alpha = parseFloat(ge("range51_a").value);
-
 
     
     transform_line("line51_phi",perspective);
@@ -2032,7 +1764,6 @@ function update51(){
     ge("line51_a_r").setAttribute("y2",y_a_r);
     
 
-
     
     transform_polyline("poly51_circle",perspective);
     transform_line("line51_koord_x",perspective);
@@ -2064,7 +1795,6 @@ function update51(){
         if(gc51_n != 0) {
             //phi_span.innerHTML += " + " + gc3_n + " \\(*\\) 360°";
             phi_span.innerHTML += " + " + gc51_n + " * 360°";
-            //MathJax.Hub.Queue(["Typeset", MathJax.Hub, p]);
         }
     }
     else {
@@ -2133,7 +1863,6 @@ function update51(){
     }
 }
 
-
 var animate51_runs = false;
 function condition51() {
     let ome = parseFloat(ge("range51_w").value);
@@ -2201,9 +1930,7 @@ function do_animation51() {
     
     hide("range51_w_span_min");
     hide("range51_w_span_max");
-    //console.log("do_animate3");
     if(Math.abs(ome) >= 1) {
-        //console.log("stop");
         alp = 0;
         ge("range51_a").value = 0;
         
@@ -2220,17 +1947,6 @@ function do_animation51() {
     }
     update51();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 var gc6_n = 0; //number of revolutions of phi
 
@@ -2255,7 +1971,6 @@ function update6(beta_or_z_changed){
         beta = Math.atan(100/z);
         ge("range6_beta").value = beta/Math.PI*180;
     }
-
 
     
     transform_line("line6_r",perspective);
@@ -2400,24 +2115,6 @@ function update6(beta_or_z_changed){
     }
     
 }
-/*
-function animate6() {
-    phi = parseFloat(ge("range6_phi").value);
-    omega = parseFloat(ge("range6_w").value)/100;
-    ge("range6_phi").value = phi+omega;
-    
-    if(omega > 0) {
-        if(phi>=6.27) {
-            ge("range6_phi").value = phi-6.27;
-        }
-        setTimeout(function() {
-            update6();
-            animate6();
-        }, 100);
-    }
-        
-}
-*/
 var animate6_runs = false;
 function condition6() {
     let ome = parseFloat(ge("range6_w").value);
@@ -2438,16 +2135,13 @@ function animate6() {
         ge("range6_w").value = 0;
     }
     if(!animate6_runs && condition6() == true) {
-            console.log("start animation");
             animate6_runs = true;
             do_animation6();
     }
     else if(animate6_runs && !condition6()) {
-            console.log("reset");
             animate6_runs = false;
     }
     else if(!animate6_runs && !condition6()) {
-            console.log("pause");
         if (ge("pause6").value == "Play") {
             ge("pause6").click(); 
         }
@@ -2478,20 +2172,8 @@ function do_animation6() {
     }
 
     
-    //console.log("do_animate3");
     update6();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 var gc8_n = 0; //number of revolutions of phi
 var r8 = 100 //Radius default 
@@ -2557,7 +2239,6 @@ function update8(){
     
     p3d_tail = pl_tail.getAttribute("p3d");
     if(p3d_tail == "") {
-        //console.log("START");
         p3d_tail += v[0]+","+v[1]+",0"; 
     }
     else {
@@ -2570,15 +2251,17 @@ function update8(){
     }
     
     
-    //console.log(pl_tail.getAttribute("p3d"));
     pl_tail.setAttribute("p3d",p3d_tail);
     transform_polyline("poly8_tail",perspective);
 
-
     
-//BUG!
+// Bounds-Clamp für r8 (Bahnradius): r8 wird in do_animation8 aus range8_w_r
+// (Radialgeschwindigkeit) fortlaufend integriert und kann über/unter den
+// darstellbaren Bereich [0,170] hinauslaufen. Hier wird es hart zurückgesetzt
+// und die Radialgeschwindigkeit auf 0 gesetzt, damit die Figur stabil bleibt.
+// TODO: sauberer wäre eine Begrenzung der Geschwindigkeit statt eines harten
+// Resets nach Überschreitung; Verhalten bis zur Klärung bewusst unverändert.
     if (r8 < 0) {
-        console.log("zu klein");
         r8 = 0;
         ge("range8_w_r").value = 0;
         ge("range8_w").value = 0;
@@ -2586,7 +2269,6 @@ function update8(){
     else if (r8 > 170) {
         r8 = 170;
         ge("range8_w_r").value = 0;
-        //ge("range8_w").value = 0;
     }
     
     
@@ -2639,24 +2321,6 @@ function update8(){
     ge("fo8_a").setAttribute("y",ge("line8_a").getAttribute("y2"));
     
     
-    /*
-    const phi_span = ge("range8_phi_span");
-    
-    if(gc8_n >= 0){
-        phi_span.innerHTML = phi_degree + "°";
-        if(gc8_n != 0) {
-            //phi_span.innerHTML += " + " + gc3_n + " \\(*\\) 360°";
-            phi_span.innerHTML += " + " + gc8_n + " * 360°";
-            //MathJax.Hub.Queue(["Typeset", MathJax.Hub, p]);
-        }
-    }
-    else {
-        phi_span.innerHTML = "- " + (360-phi_degree) + "° ";
-        if(gc8_n != -1) {
-            phi_span.innerHTML += + gc8_n+1 + " * 360°";
-        }
-    }
-    */
 
     
     
@@ -2697,7 +2361,6 @@ function update8(){
     }
 }
 
-
 var animate8_runs = false;
 function condition8() {
     let ome = parseFloat(ge("range8_w").value);
@@ -2725,16 +2388,13 @@ function animate8() {
     }
     
     if(!animate8_runs && condition8() == true) {
-            console.log("start animation");
             animate8_runs = true;
             do_animation8();
     }
     else if(animate8_runs && !condition8()) {
-            console.log("reset");
             animate8_runs = false;
     }
     else if(!animate8_runs && !condition8()) {
-            console.log("pause");
         if (ge("pause8").value == "Play") {
             ge("pause8").click(); 
         }
@@ -2767,7 +2427,6 @@ function do_animation8() {
     }
 
     
-    //console.log("do_animate3");
     update8();
 }
 
@@ -2779,9 +2438,4 @@ function clear8() {
     transform_polyline("poly8_tail",perspective);
     update8();
 }
-
-
-
-
-
 

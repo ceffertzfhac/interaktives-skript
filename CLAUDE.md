@@ -52,7 +52,7 @@ Each interactive figure is a numbered container `<div id="gcN" class="grafik-con
 When adding/modifying a figure, keep the `gcN` / `svgN` / `rangeN_*` / `updateN` / `animateN` / `conditionN` naming consistent — the numbering is the contract between HTML and JS.
 
 ### Static vs. interactive mode
-`var interaktiv = true` (top of `script.js`) switches the whole document between interactive SVG figures and static images. When `interaktiv` is false, `make_static()` overwrites each `gcN` container's `innerHTML` with a `<img class="grafik">` from `bilder/` (plus a zoom button) and re-typesets MathJax. There is an easter-egg toggle: clicking the disguised letters in the *Kontakt* box ("Fa**ll**…**tt**") calls `test()`, which flips `interaktiv` and re-runs `make_static()`.
+`var interaktiv = true` (top of `script.js`) switches the whole document between interactive SVG figures and static images. When `interaktiv` is false, `make_static()` overwrites each `gcN` container's `innerHTML` with a `<img class="grafik">` from `bilder/` (plus a zoom button) and re-typesets MathJax. There are two easter-egg toggles hidden in the *Kontakt* box: clicking the disguised letters "Fa**ll**" calls `test()` (flips `interaktiv` and re-runs `make_static()` — the only runtime way to enter static mode without a code change), and "**tt**" in "bitte" calls `reload_mathjax()` to re-render all formulas.
 
 ### 3D → 2D projection
 `to2d(d3, perspective)` projects a 3D point `[x,y,z]` to 2D screen coords; `perspective` ∈ {1,2,3,4} selects the view, driven by `changeView()` / a `select1` dropdown. `transform_line` / `transform_polyline` apply it to SVG elements. Not all figures use 3D; many are pure 2D polar plots.
@@ -66,7 +66,6 @@ When adding/modifying a figure, keep the `gcN` / `svgN` / `rangeN_*` / `updateN`
 
 ## Conventions and gotchas
 
-- **MathJax note**: `reload_mathjax()` calls `MathJax.Hub.Queue(...)`, which is the *v2* API — the page actually loads MathJax **v3**, so this call is effectively a no-op/stale. If typeset-refresh behavior matters for your change, verify it actually re-renders rather than assuming the call works.
-- The file has many commented-out blocks and a couple of duplicate definitions (e.g. `animate6` is defined twice; the second wins). Be careful editing around these.
+- **MathJax note**: `reload_mathjax()` uses the MathJax **v3** API (`MathJax.typesetPromise()`, guarded for when MathJax isn't loaded yet). It re-renders all formulas and is wired to the "tt" easter egg in the Kontakt box and to `make_static()`. (Earlier this called the v2 `MathJax.Hub.Queue(...)` API, which was a no-op under v3 — fixed.)
 - Content and code comments are in German; match the surrounding language when editing prose or comments.
 - Only edit `InteraktivesSkript_WIP/`. `InteraktivesSkript_legacy/` is a frozen baseline — never modify it. Within WIP, `Archiv/` is a historical copy and should likewise be left alone.
