@@ -27,9 +27,9 @@ The repo holds **two parallel copies of the site**:
 - `InteraktivesSkript_WIP/` — **the working copy. All edits go here.** This is the only folder you should modify.
 - `InteraktivesSkript_legacy/` — a **frozen baseline** snapshot of the site as of the split. Do not edit; it exists for reference/diffing against WIP. Both folders started byte-identical.
 
-Inside either site folder the structure is the same:
+Inside either site folder the structure is the same (legacy still matches this; **WIP has been modularized** — see Architecture):
   - `index.html` — the whole document: prose sections, inline SVG figures, slider controls, MathJax `$$…$$` / `\[…\]` / `\(…\)` formulas
-  - `src/script.js` — ~2800 lines of vanilla JS, the entire app logic
+  - `src/script.js` *(legacy only)* — the entire app logic in one file. **In WIP this is split into ESM modules** (`src/main.js` entry + `core/transform/ui/print.js` + `src/figures/*.js`); `script.js` no longer exists in WIP.
   - `src/styles.css`, `src/darkmode.css` — styles; `darkmode.css` is loaded but `disabled` and toggled at runtime
   - `bilder/` — static figure PNGs/SVGs used in static mode and prose
   - `src/assets/` — SVG/PNG icons injected into highlight boxes
@@ -37,25 +37,38 @@ Inside either site folder the structure is the same:
 
 `__MACOSX/`, `*.DS_Store`, `Archiv.zip` — macOS zip metadata/junk; ignored, do not edit.
 
-## Architecture
+## Architecture (WIP — ESM modules + figure factory)
 
-### Global-function, inline-handler model
-`script.js` uses no modules and no build step. Functions are global and wired to the DOM via inline `oninput="updateN();"` / `onclick="..."` attributes in `index.html`. `ge(id)` is a `getElementById` shortcut used everywhere; `ga(id, attr)` reads an SVG attribute. `init()` runs on `<body onload>` and orchestrates startup: `generate_highlight_boxes()` → `safari_bug()` → `space()` → `generate_toc()` → `offsetAnchor()` → `make_static()` → `update_all()` → `from_qr()` → `check_print()`.
+### Module layout
+WIP ships as native ESM (no build step, no bundler). `index.html` loads `<script type="module" src="src/main.js">`; modules are deferred, so `main.js` calls `init()` at the end of the module (no `<body onload>`). qrjs2 and MathJax stay classic CDN `<script>` tags → global `window.QRCode` / `window.MathJax`.
 
-### Interactive figures (the core pattern)
-Each interactive figure is a numbered container `<div id="gcN" class="grafik-container">` in `index.html` (N ∈ {1,3,31,32,4,5,51,6,7,8,9}). Inside is an inline `<svg id="svgN">` plus range sliders `id="rangeN_*"`. A figure is driven by a *family* of functions in `script.js` that share the `N` suffix:
+```
+src/main.js        entry: init(), central data-action binder, afterprint/hashchange listeners
+src/core.js        state (interaktiv, darkmode_on, linspace, speed_factor), ge/show/hide,
+                   generate_highlight_boxes, safari_bug, degree_to_fraction, make_static,
+                   test, reload_mathjax, toggle_darkmode, reset, update_all (no figure imports)
+src/transform.js   to2d, transform_line, transform_polyline, ga  (imports ge from core)
+src/ui.js          toc, generate_toc, kontakt, offsetAnchor, toggle_body_scroll, zoom, close_zoom, pause
+src/print.js       init_print, check_print, print_page, create_qr, from_qr, findGetParameter
+src/figures/factory.js   createFigure() + shared omega-circle hooks (circleStep/Wrap/Render, omega*)
+src/figures/fig_NN.js     one file per figure; self-registers updateN/animateN/clearN on window
+```
 
-- `updateN()` — recomputes SVG geometry from the slider values, manipulates `polyline.points` via `svg.createSVGPoint()`, and writes values back into `rangeN_*_span` elements. Called on every slider `oninput` and once at startup by `update_all()`.
-- `conditionN()` — boolean: should the animation loop keep running? (typically checks the angular-velocity slider is non-zero and the Pause button says "Pause").
-- `animateN()` / `do_animationN()` — the animation: `do_animationN` advances the phi slider, calls `updateN()`, and re-schedules itself with `setTimeout(..., 10)` while `conditionN()` holds. A per-figure flag (e.g. `animate3_runs`) guards re-entry.
+Dependency graph is acyclic: `core` ← `transform` ← `factory`; `core` ← `ui`; `core`,`ui` ← `print`; everything ← `main`. `update_all` (core) dispatches via `window.updateN` instead of importing figure modules, which is what keeps the graph cycle-free — figure modules are side-effect-imported by `main.js` so their `window` registration runs before `init()`.
 
-When adding/modifying a figure, keep the `gcN` / `svgN` / `rangeN_*` / `updateN` / `animateN` / `conditionN` naming consistent — the numbering is the contract between HTML and JS.
+### Central event binding (data-action)
+There are **no inline `oninput`/`onclick` handlers**. `index.html` marks elements with `data-action` (+ `data-fig`, optional `data-arg`, `data-event="change"` for `<select>`/radio). `main.js` attaches one delegated listener each for `click`/`input`/`change` and dispatches to the function or to `fig_call(prefix, fig, arg)` → `window[prefix+fig]`. `make_static()` injects `data-action="zoom"` so the delegated binder covers static-mode zoom buttons too.
+
+### Interactive figures (the factory pattern)
+Each interactive figure is a numbered container `<div id="gcN" class="grafik-container">` (N ∈ {1,3,31,32,4,5,51,6,8,9}) holding an inline `<svg id="svgN">` plus range sliders `id="rangeN_*"`. The 7 animated 3D-circle figures (3/31/32/5/51/6/8) are built via `createFigure({id, render, step, wrap, condition, snap, clear?})` in `figures/factory.js`, which owns all shared boilerplate: a `requestAnimationFrame` loop with a ~10 ms accumulator (replacing recursive `setTimeout(...,10)`), a reentry guard, slider snap, φ-wrap + revolution counter (`state.n`), a **cached** static circle `p3d` (rebuilt only when radius/z change, not per frame), the koord transform + foreignObject copies, and the φ-span block. Each `fig_NN.js` supplies only the figure-specific hooks. The 2D arcs (gc1/gc9) and the radio image-swap (gc4) are small standalone modules. The factory exposes `updateN`/`animateN`/`clearN` on `window` (the binder + `update_all` consume those names — the `N` suffix remains the HTML↔JS contract).
+
+A deliberately-preserved legacy bug: `fig_5.js`'s gc51 `>6.27` wrap increments **gc5's** revolution counter (`fig5.state.n++`) instead of gc51's — kept for behavior parity, flagged in the code.
 
 ### Static vs. interactive mode
-`var interaktiv = true` (top of `script.js`) switches the whole document between interactive SVG figures and static images. When `interaktiv` is false, `make_static()` overwrites each `gcN` container's `innerHTML` with a `<img class="grafik">` from `bilder/` (plus a zoom button) and re-typesets MathJax. There are two easter-egg toggles hidden in the *Kontakt* box: clicking the disguised letters "Fa**ll**" calls `test()` (flips `interaktiv` and re-runs `make_static()` — the only runtime way to enter static mode without a code change), and "**tt**" in "bitte" calls `reload_mathjax()` to re-render all formulas.
+`interaktiv` (exported `let` in `core.js`) switches the whole document between interactive SVG figures and static images. When false, `make_static()` overwrites each `gcN` container's `innerHTML` with a `<img class="grafik">` from `bilder/` (plus a zoom button) and re-typesets MathJax. Two easter-egg toggles are hidden in the *Kontakt* box: clicking the disguised letters "Fa**ll**" calls `test()` (flips `interaktiv` and re-runs `make_static()` — the only runtime way to enter static mode without a code change), and "**tt**" in "bitte" calls `reload_mathjax()` to re-render all formulas.
 
 ### 3D → 2D projection
-`to2d(d3, perspective)` projects a 3D point `[x,y,z]` to 2D screen coords; `perspective` ∈ {1,2,3,4} selects the view, driven by `changeView()` / a `select1` dropdown. `transform_line` / `transform_polyline` apply it to SVG elements. Not all figures use 3D; many are pure 2D polar plots.
+`to2d(d3, perspective)` projects a 3D point `[x,y,z]` to 2D screen coords; `perspective` ∈ {1,2,3,4} selects the view, driven by the per-figure `selectN` dropdown (read in each render). `transform_line` / `transform_polyline` apply it to SVG elements. Not all figures use 3D; gc1/gc9 are pure 2D polar plots.
 
 ### Highlight boxes, TOC, print, QR, zoom, darkmode
 - `generate_highlight_boxes()` finds every element with one of the classes `lernziel`, `motivation`, `wiederholung`, `beispiel`, `zusammenfassung`, `aufgabe`, `anmerkung` and injects an icon (`src/assets/*.svg`) plus a capitalized title before its original content. To add a new box type, add a `[class, icon]` entry to the `boxes` array.
