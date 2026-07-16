@@ -38,14 +38,6 @@ function show(element_id) {
 function hide(element_id) {
     ge(element_id).classList.add("hidden");
 }
-function set_visibility(element_id,show_this) {
-    if (show_this) {
-        show(element_id);
-    }
-    else {
-        hide(element_id);
-    }
-}
 function toggle_visibility(element_id) {
     if(ge(element_id).classList.contains("hidden")) {
         show(element_id);
@@ -89,37 +81,6 @@ function capitalizeFirstLetter(string) { //foo -> Foo
 }
 }
 
-function changeView() {
-    show("line1");
-    show("line2");
-    show("line3");
-    
-    show("fo2");
-    show("fo3");
-    show("fo4");
-    
-    
-    
-    perspective = ge("select1").value;
-    if(perspective == 1) {
-        hide("line3");
-        hide("fo4");
-    }
-    else if(perspective == 4) {
-        hide("line2");
-        hide("fo3");
-    }
-    update();
-    ge("fo2").setAttribute("x",ga("line1","x2"));
-    ge("fo2").setAttribute("y",ga("line1","y2"));
-    ge("fo3").setAttribute("x",ga("line2","x2"));
-    ge("fo3").setAttribute("y",ga("line2","y2"));
-    ge("fo4").setAttribute("x",ga("line3","x2"));
-    ge("fo4").setAttribute("y",ga("line3","y2"));
-    
-    
-}
-
 function to2d(d3,perspective) {
     let x = 0;
     let y = 0;
@@ -152,19 +113,6 @@ function transform_line(element_id, perspective) {
     e.setAttribute("x2",to2d(d32,perspective)[0]);
     e.setAttribute("y2",to2d(d32,perspective)[1]);
 }
-function transform_ellipse(element_id) {
-    e = ge(element_id);
-    d3 = ga(element_id,"d3");
-    e.setAttribute("cx",to2d(d3)[0]);
-    e.setAttribute("cy",to2d(d3)[1]);
-    ry = e.getAttribute("r")*0.5;
-    e.setAttribute("ry",ry);
-    
-}
-function transform_init() {
-    transform_line("line4");
-    //transform_ellipse("ellipse1");
-}
 function transform_polyline(element_id,perspective){
     pl = ge(element_id);
     if(pl.getAttribute("p3d") == ""){
@@ -195,71 +143,6 @@ function transform_polyline(element_id,perspective){
 function ga(element_id,attr) { //get attribute
     return ge(element_id).getAttribute(attr).split(",");
 }
-function norm(e) { //normiert Vektor e=element_id
-    v = new Array(3);
-    for (let i = 0;i<3;i++) {
-        v[i] = ga(e,"d32")[i]-ga(e,"d31")[i];
-    }
-    length = Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
-    for (let i = 0;i<3;i++) {
-        v[i] = v[i]/length;
-    }
-    return v;
-}
-function update() {
-    svg = ge("svg1");
-    pl = ge("poly2");
-    
-    phi = ge("range_phi1").value;
-    z1 =  ge("range_z1").value;
-    ge("range_phi1_span").innerHTML=phi;
-    ge("range_z1_span").innerHTML=z1;
-    
-    
-    transform_line("line1");
-    transform_line("line2");
-    transform_line("line3");
-    
-
-    
-    var p3d = "";
-    for(let i=0; i<linspace; i++) {
-        let p = pl.points.appendItem(svg.createSVGPoint());
-        p.x = 50*Math.cos(2*Math.PI*i/linspace);
-        p.y = 50*Math.sin(2*Math.PI*i/linspace);
-        
-        let px = 50*Math.cos(2*Math.PI*i/linspace);
-        let py = 50*Math.sin(2*Math.PI*i/linspace);
-        let pz = ge("range_z1").value;
-        
-        p3d += px+","+py+","+pz+" ";
-
-    }
-    pl.setAttribute("p3d",p3d);
-    transform_polyline("poly2");
-    
-    
-    
-    v = new Array(3);
-    v[0] = Math.cos(phi)*50;
-    v[1] = Math.sin(phi)*50;
-    v[2] = ge("range_z1").value;
-    ge("circle1").setAttribute("cx",to2d(v)[0]);
-    ge("circle1").setAttribute("cy",to2d(v)[1]);
-    ge("fo1").setAttribute("x",to2d(v)[0]);
-    ge("fo1").setAttribute("y",to2d(v)[1]);
-    //ge("fo1_inner").setAttribute("x",to2d(v)[0]);
-    //ge("fo1_inner").setAttribute("y",to2d(v)[1]);
-    ge("line4").setAttribute("d32",v);
-    
-    transform_line("line4");
-    
-    fraction();
-    
-    
-    
-}
-
 function safari_bug() { //mit Positionierung von Text im SVG
     const IS_SAFARI = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
     fo = document.getElementsByClassName("fo_inner");
@@ -269,53 +152,6 @@ function safari_bug() { //mit Positionierung von Text im SVG
         }
     }
 }
-function fraction() { //test
-    phi = ge("range_phi1").value/Math.PI;
-    n = find_rational(phi,12).numerator;
-    d = find_rational(phi,12).denominator;
-    r = "";
-    if(n==0) {
-        r = 0;
-    }
-    else if(d == 1) {
-        r = n;
-    }
-    else {
-        r = n + "/" + d;
-    }
-    ge("fraction").innerHTML=r;
-    
-}
-function to_fraction(value) {
-    n = find_rational(value,12).numerator;
-    d = find_rational(value,12).denominator;
-    r = "";
-    if(n==0) {
-        r = 0;
-    }
-    else if(d == 1) {
-        r = n;
-    }
-    else {
-        r = n + "/" + d;
-    }
-    return r;
-}
-
-function find_rational( value, maxdenom ) {
-  let best = { numerator: 1, denominator: 1, error: Math.abs(value - 1) }
-  if ( !maxdenom ) maxdenom = 10000;
-  for ( let denominator = 1; best.error > 0 && denominator <= maxdenom; denominator++ ) {
-    let numerator = Math.round( value * denominator );
-    let error = Math.abs( value - numerator / denominator );
-    if ( error >= best.error ) continue;
-    best.numerator = numerator;
-    best.denominator = denominator;
-    best.error = error;
-  }
-  return best;
-}
-
 function degree_to_fraction(value){ //180 -> 1/2 , 181 -> 181/360
     gcd = gcd_rec(value,180);
     z = parseInt(value/gcd);
@@ -468,14 +304,6 @@ function create_qr(element_id) {
     ge(element_id).insertBefore(div_container,ge(element_id).firstChild);
 
 }
-function create_qr_title(element_id) {
-    const title = document.createElement("div");
-    const link = location.href+"#"+element_id;
-    div.setAttribute("class","qr_title");
-    div.innerHTML = "<a href='"+link+"'>"+link+"</a><br><i>Hinweis: Sie müssen im Ilias angemeldet sein</i>";
-    ge(element_id).appendChild(title);
-}
-
 function from_qr(){ //if user comes to this site via the qr code link
     g = findGetParameter("g");
     if(!interaktiv) { //statisch
@@ -609,9 +437,6 @@ function reload_mathjax(){
     if (window.MathJax && MathJax.typesetPromise) {
         MathJax.typesetPromise();
     }
-}
-function wait_reload_mathjax(){
-    setTimeout(reload_mathjax, 2000);
 }
 function toggle_darkmode(){
     darkmode_on = !darkmode_on;
