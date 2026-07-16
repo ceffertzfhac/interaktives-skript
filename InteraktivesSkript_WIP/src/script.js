@@ -59,16 +59,16 @@ function generate_highlight_boxes() {
     ];
     
     for (let l=0; l < boxes.length; l++) {
-        a = document.getElementsByClassName(boxes[l][0]);
+        const a = document.getElementsByClassName(boxes[l][0]);
         for (let i=0; i < a.length; i++) {
-            a_content = a[i].innerHTML;
+            const a_content = a[i].innerHTML;
             a[i].innerHTML="";
-            a_title = document.createElement("div");
+            const a_title = document.createElement("div");
             a_title.setAttribute("class","highlight_box_title");
             a_title.innerHTML = capitalizeFirstLetter(boxes[l][0]);
             a[i].appendChild(a_title);
 
-            a_img = document.createElement("img");
+            const a_img = document.createElement("img");
             a_img.setAttribute("src","src/assets/" + boxes[l][1]);
             a_img.setAttribute("class","highlight_box_img");
             a[i].appendChild(a_img);
@@ -105,24 +105,24 @@ function to2d(d3,perspective) {
     return [x,y];
 }
 function transform_line(element_id, perspective) {
-    e = ge(element_id);
-    d31 = ga(element_id,"d31");
-    d32 = ga(element_id,"d32");
+    const e = ge(element_id);
+    const d31 = ga(element_id,"d31");
+    const d32 = ga(element_id,"d32");
     e.setAttribute("x1",to2d(d31,perspective)[0]);
     e.setAttribute("y1",to2d(d31,perspective)[1]);
     e.setAttribute("x2",to2d(d32,perspective)[0]);
     e.setAttribute("y2",to2d(d32,perspective)[1]);
 }
 function transform_polyline(element_id,perspective){
-    pl = ge(element_id);
+    const pl = ge(element_id);
     if(pl.getAttribute("p3d") == ""){
-        p = ""
+        const p = ""
         return p;
     }
     else {
-        p = "";
+        let p = "";
         if (pl.getAttribute("p3d").includes(" ")) {
-            p3d = pl.getAttribute("p3d").split(" ");
+            const p3d = pl.getAttribute("p3d").split(" ");
             for (let i=0; i < p3d.length-1;i++) {
                 p3d[i] =  p3d[i].split(",");
                 p += to2d(p3d[i],perspective);
@@ -130,7 +130,7 @@ function transform_polyline(element_id,perspective){
             }
         }
         else {
-            p3d = pl.getAttribute("p3d").split(",");            
+            const p3d = pl.getAttribute("p3d").split(",");
             p = to2d(p3d,perspective);
         }
 
@@ -145,7 +145,7 @@ function ga(element_id,attr) { //get attribute
 }
 function safari_bug() { //mit Positionierung von Text im SVG
     const IS_SAFARI = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-    fo = document.getElementsByClassName("fo_inner");
+    const fo = document.getElementsByClassName("fo_inner");
     if(IS_SAFARI){
         for(let i = 0;i<fo.length;i++) {
             fo[i].classList.add("fixed");
@@ -153,9 +153,10 @@ function safari_bug() { //mit Positionierung von Text im SVG
     }
 }
 function degree_to_fraction(value){ //180 -> 1/2 , 181 -> 181/360
-    gcd = gcd_rec(value,180);
-    z = parseInt(value/gcd);
-    n = parseInt(180/gcd);
+    const gcd = gcd_rec(value,180);
+    const z = parseInt(value/gcd);
+    const n = parseInt(180/gcd);
+    let r;
     if(z==0) {
         r = 0;
     }
@@ -165,7 +166,7 @@ function degree_to_fraction(value){ //180 -> 1/2 , 181 -> 181/360
     else {
         r = z + "/" + n;
     }
-    return r;    
+    return r;
 }
 function gcd_rec(a, b) { //größter gemeinsamer Teiler
     if (b) {
@@ -188,9 +189,9 @@ function toggle_body_scroll() {
 var zoom_enabled = false;
 
 function zoom(parent_gc) {
-    scource_div = parent_gc;
+    const scource_div = parent_gc;
     show("zoom_overlay");
-    target_div = ge("zoom_content");
+    const target_div = ge("zoom_content");
     target_div.innerHTML = scource_div.innerHTML;
     target_div.firstElementChild.setAttribute("style","position:static;");
     //target_div.firstElementChild.classList.add("grafik-inner-zoom");
@@ -305,7 +306,7 @@ function create_qr(element_id) {
 
 }
 function from_qr(){ //if user comes to this site via the qr code link
-    g = findGetParameter("g");
+    const g = findGetParameter("g");
     if(!interaktiv) { //statisch
         setTimeout(function(){
             if(g) {
@@ -333,8 +334,8 @@ function findGetParameter(parameterName) {
     return result;
 }
 function toc(){
-    content = ge("toc_content");
-    e_id = "toc_container";
+    const content = ge("toc_content");
+    const e_id = "toc_container";
     content.classList.remove("toc_hide");
     content.classList.remove("toc_show");
     if(ge(e_id).classList.contains("hidden")) {
@@ -347,11 +348,11 @@ function toc(){
     }    
 }
 function generate_toc(){
-    h = document.getElementsByClassName("inhaltsverzeichnis");
-    toc_c = ge("toc_content");
+    const h = document.getElementsByClassName("inhaltsverzeichnis");
+    const toc_c = ge("toc_content");
     for (let i = 0;i<h.length;i++) {
         h[i].setAttribute("id","toc_"+i);
-        t = h[i].innerHTML;
+        const t = h[i].innerHTML;
         toc_c.innerHTML += "<a href='#" + h[i].id + "' class='toc_" + h[i].tagName + "'>" + t + "</a><br>";
     }
 
