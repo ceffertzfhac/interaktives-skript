@@ -655,72 +655,133 @@ function update9(koords){
 }
 
 // === Per-figure factory (Stage 3) ===
-// createCircleFigure fasst die gemeinsame Boilerplate der 3D-Kreisbahn-Figuren
-// mit reinem omega-Antrieb (gc3/gc31/gc32) zusammen: rAF-Loop, Reentry-Guard,
-// Snap, phi-Wrap + Revolutionszaehler, gecachte statische Kreis-p3d (statt
-// 100-Punkte-AppendItem pro Frame), Koordinaten-Transform + fo-Kopie,
-// phi_span-Block, Pause-Enable. Pro Figur nur noch {id, hasW, hasA}.
-function createCircleFigure(cfg){
+// createFigure fasst die gemeinsame Boilerplate aller animierten 3D-Kreisbahn-
+// Figuren zusammen: rAF-Loop (~10 ms Akkumulator, ersetzt rekursives
+// setTimeout(...,10)), Reentry-Guard, Slider-Snap, phi-Wrap + Revolutions-
+// zaehler (state.n), gecachte statische Kreis-p3d (statt 100-Punkte-
+// AppendItem pro Frame -- transform_polyline leitet points ohnehin aus p3d
+// ab), Koordinaten-Transform + fo-Kopie, phi_span-Block. Pro Figur nur noch
+// Hooks: render, step, wrap, condition, snap (optional clear). updateN /
+// animateN / clearN werden via window[...] exponiert, damit update_all und der
+// data-action-Binder unverändert arbeiten.
+function createFigure(cfg){
     const P = cfg.id;
-    const state = { n: 0, runs: false, raf: null, last: 0 };
+    const state = { n: 0, runs: false, raf: null, last: 0, r8: 100 };
     const circle = { key: null };
 
-    function setCircleP3d(radius, z){
-        const key = radius + "," + z;
-        if(key === circle.key) return;
-        circle.key = key;
-        let p3d = "";
-        for(let i=0; i<=linspace; i++){
-            const px = radius*Math.cos(2*Math.PI*i/linspace);
-            const py = radius*Math.sin(2*Math.PI*i/linspace);
-            p3d += px+","+py+","+z+" ";
+    const ctx = {
+        P: P,
+        state: state,
+        setCircleP3d: function(radius, z){
+            const key = radius + "," + z;
+            if(key === circle.key) return;
+            circle.key = key;
+            let p3d = "";
+            for(let i=0; i<=linspace; i++){
+                const px = radius*Math.cos(2*Math.PI*i/linspace);
+                const py = radius*Math.sin(2*Math.PI*i/linspace);
+                p3d += px+","+py+","+z+" ";
+            }
+            ge("poly"+P+"_circle").setAttribute("p3d",p3d);
+        },
+        transformKoord: function(perspective){
+            transform_polyline("poly"+P+"_circle",perspective);
+            transform_line("line"+P+"_koord_x",perspective);
+            transform_line("line"+P+"_koord_y",perspective);
+            transform_line("line"+P+"_koord_z",perspective);
+            ge("fo"+P+"_x").setAttribute("x",ge("line"+P+"_koord_x").getAttribute("x2"));
+            ge("fo"+P+"_x").setAttribute("y",ge("line"+P+"_koord_x").getAttribute("y2"));
+            ge("fo"+P+"_y").setAttribute("x",ge("line"+P+"_koord_y").getAttribute("x2"));
+            ge("fo"+P+"_y").setAttribute("y",ge("line"+P+"_koord_y").getAttribute("y2"));
+            ge("fo"+P+"_z").setAttribute("x",ge("line"+P+"_koord_z").getAttribute("x2"));
+            ge("fo"+P+"_z").setAttribute("y",ge("line"+P+"_koord_z").getAttribute("y2"));
+        },
+        phiSpan: function(phi_degree){
+            const s = ge("range"+P+"_phi_span");
+            if(state.n >= 0){
+                s.innerHTML = phi_degree + "°";
+                if(state.n != 0){ s.innerHTML += " + " + state.n + " * 360°"; }
+            }
+            else {
+                s.innerHTML = "- " + (360-phi_degree) + "° ";
+                if(state.n != -1){ s.innerHTML += + state.n+1 + " * 360°"; }
+            }
         }
-        ge("poly"+P+"_circle").setAttribute("p3d",p3d);
+    };
+
+    function scheduleNext(){
+        state.last = performance.now();
+        const loop = function(t){
+            if(t - state.last >= 10){ state.last = t; tick(); }
+            else { state.raf = requestAnimationFrame(loop); }
+        };
+        state.raf = requestAnimationFrame(loop);
     }
 
-    function transformKoord(perspective){
-        transform_polyline("poly"+P+"_circle",perspective);
-        transform_line("line"+P+"_koord_x",perspective);
-        transform_line("line"+P+"_koord_y",perspective);
-        transform_line("line"+P+"_koord_z",perspective);
-        ge("fo"+P+"_x").setAttribute("x",ge("line"+P+"_koord_x").getAttribute("x2"));
-        ge("fo"+P+"_x").setAttribute("y",ge("line"+P+"_koord_x").getAttribute("y2"));
-        ge("fo"+P+"_y").setAttribute("x",ge("line"+P+"_koord_y").getAttribute("x2"));
-        ge("fo"+P+"_y").setAttribute("y",ge("line"+P+"_koord_y").getAttribute("y2"));
-        ge("fo"+P+"_z").setAttribute("x",ge("line"+P+"_koord_z").getAttribute("x2"));
-        ge("fo"+P+"_z").setAttribute("y",ge("line"+P+"_koord_z").getAttribute("y2"));
-    }
-
-    function phiSpan(phi_degree){
-        const s = ge("range"+P+"_phi_span");
-        if(state.n >= 0){
-            s.innerHTML = phi_degree + "°";
-            if(state.n != 0){ s.innerHTML += " + " + state.n + " * 360°"; }
+    function tick(){
+        cfg.step(ctx);
+        if(cfg.condition(ctx)){
+            cfg.wrap(ctx);
+            scheduleNext();
         }
-        else {
-            s.innerHTML = "- " + (360-phi_degree) + "° ";
-            if(state.n != -1){ s.innerHTML += + state.n+1 + " * 360°"; }
+        else { state.runs = false; }
+        cfg.render(ctx);
+    }
+
+    function animate(){
+        cfg.snap(ctx);
+        if(!state.runs && cfg.condition(ctx)){ state.runs = true; tick(); }
+        else if(state.runs && !cfg.condition(ctx)){ state.runs = false; }
+        else if(!state.runs && !cfg.condition(ctx)){
+            if(ge("pause"+P).value == "Play") ge("pause"+P).click();
         }
     }
 
-    function condition(){
-        if(ge("pause"+P).value != "Pause") return false;
-        return parseFloat(ge("range"+P+"_w").value) != 0;
-    }
+    function update(arg){ cfg.render(ctx, arg); }
+    ctx.update = update;
 
-    function snap(){
-        const e = ge("range"+P+"_w");
-        if(Math.abs(parseFloat(e.value)) < 0.1) e.value = 0;
-    }
+    if(cfg.tail) ctx.tail = [];
 
-    function render(){
+    window["update"+P] = update;
+    window["animate"+P] = animate;
+    if(cfg.clear) window["clear"+P] = cfg.clear(ctx);
+    return ctx;
+}
+
+// --- gemeinsam genutzte Hook-Funktionen (reine omega-Kreisbahn-Familie) ---
+function circleStep(ctx){
+    const P = ctx.P;
+    const phi = parseFloat(ge("range"+P+"_phi").value);
+    const ome = parseFloat(ge("range"+P+"_w").value);
+    const omega = ome/10*speed_factor;
+    ge("range"+P+"_phi").value = phi+omega;
+    ctx.phi = phi; ctx.ome = ome;
+}
+function circleWrap(ctx){
+    const P = ctx.P;
+    if(ctx.phi > 6.27){ ge("range"+P+"_phi").value = ctx.phi-6.27; ctx.state.n++; }
+    if(ctx.phi == 0 && ctx.ome < 0){ ge("range"+P+"_phi").value = ctx.phi+6.27; ctx.state.n--; }
+}
+function omegaCondition(ctx){
+    const P = ctx.P;
+    return ge("pause"+P).value == "Pause" && parseFloat(ge("range"+P+"_w").value) != 0;
+}
+function omegaSnap(ctx){
+    const P = ctx.P;
+    const e = ge("range"+P+"_w");
+    if(Math.abs(parseFloat(e.value)) < 0.1) e.value = 0;
+}
+function circleRender(opts){
+    const hasW = opts.hasW, hasA = opts.hasA;
+    return function(ctx){
+        const P = ctx.P;
         const perspective = ge("select"+P).value;
         const phi = parseFloat(ge("range"+P+"_phi").value);
         const phi_degree = Math.round(phi/Math.PI * 180);
         const omega = parseFloat(ge("range"+P+"_w").value);
 
         transform_line("line"+P+"_phi",perspective);
-        setCircleP3d(100,0);
+        ctx.setCircleP3d(100,0);
 
         const v = [Math.cos(phi)*100, Math.sin(phi)*100, 0];
         const v2 = [v[0]-Math.cos(Math.PI/2-phi)*omega*100, v[1]+Math.sin(Math.PI/2-phi)*omega*100, 0];
@@ -738,46 +799,46 @@ function createCircleFigure(cfg){
         ge("line"+P+"_v").setAttribute("y1",y);
         ge("line"+P+"_v").setAttribute("x2",to2d(v2,perspective)[0]);
         ge("line"+P+"_v").setAttribute("y2",to2d(v2,perspective)[1]);
-        if(cfg.hasA){
+        if(hasA){
             ge("line"+P+"_a").setAttribute("x1",x);
             ge("line"+P+"_a").setAttribute("y1",y);
             ge("line"+P+"_a").setAttribute("x2",x_a);
             ge("line"+P+"_a").setAttribute("y2",y_a);
         }
-        if(cfg.hasW){
+        if(hasW){
             ge("line"+P+"_w").setAttribute("y2",to2d([0,0,100*omega],perspective)[1]);
         }
 
-        transformKoord(perspective);
+        ctx.transformKoord(perspective);
 
         ge("fo"+P+"_v").setAttribute("x",ge("line"+P+"_v").getAttribute("x2"));
         ge("fo"+P+"_v").setAttribute("y",ge("line"+P+"_v").getAttribute("y2"));
-        if(cfg.hasW){
+        if(hasW){
             ge("fo"+P+"_w").setAttribute("x",ge("line"+P+"_w").getAttribute("x2"));
             ge("fo"+P+"_w").setAttribute("y",ge("line"+P+"_w").getAttribute("y2"));
         }
-        if(cfg.hasA){
+        if(hasA){
             ge("fo"+P+"_a").setAttribute("x",ge("line"+P+"_a").getAttribute("x2"));
             ge("fo"+P+"_a").setAttribute("y",ge("line"+P+"_a").getAttribute("y2"));
         }
 
-        phiSpan(phi_degree);
+        ctx.phiSpan(phi_degree);
 
         show("line"+P+"_v");
-        if(cfg.hasW) show("line"+P+"_w");
-        if(cfg.hasA) show("line"+P+"_a");
+        if(hasW) show("line"+P+"_w");
+        if(hasA) show("line"+P+"_a");
         show("line"+P+"_koord_z");
-        if(cfg.hasW) show("fo"+P+"_w");
+        if(hasW) show("fo"+P+"_w");
         show("fo"+P+"_v");
         show("fo"+P+"_z");
-        if(cfg.hasA) show("fo"+P+"_a");
+        if(hasA) show("fo"+P+"_a");
         hide("range"+P+"_w_span_l0");
         hide("range"+P+"_w_span_e0");
         hide("range"+P+"_w_span_g0");
         if(omega == 0){
             hide("line"+P+"_v");
-            if(cfg.hasW){ hide("line"+P+"_w"); hide("fo"+P+"_w"); }
-            if(cfg.hasA){ hide("line"+P+"_a"); hide("fo"+P+"_a"); }
+            if(hasW){ hide("line"+P+"_w"); hide("fo"+P+"_w"); }
+            if(hasA){ hide("line"+P+"_a"); hide("fo"+P+"_a"); }
             hide("fo"+P+"_v");
             show("range"+P+"_w_span_e0");
         }
@@ -786,1099 +847,414 @@ function createCircleFigure(cfg){
         if(perspective == 1){
             hide("line"+P+"_koord_z");
             hide("fo"+P+"_z");
-            if(cfg.hasW){ hide("line"+P+"_w"); hide("fo"+P+"_w"); }
+            if(hasW){ hide("line"+P+"_w"); hide("fo"+P+"_w"); }
         }
 
         ge("pause"+P).removeAttribute("disabled");
         if(omega == 0) ge("pause"+P).setAttribute("disabled","true");
-    }
-
-    function scheduleNext(){
-        state.last = performance.now();
-        const loop = (t) => {
-            if(t - state.last >= 10){ state.last = t; tick(); }
-            else { state.raf = requestAnimationFrame(loop); }
-        };
-        state.raf = requestAnimationFrame(loop);
-    }
-
-    function tick(){
-        const phi = parseFloat(ge("range"+P+"_phi").value);
-        const ome = parseFloat(ge("range"+P+"_w").value);
-        const omega = ome/10*speed_factor;
-        ge("range"+P+"_phi").value = phi+omega;
-        if(condition()){
-            if(phi>6.27){ ge("range"+P+"_phi").value = phi-6.27; state.n++; }
-            if(phi == 0 && ome < 0){ ge("range"+P+"_phi").value = phi+6.27; state.n--; }
-            scheduleNext();
-        }
-        else { state.runs = false; }
-        render();
-    }
-
-    function animate(){
-        snap();
-        if(!state.runs && condition()){ state.runs = true; tick(); }
-        else if(state.runs && !condition()){ state.runs = false; }
-        else if(!state.runs && !condition()){
-            if(ge("pause"+P).value == "Play") ge("pause"+P).click();
-        }
-    }
-
-    window["update"+P] = render;
-    window["animate"+P] = animate;
-    return { render, animate, state };
+    };
 }
 
-createCircleFigure({id:"3",  hasW:true,  hasA:true});
-createCircleFigure({id:"31", hasW:false, hasA:true});
-createCircleFigure({id:"32", hasW:false, hasA:false});
+createFigure({id:"3",  render:circleRender({hasW:true, hasA:true}),  step:circleStep, wrap:circleWrap, condition:omegaCondition, snap:omegaSnap});
+createFigure({id:"31", render:circleRender({hasW:false, hasA:true}), step:circleStep, wrap:circleWrap, condition:omegaCondition, snap:omegaSnap});
+createFigure({id:"32", render:circleRender({hasW:false, hasA:false}),step:circleStep, wrap:circleWrap, condition:omegaCondition, snap:omegaSnap});
 
+// --- gc5/gc51: omega + alpha (Tangentialbeschleunigung) ---
+function alphaStep(ctx){
+    const P = ctx.P;
+    const phi = parseFloat(ge("range"+P+"_phi").value);
+    let ome = parseFloat(ge("range"+P+"_w").value);
+    const alp = parseFloat(ge("range"+P+"_a").value);
+    ome = ome + alp/200;
+    ge("range"+P+"_w").value = ome;
+    const omega = ome/10*speed_factor;
+    ge("range"+P+"_phi").value = phi+omega;
+    ctx.phi = phi; ctx.ome = ome; ctx.omega = omega;
+    // |ome|>=1-Begrenzung (aus do_animation5/51): alpha wird geloescht,
+    // min/max-Span eingeblendet. Laeuft jeden Tick (wie im Original).
+    hide("range"+P+"_w_span_min");
+    hide("range"+P+"_w_span_max");
+    if(Math.abs(ome) >= 1){
+        ge("range"+P+"_a").value = 0;
+        if(ome <= -1){ show("range"+P+"_w_span_min"); hide("range"+P+"_w_span_l0"); }
+        else if(ome >= -1){ show("range"+P+"_w_span_max"); hide("range"+P+"_w_span_g0"); }
+    }
+}
+function alphaWrap(opts){
+    return function(ctx){
+        const P = ctx.P;
+        if(ctx.phi > 6.27){ ge("range"+P+"_phi").value = ctx.phi-6.27; opts.onRevolutionForward(ctx); }
+        if(ctx.phi == 0 && ctx.omega < 0){ ge("range"+P+"_phi").value = ctx.phi+6.27; ctx.state.n--; }
+    };
+}
+function alphaCondition(ctx){
+    const P = ctx.P;
+    return ge("pause"+P).value == "Pause" &&
+        (parseFloat(ge("range"+P+"_w").value) != 0 || parseFloat(ge("range"+P+"_a").value) != 0);
+}
+function alphaSnap(ctx){
+    const P = ctx.P;
+    const we = ge("range"+P+"_w");
+    const ae = ge("range"+P+"_a");
+    if(Math.abs(parseFloat(we.value)) < 0.1 && parseFloat(ae.value) == 0) we.value = 0;
+    if(Math.abs(parseFloat(ae.value)) < 0.1) ae.value = 0;
+}
+function alphaRender(opts){
+    const hasW = opts.hasW;
+    return function(ctx){
+        const P = ctx.P;
+        const perspective = ge("select"+P).value;
+        const phi = parseFloat(ge("range"+P+"_phi").value);
+        const phi_degree = Math.round(phi/Math.PI * 180);
+        const omega = parseFloat(ge("range"+P+"_w").value);
+        const alpha = parseFloat(ge("range"+P+"_a").value);
+
+        transform_line("line"+P+"_phi",perspective);
+        ctx.setCircleP3d(100,0);
+
+        const v = [Math.cos(phi)*100, Math.sin(phi)*100, 0];
+        const v2 = [v[0]-Math.cos(Math.PI/2-phi)*omega*100, v[1]+Math.sin(Math.PI/2-phi)*omega*100, 0];
+        const v_a_r = [(1-0.8*Math.abs(omega))*v[0], (1-0.8*Math.abs(omega))*v[1], 0];
+        const v_a_t = [v[0]-Math.cos(Math.PI/2-phi)*alpha*60, v[1]+Math.sin(Math.PI/2-phi)*alpha*60, 0];
+        const x = to2d(v,perspective)[0];
+        const y = to2d(v,perspective)[1];
+        const x_a_r = to2d(v_a_r,perspective)[0];
+        const y_a_r = to2d(v_a_r,perspective)[1];
+
+        ge("point"+P).setAttribute("cx",x);
+        ge("point"+P).setAttribute("cy",y);
+        ge("line"+P+"_phi").setAttribute("x2",x);
+        ge("line"+P+"_phi").setAttribute("y2",y);
+        ge("line"+P+"_v").setAttribute("x1",x);
+        ge("line"+P+"_v").setAttribute("y1",y);
+        ge("line"+P+"_v").setAttribute("x2",to2d(v2,perspective)[0]);
+        ge("line"+P+"_v").setAttribute("y2",to2d(v2,perspective)[1]);
+        ge("line"+P+"_a_t").setAttribute("x1",x);
+        ge("line"+P+"_a_t").setAttribute("y1",y);
+        ge("line"+P+"_a_t").setAttribute("x2",to2d(v_a_t,perspective)[0]);
+        ge("line"+P+"_a_t").setAttribute("y2",to2d(v_a_t,perspective)[1]);
+        ge("line"+P+"_a_r").setAttribute("x1",x);
+        ge("line"+P+"_a_r").setAttribute("y1",y);
+        ge("line"+P+"_a_r").setAttribute("x2",x_a_r);
+        ge("line"+P+"_a_r").setAttribute("y2",y_a_r);
+        if(hasW){
+            ge("line"+P+"_w").setAttribute("y2",to2d([0,0,100*omega],perspective)[1]);
+            ge("line"+P+"_alpha").setAttribute("y2",to2d([0,0,50*alpha],perspective)[1]);
+        }
+
+        ctx.transformKoord(perspective);
+
+        ge("fo"+P+"_v").setAttribute("x",ge("line"+P+"_v").getAttribute("x2"));
+        ge("fo"+P+"_v").setAttribute("y",ge("line"+P+"_v").getAttribute("y2"));
+        if(hasW){
+            ge("fo"+P+"_w").setAttribute("x",ge("line"+P+"_w").getAttribute("x2"));
+            ge("fo"+P+"_w").setAttribute("y",ge("line"+P+"_w").getAttribute("y2"));
+            ge("fo"+P+"_alpha").setAttribute("x",ge("line"+P+"_alpha").getAttribute("x2"));
+            ge("fo"+P+"_alpha").setAttribute("y",ge("line"+P+"_alpha").getAttribute("y2"));
+        }
+        ge("fo"+P+"_a_r").setAttribute("x",ge("line"+P+"_a_r").getAttribute("x2"));
+        ge("fo"+P+"_a_r").setAttribute("y",ge("line"+P+"_a_r").getAttribute("y2"));
+        ge("fo"+P+"_a_t").setAttribute("x",ge("line"+P+"_a_t").getAttribute("x2"));
+        ge("fo"+P+"_a_t").setAttribute("y",ge("line"+P+"_a_t").getAttribute("y2"));
+
+        ctx.phiSpan(phi_degree);
+
+        show("line"+P+"_v");
+        if(hasW){ show("line"+P+"_w"); show("line"+P+"_alpha"); }
+        show("line"+P+"_a_r");
+        show("line"+P+"_a_t");
+        show("line"+P+"_koord_z");
+        if(hasW){ show("fo"+P+"_w"); show("fo"+P+"_alpha"); }
+        show("fo"+P+"_v");
+        show("fo"+P+"_z");
+        show("fo"+P+"_a_r");
+        show("fo"+P+"_a_t");
+        hide("range"+P+"_w_span_g0");
+        hide("range"+P+"_w_span_e0");
+        hide("range"+P+"_w_span_l0");
+        hide("range"+P+"_a_span_g0");
+        hide("range"+P+"_a_span_e0");
+        hide("range"+P+"_a_span_l0");
+        if(omega == 0){
+            hide("line"+P+"_v");
+            if(hasW){ hide("line"+P+"_w"); hide("fo"+P+"_w"); }
+            hide("line"+P+"_a_r");
+            hide("fo"+P+"_v");
+            hide("fo"+P+"_a_r");
+            show("range"+P+"_w_span_e0");
+        }
+        else if(omega > 0 && omega < 1){ show("range"+P+"_w_span_g0"); }
+        else if(omega < 0 && omega > -1){ show("range"+P+"_w_span_l0"); }
+        if(perspective == 1){
+            hide("line"+P+"_koord_z");
+            hide("fo"+P+"_z");
+            if(hasW){ hide("line"+P+"_w"); hide("fo"+P+"_w"); }
+        }
+        if(alpha == 0){
+            hide("line"+P+"_a_t");
+            if(hasW) hide("line"+P+"_alpha");
+            hide("fo"+P+"_a_t");
+            if(hasW) hide("fo"+P+"_alpha");
+            show("range"+P+"_a_span_e0");
+        }
+        else if(alpha > 0){ show("range"+P+"_a_span_g0"); }
+        else if(alpha < 0){ show("range"+P+"_a_span_l0"); }
+
+        ge("pause"+P).removeAttribute("disabled");
+        if(omega == 0 && alpha == 0) ge("pause"+P).setAttribute("disabled","true");
+    };
+}
+
+const fig5 = createFigure({id:"5", render:alphaRender({hasW:true}), step:alphaStep,
+    wrap:alphaWrap({onRevolutionForward: function(ctx){ ctx.state.n++; }}),
+    condition:alphaCondition, snap:alphaSnap});
+// BUG (aus Legacy, bewusst erhalten): do_animation51 inkrementiert im >6.27-Zweig
+// gc5_n statt gc51_n (Copy-Paste-Fehler). ctx.state.n++ wuerde es "reparieren";
+// wir halten das Originalverhalten bei und markieren die Stelle. Bei Bedarf als
+// eigener Fix aufwaermen.
+createFigure({id:"51", render:alphaRender({hasW:false}), step:alphaStep,
+    wrap:alphaWrap({onRevolutionForward: function(ctx){ fig5.state.n++; }}),
+    condition:alphaCondition, snap:alphaSnap});
+
+// --- gc6: geneigte Kreisbahn (z/beta-Sync), reiner omega-Antrieb ---
+function tiltRender(ctx, arg){
+    const P = ctx.P;
+    const perspective = ge("select"+P).value;
+    const phi = parseFloat(ge("range"+P+"_phi").value);
+    const omega = parseFloat(ge("range"+P+"_w").value);
+    let z;
+    if(arg == "beta"){
+        const beta = parseFloat(ge("range"+P+"_beta").value);
+        z = 100/Math.tan(beta*Math.PI/180);
+        ge("range"+P+"_z").value = z;
+    }
+    else {
+        z = parseFloat(ge("range"+P+"_z").value);
+        const beta = Math.atan(100/z);
+        ge("range"+P+"_beta").value = beta/Math.PI*180;
+    }
+
+    transform_line("line"+P+"_r",perspective);
+    ctx.setCircleP3d(100,z);
+
+    const v = [Math.cos(phi)*100, Math.sin(phi)*100, z];
+    const v2 = [v[0]-Math.cos(Math.PI/2-phi)*omega*100, v[1]+Math.sin(Math.PI/2-phi)*omega*100, z];
+    const v3 = [0, 0, z];
+    const x_1 = to2d(v,perspective)[0];
+    const y_1 = to2d(v,perspective)[1];
+    const v_r = [v[0]*0.5, v[1]*0.5, v[2]*0.5];
+    const x_r = to2d(v_r,perspective)[0];
+    const y_r = to2d(v_r,perspective)[1];
+    const v_R = [v[0]*0.5, v[1]*0.5, v[2]];
+    const x_R = to2d(v_R,perspective)[0];
+    const y_R = to2d(v_R,perspective)[1];
+
+    ge("point"+P).setAttribute("cx",x_1);
+    ge("point"+P).setAttribute("cy",y_1);
+    ge("line"+P+"_r").setAttribute("x2",x_1);
+    ge("line"+P+"_r").setAttribute("y2",y_1);
+    ge("line"+P+"_v").setAttribute("x1",x_1);
+    ge("line"+P+"_v").setAttribute("y1",y_1);
+    ge("line"+P+"_R").setAttribute("x2",x_1);
+    ge("line"+P+"_R").setAttribute("y2",y_1);
+    ge("line"+P+"_R").setAttribute("x1",to2d(v3,perspective)[0]);
+    ge("line"+P+"_R").setAttribute("y1",to2d(v3,perspective)[1]);
+    ge("line"+P+"_v").setAttribute("x2",to2d(v2,perspective)[0]);
+    ge("line"+P+"_v").setAttribute("y2",to2d(v2,perspective)[1]);
+    ge("line"+P+"_w").setAttribute("y1",-z);
+    ge("line"+P+"_w").setAttribute("y2",-z+to2d([0,0,100*omega],perspective)[1]);
+
+    ctx.transformKoord(perspective);
+
+    ge("fo"+P+"_v").setAttribute("x",ge("line"+P+"_v").getAttribute("x2"));
+    ge("fo"+P+"_v").setAttribute("y",ge("line"+P+"_v").getAttribute("y2"));
+    ge("fo"+P+"_w").setAttribute("x",ge("line"+P+"_w").getAttribute("x2"));
+    ge("fo"+P+"_w").setAttribute("y",ge("line"+P+"_w").getAttribute("y2"));
+    ge("fo"+P+"_r").setAttribute("x",x_r);
+    ge("fo"+P+"_r").setAttribute("y",y_r);
+    ge("fo"+P+"_R").setAttribute("x",x_R);
+    ge("fo"+P+"_R").setAttribute("y",y_R);
+
+    show("line"+P+"_v");
+    show("line"+P+"_w");
+    show("line"+P+"_koord_z");
+    show("fo"+P+"_w");
+    show("fo"+P+"_v");
+    show("fo"+P+"_z");
+    show("line"+P+"_koord_x");
+    show("line"+P+"_koord_y");
+    show("fo"+P+"_x");
+    show("fo"+P+"_y");
+    show("line"+P+"_r");
+    show("fo"+P+"_r");
+    if(omega == 0){
+        hide("line"+P+"_v");
+        hide("line"+P+"_w");
+        hide("fo"+P+"_w");
+        hide("fo"+P+"_v");
+    }
+    if(perspective == 1){
+        hide("line"+P+"_koord_z");
+        hide("line"+P+"_w");
+        hide("line"+P+"_r");
+        hide("fo"+P+"_r");
+        hide("fo"+P+"_w");
+        hide("fo"+P+"_z");
+    }
+    if(perspective == 3){
+        hide("line"+P+"_koord_x");
+        hide("line"+P+"_koord_y");
+        hide("fo"+P+"_x");
+        hide("fo"+P+"_y");
+    }
+
+    ge("pause"+P).removeAttribute("disabled");
+    if(omega == 0) ge("pause"+P).setAttribute("disabled","true");
+}
+createFigure({id:"6", render:tiltRender, step:circleStep, wrap:circleWrap, condition:omegaCondition, snap:omegaSnap});
+
+// --- gc8: Radialgeschwindigkeit (omega_r) + Spur (tail), variabler Radius r8 ---
+function tailRender(ctx){
+    const P = ctx.P;
+    const perspective = ge("select"+P).value;
+    const phi = parseFloat(ge("range"+P+"_phi").value);
+    const phi_degree = Math.round(phi/Math.PI * 180);
+    const omega = parseFloat(ge("range"+P+"_w").value);
+    const omega_r = parseFloat(ge("range"+P+"_w_r").value);
+    const r8 = ctx.state.r8;
+
+    transform_line("line"+P+"_phi",perspective);
+    ctx.setCircleP3d(r8,0);
+
+    const v = [Math.cos(phi)*r8, Math.sin(phi)*r8, 0];
+    const v2 = [v[0]-Math.cos(Math.PI/2-phi)*omega*r8, v[1]+Math.sin(Math.PI/2-phi)*omega*r8, 0];
+    const v_a = [(1-0.8*Math.abs(omega))*v[0], (1-0.8*Math.abs(omega))*v[1], 0];
+    const v_r = [(1+omega_r*50/r8)*v[0], (1+omega_r*50/r8)*v[1], 0];
+    const x = to2d(v,perspective)[0];
+    const y = to2d(v,perspective)[1];
+    const x_a = to2d(v_a,perspective)[0];
+    const y_a = to2d(v_a,perspective)[1];
+
+    // Spur als Array (P1-Item 9): bisher p3d-String mit split/join; Array ist
+    // aequivalent. transform_polyline liest p3d und projiziert (laeszt wie im
+    // Original den letzten Punkt beim includes(" ")-Zweig weg).
+    ctx.tail.push(v[0]+","+v[1]+",0");
+    if(ctx.tail.length >= 1000) ctx.tail.shift();
+    ge("poly"+P+"_tail").setAttribute("p3d", ctx.tail.join(" "));
+    transform_polyline("poly"+P+"_tail",perspective);
+
+    // r8-Begrenzung [0,170] (aus Legacy, bewusst unverändert): hart Reset der
+    // (Radial-)Geschwindigkeit, damit die Figur stabil bleibt.
+    if(ctx.state.r8 < 0){
+        ctx.state.r8 = 0;
+        ge("range"+P+"_w_r").value = 0;
+        ge("range"+P+"_w").value = 0;
+    }
+    else if(ctx.state.r8 > 170){
+        ctx.state.r8 = 170;
+        ge("range"+P+"_w_r").value = 0;
+    }
+
+    ge("point"+P).setAttribute("cx",x);
+    ge("point"+P).setAttribute("cy",y);
+    ge("line"+P+"_phi").setAttribute("x2",x);
+    ge("line"+P+"_phi").setAttribute("y2",y);
+    ge("line"+P+"_v").setAttribute("x1",x);
+    ge("line"+P+"_v").setAttribute("y1",y);
+    ge("line"+P+"_v").setAttribute("x2",to2d(v2,perspective)[0]);
+    ge("line"+P+"_v").setAttribute("y2",to2d(v2,perspective)[1]);
+    ge("line"+P+"_v_r").setAttribute("x1",x);
+    ge("line"+P+"_v_r").setAttribute("y1",y);
+    ge("line"+P+"_v_r").setAttribute("x2",to2d(v_r,perspective)[0]);
+    ge("line"+P+"_v_r").setAttribute("y2",to2d(v_r,perspective)[1]);
+    ge("line"+P+"_a").setAttribute("x1",x);
+    ge("line"+P+"_a").setAttribute("y1",y);
+    ge("line"+P+"_a").setAttribute("x2",x_a);
+    ge("line"+P+"_a").setAttribute("y2",y_a);
+    ge("line"+P+"_w").setAttribute("y2",to2d([0,0,100*omega],perspective)[1]);
+
+    ctx.transformKoord(perspective);
+
+    ge("fo"+P+"_v").setAttribute("x",ge("line"+P+"_v").getAttribute("x2"));
+    ge("fo"+P+"_v").setAttribute("y",ge("line"+P+"_v").getAttribute("y2"));
+    ge("fo"+P+"_v_r").setAttribute("x",ge("line"+P+"_v_r").getAttribute("x2"));
+    ge("fo"+P+"_v_r").setAttribute("y",ge("line"+P+"_v_r").getAttribute("y2"));
+    ge("fo"+P+"_w").setAttribute("x",ge("line"+P+"_w").getAttribute("x2"));
+    ge("fo"+P+"_w").setAttribute("y",ge("line"+P+"_w").getAttribute("y2"));
+    ge("fo"+P+"_a").setAttribute("x",ge("line"+P+"_a").getAttribute("x2"));
+    ge("fo"+P+"_a").setAttribute("y",ge("line"+P+"_a").getAttribute("y2"));
+
+    show("line"+P+"_v");
+    show("line"+P+"_v_r");
+    show("line"+P+"_w");
+    show("line"+P+"_a");
+    show("line"+P+"_koord_z");
+    show("fo"+P+"_w");
+    show("fo"+P+"_v");
+    show("fo"+P+"_v_r");
+    show("fo"+P+"_z");
+    show("fo"+P+"_a");
+    if(omega == 0){
+        hide("line"+P+"_v");
+        hide("line"+P+"_w");
+        hide("line"+P+"_a");
+        hide("fo"+P+"_w");
+        hide("fo"+P+"_v");
+        hide("fo"+P+"_a");
+    }
+    if(perspective == 1){
+        hide("line"+P+"_koord_z");
+        hide("line"+P+"_w");
+        hide("fo"+P+"_w");
+        hide("fo"+P+"_z");
+    }
+    if(omega_r == 0){
+        hide("line"+P+"_v_r");
+        hide("fo"+P+"_v_r");
+    }
+
+    ge("pause"+P).removeAttribute("disabled");
+    if(omega == 0) ge("pause"+P).setAttribute("disabled","true");
+}
+function tailStep(ctx){
+    const P = ctx.P;
+    const phi = parseFloat(ge("range"+P+"_phi").value);
+    const ome = parseFloat(ge("range"+P+"_w").value);
+    const ome_r = parseFloat(ge("range"+P+"_w_r").value);
+    const omega = ome/10*speed_factor;
+    ge("range"+P+"_phi").value = phi+omega;
+    ctx.state.r8 = ctx.state.r8 + ome_r/2;
+    ctx.phi = phi; ctx.ome = ome;
+}
+function tailCondition(ctx){
+    const P = ctx.P;
+    return ge("pause"+P).value == "Pause" &&
+        (parseFloat(ge("range"+P+"_w").value) != 0 || parseFloat(ge("range"+P+"_w_r").value) != 0);
+}
+function tailSnap(ctx){
+    const P = ctx.P;
+    const we = ge("range"+P+"_w");
+    if(Math.abs(parseFloat(we.value)) < 0.1) we.value = 0;
+    const re = ge("range"+P+"_w_r");
+    if(Math.abs(parseFloat(re.value)) < 0.1) re.value = 0;
+}
+createFigure({id:"8", render:tailRender, step:tailStep, wrap:circleWrap, condition:tailCondition, snap:tailSnap, tail:true,
+    clear: function(ctx){
+        return function(){
+            ctx.tail.length = 0;
+            ge("poly"+ctx.P+"_tail").setAttribute("p3d","");
+            transform_polyline("poly"+ctx.P+"_tail", ge("select"+ctx.P).value);
+            ctx.update();
+        };
+    }});
 
 function update4() {
-    img = ge("img4-1");
+    const img = ge("img4-1");
     if(ge("radio4-1").checked) {
         img.src="bilder/image002.png";
     }
     else {
         img.src="bilder/image003.png";
     }
-}
-
-var gc5_n = 0; //number of revolutions of phi
-
-function update5(){
-    svg = ge("svg5");
-    pl_circle = ge("poly5_circle");
-    pl_angle = ge("poly5_angle");
-    perspective = ge("select5").value;
-    phi = parseFloat(ge("range5_phi").value);
-    phi_degree = Math.round(phi/Math.PI * 180);
-    omega = parseFloat(ge("range5_w").value);
-    alpha = parseFloat(ge("range5_a").value);
-
-    
-    transform_line("line5_phi",perspective);
-
-    var p3d = "";
-    for(let i=0; i<=linspace; i++) {
-        let p = pl_circle.points.appendItem(svg.createSVGPoint());
-        p.x = 100*Math.cos(2*Math.PI*i/linspace);
-        p.y = 100*Math.sin(2*Math.PI*i/linspace);
-        
-        let px = 100*Math.cos(2*Math.PI*i/linspace);
-        let py = 100*Math.sin(2*Math.PI*i/linspace);
-        let pz = 0;
-        
-        p3d += px+","+py+","+pz+" ";
-
-    }
-    pl_circle.setAttribute("p3d",p3d);
-    
-    
-    v = new Array(3);
-    v[0] = Math.cos(phi)*100;
-    v[1] = Math.sin(phi)*100;
-    v[2] = 0;
-    
-    v2 = new Array(3);
-    v2[0] = v[0] - Math.cos(Math.PI/2-phi)*omega*100;
-    v2[1] = v[1] + Math.sin(Math.PI/2-phi)*omega*100;
-    v2[2] = 0;
-    
-    
-    v_a_r = new Array(3); //v_a radial
-    v_a_r[0] = (1-0.8*Math.abs(omega)) * v[0];
-    v_a_r[1] = (1-0.8*Math.abs(omega)) * v[1];
-    v_a_r[2] = 0;
-    
-    v_a_t = new Array(3); //v_a tangential
-    v_a_t[0] = v[0] - Math.cos(Math.PI/2-phi)*alpha*60;
-    v_a_t[1] = v[1] + Math.sin(Math.PI/2-phi)*alpha*60;
-    v_a_t[2] = 0;
-
-    
-    
-    x = to2d(v,perspective)[0];
-    y = to2d(v,perspective)[1];
-    
-    x_a_r = to2d(v_a_r,perspective)[0];
-    y_a_r = to2d(v_a_r,perspective)[1];
-    x_a_t = to2d(v_a_t,perspective)[0];
-    y_a_t = to2d(v_a_t,perspective)[1];
-    
-    
-    
-    ge("point5").setAttribute("cx",x);
-    ge("point5").setAttribute("cy",y);
-    ge("line5_phi").setAttribute("x2",x);
-    ge("line5_phi").setAttribute("y2",y);
-    ge("line5_v").setAttribute("x1",x);
-    ge("line5_v").setAttribute("y1",y);
-    ge("line5_v").setAttribute("x2",to2d(v2,perspective)[0]);
-    ge("line5_v").setAttribute("y2",to2d(v2,perspective)[1]);
-    
-    ge("line5_a_t").setAttribute("x1",x);
-    ge("line5_a_t").setAttribute("y1",y);
-    ge("line5_a_t").setAttribute("x2",to2d(v_a_t,perspective)[0]);
-    ge("line5_a_t").setAttribute("y2",to2d(v_a_t,perspective)[1]);
-    
-    ge("line5_a_r").setAttribute("x1",x);
-    ge("line5_a_r").setAttribute("y1",y);
-    ge("line5_a_r").setAttribute("x2",x_a_r);
-    ge("line5_a_r").setAttribute("y2",y_a_r);
-    
-
-    
-    ge("line5_w").setAttribute("y2",to2d([0,0,100*omega],perspective)[1]);
-    ge("line5_alpha").setAttribute("y2",to2d([0,0,50*alpha],perspective)[1]);
-    
-    transform_polyline("poly5_circle",perspective);
-    transform_line("line5_koord_x",perspective);
-    transform_line("line5_koord_y",perspective);
-    transform_line("line5_koord_z",perspective);
-    
-    ge("fo5_x").setAttribute("x",ge("line5_koord_x").getAttribute("x2"));
-    ge("fo5_x").setAttribute("y",ge("line5_koord_x").getAttribute("y2"));
-    ge("fo5_y").setAttribute("x",ge("line5_koord_y").getAttribute("x2"));
-    ge("fo5_y").setAttribute("y",ge("line5_koord_y").getAttribute("y2"));
-    ge("fo5_z").setAttribute("x",ge("line5_koord_z").getAttribute("x2"));
-    ge("fo5_z").setAttribute("y",ge("line5_koord_z").getAttribute("y2"));
-    
-    ge("fo5_v").setAttribute("x",ge("line5_v").getAttribute("x2"));
-    ge("fo5_v").setAttribute("y",ge("line5_v").getAttribute("y2"));
-    ge("fo5_w").setAttribute("x",ge("line5_w").getAttribute("x2"));
-    ge("fo5_w").setAttribute("y",ge("line5_w").getAttribute("y2"));   
-    ge("fo5_alpha").setAttribute("x",ge("line5_alpha").getAttribute("x2"));
-    ge("fo5_alpha").setAttribute("y",ge("line5_alpha").getAttribute("y2")); 
-    ge("fo5_a_r").setAttribute("x",ge("line5_a_r").getAttribute("x2"));
-    ge("fo5_a_r").setAttribute("y",ge("line5_a_r").getAttribute("y2"));
-    ge("fo5_a_t").setAttribute("x",ge("line5_a_t").getAttribute("x2"));
-    ge("fo5_a_t").setAttribute("y",ge("line5_a_t").getAttribute("y2"));
-    
-    
-    
-    
-    const phi_span = ge("range5_phi_span");
-    
-    if(gc5_n >= 0){
-        phi_span.innerHTML = phi_degree + "°";
-        if(gc5_n != 0) {
-            //phi_span.innerHTML += " + " + gc3_n + " \\(*\\) 360°";
-            phi_span.innerHTML += " + " + gc5_n + " * 360°";
-        }
-    }
-    else {
-        phi_span.innerHTML = "- " + (360-phi_degree) + "° ";
-        if(gc5_n != -1) {
-            phi_span.innerHTML += + gc5_n+1 + " * 360°";
-        }
-    }
-
-    
-    
-    
- show("line5_v");
-    show("line5_w");
-    show("line5_alpha");
-    show("line5_a_r");
-    show("line5_a_t");
-    show("line5_koord_z");
-    show("fo5_w");
-    show("fo5_v");
-    show("fo5_z");
-    show("fo5_a_r");
-    show("fo5_a_t");
-    show("fo5_alpha");
-    hide("range5_w_span_g0");
-    hide("range5_w_span_e0");
-    hide("range5_w_span_l0");
-    hide("range5_a_span_g0");
-    hide("range5_a_span_e0");
-    hide("range5_a_span_l0");
-    if(omega == 0) { 
-        hide("line5_v"); 
-        hide("line5_w"); 
-        hide("line5_a_r"); 
-        hide("fo5_w"); 
-        hide("fo5_v"); 
-        hide("fo5_a_r"); 
-        show("range5_w_span_e0");
-    }
-    else if(omega > 0 && omega < 1){
-        show("range5_w_span_g0");
-
-    }
-    else if(omega < 0 && omega > -1){
-        show("range5_w_span_l0");
-    }
-    if(perspective == 1) { 
-        hide("line5_koord_z"); 
-        hide("line5_w"); 
-        hide("fo5_w"); 
-        hide("fo5_z"); 
-    }
-    if (alpha == 0) {
-        hide("line5_a_t");
-        hide("line5_alpha");
-        hide("fo5_a_t");
-        hide("fo5_alpha");
-        show("range5_a_span_e0");
-    }
-    else if(alpha > 0){
-        show("range5_a_span_g0");
-    }
-    else if(alpha < 0){
-        show("range5_a_span_l0");
-    }
-    
-    ge("pause5").removeAttribute("disabled");
-    if(omega == 0 && alpha == 0) {
-        ge("pause5").setAttribute("disabled","true");
-    }
-}
-
-var animate5_runs = false;
-function condition5() {
-    let ome = parseFloat(ge("range5_w").value);
-    let alp = parseFloat(ge("range5_a").value);
-    if((ome != 0 || alp != 0) && ge("pause5").value == "Pause") {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-function animate5() {
-    let ome = parseFloat(ge("range5_w").value);    
-    let alp = parseFloat(ge("range5_a").value);    
-    
-    if(Math.abs(ome) < 0.1 && alp == 0) { //snap slider
-        ome = 0;
-        ge("range5_w").value = 0;
-    }
-    if(Math.abs(alp) < 0.1) { //snap slider
-        alp = 0;
-        ge("range5_a").value = 0;
-    }
-    
-    if(!animate5_runs && condition5() == true) {
-            animate5_runs = true;
-            do_animation5();
-    }
-    else if(animate5_runs && !condition5()) {
-            animate5_runs = false;
-    }
-    else if(!animate5_runs && !condition5()) {
-        if (ge("pause5").value == "Play") {
-            ge("pause5").click(); 
-        }
-    }
-    
-}
-
-function do_animation5() {
-    phi = parseFloat(ge("range5_phi").value);
-    ome = parseFloat(ge("range5_w").value);
-    alp = parseFloat(ge("range5_a").value);
-    
-    ome = ome + alp/200;
-    ge("range5_w").value = ome;
-    
-    omega = ome/10*speed_factor;
-    ge("range5_phi").value = phi+omega;
-    
-    if(condition5()) {
-        if(phi>6.27) {
-            ge("range5_phi").value = phi-6.27;
-            gc5_n++;
-        }
-        if(phi == 0 && omega < 0) {
-            ge("range5_phi").value = phi+6.27;
-            gc5_n--;
-        }
-        setTimeout(function () {
-            do_animation5();
-        }, 10);
-    }
-    
-    hide("range5_w_span_min");
-    hide("range5_w_span_max");
-    if(Math.abs(ome) >= 1) {
-        alp = 0;
-        ge("range5_a").value = 0;
-        
-
-        if(ome <= -1) {
-            show("range5_w_span_min");
-            hide("range5_w_span_l0");
-        }
-        else if(ome >= -1) {
-            show("range5_w_span_max");
-            hide("range5_w_span_g0");
-        }
-
-    }
-    update5();
-}
-
-var gc51_n = 0; //number of revolutions of phi
-
-function update51(){
-    svg = ge("svg51");
-    pl_circle = ge("poly51_circle");
-    pl_angle = ge("poly51_angle");
-    perspective = ge("select51").value;
-    phi = parseFloat(ge("range51_phi").value);
-    phi_degree = Math.round(phi/Math.PI * 180);
-    omega = parseFloat(ge("range51_w").value);
-    alpha = parseFloat(ge("range51_a").value);
-
-    
-    transform_line("line51_phi",perspective);
-
-    var p3d = "";
-    for(let i=0; i<=linspace; i++) {
-        let p = pl_circle.points.appendItem(svg.createSVGPoint());
-        p.x = 100*Math.cos(2*Math.PI*i/linspace);
-        p.y = 100*Math.sin(2*Math.PI*i/linspace);
-        
-        let px = 100*Math.cos(2*Math.PI*i/linspace);
-        let py = 100*Math.sin(2*Math.PI*i/linspace);
-        let pz = 0;
-        
-        p3d += px+","+py+","+pz+" ";
-
-    }
-    pl_circle.setAttribute("p3d",p3d);
-    
-    
-    v = new Array(3);
-    v[0] = Math.cos(phi)*100;
-    v[1] = Math.sin(phi)*100;
-    v[2] = 0;
-    
-    v2 = new Array(3);
-    v2[0] = v[0] - Math.cos(Math.PI/2-phi)*omega*100;
-    v2[1] = v[1] + Math.sin(Math.PI/2-phi)*omega*100;
-    v2[2] = 0;
-    
-    
-    v_a_r = new Array(3); //v_a radial
-    v_a_r[0] = (1-0.8*Math.abs(omega)) * v[0];
-    v_a_r[1] = (1-0.8*Math.abs(omega)) * v[1];
-    v_a_r[2] = 0;
-    
-    v_a_t = new Array(3); //v_a tangential
-    v_a_t[0] = v[0] - Math.cos(Math.PI/2-phi)*alpha*60;
-    v_a_t[1] = v[1] + Math.sin(Math.PI/2-phi)*alpha*60;
-    v_a_t[2] = 0;
-
-    
-    
-    x = to2d(v,perspective)[0];
-    y = to2d(v,perspective)[1];
-    
-    x_a_r = to2d(v_a_r,perspective)[0];
-    y_a_r = to2d(v_a_r,perspective)[1];
-    x_a_t = to2d(v_a_t,perspective)[0];
-    y_a_t = to2d(v_a_t,perspective)[1];
-    
-    
-    
-    ge("point51").setAttribute("cx",x);
-    ge("point51").setAttribute("cy",y);
-    ge("line51_phi").setAttribute("x2",x);
-    ge("line51_phi").setAttribute("y2",y);
-    ge("line51_v").setAttribute("x1",x);
-    ge("line51_v").setAttribute("y1",y);
-    ge("line51_v").setAttribute("x2",to2d(v2,perspective)[0]);
-    ge("line51_v").setAttribute("y2",to2d(v2,perspective)[1]);
-    
-    ge("line51_a_t").setAttribute("x1",x);
-    ge("line51_a_t").setAttribute("y1",y);
-    ge("line51_a_t").setAttribute("x2",to2d(v_a_t,perspective)[0]);
-    ge("line51_a_t").setAttribute("y2",to2d(v_a_t,perspective)[1]);
-    
-    ge("line51_a_r").setAttribute("x1",x);
-    ge("line51_a_r").setAttribute("y1",y);
-    ge("line51_a_r").setAttribute("x2",x_a_r);
-    ge("line51_a_r").setAttribute("y2",y_a_r);
-    
-
-    
-    transform_polyline("poly51_circle",perspective);
-    transform_line("line51_koord_x",perspective);
-    transform_line("line51_koord_y",perspective);
-    transform_line("line51_koord_z",perspective);
-    
-    ge("fo51_x").setAttribute("x",ge("line51_koord_x").getAttribute("x2"));
-    ge("fo51_x").setAttribute("y",ge("line51_koord_x").getAttribute("y2"));
-    ge("fo51_y").setAttribute("x",ge("line51_koord_y").getAttribute("x2"));
-    ge("fo51_y").setAttribute("y",ge("line51_koord_y").getAttribute("y2"));
-    ge("fo51_z").setAttribute("x",ge("line51_koord_z").getAttribute("x2"));
-    ge("fo51_z").setAttribute("y",ge("line51_koord_z").getAttribute("y2"));
-    
-    ge("fo51_v").setAttribute("x",ge("line51_v").getAttribute("x2"));
-    ge("fo51_v").setAttribute("y",ge("line51_v").getAttribute("y2"));
-   
-    ge("fo51_a_r").setAttribute("x",ge("line51_a_r").getAttribute("x2"));
-    ge("fo51_a_r").setAttribute("y",ge("line51_a_r").getAttribute("y2"));
-    ge("fo51_a_t").setAttribute("x",ge("line51_a_t").getAttribute("x2"));
-    ge("fo51_a_t").setAttribute("y",ge("line51_a_t").getAttribute("y2"));
-    
-    
-    
-    
-    const phi_span = ge("range51_phi_span");
-    
-    if(gc51_n >= 0){
-        phi_span.innerHTML = phi_degree + "°";
-        if(gc51_n != 0) {
-            //phi_span.innerHTML += " + " + gc3_n + " \\(*\\) 360°";
-            phi_span.innerHTML += " + " + gc51_n + " * 360°";
-        }
-    }
-    else {
-        phi_span.innerHTML = "- " + (360-phi_degree) + "° ";
-        if(gc51_n != -1) {
-            phi_span.innerHTML += + gc51_n+1 + " * 360°";
-        }
-    }
-
-    
-    
-    
-    show("line51_v");
-    show("line51_a_r");
-    show("line51_a_t");
-    show("line51_koord_z");
-
-    show("fo51_v");
-    show("fo51_z");
-    show("fo51_a_r");
-    show("fo51_a_t");
-
-    hide("range51_w_span_g0");
-    hide("range51_w_span_e0");
-    hide("range51_w_span_l0");
-    hide("range51_a_span_g0");
-    hide("range51_a_span_e0");
-    hide("range51_a_span_l0");
-    if(omega == 0) { 
-        hide("line51_v"); 
-        hide("line51_a_r"); 
- 
-        hide("fo51_v"); 
-        hide("fo51_a_r"); 
-        show("range51_w_span_e0");
-    }
-    else if(omega > 0 && omega < 1){
-        show("range51_w_span_g0");
-
-    }
-    else if(omega < 0 && omega > -1){
-        show("range51_w_span_l0");
-    }
-    if(perspective == 1) { 
-        hide("line51_koord_z"); 
-
-        hide("fo51_z"); 
-    }
-    if (alpha == 0) {
-        hide("line51_a_t");
-
-        hide("fo51_a_t");
-
-        show("range51_a_span_e0");
-    }
-    else if(alpha > 0){
-        show("range51_a_span_g0");
-    }
-    else if(alpha < 0){
-        show("range51_a_span_l0");
-    }
-    
-    ge("pause51").removeAttribute("disabled");
-    if(omega == 0 && alpha == 0) {
-        ge("pause51").setAttribute("disabled","true");
-    }
-}
-
-var animate51_runs = false;
-function condition51() {
-    let ome = parseFloat(ge("range51_w").value);
-    let alp = parseFloat(ge("range51_a").value);
-    if((ome != 0 || alp != 0) && ge("pause51").value == "Pause") {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-function animate51() {
-    let ome = parseFloat(ge("range51_w").value);    
-    let alp = parseFloat(ge("range51_a").value);    
-    
-    if(Math.abs(ome) < 0.1 && alp == 0) { //snap slider
-        ome = 0;
-        ge("range51_w").value = 0;
-    }
-    if(Math.abs(alp) < 0.1) { //snap slider
-        alp = 0;
-        ge("range51_a").value = 0;
-    }
-    
-    if(!animate51_runs && condition51() == true) {
-            animate51_runs = true;
-            do_animation51();
-    }
-    else if(animate51_runs && !condition51()) {
-            animate51_runs = false;
-    }
-    else if(!animate51_runs && !condition51()) {
-        if (ge("pause51").value == "Play") {
-            ge("pause51").click(); 
-        }
-    }
-    
-}
-
-function do_animation51() {
-    phi = parseFloat(ge("range51_phi").value);
-    ome = parseFloat(ge("range51_w").value);
-    alp = parseFloat(ge("range51_a").value);
-    
-    ome = ome + alp/200;
-    ge("range51_w").value = ome;
-    
-    omega = ome/10*speed_factor;
-    ge("range51_phi").value = phi+omega;
-    
-    if(condition51()) {
-        if(phi>6.27) {
-            ge("range51_phi").value = phi-6.27;
-            gc5_n++;
-        }
-        if(phi == 0 && omega < 0) {
-            ge("range51_phi").value = phi+6.27;
-            gc51_n--;
-        }
-        setTimeout(function () {
-            do_animation51();
-        }, 10);
-    }
-    
-    hide("range51_w_span_min");
-    hide("range51_w_span_max");
-    if(Math.abs(ome) >= 1) {
-        alp = 0;
-        ge("range51_a").value = 0;
-        
-
-        if(ome <= -1) {
-            show("range51_w_span_min");
-            hide("range51_w_span_l0");
-        }
-        else if(ome >= -1) {
-            show("range51_w_span_max");
-            hide("range51_w_span_g0");
-        }
-
-    }
-    update51();
-}
-
-var gc6_n = 0; //number of revolutions of phi
-
-function update6(beta_or_z_changed){
-    svg = ge("svg6");
-    pl_circle = ge("poly6_circle");
-    pl_angle = ge("poly6_angle");
-    perspective = ge("select6").value;
-    phi = parseFloat(ge("range6_phi").value);
-    omega = parseFloat(ge("range6_w").value);
-
-    
-    
-    
-    if(beta_or_z_changed == "beta"){
-        beta = parseFloat(ge("range6_beta").value);
-        z = 100/Math.tan(beta*Math.PI / 180);
-        ge("range6_z").value = z;
-    }
-    else { // z changed
-        z = parseFloat(ge("range6_z").value);
-        beta = Math.atan(100/z);
-        ge("range6_beta").value = beta/Math.PI*180;
-    }
-
-    
-    transform_line("line6_r",perspective);
-
-    var p3d = "";
-    for(let i=0; i<=linspace; i++) {
-        let p = pl_circle.points.appendItem(svg.createSVGPoint());
-        p.x = 100*Math.cos(2*Math.PI*i/linspace);
-        p.y = 100*Math.sin(2*Math.PI*i/linspace);
-        
-        let px = 100*Math.cos(2*Math.PI*i/linspace);
-        let py = 100*Math.sin(2*Math.PI*i/linspace);
-        let pz = z;
-        
-        p3d += px+","+py+","+pz+" ";
-
-    }
-    pl_circle.setAttribute("p3d",p3d);
-    
-    
-    v = new Array(3); //Punkt-Objekt
-    v[0] = Math.cos(phi)*100;
-    v[1] = Math.sin(phi)*100;
-    v[2] = z;
-    
-    v2 = new Array(3); //v Ziel
-    v2[0] = v[0] - Math.cos(Math.PI/2-phi)*omega*100;
-    v2[1] = v[1] + Math.sin(Math.PI/2-phi)*omega*100;
-    v2[2] = z;
-    
-    v3 = new Array(3); //R Ursprung
-    v3[0] = 0;
-    v3[1] = 0;
-    v3[2] = z;
-    
-    x_1 = to2d(v,perspective)[0];
-    y_1 = to2d(v,perspective)[1];
-    
-    v_r = new Array(3); //r text
-    v_r[0] = v[0]*0.5;
-    v_r[1] = v[1]*0.5;
-    v_r[2] = v[2]*0.5;
-    
-    x_r = to2d(v_r,perspective)[0];
-    y_r = to2d(v_r,perspective)[1];
-    
-    v_R = new Array(3); //R text
-    v_R[0] = v[0]*0.5;
-    v_R[1] = v[1]*0.5;
-    v_R[2] = v[2];
-    
-    x_R = to2d(v_R,perspective)[0];
-    y_R = to2d(v_R,perspective)[1];
-    
-    
- 
-    
-    ge("point6").setAttribute("cx",x_1);
-    ge("point6").setAttribute("cy",y_1);
-    
-    ge("line6_r").setAttribute("x2",x_1);
-    ge("line6_r").setAttribute("y2",y_1);
-    
-    ge("line6_v").setAttribute("x1",x_1);
-    ge("line6_v").setAttribute("y1",y_1);
-    
-    ge("line6_R").setAttribute("x2",x_1);
-    ge("line6_R").setAttribute("y2",y_1);
-    ge("line6_R").setAttribute("x1",to2d(v3,perspective)[0]);
-    ge("line6_R").setAttribute("y1",to2d(v3,perspective)[1]);
-    
-    
-
-    ge("line6_v").setAttribute("x2",to2d(v2,perspective)[0]);
-    ge("line6_v").setAttribute("y2",to2d(v2,perspective)[1]);
-    
-
-    ge("line6_w").setAttribute("y1",-z);
-    ge("line6_w").setAttribute("y2",-z+to2d([0,0,100*omega],perspective)[1]);
-    
-    transform_polyline("poly6_circle",perspective);
-    transform_line("line6_koord_x",perspective);
-    transform_line("line6_koord_y",perspective);
-    transform_line("line6_koord_z",perspective);
-    
-    ge("fo6_x").setAttribute("x",ge("line6_koord_x").getAttribute("x2"));
-    ge("fo6_x").setAttribute("y",ge("line6_koord_x").getAttribute("y2"));
-    ge("fo6_y").setAttribute("x",ge("line6_koord_y").getAttribute("x2"));
-    ge("fo6_y").setAttribute("y",ge("line6_koord_y").getAttribute("y2"));
-    ge("fo6_z").setAttribute("x",ge("line6_koord_z").getAttribute("x2"));
-    ge("fo6_z").setAttribute("y",ge("line6_koord_z").getAttribute("y2"));
-    
-    ge("fo6_v").setAttribute("x",ge("line6_v").getAttribute("x2"));
-    ge("fo6_v").setAttribute("y",ge("line6_v").getAttribute("y2"));
-    ge("fo6_w").setAttribute("x",ge("line6_w").getAttribute("x2"));
-    ge("fo6_w").setAttribute("y",ge("line6_w").getAttribute("y2"));
-    
-    ge("fo6_r").setAttribute("x",x_r);
-    ge("fo6_r").setAttribute("y",y_r);
-    ge("fo6_R").setAttribute("x",x_R);
-    ge("fo6_R").setAttribute("y",y_R);
-    
-    
-    
-    show("line6_v");
-    show("line6_w");
-    show("line6_koord_z");
-    show("fo6_w");
-    show("fo6_v");
-    show("fo6_z");
-    show("line6_koord_x"); 
-    show("line6_koord_y"); 
-    show("fo6_x"); 
-    show("fo6_y"); 
-    show("line6_r"); 
-    show("fo6_r");
-    if(omega == 0) { 
-        hide("line6_v"); 
-        hide("line6_w"); 
-        hide("fo6_w"); 
-        hide("fo6_v"); 
-    }
-    if(perspective == 1) { //top
-        hide("line6_koord_z"); 
-        hide("line6_w"); 
-        hide("line6_r"); 
-        hide("fo6_r"); 
-        hide("fo6_w"); 
-        hide("fo6_z"); 
-        
-    }
-    if(perspective == 3) {  
-        hide("line6_koord_x"); 
-        hide("line6_koord_y"); 
-        hide("fo6_x"); 
-        hide("fo6_y"); 
-    }
-    
-    ge("pause6").removeAttribute("disabled");
-    if(omega == 0) {
-        ge("pause6").setAttribute("disabled","true");
-    }
-    
-}
-var animate6_runs = false;
-function condition6() {
-    let ome = parseFloat(ge("range6_w").value);
-
-    if(ome != 0 && ge("pause6").value == "Pause") { 
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-function animate6() {
-    let ome = parseFloat(ge("range6_w").value);    
-    
-    if(Math.abs(ome) < 0.1) { //snap slider
-        ome = 0;
-        ge("range6_w").value = 0;
-    }
-    if(!animate6_runs && condition6() == true) {
-            animate6_runs = true;
-            do_animation6();
-    }
-    else if(animate6_runs && !condition6()) {
-            animate6_runs = false;
-    }
-    else if(!animate6_runs && !condition6()) {
-        if (ge("pause6").value == "Play") {
-            ge("pause6").click(); 
-        }
-    }
-    
-}
-
-function do_animation6() {
-    phi = parseFloat(ge("range6_phi").value);
-    ome = parseFloat(ge("range6_w").value);
-    
-    omega = ome/10*speed_factor;
-    ge("range6_phi").value = phi+omega;
-    
-    
-    if(condition6()) {
-        if(phi>6.27) {
-            ge("range6_phi").value = phi-6.27;
-            gc6_n++;
-        }
-        if(phi == 0 && ome < 0) {
-            ge("range6_phi").value = phi+6.27;
-            gc6_n--;
-        }
-        setTimeout(function () {
-            do_animation6();
-        }, 10);
-    }
-
-    
-    update6();
-}
-
-var gc8_n = 0; //number of revolutions of phi
-var r8 = 100 //Radius default 
-
-function update8(){
-    svg = ge("svg8");
-    pl_circle = ge("poly8_circle");
-    pl_tail = ge("poly8_tail");
-    pl_angle = ge("poly8_angle");
-    perspective = ge("select8").value;
-    phi = parseFloat(ge("range8_phi").value);
-    phi_degree = Math.round(phi/Math.PI * 180);
-    omega = parseFloat(ge("range8_w").value);
-    omega_r = parseFloat(ge("range8_w_r").value); //müsste eigentlich velocity_r heißen...
-
-    
-    transform_line("line8_phi",perspective);
-
-    var p3d = "";
-    for(let i=0; i<=linspace; i++) {
-        let p = pl_circle.points.appendItem(svg.createSVGPoint());
-        p.x = r8*Math.cos(2*Math.PI*i/linspace);
-        p.y = r8*Math.sin(2*Math.PI*i/linspace);
-        
-        let px = r8*Math.cos(2*Math.PI*i/linspace);
-        let py = r8*Math.sin(2*Math.PI*i/linspace);
-        let pz = 0;
-        
-        p3d += px+","+py+","+pz+" ";
-
-    }
-    pl_circle.setAttribute("p3d",p3d);
-    
-
-    
-    v = new Array(3);
-    v[0] = Math.cos(phi)*r8;
-    v[1] = Math.sin(phi)*r8;
-    v[2] = 0;
-    
-    v2 = new Array(3); //v_t
-    v2[0] = v[0] - Math.cos(Math.PI/2-phi)*omega*r8;
-    v2[1] = v[1] + Math.sin(Math.PI/2-phi)*omega*r8;
-    v2[2] = 0;
-    
-    
-    v_a = new Array(3); //w_a radial
-    v_a[0] = (1-0.8*Math.abs(omega)) * v[0];
-    v_a[1] = (1-0.8*Math.abs(omega)) * v[1];
-    v_a[2] = 0;
-    
-    v_r = new Array(3); //v_r radial
-    v_r[0] = (1+omega_r*50/r8) * v[0];
-    v_r[1] = (1+omega_r*50/r8) * v[1];
-    v_r[2] = 0;
-    
-    x = to2d(v,perspective)[0];
-    y = to2d(v,perspective)[1];
-    
-    x_a = to2d(v_a,perspective)[0];
-    y_a = to2d(v_a,perspective)[1];
-    
-    
-    p3d_tail = pl_tail.getAttribute("p3d");
-    if(p3d_tail == "") {
-        p3d_tail += v[0]+","+v[1]+",0"; 
-    }
-    else {
-        p3d_tail += " " + v[0]+","+v[1]+",0";
-    }
-    p_array = p3d_tail.split(" ");
-    if(p_array.length >= 1000) {
-        p_array.shift();
-        p3d_tail = p_array.join(" ");
-    }
-    
-    
-    pl_tail.setAttribute("p3d",p3d_tail);
-    transform_polyline("poly8_tail",perspective);
-
-    
-// Bounds-Clamp für r8 (Bahnradius): r8 wird in do_animation8 aus range8_w_r
-// (Radialgeschwindigkeit) fortlaufend integriert und kann über/unter den
-// darstellbaren Bereich [0,170] hinauslaufen. Hier wird es hart zurückgesetzt
-// und die Radialgeschwindigkeit auf 0 gesetzt, damit die Figur stabil bleibt.
-// TODO: sauberer wäre eine Begrenzung der Geschwindigkeit statt eines harten
-// Resets nach Überschreitung; Verhalten bis zur Klärung bewusst unverändert.
-    if (r8 < 0) {
-        r8 = 0;
-        ge("range8_w_r").value = 0;
-        ge("range8_w").value = 0;
-    }
-    else if (r8 > 170) {
-        r8 = 170;
-        ge("range8_w_r").value = 0;
-    }
-    
-    
-    
-    
-    ge("point8").setAttribute("cx",x);
-    ge("point8").setAttribute("cy",y);
-    ge("line8_phi").setAttribute("x2",x);
-    ge("line8_phi").setAttribute("y2",y);
-    ge("line8_v").setAttribute("x1",x);
-    ge("line8_v").setAttribute("y1",y);
-    ge("line8_v").setAttribute("x2",to2d(v2,perspective)[0]);
-    ge("line8_v").setAttribute("y2",to2d(v2,perspective)[1]);
-    
-    ge("line8_v_r").setAttribute("x1",x);
-    ge("line8_v_r").setAttribute("y1",y);
-    ge("line8_v_r").setAttribute("x2",to2d(v_r,perspective)[0]);
-    ge("line8_v_r").setAttribute("y2",to2d(v_r,perspective)[1]);
-    
-    ge("line8_a").setAttribute("x1",x);
-    ge("line8_a").setAttribute("y1",y);
-    ge("line8_a").setAttribute("x2",x_a);
-    ge("line8_a").setAttribute("y2",y_a);
-    
-
-    
-    ge("line8_w").setAttribute("y2",to2d([0,0,100*omega],perspective)[1]);
-    
-    transform_polyline("poly8_circle",perspective);
-
-    
-    transform_line("line8_koord_x",perspective);
-    transform_line("line8_koord_y",perspective);
-    transform_line("line8_koord_z",perspective);
-    
-    ge("fo8_x").setAttribute("x",ge("line8_koord_x").getAttribute("x2"));
-    ge("fo8_x").setAttribute("y",ge("line8_koord_x").getAttribute("y2"));
-    ge("fo8_y").setAttribute("x",ge("line8_koord_y").getAttribute("x2"));
-    ge("fo8_y").setAttribute("y",ge("line8_koord_y").getAttribute("y2"));
-    ge("fo8_z").setAttribute("x",ge("line8_koord_z").getAttribute("x2"));
-    ge("fo8_z").setAttribute("y",ge("line8_koord_z").getAttribute("y2"));
-    
-    ge("fo8_v").setAttribute("x",ge("line8_v").getAttribute("x2"));
-    ge("fo8_v").setAttribute("y",ge("line8_v").getAttribute("y2"));
-    ge("fo8_v_r").setAttribute("x",ge("line8_v_r").getAttribute("x2"));
-    ge("fo8_v_r").setAttribute("y",ge("line8_v_r").getAttribute("y2"));
-    ge("fo8_w").setAttribute("x",ge("line8_w").getAttribute("x2"));
-    ge("fo8_w").setAttribute("y",ge("line8_w").getAttribute("y2"));    
-    ge("fo8_a").setAttribute("x",ge("line8_a").getAttribute("x2"));
-    ge("fo8_a").setAttribute("y",ge("line8_a").getAttribute("y2"));
-    
-    
-
-    
-    
-    
-    show("line8_v");
-    show("line8_v_r");
-    show("line8_w");
-    show("line8_a");
-    show("line8_koord_z");
-    show("fo8_w");
-    show("fo8_v");
-    show("fo8_v_r");
-    show("fo8_z");
-    show("fo8_a");
-    if(omega == 0) { 
-        hide("line8_v"); 
-        hide("line8_w"); 
-        hide("line8_a"); 
-        hide("fo8_w"); 
-        hide("fo8_v"); 
-        hide("fo8_a"); 
-    }
-    if(perspective == 1) { //top
-        hide("line8_koord_z"); 
-        hide("line8_w"); 
-        hide("fo8_w"); 
-        hide("fo8_z"); 
-    } 
-    if(omega_r == 0) {
-        hide("line8_v_r");
-        hide("fo8_v_r");
-    }
-    
-    
-    ge("pause8").removeAttribute("disabled");
-    if(omega == 0) {
-        ge("pause8").setAttribute("disabled","true");
-    }
-}
-
-var animate8_runs = false;
-function condition8() {
-    let ome = parseFloat(ge("range8_w").value);
-    let ome_r = parseFloat(ge("range8_w_r").value);
-
-    if((ome != 0 || ome_r != 0) && ge("pause8").value == "Pause") {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-function animate8() {
-    let ome = parseFloat(ge("range8_w").value);    
-    let vr = parseFloat(ge("range8_w_r").value);    
-    
-    if(Math.abs(ome) < 0.1) { //snap slider
-        ome = 0;
-        ge("range8_w").value = 0;
-    }
-    if(Math.abs(vr) < 0.1) { //snap slider
-        vr = 0;
-        ge("range8_w_r").value = 0;
-    }
-    
-    if(!animate8_runs && condition8() == true) {
-            animate8_runs = true;
-            do_animation8();
-    }
-    else if(animate8_runs && !condition8()) {
-            animate8_runs = false;
-    }
-    else if(!animate8_runs && !condition8()) {
-        if (ge("pause8").value == "Play") {
-            ge("pause8").click(); 
-        }
-    }
-    
-}
-
-function do_animation8() {
-    phi = parseFloat(ge("range8_phi").value);
-    ome = parseFloat(ge("range8_w").value);
-    ome_r = parseFloat(ge("range8_w_r").value);
-    
-    omega = ome/10*speed_factor;
-    ge("range8_phi").value = phi+omega;
-    
-    r8 = r8 + ome_r/2;
-    
-    if(condition8()) {
-        if(phi>6.27) {
-            ge("range8_phi").value = phi-6.27;
-            gc8_n++;
-        }
-        if(phi == 0 && ome < 0) {
-            ge("range8_phi").value = phi+6.27;
-            gc8_n--;
-        }
-        setTimeout(function () {
-            do_animation8();
-        }, 10);
-    }
-
-    
-    update8();
-}
-
-function clear8() {
-    pl_tail = ge("poly8_tail");
-    perspective = ge("select8").value;
-    
-    pl_tail.setAttribute("p3d","");
-    transform_polyline("poly8_tail",perspective);
-    update8();
 }
 
