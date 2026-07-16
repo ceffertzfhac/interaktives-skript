@@ -16,13 +16,13 @@
         <div id="header">
             <span id="span_title">Physik Skript</span>
             <div id="toolbar">
-                <div class="navbar_button" onclick="toc()">Inhaltsverzeichnis</div>
-                <div class="navbar_button" onclick="init_print()">Drucken</div>
-                <div class="navbar_button" onclick="kontakt()">Kontakt</div>
+                <div class="navbar_button" data-action="toc">Inhaltsverzeichnis</div>
+                <div class="navbar_button" data-action="init_print">Drucken</div>
+                <div class="navbar_button" data-action="kontakt">Kontakt</div>
             </div> 
-            <div class="darkmode_icon" onclick="toggle_darkmode()"></div>
+            <div class="darkmode_icon" data-action="toggle_darkmode"></div>
         </div>
-        <div id="zoom_overlay" class="hidden" onclick="close_zoom()"></div>
+        <div id="zoom_overlay" class="hidden" data-action="close_zoom"></div>
         <div id="zoom" class="hidden">
             <div id="zoom_content"></div>
         </div>
@@ -35,13 +35,13 @@
         <div id="print_container" class="hidden"></div>
         <div id="toc_container" class="hidden">
             <div id="toc_content" class=""></div>
-            <div id="toc_overlay" onclick="hide('toc_container')"></div>
+            <div id="toc_overlay" data-action="hide" data-target="toc_container"></div>
         </div>
         <div id="kontakt" class="hidden">
             Bei fachlichen Fragen oder Kommentaren wenden Sie sich an: <br>
             <a href="mailto:c.effertz@fh-aachen.de?subject=[Physik]%20[Interaktives Skript]">c.effertz(at)fh-aachen.de</a>
             <br><br>
-            Fa<span onclick="test()">ll</span>s Sie einen Bug gefunden haben, schreiben Sie bi<span onclick="reload_mathjax()">tt</span>e kurz eine E-Mail an: <br>
+            Fa<span data-action="test">ll</span>s Sie einen Bug gefunden haben, schreiben Sie bi<span data-action="reload-mathjax">tt</span>e kurz eine E-Mail an: <br>
             <a href="mailto:peter.wilke@alumni.fh-aachen.de?subject=[Interaktives Skript]%20[Bug]">peter.wilke(at)alumni.fh-aachen.de</a>
         
         </div>
@@ -119,16 +119,16 @@ Die Grundbegriffe der Dynamik sind der Impuls, die Kraft, die Energie und die Le
                         
                 <div id="gc4" class="grafik-container">
                         <div class="grafik-container-inner">
-                            <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                            <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                             <img src="bilder/image002.png" id="img4-1">
                             
                             <br><br>
                             <label class="radio-container">Translatorische Kinematik
-                                <input type="radio" id="radio4-1" checked="checked" name="radio4" onchange="update4()">
+                                <input type="radio" id="radio4-1" checked="checked" name="radio4" data-action="update" data-fig="4" data-event="change">
                                 <span class="radio-checkmark"></span>
                             </label>
                             <label class="radio-container">Rotatorische Kinematik
-                                <input type="radio" id="radio4-2" name="radio4" onchange="update4()">
+                                <input type="radio" id="radio4-2" name="radio4" data-action="update" data-fig="4" data-event="change">
                                 <span class="radio-checkmark"></span>
                             </label>
                         </div>
@@ -192,7 +192,7 @@ Diese Formel beschreibt eine Kreisbahn.
                         
                         <div id="gc1" class="grafik-container">
                                 <div class="grafik-container-inner">
-                                    <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                    <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                     <svg id="svg1" viewBox="-150 -150 300 300">
 
                                         <circle id="circle1" cx="0" cy="0" r="100"></circle>
@@ -219,15 +219,15 @@ Diese Formel beschreibt eine Kreisbahn.
                                             
                                     </svg>
                                     <br>
-                                    <input id="range1_phi0" type="range" min="0" max="360" value="0" step="0.5" oninput="update1();">
+                                    <input id="range1_phi0" type="range" min="0" max="360" value="0" step="0.5" data-action="update" data-fig="1">
                                                                   \( \varphi_0 = 0 \) Position 
                                     <br>
-                                    <input id="range1_phi" type="range" min="0" max="360" value="141" step="3" oninput="update1();">
+                                    <input id="range1_phi" type="range" min="0" max="360" value="141" step="3" data-action="update" data-fig="1">
                                    
                                                                   \( \varphi = \) <span id="range1_phi_span"></span> \( = \) <span id="range1_phi_span_fraction"></span> \( \pi \)
                               
                                     <br>
-                                    <input id="range1_r" type="range" min="0" max="150" value="100" step="1" oninput="update1();">
+                                    <input id="range1_r" type="range" min="0" max="150" value="100" step="1" data-action="update" data-fig="1">
                                                                   \( R = \) <span id="range1_r_span"></span>
                                     <!--<div class="gc_title">Radius und Winkel einer Drehbewegung. <br>
                                          Der Winkel \( \varphi \) ist willkürlich festgelegt.</div>-->
@@ -298,7 +298,7 @@ Ein Punkt auf einer Kreisbahn ist also eindeutig bestimmt durch seinen Winkel \(
                             
                              <div id="gc9" class="grafik-container">
                                 <div class="grafik-container-inner">
-                                    <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                    <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                     <svg id="svg9" viewBox="-150 -150 300 300">
 
                                         <circle id="circle9" cx="0" cy="0" r="100"></circle>
@@ -336,17 +336,17 @@ Ein Punkt auf einer Kreisbahn ist also eindeutig bestimmt durch seinen Winkel \(
                                     </svg>
                                     <br>
   
-                                    <input id="range9_phi" type="range" min="0" max="360" value="141" step="0.1" oninput="update9('kreis');">
+                                    <input id="range9_phi" type="range" min="0" max="360" value="141" step="0.1" data-action="update" data-fig="9" data-arg="kreis">
                                    
                                                                   \( \varphi = \) <span id="range9_phi_span"></span> 
                                     <br>
-                                    <input id="range9_r" type="range" min="0" max="150" value="100" step="1" oninput="update9('kreis');">
+                                    <input id="range9_r" type="range" min="0" max="150" value="100" step="1" data-action="update" data-fig="9" data-arg="kreis">
                                                                   \( R = \) <span id="range9_r_span"></span>
                                     <br>
-                                    <input id="range9_x" type="range" min="-150" max="150" value="-77.7" step="0.1" oninput="update9('xy');">
+                                    <input id="range9_x" type="range" min="-150" max="150" value="-77.7" step="0.1" data-action="update" data-fig="9" data-arg="xy">
                                                                   \( r_x = \) <span id="range9_x_span"></span>
                                     <br>
-                                    <input id="range9_y" type="range" min="-150" max="150" value="62.9" step="1" oninput="update9('xy');">
+                                    <input id="range9_y" type="range" min="-150" max="150" value="62.9" step="1" data-action="update" data-fig="9" data-arg="xy">
                                                                   \( r_y = \) <span id="range9_y_span"></span>
                                     
                                     
@@ -451,7 +451,7 @@ Seine Winkelgeschwindigkeit beträgt somit 360°/(60 s) oder \( \frac{\pi}{60} \
                             
                           <div id="gc32" class="grafik-container">
                                 <div class="grafik-container-inner">
-                                    <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                    <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                     <svg id="svg32" viewBox="-150 -150 300 300">
 
                                         <line id="line32_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
@@ -497,13 +497,13 @@ Seine Winkelgeschwindigkeit beträgt somit 360°/(60 s) oder \( \frac{\pi}{60} \
                                             
                                     </svg>
                                     <br>
-                                    <input id="range32_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" oninput="update32();">
+                                    <input id="range32_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" data-action="update" data-fig="32">
                                                                 \( \varphi =\) <!--  <span id="range1_phi_span"></span> \( \approx \) <span id="range3_phi_span_fraction"></span> \( \pi \)-->
                                     <span id="range32_phi_span"></span>
                                     
                                     <br>
                                     
-                                    <input id="range32_w" type="range" min="-1" max="1" value="0" step="0.01" oninput="animate32();">
+                                    <input id="range32_w" type="range" min="-1" max="1" value="0" step="0.01" data-action="animate" data-fig="32">
                                                                   \( \omega \)<!-- <span id="range3_w_span"></span>-->
                                     <span id="range32_w_span_l0" class="hidden">\( < 0\ s^{-1} \)</span> 
                                     <span id="range32_w_span_e0" class="hidden">\( = 0\ s^{-1} \)</span>
@@ -511,12 +511,12 @@ Seine Winkelgeschwindigkeit beträgt somit 360°/(60 s) oder \( \frac{\pi}{60} \
                                     
                                     
                                     <br><br>
-                                    <select id="select32" onchange="update32()">
+                                    <select id="select32" data-action="update" data-fig="32" data-event="change">
                                         <option value="1" selected>Top</option>
                                         <option value="3">Iso</option>
                                     </select>
-                                    <input type="button" value="Pause" id="pause32" onclick="pause(this);animate32()">
-                                    <input type="button" value="Reset" id="" onclick="reset()">
+                                    <input type="button" value="Pause" id="pause32" data-action="pause-animate" data-fig="32">
+                                    <input type="button" value="Reset" id="" data-action="reset">
 
                                 </div>
                             </div> 
@@ -592,7 +592,7 @@ Der Zusammenhang zwischen Winkel und Winkelgeschwindigkeit ist:
                             
                             <div id="gc51" class="grafik-container">
                                 <div class="grafik-container-inner">
-                                    <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                    <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                     <svg id="svg51" viewBox="-150 -150 300 300">
 
                                         <line id="line51_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
@@ -648,12 +648,12 @@ Der Zusammenhang zwischen Winkel und Winkelgeschwindigkeit ist:
                                             
                                     </svg>
                                     <br>
-                                    <input id="range51_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" oninput="update51();">
+                                    <input id="range51_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" data-action="update" data-fig="51">
                                                                 \( \varphi = \) <!--  <span id="range1_phi_span"></span> \( \approx \) <span id="range3_phi_span_fraction"></span> \( \pi \)-->
                                     <span id="range51_phi_span"></span>
                                     <br>
                                     
-                                    <input id="range51_w" type="range" min="-1" max="1" value="0" step="0.0001" oninput="animate51();">
+                                    <input id="range51_w" type="range" min="-1" max="1" value="0" step="0.0001" data-action="animate" data-fig="51">
                                                                   \( \omega \)  
                                         <span id="range51_w_span_l0" class="hidden">\( < 0\ s^{-1} \)</span> 
                                         <span id="range51_w_span_e0" class="hidden">\( = 0\ s^{-1} \)</span>
@@ -663,18 +663,18 @@ Der Zusammenhang zwischen Winkel und Winkelgeschwindigkeit ist:
                                             
                                     
                                     <br>
-                                    <input id="range51_a" type="range" min="-1" max="1" value="0" step="0.01" oninput="animate51();">
+                                    <input id="range51_a" type="range" min="-1" max="1" value="0" step="0.01" data-action="animate" data-fig="51">
                                                                   \( \alpha \) 
                                         <span id="range51_a_span_l0" class="hidden">\( < 0\ s^{-2} \)</span> 
                                         <span id="range51_a_span_e0" class="hidden">\( = 0\ s^{-2} \)</span>
                                         <span id="range51_a_span_g0" class="hidden">\( > 0\ s^{-2} \)</span>
                                     <br><br>
-                                    <select id="select51" onchange="update51()">
+                                    <select id="select51" data-action="update" data-fig="51" data-event="change">
                                         <option value="1" selected>Top</option>
                                         <option value="3">Iso</option>
                                     </select>
-                                    <input type="button" value="Pause" id="pause51" onclick="pause(this);animate51()">
-                                    <input type="button" value="Reset" id="" onclick="reset()">
+                                    <input type="button" value="Pause" id="pause51" data-action="pause-animate" data-fig="51">
+                                    <input type="button" value="Reset" id="" data-action="reset">
 
                                 </div>
                             </div>    
@@ -759,7 +759,7 @@ Mit \(  R\cdot\dot{\omega}\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\ri
                             
                                <div id="gc31" class="grafik-container">
                                 <div class="grafik-container-inner">
-                                    <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                    <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                     <svg id="svg31" viewBox="-150 -150 300 300">
 
                                         <line id="line31_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
@@ -809,13 +809,13 @@ Mit \(  R\cdot\dot{\omega}\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\ri
                                             
                                     </svg>
                                     <br>
-                                    <input id="range31_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" oninput="update31();">
+                                    <input id="range31_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" data-action="update" data-fig="31">
                                                                 \( \varphi =\) <!--  <span id="range1_phi_span"></span> \( \approx \) <span id="range3_phi_span_fraction"></span> \( \pi \)-->
                                     <span id="range31_phi_span"></span>
                                     
                                     <br>
                                     
-                                    <input id="range31_w" type="range" min="-1" max="1" value="0" step="0.01" oninput="animate31();">
+                                    <input id="range31_w" type="range" min="-1" max="1" value="0" step="0.01" data-action="animate" data-fig="31">
                                                                   \( \omega \)<!-- <span id="range3_w_span"></span>-->
                                     <span id="range31_w_span_l0" class="hidden">\( < 0\ s^{-1} \)</span> 
                                     <span id="range31_w_span_e0" class="hidden">\( = 0\ s^{-1} \)</span>
@@ -823,12 +823,12 @@ Mit \(  R\cdot\dot{\omega}\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\ri
                                     
                                     
                                     <br><br>
-                                    <select id="select31" onchange="update31()">
+                                    <select id="select31" data-action="update" data-fig="31" data-event="change">
                                         <option value="1" selected>Top</option>
                                         <option value="3">Iso</option>
                                     </select>
-                                    <input type="button" value="Pause" id="pause31" onclick="pause(this);animate31()">
-                                    <input type="button" value="Reset" id="" onclick="reset()">
+                                    <input type="button" value="Pause" id="pause31" data-action="pause-animate" data-fig="31">
+                                    <input type="button" value="Reset" id="" data-action="reset">
 
                                 </div>
                             </div> 
@@ -1007,7 +1007,7 @@ Im Allgemeinen sind diese Größen 3-D Vektoren. Außerdem sind alle Größen ze
                             
                               <div id="gc3" class="grafik-container">
                                 <div class="grafik-container-inner">
-                                    <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                    <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                     <svg id="svg3" viewBox="-150 -150 300 300">
 
                                         <line id="line3_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
@@ -1062,13 +1062,13 @@ Im Allgemeinen sind diese Größen 3-D Vektoren. Außerdem sind alle Größen ze
                                             
                                     </svg>
                                     <br>
-                                    <input id="range3_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" oninput="update3();">
+                                    <input id="range3_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" data-action="update" data-fig="3">
                                                                 \( \varphi =\) <!--  <span id="range1_phi_span"></span> \( \approx \) <span id="range3_phi_span_fraction"></span> \( \pi \)-->
                                     <span id="range3_phi_span"></span>
                                     
                                     <br>
                                     
-                                    <input id="range3_w" type="range" min="-1" max="1" value="0" step="0.01" oninput="animate3();">
+                                    <input id="range3_w" type="range" min="-1" max="1" value="0" step="0.01" data-action="animate" data-fig="3">
                                                                   \( \omega \)<!-- <span id="range3_w_span"></span>-->
                                     <span id="range3_w_span_l0" class="hidden">\( < 0\ s^{-1} \)</span> 
                                     <span id="range3_w_span_e0" class="hidden">\( = 0\ s^{-1} \)</span>
@@ -1076,12 +1076,12 @@ Im Allgemeinen sind diese Größen 3-D Vektoren. Außerdem sind alle Größen ze
                                     
                                     
                                     <br><br>
-                                    <select id="select3" onchange="update3()">
+                                    <select id="select3" data-action="update" data-fig="3" data-event="change">
                                         <option value="1">Top</option>
                                         <option value="3" selected>Iso</option>
                                     </select>
-                                    <input type="button" value="Pause" id="pause3" onclick="pause(this);animate3()">
-                                    <input type="button" value="Reset" id="" onclick="reset()">
+                                    <input type="button" value="Pause" id="pause3" data-action="pause-animate" data-fig="3">
+                                    <input type="button" value="Reset" id="" data-action="reset">
 
                                 </div>
                             </div> 
@@ -1117,7 +1117,7 @@ Damit folgt für den Betrag: \( \left|d\vec{r}\right|=Rd\varphi \), diesen Zusam
                                 
                                     <div id="gc6" class="grafik-container">
                                 <div class="grafik-container-inner">
-                                    <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                    <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                     <svg id="svg6" viewBox="-150 -200 300 300">
                                         
                                         <line id="line6_koord_x" x1="0" y1="0" d31="0,0,0" d32="50,0,0" x2="-50" y2="50" marker-end="url(#arrow)"></line>
@@ -1165,26 +1165,26 @@ Damit folgt für den Betrag: \( \left|d\vec{r}\right|=Rd\varphi \), diesen Zusam
                                             
                                     </svg>
                                     <br>
-                                    <input id="range6_z" type="range" min="0" max="120" value="80" step="1" oninput="update6('z');">
+                                    <input id="range6_z" type="range" min="0" max="120" value="80" step="1" data-action="update" data-fig="6" data-arg="z">
                                                                 \( z \) <!--  <span id="range1_phi_span"></span> \( \approx \) <span id="range3_phi_span_fraction"></span> \( \pi \)-->
                                     <br>
-                                    <input id="range6_beta" type="range" min="40" max="90" value="51" step="1" oninput="update6('beta');">
+                                    <input id="range6_beta" type="range" min="40" max="90" value="51" step="1" data-action="update" data-fig="6" data-arg="beta">
                                                                 \( \beta \) <!--  <span id="range1_phi_span"></span> \( \approx \) <span id="range3_phi_span_fraction"></span> \( \pi \)-->
                                     <br>
-                                    <input id="range6_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" oninput="update6();">
+                                    <input id="range6_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" data-action="update" data-fig="6">
                                                                 \( \varphi \) <!--  <span id="range1_phi_span"></span> \( \approx \) <span id="range3_phi_span_fraction"></span> \( \pi \)-->
                                     <br>
                                     
-                                    <input id="range6_w" type="range" min="-1" max="1" value="0" step="0.01" oninput="animate6();">
+                                    <input id="range6_w" type="range" min="-1" max="1" value="0" step="0.01" data-action="animate" data-fig="6">
                                                                   \( \omega \)<!-- <span id="range3_w_span"></span>-->
                                     <br><br>
-                                    <select id="select6" onchange="update6()">
+                                    <select id="select6" data-action="update" data-fig="6" data-event="change">
                                         <option value="1">Top</option>
                                         <option value="3" selected>Iso</option>
                                     </select>
-                                    <input type="button" value="Pause" id="pause6" onclick="pause(this);animate6()">
+                                    <input type="button" value="Pause" id="pause6" data-action="pause-animate" data-fig="6">
 
-                                    <input type="button" value="Reset" id="" onclick="reset()">
+                                    <input type="button" value="Reset" id="" data-action="reset">
 
                                 </div>
                             </div>
@@ -1195,7 +1195,7 @@ Damit folgt für den Betrag: \( \left|d\vec{r}\right|=Rd\varphi \), diesen Zusam
                          <!--   
                          <div id="gc7" class="grafik-container">
                             <div class="grafik-container-inner">
-                                <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                 <img src="bilder/abb84.png" class="grafik" id="bild7" draggable="false">
                             </div>
                         </div>         
@@ -1276,7 +1276,7 @@ Genau wie die Bahnbeschleunigung ist die Winkelbeschleunigung im Allgemeinen ein
                             
                             <div id="gc5" class="grafik-container">
                                 <div class="grafik-container-inner">
-                                    <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                    <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                     <svg id="svg5" viewBox="-150 -150 300 300">
 
                                         <line id="line5_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
@@ -1343,12 +1343,12 @@ Genau wie die Bahnbeschleunigung ist die Winkelbeschleunigung im Allgemeinen ein
                                             
                                     </svg>
                                     <br>
-                                    <input id="range5_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" oninput="update5();">
+                                    <input id="range5_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" data-action="update" data-fig="5">
                                                                 \( \varphi = \) <!--  <span id="range1_phi_span"></span> \( \approx \) <span id="range3_phi_span_fraction"></span> \( \pi \)-->
                                     <span id="range5_phi_span"></span>
                                     <br>
                                     
-                                    <input id="range5_w" type="range" min="-1" max="1" value="0" step="0.0001" oninput="animate5();">
+                                    <input id="range5_w" type="range" min="-1" max="1" value="0" step="0.0001" data-action="animate" data-fig="5">
                                                                   \( \omega \)  
                                         <span id="range5_w_span_l0" class="hidden">\( < 0\ s^{-1} \)</span> 
                                         <span id="range5_w_span_e0" class="hidden">\( = 0\ s^{-1} \)</span>
@@ -1358,18 +1358,18 @@ Genau wie die Bahnbeschleunigung ist die Winkelbeschleunigung im Allgemeinen ein
                                             
                                     
                                     <br>
-                                    <input id="range5_a" type="range" min="-1" max="1" value="0" step="0.01" oninput="animate5();">
+                                    <input id="range5_a" type="range" min="-1" max="1" value="0" step="0.01" data-action="animate" data-fig="5">
                                                                   \( \alpha \) 
                                         <span id="range5_a_span_l0" class="hidden">\( < 0\ s^{-2} \)</span> 
                                         <span id="range5_a_span_e0" class="hidden">\( = 0\ s^{-2} \)</span>
                                         <span id="range5_a_span_g0" class="hidden">\( > 0\ s^{-2} \)</span>
                                     <br><br>
-                                    <select id="select5" onchange="update5()">
+                                    <select id="select5" data-action="update" data-fig="5" data-event="change">
                                         <option value="1">Top</option>
                                         <option value="3" selected>Iso</option>
                                     </select>
-                                    <input type="button" value="Pause" id="pause5" onclick="pause(this);animate5()">
-                                    <input type="button" value="Reset" id="" onclick="reset()">
+                                    <input type="button" value="Pause" id="pause5" data-action="pause-animate" data-fig="5">
+                                    <input type="button" value="Reset" id="" data-action="reset">
 
                                 </div>
                             </div>    
@@ -1422,7 +1422,7 @@ Bei einer Kreisbewegung mit veränderlicher Winkelgeschwindigkeit setzt sich die
                      
                         <div id="gc8" class="grafik-container">
                             <div class="grafik-container-inner">
-                                <div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div>
+                                <div class="zoom_button zoom_maximize" data-action="zoom"></div>
                                 <svg id="svg8" viewBox="-150 -150 300 300">
                                     <line id="line8_phi" x1="0" y1="0" x2="0" y2="-100" d31="0,0,0" d32="0,100,0"></line>
                                     <circle id="point8" class="point" cx="0" cy="-100" r="6" d3="0,0,0"></circle> 
@@ -1480,29 +1480,29 @@ Bei einer Kreisbewegung mit veränderlicher Winkelgeschwindigkeit setzt sich die
                                 </svg>
                                 
                                     <br>
-                                    <input id="range8_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" oninput="update8();">
+                                    <input id="range8_phi" type="range" min="0" max="6.28" value="2.5" step="0.001" data-action="update" data-fig="8">
                                                                 \( \varphi \) <!--  <span id="range1_phi_span"></span> \( \approx \) <span id="range3_phi_span_fraction"></span> \( \pi \)-->
                                     <!--<span id="range8_phi_span"></span>-->
                                     
                                     <br>
                                     
-                                    <input id="range8_w" type="range" min="-1" max="1" value="0" step="0.01" oninput="animate8();">
+                                    <input id="range8_w" type="range" min="-1" max="1" value="0" step="0.01" data-action="animate" data-fig="8">
                                                                   \( \omega \)<!-- <span id="range3_w_span"></span>-->
 
                                     
                                     <br>
-                                    <input id="range8_w_r" type="range" min="-1" max="1" value="0" step="0.01" oninput="animate8();">
+                                    <input id="range8_w_r" type="range" min="-1" max="1" value="0" step="0.01" data-action="animate" data-fig="8">
                                                                   \( v_r \)<!-- <span id="range3_w_span"></span>-->
 
                                     
                                     <br><br>
-                                    <select id="select8" onchange="update8()">
+                                    <select id="select8" data-action="update" data-fig="8" data-event="change">
                                         <option value="1">Top</option>
                                         <option value="3" selected>Iso</option>
                                     </select>
-                                    <input type="button" value="Pause" id="pause8" onclick="pause(this);animate8()">
-                                    <input type="button" value="Clear" id="" onclick="clear8()">
-                                    <input type="button" value="Reset" id="" onclick="reset()">
+                                    <input type="button" value="Pause" id="pause8" data-action="pause-animate" data-fig="8">
+                                    <input type="button" value="Clear" id="" data-action="clear" data-fig="8">
+                                    <input type="button" value="Reset" id="" data-action="reset">
 
                                     <!--<div class="gc_title">Abb. 12: Radialgeschwindigkeit</div>-->
                             </div>

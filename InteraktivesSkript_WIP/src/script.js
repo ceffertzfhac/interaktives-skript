@@ -5,6 +5,7 @@ var auto_print = false; //Safari blocks autoprint...
 var speed_factor = 1;
 
 function init() {
+    bind_events();
     generate_highlight_boxes();
     safari_bug();
     generate_toc();
@@ -15,6 +16,56 @@ function init() {
     }
     from_qr();
     check_print();
+}
+
+// Zentrales Event-Binding (Stage 2): Inline-Handler sind durch data-action-
+// Attribute ersetzt; ein delegierter Listener je Event-Typ dispatcht an die
+// globalen Funktionen. data-event="change" markiert <select>/Radio, die wie
+// bisher nur auf change (nicht input) reagieren sollen.
+function fig_call(prefix, fig, arg) {
+    const fn = window[prefix + fig];
+    if (!fn) return;
+    if (arg !== undefined && arg !== null && arg !== "") fn(arg);
+    else fn();
+}
+
+function bind_events() {
+    document.addEventListener("click", dispatch_click);
+    document.addEventListener("input", dispatch_input);
+    document.addEventListener("change", dispatch_change);
+}
+
+function dispatch_input(e) {
+    const el = e.target.closest("[data-action]");
+    if (!el || el.dataset.event === "change") return;
+    if (el.dataset.action === "update") fig_call("update", el.dataset.fig, el.dataset.arg);
+    else if (el.dataset.action === "animate") fig_call("animate", el.dataset.fig);
+}
+
+function dispatch_change(e) {
+    const el = e.target.closest("[data-action]");
+    if (!el || el.dataset.event !== "change") return;
+    if (el.dataset.action === "update") fig_call("update", el.dataset.fig, el.dataset.arg);
+}
+
+function dispatch_click(e) {
+    const el = e.target.closest("[data-action]");
+    if (!el) return;
+    switch (el.dataset.action) {
+        case "toc": toc(); break;
+        case "init_print": init_print(); break;
+        case "kontakt": kontakt(); break;
+        case "toggle_darkmode": toggle_darkmode(); break;
+        case "close_zoom": close_zoom(); break;
+        case "test": test(); break;
+        case "reload-mathjax": reload_mathjax(); break;
+        case "reset": reset(); break;
+        case "clear": fig_call("clear", el.dataset.fig); break;
+        case "zoom": zoom(el.parentElement.parentElement); break;
+        case "pause-animate": pause(el); fig_call("animate", el.dataset.fig); break;
+        case "hide": hide(el.dataset.target); break;
+        default: break;
+    }
 }
 function update_all() {
     update1();
@@ -398,25 +449,25 @@ function reset(){
 }
 function make_static(){ //interaktives Skript statisch machen für Evaluation
     if(!interaktiv){
-        ge("gc4").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div><img src="bilder/image002.png" class="grafik" id="" draggable="false"><br><img src="bilder/image003.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc4").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/image002.png" class="grafik" id="" draggable="false"><br><img src="bilder/image003.png" class="grafik" id="" draggable="false"></div>';
         
-        ge("gc1").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div><img src="bilder/phi_0.png" class="grafik" id="" draggable="false"><br></div>';
+        ge("gc1").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/phi_0.png" class="grafik" id="" draggable="false"><br></div>';
         
-        ge("gc9").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div><img src="bilder/kreis-xy_koord.png" class="grafik" id="" draggable="false"><br></div>';
+        ge("gc9").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/kreis-xy_koord.png" class="grafik" id="" draggable="false"><br></div>';
         
-        ge("gc31").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div><img src="bilder/geschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc31").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/geschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
         
-        ge("gc32").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div><img src="bilder/winkelgeschwindigkeit_v.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc32").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/winkelgeschwindigkeit_v.png" class="grafik" id="" draggable="false"></div>';
         
-        ge("gc51").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div><img src="bilder/beschleunigung.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc51").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/beschleunigung.png" class="grafik" id="" draggable="false"></div>';
         
-        ge("gc3").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div><img src="bilder/omega_vektor.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc3").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/omega_vektor.png" class="grafik" id="" draggable="false"></div>';
         
-        ge("gc5").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div><img src="bilder/winkelbeschleunigung.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc5").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/winkelbeschleunigung.png" class="grafik" id="" draggable="false"></div>';
         
         ge("gc6").innerHTML = "";
         
-        ge("gc8").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" onclick="zoom(this.parentElement.parentElement)"></div><img src="bilder/radialgeschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc8").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/radialgeschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
         
         
         reload_mathjax();
