@@ -26,16 +26,17 @@ body {
 #span_title {
     color: #eee;
 }
+#header_eyebrow { color: #7fd9d4; }
+#header_divider { background: #444; }
 .navbar_button {
-    background-color: var(--bg);
-    color:#ccc;
-    border-bottom: 1px solid #1b1b1b;
+    color: #ccc;
 }
 .navbar_button:hover {
-    background-color: #222;
+    background-color: #1a3634;
+    color: #7fd9d4;
 }
 .navbar_button:active {
-    background-color: #1b1b1b;
+    background-color: #17332f;
 }
 .text_size_button {
     background-color: var(--bg);
@@ -72,6 +73,9 @@ body {
 mjx-container[display="true"] {
     background-color: #262626;
     border-color: #444;
+}
+.eq-number, .fig-number {
+    color: #888;
 }
 .grafik-container-inner {
     background-color: var(--bg);

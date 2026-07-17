@@ -38,7 +38,7 @@ html {
 }
 body {
     margin: 0;
-    margin-top:70px;
+    margin-top: 84px; /* #header ist 64px hoch + 20px Luft zum Content-Rand */
     background-color: var(--paper-outer);
     font-family: var(--font-ui);
     color: var(--ink);
@@ -72,7 +72,12 @@ body {
     max-width: calc(100vw - 40px);
     margin: 0 auto 40px;
     border-radius: 14px;
-    overflow: hidden;
+    /* Kein overflow:hidden hier (Nutzer-Feedback zur Rail): eine
+       position:sticky-Rail als Nachfahre wird von jedem Vorfahren mit
+       overflow != visible deaktiviert -- klassische CSS-Falle. Die
+       abgerundeten Ecken bleiben trotzdem sichtbar (border-radius wirkt auch
+       ohne Clipping auf Hintergrund/Schatten/Rand); .chapter-body/.chapter-pagenav
+       runden ihre eigenen oberen/unteren Ecken separat nach, s. dort. */
     box-shadow: 0 12px 32px rgba(24,27,33,.12);
     background-color: var(--paper);
     hyphens: auto;
@@ -102,7 +107,12 @@ body {
     font-family: var(--font-serif);
     color: var(--ink);
     font-size: var(--paper-font-size);
-    line-height: var(--paper-line-height);
+    /* Zeilenabstand (Nutzer-Feedback): am statischen Skript v0.13 orientiert
+       (Physik_skript_header*.tex: \linespread{1.3}, mit LaTeX-Baselineskip
+       ergibt das ~1.5-1.6 CSS-line-height) -- Fallback 1.65 gilt beim ersten
+       Paint, bevor core.js::read_paper_metrics() ihn als Basis fuer die
+       Textgroessen-Stufen uebernimmt. */
+    line-height: var(--paper-line-height, 1.65);
     max-width: var(--paper-max-width, 900px);
     margin: 0 auto;
     padding: 30px 0 60px;
@@ -139,58 +149,121 @@ body {
    Element, das MathJax fuer eine $$...$$-Formel einsetzt (keine zusaetzliche
    Wrapper-Div noetig). */
 mjx-container[display="true"] {
+    position: relative;
     display: block;
     background: var(--surface);
     border: 1px solid var(--border);
     border-left: 3px solid var(--teal);
     border-radius: 8px;
-    padding: 16px 22px;
+    padding: 16px 56px 16px 22px;
     margin: 0 0 20px;
     text-align: center;
 }
 mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
+/* Kein Box-in-Box (Nutzer-Feedback): innerhalb einer Highlight-Box (z.B. das
+   Waschmaschinentrommel-.beispiel) ist die Formel bereits von der aeusseren
+   Karte umrahmt -- die Formel-Karte selbst faellt dort auf reinen
+   Blocksatz + Abstand zurueck, ohne eigenen Rahmen/Hintergrund. */
+.lernziel mjx-container[display="true"],
+.motivation mjx-container[display="true"],
+.wiederholung mjx-container[display="true"],
+.beispiel mjx-container[display="true"],
+.zusammenfassung mjx-container[display="true"],
+.aufgabe mjx-container[display="true"],
+.anmerkung mjx-container[display="true"] {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 4px 44px 4px 0;
+    margin: 0 0 8px;
+}
+/* Formel-/Abbildungsnummern (v2.2, numbering.js): am statischen Skript v0.13
+   orientiert (\numberwithin{equation}{section}) -- "(1.5.1.3)" rechtsbuendig
+   neben der Formel, wie im gedruckten Skript. */
+.eq-number {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.78em;
+    color: var(--ink-3);
+    white-space: nowrap;
+}
+.fig-number {
+    margin: -12px 0 20px;
+    font-family: var(--font-ui);
+    font-size: 0.78em;
+    color: var(--ink-3);
+    text-align: center;
+}
+/* Kopfleiste (v2.2, Mockup-Vorlage): EINE 64px-Leiste statt zweier gestapelter
+   Balken (frueher: #header mit den Alt-Werkzeugen + separater #chapter_appbar
+   mit Breadcrumb/Fortschritt) -- Branding+Breadcrumb links, Werkzeuge in der
+   Mitte, Fortschritt+Hamburger rechts, exakt wie im Claude-Design-Mockup
+   ("App bar", 64px/#ffffff/Trenner). #chapter_hamburger ist per Default
+   verborgen und erscheint erst im Tablet-Breakpoint (s. @media unten). */
 #header {
+    box-sizing: border-box;
     position: fixed;
-    height:50px;
-    line-height: 50px;
-    width:100%;
+    top: 0;
+    left: 0;
+    height: 64px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 24px;
     background-color: var(--surface);
-    top:0px;
-    vertical-align: middle;
-    padding-left:40px;
     border-bottom: 1px solid var(--border);
     box-shadow: 0 1px 3px rgba(24,27,33,.06);
     z-index: 10;
     font-family: var(--font-ui);
     color: var(--ink);
 }
+#header #chapter_hamburger { display: none; flex-shrink: 0; }
 
-#span_title{
+#header_brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    flex-shrink: 0;
+}
+#header_eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    white-space: nowrap;
+}
+#span_title {
     font-size: 15.5px;
     font-weight: 700;
     letter-spacing: -.01em;
     color: var(--ink);
-    margin: 0 auto;
-    width: 200px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    white-space: nowrap;
 }
-#toolbar {
-    position: absolute;
-    top: 0px;
-    /*left:10px;*/
+#header_version { opacity: .55; font-size: .62em; font-weight: 400; margin-left: 3px; }
+#header_divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+    flex-shrink: 0;
+}
+#header_spacer { flex: 1 1 auto; min-width: 12px; }
 
+#toolbar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
 }
 #text_size_controls {
-    position: absolute;
-    right: 105px;
-    top: 10px;
-    height: 30px;
     display: flex;
     align-items: center;
     gap: 6px;
-    line-height: normal;
+    flex-shrink: 0;
 }
 .text_size_button {
     height: 30px;
@@ -221,18 +294,11 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     text-align: center;
     user-select: none;
 }
-/* Breiten-Umschalter (v1.4.5): 3-Segment-Leiste, links von #text_size_controls.
-   Aesthetik gespiegelt an .text_size_button; aktives Segment hervorgehoben.
-   Toolbar-Platz ist begrenzt -> kompakte Buttons. */
 #width_mode_controls {
-    position: absolute;
-    right: 255px;
-    top: 10px;
-    height: 30px;
     display: flex;
     align-items: center;
     gap: 4px;
-    line-height: normal;
+    flex-shrink: 0;
 }
 .width_mode_button {
     height: 30px;
@@ -260,11 +326,12 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     color: var(--ink-2);
     padding: 0 12px;
     cursor: pointer;
-    float:left;
-    margin: 8px 2px;
-    line-height: 34px;
+    height: 30px;
+    display: flex;
+    align-items: center;
     border-radius: 7px;
     font-weight: 500;
+    font-size: 13.5px;
     transition: background-color .15s, color .15s;
 
   -webkit-touch-callout: none; /* iOS Safari */
@@ -289,20 +356,24 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     position: absolute;
 }
 .darkmode_icon {
-    height:30px;
-    width:30px;
+    height: 30px;
+    width: 30px;
     background-image: url(assets/darkmode.png);
-    /*border:1px solid red;*/
-    position: absolute;
-    right:55px;
-    top:10px;
     background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     opacity: 75%;
     cursor: pointer;
+    flex-shrink: 0;
 }
 .darkmode_icon:hover{
     opacity: 100%;
 }
+#header .chapter-progress { flex-shrink: 0; }
+/* Waehrend der TOC-Vollbild-Screen offen ist, uebernimmt dessen eigene
+   Kopfleiste (#toc_screen_bar) die Rolle von #header (Mockup-Prinzip: eine
+   Kopfleiste je Ansicht, keine gestapelten Balken). */
+body.toc-open #header { display: none; }
 #kontakt {
     background-color: white;
     padding:20px;
@@ -874,13 +945,13 @@ input[type="range"]::-moz-range-track {
 /* TOC als eigener Vollbild-"Screen" (v2.1, Mockup-Vorlage): deckt exakt die
    Flaeche von #content ab (gleiche Breite/Zentrierung/Radius) statt eines
    schmalen linksseitigen Slide-over-Panels -- fuehlt sich wie eine eigene
-   Ansicht an, nicht wie ein Popover. #header bleibt sichtbar (Drucken/
-   Kontakt/Darkmode erreichbar), daher top:70px (Header-Hoehe 50px + Body-
-   margin-top 70px faellt hier weg, da toc_container position:fixed ist und
-   direkt ab Viewport-Y rechnet -> 70px = Header-Bereich). */
+   Ansicht an, nicht wie ein Popover. #header wird waehrend TOC-Ansicht
+   ausgeblendet (body.toc-open, s. #header-Regeln) -- #toc_screen_bar
+   uebernimmt dessen Rolle (Mockup-Prinzip: eine Kopfleiste je Ansicht),
+   daher reicht ein kleiner Rand oben statt der Header-Hoehe. */
 #toc_container {
     position: fixed;
-    top: 70px;
+    top: 24px;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
@@ -1086,20 +1157,7 @@ input[type="range"]::-moz-range-track {
    Grid), Drawer/Hamburger nur ab dem Tablet-Breakpoint (erste echte @media-
    Regel im Projekt, s. BACKLOG.md P2). */
 
-#chapter_appbar {
-    scroll-margin-top: 60px; /* #header ist position:fixed (50px hoch); verhindert, dass scrollIntoView-Ziele (Tastaturfokus etc.) dahinter landen. */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-    padding: 14px 24px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    font-family: var(--font-ui);
-}
 #chapter_hamburger {
-    display: none;
     width: 32px; height: 32px;
     border-radius: 8px;
     border: 1px solid var(--border);
@@ -1165,7 +1223,16 @@ input[type="range"]::-moz-range-track {
 .rail-dot { display: inline-block; width: 1.1em; color: var(--teal); }
 .rail-empty { padding: 7px 10px; font-size: 0.82em; color: var(--ink-4); }
 
-#chapter_rail_desktop_wrap { padding-top: 30px; font-family: var(--font-ui); }
+/* Rail bleibt beim Scrollen der (langen) Seite oben angedockt, statt mit dem
+   Lesefluss mitzuscrollen -- Nutzer-Feedback. */
+#chapter_rail_desktop_wrap {
+    position: sticky;
+    top: 84px; /* #header-Hoehe (64px) + Luft */
+    max-height: calc(100vh - 104px);
+    overflow-y: auto;
+    padding-top: 30px;
+    font-family: var(--font-ui);
+}
 
 /* ── Marginalie (rechts): verschobene .anmerkung-Boxen der aktiven Seite ─ */
 #chapter_marginalia { padding-top: 30px; font-family: var(--font-ui); }
@@ -1228,7 +1295,7 @@ input[type="range"]::-moz-range-track {
 
 /* ── Tablet-Breakpoint (erste responsive Regel im Projekt) ───────────────── */
 @media (max-width: 1024px) {
-    #chapter_hamburger { display: block; }
+    #header #chapter_hamburger { display: flex; align-items: center; justify-content: center; }
     .chapter-crumb #chapter_crumb_chapter { display: none; }
     .chapter-body {
         grid-template-columns: 1fr;

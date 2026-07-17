@@ -13,6 +13,7 @@ import { init_print, check_print, from_qr } from './print.js';
 import { paginate } from './pages.js';
 import { init_shell, toggle_drawer, close_drawer, chapter_prev, chapter_next, goto_page } from './shell.js';
 import { init_figure_panels, toggle_panel } from './figures/panels.js';
+import { init_numbering } from './numbering.js';
 
 // Figuren laden (Seiteneffekt: Registrierung von updateN/animateN/clearN).
 import './figures/fig_1.js';
@@ -95,6 +96,7 @@ function init() {
     generate_toc();
     init_shell();
     init_figure_panels();
+    init_numbering();
     offsetAnchor();
     make_static();
     if(interaktiv) {

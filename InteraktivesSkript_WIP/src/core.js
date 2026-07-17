@@ -3,7 +3,15 @@
 // Breiten-Modus, Reset sowie update_all (dispatcht via window.updateN -- siehe
 // figures/*).
 
-const WIDTHS = { schmal: "760px", normal: "900px", breit: "1180px" };
+// #content-Breite je Modus (wie zuvor in splitter.js erprobt); #container
+// laeuft mit CONTAINER_SLACK mit, damit #content (margin:auto) nicht ueber
+// einen schmaleren Elternrahmen hinaus zentriert werden muss.
+const CONTENT_WIDTHS = { schmal: 900, normal: 1150, breit: 1500 };
+const CONTAINER_SLACK = 50;
+// Lesespalten-Deckel: bei schmal/normal begrenzt ohnehin das Grid (Rail 220px +
+// Marginalie 210px + Gaps/Padding) die Breite staerker als dieser Wert: er
+// greift wirksam erst bei breit.
+const PAPER_MAX_WIDTHS = { schmal: "640px", normal: "760px", breit: "980px" };
 const WIDTH_STORAGE_KEY = "skript_width_mode";
 
 export let interaktiv = true; //statisches oder interaktives Skript
@@ -149,9 +157,14 @@ export function test(){
 }
 // MathJax v3 hat kein MathJax.Hub mehr (v2-API). typesetPromise() rendert
 // (bzw. re-rendert) alle Formeln im Dokument; ohne geladenes MathJax no-op.
+// Re-Typeset baut jede <mjx-container> neu auf und wirft damit die von
+// numbering.js injizierten .eq-number-Badges weg -- window.renumber_equations
+// (Bruecke statt Import, s. numbering.js) stellt sie danach wieder her.
 export function reload_mathjax(){
     if (window.MathJax && MathJax.typesetPromise) {
-        MathJax.typesetPromise();
+        MathJax.typesetPromise().then(() => {
+            if (window.renumber_equations) window.renumber_equations();
+        });
     }
 }
 export function toggle_darkmode(){
@@ -231,9 +244,14 @@ function mark_active_width_segment(mode) {
 }
 
 export function set_width_mode(mode, persist = true) {
-    if (!WIDTHS[mode]) return;
+    if (!CONTENT_WIDTHS[mode]) return;
+    const contentW = CONTENT_WIDTHS[mode];
+    const content = ge("content");
+    const container = ge("container");
     const paper = ge("paper");
-    if (paper) paper.style.setProperty("--paper-max-width", WIDTHS[mode]);
+    if (content) content.style.width = contentW + "px";
+    if (container) container.style.width = (contentW + CONTAINER_SLACK) + "px";
+    if (paper) paper.style.setProperty("--paper-max-width", PAPER_MAX_WIDTHS[mode]);
     mark_active_width_segment(mode);
     if (persist) {
         try { localStorage.setItem(WIDTH_STORAGE_KEY, mode); } catch (_) {}
@@ -244,7 +262,7 @@ export function init_width_mode() {
     let mode = "normal";
     try {
         const s = localStorage.getItem(WIDTH_STORAGE_KEY);
-        if (s && WIDTHS[s]) mode = s;
+        if (s && CONTENT_WIDTHS[s]) mode = s;
     } catch (_) {}
     set_width_mode(mode, false);
 }

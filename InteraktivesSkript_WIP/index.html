@@ -16,12 +16,25 @@
     </head>
     <body>
         <div id="header">
-            <span id="span_title">Physik Skript <span style="opacity:0.55;font-size:0.6em;font-weight:normal">v1.4.7</span></span>
+            <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation">☰</button>
+            <div id="header_brand">
+                <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
+                <span id="span_title">Interaktives Skript <span id="header_version">v1.4.7</span></span>
+            </div>
+            <div id="header_divider"></div>
+            <div class="chapter-crumb">
+                <span id="chapter_crumb_chapter"></span>
+                <span>›</span>
+                <span id="chapter_crumb_current"></span>
+            </div>
+
+            <div id="header_spacer"></div>
+
             <div id="toolbar">
                 <div class="navbar_button" data-action="toc">Inhaltsverzeichnis</div>
                 <div class="navbar_button" data-action="init_print">Drucken</div>
                 <div class="navbar_button" data-action="kontakt">Kontakt</div>
-            </div> 
+            </div>
             <div id="text_size_controls" aria-label="Textgroesse links">
                 <button type="button" id="text_size_minus" class="text_size_button" data-action="adjust_text_size" data-step="-1">A-</button>
                 <span id="text_size_status">Text 2/5</span>
@@ -33,6 +46,11 @@
                 <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="breit">Extrabreit</button>
             </div>
             <div class="darkmode_icon" data-action="toggle_darkmode"></div>
+
+            <div class="chapter-progress">
+                <div class="chapter-progress-track"><span id="chapter_progress_bar"></span></div>
+                <span id="chapter_progress_label"></span>
+            </div>
         </div>
         <div id="zoom_overlay" class="hidden" data-action="close_zoom"></div>
         <div id="zoom" class="hidden">
@@ -102,18 +120,6 @@
         
         <div id="container">
             <div id="content">
-                <div id="chapter_appbar">
-                    <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation">☰</button>
-                    <div class="chapter-crumb">
-                        <span id="chapter_crumb_chapter"></span>
-                        <span>›</span>
-                        <span id="chapter_crumb_current"></span>
-                    </div>
-                    <div class="chapter-progress">
-                        <div class="chapter-progress-track"><span id="chapter_progress_bar"></span></div>
-                        <span id="chapter_progress_label"></span>
-                    </div>
-                </div>
                 <div class="chapter-body">
                 <aside id="chapter_rail_desktop_wrap">
                     <div id="chapter_rail_desktop"></div>
@@ -311,12 +317,10 @@ Ab jetzt im Bogenmaß rechnen: 360° = 2π
                         
                         <br>
                         
-                        Nun gibt es zwei Möglichkeiten, den Ort des Objekts anzugeben: Entweder durch den Radius R und den Winkel \( \varphi \) oder durch seinen Ortsvektor: \( \vec{r}=\left(\begin{matrix}r_x\\r_y\\0\\\end{matrix}\right) \).
-                        
-                        
-                        <br>
-                     Man kann leicht von einem System in das andere umrechnen. Sind \( R \) und \( \varphi \) bekannt, ergibt sich \( \vec{r} \) zu \( \vec{r}=R\left(\begin{matrix}\cos{\left(\varphi\right)}\\\sin{\left(\varphi\right)}\\0\\\end{matrix}\right)=\left(\begin{matrix}r_x\\r_y\\0\\\end{matrix}\right) \).
-                        
+                        Nun gibt es zwei Möglichkeiten, den Ort des Objekts anzugeben: Entweder durch den Radius R und den Winkel \( \varphi \) oder durch seinen Ortsvektor:
+                        \[ \vec{r}=\left(\begin{matrix}r_x\\r_y\\0\\\end{matrix}\right) \]
+                     Man kann leicht von einem System in das andere umrechnen. Sind \( R \) und \( \varphi \) bekannt, ergibt sich \( \vec{r} \) zu:
+                        \[ \vec{r}=R\left(\begin{matrix}\cos{\left(\varphi\right)}\\\sin{\left(\varphi\right)}\\0\\\end{matrix}\right)=\left(\begin{matrix}r_x\\r_y\\0\\\end{matrix}\right) \]
                      <br>
                             
                             
@@ -327,7 +331,13 @@ Ab jetzt im Bogenmaß rechnen: 360° = 2π
                         <br><br>
                             
                             
-Ein Punkt auf einer Kreisbahn ist also eindeutig bestimmt durch seinen Winkel \( \varphi \) und seinen Radius \( R \). Sein Ort errechnet sich dann aus: \( \vec{r}\left(t\right)=\left(\begin{matrix}R\cos{(\varphi}(t))\\R\ \sin\ \left(\varphi\left(t\right)\right)\\\end{matrix}\right) \), wobei bei einer gleichförmigen Kreisbewegung die folgende Zeitabhängigkeit des Winkels \( \varphi \) gilt: \( \varphi\left(t\right)=\frac{2\pi}{T}t \). Mit Hilfe des „trigonometrischen Pythagoras“ erkennt man, dass \( R=\sqrt{R^2{\cos}^2\left(\varphi\left(t\right)\right)+R^2{\sin}^2\left(\varphi\left(t\right)\right)} \) gilt. Das bedeutet: zu einem beliebigen Zeitpunkt ist der Abstand eines Objektes mit dem oben genannten Ortsvektor zum Koordinatenmittelpunkt immer \( R \). Der Betrag des Ortsvektors \( \vec{r} \) ist der Kreisbahnradius \( R \):
+Ein Punkt auf einer Kreisbahn ist also eindeutig bestimmt durch seinen Winkel \( \varphi \) und seinen Radius \( R \). Sein Ort errechnet sich dann aus:
+                        \[ \vec{r}\left(t\right)=\left(\begin{matrix}R\cos{(\varphi}(t))\\R\ \sin\ \left(\varphi\left(t\right)\right)\\\end{matrix}\right) \]
+                        wobei bei einer gleichförmigen Kreisbewegung die folgende Zeitabhängigkeit des Winkels \( \varphi \) gilt:
+                        \[ \varphi\left(t\right)=\frac{2\pi}{T}t \]
+                        Mit Hilfe des „trigonometrischen Pythagoras“ erkennt man, dass
+                        \[ R=\sqrt{R^2{\cos}^2\left(\varphi\left(t\right)\right)+R^2{\sin}^2\left(\varphi\left(t\right)\right)} \]
+                        gilt. Das bedeutet: zu einem beliebigen Zeitpunkt ist der Abstand eines Objektes mit dem oben genannten Ortsvektor zum Koordinatenmittelpunkt immer \( R \). Der Betrag des Ortsvektors \( \vec{r} \) ist der Kreisbahnradius \( R \):
                             
                             
                             
@@ -408,13 +418,10 @@ Ein Punkt auf einer Kreisbahn ist also eindeutig bestimmt durch seinen Winkel \(
                         \]
 Bei festem R ist die Kreisbewegung durch \( \varphi\left(t\right) \) vollständig beschrieben, d.h. man kommt in diesem Fall mit einer Koordinate \( (\varphi\left(t\right)) \) statt mit zwei Koordinaten \( (x\left(t\right), y\left(t\right)) \) aus, um die Bewegung zu beschreiben.
 Kennt man andererseits \( \vec{r}=\left(\begin{matrix}r_x\\r_y\\0\\\end{matrix}\right) \), so erhält man \( R \) und \( \varphi \) aus:
-\[
-                        R=\sqrt{r_x^2+r_y^2}
-                        \]
-und 
-                        \[
-\tan{\left(\varphi\right)=\frac{r_y}{r_x}}
-                        \]
+\[ \begin{aligned}
+                        R &=\sqrt{r_x^2+r_y^2} \\
+                        \tan{\left(\varphi\right)} &=\frac{r_y}{r_x}
+                        \end{aligned} \]
 
                         
                         <div class="zusammenfassung">
@@ -607,7 +614,13 @@ Der Zusammenhang zwischen Winkel und Winkelgeschwindigkeit ist:
                         Um die Winkelbeschleunigung \( \alpha \) von der (kinematischen) Beschleunigung des Objektes \( \vec{a} \) zu unterscheiden, spricht man bei \( \vec{a}(t) \) im Zusammenhang von Kreisbewegungen auch von der Bahnbeschleunigung.    
                             
                             
-                            Ist die Winkelbeschleunigung konstant, so kann man \( \alpha\ =\frac{\mathrm{\Delta\omega}}{\mathrm{\Delta t}}\) benutzen, um \( \alpha \) zu errechnen. Allgemein schreibt man: \(\alpha\left(t\right)=\frac{d}{dt}\omega\left(t\right)=\ \dot{\omega}\left(t\right)\). Möchte man aus der Winkelbeschleunigung die Winkelgeschwindigkeit ermitteln, so muss man integrieren: \(\omega\left(t\right)=\ \omega_0\ +\ \int_{0}^{t}{\ \alpha\left(\tau\right)d\tau}\). Dabei ist \(\omega_0 \) die Winkelgeschwindigkeit des Objektes zur Zeit \( t=0\).
+                            Ist die Winkelbeschleunigung konstant, so kann man sie aus \( \alpha=\frac{\mathrm{\Delta\omega}}{\mathrm{\Delta t}} \) errechnen; allgemein, als zeitliche Ableitung der Winkelgeschwindigkeit, schreibt man \( \alpha\left(t\right)=\frac{d}{dt}\omega\left(t\right)=\dot{\omega}\left(t\right) \). Möchte man umgekehrt aus der Winkelbeschleunigung die Winkelgeschwindigkeit ermitteln, muss man integrieren:
+                            \[ \begin{aligned}
+                            \alpha &=\frac{\mathrm{\Delta\omega}}{\mathrm{\Delta t}} \qquad \text{(konstantes } \alpha \text{)} \\
+                            \alpha\left(t\right) &=\frac{d}{dt}\omega\left(t\right)=\dot{\omega}\left(t\right) \qquad \text{(allgemein)} \\
+                            \omega\left(t\right) &=\ \omega_0\ +\ \int_{0}^{t}{\ \alpha\left(\tau\right)d\tau}
+                            \end{aligned} \]
+                            Dabei ist \(\omega_0 \) die Winkelgeschwindigkeit des Objektes zur Zeit \( t=0\).
                         
                         <div class="beispiel">
                         Eine Waschmaschinentrommel in voller Fahrt hat typischerweise 1600 Umdrehungen pro Minute. Angenommen, die Waschmaschine startet im Stillstand und erreicht nach 2 Minuten die maximale Winkelgeschwindigkeit bei konstanter Winkelbeschleunigung. Wie groß ist \( \alpha\left(t\right) \) in der Beschleunigungsphase? Wie groß ist \( \omega\left(t\right) \) und \( \varphi\left(t\right) \)?
@@ -721,18 +734,12 @@ Der Zusammenhang zwischen Winkel und Winkelgeschwindigkeit ist:
                             
                             
                         Der Zusammenhang zwischen der Winkelbeschleunigung \( \alpha(t) \) und der Bahnbeschleunigung \( \vec{a}(t) \) erhält man, wenn man \(\vec v(t)\) nach der Zeit ableitet und dabei sowohl die Produkt- als auch die Kettenregel beachtet:
-                        \[
-                        \vec{v}\left(t\right)=R·\dot{\varphi} (t)⋅ \left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)=Rω(t)⋅\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
-                        \]
-                        \[
-                        \vec{a}\left(t\right)=\dot{\vec{v}}\left(t\right)=R\dot{\omega}\left(t\right)\cdot\ \left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)+Rω(t) \dot{\varphi}(t)\left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
-                        \]
-                        \[
-                        =R\dot{\omega}(t)\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)+R{\omega}(t)^2 \left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
-                        \]
-                        \[
-                        =R\alpha(t)\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)+R{\omega}(t)^2 \left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
-                        \]
+                        \[ \begin{aligned}
+                        \vec{v}\left(t\right) &=R·\dot{\varphi} (t)⋅ \left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)=Rω(t)⋅\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right) \\
+                        \vec{a}\left(t\right) &=\dot{\vec{v}}\left(t\right)=R\dot{\omega}\left(t\right)\cdot\ \left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)+Rω(t) \dot{\varphi}(t)\left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right) \\
+                        &=R\dot{\omega}(t)\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)+R{\omega}(t)^2 \left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right) \\
+                        &=R\alpha(t)\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)+R{\omega}(t)^2 \left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
+                        \end{aligned} \]
 
                         <div class="anmerkung">
                         Die Bahnbeschleunigung eines Objektes auf einer Kreisbahn hat im Allgemeinen zwei (linear unabhängige) Vektorterme, mit deren Bedeutung sich weiter unten noch beschäftigt wird.
@@ -743,11 +750,10 @@ Der Zusammenhang zwischen Winkel und Winkelgeschwindigkeit ist:
                                                     \[ \text{Winkelbeschleunigung} = \frac{\text{Änderung der Winkelgeschwindigkeit}}{\text{dafür benötigte Zeit}} \]
 
                             Der Zusammenhang zwischen der Winkelgeschwindigkeit und er Winkelbeschleunigung ist:
-                            \[
-                            \alpha\left(t\right)=\ \frac{d}{dt}\ \omega\left(t\right)=\ \dot{\omega}\left(t\right)
-                            \] \[
-                            \omega\left(t\right)=\ \omega_0\ +\ \int_{0}^{t}{\ \alpha\left(\tau\right)d\tau}
-                            \]
+                            \[ \begin{aligned}
+                            \alpha\left(t\right) &=\ \frac{d}{dt}\ \omega\left(t\right)=\ \dot{\omega}\left(t\right) \\
+                            \omega\left(t\right) &=\ \omega_0\ +\ \int_{0}^{t}{\ \alpha\left(\tau\right)d\tau}
+                            \end{aligned} \]
                             
                         </div>
                         
@@ -759,27 +765,18 @@ Der Zusammenhang zwischen Winkel und Winkelgeschwindigkeit ist:
                         
                         Eine gleichförmige Kreisbewegung ist eine Kreisbewegung mit \( \alpha\left(t\right)=\ \alpha\ =\ 0 \). Daraus folgt:\( \omega\left(t\right)=\ \omega_0\ =\ const \).
                         
-                    \[     
-\varphi\left(t\right)=\varphi_0+\int_{0}^{t}\omega\left(t\right)d\tau=\varphi_0+\int_{0}^{t}{\omega_0d\tau}=\omega_0t+\varphi_0
-                        \]
-                            \[
-\omega\left(t\right)=\ \omega_0\ =\ const
-                        \]
-                            \[
-\alpha\left(t\right)=0
-                        \]
+                    \[ \begin{aligned}
+\varphi\left(t\right) &=\varphi_0+\int_{0}^{t}\omega\left(t\right)d\tau=\varphi_0+\int_{0}^{t}{\omega_0d\tau}=\omega_0t+\varphi_0 \\
+\omega\left(t\right) &=\ \omega_0\ =\ const \\
+\alpha\left(t\right) &=0
+                        \end{aligned} \]
 Die entsprechenden Größen der Kinematik, d.h. Bahngeschwindigkeit \( \vec v(t) \) und Bahnbeschleunigung \( \vec a(t) \) , sind:
-                         \[ 
-\vec{r}\left(t\right)=R\left(\begin{matrix}\cos{\left(\varphi\left(t\right)\right)}\\\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
-                        \]
-                            \[
-\vec{v}\left(t\right)=R\omega\left(t\right)\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\+\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
-                        \]
-                            \[
-\vec{a}\left(t\right)=R\cdot\dot{\omega}\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)+R\cdot{\omega}(t)^2 \left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
-⇒ \vec{a}(t)=Rω_0^2 \left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
-
-                  \]      
+                         \[ \begin{aligned}
+\vec{r}\left(t\right) &=R\left(\begin{matrix}\cos{\left(\varphi\left(t\right)\right)}\\\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right) \\
+\vec{v}\left(t\right) &=R\omega\left(t\right)\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\+\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right) \\
+\vec{a}\left(t\right) &=R\cdot\dot{\omega}\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)+R\cdot{\omega}(t)^2 \left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right) \\
+&\Rightarrow \vec{a}(t)=Rω_0^2 \left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
+                  \end{aligned} \]
 Mit \(  R\cdot\dot{\omega}\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
 =0 \), da \( \alpha\left(t\right)=\dot{\omega}\left(t\right)=0 \) und \( {\omega\left(t\right)}^2=\omega_0^2 \)
                         <br>
@@ -880,8 +877,12 @@ Mit \(  R\cdot\dot{\omega}\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\ri
                             
                             
                             
-Im Vergleich von \( \vec{a}\left(t\right)=R\omega_0^2\left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
- \) zu \( \vec{a}\left(t\right)=\ddot{\vec{s}}\left(t\right)=\left(\begin{array}{c} -R \left(\frac{2\pi}{T}\right) ^2 \ \cos(\frac{2\pi}{T}t) \\ -R \left(\frac{2\pi}{T}\right) ^2 \ \sin(\frac{2\pi}{T}t)  \\ 0 \end{array}\right) \) ist wieder \( \omega_0^2=\left(\frac{2\pi}{T}\right)^2\Rightarrow\omega_0=\frac{2\pi}{T} \) zu erkennen. 
+Im Vergleich der beiden Darstellungen von \( \vec{a}(t) \)
+                        \[ \begin{aligned}
+                        \vec{a}\left(t\right)&=R\omega_0^2\left(\begin{matrix}-\cos{\left(\varphi\left(t\right)\right)}\\-\sin{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right) \\
+                        \vec{a}\left(t\right)&=\ddot{\vec{s}}\left(t\right)=\left(\begin{array}{c} -R \left(\frac{2\pi}{T}\right) ^2 \ \cos(\frac{2\pi}{T}t) \\ -R \left(\frac{2\pi}{T}\right) ^2 \ \sin(\frac{2\pi}{T}t) \\ 0 \end{array}\right)
+                        \end{aligned} \]
+                        ist wieder \( \omega_0^2=\left(\frac{2\pi}{T}\right)^2\Rightarrow\omega_0=\frac{2\pi}{T} \) zu erkennen. 
     
                         Man sieht: handelt es sich um eine Kreisbewegung eines Objektes auf einer Bahn mit konstanter Winkelgeschwindigkeit, so fällt einer der beiden Terme der Bahnbeschleunigung weg. Zusätzlich ist noch etwas weiteres wichtiges zu erkennen: Auch wenn die Kreisbeweung eine konstante Winkelgeschwindigkeit und somit eine Winkelbeschleunigung von null hat, so ist eine Kreisbewegung immer eine beschleunigte Bewegung.
                         <br>
@@ -897,11 +898,15 @@ Im Zähler des Bruchs steht der in der Zeit \( t \) überstrichene Winkel. Wird 
        \[                 
 \omega_0=\ \frac{2\pi}{T}
                         \]
-Anstelle der Periodendauer \( T \) wird häufig auch die Frequenz f oder die Drehzahl verwendet. Sie gibt an, wie oft sich das Objekt pro Zeiteinheit im Kreis dreht. Man erhält sie aus dem Kehrwert der Periodendauer: \( f=\frac{1}{T}=\frac{\omega_0}{2\pi} \). Die Einheit der Frequenz ist das Hertz (Hz): \( \left[f\right]={Hz=s}^{-1} \)
+Anstelle der Periodendauer \( T \) wird häufig auch die Frequenz f oder die Drehzahl verwendet. Sie gibt an, wie oft sich das Objekt pro Zeiteinheit im Kreis dreht. Man erhält sie aus dem Kehrwert der Periodendauer:
+                        \[ f=\frac{1}{T}=\frac{\omega_0}{2\pi} \]
+                        Die Einheit der Frequenz ist das Hertz (Hz): \( \left[f\right]={Hz=s}^{-1} \)
                         <br><br>
 Die Definitionen der Periodendauer \( T \) und der Frequenz \( f \) gelten auch für ungleichförmige Kreisebewegungen. Dann sind diese allerdings nicht konstant und sind immer nur für infinisismale Zeitintervalle sinnhaft.
 <br><br>
-                        \( \omega\ =\ 2\pi\ f \) nennt man die Kreisfrequenz. Bei gleichförmigen Kreisbewegungen kann man die Begriffe Kreisfrequenz und Winkelgeschwindigkeit synonym verwenden.
+Die Größe
+                        \[ \omega\ =\ 2\pi\ f \]
+                        nennt man die Kreisfrequenz. Bei gleichförmigen Kreisbewegungen kann man die Begriffe Kreisfrequenz und Winkelgeschwindigkeit synonym verwenden.
                         <br><br>
 
 <!--                        
@@ -1389,9 +1394,15 @@ Die Achse, welche durch den Mittelpunkt der Kreisbahn verläuft und senkrecht zu
                                 
                             
                             
-Es gilt: \( \frac{U}{\left|d\vec{r}\right|}=\frac{2\pi}{d\varphi}\Rightarrow\frac{2\pi R}{\left|d\vec{r}\right|}=\frac{2\pi}{d\varphi} \). 
-                            
-Damit folgt für den Betrag: \( \left|d\vec{r}\right|=Rd\varphi \), diesen Zusammenhang kann man vektoriell schreiben als \( d\vec{r}=d\vec{\varphi}\times\vec{r} \). Mit \( \vec{v}\left(t\right)=\frac{d\vec{r}}{dt} \) folgt \( \vec{v}=\frac{d\vec{\varphi}}{dt}\times\vec{r}=\vec{\omega}\times\vec{r} \). Die Bahngeschwindigkeit ist das Kreuzprodukt aus vektorieller Winkelgeschwindigkeit und \( \vec{r} \).
+Es gilt:
+                            \[ \frac{U}{\left|d\vec{r}\right|}=\frac{2\pi}{d\varphi}\Rightarrow\frac{2\pi R}{\left|d\vec{r}\right|}=\frac{2\pi}{d\varphi} \]
+
+Damit folgt für den Betrag \( \left|d\vec{r}\right|=Rd\varphi \); diesen Zusammenhang kann man vektoriell schreiben als \( d\vec{r}=d\vec{\varphi}\times\vec{r} \), und mit \( \vec{v}\left(t\right)=\frac{d\vec{r}}{dt} \) folgt die Herleitung:
+                            \[ \begin{aligned}
+                            d\vec{r} &=d\vec{\varphi}\times\vec{r} \\
+                            \vec{v} &=\frac{d\vec{r}}{dt}=\frac{d\vec{\varphi}}{dt}\times\vec{r}=\vec{\omega}\times\vec{r}
+                            \end{aligned} \]
+                            Die Bahngeschwindigkeit ist das Kreuzprodukt aus vektorieller Winkelgeschwindigkeit und \( \vec{r} \).
                          <br><br>
                             
                                 

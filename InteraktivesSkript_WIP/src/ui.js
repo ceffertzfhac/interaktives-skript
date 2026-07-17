@@ -78,12 +78,14 @@ export function toc(){
         container.classList.remove("toc_hiding");
         generate_toc(); // aktuelle Seite kann sich seit dem letzten Aufbau geaendert haben (Rail/Pagenav-Navigation)
         show("toc_container");
+        document.body.classList.add("toc-open"); // blendet #header aus, s. styles.css
         toggle_body_scroll();
         const search = ge("toc_search");
         if (search) { search.value = ""; search.focus({ preventScroll: true }); }
     }
     else {
         container.classList.add("toc_hiding");
+        document.body.classList.remove("toc-open");
         toggle_body_scroll();
         toc_hide_timer = setTimeout(() => {
             hide("toc_container");
