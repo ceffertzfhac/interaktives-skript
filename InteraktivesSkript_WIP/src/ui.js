@@ -1,7 +1,12 @@
 // ui.js — Inhaltsverzeichnis, Kontakt-Anker, Zoom-Overlay, Pause-Button.
 // close_zoom() ruft update_all() (core), daher Abhaengigkeit auf core.
+// generate_toc()/toc() bauen das Akkordeon aus dem pages.js-Seitenregister
+// (Kapitel = h2-Ueberschrift, Unterabschnitte = h3), Klicks navigieren ueber
+// showPage() statt per Anker-Sprung -- andere Seiten sind per Paginierung
+// display:none, ein reiner Anker-Sprung wuerde ins Leere zeigen.
 
 import { ge, show, hide, toggle_visibility, update_all } from './core.js';
+import { getPages, showPage } from './pages.js';
 
 export let zoom_enabled = false;
 
@@ -58,29 +63,91 @@ export function close_zoom(){
     update_all();
 }
 
+// toc() oeffnet/schliesst das TOC-Akkordeon. Bug-Fix (BACKLOG.md P2): frueher
+// referenzierte "toc_hide" faelschlich die Show-Keyframes (Copy-Paste), und
+// hide("toc_container") setzte sofort display:none, ohne die Hide-Animation
+// abspielen zu lassen; ausserdem fehlte toggle_body_scroll() (im Gegensatz zu
+// zoom()/close_zoom(), die es nutzen) -- daher blieb u.U. ein Scroll-Balken-
+// Rest sichtbar. Jetzt: beim Schliessen erst toc_hide abspielen lassen, erst
+// danach "hidden" setzen; toggle_body_scroll() symmetrisch bei Auf/Zu.
+const TOC_ANIM_MS = 350;
+let toc_hide_timer = null;
+
 export function toc(){
     const content = ge("toc_content");
     const container = ge("toc_container");
-    content.classList.remove("toc_hide");
-    content.classList.remove("toc_show");
     if(container.classList.contains("hidden")) {
+        clearTimeout(toc_hide_timer);
         show("toc_container");
+        content.classList.remove("toc_hide");
         content.classList.add("toc_show");
+        toggle_body_scroll();
     }
     else {
-        hide("toc_container");
+        content.classList.remove("toc_show");
+        content.classList.add("toc_hide");
+        toggle_body_scroll();
+        toc_hide_timer = setTimeout(() => hide("toc_container"), TOC_ANIM_MS);
     }
 }
-export function generate_toc(){
-    const h = document.getElementsByClassName("inhaltsverzeichnis");
-    const toc_c = ge("toc_content");
-    for (let i = 0;i<h.length;i++) {
-        h[i].setAttribute("id","toc_"+i);
-        const t = h[i].innerHTML;
-        toc_c.innerHTML += "<a href='#" + h[i].id + "' class='toc_" + h[i].tagName + "'>" + t + "</a><br>";
-    }
 
-    return h;
+// generate_toc() baut ein Akkordeon aus dem pages.js-Seitenregister: eine
+// Gruppe pro h2-Seite (Kapitel), darunter ihre h3-Seiten (Unterabschnitte) als
+// Links. Generisch aus .inhaltsverzeichnis abgeleitet -- ein neues Kapitel
+// (weiteres h2 + h3-Folge in einer kuenftigen chapters/ch_NN-Datei) erscheint
+// hier automatisch als weitere Gruppe, ohne Code-Aenderung.
+export function generate_toc(){
+    const toc_c = ge("toc_content");
+    if (!toc_c) return [];
+    toc_c.innerHTML = "";
+    const pages = getPages();
+    const groups = [];
+    let cur = null;
+    pages.forEach(p => {
+        if (p.level === "h2") { cur = { chapter: p, subs: [] }; groups.push(cur); }
+        else if (cur) cur.subs.push(p);
+        else { cur = { chapter: p, subs: [] }; groups.push(cur); }
+    });
+
+    groups.forEach((g, gi) => {
+        const groupEl = document.createElement("div");
+        groupEl.className = "toc_group";
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "toc_group_header";
+        btn.innerHTML = "<span class='toc_group_title'>" + g.chapter.title + "</span><span class='toc_group_chevron'>▾</span>";
+        groupEl.appendChild(btn);
+
+        const body = document.createElement("div");
+        body.className = "toc_group_body";
+        g.subs.forEach(sub => {
+            const a = document.createElement("a");
+            a.href = "#" + sub.id;
+            a.className = "toc_sub_link";
+            a.textContent = sub.title;
+            a.dataset.action = "goto_page";
+            a.dataset.arg = sub.id;
+            a.addEventListener("click", () => toc());
+            body.appendChild(a);
+        });
+        if (g.subs.length === 0) {
+            // Kapitel ohne Unterabschnitte (z.B. reine Intro-Seite): Klick auf
+            // die Kopfzeile selbst navigiert.
+            btn.dataset.action = "goto_page";
+            btn.dataset.arg = g.chapter.id;
+            btn.addEventListener("click", () => toc());
+        }
+        groupEl.appendChild(body);
+        toc_c.appendChild(groupEl);
+
+        btn.addEventListener("click", () => {
+            if (g.subs.length === 0) return; // navigiert bereits, s.o.
+            groupEl.classList.toggle("toc_group_collapsed");
+        });
+    });
+
+    return pages;
 }
 export function kontakt() {
     if(window.scrollY >= 70) {

@@ -1,14 +1,10 @@
 // core.js — zentrale Helfer, globaler State, Skript-Steuerung (statisch vs.
 // interaktiv), Highlight-Boxen, Safari-Workaround, Bruchdarstellung, Darkmode,
-// Reset sowie update_all (dispatcht via window.updateN -- siehe figures/*).
-// Eine Abhaengigkeit zu splitter.js: make_static() baut die Grafik-Inners neu
-// und muss danach den ResizeObserver neu an die ersetzten Inners anhaengen +
-// den Layout-Pass neu anstossen (v1.4.6). Das ist ein ES-Modul-Zyklus (splitter.js
-// importiert ge aus core.js), aber benigne: beide Bindings (ge,
-// refresh_figure_layout) sind gehobene Funktions-Deklarationen, die nur zur
-// Laufzeit -- nicht waehrend der Modul-Eval -- aufgerufen werden.
+// Breiten-Modus, Reset sowie update_all (dispatcht via window.updateN -- siehe
+// figures/*).
 
-import { refresh_figure_layout } from './splitter.js';
+const WIDTHS = { schmal: "760px", normal: "900px", breit: "1180px" };
+const WIDTH_STORAGE_KEY = "skript_width_mode";
 
 export let interaktiv = true; //statisches oder interaktives Skript
 export let darkmode_on = false;
@@ -134,13 +130,11 @@ export function make_static(){ //interaktives Skript statisch machen für Evalua
 
         ge("gc8").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/radialgeschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
 
+        // gc10 (Kreisbewegung, src/figures/kreisbewegung/) hat kein statisches
+        // Bild-Pendant und bleibt bewusst interaktiv, auch im statischen Modus
+        // (keine 1:1-Parität zu den anderen Figuren, s. CLAUDE.md).
 
         reload_mathjax();
-        // Inners wurden neu gebaut (und gc6 geleert) -> ResizeObserver neu an
-        // die ersetzten Inners anhaengen + Layout-Pass (v1.4.6). Initial (init:
-        // make_static vor init_splitter) ist _refresh noch null -> No-op, das
-        // init_splitter selbst uebernimmt; relevant nur beim Runtime-Test().
-        refresh_figure_layout();
     }
 }
 
@@ -225,6 +219,34 @@ export function adjust_text_size(step) {
     if (!step) return;
     text_level = Math.min(TEXT_LEVEL_MAX, Math.max(TEXT_LEVEL_MIN, text_level + step));
     apply_text_size();
+}
+
+// Breiten-Modus (v2.0): seit der Ablösung der Sticky-Grafikspalte (splitter.js)
+// steuert Schmal/Normal/Extrabreit nur noch die max-width der Lesespalte
+// #paper -- kein Splitter, kein --scale, kein Stapel-Cap mehr noetig.
+function mark_active_width_segment(mode) {
+    document.querySelectorAll('[data-action="set_width_mode"]').forEach(el => {
+        el.classList.toggle("active", el.dataset.mode === mode);
+    });
+}
+
+export function set_width_mode(mode, persist = true) {
+    if (!WIDTHS[mode]) return;
+    const paper = ge("paper");
+    if (paper) paper.style.setProperty("--paper-max-width", WIDTHS[mode]);
+    mark_active_width_segment(mode);
+    if (persist) {
+        try { localStorage.setItem(WIDTH_STORAGE_KEY, mode); } catch (_) {}
+    }
+}
+
+export function init_width_mode() {
+    let mode = "normal";
+    try {
+        const s = localStorage.getItem(WIDTH_STORAGE_KEY);
+        if (s && WIDTHS[s]) mode = s;
+    } catch (_) {}
+    set_width_mode(mode, false);
 }
 
 export function reset(){

@@ -5,6 +5,8 @@
 
 import { ge, show, hide, interaktiv } from './core.js';
 import { zoom } from './ui.js';
+import { showAllPagesForPrint, restorePagination } from './pages.js';
+import { restoreMarginalia } from './shell.js';
 
 export let auto_print = false; //Safari blocks autoprint...
 
@@ -25,6 +27,14 @@ export function check_print() { //check if this page was just opened in a new ta
 }
 
 export function print_page() {
+    // Alle Kapitelseiten sichtbar machen, bevor #container geklont wird --
+    // sonst enthaelt der Ausdruck nur die gerade aktive Seite (Paginierung,
+    // s. pages.js). restoreMarginalia() stellt zuvor in die Marginalie
+    // verschobene .anmerkung-Boxen an ihren Platz in der jeweiligen Seite
+    // zurueck, damit jede Seite im Ausdruck vollstaendig ist.
+    restoreMarginalia();
+    showAllPagesForPrint();
+
     var pc = ge("print_container");
     pc.innerHTML = ge("container").innerHTML;
     show("print_container");
@@ -32,6 +42,8 @@ export function print_page() {
     hide("container");
     hide("header");
     hide("toc_container");
+
+    restorePagination();
 
     const gci = pc.querySelectorAll(".grafik-container-inner");
     for(let i=0;i<gci.length;i++){
@@ -41,6 +53,12 @@ export function print_page() {
     for(let i=0;i<zm.length;i++){
         zm[i].remove();
     }
+    // Kapitel-App-Shell (Breadcrumb-Leiste, linke Rail, Tablet-Drawer) ist
+    // fuer den Ausdruck ohne Wert -- entfernen, uebrig bleibt der reine
+    // Lesefluss aller Seiten.
+    ["#chapter_appbar", "#chapter_rail_desktop_wrap", "#chapter_drawer", "#chapter_marginalia"].forEach(sel => {
+        pc.querySelectorAll(sel).forEach(n => n.remove());
+    });
     const gc = pc.querySelectorAll(".grafik-container");
     for(let i=0;i<gc.length;i++){
         create_qr(gc[i].id);

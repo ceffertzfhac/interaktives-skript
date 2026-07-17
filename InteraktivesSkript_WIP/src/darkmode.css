@@ -112,3 +112,61 @@ input[type="range"]::-moz-range-track {
     filter: invert(1) hue-rotate(180deg) saturate(10);
     mix-blend-mode: lighten;
 }
+
+/* ── Kapitel-App-Shell (v2.0) ─────────────────────────────────────────────── */
+.grafik-container {
+    background-color: var(--bg);
+    border-color: #444;
+}
+.gc_header { border-bottom-color: #444; }
+.gc_header_title { color: #eee; }
+.gc_preview { color: #bbb; }
+#chapter_appbar { border-bottom-color: #444; }
+.chapter-crumb { color: #aaa; }
+.chapter-crumb #chapter_crumb_current { color: #fff; }
+.chapter-progress { color: #888; }
+.chapter-progress-track { background-color: #444; }
+#chapter_hamburger { background-color: var(--bg); color: #ccc; border-color: #444; }
+.rail-heading { color: #888; }
+.rail-onpage a, .rail-chapterlink { color: #bbb; }
+.rail-onpage a:hover, .rail-chapterlink:hover { background-color: #222; }
+.rail-chapterlink.current { background-color: #26403f; color: #7fd9d4; }
+.rail-empty { color: #777; }
+#chapter_marginalia .anmerkung { border-color: #444; background-color: #262626; color: #ccc; }
+.chapter-pagenav { border-top-color: #444; }
+.chapter-pagenav button { background-color: var(--bg); color: #ccc; border-color: #444; }
+.chapter-pagenav button:hover:not(:disabled) { background-color: #222; }
+#chapter_drawer_panel { background-color: #1b1b1b; }
+.toc_group { border-color: #444; }
+.toc_group_header { background-color: #262626; color: #eee; }
+.toc_group_header:hover { background-color: #2e2e2e; }
+.toc_sub_link { color: #ccc; }
+.toc_sub_link:hover { background-color: #2e2e2e; }
+
+/* ── Kreisbewegung-Simulation (src/figures/kreisbewegung/): dieselben
+   #gc10-Variablen wie in figures/kreisbewegung/styles.css, dunkles Set --
+   folgt dem Selector-Override-Muster dieser Datei statt eines eigenen
+   body.dark-Klassenumschalters (die Portierung nutzt bewusst dieselben CSS-
+   Variablen weiter, s. figures/kreisbewegung/ui.js-Kommentar). */
+#gc10 {
+    --kb-bg: #1b1b1b;
+    --kb-surface: #262626;
+    --kb-surface2: #202020;
+    --kb-border: #444;
+    --kb-border2: #555;
+    --kb-text: #eee;
+    --kb-text2: #bbb;
+    --kb-text3: #888;
+    --kb-r: #e0b040;
+    --kb-vel: #5b9bd5;
+    --kb-acc: #e06666;
+    --kb-rx: #6fa8dc;
+    --kb-ry: #6fcf97;
+    --kb-vx: #ffd966;
+    --kb-vy: #e07070;
+    --kb-ax: #4fc3d9;
+    --kb-ay: #f2a35e;
+    --kb-traj: #999;
+    --kb-graph-bg: #202020;
+    --kb-grid-line: #333;
+}

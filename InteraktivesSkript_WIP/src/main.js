@@ -6,10 +6,13 @@
 
 import { interaktiv, generate_highlight_boxes, safari_bug, make_static,
          update_all, toggle_darkmode, test, reload_mathjax, reset, hide,
-         init_text_size_controls, adjust_text_size } from './core.js';
+         init_text_size_controls, adjust_text_size, set_width_mode,
+         init_width_mode } from './core.js';
 import { generate_toc, offsetAnchor, toc, kontakt, close_zoom, zoom, pause } from './ui.js';
 import { init_print, check_print, from_qr } from './print.js';
-import { init_splitter, set_width_mode } from './splitter.js';
+import { paginate } from './pages.js';
+import { init_shell, toggle_drawer, close_drawer, chapter_prev, chapter_next, goto_page } from './shell.js';
+import { init_figure_panels, toggle_panel } from './figures/panels.js';
 
 // Figuren laden (Seiteneffekt: Registrierung von updateN/animateN/clearN).
 import './figures/fig_1.js';
@@ -19,6 +22,7 @@ import './figures/fig_5.js';
 import './figures/fig_6.js';
 import './figures/fig_8.js';
 import './figures/fig_9.js';
+import { initKreisbewegung } from './figures/kreisbewegung/ui.js';
 
 // Zentrales Event-Binding (Stage 2): Inline-Handler sind durch data-action-
 // Attribute ersetzt; ein delegierter Listener je Event-Typ dispatcht an die
@@ -68,6 +72,12 @@ function dispatch_click(e) {
         case "zoom": zoom(el.parentElement.parentElement); break;
         case "pause-animate": pause(el); fig_call("animate", el.dataset.fig); break;
         case "hide": hide(el.dataset.target); break;
+        case "toggle_panel": toggle_panel(el); break;
+        case "toggle_drawer": toggle_drawer(); break;
+        case "close_drawer": close_drawer(); break;
+        case "chapter_prev": chapter_prev(); break;
+        case "chapter_next": chapter_next(); break;
+        case "goto_page": goto_page(el.dataset.arg); break;
         default: break;
     }
 }
@@ -75,14 +85,20 @@ function dispatch_click(e) {
 function init() {
     bind_events();
     init_text_size_controls();
+    init_width_mode();
     generate_highlight_boxes();
     safari_bug();
+    // paginate() muss vor generate_toc()/init_shell() laufen: beide lesen das
+    // Seitenregister (h2/h3 -> .chapter-page) auf, das paginate() aufbaut.
+    paginate();
     generate_toc();
+    init_shell();
+    init_figure_panels();
     offsetAnchor();
     make_static();
-    init_splitter();
     if(interaktiv) {
         update_all();
+        initKreisbewegung();
     }
     from_qr();
     check_print();

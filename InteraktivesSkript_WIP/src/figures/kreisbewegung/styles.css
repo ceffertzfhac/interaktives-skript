@@ -1,0 +1,230 @@
+/* styles.css (kreisbewegung) — reskinned aus Input/Simulationen/
+   Project_kreisbewegung_simulation/css/styles.css + der von dort referenzierten
+   (im Repo nicht vorhandenen) shared/css/design-system.css. Farbig an die WIP-
+   Palette angeglichen (--fh Mint statt FH-Mint-Klon, IBM Plex/Source Serif
+   statt DM Sans/JetBrains Mono) statt eines eigenen Theme-Systems; Dark-Mode
+   folgt src/darkmode.css (#gc10-Overrides der hier definierten Variablen),
+   nicht mehr body.dark/body.light. Scope: alles unter #gc10, damit nichts mit
+   den bestehenden gcN-Figuren oder der App-Chrome kollidiert. */
+
+#gc10 {
+    --kb-bg: #fbfaf7;
+    --kb-surface: #ffffff;
+    --kb-surface2: #f6f4ef;
+    --kb-border: #e3e1d7;
+    --kb-border2: #d1cebf;
+    --kb-text: #181b21;
+    --kb-text2: #4c5266;
+    --kb-text3: #878ea1;
+    --kb-accent: var(--fh, #00b2a9);
+    --kb-r: #b08010;
+    --kb-vel: #0072b2;
+    --kb-acc: #c0392b;
+    --kb-rx: #1f77b4;
+    --kb-ry: #1a8a50;
+    --kb-vx: #b8860b;
+    --kb-vy: #c03030;
+    --kb-ax: #17a2b8;
+    --kb-ay: #e0782d;
+    --kb-traj: #7f7f7f;
+    --kb-graph-bg: #ffffff;
+    --kb-grid-line: #e8eaf0;
+    --kb-lcd-bg: #0a0a0a;
+    --kb-lcd-on: #ff3b3b;
+    --kb-lcd-off: #2a1010;
+    --kb-r-sm: 6px;
+    --kb-font: 'IBM Plex Sans', system-ui, sans-serif;
+    --kb-font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+    font-family: var(--kb-font);
+    color: var(--kb-text);
+    background: var(--kb-bg);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* ── Panel-Kopfzeile (dunkler Balken, Titel + Play/Pause/Reset/Export) ──── */
+#gc10 .kb-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; flex-wrap: wrap; padding: 12px 16px;
+    background: #181b21;
+}
+#gc10 .kb-topbar-title {
+    display: flex; align-items: center; gap: 8px;
+    color: #eef1f5; font-size: 13px; font-weight: 700;
+}
+#gc10 .kb-topbar-title .kb-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--kb-accent);
+}
+#gc10 .kb-topbar-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+#gc10 .btn {
+    padding: 6px 13px; border-radius: var(--kb-r-sm); border: 1px solid #3a4050;
+    background: #2a2f38; color: #eef1f5;
+    font-family: var(--kb-font); font-size: 12.5px; font-weight: 600;
+    cursor: pointer; transition: all .15s;
+}
+#gc10 .btn:hover { background: #333947; }
+#gc10 .btn.primary { background: var(--kb-accent); color: #04302f; border-color: var(--kb-accent); font-weight: 700; }
+#gc10 .btn.primary:hover { filter: brightness(1.08); }
+#gc10 .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── 3-Spalten-Grid (Parameter | Buehne | Analyse), an die Reading-Column-
+   Breite angepasst (220/1fr/210, wie im Design-Mockup) statt der Standalone-
+   App-Breite (280/1fr/270). ─────────────────────────────────────────────── */
+#gc10 .kb-layout { display: grid; grid-template-columns: 220px 1fr 210px; min-height: 460px; }
+#gc10 .kb-panel { background: var(--kb-surface2); overflow-y: auto; }
+#gc10 .kb-panel.left { border-right: 1px solid var(--kb-border); }
+#gc10 .kb-panel.right { border-left: 1px solid var(--kb-border); }
+#gc10 .panel-section { padding: 12px 14px; border-bottom: 1px solid var(--kb-border); }
+
+#gc10 .panel-section.collapsible > .panel-label {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    width: 100%; margin-bottom: 10px; padding: 2px 0;
+    background: transparent; border: none; text-align: left;
+    font: inherit; font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--kb-text2); cursor: pointer;
+}
+#gc10 .panel-section.collapsible > .panel-label:hover { color: var(--kb-text); }
+#gc10 .acc-chevron { color: var(--kb-text3); font-size: 1rem; transition: transform .2s ease; }
+#gc10 .panel-section.collapsed > .panel-label { margin-bottom: 0; }
+#gc10 .panel-section.collapsed > .panel-label .acc-chevron { transform: rotate(-90deg); }
+#gc10 .panel-section.collapsed > .panel-label ~ * { display: none !important; }
+#gc10 .panel-label:not(.panel-section.collapsible > .panel-label) {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--kb-text3); margin-bottom: 10px;
+}
+
+#gc10 .slider-label { font-size: 12px; color: var(--kb-text2); margin-bottom: 3px; }
+#gc10 .slider-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 12px; }
+#gc10 .slider-val { font-family: var(--kb-font-mono); font-size: 11.5px; color: var(--kb-accent); text-align: right; min-width: 52px; }
+#gc10 input[type=range] { -webkit-appearance: none; width: 100%; height: 3px; background: var(--kb-border2); border-radius: 2px; outline: none; }
+#gc10 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--kb-accent); cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--kb-accent); }
+#gc10 input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--kb-accent); cursor: pointer; border: 2px solid #fff; }
+
+#gc10 .select-field {
+    width: 100%; padding: 6px 8px; margin-bottom: 8px;
+    background: var(--kb-surface); border: 1px solid var(--kb-border2);
+    border-radius: var(--kb-r-sm); color: var(--kb-text);
+    font-family: var(--kb-font); font-size: 12px; cursor: pointer; outline: none;
+}
+#gc10 .vis-control { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+#gc10 .vis-control .slider-label { min-width: 74px; flex: 0 0 auto; margin-bottom: 0; }
+#gc10 .vis-control .select-field { flex: 1 1 auto; margin-bottom: 0; font-size: 12px; padding: 5px 8px; }
+
+#gc10 .vis-toggle-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+#gc10 .vis-label { font-size: 12.5px; color: var(--kb-text2); }
+#gc10 .toggle-switch { position: relative; width: 28px; height: 15px; cursor: pointer; flex-shrink: 0; }
+#gc10 .toggle-switch input { display: none; }
+#gc10 .toggle-track { position: absolute; inset: 0; background: var(--kb-border2); border-radius: 8px; transition: background .15s; }
+#gc10 .toggle-thumb { position: absolute; left: 2px; top: 2px; width: 11px; height: 11px; border-radius: 50%; background: #fff; transition: all .15s; }
+#gc10 .toggle-switch input:checked + .toggle-track { background: var(--kb-accent); }
+#gc10 .toggle-switch input:checked + .toggle-track + .toggle-thumb { left: 15px; }
+
+#gc10 .speed-pills { display: flex; gap: 5px; }
+#gc10 .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: 11.5px; color: var(--kb-text2);
+    cursor: pointer; transition: all .15s; position: relative; user-select: none;
+}
+#gc10 .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+#gc10 .speed-pill.active { background: color-mix(in srgb, var(--kb-accent) 12%, transparent); border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700; }
+
+#gc10 .legend-grid { display: grid; grid-template-columns: 14px 1fr; gap: 4px 7px; align-items: center; }
+#gc10 .legend-swatch { width: 14px; height: 10px; border-radius: 2px; }
+#gc10 .legend-label { font-size: 11.5px; color: var(--kb-text2); }
+
+/* ── Buehne (Mitte): SVG-Animation + Zeit-Label ─────────────────────────── */
+#gc10 .kb-stage { position: relative; display: flex; align-items: center; justify-content: center; background: var(--kb-bg); overflow: hidden; }
+#gc10 #kb_main_svg { width: 100%; height: 100%; max-height: 460px; display: block; }
+#gc10 .kb-time-label { position: absolute; bottom: 7px; right: 12px; font-family: var(--kb-font-mono); font-size: 11.5px; color: var(--kb-text3); pointer-events: none; }
+
+#gc10 #kb_anim-arrowhead polygon { fill: var(--kb-text); }
+#gc10 #kb_arrowhead-r polygon { fill: var(--kb-r); }
+#gc10 #kb_arrowhead-rx polygon { fill: var(--kb-rx); }
+#gc10 #kb_arrowhead-ry polygon { fill: var(--kb-ry); }
+#gc10 #kb_arrowhead-v polygon { fill: var(--kb-vel); }
+#gc10 #kb_arrowhead-vx polygon { fill: var(--kb-vx); }
+#gc10 #kb_arrowhead-vy polygon { fill: var(--kb-vy); }
+#gc10 #kb_arrowhead-a polygon { fill: var(--kb-acc); }
+#gc10 #kb_arrowhead-ax polygon { fill: var(--kb-ax); }
+#gc10 #kb_arrowhead-ay polygon { fill: var(--kb-ay); }
+#gc10 #kb_graph-arrowhead polygon { fill: var(--kb-text); }
+
+#gc10 #kb_trajectory_path { stroke: var(--kb-traj); }
+#gc10 #kb_disk { stroke: var(--kb-traj); }
+#gc10 #kb_point { fill: var(--kb-accent); stroke: var(--kb-text); }
+#gc10 #kb_zoom_text_display { fill: var(--kb-text3); font-family: var(--kb-font-mono); font-size: 11px; }
+
+#gc10 #kb_position_vector { stroke: var(--kb-r); }
+#gc10 #kb_position_vector_x { stroke: var(--kb-rx); }
+#gc10 #kb_position_vector_y { stroke: var(--kb-ry); }
+#gc10 #kb_velocity_vector { stroke: var(--kb-vel); }
+#gc10 #kb_velocity_vector_x { stroke: var(--kb-vx); }
+#gc10 #kb_velocity_vector_y { stroke: var(--kb-vy); }
+#gc10 #kb_acceleration_vector { stroke: var(--kb-acc); }
+#gc10 #kb_acceleration_vector_x { stroke: var(--kb-ax); }
+#gc10 #kb_acceleration_vector_y { stroke: var(--kb-ay); }
+
+#gc10 #kb_stopwatch_circle { fill: var(--kb-surface); stroke: var(--kb-text); cursor: pointer; }
+#gc10 #kb_subdial_face { fill: var(--kb-surface); stroke: var(--kb-text3); }
+#gc10 #kb_stopwatch_main_hand { stroke: var(--kb-text); }
+#gc10 #kb_stopwatch_sub_hand { stroke: var(--kb-accent); }
+#gc10 .sw-mark { stroke: var(--kb-text3); }
+#gc10 .lcd-frame { fill: var(--kb-lcd-bg); stroke: var(--kb-text); }
+#gc10 .lcd-seg-on { fill: var(--kb-lcd-on); }
+#gc10 .lcd-seg-off { fill: var(--kb-lcd-off); }
+
+/* ── Diagramm ─────────────────────────────────────────────────────────────── */
+#gc10 .kb-graph-wrapper { position: relative; border-top: 1px solid var(--kb-border); background: var(--kb-bg); grid-column: 1 / -1; padding: 4px; }
+#gc10 #kb_graph_svg { width: 100%; height: 340px; display: block; }
+#gc10 #kb_graph_line, #gc10 #kb_graph_line_top, #gc10 #kb_graph_line_bottom { stroke: var(--kb-accent); }
+#gc10 #kb_graph_point, #gc10 #kb_graph_point_top, #gc10 #kb_graph_point_bottom { fill: var(--kb-accent); }
+#gc10 .graph-bg { fill: var(--kb-graph-bg); }
+#gc10 .grid-line { stroke: var(--kb-grid-line); }
+#gc10 .axis-line { stroke: var(--kb-text); }
+#gc10 .axis-label { fill: var(--kb-text); font-size: 13px; font-family: var(--kb-font); }
+#gc10 .tick-label { fill: var(--kb-text3); font-size: 11px; font-family: var(--kb-font-mono); }
+#gc10 .graph-title-text { fill: var(--kb-text); font-size: 15px; font-family: var(--kb-font); font-weight: 600; }
+#gc10 .graph-title-text.small { font-size: 13px; }
+#gc10 .graph-hover-line { stroke: var(--kb-text3); stroke-width: 1.5; stroke-dasharray: 4,3; pointer-events: none; }
+#gc10 .graph-hover-point { fill: none; stroke-width: 2; pointer-events: none; }
+#gc10 .graph-hover-tooltip-bg { fill: var(--kb-surface2); fill-opacity: .85; stroke: var(--kb-border2); stroke-width: 1; rx: 4; }
+#gc10 .graph-hover-tooltip-text { fill: var(--kb-text); font-size: 11px; font-family: var(--kb-font-mono); pointer-events: none; }
+#gc10 .graph-hit-rect { fill: none; pointer-events: all; cursor: crosshair; }
+
+/* ── Rechte Analyse-Spalte (einklappbar, Default: aufgeklappt) ──────────── */
+#gc10 .kb-layout.analysis-collapsed { grid-template-columns: 220px 1fr 40px; }
+#gc10 .kb-layout.analysis-collapsed .kb-panel.right .kb-panel-body {
+    position: fixed; left: -10000px; top: 0; width: 210px; pointer-events: none;
+}
+#gc10 .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 10px 14px;
+    background: var(--kb-surface); border: none; border-bottom: 1px solid var(--kb-border);
+    cursor: pointer; color: var(--kb-text2); font: inherit;
+}
+#gc10 .panel-header:hover { color: var(--kb-text); }
+#gc10 .ph-label { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; color: var(--kb-text3); text-transform: uppercase; }
+#gc10 .ph-chevron { width: 14px; height: 14px; flex-shrink: 0; transition: transform .2s ease; }
+#gc10 .kb-layout.analysis-collapsed .panel-header { flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 14px 0; gap: 10px; border-bottom: none; }
+#gc10 .kb-layout.analysis-collapsed .ph-label { writing-mode: vertical-rl; transform: rotate(180deg); }
+#gc10 .kb-layout.analysis-collapsed .ph-chevron { transform: rotate(180deg); }
+
+#gc10 .analysis-grid { display: grid; grid-template-columns: auto 1fr; gap: 1px; background: var(--kb-border); border-top: 1px solid var(--kb-border); }
+#gc10 .analysis-cell { background: var(--kb-surface2); padding: 4px 8px; font-size: 11px; }
+#gc10 .analysis-cell.key { color: var(--kb-text3); }
+#gc10 .analysis-cell.val { font-family: var(--kb-font-mono); color: var(--kb-text); text-align: right; }
+#gc10 .formula-box {
+    background: color-mix(in srgb, var(--kb-accent) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--kb-accent) 20%, transparent);
+    border-radius: var(--kb-r-sm); padding: 10px 12px; font-size: 12.5px;
+    color: var(--kb-text2); line-height: 1.75;
+}
+#gc10 .kb-note { font-size: 11px; color: var(--kb-text3); margin-top: 6px; line-height: 1.5; }
+
+@media (max-width: 760px) {
+    #gc10 .kb-layout { grid-template-columns: 1fr; }
+    #gc10 .kb-panel.left, #gc10 .kb-panel.right { border: none; border-top: 1px solid var(--kb-border); }
+    #gc10 .kb-layout.analysis-collapsed { grid-template-columns: 1fr; }
+}

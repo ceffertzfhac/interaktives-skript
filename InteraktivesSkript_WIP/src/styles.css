@@ -30,80 +30,51 @@ body {
     float:left;
 }
 */
-/* Splitter (v1.4.0): draggable Trennung Text<->Grafik. --g = Grafik-Anteil
-   (0.25..0.75), --gap = Spalt zwischen Text- und Grafik-Spalte. Eine CSS-
-   Variable steuert alle abhaengigen Regeln via calc(); JS setzt beim Ziehen
-   nur --g (siehe src/splitter.js). */
-#splitter {
-    top: 40px;
-    bottom:40px;
-    position: absolute;
-    left: var(--split-left, 801px); /* concrete px, gesetzt von splitter.js (var-direct, kein calc+var) — Fallback = Default --g 0.30 */
-    width: 8px;
-    cursor: col-resize;
-    z-index: 5;
-    touch-action: none;
-}
-#splitter::after {
-    content: "";
-    position: absolute;
-    left: 3px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: #ddd;
-}
-#splitter:hover::after,
-#splitter.active::after {
-    background: var(--fh);
-}
-body.splitting {
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: col-resize;
-}
 #print_container #vertical_line {
     visibility: hidden;
 }
+/* Kapitel-App-Shell (v2.0): #content ist ein normaler Blockcontainer (kein
+   Splitter/float/absolute mehr, s. src/pages.js + src/shell.js). #paper wird
+   von pages.js in .chapter-page-Einheiten gruppiert (eine Seite sichtbar) und
+   sitzt in einem Grid neben der linken Rail und der rechten Marginalie.
+   Breiten-Modus (Schmal/Normal/Extrabreit) setzt nur noch --paper-max-width
+   (s. core.js::set_width_mode) -- kein --scale/--g/Sticky-Grafikspalte mehr. */
 #content {
-    /*border: 1px solid yellow;*/
     width: 1150px;
-    margin-left:20px;
-    float:left;
-    position: absolute;
+    max-width: calc(100vw - 40px);
+    margin: 0 auto 40px;
     box-shadow: 0px 0px 18px #aaa;
     background-color: white;
     hyphens: auto;
-	text-align: justify;
-    /* Splitter-Variablen (v1.4.0..v1.4.4): --g = Grafik-Anteil 0.25..0.50
-       (nur Referenz). Die Layout-wirksamen Werte setzt splitter.js als
-       KONKRETE Pixel (var-direct, nicht calc+var -- letzteres war nicht
-       zuverlaessig aufgeloest und liess #paper auf shrink-to-fit fallen):
-       --split-left (Splitter-Position), --paper-w (Textspaltenbreite),
-       --gfx-left (Grafik-Position), --scale (= (--g*1150-70)/300, cap).
-       Defaults hier (= --g 0.30) verhindern Pre-JS-Flash. Das -70 bei --scale
-       ist der horizontale Innenrand der Grafik-Spalte (20px Spalt zum Splitter
-       links + 50px Platz fuer Labels rechts, v1.4.2). */
-    --g: 0.30;
-    --split-left: 801px;
-    --paper-w: 765px;
-    --gfx-left: 755px;
-    --scale: 0.92;
+    text-align: justify;
 }
 #print_container #content {
     box-shadow: 0px 0px 0px #fff;
     width:800px;
+    margin: 0;
+}
+
+.chapter-body {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr) 210px;
+    align-items: start;
+    gap: 24px;
+    padding: 0 24px;
+}
+#print_container .chapter-body {
+    display: block;
+    padding: 0;
 }
 
 #paper {
-    /*border:1px solid red;*/
-    width: var(--paper-w, 765px); /* concrete px, gesetzt von splitter.js (var-direct, kein calc+var); Fallback = Default --g 0.30 */
-    box-sizing: border-box; /* width schliesst Padding ein, damit die Textspalte nicht ueber den Splitter hinausragt. */
+    box-sizing: border-box;
     font-size: var(--paper-font-size);
     line-height: var(--paper-line-height);
-    float:left;
-    padding:30px 30px 50px 70px;
-    overflow-wrap: anywhere; /* schmale Textspalte (Splitter weit rechts): lange Woerter/Token umbrechen statt ueber den Trennstrich zu ragen (v1.4.2). */
+    max-width: var(--paper-max-width, 900px);
+    margin: 0 auto;
+    padding: 30px 0 60px;
+    overflow-wrap: anywhere;
+    min-width: 0;
 }
 #paper .grafik-container,
 #paper .grafik-container *,
@@ -115,8 +86,8 @@ body.splitting {
     line-height: var(--paper-base-line-height);
 }
 #print_container #paper {
-    padding:0 0 0 0;
-    width: 700px; /* calc-Literal 1150px gilt nur fuer interaktives #content (800px im Print) */
+    padding: 20px 40px;
+    max-width: none;
 }
 /* Display-Formeln auf die Textspalte begrenzen (v1.4.3): MathJax-SVGs haben
    feste Pixelbreite und koennen sich nicht umbrechen -- bei schmaler Textspalte
@@ -316,64 +287,61 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     user-select: none;
 
 }
+/* Figuren: collapsible Karte im normalen Lesefluss (v2.0) statt sticky/
+   skalierter Grafikspalte (splitter.js, entfernt). init_figure_panels()
+   (src/figures/panels.js) fuegt .gc_header + .gc_preview per JS ein; per
+   Default eingeklappt (.gc-expanded steuert, was sichtbar ist). */
 .grafik-container {
-    /*border: 1px solid red;*/
-    height:100%;
-
-    /*margin-left:870px;*/
-    /*margin-right:-365px;*/
-    /*float:right;*/
-    width:300px;
-    max-width: 100%; /* verhindert Overflow des Sticky-Platzhalters bei schmaler Textspalte (--g nahe 0.75) */
-    position: -webkit-sticky;
-    position: sticky;
-    top:250px;
+    background: #fff;
+    border: 1px solid #e3e1d7;
+    border-radius: 10px;
+    margin: 24px 0;
+    overflow: hidden;
 }
-
-#print_container .grafik-container {
-    min-height: 240px;
-    /*border:1px solid #ddd;*/
-    padding:20px 207px 20px 20px;
-    border-radius: 5px;
-    position: relative;
-    top:0px;
+.gc_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
 }
-/* Print-Guards (v1.4.0): Print cloned #container -> #content mit --g; calc
-   hier neutralisieren, damit Grafiken inline (nicht im rechten Bund) liegen
-   und der Splitter-Handle nicht gedruckt wird. */
-#print_container .grafik-container-inner {
-    position: relative;
-    left: auto;
-    width: 100%;
-    top: auto;
-    transform: none;
+.gc_header_title {
+    font-weight: 700;
+    font-size: 0.95em;
+    color: #181b21;
 }
-#print_container #splitter {
-    display: none;
-}
-
-.grafik-container-inner {
-    /*border:1px solid green;*/
-    position: absolute;
-    width: 300px; /* naturale Grafikbreite; Skalierung ueber transform (siehe unten) */
-    left: var(--gfx-left, 755px); /* concrete px, gesetzt von splitter.js (var-direct). = B - 50: Containing-Block ist der sticky .grafik-container-Platzhalter (bei x=Paper-padding-left 70), nicht #content -> -70 Versatz, damit die Grafik bei B=(1-g)*1150 im #content liegt; +20px Spalt zum Splitter = -50 (v1.4.2: Grafik klebt nicht bündig am Trennstrich). */
-    background-color: white;
+.gc_toggle {
+    flex-shrink: 0;
+    background: var(--fh);
+    color: #04302f;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 0.85em;
+    font-weight: 700;
+    cursor: pointer;
     white-space: nowrap;
-    top:-200px;
-    /* Gleichmaessige Skalierung mit der Grafik-Spalte (v1.4.0): transform:
-       scale erhaelt Seitenverhaeltnis + internes Layout (foreignObject-Labels)
-       exakt, im Gegensatz zu width:100% am SVG (nicht-gleichmaessig, verzerrt).
-       --scale = (--g * 1150 - 70) / 300 (gesetzt in splitter.js + Default hier);
-       das -70 laesst 20px Spalt links + 50px Platz fuer rechts ueberstehende
-       Labels, damit skalierte Labels nicht über den Seitenrand ragen (v1.4.2).
-       Zusaetzlich cap: --scale <= (viewportH - 120) / naturaleHoehe, damit die
-       ganze Grafik auf den Bildschirm passt (siehe splitter.js). */
-    transform: scale(var(--scale, 1));
-    transform-origin: top left;
-
-    /*text-align: center;*/
-
 }
+.gc_toggle:hover { filter: brightness(1.06); }
+.gc_preview {
+    padding: 0 18px 16px;
+    color: #4c5266;
+    font-size: 0.9em;
+}
+.gc_preview p { margin: 0; }
+.grafik-container-inner {
+    display: none;
+    padding: 0 18px 20px;
+    position: relative;
+}
+.grafik-container.gc-expanded .gc_preview { display: none; }
+.grafik-container.gc-expanded .grafik-container-inner { display: block; }
+.grafik-container.gc-expanded .gc_header { border-bottom: 1px solid #e3e1d7; }
+
+#print_container .grafik-container { border: 1px solid #ddd; }
+#print_container .gc_header,
+#print_container .gc_preview { display: none !important; }
+#print_container .grafik-container-inner { display: block !important; }
 .gc_title {
     /*font-family: sans-serif;*/
     font-size: 0.9em;
@@ -863,7 +831,16 @@ input[type="range"]::-moz-range-track {
 }
 #toc_content.toc_show {
     animation-name: toc-show;
-        animation-duration: 0.35s;
+    animation-duration: 0.35s;
+    animation-fill-mode: forwards;
+}
+/* Bug-Fix (BACKLOG.md P2): toc_hide referenzierte zuvor faelschlich toc-show
+   (Copy-Paste) und wurde nie tatsaechlich gesetzt (ui.js hide() sprang direkt
+   auf display:none) -- die Schliessen-Animation lief nie. Jetzt gesetzt +
+   verdrahtet (s. ui.js::toc()). */
+#toc_content.toc_hide {
+    animation-name: toc-hide;
+    animation-duration: 0.35s;
     animation-fill-mode: forwards;
 }
 @keyframes toc-show {
@@ -882,13 +859,46 @@ input[type="range"]::-moz-range-track {
   from {background-color: red;}
   to {background-color: yellow;}
 }
-.toc_H1, .toc_H2, .toc_H3, .toc_H4 {
-    line-height: 1.5;
+
+/* TOC-Akkordeon (v2.0): eine Gruppe pro Kapitel (h2), Unterabschnitte (h3)
+   darunter -- generisch aus dem pages.js-Seitenregister gebaut (s. ui.js). */
+.toc_group {
+    border: 1px solid #e3e1d7;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
 }
-.toc_H1 { margin-left:0px; }
-.toc_H2 { margin-left:40px; }
-.toc_H3 { margin-left:80px; }
-.toc_H4 { margin-left:120px; }
+.toc_group_header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #faf9f6;
+    border: none;
+    text-align: left;
+    font: inherit;
+    font-weight: 600;
+    color: #181b21;
+    cursor: pointer;
+}
+.toc_group_header:hover { background: #f0eee6; }
+.toc_group_chevron { color: #878ea1; font-size: 0.85em; transition: transform .2s ease; }
+.toc_group.toc_group_collapsed .toc_group_chevron { transform: rotate(-90deg); }
+.toc_group.toc_group_collapsed .toc_group_body { display: none; }
+.toc_group_body {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 8px 8px 20px;
+}
+.toc_sub_link {
+    padding: 7px 8px;
+    border-radius: 6px;
+    font-size: 0.92em;
+    color: #282c34;
+}
+.toc_sub_link:hover { background: #f0eee6; text-decoration: none; }
 
 
 #print_instruction {
@@ -918,6 +928,154 @@ input[type="range"]::-moz-range-track {
     font-size: 110%;
 }
 
+
+/* ══════════ KAPITEL-APP-SHELL (v2.0) ══════════════════════════════════════
+   src/pages.js (Paginierung) + src/shell.js (Breadcrumb/Rail/Marginalie/
+   Drawer). Desktop: Rail links + Marginalie rechts sichtbar (.chapter-body
+   Grid), Drawer/Hamburger nur ab dem Tablet-Breakpoint (erste echte @media-
+   Regel im Projekt, s. BACKLOG.md P2). */
+
+#chapter_appbar {
+    scroll-margin-top: 60px; /* #header ist position:fixed (50px hoch); verhindert, dass scrollIntoView-Ziele (Tastaturfokus etc.) dahinter landen. */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 14px 24px;
+    border-bottom: 1px solid #e3e1d7;
+}
+#chapter_hamburger {
+    display: none;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: 1px solid #e3e1d7;
+    background: #faf9f6;
+    font-size: 14px;
+    color: #4c5266;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.chapter-crumb {
+    font-size: 0.85em;
+    color: #4c5266;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+.chapter-crumb #chapter_crumb_chapter { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chapter-crumb #chapter_crumb_current { color: #181b21; font-weight: 600; }
+.chapter-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78em;
+    color: #878ea1;
+    flex-shrink: 0;
+}
+.chapter-progress-track {
+    width: 130px;
+    height: 5px;
+    background: #e3e1d7;
+    border-radius: 3px;
+    overflow: hidden;
+}
+.chapter-progress-track > span {
+    display: block;
+    height: 100%;
+    background: var(--fh);
+}
+
+/* ── Rail (links): "Auf dieser Seite" + Kapitel-Mininav ─────────────────── */
+.rail-block { margin-bottom: 22px; }
+.rail-heading {
+    font-size: 0.68em;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #878ea1;
+    margin-bottom: 10px;
+}
+.rail-onpage, .rail-chapternav { display: flex; flex-direction: column; gap: 2px; }
+.rail-onpage a, .rail-chapterlink {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 0.82em;
+    color: #4c5266;
+    text-decoration: none;
+}
+.rail-onpage a:hover, .rail-chapterlink:hover { background: #f0eee6; text-decoration: none; }
+.rail-chapterlink.current { background: #e3f6f5; color: #00595c; font-weight: 600; }
+.rail-dot { display: inline-block; width: 1.1em; color: var(--fh); }
+.rail-empty { padding: 7px 10px; font-size: 0.82em; color: #a3a9b8; }
+
+#chapter_rail_desktop_wrap { padding-top: 30px; }
+
+/* ── Marginalie (rechts): verschobene .anmerkung-Boxen der aktiven Seite ─ */
+#chapter_marginalia { padding-top: 30px; }
+#chapter_marginalia .anmerkung {
+    margin: 0 0 14px;
+    font-size: 0.85em;
+}
+
+/* ── Seiten-Navigation (unten in #paper) ─────────────────────────────────── */
+.chapter-pagenav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e3e1d7;
+}
+.chapter-pagenav button {
+    background: #faf9f6;
+    border: 1px solid #e3e1d7;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 0.85em;
+    color: #4c5266;
+    cursor: pointer;
+}
+.chapter-pagenav button:hover:not(:disabled) { background: #f0eee6; }
+.chapter-pagenav button:disabled { opacity: 0.4; cursor: default; }
+
+/* ── Tablet-Drawer (Slide-in, s. shell.js::toggle_drawer) ────────────────── */
+#chapter_drawer_overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,22,26,.35);
+    z-index: 40;
+}
+#chapter_drawer_panel {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    background: #faf9f6;
+    box-shadow: 0 0 20px rgba(0,0,0,.2);
+    z-index: 41;
+    padding: 18px 16px;
+    overflow-y: auto;
+}
+
+/* ── Tablet-Breakpoint (erste responsive Regel im Projekt) ───────────────── */
+@media (max-width: 1024px) {
+    #chapter_hamburger { display: block; }
+    .chapter-crumb #chapter_crumb_chapter { display: none; }
+    .chapter-body {
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+    }
+    #chapter_rail_desktop_wrap,
+    #chapter_marginalia { display: none; }
+    #paper { max-width: 100%; }
+}
+@media (min-width: 1025px) {
+    #chapter_drawer { display: none !important; }
+}
 
 /***********  USER STYLES   ************/
 
