@@ -5,9 +5,11 @@
 // am Modul-Ende ersetzt das ehemalige <body onload="init()">.
 
 import { interaktiv, generate_highlight_boxes, safari_bug, make_static,
-         update_all, toggle_darkmode, test, reload_mathjax, reset, hide } from './core.js';
+         update_all, toggle_darkmode, test, reload_mathjax, reset, hide,
+         init_text_size_controls, adjust_text_size } from './core.js';
 import { generate_toc, offsetAnchor, toc, kontakt, close_zoom, zoom, pause } from './ui.js';
 import { init_print, check_print, from_qr } from './print.js';
+import { init_splitter, set_width_mode } from './splitter.js';
 
 // Figuren laden (Seiteneffekt: Registrierung von updateN/animateN/clearN).
 import './figures/fig_1.js';
@@ -55,6 +57,8 @@ function dispatch_click(e) {
         case "toc": toc(); break;
         case "init_print": init_print(); break;
         case "kontakt": kontakt(); break;
+        case "adjust_text_size": adjust_text_size(parseInt(el.dataset.step, 10) || 0); break;
+        case "set_width_mode": set_width_mode(el.dataset.mode); break;
         case "toggle_darkmode": toggle_darkmode(); break;
         case "close_zoom": close_zoom(); break;
         case "test": test(); break;
@@ -70,11 +74,13 @@ function dispatch_click(e) {
 
 function init() {
     bind_events();
+    init_text_size_controls();
     generate_highlight_boxes();
     safari_bug();
     generate_toc();
     offsetAnchor();
     make_static();
+    init_splitter();
     if(interaktiv) {
         update_all();
     }

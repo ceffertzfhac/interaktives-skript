@@ -30,13 +30,37 @@ body {
     float:left;
 }
 */
-#vertical_line {
-    /*height:100%;*/
+/* Splitter (v1.4.0): draggable Trennung Text<->Grafik. --g = Grafik-Anteil
+   (0.25..0.75), --gap = Spalt zwischen Text- und Grafik-Spalte. Eine CSS-
+   Variable steuert alle abhaengigen Regeln via calc(); JS setzt beim Ziehen
+   nur --g (siehe src/splitter.js). */
+#splitter {
     top: 40px;
     bottom:40px;
     position: absolute;
-    right:335px;
-    border-left:2px solid #ddd;
+    left: var(--split-left, 801px); /* concrete px, gesetzt von splitter.js (var-direct, kein calc+var) — Fallback = Default --g 0.30 */
+    width: 8px;
+    cursor: col-resize;
+    z-index: 5;
+    touch-action: none;
+}
+#splitter::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #ddd;
+}
+#splitter:hover::after,
+#splitter.active::after {
+    background: var(--fh);
+}
+body.splitting {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: col-resize;
 }
 #print_container #vertical_line {
     visibility: hidden;
@@ -49,8 +73,22 @@ body {
     position: absolute;
     box-shadow: 0px 0px 18px #aaa;
     background-color: white;
-    hyphens: auto; 
-	text-align: justify
+    hyphens: auto;
+	text-align: justify;
+    /* Splitter-Variablen (v1.4.0..v1.4.4): --g = Grafik-Anteil 0.25..0.50
+       (nur Referenz). Die Layout-wirksamen Werte setzt splitter.js als
+       KONKRETE Pixel (var-direct, nicht calc+var -- letzteres war nicht
+       zuverlaessig aufgeloest und liess #paper auf shrink-to-fit fallen):
+       --split-left (Splitter-Position), --paper-w (Textspaltenbreite),
+       --gfx-left (Grafik-Position), --scale (= (--g*1150-70)/300, cap).
+       Defaults hier (= --g 0.30) verhindern Pre-JS-Flash. Das -70 bei --scale
+       ist der horizontale Innenrand der Grafik-Spalte (20px Spalt zum Splitter
+       links + 50px Platz fuer Labels rechts, v1.4.2). */
+    --g: 0.30;
+    --split-left: 801px;
+    --paper-w: 765px;
+    --gfx-left: 755px;
+    --scale: 0.92;
 }
 #print_container #content {
     box-shadow: 0px 0px 0px #fff;
@@ -59,13 +97,34 @@ body {
 
 #paper {
     /*border:1px solid red;*/
-    width:700px;
+    width: var(--paper-w, 765px); /* concrete px, gesetzt von splitter.js (var-direct, kein calc+var); Fallback = Default --g 0.30 */
+    box-sizing: border-box; /* width schliesst Padding ein, damit die Textspalte nicht ueber den Splitter hinausragt. */
+    font-size: var(--paper-font-size);
+    line-height: var(--paper-line-height);
     float:left;
     padding:30px 30px 50px 70px;
+    overflow-wrap: anywhere; /* schmale Textspalte (Splitter weit rechts): lange Woerter/Token umbrechen statt ueber den Trennstrich zu ragen (v1.4.2). */
+}
+#paper .grafik-container,
+#paper .grafik-container *,
+#paper input,
+#paper select,
+#paper option,
+#paper button {
+    font-size: var(--paper-base-font-size);
+    line-height: var(--paper-base-line-height);
 }
 #print_container #paper {
     padding:0 0 0 0;
+    width: 700px; /* calc-Literal 1150px gilt nur fuer interaktives #content (800px im Print) */
 }
+/* Display-Formeln auf die Textspalte begrenzen (v1.4.3): MathJax-SVGs haben
+   feste Pixelbreite und koennen sich nicht umbrechen -- bei schmaler Textspalte
+   (Splitter nach rechts gezogen) wuerden sie ueber den Trennstrich ragen.
+   max-width:100% + height:auto skaliert sie (via viewBox) proportional runter,
+   nur wenn sie breiter als die Spalte sind; schmalere Formeln unbeeinflusst. */
+mjx-container[display="true"] { display: block; }
+mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 #header {
     position: fixed;
     height:50px;
@@ -98,6 +157,77 @@ body {
     top: 0px;
     /*left:10px;*/
 
+}
+#text_size_controls {
+    position: absolute;
+    right: 105px;
+    top: 10px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: normal;
+}
+.text_size_button {
+    height: 30px;
+    min-width: 38px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    color: #444;
+    border-radius: 3px;
+    cursor: pointer;
+    font: inherit;
+}
+.text_size_button:hover {
+    background-color: #ddd;
+}
+.text_size_button:active {
+    background-color: #ccc;
+}
+.text_size_button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+#text_size_status {
+    color: #666;
+    font-size: 13px;
+    min-width: 52px;
+    text-align: center;
+    user-select: none;
+}
+/* Breiten-Umschalter (v1.4.5): 3-Segment-Leiste, links von #text_size_controls.
+   Aesthetik gespiegelt an .text_size_button; aktives Segment hervorgehoben.
+   Toolbar-Platz ist begrenzt -> kompakte Buttons. */
+#width_mode_controls {
+    position: absolute;
+    right: 255px;
+    top: 10px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    line-height: normal;
+}
+.width_mode_button {
+    height: 30px;
+    min-width: 44px;
+    padding: 0 8px;
+    border: 1px solid #ddd;
+    background-color: white;
+    color: #444;
+    border-radius: 3px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+}
+.width_mode_button:hover {
+    background-color: #ddd;
+}
+.width_mode_button.active {
+    background-color: #444;
+    color: #fff;
+    border-color: #444;
 }
 .navbar_button {
     background-color: white;
@@ -189,11 +319,12 @@ body {
 .grafik-container {
     /*border: 1px solid red;*/
     height:100%;
-    
+
     /*margin-left:870px;*/
     /*margin-right:-365px;*/
     /*float:right;*/
     width:300px;
+    max-width: 100%; /* verhindert Overflow des Sticky-Platzhalters bei schmaler Textspalte (--g nahe 0.75) */
     position: -webkit-sticky;
     position: sticky;
     top:250px;
@@ -207,15 +338,38 @@ body {
     position: relative;
     top:0px;
 }
+/* Print-Guards (v1.4.0): Print cloned #container -> #content mit --g; calc
+   hier neutralisieren, damit Grafiken inline (nicht im rechten Bund) liegen
+   und der Splitter-Handle nicht gedruckt wird. */
+#print_container .grafik-container-inner {
+    position: relative;
+    left: auto;
+    width: 100%;
+    top: auto;
+    transform: none;
+}
+#print_container #splitter {
+    display: none;
+}
 
 .grafik-container-inner {
     /*border:1px solid green;*/
     position: absolute;
-    width:300px;
-    left:770px;
+    width: 300px; /* naturale Grafikbreite; Skalierung ueber transform (siehe unten) */
+    left: var(--gfx-left, 755px); /* concrete px, gesetzt von splitter.js (var-direct). = B - 50: Containing-Block ist der sticky .grafik-container-Platzhalter (bei x=Paper-padding-left 70), nicht #content -> -70 Versatz, damit die Grafik bei B=(1-g)*1150 im #content liegt; +20px Spalt zum Splitter = -50 (v1.4.2: Grafik klebt nicht bündig am Trennstrich). */
     background-color: white;
     white-space: nowrap;
-    top:-200px
+    top:-200px;
+    /* Gleichmaessige Skalierung mit der Grafik-Spalte (v1.4.0): transform:
+       scale erhaelt Seitenverhaeltnis + internes Layout (foreignObject-Labels)
+       exakt, im Gegensatz zu width:100% am SVG (nicht-gleichmaessig, verzerrt).
+       --scale = (--g * 1150 - 70) / 300 (gesetzt in splitter.js + Default hier);
+       das -70 laesst 20px Spalt links + 50px Platz fuer rechts ueberstehende
+       Labels, damit skalierte Labels nicht über den Seitenrand ragen (v1.4.2).
+       Zusaetzlich cap: --scale <= (viewportH - 120) / naturaleHoehe, damit die
+       ganze Grafik auf den Bildschirm passt (siehe splitter.js). */
+    transform: scale(var(--scale, 1));
+    transform-origin: top left;
 
     /*text-align: center;*/
 
@@ -680,6 +834,10 @@ input[type="range"]::-moz-range-track {
     text-decoration: underline;
 }
 
+.hidden#toc_container {
+    display: none;
+}
+
 #toc_overlay {
     position: fixed;
     top:50px;
@@ -700,17 +858,12 @@ input[type="range"]::-moz-range-track {
     z-index:10;
     /*border:1px solid orange;*/
     box-shadow: 0px 15px 18px #aaa;
-    overflow-y: scroll;
+        overflow-y: auto;
 
 }
 #toc_content.toc_show {
     animation-name: toc-show;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-}
-#toc_content.toc_hide {
-    animation-name: toc-show;
-    animation-duration: 1s;
+        animation-duration: 0.35s;
     animation-fill-mode: forwards;
 }
 @keyframes toc-show {
@@ -774,22 +927,9 @@ input[type="range"]::-moz-range-track {
 #line9_x, #line9_y {
     stroke-dasharray:4px;
 }
-#gc9 .grafik-container-inner{
-    /*margin-top:100px;*/
-    
-}
 
 #img4-1 {
     width:100%;
-}
-#gc6 .grafik-container-inner{
-    margin-top:400px;
-    
-}
-
-#print_container #gc6 .grafik-container-inner{
-    margin-top:50px;
-    
 }
 #bild7 {
     width:70%;

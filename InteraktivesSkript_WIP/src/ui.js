@@ -60,16 +60,15 @@ export function close_zoom(){
 
 export function toc(){
     const content = ge("toc_content");
-    const e_id = "toc_container";
+    const container = ge("toc_container");
     content.classList.remove("toc_hide");
     content.classList.remove("toc_show");
-    if(ge(e_id).classList.contains("hidden")) {
-        show(e_id);
+    if(container.classList.contains("hidden")) {
+        show("toc_container");
         content.classList.add("toc_show");
     }
     else {
-        content.classList.add("toc_hide");
-        hide(e_id);
+        hide("toc_container");
     }
 }
 export function generate_toc(){

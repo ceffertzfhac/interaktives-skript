@@ -34,6 +34,34 @@ body {
 .navbar_button:active {
     background-color: #1b1b1b;
 }
+.text_size_button {
+    background-color: var(--bg);
+    color: #ccc;
+    border-color: #1b1b1b;
+}
+.text_size_button:hover {
+    background-color: #222;
+}
+.text_size_button:active {
+    background-color: #1b1b1b;
+}
+.text_size_button:disabled,
+#text_size_status {
+    color: #999;
+}
+.width_mode_button {
+    background-color: var(--bg);
+    color: #ccc;
+    border-color: #1b1b1b;
+}
+.width_mode_button:hover {
+    background-color: #222;
+}
+.width_mode_button.active {
+    background-color: #ccc;
+    color: #1b1b1b;
+    border-color: #ccc;
+}
 .highlight_box_title {
     border-bottom: 1px solid #555;
 }

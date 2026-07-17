@@ -1,12 +1,27 @@
 // core.js — zentrale Helfer, globaler State, Skript-Steuerung (statisch vs.
 // interaktiv), Highlight-Boxen, Safari-Workaround, Bruchdarstellung, Darkmode,
 // Reset sowie update_all (dispatcht via window.updateN -- siehe figures/*).
-// Keine Abhaengigkeiten zu anderen Modulen (Wurzel des Abhaengigkeitsgraphen).
+// Eine Abhaengigkeit zu splitter.js: make_static() baut die Grafik-Inners neu
+// und muss danach den ResizeObserver neu an die ersetzten Inners anhaengen +
+// den Layout-Pass neu anstossen (v1.4.6). Das ist ein ES-Modul-Zyklus (splitter.js
+// importiert ge aus core.js), aber benigne: beide Bindings (ge,
+// refresh_figure_layout) sind gehobene Funktions-Deklarationen, die nur zur
+// Laufzeit -- nicht waehrend der Modul-Eval -- aufgerufen werden.
+
+import { refresh_figure_layout } from './splitter.js';
 
 export let interaktiv = true; //statisches oder interaktives Skript
 export let darkmode_on = false;
 export const linspace = 100;
 export const speed_factor = 1;
+
+const TEXT_LEVEL_MIN = 1;
+const TEXT_LEVEL_MAX = 5;
+const DEFAULT_TEXT_LEVEL = 2;
+
+let text_level = DEFAULT_TEXT_LEVEL;
+let paper_base_font_size = null;
+let paper_base_line_height = null;
 
 export function ge(element_id) {
     return document.getElementById(element_id);
@@ -121,6 +136,11 @@ export function make_static(){ //interaktives Skript statisch machen für Evalua
 
 
         reload_mathjax();
+        // Inners wurden neu gebaut (und gc6 geleert) -> ResizeObserver neu an
+        // die ersetzten Inners anhaengen + Layout-Pass (v1.4.6). Initial (init:
+        // make_static vor init_splitter) ist _refresh noch null -> No-op, das
+        // init_splitter selbst uebernimmt; relevant nur beim Runtime-Test().
+        refresh_figure_layout();
     }
 }
 
@@ -148,6 +168,63 @@ export function toggle_darkmode(){
     else {
         ge("darkmode_stylesheet").disabled=true
     }
+}
+
+function read_paper_metrics() {
+    const paper = ge("paper");
+    if (!paper) return null;
+    if (paper_base_font_size === null || paper_base_line_height === null) {
+        const computed = window.getComputedStyle(paper);
+        paper_base_font_size = parseFloat(computed.fontSize) || 16;
+        paper_base_line_height = parseFloat(computed.lineHeight);
+        if (Number.isNaN(paper_base_line_height)) {
+            paper_base_line_height = paper_base_font_size * 1.2;
+        }
+    }
+    return paper;
+}
+
+function metrics_for_level(level) {
+    const font_scale = [0, 0, 1, 1.2, 1.4, 5 / 3][level] || 1;
+    const line_scale = [0, 0, 1, 1.2, 1.4, 5 / 3][level] || 1;
+    const font_size = level === 1
+        ? Math.max(1, paper_base_font_size - 1)
+        : paper_base_font_size * font_scale;
+    const line_height = level <= 2
+        ? paper_base_line_height
+        : paper_base_line_height * line_scale;
+    return { font_size, line_height };
+}
+
+function sync_text_size_ui() {
+    const status = ge("text_size_status");
+    const minus = ge("text_size_minus");
+    const plus = ge("text_size_plus");
+    if (status) status.textContent = "Text " + text_level + "/5";
+    if (minus) minus.disabled = text_level <= TEXT_LEVEL_MIN;
+    if (plus) plus.disabled = text_level >= TEXT_LEVEL_MAX;
+}
+
+function apply_text_size() {
+    const paper = read_paper_metrics();
+    if (!paper) return;
+    const { font_size, line_height } = metrics_for_level(text_level);
+    paper.style.setProperty("--paper-base-font-size", paper_base_font_size.toFixed(2) + "px");
+    paper.style.setProperty("--paper-base-line-height", paper_base_line_height.toFixed(2) + "px");
+    paper.style.setProperty("--paper-font-size", font_size.toFixed(2) + "px");
+    paper.style.setProperty("--paper-line-height", line_height.toFixed(2) + "px");
+    sync_text_size_ui();
+}
+
+export function init_text_size_controls() {
+    read_paper_metrics();
+    apply_text_size();
+}
+
+export function adjust_text_size(step) {
+    if (!step) return;
+    text_level = Math.min(TEXT_LEVEL_MAX, Math.max(TEXT_LEVEL_MIN, text_level + step));
+    apply_text_size();
 }
 
 export function reset(){
