@@ -68,10 +68,14 @@ function numberImages(page, prefix) {
 // s. init_numbering) und zaehlt ALLE Display-Formeln der Seite in
 // Dokumentreihenfolge, unabhaengig davon, ob sie in einer Box stecken (wie
 // in LaTeX: eine \begin{equation} in einer Box-Umgebung wird trotzdem
-// mitgezaehlt).
+// mitgezaehlt) -- AUSSER den winzigen Achsen-/Vektor-Labels in den
+// foreignObject-Beschriftungen der interaktiven Figuren (z.B. "$$x$$",
+// "$$\vec\omega$$" in fig_NN.js): das sind UI-Labels, keine Lehrbuch-
+// Gleichungen, und wurden vor diesem Fix faelschlich mitgezaehlt.
 function numberEquations(page, prefix) {
     let n = 0;
     page.el.querySelectorAll('mjx-container[display="true"]').forEach(eq => {
+        if (eq.closest('.grafik-container')) return;
         n++;
         let badge = eq.querySelector(':scope > .eq-number');
         if (!badge) {
@@ -80,7 +84,29 @@ function numberEquations(page, prefix) {
             eq.appendChild(badge);
         }
         badge.textContent = '(' + prefix + '.' + n + ')';
+        layoutEqNumber(eq, badge);
     });
+}
+
+// Die reservierte Padding-Breite (s. styles.css) reicht fuer normal lange
+// Nummern ("(1.5.8.4)"), kann aber bei breiten Formeln (grosse Matrizen,
+// lange Vektorsummen) *und* langen Nummern ("(1.5.10.12)" bei zweistelligen
+// Zaehlern) trotzdem eng werden -- besonders bei "Schmal" (schmale
+// Lesespalte). Statt zu riskieren, dass Formel und Nummer sich ueberlappen,
+// wird nach dem Setzen gemessen: passt die Nummer nicht mehr rechts neben
+// die Formel, rutscht sie per .eq-number-below unter die Formel (kein
+// Ueberlapp bei jeder Breite). getBoundingClientRect() erzwingt einen
+// Reflow -- bei der ueberschaubaren Formelzahl pro Seite unkritisch.
+function layoutEqNumber(eq, badge) {
+    badge.classList.remove('eq-number-below');
+    const svg = eq.querySelector(':scope > svg');
+    if (!svg) return;
+    const GAP = 10;
+    const svgRect = svg.getBoundingClientRect();
+    const badgeRect = badge.getBoundingClientRect(); // badge.left = wo sie mit right:14px tatsaechlich sitzt
+    if (svgRect.right + GAP > badgeRect.left) {
+        badge.classList.add('eq-number-below');
+    }
 }
 
 function forEachPage(fn) {
@@ -90,6 +116,15 @@ function forEachPage(fn) {
 
 function numberEquationsAll() {
     forEachPage(numberEquations);
+}
+
+// Nur die Kollisions-Pruefung neu ausfuehren (keine Neuvergabe der
+// Nummern) -- fuer Breiten-Modus-Wechsel/Resize, bei denen sich nur die
+// verfuegbare Breite aendert, s. Bruecken unten.
+function relayoutEqNumbers() {
+    document.querySelectorAll('mjx-container[display="true"] > .eq-number').forEach(badge => {
+        layoutEqNumber(badge.parentElement, badge);
+    });
 }
 
 export function init_numbering() {
@@ -117,4 +152,16 @@ export function init_numbering() {
     // core->numbering->pages->core zu vermeiden (gleiches Muster wie
     // update_all()/window.updateN).
     window.renumber_equations = numberEquationsAll;
+    // Bruecke fuer core.js::set_width_mode() (Schmal/Normal/Extrabreit
+    // aendert die Lesespaltenbreite, also den verfuegbaren Platz neben der
+    // Nummer) -- gleiches Muster.
+    window.relayout_eq_numbers = relayoutEqNumbers;
+
+    // Fenstergroesse kann sich unabhaengig vom Breiten-Modus aendern
+    // (Browserfenster resizen) -- debounced, da resize sehr oft feuert.
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(relayoutEqNumbers, 150);
+    });
 }

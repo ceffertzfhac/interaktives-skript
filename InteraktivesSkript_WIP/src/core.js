@@ -221,6 +221,7 @@ function apply_text_size() {
     paper.style.setProperty("--paper-font-size", font_size.toFixed(2) + "px");
     paper.style.setProperty("--paper-line-height", line_height.toFixed(2) + "px");
     sync_text_size_ui();
+    if (window.relayout_eq_numbers) window.relayout_eq_numbers();
 }
 
 export function init_text_size_controls() {
@@ -256,6 +257,10 @@ export function set_width_mode(mode, persist = true) {
     if (persist) {
         try { localStorage.setItem(WIDTH_STORAGE_KEY, mode); } catch (_) {}
     }
+    // Formelnummern koennen bei der neuen Spaltenbreite mit der Formel
+    // kollidieren (oder jetzt wieder Platz haben) -- Bruecke zu numbering.js
+    // (s. dortiger Kommentar zum core->numbering-Zyklus).
+    if (window.relayout_eq_numbers) window.relayout_eq_numbers();
 }
 
 export function init_width_mode() {

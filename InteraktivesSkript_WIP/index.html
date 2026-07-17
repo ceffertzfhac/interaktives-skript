@@ -1680,20 +1680,18 @@ Mit der vektoriellen Winkelbeschleunigung lässt sich die allgemeine Formel für
                         
 Hierbei ist \( {\vec{\alpha}}_{zp} \) ist die vektorielle Schreibweise der Zentripetalbeschleunigung, sie zeigt zum Mittelpunkt der Kreisbewegung (zur Drehachse) hin. Gleiches gilt auch für die Zentripetalkraft \( \vec{F_{zp}} \).
                         <br><br>
-Warum der erste Term der Bahnbeschleunigung durch das Kreuzprodukt ersetzt werden kann, sieht man an folgender Herleitung
-                        
-                        
-       \[                 
-\vec{\omega}\left(t\right)=\left(\begin{matrix}0\\0\\\left|\omega\left(t\right)\right|\\\end{matrix}\right)\Rightarrow\vec{\alpha}\left(t\right)=\left(\begin{matrix}0\\0\\\left|\dot{\omega}\left(t\right)\right|\\\end{matrix}\right)
-                        \] \[
-\vec{r}\left(t\right)=R\left(\begin{matrix}\cos{\left(\varphi\left(t\right)\right)}\\\sin{\left(\varphi\left(t\right)\right)}\\h\\\end{matrix}\right)
-                        \] \[
-\vec{\alpha}\left(t\right)\times\vec{r}=\left(\begin{matrix}0\\0\\\left|\dot{\omega}\left(t\right)\right|\\\end{matrix}\right)\times 
-                        R\left(\begin{matrix}\cos{\left(\varphi\left(t\right)\right)}\\\sin{\left(\varphi\left(t\right)\right)}\\h\\\end{matrix}\right)=R\left(\begin{matrix}\left|\dot{\omega}\left(t\right)\right|\cdot\left(-\sin{\left(\varphi\left(t\right)\right)}\right)\\\cos{\left(\varphi\left(t\right)\right)}\cdot\left|\dot{\omega}\left(t\right)\right|\\0\\\end{matrix}\right)=R\cdot\left|\dot{\omega}\left(t\right)\right|\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)
-                        \] \[
-\text{Daher ist:}\ R\left|\dot{\vec{\omega}}\left(t\right)\right|\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right)=\vec{\alpha}\left(t\right)\times\vec{r}
-                        
-                        \]
+Warum der erste Term der Bahnbeschleunigung durch das Kreuzprodukt ersetzt werden kann, sieht man an folgender Herleitung:
+                        \[ \begin{aligned}
+                        \vec{\omega}\left(t\right) &=\left(\begin{matrix}0\\0\\\left|\omega\left(t\right)\right|\\\end{matrix}\right)
+                        \;\Rightarrow\;
+                        \vec{\alpha}\left(t\right) =\left(\begin{matrix}0\\0\\\left|\dot{\omega}\left(t\right)\right|\\\end{matrix}\right) \\[8pt]
+                        \vec{r}\left(t\right) &=R\left(\begin{matrix}\cos{\left(\varphi\left(t\right)\right)}\\\sin{\left(\varphi\left(t\right)\right)}\\h\\\end{matrix}\right) \\[8pt]
+                        \vec{\alpha}\left(t\right)\times\vec{r} &=\left(\begin{matrix}0\\0\\\left|\dot{\omega}\left(t\right)\right|\\\end{matrix}\right)\times
+                        R\left(\begin{matrix}\cos{\left(\varphi\left(t\right)\right)}\\\sin{\left(\varphi\left(t\right)\right)}\\h\\\end{matrix}\right) \\
+                        &=R\left(\begin{matrix}\left|\dot{\omega}\left(t\right)\right|\cdot\left(-\sin{\left(\varphi\left(t\right)\right)}\right)\\\cos{\left(\varphi\left(t\right)\right)}\cdot\left|\dot{\omega}\left(t\right)\right|\\0\\\end{matrix}\right) \\
+                        &=R\cdot\left|\dot{\omega}\left(t\right)\right|\cdot\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right) \\[8pt]
+                        \text{Daher ist:}\quad R\left|\dot{\vec{\omega}}\left(t\right)\right|\left(\begin{matrix}-\sin{\left(\varphi\left(t\right)\right)}\\\cos{\left(\varphi\left(t\right)\right)}\\0\\\end{matrix}\right) &=\vec{\alpha}\left(t\right)\times\vec{r}
+                        \end{aligned} \]
                         <div class="beispiel">
                         <!--annmerkung-->
                             
