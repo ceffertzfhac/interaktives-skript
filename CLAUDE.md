@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A static, single-page interactive physics script (German, topic: rotational motion / *Drehbewegungen auf Kreisbahnen*) for an FH Aachen course. There is **no build system, package manager, bundler, or test suite** — it is plain HTML/CSS/vanilla JS served as static files. All interactivity is hand-written DOM/SVG manipulation; the only external libraries are loaded from CDNs in `index.html` (MathJax v3 `tex-svg` for LaTeX rendering, `qrjs2` for print QR codes).
 
-> **Scalability is a hard constraint.** The final script will be a *complete* script with **15+ chapters and many more figures** (current WIP: ~9 sections, 11 figures, one 2787-line `script.js`). The current monolithic, copy-paste-per-figure architecture does not scale there. When proposing changes, optimize for "adding a chapter/figure is O(1) files and small token cost," not O(size-of-whole-file). The modernization plan toward that target lives in `BACKLOG.md` (with a target architecture sketch). When working in the WIP, also weigh **token efficiency of edits** — prefer edits that touch one small module over ones that require loading the whole `script.js`.
+> **Scalability is a hard constraint.** The final script will be a *complete* script with **15+ chapters and many more figures** (current WIP: ~9 sections, 11 figures, modularized ESM — the content target lives in `Input/v0.13/`). The original monolithic, copy-paste-per-figure architecture (preserved in `Input/InteraktivesSkript_legacy/`) does not scale there. When proposing changes, optimize for "adding a chapter/figure is O(1) files and small token cost," not O(size-of-whole-file). The modernization plan toward that target lives in `BACKLOG.md` (with a target architecture sketch). When working in the WIP, also weigh **token efficiency of edits** — prefer edits that touch one small module over ones that require loading a whole large file.
 
 ## Running it
 
@@ -22,14 +22,17 @@ There is nothing to build, lint, or test. To verify a change, reload the page an
 
 ## Repository layout
 
-The repo holds **two parallel copies of the site**:
+The repo root holds:
 
 - `InteraktivesSkript_WIP/` — **the working copy. All edits go here.** This is the only folder you should modify.
-- `InteraktivesSkript_legacy/` — a **frozen baseline** snapshot of the site as of the split. Do not edit; it exists for reference/diffing against WIP. Both folders started byte-identical.
+- `Input/` — drop folder for source material the user provides; **read-only reference, do not edit**:
+  - `Input/InteraktivesSkript_legacy/` — the **frozen baseline** snapshot of the site as of the split (relocated here from the repo root). Do not edit; it exists for reference/diffing against WIP. Started byte-identical to WIP. *(The legacy `src/script.js` — the whole app in one 2787-line file — lives only here now; WIP is modularized, see Architecture.)*
+  - `Input/v0.13/` — LaTeX source of the **complete target script** (`Physik_pskript_v0.13.tex` + compiled `.pdf` + per-chapter `.tex` files) spanning all 15+ chapters (Mechanics, EM, Schwingungen, Wellen, Gravitation, Stöße, …). This is the content target the WIP is being scaled toward.
+  - `Input/Simulationen/` — 16 standalone simulation projects (Atwood, Federpendel, freier Fall, Kreisbewegung, Wellen, Lorentz-force, schiefer Wurf, …) — candidate source material for future interactive figures.
 
-Inside either site folder the structure is the same (legacy still matches this; **WIP has been modularized** — see Architecture):
+Inside the WIP site folder the structure is:
   - `index.html` — the whole document: prose sections, inline SVG figures, slider controls, MathJax `$$…$$` / `\[…\]` / `\(…\)` formulas
-  - `src/script.js` *(legacy only)* — the entire app logic in one file. **In WIP this is split into ESM modules** (`src/main.js` entry + `core/transform/ui/print.js` + `src/figures/*.js`); `script.js` no longer exists in WIP.
+  - `src/` — the ESM modules (`main.js` entry + `core/transform/ui/print/splitter.js` + `figures/*.js`); no monolithic `script.js` (that survives only in `Input/InteraktivesSkript_legacy/`)
   - `src/styles.css`, `src/darkmode.css` — styles; `darkmode.css` is loaded but `disabled` and toggled at runtime
   - `bilder/` — static figure PNGs/SVGs used in static mode and prose
   - `src/assets/` — SVG/PNG icons injected into highlight boxes
@@ -50,6 +53,7 @@ src/core.js        state (interaktiv, darkmode_on, linspace, speed_factor), ge/s
 src/transform.js   to2d, transform_line, transform_polyline, ga  (imports ge from core)
 src/ui.js          toc, generate_toc, kontakt, offsetAnchor, toggle_body_scroll, zoom, close_zoom, pause
 src/print.js       init_print, check_print, print_page, create_qr, from_qr, findGetParameter
+src/splitter.js    init_splitter — draggable Text/Grafik-Trennung; setzt CSS-Var --g (0.25..0.50) auf #content via pointer drag (window listeners, no pointer capture); --scale=(--g*1150-70)/300, viewport-capped
 src/figures/factory.js   createFigure() + shared omega-circle hooks (circleStep/Wrap/Render, omega*)
 src/figures/fig_NN.js     one file per figure; self-registers updateN/animateN/clearN on window
 ```
@@ -81,4 +85,4 @@ A deliberately-preserved legacy bug: `fig_5.js`'s gc51 `>6.27` wrap increments *
 
 - **MathJax note**: `reload_mathjax()` uses the MathJax **v3** API (`MathJax.typesetPromise()`, guarded for when MathJax isn't loaded yet). It re-renders all formulas and is wired to the "tt" easter egg in the Kontakt box and to `make_static()`. (Earlier this called the v2 `MathJax.Hub.Queue(...)` API, which was a no-op under v3 — fixed.)
 - Content and code comments are in German; match the surrounding language when editing prose or comments.
-- Only edit `InteraktivesSkript_WIP/`. `InteraktivesSkript_legacy/` is a frozen baseline — never modify it. Within WIP, `Archiv/` is a historical copy and should likewise be left alone.
+- Only edit `InteraktivesSkript_WIP/`. `Input/` is read-only reference material — never modify it (the frozen baseline now lives at `Input/InteraktivesSkript_legacy/`). Within WIP, `Archiv/` is a historical copy and should likewise be left alone.

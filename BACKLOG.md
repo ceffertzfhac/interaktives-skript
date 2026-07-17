@@ -76,7 +76,12 @@ Diese Zielarchitektur leitet die P1-Items; P0 ist unabhängig davon vorher machb
 - [ ] **A: `<html lang="de">` setzen** (`index.html:2`) und semantische Buttons statt `<div class="navbar_button" onclick>` (Toolbar, Zoom) für Tastatur/A11y.
 - [ ] **W: CSS aufräumen.** Viele auskommentierte Deklarationen, doppelte Properties (`.qr_container` width 376 & 381). `@page`-CSS-Nesting (`h1{}` in `@page`) ggf. prüfen/kompatibel lösen.
 - [ ] **W: Tooling-Baseline.** Editor-Config + Prettier + ESLint einführen, damit Edits automatisch konsistent formatiert sind (reduziert Review- und Merge-Rauschen). Optional TypeScript/JSDoc-Typen für die Figuren-Factory.
-- [ ] **W: `script.js` mit `defer` laden** (`index.html:19` im `<head>` ohne `defer`) — Best-Practice, parse-blocking vermeiden.
+- [ ] **W: `script.js` mit `defer` laden** (`index.html:19` im `<head>` ohne `defer`) — Best-Practice, parse-blocking vermeiden. *(Erübrigt sich durch ESM-Split Stage 4 — `<script type="module">` ist implizit defer.)*
+- [ ] **W/Bug: TOC-Einklappen lässt linken Balken stehen.** Klapp man das Inhaltsverzeichnis aus und wieder ein, verbleibt ein vertikaler Balken am linken (Scroll-)Rand im Bild. Diagnose (Stand v1.3.0):
+  - `#toc_content.toc_hide { animation-name: toc-show }` (`styles.css:712`) — Copy-Paste-Bug: die Hide-Animation referenziert die *Show*-Keyframes (`translateX(-500→0)`), sollte `animation-name: toc-hide` sein. Mit `animation-fill-mode: forwards` endet das Element am *sichtbaren* Ort (`translateX(0)`), nicht am verdeckten.
+  - `.hidden { visibility: hidden; position: absolute }` (`styles.css:254`) versteckt per `visibility`, nicht `display:none`. Zusammen mit `#toc_content { position:fixed; overflow-y:scroll }` (immer sichtbare Scrollbar, da `scroll` nicht `auto`) und dem fehlenden `left`-Wert kann der fixed-Kind-Container beim Einklappen sichtbar/blitisch bleiben statt zu verschwinden.
+  - `toc()` (`ui.js:61`) klapp nur `toc_container` um, ruft aber *nicht* `toggle_body_scroll()` (kein `no_scroll` auf `<body>`) → kein Layout-Shift-Schutz während des TOC offen ist (im Gegensatz zu `zoom`/`close_zoom`, die es nutzen).
+  - Fix-Richtung: `toc_hide`-Animation auf `toc-hide` korrigieren; `.hidden` für Overlay-Container auf `display:none` umstellen (oder `#toc_content` explizit `left:0` + `visibility`-Override geben und beim Schließen `display:none`); `toc()` symmetrisch zu `zoom` `toggle_body_scroll()` aufrufen. Danach im Browser (aus-/einklappen, Body-Scroll-Verhalten) verifizieren.
 
 ---
 
