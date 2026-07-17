@@ -8,7 +8,7 @@ import { interaktiv, generate_highlight_boxes, safari_bug, make_static,
          update_all, toggle_darkmode, test, reload_mathjax, reset, hide,
          init_text_size_controls, adjust_text_size, set_width_mode,
          init_width_mode } from './core.js';
-import { generate_toc, offsetAnchor, toc, kontakt, close_zoom, zoom, pause } from './ui.js';
+import { generate_toc, offsetAnchor, toc, toc_filter, kontakt, close_zoom, zoom, pause } from './ui.js';
 import { init_print, check_print, from_qr } from './print.js';
 import { paginate } from './pages.js';
 import { init_shell, toggle_drawer, close_drawer, chapter_prev, chapter_next, goto_page } from './shell.js';
@@ -46,6 +46,7 @@ function dispatch_input(e) {
     if (!el || el.dataset.event === "change") return;
     if (el.dataset.action === "update") fig_call("update", el.dataset.fig, el.dataset.arg);
     else if (el.dataset.action === "animate") fig_call("animate", el.dataset.fig);
+    else if (el.dataset.action === "toc_search") toc_filter(el.value);
 }
 
 function dispatch_change(e) {

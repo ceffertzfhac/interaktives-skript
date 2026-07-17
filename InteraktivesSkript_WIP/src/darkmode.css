@@ -23,6 +23,9 @@ body {
     box-shadow: 0px 0px 5px #000000aa;
     border-bottom: 1px solid #1b1b1b;
 }
+#span_title {
+    color: #eee;
+}
 .navbar_button {
     background-color: var(--bg);
     color:#ccc;
@@ -64,6 +67,11 @@ body {
 }
 .highlight_box_title {
     border-bottom: 1px solid #555;
+    color: #7fd9d4;
+}
+mjx-container[display="true"] {
+    background-color: #262626;
+    border-color: #444;
 }
 .grafik-container-inner {
     background-color: var(--bg);
@@ -121,7 +129,7 @@ input[type="range"]::-moz-range-track {
 .gc_header { border-bottom-color: #444; }
 .gc_header_title { color: #eee; }
 .gc_preview { color: #bbb; }
-#chapter_appbar { border-bottom-color: #444; }
+#chapter_appbar { background-color: var(--bg); border-bottom-color: #444; }
 .chapter-crumb { color: #aaa; }
 .chapter-crumb #chapter_crumb_current { color: #fff; }
 .chapter-progress { color: #888; }
@@ -137,11 +145,29 @@ input[type="range"]::-moz-range-track {
 .chapter-pagenav button { background-color: var(--bg); color: #ccc; border-color: #444; }
 .chapter-pagenav button:hover:not(:disabled) { background-color: #222; }
 #chapter_drawer_panel { background-color: #1b1b1b; }
-.toc_group { border-color: #444; }
+/* TOC-Vollbild-Screen (v2.1) */
+#toc_screen { background-color: var(--bg); box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+#toc_screen_bar { background-color: #1b1b1b; border-bottom-color: #444; }
+.toc_screen_heading { color: #eee; }
+.toc_position { color: #999; }
+.toc_search { background-color: #262626; border-color: #444; color: #eee; }
+.toc_close_btn { background-color: #262626; border-color: #444; color: #ccc; }
+.toc_close_btn:hover { background-color: #2e2e2e; }
+
+.toc_group { border-color: #444; background-color: #262626; }
 .toc_group_header { background-color: #262626; color: #eee; }
 .toc_group_header:hover { background-color: #2e2e2e; }
+.toc_group_body { border-top-color: #444; }
 .toc_sub_link { color: #ccc; }
 .toc_sub_link:hover { background-color: #2e2e2e; }
+/* Aktuelle Gruppe/Seite: eigener dunkler Teal-Akzent statt der hellen
+   Light-Mode-Tints (--teal-tint), die in styles.css eine hoehere Spezifitaet
+   haben und sonst helle Flaechen mit dann-hellem Text (s.o.) ergeben wuerden. */
+.toc_group.toc_group_current { border-color: var(--fh); }
+.toc_group.toc_group_current .toc_group_header,
+.toc_group.toc_group_current .toc_group_header:hover { background-color: #17332f; color: #eee; }
+.toc_group.toc_group_current .toc_group_body { border-top-color: #2a4a45; }
+.toc_sub_link.toc_sub_current { color: #04302f; }
 
 /* ── Kreisbewegung-Simulation (src/figures/kreisbewegung/): dieselben
    #gc10-Variablen wie in figures/kreisbewegung/styles.css, dunkles Set --

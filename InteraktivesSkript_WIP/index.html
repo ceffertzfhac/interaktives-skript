@@ -46,8 +46,18 @@
         </div>
         <div id="print_container" class="hidden"></div>
         <div id="toc_container" class="hidden">
-            <div id="toc_content" class=""></div>
-            <div id="toc_overlay" data-action="hide" data-target="toc_container"></div>
+            <div id="toc_screen">
+                <div id="toc_screen_bar">
+                    <div id="toc_screen_title">
+                        <span class="toc_screen_eyebrow">FH Aachen · FB 8 · Physik</span>
+                        <span class="toc_screen_heading">Inhaltsverzeichnis</span>
+                    </div>
+                    <input type="search" id="toc_search" class="toc_search" placeholder="Kapitel oder Abschnitt suchen…" autocomplete="off" data-action="toc_search">
+                    <div id="toc_position" class="toc_position"></div>
+                    <button type="button" id="toc_close_btn" class="toc_close_btn" data-action="toc" aria-label="Inhaltsverzeichnis schließen">✕</button>
+                </div>
+                <div id="toc_content"></div>
+            </div>
         </div>
         <div id="kontakt" class="hidden">
             Bei fachlichen Fragen oder Kommentaren wenden Sie sich an: <br>

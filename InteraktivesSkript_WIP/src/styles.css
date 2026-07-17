@@ -1,6 +1,30 @@
+/* Design-Tokens (v2.1): 1:1 aus dem Claude-Design-Mockup uebernommen
+   ("Interaktives Skript.dc.html", Projekt e8dd98b4-...) -- nicht neu erfunden,
+   s. CLAUDE.md. --fh bleibt als Alias fuer --teal erhalten (viele bestehende
+   Regeln referenzieren --fh). */
 :root {
-/*  --fh: #00b1ab;*/
-  --fh: #00b2a9;
+  --fh: #00b1ac;
+  --teal: #00b1ac;
+  --teal-dark: #00807c;
+  --teal-darker: #00595c;
+  --teal-ink: #04302f;
+  --teal-tint: #e3f6f5;
+  --teal-tint-2: #cdeae8;
+  --ink: #181b21;
+  --ink-2: #4c5266;
+  --ink-3: #878ea1;
+  --ink-4: #c7c3b5;
+  --paper-outer: #dedad0;
+  --paper: #f6f4ef;
+  --surface: #ffffff;
+  --surface-2: #faf9f6;
+  --surface-3: #f0eee6;
+  --border: #e3e1d7;
+  --border-2: #d1cebf;
+  --font-ui: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-serif: 'Source Serif 4', 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
   --c1: #005eb1;
   --c2: #d17d00;
   --c3: #4db100;
@@ -15,11 +39,15 @@ html {
 body {
     margin: 0;
     margin-top:70px;
-    background-color: #ddd;
-    font-family: "Times","Times New Roman", serif;
+    background-color: var(--paper-outer);
+    font-family: var(--font-ui);
+    color: var(--ink);
 }
 a {
-    color: var(--fh);
+    color: var(--teal-dark);
+}
+a:hover {
+    color: var(--teal);
 }
 
 /*
@@ -43,12 +71,15 @@ body {
     width: 1150px;
     max-width: calc(100vw - 40px);
     margin: 0 auto 40px;
-    box-shadow: 0px 0px 18px #aaa;
-    background-color: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(24,27,33,.12);
+    background-color: var(--paper);
     hyphens: auto;
     text-align: justify;
 }
 #print_container #content {
+    border-radius: 0;
     box-shadow: 0px 0px 0px #fff;
     width:800px;
     margin: 0;
@@ -68,6 +99,8 @@ body {
 
 #paper {
     box-sizing: border-box;
+    font-family: var(--font-serif);
+    color: var(--ink);
     font-size: var(--paper-font-size);
     line-height: var(--paper-line-height);
     max-width: var(--paper-max-width, 900px);
@@ -76,12 +109,18 @@ body {
     overflow-wrap: anywhere;
     min-width: 0;
 }
+/* UI-Chrome innerhalb der Lesespalte (Figuren, Formulare, Buttons) bleibt
+   Sans, nur der Fliesstext ist Serif -- wie im Mockup (IBM Plex Sans fuer
+   Bedienelemente, Source Serif 4 nur fuer Prosa). */
 #paper .grafik-container,
 #paper .grafik-container *,
 #paper input,
 #paper select,
 #paper option,
-#paper button {
+#paper button,
+#paper .highlight_box_title,
+#paper .chapter-pagenav {
+    font-family: var(--font-ui);
     font-size: var(--paper-base-font-size);
     line-height: var(--paper-base-line-height);
 }
@@ -94,34 +133,48 @@ body {
    (Splitter nach rechts gezogen) wuerden sie ueber den Trennstrich ragen.
    max-width:100% + height:auto skaliert sie (via viewBox) proportional runter,
    nur wenn sie breiter als die Spalte sind; schmalere Formeln unbeeinflusst. */
-mjx-container[display="true"] { display: block; }
+/* Formel-Karten (v2.1, Mockup-Vorlage): Block-Formeln bekommen dieselbe
+   Karten-Optik wie die uebrigen Boxen -- weisse Flaeche, heller Rahmen, 3px
+   Teal-Akzent links, zentriert. mjx-container ist bereits das aeusserste
+   Element, das MathJax fuer eine $$...$$-Formel einsetzt (keine zusaetzliche
+   Wrapper-Div noetig). */
+mjx-container[display="true"] {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 0 0 20px;
+    text-align: center;
+}
 mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 #header {
     position: fixed;
     height:50px;
     line-height: 50px;
     width:100%;
-    background-color: white;
+    background-color: var(--surface);
     top:0px;
     vertical-align: middle;
     padding-left:40px;
-    border-bottom: 1px solid #ddd;
-    box-shadow: 0px 0px 5px #ddddddaa;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(24,27,33,.06);
     z-index: 10;
-    font-family: "Helvetica Neue","Helvetica",sans-serif;
+    font-family: var(--font-ui);
+    color: var(--ink);
 }
 
 #span_title{
-    font-size: 25px;
-    /* margin-left: 90px; */
-    /* position: absolute; */
+    font-size: 15.5px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--ink);
     margin: 0 auto;
     width: 200px;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    font-weight: 300;
-    
 }
 #toolbar {
     position: absolute;
@@ -143,26 +196,27 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     height: 30px;
     min-width: 38px;
     padding: 0 10px;
-    border: 1px solid #ddd;
-    background-color: white;
-    color: #444;
-    border-radius: 3px;
+    border: 1px solid var(--border);
+    background-color: var(--surface-2);
+    color: var(--ink-2);
+    border-radius: 7px;
     cursor: pointer;
     font: inherit;
 }
 .text_size_button:hover {
-    background-color: #ddd;
+    background-color: var(--surface-3);
 }
 .text_size_button:active {
-    background-color: #ccc;
+    background-color: var(--border);
 }
 .text_size_button:disabled {
     opacity: 0.45;
     cursor: default;
 }
 #text_size_status {
-    color: #666;
-    font-size: 13px;
+    color: var(--ink-3);
+    font-family: var(--font-mono);
+    font-size: 12px;
     min-width: 52px;
     text-align: center;
     user-select: none;
@@ -184,32 +238,35 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     height: 30px;
     min-width: 44px;
     padding: 0 8px;
-    border: 1px solid #ddd;
-    background-color: white;
-    color: #444;
-    border-radius: 3px;
+    border: 1px solid var(--border);
+    background-color: var(--surface-2);
+    color: var(--ink-2);
+    border-radius: 7px;
     cursor: pointer;
     font: inherit;
     font-size: 13px;
 }
 .width_mode_button:hover {
-    background-color: #ddd;
+    background-color: var(--surface-3);
 }
 .width_mode_button.active {
-    background-color: #444;
-    color: #fff;
-    border-color: #444;
+    background-color: var(--teal);
+    color: var(--teal-ink);
+    border-color: var(--teal);
+    font-weight: 600;
 }
 .navbar_button {
-    background-color: white;
-    color:#444;
-    padding: 0 10px 0 10px;
+    background-color: transparent;
+    color: var(--ink-2);
+    padding: 0 12px;
     cursor: pointer;
     float:left;
-    margin:0 2px 0 2px;
-    border-bottom: 1px solid #ddd;
+    margin: 8px 2px;
+    line-height: 34px;
+    border-radius: 7px;
+    font-weight: 500;
+    transition: background-color .15s, color .15s;
 
-    
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -220,10 +277,11 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 }
 
 .navbar_button:hover {
-    background-color: #ddd;
+    background-color: var(--teal-tint);
+    color: var(--teal-darker);
 }
 .navbar_button:active {
-    background-color: #ccc;
+    background-color: var(--teal-tint-2);
 }
 #logo {
     height:40px;
@@ -292,11 +350,12 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
    (src/figures/panels.js) fuegt .gc_header + .gc_preview per JS ein; per
    Default eingeklappt (.gc-expanded steuert, was sichtbar ist). */
 .grafik-container {
-    background: #fff;
-    border: 1px solid #e3e1d7;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 10px;
     margin: 24px 0;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(24,27,33,.03);
 }
 .gc_header {
     display: flex;
@@ -308,12 +367,12 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 .gc_header_title {
     font-weight: 700;
     font-size: 0.95em;
-    color: #181b21;
+    color: var(--ink);
 }
 .gc_toggle {
     flex-shrink: 0;
-    background: var(--fh);
-    color: #04302f;
+    background: var(--teal);
+    color: var(--teal-ink);
     border: none;
     border-radius: 8px;
     padding: 9px 16px;
@@ -325,7 +384,7 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 .gc_toggle:hover { filter: brightness(1.06); }
 .gc_preview {
     padding: 0 18px 16px;
-    color: #4c5266;
+    color: var(--ink-2);
     font-size: 0.9em;
 }
 .gc_preview p { margin: 0; }
@@ -336,9 +395,9 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 }
 .grafik-container.gc-expanded .gc_preview { display: none; }
 .grafik-container.gc-expanded .grafik-container-inner { display: block; }
-.grafik-container.gc-expanded .gc_header { border-bottom: 1px solid #e3e1d7; }
+.grafik-container.gc-expanded .gc_header { border-bottom: 1px solid var(--border); }
 
-#print_container .grafik-container { border: 1px solid #ddd; }
+#print_container .grafik-container { border: 1px solid #ddd; box-shadow: none; }
 #print_container .gc_header,
 #print_container .gc_preview { display: none !important; }
 #print_container .grafik-container-inner { display: block !important; }
@@ -522,22 +581,28 @@ html, body {
 
 
 .lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung {
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal);
+    border-radius: 10px;
     padding: 00px 30px 15px 30px;
     margin: 20px 00px 20px 50px;
-    background-color: #f6f6f6;
+    background-color: var(--surface);
+    box-shadow: 0 2px 8px rgba(24,27,33,.03);
 
 }
 #print_container .lernziel, #print_container .motivation,#print_container .wiederholung, #print_container .beispiel, #print_container .zusammenfassung,#print_container .aufgabe, #print_container .anmerkung {
     background-color: #fff;
+    box-shadow: none;
 }
 .highlight_box_title {
-    /*color: var(--fh);*/
-    font-size: 1em;
-    font-weight: bold;
+    color: var(--teal-dark);
+    font-size: 0.95em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
     margin:10px 0px 10px 0px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
 }
 .highlight_box_img {
     position: absolute;
@@ -806,99 +871,185 @@ input[type="range"]::-moz-range-track {
     display: none;
 }
 
-#toc_overlay {
+/* TOC als eigener Vollbild-"Screen" (v2.1, Mockup-Vorlage): deckt exakt die
+   Flaeche von #content ab (gleiche Breite/Zentrierung/Radius) statt eines
+   schmalen linksseitigen Slide-over-Panels -- fuehlt sich wie eine eigene
+   Ansicht an, nicht wie ein Popover. #header bleibt sichtbar (Drucken/
+   Kontakt/Darkmode erreichbar), daher top:70px (Header-Hoehe 50px + Body-
+   margin-top 70px faellt hier weg, da toc_container position:fixed ist und
+   direkt ab Viewport-Y rechnet -> 70px = Header-Bereich). */
+#toc_container {
     position: fixed;
-    top:50px;
-    left:0px;
-    bottom:0px;
-    right:0px;
-    background-color: #00000033;
+    top: 70px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1150px;
+    max-width: calc(100vw - 40px);
     z-index: 9;
 }
-#toc_content {
-    position:fixed;
-    max-width:500px;
-    padding:20px;
-    top:50px;
-    bottom:0px;
-    /*left:0px;*/
-    background-color: white;
-    z-index:10;
-    /*border:1px solid orange;*/
-    box-shadow: 0px 15px 18px #aaa;
-        overflow-y: auto;
-
+#toc_screen {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(24,27,33,.28);
+    overflow: hidden;
+    animation: toc-show .3s ease forwards;
 }
-#toc_content.toc_show {
-    animation-name: toc-show;
-    animation-duration: 0.35s;
-    animation-fill-mode: forwards;
-}
-/* Bug-Fix (BACKLOG.md P2): toc_hide referenzierte zuvor faelschlich toc-show
-   (Copy-Paste) und wurde nie tatsaechlich gesetzt (ui.js hide() sprang direkt
-   auf display:none) -- die Schliessen-Animation lief nie. Jetzt gesetzt +
-   verdrahtet (s. ui.js::toc()). */
-#toc_content.toc_hide {
-    animation-name: toc-hide;
-    animation-duration: 0.35s;
-    animation-fill-mode: forwards;
+#toc_container.toc_hiding #toc_screen {
+    animation: toc-hide .25s ease forwards;
 }
 @keyframes toc-show {
-  from {transform: translateX(-500px)}
-  to {transform: translateX(0px);}
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes toc-hide {
-  from {transform: translateX(0px)}
-  to {transform: translateX(-500px)}
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(10px); }
 }
-@keyframes test {
-  from {background-color: white;}
-  to {background-color: red;}
+
+#toc_screen_bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 64px;
+    padding: 0 24px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-ui);
 }
-@keyframes example {
-  from {background-color: red;}
-  to {background-color: yellow;}
+#toc_screen_title { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
+.toc_screen_eyebrow {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+}
+.toc_screen_heading { font-size: 15.5px; font-weight: 700; color: var(--ink); letter-spacing: -.01em; }
+.toc_search {
+    flex: 1 1 auto;
+    max-width: 420px;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-2);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+}
+.toc_search:focus { border-color: var(--teal); }
+.toc_position {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--ink-3);
+    white-space: nowrap;
+}
+.toc_close_btn {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--ink-2);
+    font-size: 14px;
+    cursor: pointer;
+}
+.toc_close_btn:hover { background: var(--surface-3); }
+
+#toc_content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 28px 60px;
+}
+#toc_content_inner { max-width: 920px; margin: 0 auto; }
+
+@media (max-width: 760px) {
+    #toc_screen_bar { padding: 0 16px; gap: 10px; }
+    .toc_screen_eyebrow { display: none; }
+    #toc_content { padding: 20px 16px; }
 }
 
 /* TOC-Akkordeon (v2.0): eine Gruppe pro Kapitel (h2), Unterabschnitte (h3)
    darunter -- generisch aus dem pages.js-Seitenregister gebaut (s. ui.js). */
 .toc_group {
-    border: 1px solid #e3e1d7;
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
     margin-bottom: 10px;
     overflow: hidden;
+    background: var(--surface);
 }
+.toc_group.toc_group_current { border-color: var(--teal); box-shadow: 0 2px 10px rgba(0,177,172,.12); }
 .toc_group_header {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 12px 14px;
-    background: #faf9f6;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--surface-2);
     border: none;
     text-align: left;
     font: inherit;
+    font-family: var(--font-ui);
     font-weight: 600;
-    color: #181b21;
+    color: var(--ink);
     cursor: pointer;
 }
-.toc_group_header:hover { background: #f0eee6; }
-.toc_group_chevron { color: #878ea1; font-size: 0.85em; transition: transform .2s ease; }
+.toc_group.toc_group_current .toc_group_header { background: var(--teal-tint); }
+.toc_group_header:hover { background: var(--surface-3); }
+.toc_group.toc_group_current .toc_group_header:hover { background: var(--teal-tint); }
+.toc_group_number {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-3);
+    width: 60px;
+    flex-shrink: 0;
+}
+.toc_group.toc_group_current .toc_group_number { color: var(--teal-dark); }
+.toc_group_title { flex: 1 1 auto; font-size: 14.5px; }
+.toc_group_chevron { color: var(--ink-3); font-size: 0.85em; flex-shrink: 0; transition: transform .2s ease; }
+.toc_group.toc_group_current .toc_group_chevron { color: var(--teal-dark); }
 .toc_group.toc_group_collapsed .toc_group_chevron { transform: rotate(-90deg); }
 .toc_group.toc_group_collapsed .toc_group_body { display: none; }
 .toc_group_body {
     display: flex;
     flex-direction: column;
-    padding: 4px 8px 8px 20px;
+    padding: 6px 18px 12px 66px;
+    border-top: 1px solid var(--border);
 }
+.toc_group.toc_group_current .toc_group_body { border-top-color: var(--teal-tint-2); }
 .toc_sub_link {
-    padding: 7px 8px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px;
     border-radius: 6px;
-    font-size: 0.92em;
-    color: #282c34;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--ink);
 }
-.toc_sub_link:hover { background: #f0eee6; text-decoration: none; }
+.toc_sub_link:hover { background: var(--surface-3); text-decoration: none; }
+.toc_sub_link.toc_sub_current {
+    font-weight: 700;
+    color: var(--teal-ink);
+    background: var(--teal);
+}
+.toc_sub_link.toc_sub_current:hover { background: var(--teal); }
+.toc_sub_marker { color: var(--ink-4); flex-shrink: 0; }
+.toc_sub_link.toc_sub_current .toc_sub_marker { color: inherit; }
+#toc_content .toc_empty_state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--ink-3);
+    font-family: var(--font-ui);
+    font-size: 13.5px;
+}
 
 
 #print_instruction {
@@ -943,48 +1094,51 @@ input[type="range"]::-moz-range-track {
     gap: 16px;
     flex-wrap: wrap;
     padding: 14px 24px;
-    border-bottom: 1px solid #e3e1d7;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-ui);
 }
 #chapter_hamburger {
     display: none;
     width: 32px; height: 32px;
     border-radius: 8px;
-    border: 1px solid #e3e1d7;
-    background: #faf9f6;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
     font-size: 14px;
-    color: #4c5266;
+    color: var(--ink-2);
     cursor: pointer;
     flex-shrink: 0;
 }
 .chapter-crumb {
     font-size: 0.85em;
-    color: #4c5266;
+    color: var(--ink-2);
     display: flex;
     align-items: center;
     gap: 6px;
     min-width: 0;
 }
 .chapter-crumb #chapter_crumb_chapter { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chapter-crumb #chapter_crumb_current { color: #181b21; font-weight: 600; }
+.chapter-crumb #chapter_crumb_current { color: var(--ink); font-weight: 600; }
 .chapter-progress {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 0.78em;
-    color: #878ea1;
+    font-family: var(--font-mono);
+    color: var(--ink-3);
     flex-shrink: 0;
 }
 .chapter-progress-track {
     width: 130px;
     height: 5px;
-    background: #e3e1d7;
+    background: var(--border);
     border-radius: 3px;
     overflow: hidden;
 }
 .chapter-progress-track > span {
     display: block;
     height: 100%;
-    background: var(--fh);
+    background: var(--teal);
 }
 
 /* ── Rail (links): "Auf dieser Seite" + Kapitel-Mininav ─────────────────── */
@@ -994,7 +1148,7 @@ input[type="range"]::-moz-range-track {
     font-weight: 700;
     letter-spacing: .1em;
     text-transform: uppercase;
-    color: #878ea1;
+    color: var(--ink-3);
     margin-bottom: 10px;
 }
 .rail-onpage, .rail-chapternav { display: flex; flex-direction: column; gap: 2px; }
@@ -1003,43 +1157,53 @@ input[type="range"]::-moz-range-track {
     padding: 7px 10px;
     border-radius: 7px;
     font-size: 0.82em;
-    color: #4c5266;
+    color: var(--ink-2);
     text-decoration: none;
 }
-.rail-onpage a:hover, .rail-chapterlink:hover { background: #f0eee6; text-decoration: none; }
-.rail-chapterlink.current { background: #e3f6f5; color: #00595c; font-weight: 600; }
-.rail-dot { display: inline-block; width: 1.1em; color: var(--fh); }
-.rail-empty { padding: 7px 10px; font-size: 0.82em; color: #a3a9b8; }
+.rail-onpage a:hover, .rail-chapterlink:hover { background: var(--surface-3); text-decoration: none; }
+.rail-chapterlink.current { background: var(--teal-tint); color: var(--teal-darker); font-weight: 600; }
+.rail-dot { display: inline-block; width: 1.1em; color: var(--teal); }
+.rail-empty { padding: 7px 10px; font-size: 0.82em; color: var(--ink-4); }
 
-#chapter_rail_desktop_wrap { padding-top: 30px; }
+#chapter_rail_desktop_wrap { padding-top: 30px; font-family: var(--font-ui); }
 
 /* ── Marginalie (rechts): verschobene .anmerkung-Boxen der aktiven Seite ─ */
-#chapter_marginalia { padding-top: 30px; }
+#chapter_marginalia { padding-top: 30px; font-family: var(--font-ui); }
 #chapter_marginalia .anmerkung {
+    /* Kompakte Karte statt der breiten Fliesstext-Box (kein Platz fuer das
+       abgesetzte Icon in der 210px-Spalte, s. .highlight_box_img). */
     margin: 0 0 14px;
+    padding: 12px 14px;
+    font-size: 0.82em;
+}
+#chapter_marginalia .anmerkung .highlight_box_img { display: none; }
+#chapter_marginalia .anmerkung .highlight_box_title {
     font-size: 0.85em;
+    padding-bottom: 6px;
+    margin-top: 0;
 }
 
 /* ── Seiten-Navigation (unten in #paper) ─────────────────────────────────── */
 .chapter-pagenav {
+    font-family: var(--font-ui);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
     margin-top: 40px;
     padding-top: 20px;
-    border-top: 1px solid #e3e1d7;
+    border-top: 1px solid var(--border);
 }
 .chapter-pagenav button {
-    background: #faf9f6;
-    border: 1px solid #e3e1d7;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 9px 16px;
     font-size: 0.85em;
-    color: #4c5266;
+    color: var(--ink-2);
     cursor: pointer;
 }
-.chapter-pagenav button:hover:not(:disabled) { background: #f0eee6; }
+.chapter-pagenav button:hover:not(:disabled) { background: var(--surface-3); }
 .chapter-pagenav button:disabled { opacity: 0.4; cursor: default; }
 
 /* ── Tablet-Drawer (Slide-in, s. shell.js::toggle_drawer) ────────────────── */
@@ -1054,11 +1218,12 @@ input[type="range"]::-moz-range-track {
     left: 0; top: 0; bottom: 0;
     width: 280px;
     max-width: 85vw;
-    background: #faf9f6;
+    background: var(--surface-2);
     box-shadow: 0 0 20px rgba(0,0,0,.2);
     z-index: 41;
     padding: 18px 16px;
     overflow-y: auto;
+    font-family: var(--font-ui);
 }
 
 /* ── Tablet-Breakpoint (erste responsive Regel im Projekt) ───────────────── */
