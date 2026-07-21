@@ -52,7 +52,9 @@ function landmarksFor(page) {
     if (!page) return [];
     const items = [];
     let n = 0;
-    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung').forEach(el => {
+    // .bemerkung/.wichtig sind die v0.13-Namen (seit Kapitel 1.4) und muessen
+    // hier mitgefuehrt werden, sonst fehlen sie in der Seiten-Navigation.
+    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung, .bemerkung, .wichtig').forEach(el => {
         if (!el.id) el.id = page.id + '-landmark-' + (n++);
         const t = el.querySelector('.highlight_box_title');
         items.push({ id: el.id, label: t ? t.textContent : 'Abschnitt' });
@@ -125,7 +127,17 @@ function renderAppbar(page) {
     const progressBar = ge('chapter_progress_bar');
     const pages = getPages();
     if (!pages.length) return;
-    if (crumbChapter) crumbChapter.textContent = pages[0].title;
+    // Kapitel-Krume = die naechste h2-Seite oberhalb der aktiven, nicht
+    // pauschal pages[0] -- sonst zeigt sie ab dem zweiten Kapitel weiterhin
+    // den Titel des ersten an.
+    if (crumbChapter) {
+        const from = Math.max(0, getCurrentIndex());
+        let chapterPage = pages[0];
+        for (let i = from; i >= 0; i--) {
+            if (pages[i].level === 'h2') { chapterPage = pages[i]; break; }
+        }
+        crumbChapter.textContent = chapterPage.title;
+    }
     if (crumbCurrent) crumbCurrent.textContent = page ? page.title : '';
     const idx = getCurrentIndex() + 1;
     if (progress) progress.textContent = 'Seite ' + idx + '/' + pages.length;

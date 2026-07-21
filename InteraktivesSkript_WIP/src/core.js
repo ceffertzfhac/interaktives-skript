@@ -52,14 +52,22 @@ function capitalizeFirstLetter(string) {
 }
 
 export function generate_highlight_boxes() {
+    // Box-Typen + Icons, an v0.13 (Physik_skript_header_gmni_v3.tex) angelehnt:
+    // beispiel=pen, bemerkung=eye, wichtig=star, lernziel=target,
+    // aufgabe/zusammenfassung=noteblock (v0.13 nutzt fuer Zusammenfassung ein
+    // bulb-Icon, das hier nicht vorliegt -> noteblock). motivation/wiederholung/
+    // anmerkung bleiben fuer aeltere Fragmente; neuere Kapitel nutzen die
+    // v0.13-Namen (beispiel/bemerkung/wichtig/lernziel/aufgabe/zusammenfassung).
     const boxes = [
         ["lernziel","target.svg"],
         ["motivation","star.svg"],
         ["wiederholung","head.svg"],
-        ["beispiel","eye.svg"],
+        ["beispiel","pen.svg"],
         ["zusammenfassung","noteblock.svg"],
-        ["aufgabe","pen.svg"],
-        ["anmerkung","eye.svg"]
+        ["aufgabe","noteblock.svg"],
+        ["anmerkung","eye.svg"],
+        ["wichtig","star.svg"],
+        ["bemerkung","eye.svg"]
     ];
 
     for (let l=0; l < boxes.length; l++) {
@@ -67,9 +75,16 @@ export function generate_highlight_boxes() {
         for (let i=0; i < a.length; i++) {
             const a_content = a[i].innerHTML;
             a[i].innerHTML="";
+            // Zwei Spans: .hb-type traegt den Typ ("Bemerkung 1.4.3") und wird
+            // per CSS in Versalien gesetzt, .hb-name den boxeigenen Titel aus
+            // data-title -- der bleibt Gross/klein (s. styles.css). Die
+            // Nummerierung fuellt beide Spans spaeter neu (numbering.js).
             const a_title = document.createElement("div");
             a_title.setAttribute("class","highlight_box_title");
-            a_title.innerHTML = capitalizeFirstLetter(boxes[l][0]);
+            const a_type = document.createElement("span");
+            a_type.setAttribute("class","hb-type");
+            a_type.textContent = capitalizeFirstLetter(boxes[l][0]);
+            a_title.appendChild(a_type);
             a[i].appendChild(a_title);
 
             const a_img = document.createElement("img");
@@ -124,25 +139,29 @@ function gcd_rec(a, b) { //größter gemeinsamer Teiler
 
 export function make_static(){ //interaktives Skript statisch machen für Evaluation
     if(!interaktiv){
-        ge("gc4").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/image002.png" class="grafik" id="" draggable="false"><br><img src="bilder/image003.png" class="grafik" id="" draggable="false"></div>';
+        // Seit v1.7 enthaelt Kapitel 1.4 keine interaktiven gcN-Container mehr
+        // (reine v0.13-Abbildungen); ge("gcN") liefert dann null. set() hebt
+        // sich sicher darueber, damit test()/Statischer-Modus nicht crasht.
+        const set = (id, html) => { const el = ge(id); if (el) el.innerHTML = html; };
+        set("gc4", '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/image002.png" class="grafik" id="" draggable="false"><br><img src="bilder/image003.png" class="grafik" id="" draggable="false"></div>');
 
-        ge("gc1").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/phi_0.png" class="grafik" id="" draggable="false"><br></div>';
+        set("gc1", '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/phi_0.png" class="grafik" id="" draggable="false"><br></div>');
 
-        ge("gc9").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/kreis-xy_koord.png" class="grafik" id="" draggable="false"><br></div>';
+        set("gc9", '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/kreis-xy_koord.png" class="grafik" id="" draggable="false"><br></div>');
 
-        ge("gc31").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/geschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
+        set("gc31", '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/geschwindigkeit.png" class="grafik" id="" draggable="false"></div>');
 
-        ge("gc32").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/winkelgeschwindigkeit_v.png" class="grafik" id="" draggable="false"></div>';
+        set("gc32", '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/winkelgeschwindigkeit_v.png" class="grafik" id="" draggable="false"></div>');
 
-        ge("gc51").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/beschleunigung.png" class="grafik" id="" draggable="false"></div>';
+        set("gc51", '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/beschleunigung.png" class="grafik" id="" draggable="false"></div>');
 
-        ge("gc3").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/omega_vektor.png" class="grafik" id="" draggable="false"></div>';
+        set("gc3", '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/omega_vektor.png" class="grafik" id="" draggable="false"></div>');
 
-        ge("gc5").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/winkelbeschleunigung.png" class="grafik" id="" draggable="false"></div>';
+        set("gc5", '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/winkelbeschleunigung.png" class="grafik" id="" draggable="false"></div>');
 
-        ge("gc6").innerHTML = "";
+        set("gc6", "");
 
-        ge("gc8").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/radialgeschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
+        set("gc8", '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/radialgeschwindigkeit.png" class="grafik" id="" draggable="false"></div>');
 
         // gc10 (Kreisbewegung, src/figures/kreisbewegung/) hat kein statisches
         // Bild-Pendant und bleibt bewusst interaktiv, auch im statischen Modus
@@ -288,13 +307,13 @@ export function reset(){
 // von init(), sodass die Referenzen hier existieren. update_all selbst bleibt
 // damit frei von Importen auf einzelne Figuren (keine Zyklen).
 export function update_all() {
-    window.update1();
-    window.update9();
-    window.update3();
-    window.update31();
-    window.update32();
-    window.update5();
-    window.update51();
-    window.update6();
-    window.update8();
+    // Seit v1.7 enthaelt Kapitel 1.4 keine interaktiven Figuren mehr (rein
+    // statische v0.13-Abbildungen); die fig_NN-Module sind daher nicht mehr
+    // in main.js importiert und window.updateN existiert nicht. Aufruf nur,
+    // wenn die Figur registriert ist -> keine Crashes, sobald Figuren
+    // schrittweise wieder eingebunden werden, greift das automatisch wieder.
+    [1, 9, 3, 31, 32, 5, 51, 6, 8].forEach(n => {
+        const fn = window['update' + n];
+        if (typeof fn === 'function') fn();
+    });
 }

@@ -12,7 +12,11 @@
   --teal-tint-2: #cdeae8;
   --ink: #181b21;
   --ink-2: #4c5266;
-  --ink-3: #878ea1;
+  /* Sekundaertext (Bildunterschriften, Fussnoten, Marginalien). Frueher
+     #878ea1 -- das ergab auf --paper (#f6f4ef) nur 2,98:1 und lag damit unter
+     WCAG AA (4,5:1 fuer Text unter 18,66px; Captions 0.9em, Fussnoten 0.82em).
+     #666d80 haelt den Blaugrau-Ton und kommt auf 4,70:1. */
+  --ink-3: #666d80;
   --ink-4: #c7c3b5;
   --paper-outer: #dedad0;
   --paper: #f6f4ef;
@@ -90,9 +94,15 @@ body {
     margin: 0;
 }
 
+/* Dritte Spalte ist `auto`, nicht fix 210px: hat die aktive Seite keine
+   Marginalien-Boxen, setzt shell.js `.hidden` auf #chapter_marginalia
+   (visibility:hidden + position:absolute) -- die Spalte faellt dann auf 0
+   zusammen und die Lesespalte bekommt den Platz, statt eine leere 210px-Rinne
+   stehen zu lassen. Die Breite der gefuellten Spalte steht an
+   #chapter_marginalia selbst. */
 .chapter-body {
     display: grid;
-    grid-template-columns: 220px minmax(0, 1fr) 210px;
+    grid-template-columns: 220px minmax(0, 1fr) auto;
     align-items: start;
     gap: 24px;
     padding: 0 24px;
@@ -148,12 +158,25 @@ body {
    Teal-Akzent links, zentriert. mjx-container ist bereits das aeusserste
    Element, das MathJax fuer eine $$...$$-Formel einsetzt (keine zusaetzliche
    Wrapper-Div noetig). */
-mjx-container[display="true"] {
+/* Nur NUMMERIERTE Formeln bekommen eine Karte (Nutzer-Feedback). MathJax
+   markiert getaggte Display-Formeln mit width="full" (die Nummer macht sie zu
+   einer vollbreiten Tabelle) -- equation*/align*/\[…\] haben das Attribut
+   nicht und bleiben rahmenlos. Optisch setzt sich die Formelkarte bewusst von
+   den Inhaltskaesten ab: kein farbiger Akzentbalken links, dafuer eine
+   papierfarbene Flaeche mit Haarlinie ringsum. */
+mjx-container[display="true"]:not([width="full"]) {
+    display: block;
+    background: none;
+    border: none;
+    padding: 4px 0;
+    margin: 0 0 14px;
+    text-align: center;
+}
+mjx-container[display="true"][width="full"] {
     position: relative;
     display: block;
-    background: var(--surface);
+    background: var(--surface-2);
     border: 1px solid var(--border);
-    border-left: 3px solid var(--teal);
     border-radius: 8px;
     /* Rechtes Padding reserviert Platz fuer .eq-number (bis zu "(1.5.10.12)",
        zweistellige Kapitel-/Zaehler-Teile) -- s. numbering.js::layoutEqNumber
@@ -174,7 +197,9 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 .beispiel mjx-container[display="true"],
 .zusammenfassung mjx-container[display="true"],
 .aufgabe mjx-container[display="true"],
-.anmerkung mjx-container[display="true"] {
+.anmerkung mjx-container[display="true"],
+.bemerkung mjx-container[display="true"],
+.wichtig mjx-container[display="true"] {
     background: none;
     border: none;
     border-radius: 0;
@@ -212,6 +237,103 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     color: var(--ink-3);
     text-align: center;
 }
+/* v1.7: v0.13-Abbildungen als <figure class="abbildung"> mit figcaption.
+   numbering.js stellt der Beschriftung ein "Abb. 1.4.n"-Label
+   (<span class="fig-label">) voran. Nebenbild-Paare (v0.13 \begin{subfigure})
+   liegen in .abbildung-sub-imgs nebeneinander. */
+#paper figure.abbildung {
+    margin: 28px auto;
+    text-align: center;
+}
+/* Wichtig: die Legacy-Regel `.grafik { width:100% }` (weiter unten, stammt von
+   den interaktiven SVG-Figuren) wuerde jede Abbildung auf volle Spaltenbreite
+   ziehen. v0.13 vergibt aber individuelle Breiten (0.25 bis 0.99\textwidth),
+   die als Inline-`style="width:xx%"` am <img> stehen -- deshalb hier
+   `width:auto` als Basis, damit die Inline-Breite greift und Bilder nicht
+   ueber ihre native Aufloesung hinaus hochskaliert werden. */
+#paper figure.abbildung > img.grafik,
+#paper figure.abbildung > svg.grafik {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
+#paper figure.abbildung .abbildung-sub-imgs {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+/* Aussenbreite der Teilabbildung kommt als Inline-Style aus v0.13
+   (\begin{subfigure}[t]{0.48\textwidth} bzw. 0.495), die Innenbreite des
+   Bildes ebenso (0.75/0.9/0.99\linewidth) -- daher hier kein erzwungenes
+   flex-basis/max-width mehr. */
+#paper figure.abbildung .abbildung-sub-imgs .subfig {
+    flex: 0 1 auto;
+    min-width: 180px;
+}
+#paper figure.abbildung .abbildung-sub-imgs .subfig img.grafik {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
+#paper figure.abbildung .abbildung-sub-imgs .subfig .subcap {
+    margin-top: 6px;
+    font-size: 0.82em;
+    color: var(--ink-3);
+}
+#paper figure.abbildung > figcaption {
+    margin: 12px auto 0;
+    max-width: 92%;
+    font-size: 0.9em;
+    line-height: 1.45;
+    color: var(--ink-3);
+    text-align: left;
+}
+#paper figure.abbildung .fig-label {
+    font-weight: 600;
+    color: var(--ink-2);
+}
+#paper figure.abbildung .bildquelle {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.88em;
+    color: var(--ink-3);
+}
+/* Fussnoten (v0.13 \footnote): inline als kleine hellere Klammer-Notiz */
+#paper .fussnote {
+    /* Gleiche Schriftgroesse wie der Fliesstext (Nutzer-Feedback): die
+       Fussnoten stehen inline mitten im Absatz, ein kleinerer Grad macht die
+       Zeile unruhig. Abgesetzt wird nur ueber die Farbe. */
+    color: var(--ink-3);
+}
+#paper .fussnote::before { content: " ("; }
+#paper .fussnote::after  { content: ")"; }
+/* Tabellen (v0.13 \begin{tabular}/\begin{table}) */
+#paper table {
+    border-collapse: collapse;
+    margin: 20px auto;
+    font-size: 0.92em;
+}
+#paper table caption {
+    caption-side: bottom;
+    margin-top: 8px;
+    font-size: 0.88em;
+    color: var(--ink-3);
+    text-align: left;
+}
+#paper th, #paper td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+#paper th { background: var(--surface); }
+#paper table.twocol th, #paper table.twocol td { text-align: center; }
 /* Kopfleiste (v2.2, Mockup-Vorlage): EINE 64px-Leiste statt zweier gestapelter
    Balken (frueher: #header mit den Alt-Werkzeugen + separater #chapter_appbar
    mit Breadcrumb/Fortschritt) -- Branding+Breadcrumb links, Werkzeuge in der
@@ -266,7 +388,42 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     background: var(--border);
     flex-shrink: 0;
 }
-#header_spacer { flex: 1 1 auto; min-width: 12px; }
+/* Der frühere #header_spacer entfällt: die Krume ist jetzt das flexible
+   Element (flex:1) und schiebt den Bedien-Cluster nach rechts. */
+#header_controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+/* Symbol-Buttons (Drucken/Kontakt) -- gleiche Groesse wie der Darkmode-
+   Schalter, Beschriftung nur noch als title/aria-label. */
+.icon_button {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--surface-2);
+    color: var(--ink-2);
+    cursor: pointer;
+}
+.icon_button svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.icon_button:hover { background-color: var(--surface-3); color: var(--ink); }
+.icon_button:active { background-color: var(--border); }
 
 #toolbar {
     display: flex;
@@ -641,35 +798,84 @@ line, ellipse, polyline, circle {
 }
 
 
-.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung {
+/* Kastentypen: gemeinsames Grundgeruest, pro Typ nur eine andere Akzentfarbe
+   (--box-accent) und ein sehr schwacher Flaechenton daraus (Nutzer-Feedback:
+   "dezent unterschiedlich, nicht so aufdringlich wie im PDF"). Die Farbe
+   steuert Akzentbalken, Flaeche und Titelfarbe -- ein neuer Typ braucht damit
+   genau eine Zeile. Der Flaechenton nutzt color-mix; Browser ohne
+   color-mix-Unterstuetzung behalten die vorher deklarierte weisse Flaeche.
+   Darkmode funktioniert automatisch mit, weil --surface dort umdefiniert wird.
+   .bemerkung/.wichtig (v0.13-Namen) muessen hier mitgefuehrt werden: ohne sie
+   fehlt der 50px-Freiraum links, in dem .highlight_box_img sitzt -- das Icon
+   landete sonst ausserhalb von #paper in der Schiene. */
+.lernziel     { --box-accent: var(--c4); }   /* violett  -- Lernziel     */
+.beispiel     { --box-accent: var(--teal); } /* teal     -- Beispiel     */
+.aufgabe      { --box-accent: var(--c1); }   /* blau     -- Aufgabe      */
+.wichtig      { --box-accent: var(--c2); }   /* amber    -- Wichtig      */
+.zusammenfassung { --box-accent: var(--teal-darker); }
+.bemerkung    { --box-accent: var(--ink-3); } /* graublau -- Bemerkung (haeufigster Typ, bleibt am leisesten) */
+.anmerkung, .motivation, .wiederholung { --box-accent: var(--ink-3); }
+
+.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung, .bemerkung, .wichtig {
+    position: relative;
     border: 1px solid var(--border);
-    border-left: 3px solid var(--teal);
+    border-left: 3px solid var(--box-accent, var(--teal));
     border-radius: 10px;
     padding: 00px 30px 15px 30px;
     margin: 20px 00px 20px 50px;
     background-color: var(--surface);
+    background-color: color-mix(in srgb, var(--box-accent, var(--teal)) 4%, var(--surface));
     box-shadow: 0 2px 8px rgba(24,27,33,.03);
 
 }
-#print_container .lernziel, #print_container .motivation,#print_container .wiederholung, #print_container .beispiel, #print_container .zusammenfassung,#print_container .aufgabe, #print_container .anmerkung {
+/* Bemerkung ist der haeufigste Typ (14x allein in 1.4) und soll den Lesefluss
+   am wenigsten stoeren: kein Flaechenton, duennerer Akzent. */
+.bemerkung {
+    background-color: var(--surface);
+    border-left-width: 2px;
+}
+/* Zusammenfassung darf als Rekapitulation etwas praesenter sein. */
+.zusammenfassung {
+    background-color: color-mix(in srgb, var(--box-accent) 7%, var(--surface));
+}
+#print_container .lernziel, #print_container .motivation,#print_container .wiederholung, #print_container .beispiel, #print_container .zusammenfassung,#print_container .aufgabe, #print_container .anmerkung, #print_container .bemerkung, #print_container .wichtig {
     background-color: #fff;
     box-shadow: none;
 }
 .highlight_box_title {
+    /* Titelfarbe folgt dem Typ-Akzent, aber deutlich abgedunkelt, damit der
+       Kontrast auf der hellen Flaeche stimmt (amber/gruen waeren pur zu hell). */
     color: var(--teal-dark);
+    color: color-mix(in srgb, var(--box-accent, var(--teal)) 55%, var(--ink));
     font-size: 0.95em;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: .04em;
     margin:10px 0px 10px 0px;
     border-bottom: 1px solid var(--border);
     padding-bottom: 8px;
 }
+/* Versalien nur fuer den Typ-Teil ("BEMERKUNG 1.4.3"), nicht fuer den
+   eigenen Titel der Box (Nutzer-Feedback): der bleibt in normaler Gross-/
+   Kleinschreibung, damit Formelbestandteile und Fachbegriffe darin nicht
+   verfaelscht werden. */
+.highlight_box_title .hb-type {
+    text-transform: uppercase;
+}
+.highlight_box_title .hb-name {
+    text-transform: none;
+    letter-spacing: 0;
+}
+/* Das Icon sitzt in der 50px-Rinne links der Box (s. margin-left der
+   Box-Regel). Frueher ueber `margin-left:-80px` an der statischen Position
+   ausgerichtet -- das haengt an Padding und Box-Margin und schob das Icon bei
+   Boxen ohne diese Regel aus der Lesespalte in die Schiene. Jetzt an der Box
+   selbst verankert (position:relative dort), damit es die Spalte nie
+   verlassen kann. */
 .highlight_box_img {
     position: absolute;
-    margin-left: -80px;
-    margin-top: -40px;
-    height:38px;
+    left: -50px;
+    top: 12px;
+    height: 38px;
 }
 
 
@@ -1152,16 +1358,41 @@ input[type="range"]::-moz-range-track {
     cursor: pointer;
     flex-shrink: 0;
 }
+/* Krume = Zugang zum Inhaltsverzeichnis, zweireihig (Nutzer-Feedback):
+   Kapitel oben klein, aktueller Unterabschnitt darunter -- das halbiert den
+   Platzbedarf gegenueber der einzeiligen Variante, in der lange h3-Titel wie
+   "1.4.12 Zusatz: Rotation um eine beliebige Achse (nur fuer Interessierte
+   und Experten)" die Bedienelemente aus dem Header geschoben haben. Beide
+   Zeilen kuerzen per Ellipse; die Krume ist das einzige flexible Element im
+   Header, alles rechts davon behaelt seine Breite. */
 .chapter-crumb {
-    font-size: 0.85em;
-    color: var(--ink-2);
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
     align-items: center;
-    gap: 6px;
-    min-width: 0;
+    gap: 8px;
+    max-width: 460px;
+    padding: 4px 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: none;
+    font: inherit;
+    text-align: left;
+    color: var(--ink-2);
+    cursor: pointer;
 }
-.chapter-crumb #chapter_crumb_chapter { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chapter-crumb #chapter_crumb_current { color: var(--ink); font-weight: 600; }
+.chapter-crumb:hover { background-color: var(--surface-2); border-color: var(--border); }
+.chapter-crumb .crumb-lines {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+.chapter-crumb #chapter_crumb_chapter,
+.chapter-crumb #chapter_crumb_current { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chapter-crumb #chapter_crumb_chapter { font-size: 0.72em; color: var(--ink-3); }
+.chapter-crumb #chapter_crumb_current { font-size: 0.85em; color: var(--ink); font-weight: 600; }
+.chapter-crumb .crumb-caret { flex-shrink: 0; font-size: 0.7em; color: var(--ink-3); }
 .chapter-progress {
     display: flex;
     align-items: center;
@@ -1185,6 +1416,7 @@ input[type="range"]::-moz-range-track {
 }
 
 /* ── Rail (links): "Auf dieser Seite" + Kapitel-Mininav ─────────────────── */
+#chapter_rail_desktop, #chapter_drawer_panel { text-align: left; }
 .rail-block { margin-bottom: 22px; }
 .rail-heading {
     font-size: 0.68em;
@@ -1202,6 +1434,12 @@ input[type="range"]::-moz-range-track {
     font-size: 0.82em;
     color: var(--ink-2);
     text-decoration: none;
+    /* Flattersatz statt Blocksatz (Nutzer-Feedback): #content setzt
+       text-align:justify fuer die Lesespalte, das erbt die Schiene mit und
+       reisst in den schmalen 220px grosse Wortluecken auf. Gilt fuer Schiene
+       und Tablet-Drawer gleichermassen (beide nutzen diese Klassen). */
+    text-align: left;
+    hyphens: none;
 }
 .rail-onpage a:hover, .rail-chapterlink:hover { background: var(--surface-3); text-decoration: none; }
 .rail-chapterlink.current { background: var(--teal-tint); color: var(--teal-darker); font-weight: 600; }
@@ -1220,7 +1458,7 @@ input[type="range"]::-moz-range-track {
 }
 
 /* ── Marginalie (rechts): verschobene .anmerkung-Boxen der aktiven Seite ─ */
-#chapter_marginalia { padding-top: 30px; font-family: var(--font-ui); }
+#chapter_marginalia { width: 210px; padding-top: 30px; font-family: var(--font-ui); }
 #chapter_marginalia .anmerkung {
     /* Kompakte Karte statt der breiten Fliesstext-Box (kein Platz fuer das
        abgesetzte Icon in der 210px-Spalte, s. .highlight_box_img). */

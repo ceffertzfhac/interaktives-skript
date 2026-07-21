@@ -17,14 +17,19 @@ import { init_numbering } from './numbering.js';
 import { loadChapters, typesetAfterLoad } from './chapters.js';
 
 // Figuren laden (Seiteneffekt: Registrierung von updateN/animateN/clearN).
-import './figures/fig_1.js';
-import './figures/fig_3.js';
-import './figures/fig_4.js';
-import './figures/fig_5.js';
-import './figures/fig_6.js';
-import './figures/fig_8.js';
-import './figures/fig_9.js';
-import { initKreisbewegung } from './figures/kreisbewegung/ui.js';
+// Seit v1.7 ist Kapitel 1.4 rein statisch (v0.13-Abbildungen, keine
+// interaktiven gcN-Container). Die fig_NN-Module + Kreisbewegung-Figur
+// bleiben auf der Platte und werden schrittweise wieder eingebunden, sobald
+// die entsprechenden interaktiven Grafiken zurueckkehren — dann hier die
+// Imports wieder aktivieren:
+//   import './figures/fig_1.js';
+//   import './figures/fig_3.js';
+//   import './figures/fig_4.js';
+//   import './figures/fig_5.js';
+//   import './figures/fig_6.js';
+//   import './figures/fig_8.js';
+//   import './figures/fig_9.js';
+//   import { initKreisbewegung } from './figures/kreisbewegung/ui.js';
 
 // Zentrales Event-Binding (Stage 2): Inline-Handler sind durch data-action-
 // Attribute ersetzt; ein delegierter Listener je Event-Typ dispatcht an die
@@ -109,7 +114,8 @@ async function init() {
     make_static();
     if(interaktiv) {
         update_all();
-        initKreisbewegung();
+        // initKreisbewegung() entfaellt v1.7 (kein gc10-Container mehr in
+        // Kapitel 1.4); s. auskommentierte Imports oben.
     }
     from_qr();
     check_print();
