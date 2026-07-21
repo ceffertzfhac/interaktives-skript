@@ -1,0 +1,20 @@
+# EditorConfig -- zero-dep Tooling-Baseline (s. BACKLOG.md P2). Von
+# Editoren mit EditorConfig-Unterstützung automatisch gelesen; kein
+# Build, kein Package-Manager noetig. Prettier/ESLint sind bewusst
+# vertagt, bis ein Build (Vite/esbuild) eingefuehrt wird (s. CLAUDE.md).
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{html,css,js,mjs}]
+indent_size = 4
+
+# Markdown: Two-Space-Zeilenumbraechche erhalten (trailing whitespace bedeutend)
+[*.md]
+trim_trailing_whitespace = false
