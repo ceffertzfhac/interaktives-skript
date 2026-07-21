@@ -111,13 +111,46 @@ Zusammenfassung 4), Pagination 13 Seiten (h2-Intro + 12× h3), keine `gcN`-Reste
 - [x] **Nebenbefund: linke Schiene listet die neuen Boxentypen nicht.** `shell.js:55` sammelt Landmarks über `.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung` — `bemerkung` und `wichtig` fehlen, also erscheinen 17 der 30 Boxen des Kapitels nicht in der Seitennavigation. *(S)* — *Fix (v1.7): `shell.js::landmarksFor` um `.bemerkung`/`.wichtig` erweitert.*
 - [x] **Inhalt/Bug: Farbkodierung aus v0.13 fehlt.** v0.13 nutzt 11× `\textcolor`, das Kapitel-HTML **kein einziges**. Betroffen: (a) Zerlegung der Beschleunigung (tex L410–424: `\alpha(t)\cdot R`-Term rot, `\omega(t)^2\cdot R`-Term blau) — die Prosa sagt weiterhin „*hervorgehoben durch die unterschiedlichen Farben*", ohne dass etwas hervorgehoben ist; (b) 5× Farbverweise „(in blau/orange/grau)" in den Bildunterschriften zu Abb. 1.4.19/1.4.20 (tex L869, L944–946). Fix: `\textcolor{red|blue}{…}` in Mathe übernehmen, Farbphrasen in Captions als `<span style="color:#1555A2|#F47A2D|#474747">`. **Kein Config-Change nötig** — MathJax-Autoload zieht das `color`-Paket selbst; die im Plan vorgesehene `packages:{'[+]':['color']}`-Zeile fehlt, wird aber nicht gebraucht. *(S, niedriges Risiko)* — *Fix (v1.7): `\textcolor{red|blue}` in der Zerlegung der Beschleunigung, 6 farbcodierte Phrasen in den Bildunterschriften als `<span style="color:…">`; `[tex]/color` in `loader.load` **und** `tex.packages`.*
 - [x] **Doku: Plan-Schritt G nicht ausgeführt.** `CLAUDE.md` beschreibt weiterhin ch_01 als interaktives Kapitel „1.5" mit 11 `gcN`-Figuren. Nachzutragen: v0.13-Migration (Abschnitt **1.4**, 12 Unterabschnitte, rein statisch), dormante `figures/fig_NN.js` + `figures/kreisbewegung/` (Imports in `main.js` auskommentiert, Guards in `update_all`/`make_static`), neue Box-Typen `wichtig`/`bemerkung`, MathJax-`tags:'ams'`-Config, `figure.abbildung`/`.fussnote`/Tabellen-CSS. *(S)* — *Fix (v1.7): `CLAUDE.md` beschreibt jetzt die Zaehler-Scopes, die MathJax-Paketfalle, die Bildbreiten-Regel und die fuenf Stellen, die Box-Klassen aufzaehlen.*
-- [ ] **Skalierung: MathJax-Gleichungspräfix ist hartcodiert.** `index.html` setzt `tagformat.number = (n) => '1.4.' + n`. Sobald eine zweite Section ins WIP kommt (ch_02 wartet schon), ist jede Formel dort falsch nummeriert. Lösung analog `numbering.js::sectionPrefix()`: Präfix pro Seite/Section ermitteln statt global. **Blocker für das nächste Kapitel.** *(M, mittel)*
-- [ ] **Konsistenz: ch_02-Scaffold nummeriert „2.x".** Nach v0.13 müsste das Kapitel „Kinematik des starren Körpers" unter Mechanik = Kap. 1 laufen (vgl. 1.4). Beim Ausbau von ch_02 mitziehen. *(S)*
-- [ ] **Aufräumen: verwaister Stylesheet-Link.** `index.html:9` lädt `src/figures/kreisbewegung/styles.css`, obwohl gc10 nicht mehr im Dokument ist. Entfernen — oder bewusst stehen lassen und beim Re-Aktivieren der Figur wieder brauchen (dann als solches kommentieren). *(S)*
+- [x] **Skalierung: MathJax-Gleichungspräfix ist hartcodiert.** `index.html` setzt `tagformat.number = (n) => '1.4.' + n`. Sobald eine zweite Section ins WIP kommt (ch_02 wartet schon), ist jede Formel dort falsch nummeriert. Lösung analog `numbering.js::sectionPrefix()`: Präfix pro Seite/Section ermitteln statt global. **Blocker für das nächste Kapitel.** *(M, mittel)* — *Fix (v1.7): `renumber_equations()` in `numbering.js`. MathJax gibt `tagformat.number(n)` keinen Kontext; `\setcounter{equation}{0}` ignoriert MathJax stillschweigend und `tags.reset(0)` loescht `allLabels` -- beides nachgemessen. Loesung: nach dem ersten Typeset traegt jede nummerierte Zeile `[data-mml-node=mlabeledtr]`, daraus wird die Zuordnung laufende-Nummer→1.4.3 gebaut und genau ein zweiter Typeset ausgeloest. Verifiziert: 1.4 ergibt 1.4.1-1.4.88, ein zweiter Abschnitt startet bei 1.5.1.*
+- [x] **Konsistenz: ch_02-Scaffold nummeriert „2.x".** Nach v0.13 müsste das Kapitel „Kinematik des starren Körpers" unter Mechanik = Kap. 1 laufen (vgl. 1.4). Beim Ausbau von ch_02 mitziehen. *(S)* — *Erledigt: Scaffold geloescht; an seine Stelle tritt `ch_02_dynamik_drehbewegung.html` mit der korrekten v0.13-Nummerierung 1.5.x.*
+- [x] **Aufräumen: verwaister Stylesheet-Link.** `index.html:9` lädt `src/figures/kreisbewegung/styles.css`, obwohl gc10 nicht mehr im Dokument ist. Entfernen — oder bewusst stehen lassen und beim Re-Aktivieren der Figur wieder brauchen (dann als solches kommentieren). *(S)* — *Fix (v1.7): auskommentiert, mit Hinweis auf die Re-Aktivierung samt gc10.*
 - [x] **UI: Header neu aufgeteilt.** — *Fix (v1.7, Nutzer-Feedback): die Krume ist jetzt selbst der Zugang zum Inhaltsverzeichnis (`<button data-action="toc">`, zweireihig: Kapitel klein oben, Unterabschnitt darunter, beide mit Ellipse) -- der separate Button "Inhaltsverzeichnis" entfaellt; Drucken/Kontakt/Darkmode als Symbol-Buttons (`.icon_button`, Beschriftung via title/aria-label) in einem rechten Cluster `#header_controls`; `#header_spacer` raus, die Krume ist das einzige schrumpfende Element. Nebenbei: `shell.js::renderAppbar` nahm fuer die Kapitel-Krume pauschal `pages[0]` -- ab dem zweiten Kapitel falsch, jetzt die naechste h2-Seite oberhalb der aktiven.*
 - [x] **Aufräumen: verwaister Stylesheet-Link.** — *Fix (v1.7): `index.html:9` auskommentiert mit Hinweis auf die Re-Aktivierung samt gc10.*
 - [ ] **Kosmetik/Prosa-Abweichungen.** (a) Box-Titel `Zusammenfassung 1.4.4: Zusammenfassung: Kinematik der Kreis-…` doppelt das Wort. (b) Fußnote 2 wurde still zu „**Im** Kapitel zur Kinematik" korrigiert (v0.13: „In Kapitel") — sinnvolle Korrektur, aber Abweichung vom Anspruch „wortgleich"; entweder bewusst als Korrekturliste führen oder zurückdrehen. (a) und die Fussnoten-Schriftgroesse sind in v1.7 erledigt (doppeltes "Zusammenfassung:" aus `data-title` entfernt; Fussnoten auf Fliesstextgroesse). Offen bleibt: (c) Querverweise („Abschnitt 1.4.5", „Abbildung 1.38") sind Klartext ohne `data-action="goto_page"` — 0 klickbare Sprünge im Kapitel; Nachrüsten wäre der erste echte Nutzen der Pagination. *(S–M)*
 - [ ] **Verifikation: Browser-Phasen offen.** Phasen 2 (Wort-für-Wort gegen das v0.13-PDF), 8 (Druckfluss `?print=true`), 9 (TOC-Akkordeon) und 10 (Darkmode, Tablet-Drawer <1024px) sind nur manuell/optisch prüfbar und stehen noch aus. Hinweis Phase 8: `print.js` erzeugt QR-Codes ausschließlich pro `.grafik-container` — da es davon in 1.4 keine mehr gibt, enthält der Druck **keine** QR-Codes (erwartet, kein Bug; das Akzeptanzkriterium im Verifikationsplan formuliert das zu weit). *(M)*
+
+---
+
+## P4 — Abschnitt 1.5 fertig migrieren (v0.13 „Dynamik der Drehbewegung und Rotation starrer Körper")
+
+Angefangen in `chapters/ch_02_dynamik_drehbewegung.html`. **Fertig:** Intro,
+1.5.1 Motivation, 1.5.2 Starre Körper. **Angefangen:** 1.5.3 (4 von 8 Gleichungen).
+Die elf restlichen Unterabschnitte tragen im Kapitel eine sichtbare
+„noch nicht migriert"-Box, damit kein Teilstand als fertig durchgeht.
+
+Die Vorarbeiten sind erledigt und blockieren nicht mehr: alle 13 Abbildungen
+liegen in `bilder/` (inklusive der nachgelieferten Kippbedingungs-Bilder), das
+Formelpräfix zählt pro Abschnitt, MathJax lädt das `physics`-Paket für
+`\dd`/`\eval`. Vorgehen und Werkzeuge: Skill **v013-kapitel-migration**,
+Hintergrund in `MIGRATION_v0.13_nach_HTML.md`.
+
+**Sollwerte aus dem PDF** (via `referenznummern.py`): 127 Gleichungen
+(1.5.1–1.5.127), Abbildungen 1.61–1.72, `Beispiel 1.5.1`, `Zusammenfassung 1.8`
+(kapitelweit). Die Offsets am `<h2>` stehen bereits.
+
+- [ ] **1.5.3 Drehimpuls und (Massen-)Trägheitsmoment zu Ende** — 8 Gl. (11–18), Abb. 1.62 steht schon. *(S)*
+- [ ] **1.5.4 (Massen-)Trägheitsmoment** — 9 Gl. (19–27), 3 Abbildungen (Zylinder, Kugel, Steiner). *(M)*
+- [ ] **1.5.5 Drehmoment** — 3 Gl. (28–30), 1 Abbildung. *(S)*
+- [ ] **1.5.6 Anwendung des Drehmoments – Wippe und Hebelgesetz** — 1 Gl. (31). *(S)*
+- [ ] **1.5.7 Die Kippbedingung bei starren Körpern** — keine Gleichungen, aber das Bildpaar (Abb. 1.67) hat **keine Hauptunterschrift**: nur die beiden Teilunterschriften übernehmen, keine `<figcaption>` erfinden. *(S)*
+- [ ] **1.5.8 Zusammenhang zwischen Drehmoment und Drehimpuls** — 8 Gl. (32–39). *(S)*
+- [ ] **1.5.9 Drehimpulserhaltung** — 12 Gl. (40–51), 1 Abbildung. *(M)*
+- [ ] **1.5.10 Experimente zu Drehmoment, Drehimpuls und Drehimpulserhaltung** — 3 Gl. (52–54), Maxwell-Rad-Abbildung. *(S)*
+- [ ] **1.5.11 Rotationsenergie** — 9 Gl. (55–63). *(S)*
+- [ ] **1.5.12 Rotation und Translation** — 1 Gl. (64). *(S)*
+- [ ] **1.5.13 Rollbewegung** — **63 Gleichungen (65–127)**, 2 Abbildungen; mit Abstand der größte Brocken, eigene Sitzung einplanen. *(L)*
+- [ ] **1.5.14 Zusammenfassung** — keine Gleichungen, enthält `Zusammenfassung 1.8` und die einzige Tabelle des Abschnitts. *(S)*
+- [ ] **Abschluss** — die 11 `\ref` der Quelle als `data-ref-*`-Anker auflösen (darunter Verweise auf Abschnitt 1.4), `\point`/`\SI`/Fußnoten wie gehabt; danach Verifikation nach Skill **v013-verifikation**: Soll und Ist müssen **pro Unterabschnitt** deckungsgleich sein, nicht nur in der Summe.
 
 ---
 
