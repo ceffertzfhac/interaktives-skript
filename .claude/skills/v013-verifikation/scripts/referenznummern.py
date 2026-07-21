@@ -135,7 +135,12 @@ def main():
                   re.finditer(r'Abbildung %s\.(\d+):' % re.escape(kapitel), txt)})
     if abb:
         print('  %s.%d bis %s.%d  (%d Stueck)' % (kapitel, abb[0], kapitel, abb[-1], len(abb)))
-        print('  Luecken:', [n for n in range(abb[0], abb[-1] + 1) if n not in abb] or 'keine')
+        luecken = [n for n in range(abb[0], abb[-1] + 1) if n not in abb]
+        print('  Luecken:', luecken or 'keine')
+        if luecken:
+            print('     Hinweis: eine Luecke ist nicht zwingend ein Fehler -- eine')
+            print('     figure-Umgebung ganz OHNE \\caption (nur Unterschriften der')
+            print('     Teilbilder) erhoeht den Zaehler, taucht hier aber nicht auf.')
         print('  -> data-figure-offset="%d" am <h2> des Kapitels' % (abb[0] - 1))
     else:
         print('  keine Bildunterschriften gefunden')

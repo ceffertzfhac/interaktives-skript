@@ -121,7 +121,15 @@ Inline-Breite. In `styles.css` muss stehen:
 
 `max-width` allein genügt nicht — `width` muss aktiv zurückgenommen werden.
 
-## 6. Nummerierung
+## 6. Fehlende Quelldateien
+
+Nicht jede in der `.tex` referenzierte Datei liegt auch in `PSkriptBilder/`.
+In Abschnitt 1.5 fehlen z. B. `skript_rotation_kippbedingung_1.pdf` und
+`_2.pdf` vollstaendig. Solche Luecken **fruehzeitig melden und nachfordern** --
+sie blockieren den betroffenen Unterabschnitt, nicht die ganze Migration.
+Kein Platzhalterbild einbauen, das spaeter als echt durchgeht.
+
+## 7. Nummerierung
 
 Abbildungen werden **nicht** im Markup nummeriert. `numbering.js` stellt der
 `figcaption` zur Laufzeit `Abb. 1.n` voran — kapitelweit gezählt, weil v0.13
