@@ -1,5 +1,30 @@
 :root {
+  /* Design-Tokens fuer den Dunkelmodus (v1.6): statt einzelner Selektoren zu
+     patchen, werden hier die in styles.css definierten Tokens auf dunkle
+     Werte umgebogen -- alle var(--…)-Regeln darin erben automatisch. Die
+     darunter folgenden selektor-spezifischen Ueberschreibungen bleiben als
+     Gelaendekorrektur fuer Faelle, die nicht (nur) ueber Tokens greifen
+     (img invert-Filter, Slider-Tracks, #gc10-Variablen). Wichtig: --ink als
+     hellen Wert setzen, sonst bleibt #paper-Text (color: var(--ink)) dunkel
+     auf nun dunklem Grund -> unlesbar. */
   --bg: #2c2c2c;
+  --paper-outer: #1b1b1b;
+  --paper: #2c2c2c;
+  --surface: #262626;
+  --surface-2: #262626;
+  --surface-3: #202020;
+  --border: #444;
+  --border-2: #555;
+  --ink: #ddd;
+  --ink-2: #bbb;
+  --ink-3: #999;
+  --ink-4: #888;
+  --teal: #00b1ab;          /* bleibt -- Akzent funktioniert auf dunklem Grund */
+  --teal-dark: #7fd9d4;     /* auf dunklem Grund heller als der Light-Wert #00807c, s. toc_group_number/chevron */
+  --teal-darker: #7fd9d4;
+  --teal-ink: #04302f;      /* Text auf hellem --teal-Button (.gc_toggle, .toc_sub_current) -- in beiden Modis dunkel lesbar */
+  --teal-tint: #17332f;     /* dunkle Teal-Flaeche (statt light #e3f6f5) */
+  --teal-tint-2: #1a3634;
 }
 body {
     color:#ddd;
@@ -72,6 +97,14 @@ body {
 mjx-container[display="true"] {
     background-color: #262626;
     border-color: #444;
+}
+/* MathJax v3 (tex-svg) rendert die Pfad-Fills via currentColor -- damit die
+   Formel-Glyphen auf der dunklen Formelkarte #262626 lesbar sind, muss das
+   color der mjx-container hell sein (Token --ink koennte an manchen Stellen
+   von selektor-spezifischen Ueberschreibungen ueberlagert werden, deshalb
+   hier explizit). */
+mjx-container {
+    color: #ddd;
 }
 .eq-number, .fig-number {
     color: #888;
