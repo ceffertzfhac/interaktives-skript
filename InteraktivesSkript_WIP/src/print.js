@@ -8,8 +8,11 @@ import { zoom } from './ui.js';
 import { showAllPagesForPrint, restorePagination } from './pages.js';
 import { restoreMarginalia } from './shell.js';
 
-export let auto_print = false; //Safari blocks autoprint...
-
+// Query-Parameter via URLSearchParams (statt vormals manuellem
+// findGetParameter-Parser). print (?print=true) und g (?g=gcN) sind die
+// einzigen gelesenen Params. auto_print/window.print()-Autostart wurde
+// entfernt: der toter Safari-Workaround (auto_print stets false) startete
+// nie automatisch; Nutzer druckt manuell (s. #print_instruction).
 export function init_print() { //reopen in new tab
     let link = "";
     if(location.href.split("#").length==2) {
@@ -21,7 +24,7 @@ export function init_print() { //reopen in new tab
     window.open(link, '_blank').focus();
 }
 export function check_print() { //check if this page was just opened in a new tab for printing
-    if (findGetParameter("print") == "true") {
+    if (getParam("print") === "true") {
         print_page();
     }
 }
@@ -65,10 +68,6 @@ export function print_page() {
     }
 
     document.body.setAttribute("style","background-color:#fff;margin-top:0px;margin-left:100px;");
-
-    if (auto_print) {
-        window.print();
-    }
 }
 
 export function create_qr(element_id) {
@@ -98,7 +97,7 @@ export function create_qr(element_id) {
 
 }
 export function from_qr(){ //if user comes to this site via the qr code link
-    const g = findGetParameter("g");
+    const g = getParam("g");
     if(!interaktiv) { //statisch
         setTimeout(function(){
             if(g) {
@@ -116,12 +115,6 @@ export function from_qr(){ //if user comes to this site via the qr code link
         }
     }
 }
-export function findGetParameter(parameterName) {
-    var result = null,
-        tmp = [];
-    location.search.substr(1).split("&").forEach(function (item) {
-          tmp = item.split("=");
-          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
-        });
-    return result;
+function getParam(name) {
+    return new URLSearchParams(location.search).get(name);
 }
