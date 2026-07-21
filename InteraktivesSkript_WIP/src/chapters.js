@@ -43,10 +43,15 @@ export async function loadChapters() {
 // laufen. Diese Gate spiegelt numbering.js' waitForMathJax-Poll: erst warten,
 // bis MathJax.startup.promise verfuegbar ist, dann reload_mathjax()
 // (typesetPromise + renumber_equations) -- egal wann MathJax fertig wird.
+// Nach dem Typeset stehen die Formelnummern fest: window.resolve_eq_refs
+// (numbering.js) traegt sie in die \ref-Anker ein -- bewusst ueber window
+// statt per Import, chapters.js soll nur core.js kennen.
 export function typesetAfterLoad() {
     (function waitForMathJax() {
         if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
-            window.MathJax.startup.promise.then(reload_mathjax);
+            window.MathJax.startup.promise
+                .then(reload_mathjax)
+                .then(() => { if (window.resolve_eq_refs) window.resolve_eq_refs(); });
         } else {
             setTimeout(waitForMathJax, 200);
         }

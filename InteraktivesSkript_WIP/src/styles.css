@@ -160,10 +160,10 @@ body {
    Wrapper-Div noetig). */
 /* Nur NUMMERIERTE Formeln bekommen eine Karte (Nutzer-Feedback). MathJax
    markiert getaggte Display-Formeln mit width="full" (die Nummer macht sie zu
-   einer vollbreiten Tabelle) -- equation*/align*/\[…\] haben das Attribut
-   nicht und bleiben rahmenlos. Optisch setzt sich die Formelkarte bewusst von
-   den Inhaltskaesten ab: kein farbiger Akzentbalken links, dafuer eine
-   papierfarbene Flaeche mit Haarlinie ringsum. */
+   einer vollbreiten Tabelle); die Sternvarianten der Umgebungen und die
+   \[ \]-Form haben das Attribut nicht und bleiben rahmenlos. Optisch setzt
+   sich die Formelkarte bewusst von den Inhaltskaesten ab: kein farbiger
+   Akzentbalken links, dafuer eine papierfarbene Flaeche mit Haarlinie. */
 mjx-container[display="true"]:not([width="full"]) {
     display: block;
     background: none;
@@ -1551,3 +1551,19 @@ input[type="range"]::-moz-range-track {
     stroke: #00000055;
 }
 
+
+/* ── Querverweise (v1.7) ─────────────────────────────────────────────────────
+   Abbildungs-, Abschnitts- und Formelverweise sind Links; die Nummer traegt
+   numbering.js zur Laufzeit ein (s. dort). Dezent gehalten: gleiche Farbe wie
+   der Fliesstext, nur unterstrichen, damit sie den Lesefluss nicht zerstueckeln. */
+#paper a.xref {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--box-accent, var(--teal));
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+#paper a.xref:hover {
+    color: var(--teal-darker);
+    text-decoration-thickness: 2px;
+}

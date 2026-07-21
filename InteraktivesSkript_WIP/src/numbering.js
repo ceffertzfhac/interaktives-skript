@@ -127,9 +127,10 @@ function numberFigures(page, prefix, state) {
 // nicht (kein innerHTML-Capture/Ersetzen). Idempotent via :scope > .fig-label.
 // Legacy standalone-<img> (ohne figure/Container/Box-Icon) bekommen wie
 // bisher ein kleines "Abb. x.y"-Label als .fig-number hinter dem Bild.
-function numberImages(page, prefix, state) {
+function numberImages(page, prefix, state, figNumbers) {
     page.el.querySelectorAll('figure.abbildung').forEach(fig => {
         state.img = (state.img || 0) + 1;
+        if (figNumbers && fig.id) figNumbers[fig.id] = prefix + '.' + state.img;
         const cap = fig.querySelector('figcaption');
         if (!cap) return;
         let label = cap.querySelector(':scope > .fig-label');
@@ -155,12 +156,60 @@ function numberImages(page, prefix, state) {
     });
 }
 
+// ── Querverweise ────────────────────────────────────────────────────────────
+// Alle Verweise im Kapitel sind Anker mit einem Schluessel statt fest
+// getippter Nummern (v0.13: \ref{...}); die Nummer schreibt erst die Laufzeit
+// hinein, damit Text und Ziel nicht auseinanderlaufen koennen:
+//   <a class="xref" data-ref-fig="fig-...">  -> "Abbildung 1.38"
+//   <a class="xref" data-ref-sec="p-1-4-5">  -> "Abschnitt 1.4.5"
+//   <a class="xref" data-ref-eq="eq_...">    -> "(1.4.12)"
+// Formelnummern kommen aus MathJax' Label-Register (allLabels: label ->
+// {tag, id}); MathJax rendert \ref selbst nur als Text, nicht als Link.
+function resolveFigRefs(figNumbers) {
+    document.querySelectorAll('a[data-ref-fig]').forEach(a => {
+        const key = a.dataset.refFig;
+        const num = figNumbers[key];
+        if (num === undefined) return;
+        a.textContent = 'Abbildung ' + num;
+        a.setAttribute('href', '#' + key);
+    });
+}
+
+function resolveSecRefs() {
+    const byId = {};
+    getPages().forEach(p => { byId[p.id] = p; });
+    document.querySelectorAll('a[data-ref-sec]').forEach(a => {
+        const page = byId[a.dataset.refSec];
+        if (!page) return;
+        const m = page.title.match(/^([0-9.]+)/);
+        a.textContent = 'Abschnitt ' + (m ? m[1] : page.title);
+        a.setAttribute('href', '#' + page.id);
+    });
+}
+
+export function resolve_eq_refs() {
+    const links = document.querySelectorAll('a[data-ref-eq]');
+    if (!links.length) return;
+    let labels = null;
+    try {
+        labels = window.MathJax.startup.document.inputJax[0].parseOptions.tags.allLabels;
+    } catch (e) { /* MathJax noch nicht bereit -- spaeterer Aufruf holt das nach */ }
+    if (!labels) return;
+    links.forEach(a => {
+        const info = labels[a.dataset.refEq];
+        if (!info) return;
+        a.textContent = '(' + info.tag + ')';
+        a.setAttribute('href', '#' + info.id);
+    });
+}
+
 export function init_numbering() {
     const pages = getPages();
     let section = null;
     let chapter = null;
     const boxCounters = {};   // pro Section (ausser CHAPTER_SCOPED, s. o.)
     const state = {};         // Abbildungen/Simulationen -- kapitelweit
+    const figNumbers = {};    // Figur-id -> vergebene Nummer (fuer Querverweise)
     pages.forEach((page, i) => {
         const prefix = sectionPrefix(page, i);
         const chap = chapterPrefix(page, i);
@@ -182,6 +231,15 @@ export function init_numbering() {
         }
         numberBoxes(page, prefix, chapter, boxCounters);
         numberFigures(page, prefix, state);
-        numberImages(page, chapter, state);
+        numberImages(page, chapter, state, figNumbers);
     });
+    resolveFigRefs(figNumbers);
+    resolveSecRefs();
+    resolve_eq_refs();   // greift erst, wenn MathJax fertig ist (s. main.js)
 }
+
+// window-Bruecke statt Import: core.js::reload_mathjax() und chapters.js
+// bauen die MathJax-Ausgabe neu auf und muessen die Formelverweise danach
+// erneut aufloesen -- ein Import wuerde den Zyklus core->numbering->pages->core
+// erzeugen (gleiches Muster wie update_all/window.updateN).
+window.resolve_eq_refs = resolve_eq_refs;

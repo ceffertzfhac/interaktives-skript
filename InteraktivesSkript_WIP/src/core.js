@@ -189,6 +189,9 @@ export function reload_mathjax(){
     if (window.MathJax && MathJax.typesetPromise) {
         MathJax.typesetPromise().then(() => {
             if (window.renumber_equations) window.renumber_equations();
+            // Formelverweise (<a data-ref-eq>) zeigen erst nach dem Typeset die
+            // richtige Nummer -- MathJax vergibt sie beim Rendern.
+            if (window.resolve_eq_refs) window.resolve_eq_refs();
         });
     }
 }

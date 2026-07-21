@@ -11,7 +11,7 @@
          \numberwithin, zusammenfassungcounter \numberwithin{chapter}): die
          Abschnitte 1.0-1.3 sind noch nicht migriert, haben im PDF aber schon
          37 Abbildungen und 3 Zusammenfassungen verbraucht -- daher startet
-         1.4 bei Abbildung 1.38 bzw. Zusammenfassung 1.4. Beide Offsets
+         1.4 bei <a class="xref" data-ref-fig="fig-skript-kreisbewegung-winkel">Abbildung 1.38</a> bzw. Zusammenfassung 1.4. Beide Offsets
          entfallen, sobald die vorherigen Abschnitte im WIP stehen. -->
     <h2 class="inhaltsverzeichnis" data-figure-offset="37" data-zusammenfassung-offset="3">1.4 Kinematik der Drehbewegung und Kreisbahnen</h2>
 
@@ -40,9 +40,9 @@
 
     <p>Durch die Angabe eines Radius \(R\) und eines Winkels \(\varphi\) kann ich die Position des Massenpunktes eindeutig angeben. Der Winkel \(\varphi\) ist dabei im Allgemeinen eine Funktion der Zeit \(t\), also \(\varphi = \varphi(t)\). Der Radius \(R\) ist im einfachsten Fall zunächst konstant.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-winkel">
         <img style="width:50%" class="grafik" src="bilder/skript_kreisbewegung_winkel.png" alt="">
-        <figcaption>Die Position eines Massenpunktes auf einer Kreisbahn kann durch Angabe des Ortsvektors \(\vec r\), durch Angabe der Komponenten des Vektors (in kartesischen Koordinaten) \(r_x\) und \(r_y\) oder durch Angabe des Radius \(R\) und des Winkels \(\varphi\) beschrieben werden. Der Zusammenhang zwischen den Darstellungen ist in Gleichung \ref{eq_kreisbahn_position} gegeben. Blau gestichelt ist der Teil der (gesamten) Kreisbahn, den der Massenpunkt bisher durchlaufen hat.</figcaption>
+        <figcaption>Die Position eines Massenpunktes auf einer Kreisbahn kann durch Angabe des Ortsvektors \(\vec r\), durch Angabe der Komponenten des Vektors (in kartesischen Koordinaten) \(r_x\) und \(r_y\) oder durch Angabe des Radius \(R\) und des Winkels \(\varphi\) beschrieben werden. Der Zusammenhang zwischen den Darstellungen ist in Gleichung <a class="xref" data-ref-eq="eq_kreisbahn_position"></a> gegeben. Blau gestichelt ist der Teil der (gesamten) Kreisbahn, den der Massenpunkt bisher durchlaufen hat.</figcaption>
     </figure>
 
     <div class="wichtig" data-title="Einheitensystem">
@@ -53,7 +53,7 @@
         <p>Beachten Sie: wird ein Winkel ohne Gradzeichen angegeben, so meinen wir im Allgemeinen das Bogenmaß. Das Gradzeichen wird nur verwendet, wenn explizit im Gradmaß gerechnet wird.</p>
     </div>
 
-    <p>Sie können sich vergewissern, dass die Formel \ref{eq_kreisbahn_position} tatsächlich die Position eines Massenpunktes auf einer Kreisbahn beschreibt, indem Sie die Gleichung quadrieren und addieren:</p>
+    <p>Sie können sich vergewissern, dass die Formel <a class="xref" data-ref-eq="eq_kreisbahn_position"></a> tatsächlich die Position eines Massenpunktes auf einer Kreisbahn beschreibt, indem Sie die Gleichung quadrieren und addieren:</p>
 
     \begin{align}
     x^2 + y^2 &amp;= R^2 \cos^2(\varphi) + R^2 \sin^2(\varphi) \\[6pt]
@@ -101,7 +101,7 @@
     \label{eq_kreisbahn_winkel_zeit_vereinfachte_form}
     \end{equation}
 
-    <p>Ersetzen wir nun \(\varphi(t)\) in der Gleichung \ref{eq_kreisbahn_position_zeit} durch die Gleichung \ref{eq_kreisbahn_winkel_zeit_vereinfachte_form}, so erhalten wir die Position des Massenpunktes auf der Kreisbahn als Funktion der Zeit:</p>
+    <p>Ersetzen wir nun \(\varphi(t)\) in der Gleichung <a class="xref" data-ref-eq="eq_kreisbahn_position_zeit"></a> durch die Gleichung <a class="xref" data-ref-eq="eq_kreisbahn_winkel_zeit_vereinfachte_form"></a>, so erhalten wir die Position des Massenpunktes auf der Kreisbahn als Funktion der Zeit:</p>
 
     \begin{equation}
     \vec{r}(t) = \begin{pmatrix}
@@ -146,7 +146,7 @@
 
     <div class="bemerkung" data-title="Radial und Tangential">
         <p>Bevor wir weiter machen, müssen wir zwei in diesem Abschnitt häufig vorkommende Begriffe klären: <strong>radial</strong> und <strong>tangential</strong>. Der Begriff <strong>radial</strong> beschreibt eine Richtung, die vom Mittelpunkt des Kreises weg zeigt, also in Richtung des Radius. Der Begriff <strong>tangential</strong> beschreibt eine Richtung, die tangential an den Kreis verläuft, also in Richtung der Bewegung des Massenpunktes auf der Kreisbahn. Das bedeutet, dass wenn wir über Kreisbewegungen sprechen nicht über rechts und links sprechen, sondern über radial und tangential. Der Vorteil dieser Begriffe ist, dass sie unabhängig von der Orientierung des Koordinatensystems sind. Radial und tangential sind also immer gleich, egal wie das Koordinatensystem orientiert ist und hängen nur von der tatsächlichen Bewegung des Massenpunktes ab. Man kann den beiden Richtungen (zu jedem Zeitpunkt) auch Einheitsvektoren zuordnen: der <strong>radiale Einheitsvektor</strong> \(\vec{e}_\text{r}\) zeigt immer vom Mittelpunkt des Kreises zum Massenpunkt, der <strong>tangentiale Einheitsvektor</strong> \(\vec{e}_\text{t}\) zeigt immer in Richtung der Bewegung des Massenpunktes auf der Kreisbahn. Beachten Sie, dass die Richtung dieser Einheitsvektoren, im Unterschied zu den kartesischen Einheitsvektoren \(\vec{e}_x\) und \(\vec{e}_y\), zeitabhängig sind, da sich die Richtung der Bewegung des Massenpunktes auf der Kreisbahn mit der Zeit ändert. Der Betrag der Einheitsvektoren ist – wie der Name schon sagt – immer \(1\).</p>
-        <figure class="abbildung">
+        <figure class="abbildung" id="fig-radial-tangential">
             <img style="width:55%" class="grafik" src="bilder/radial_tangential.png" alt="Radiale (blau) und tangentiale (orange) Richtung auf einer Kreisbahn mit Koordinatensystem" draggable="false">
             <figcaption>Radiale (blau) und tangentiale (orange) Richtung auf einer Kreisbahn mit Koordinatensystem.</figcaption>
         </figure>
@@ -157,7 +157,7 @@
     </div>
 
     <div class="aufgabe" data-title="Kreisbahn">
-        <p>Der Ort eines Objektes auf einer Kreisbahn errechnet sich aus der Gleichung \ref{eq_kreisbahn_position_zeit} mit \ref{eq_kreisbahn_winkel_zeit_vereinfachte_form}.</p>
+        <p>Der Ort eines Objektes auf einer Kreisbahn errechnet sich aus der Gleichung <a class="xref" data-ref-eq="eq_kreisbahn_position_zeit"></a> mit <a class="xref" data-ref-eq="eq_kreisbahn_winkel_zeit_vereinfachte_form"></a>.</p>
         <p>Zeichnen Sie \(\vert \vec r(t) \vert\), \(x(t)\) und \(y(t)\) für \(R=1\) und \(\varphi(t) = \frac{2\pi}{T} \cdot t\) mit \(T=1\,\mathrm{s}\) in ein Diagramm ein von \(0\) bis \(2\,\mathrm{s}\).</p>
     </div>
 
@@ -173,7 +173,7 @@
 
     <p>Wir werden uns im Folgenden mit der Geschwindigkeit und der Beschleunigung eines Massenpunktes auf einer Kreisbahn beschäftigen.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegungen-xydiagramm">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbewegungen_xydiagramm.png" alt="">
         <figcaption>Weg-Zeit-Diagramme eines Massenpunktes auf einer Kreisbahn mit Radius \(R=1{,}5\,\mathrm{m}\) und einer Periodendauer \(T=4{,}0\,\mathrm{s}\) nach anderthalb Perioden. Im oberen Diagramm ist \(x(t)\), im unteren Diagramm \(y(t)\) dargestellt. Startposition der Masse war bei \(\phi=0\) also bei \(x=1{,}5\,\mathrm{m}\) und \(y=0\), nach anderthalb Perioden ist die Masse bei \(x=-1{,}5\,\mathrm{m}\) und \(y=0\) angelangt. Der Winkel \(\phi\) ändert sich dabei gleichmäßig mit der Zeit. Der dargestellte Winkel in der linken Seite der Darstellung entspricht dem Rest der Division des aktuellen Winkels durch \(2\pi\), d.h. es werden nur Winkel zwischen \(0\) und \(2\pi\) dargestellt. Der wahre Winkel läuft jedoch weiter, wird also immer größer, während der dargestellte Winkel immer wieder von \(2\pi\) auf \(0\) zurückgesetzt wird.</figcaption>
     </figure>
@@ -181,7 +181,7 @@
 
 <h3 class="inhaltsverzeichnis">1.4.2 Die Geschwindigkeit eines Massenpunktes auf einer Kreisbahn</h3>
 <section>
-    <p>Wie wir aus dem Abschnitt zur Kinematik wissen, ist die Geschwindigkeit eines Massenpunktes auf einer Kreisbahn die Ableitung des Ortsvektors \(\vec{r}(t)\) (siehe \ref{eq_kreisbahn_position_zeit}) nach der Zeit \(t\):</p>
+    <p>Wie wir aus dem Abschnitt zur Kinematik wissen, ist die Geschwindigkeit eines Massenpunktes auf einer Kreisbahn die Ableitung des Ortsvektors \(\vec{r}(t)\) (siehe <a class="xref" data-ref-eq="eq_kreisbahn_position_zeit"></a>) nach der Zeit \(t\):</p>
 
     \begin{equation}
     \vec{v}(t) = \frac{d\vec{r}(t)}{dt} = \begin{pmatrix}
@@ -217,9 +217,9 @@
 
     <p>Die Winkelgeschwindigkeit \(\omega(t)\) ist also die Ableitung des Winkels \(\varphi(t)\) nach der Zeit \(t\). Sie beschreibt also, wie schnell sich der Winkel \(\varphi(t)\) ändert.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbwegegung-winkel">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbwegegung_winkel.png" alt="">
-        <figcaption>Im Diagramm auf der rechten Seite zu sehen ist ein \(\text{Winkel}-\text{Zeit}\)-Diagramm eines Massenpunktes auf einer Kreisbahn. Der Winkel \(\varphi(t)\) ändert sich dabei gleichmäßig mit der Zeit, die Winkelgeschwindigkeit \(\omega\) ist also konstant. Links ist die entsprechende Kreisbahn dargestellt, auf der sich der Massenpunkt bewegt. Dargestellt ist der Verlauf des Winkels mit der Zeit über anderthalb Perioden, analog zu Abbildung 1.40.</figcaption>
+        <figcaption>Im Diagramm auf der rechten Seite zu sehen ist ein \(\text{Winkel}-\text{Zeit}\)-Diagramm eines Massenpunktes auf einer Kreisbahn. Der Winkel \(\varphi(t)\) ändert sich dabei gleichmäßig mit der Zeit, die Winkelgeschwindigkeit \(\omega\) ist also konstant. Links ist die entsprechende Kreisbahn dargestellt, auf der sich der Massenpunkt bewegt. Dargestellt ist der Verlauf des Winkels mit der Zeit über anderthalb Perioden, analog zu <a class="xref" data-ref-fig="fig-skript-kreisbewegungen-xydiagramm">Abbildung 1.40</a>.</figcaption>
     </figure>
 
     <div class="beispiel" data-title="Die Winkelgeschwindigkeit eines Sekunden- und eines Minutenzeigers">
@@ -253,7 +253,7 @@
         <p>Um die Winkelgeschwindigkeit \(\omega(t)\) von der Geschwindigkeit, wie wir sie im Abschnitt zur Kinematik definiert haben, zu unterscheiden, nennen wir die Geschwindigkeit eines Massenpunktes auf einer Kreisbahn <strong>Bahngeschwindigkeit</strong>. Die Bahngeschwindigkeit ist dabei keine andere Größe als die Geschwindigkeit, die wir im Abschnitt zur Kinematik definiert haben, sondern eine spezielle Benennung für die Geschwindigkeit eines Massenpunktes auf einer Kreisbahn, die zur Unterscheidung beitragen soll. Wir verwenden die Bezeichnung Bahngeschwindigkeit, um klarzustellen, dass es sich um die Geschwindigkeit eines Punktes auf einer Kreisbahn handelt. Die Bahngeschwindigkeit ist im Allgemeinen ein Vektor, meinen wir den Betrag, so werden wir vom Betrag der Bahngeschwindigkeit sprechen.</p>
     </div>
 
-    <p>Damit lässt sich die Formel \ref{eq_kreisbahn_geschwindigkeit} für die Geschwindigkeit eines Massenpunktes auf einer Kreisbahn vereinfachen:</p>
+    <p>Damit lässt sich die Formel <a class="xref" data-ref-eq="eq_kreisbahn_geschwindigkeit"></a> für die Geschwindigkeit eines Massenpunktes auf einer Kreisbahn vereinfachen:</p>
 
     \begin{equation}
     \vec{v}(t) = \begin{pmatrix}
@@ -276,9 +276,9 @@
     \label{eq_kreisbahn_bahngeschwindigkeit}
     \end{equation}
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegungen-vxvydiagramm">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbewegungen_vxvydiagramm.png" alt="">
-        <figcaption>Die Komponenten der Bahngeschwindigkeit eines Massenpunktes auf einer Kreisbahn mit konstantem Radius und konstanter Periode \(T\). Im oberen Diagramm ist \(v_x(t)\), im unteren Diagramm \(v_y(t)\) dargestellt. Der Vergleich mit den Weg-Zeit-Diagrammen in Abbildung 1.40 zeigt, dass die Geschwindigkeitskomponenten gegenüber den Wegkomponenten um \(\frac{\pi}{2}\) verschoben sind. Außerdem sind die Geschwindigkeitskomponenten zueinander um \(\frac{\pi}{2}\) verschoben, was bedeutet, dass wenn eine Komponente ihr Maximum oder Minimum erreicht, die andere Komponente null ist.</figcaption>
+        <figcaption>Die Komponenten der Bahngeschwindigkeit eines Massenpunktes auf einer Kreisbahn mit konstantem Radius und konstanter Periode \(T\). Im oberen Diagramm ist \(v_x(t)\), im unteren Diagramm \(v_y(t)\) dargestellt. Der Vergleich mit den Weg-Zeit-Diagrammen in <a class="xref" data-ref-fig="fig-skript-kreisbewegungen-xydiagramm">Abbildung 1.40</a> zeigt, dass die Geschwindigkeitskomponenten gegenüber den Wegkomponenten um \(\frac{\pi}{2}\) verschoben sind. Außerdem sind die Geschwindigkeitskomponenten zueinander um \(\frac{\pi}{2}\) verschoben, was bedeutet, dass wenn eine Komponente ihr Maximum oder Minimum erreicht, die andere Komponente null ist.</figcaption>
     </figure>
 
     <p>Der Betrag der Bahngeschwindigkeit ist also gegeben durch</p>
@@ -290,9 +290,9 @@
 
     <p>Man sieht also: Die Bahngeschwindigkeit ist proportional zur Winkelgeschwindigkeit \(\omega(t)\) und zum Radius \(R\) der Kreisbahn. Die Bahngeschwindigkeit ist also umso größer, je größer der Radius \(R\) der Kreisbahn ist und je schneller sich der Massenpunkt auf der Kreisbahn bewegt, also je größer die Winkelgeschwindigkeit \(\omega(t)\) ist.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegungen-betragvdiagramm">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbewegungen_betragvdiagramm.png" alt="">
-        <figcaption>In diesem Diagramm ist der Betrag der Bahngeschwindigkeit eines Massenpunktes auf einer Kreisbahn mit konstantem Radius und konstanter Periode \(T\) dargestellt. Während sich die Komponenten der Bahngeschwindigkeit periodisch ändern (siehe Abbildung 1.42), ist der Betrag der Bahngeschwindigkeit konstant.</figcaption>
+        <figcaption>In diesem Diagramm ist der Betrag der Bahngeschwindigkeit eines Massenpunktes auf einer Kreisbahn mit konstantem Radius und konstanter Periode \(T\) dargestellt. Während sich die Komponenten der Bahngeschwindigkeit periodisch ändern (siehe <a class="xref" data-ref-fig="fig-skript-kreisbewegungen-vxvydiagramm">Abbildung 1.42</a>), ist der Betrag der Bahngeschwindigkeit konstant.</figcaption>
     </figure>
 
     <p>Ist die Winkelgeschwindigkeit konstant, so ist die Bahngeschwindigkeit konstant und der Betrag der Bahngeschwindigkeit ist gegeben durch</p>
@@ -301,7 +301,7 @@
     |\vec{v}(t)| = |\omega(t)| \cdot R
     \end{equation}
 
-    <p>Ein Vergleich mit der Formel \ref{eq_kreisbahn_winkel_zeit_vereinfachte_form} zeigt, dass die Winkelgeschwindigkeit \(\omega(t)\) konstant ist, wenn die Periode \(T\) der Kreisbewegung konstant ist. In diesem Fall ist die Bahngeschwindigkeit konstant und der Betrag der Bahngeschwindigkeit ist gegeben durch</p>
+    <p>Ein Vergleich mit der Formel <a class="xref" data-ref-eq="eq_kreisbahn_winkel_zeit_vereinfachte_form"></a> zeigt, dass die Winkelgeschwindigkeit \(\omega(t)\) konstant ist, wenn die Periode \(T\) der Kreisbewegung konstant ist. In diesem Fall ist die Bahngeschwindigkeit konstant und der Betrag der Bahngeschwindigkeit ist gegeben durch</p>
 
     \begin{equation}
     |\vec{v}(t)| = \frac{2\pi R}{T}
@@ -309,7 +309,7 @@
 
     <p>Diese Formel gilt nur, wenn die Winkelgeschwindigkeit konstant ist, also wenn die Periode \(T\) der Kreisbewegung konstant ist.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegungen-omegatdiagramm">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbewegungen_omegatdiagramm.png" alt="">
         <figcaption>Bei einer Kreisbewegung mit konstantem Radius und konstanter Periode \(T\) ist die Winkelgeschwindigkeit \(\omega(t)\) konstant. Die Winkelgeschwindigkeit wird üblicherweise in \(\mathrm{s}^{-1}\) angegeben, also in Bogenmaß pro Sekunde. Hier gezeigt ist eine Kreisbewegung mit einer Periode von \(T=4{,}0\,\mathrm{s}\), also einer Winkelgeschwindigkeit von \(\omega = \frac{2\pi}{T} = \frac{\pi}{2} \approx 1{,}57\,\mathrm{s}^{-1}\).</figcaption>
     </figure>
@@ -329,7 +329,7 @@
         \end{align}
     </div>
 
-    <p>Das Skalarprodukt ist also null, was bedeutet, dass die Vektoren \(\vec{v}(t)\) und \(\vec r(t)\) orthogonal zueinander sind. Das bedeutet, dass die Geschwindigkeit \(\vec{v}(t)\) immer tangential zur Kreisbahn ist. Der Vektor \(\vec{v}(t)\) hat also keine radiale Komponente, sondern nur eine tangentiale Komponente, siehe auch Abbildung 1.45<span class="fussnote">Das gilt allerdings nur, wenn der Radius \(R\) konstant ist. Ist der Radius \(R\) nicht konstant, so hat die Geschwindigkeit \(\vec{v}(t)\) auch eine radiale Komponente. Wir werden uns später mit solchen Bewegungen beschäftigen.</span>.</p>
+    <p>Das Skalarprodukt ist also null, was bedeutet, dass die Vektoren \(\vec{v}(t)\) und \(\vec r(t)\) orthogonal zueinander sind. Das bedeutet, dass die Geschwindigkeit \(\vec{v}(t)\) immer tangential zur Kreisbahn ist. Der Vektor \(\vec{v}(t)\) hat also keine radiale Komponente, sondern nur eine tangentiale Komponente, siehe auch <a class="xref" data-ref-fig="fig-skript-kreisbewegung-geschw">Abbildung 1.45</a><span class="fussnote">Das gilt allerdings nur, wenn der Radius \(R\) konstant ist. Ist der Radius \(R\) nicht konstant, so hat die Geschwindigkeit \(\vec{v}(t)\) auch eine radiale Komponente. Wir werden uns später mit solchen Bewegungen beschäftigen.</span>.</p>
 
     <div class="zusammenfassung" data-title="Orts- und Geschwindigkeitsvektoren eines Massenpunktes auf einer Kreisbahn:">
         <p>Wir haben gesehen, dass der Ortsvektor eines Massenpunktes auf einer Kreisbahn gegeben ist durch:</p>
@@ -346,13 +346,13 @@
         <p>mit \(\omega(t) = \dot{\varphi}(t)\) der Winkelgeschwindigkeit. Der Geschwindigkeitsvektor ist immer tangential zur Kreisbahn, also hat er keine radiale Komponente.</p>
     </div>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-geschw">
         <img style="width:50%" class="grafik" src="bilder/skript_kreisbewegung_geschw.svg" alt="">
         <figcaption>Der Geschwindigkeitsvektor steht bei einer Kreisbahn mit konstantem Radius \(R\) immer senkrecht auf dem Ortsvektor. Der Ortsvektor ist immer radial, der Geschwindigkeitsvektor immer tangential zur Kreisbahn.</figcaption>
     </figure>
 
     <div class="bemerkung" data-title="Vereinfachung der Angabe der Geschwindigkeit eines Massenpunktes auf einer Kreisbahn">
-        <p>Der Bahngeschwindigkeitsvektor \ref{eq_kreisbahn_bahngeschwindigkeit} ist schon aufwendiger zu schreiben. Hier kann man die Vereinfachung, die man durch die neuen Größen \(R\), \(\varphi(t)\) und \(\omega(t)\) erreicht, schon besser erkennen. Um eindeutig zu beschreiben, wo der Massenpunkt auf der Kreisbahn ist und wie schnell er sich bewegt, brauchen wir nur noch die Angabe zweier Funktionen \(\varphi(t)\) und \(\omega(t)\) und einen Parameter \(R\). Das ist deutlich einfacher, als die gesamte Zeit mit zwei Vektoren arbeiten zu müssen, die jeweils zwei Komponenten haben.</p>
+        <p>Der Bahngeschwindigkeitsvektor <a class="xref" data-ref-eq="eq_kreisbahn_bahngeschwindigkeit"></a> ist schon aufwendiger zu schreiben. Hier kann man die Vereinfachung, die man durch die neuen Größen \(R\), \(\varphi(t)\) und \(\omega(t)\) erreicht, schon besser erkennen. Um eindeutig zu beschreiben, wo der Massenpunkt auf der Kreisbahn ist und wie schnell er sich bewegt, brauchen wir nur noch die Angabe zweier Funktionen \(\varphi(t)\) und \(\omega(t)\) und einen Parameter \(R\). Das ist deutlich einfacher, als die gesamte Zeit mit zwei Vektoren arbeiten zu müssen, die jeweils zwei Komponenten haben.</p>
     </div>
 
     <p>Schauen wir uns nun noch die Bedeutung des Vorzeichens der Winkelgeschwindigkeit \(\omega(t)\) an. Hierzu gibt es eine Konvention, die man sich merken muss (wir kommen später noch darauf zurück): Ist die Winkelgeschwindigkeit \(\omega(t)\) positiv, so bewegt sich der Massenpunkt auf der Kreisbahn im Gegenuhrzeigersinn. Ist die Winkelgeschwindigkeit \(\omega(t)\) negativ, so bewegt sich der Massenpunkt auf der Kreisbahn im Uhrzeigersinn. Das Vorzeichen der Winkelgeschwindigkeit \(\omega(t)\) gibt also an, in welche Richtung sich der Massenpunkt auf der Kreisbahn bewegt.</p>
@@ -366,7 +366,7 @@
     \vec{a}(t) = \frac{d\vec{v}(t)}{dt} = \frac{d^2\vec{r}(t)}{dt^2}
     \end{equation}
 
-    <p>Setzen wir die Gleichung \ref{eq_kreisbahn_geschwindigkeit_mit_winkelgeschwindigkeit} für die Bahngeschwindigkeit eines Massenpunktes auf einer Kreisbahn in die Gleichung für die Beschleunigung ein, so erhalten wir</p>
+    <p>Setzen wir die Gleichung <a class="xref" data-ref-eq="eq_kreisbahn_geschwindigkeit_mit_winkelgeschwindigkeit"></a> für die Bahngeschwindigkeit eines Massenpunktes auf einer Kreisbahn in die Gleichung für die Beschleunigung ein, so erhalten wir</p>
 
     \begin{align}
     \vec{a}(t) &amp;= \frac{d}{dt} \begin{pmatrix}
@@ -383,13 +383,13 @@
     \label{eq_kreisbahn_beschleunigung}
     \end{align}
 
-    <p>Hier muss also die Produktregel und die Kettenregel der Ableitung angewendet werden, um die „innere" Ableitung \(\dot \varphi(t)\) zu berücksichtigen. Formel \ref{eq_kreisbahn_beschleunigung} ist schon ein ziemlicher Brecher mit vielen Termen. Stellen Sie sich vor, was passieren würde, wenn nun auch noch der Radius \(R\) nicht konstant wäre, sondern auch eine Funktion der Zeit \(R(t)\) wäre. Dann müssten wir noch die Kettenregel für die Ableitung von \(R(t)\) anwenden und die Gleichung würde noch komplizierter werden. Daher ist es sinnvoll, die Angabe von \(R\) und \(\varphi(t)\) zu verwenden, um die Bewegung auf der Kreisbahn zu beschreiben. Um diese Beschreibung noch weiter zu vereinfachen, definieren wir nun noch eine weitere neue Größe, die wir die Winkelbeschleunigung nennen.</p>
+    <p>Hier muss also die Produktregel und die Kettenregel der Ableitung angewendet werden, um die „innere" Ableitung \(\dot \varphi(t)\) zu berücksichtigen. Formel <a class="xref" data-ref-eq="eq_kreisbahn_beschleunigung"></a> ist schon ein ziemlicher Brecher mit vielen Termen. Stellen Sie sich vor, was passieren würde, wenn nun auch noch der Radius \(R\) nicht konstant wäre, sondern auch eine Funktion der Zeit \(R(t)\) wäre. Dann müssten wir noch die Kettenregel für die Ableitung von \(R(t)\) anwenden und die Gleichung würde noch komplizierter werden. Daher ist es sinnvoll, die Angabe von \(R\) und \(\varphi(t)\) zu verwenden, um die Bewegung auf der Kreisbahn zu beschreiben. Um diese Beschreibung noch weiter zu vereinfachen, definieren wir nun noch eine weitere neue Größe, die wir die Winkelbeschleunigung nennen.</p>
 
     <div class="bemerkung" data-title="Bahnbeschleunigung">
         <p>Analog zur Geschwindigkeit, die wir bei der Kreisbewegung auch als Bahngeschwindigkeit bezeichnet haben, nennen wir die Beschleunigung eines Massenpunktes auf einer Kreisbahn <strong>Bahnbeschleunigung</strong>. Die Bahnbeschleunigung ist dabei keine andere Größe als die Beschleunigung, die wir im Abschnitt zur Kinematik definiert haben, sondern eine spezielle Benennung für die Beschleunigung eines Massenpunktes auf einer Kreisbahn, die zur Unterscheidung beitragen soll.</p>
     </div>
 
-    <p>Schauen wir uns dazu nochmal die Formel \ref{eq_kreisbahn_beschleunigung} an. In dieser Formel tritt die erste Ableitung der Winkelgeschwindigkeit \(\dot \omega(t)\) auf. Diese ist natürlich nur dann nicht null, wenn sich die Winkelgeschwindigkeit \(\omega(t)\) ändert. Ändert sich die Winkelgeschwindigkeit \(\omega(t)\), so sprechen wir von einer <strong>Winkelbeschleunigung</strong>. Die Winkelbeschleunigung ist definiert als:</p>
+    <p>Schauen wir uns dazu nochmal die Formel <a class="xref" data-ref-eq="eq_kreisbahn_beschleunigung"></a> an. In dieser Formel tritt die erste Ableitung der Winkelgeschwindigkeit \(\dot \omega(t)\) auf. Diese ist natürlich nur dann nicht null, wenn sich die Winkelgeschwindigkeit \(\omega(t)\) ändert. Ändert sich die Winkelgeschwindigkeit \(\omega(t)\), so sprechen wir von einer <strong>Winkelbeschleunigung</strong>. Die Winkelbeschleunigung ist definiert als:</p>
 
     \begin{equation}
     \text{Winkelbeschleunigung} = \frac{\text{Änderung der Winkelgeschwindigkeit}}{\text{dafür benötigte Zeit}}
@@ -449,7 +449,7 @@
 
     <p>Wie steht es mit dem Vorzeichen der Winkelbeschleunigung? Hierzu ist insbesondere der Vergleich des Vorzeichens der Winkelbeschleunigung mit dem Vorzeichen der Winkelgeschwindigkeit interessant. Haben die beiden Größen dasselbe Vorzeichen, so wird die Winkelgeschwindigkeit im Betrag größer, es handelt sich um eine Beschleunigung im umgangssprachlichen Sinne. Haben die beiden Größen unterschiedliche Vorzeichen, so wird die Winkelgeschwindigkeit im Betrag kleiner, es handelt sich um eine Verzögerung oder um ein Abbremsen im umgangssprachlichen Sinne.</p>
 
-    <p>Schauen wir uns nun die Gleichung \ref{eq_kreisbahn_beschleunigung} noch mal genauer an. Dazu ersetzen wir \(\dot \omega(t)\) durch \(\alpha(t)\) und zerlegen den Bahngeschwindigkeitsvektor \(\vec{a}(t)\) in zwei Komponenten:</p>
+    <p>Schauen wir uns nun die Gleichung <a class="xref" data-ref-eq="eq_kreisbahn_beschleunigung"></a> noch mal genauer an. Dazu ersetzen wir \(\dot \omega(t)\) durch \(\alpha(t)\) und zerlegen den Bahngeschwindigkeitsvektor \(\vec{a}(t)\) in zwei Komponenten:</p>
 
     \begin{align}
     \vec{a}(t) &amp;= \begin{pmatrix}
@@ -525,7 +525,7 @@
 
     <h4>Spezialfall: Gleichförmige Kreisbewegung</h4>
 
-    <p>Ist die Winkelgeschwindigkeit \(\omega(t)\) konstant, so ist die Winkelbeschleunigung \(\alpha(t)\) gleich null. In diesem Fall wird der erste Term in der Gleichung \ref{eq_kreisbahn_beschleunigung_zerlegt} null und die Beschleunigung \(\vec{a}(t)\) besteht nur noch aus einer Vektorkomponente, die proportional zum Quadrat der Winkelgeschwindigkeit \(\omega(t)^2\) ist:</p>
+    <p>Ist die Winkelgeschwindigkeit \(\omega(t)\) konstant, so ist die Winkelbeschleunigung \(\alpha(t)\) gleich null. In diesem Fall wird der erste Term in der Gleichung <a class="xref" data-ref-eq="eq_kreisbahn_beschleunigung_zerlegt"></a> null und die Beschleunigung \(\vec{a}(t)\) besteht nur noch aus einer Vektorkomponente, die proportional zum Quadrat der Winkelgeschwindigkeit \(\omega(t)^2\) ist:</p>
 
     \begin{equation}
     \vec{a}(t) = \omega(t)^2 \cdot R \cdot \begin{pmatrix}
@@ -535,23 +535,23 @@
     \label{eq_kreisbahn_beschleunigung_gleichfoermig}
     \end{equation}
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegungen-axaydiagramm">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbewegungen_axaydiagramm.png" alt="">
-        <figcaption>Bewegt sich ein Massenpunkt auf einer Kreisbahn mit konstantem Radius \(R\) und konstanter Winkelgeschwindigkeit \(\omega\), so sind die Komponenten der Bahnbeschleunigung \(a_x(t)\) und \(a_y(t)\), genau wie \(x(t)\) und \(y(t)\), sowie wie \(v_x(t)\) und \(v_y(t)\), ebenfalls periodisch. Im oberen Diagramm ist \(a_x(t)\), im unteren Diagramm \(a_y(t)\) dargestellt. Der Vergleich mit den Weg-Zeit-Diagrammen in Abbildung 1.40 zeigt, dass die Beschleunigungskomponenten gegenüber den Wegkomponenten um \(\pi\) verschoben sind. Man sieht außerdem: Die Beschleunigungskomponenten sind jeweils um \(\frac{\pi}{2}\) gegenüber den Geschwindigkeitskomponenten verschoben sowie zueinander um \(\frac{\pi}{2}\) verschoben. Ist die Beschleunigungskomponente \(a_x(t)\) maximal positiv oder negativ, so ist die Beschleunigungskomponente \(a_y(t)\) null. Ist die Beschleunigungskomponente \(a_y(t)\) maximal positiv oder negativ, so ist die Beschleunigungskomponente \(a_x(t)\) null.</figcaption>
+        <figcaption>Bewegt sich ein Massenpunkt auf einer Kreisbahn mit konstantem Radius \(R\) und konstanter Winkelgeschwindigkeit \(\omega\), so sind die Komponenten der Bahnbeschleunigung \(a_x(t)\) und \(a_y(t)\), genau wie \(x(t)\) und \(y(t)\), sowie wie \(v_x(t)\) und \(v_y(t)\), ebenfalls periodisch. Im oberen Diagramm ist \(a_x(t)\), im unteren Diagramm \(a_y(t)\) dargestellt. Der Vergleich mit den Weg-Zeit-Diagrammen in <a class="xref" data-ref-fig="fig-skript-kreisbewegungen-xydiagramm">Abbildung 1.40</a> zeigt, dass die Beschleunigungskomponenten gegenüber den Wegkomponenten um \(\pi\) verschoben sind. Man sieht außerdem: Die Beschleunigungskomponenten sind jeweils um \(\frac{\pi}{2}\) gegenüber den Geschwindigkeitskomponenten verschoben sowie zueinander um \(\frac{\pi}{2}\) verschoben. Ist die Beschleunigungskomponente \(a_x(t)\) maximal positiv oder negativ, so ist die Beschleunigungskomponente \(a_y(t)\) null. Ist die Beschleunigungskomponente \(a_y(t)\) maximal positiv oder negativ, so ist die Beschleunigungskomponente \(a_x(t)\) null.</figcaption>
     </figure>
 
     <p>Schauen wir uns die Richtung des Vektors \(\vec{a}(t)\) an, so sehen wir, dass dieser Vektor immer radial zum Mittelpunkt der Kreisbahn zeigt, also genau entgegen der Richtung des Ortsvektors \(\vec{r}(t)\).</p>
 
     <p>Daraus können wir zwei Dinge schließen. Zum einen: auch wenn die Kreisbewegung gleichförmig ist und die Winkelgeschwindigkeit \(\omega(t)\) sowie der Betrag der Bahngeschwindigkeit konstant ist, so ändert dennoch der Bahngeschwindigkeitsvektor \(\vec{v}(t)\) ständig seine Richtung. Wir wissen aber: Ändert sich die Geschwindigkeit in Richtung und/oder Betrag, so liegt eine Beschleunigung vor. Der Massenpunkt muss also beschleunigt werden, um auf der Kreisbahn zu bleiben, würde er nicht beschleunigt, so würde er sich geradlinig weiter bewegen.</p>
 
-    <p>Zum anderen: Die Beschleunigung eines Massenpunktes auf einer Kreisbahn ist immer radial, also immer in Richtung des Mittelpunkts der Kreisbahn. Diese Beschleunigung wird auch als <strong>Zentripetalbeschleunigung</strong> bezeichnet. Sie ist immer radial und immer entgegen der Richtung des Ortsvektors \(\vec{r}(t)\), siehe Abbildung 1.48.</p>
+    <p>Zum anderen: Die Beschleunigung eines Massenpunktes auf einer Kreisbahn ist immer radial, also immer in Richtung des Mittelpunkts der Kreisbahn. Diese Beschleunigung wird auch als <strong>Zentripetalbeschleunigung</strong> bezeichnet. Sie ist immer radial und immer entgegen der Richtung des Ortsvektors \(\vec{r}(t)\), siehe <a class="xref" data-ref-fig="fig-skript-kreisbewegung-beschl">Abbildung 1.48</a>.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegungen-betragatdiagramm">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbewegungen_betragatdiagramm.png" alt="">
-        <figcaption>Bei einer Kreisbewegung mit konstantem Radius und konstanter Periode \(T\) ist der Betrag der Bahnbeschleunigung konstant. Beachten Sie: obwohl sich die Bahngeschwindigkeit im Betrag nicht ändert, siehe Abbildung 1.43, ändert sich die Richtung der Bahngeschwindigkeit ständig, weshalb eine Beschleunigung vorliegt.</figcaption>
+        <figcaption>Bei einer Kreisbewegung mit konstantem Radius und konstanter Periode \(T\) ist der Betrag der Bahnbeschleunigung konstant. Beachten Sie: obwohl sich die Bahngeschwindigkeit im Betrag nicht ändert, siehe <a class="xref" data-ref-fig="fig-skript-kreisbewegungen-betragvdiagramm">Abbildung 1.43</a>, ändert sich die Richtung der Bahngeschwindigkeit ständig, weshalb eine Beschleunigung vorliegt.</figcaption>
     </figure>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-beschl">
         <img style="width:50%" class="grafik" src="bilder/skript_kreisbewegung_beschl.svg" alt="">
         <figcaption>Der Beschleunigungsvektor steht bei einer gleichförmigen Kreisbahn mit konstantem Radius \(R\) und konstanter Winkelgeschwindigkeit \(\omega\) immer senkrecht auf dem Geschwindigkeitsvektor und antiparallel zum Ortsvektor. Der Ortsvektor ist immer radial, der Geschwindigkeitsvektor immer tangential zur Kreisbahn, der Beschleunigungsvektor immer radial zum Mittelpunkt der Kreisbahn gerichtet. Die Beschleunigung ist in diesem Fall die Zentripetalbeschleunigung, ihr Betrag hängt von der Winkelgeschwindigkeit \(\omega\) und dem Radius \(R\) der Kreisbahn ab.</figcaption>
     </figure>
@@ -568,7 +568,7 @@
         \begin{equation}
         |\vec{a}_\text{Zentripetal}(t)| = \omega(t)^2 \cdot R
         \end{equation}
-        <p>In Formel \ref{eq_kreisbahn_bahngeschwindigkeit_betrag} hatten wir außerdem schon den Zusammenhang gefunden:</p>
+        <p>In Formel <a class="xref" data-ref-eq="eq_kreisbahn_bahngeschwindigkeit_betrag"></a> hatten wir außerdem schon den Zusammenhang gefunden:</p>
         \begin{equation}
         |\vec{v}(t)| = \omega(t) \cdot R
         \end{equation}
@@ -630,7 +630,7 @@
 
     <p>Beachten Sie: Die Angabe einer Periodendauer \(T\) oder einer Frequenz \(f\) ist nur dann sinnvoll, wenn die Winkelgeschwindigkeit \(\omega(t)\) konstant ist. In dem Fall kann man die Winkelgeschwindigkeit auch als <strong>Kreisfrequenz</strong> bezeichnen.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-periodendauer">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbewegung_periodendauer.png" alt="">
         <figcaption>Die Periodendauer \(T\) ist die Zeit, die ein Massenpunkt benötigt, um eine volle Umdrehung auf der Kreisbahn zu absolvieren. Sie kann sowohl aus dem \(x(t)\) als auch aus dem \(y(t)\)-Diagramm aus dem zeitlichen Abstand zweier aufeinanderfolgender Maxima oder Minima abgelesen werden. In diesem Beispiel beträgt die Periodendauer \(T=4{,}0\,\mathrm{s}\). Aus der Periodendauer \(T\) kann die Frequenz \(f\) berechnet werden. In diesem Beispiel beträgt die Frequenz \(f=\frac{1}{T}=\frac{1}{4\,\mathrm{s}}=0{,}25\,\mathrm{Hz}\). Daraus folgt für die Kreisfrequenz \(\omega = 2\pi \cdot f = 2\pi \cdot 0{,}25\,\mathrm{Hz} = \frac{\pi}{2} = 1{,}6\,\mathrm{s}^{-1}\).</figcaption>
     </figure>
@@ -652,7 +652,7 @@
     \end{pmatrix}
     \end{equation}
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegungen-axaydiagramm-winkelbeschl">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbewegungen_axaydiagramm_winkelbeschl.png" alt="">
         <figcaption>Diagramm der Bahnbeschleunigungskomponenten \(a_x(t)\) und \(a_y(t)\) eines Massenpunktes auf einer Kreisbahn bei veränderlicher Winkelgeschwindigkeit \(\omega(t)\). Im oberen Diagramm ist \(a_x(t)\), im unteren Diagramm \(a_y(t)\) dargestellt Die Winkelbeschleunigung \(\alpha(t)\) führt dazu, dass die Bahnbeschleunigungskomponenten \(a_x(t)\) und \(a_y(t)\) nicht mehr rein periodisch sind. Außerdem nehmen die Maximalwerte der Bahnbeschleunigungskomponenten mit der Zeit zu. Zu sehen ist außerdem, dass der Beschleunigungsvektor nicht mehr genau radial zum Mittelpunkt der Kreisbahn zeigt, sondern zusätzlich eine tangentiale Komponente besitzt.</figcaption>
     </figure>
@@ -676,12 +676,12 @@
 
     <p>Die Richtung der Tangentialbeschleunigung wird also nun bestimmt durch das Vorzeichen der Winkelbeschleunigung \(\alpha(t)\). Ist die Winkelbeschleunigung \(\alpha(t)\) positiv, so zeigt die Tangentialbeschleunigung in Richtung der Bahngeschwindigkeit \(\vec{v}(t)\), also in Richtung der Bewegung des Massenpunktes auf der Kreisbahn. Ist die Winkelbeschleunigung \(\alpha(t)\) negativ, so zeigt die Tangentialbeschleunigung entgegen der Bahngeschwindigkeit \(\vec{v}(t)\), also entgegen der Bewegung des Massenpunktes auf der Kreisbahn. Das ergibt Sinn: Steht ein Beschleunigungsvektor in Richtung der Bewegung, so beschleunigt er den Massenpunkt, steht er entgegen der Bewegung, so bremst er den Massenpunkt ab.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegungen-aratdiagramm-winkelbeschl">
         <img style="width:80%" class="grafik" src="bilder/skript_kreisbewegungen_aratdiagramm_winkelbeschl.png" alt="">
         <figcaption>Vergleich der Beträge der Tangentialbeschleunigung \(a_\text{t}(t)\) und der Zentripetalbeschleunigung \(a_\text{r}(t)\) eines Massenpunktes auf einer Kreisbahn bei veränderlicher Winkelgeschwindigkeit \(\omega(t)\). Während die Zentripetalbeschleunigung \(a_\text{r}(t)\) sich bei einer Kreisbewegung mit veränderlicher Winkelgeschwindigkeit \(\omega(t)\) auch immer ändert, bleibt die Tangentialbeschleunigung \(a_\text{t}(t)\) genau dann konstant, wenn die Winkelbeschleunigung \(\alpha(t)\) konstant ist, also \(\alpha(t)=\alpha\).</figcaption>
     </figure>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-beschl-minus">
         <div class="abbildung-sub-imgs">
             <div class="subfig" style="width:48%">
                 <img style="width:75%" class="grafik" src="bilder/skript_kreisbewegung_beschl_minus.svg" alt="">
@@ -700,7 +700,7 @@
 <section>
     <p>Analog zur translatorischen Bewegung hängen auch bei der Kreisbewegung die kinematischen Größen Winkel, Winkelgeschwindigkeit und Winkelbeschleunigung durch zeitliche Ableitung bzw. Integration zusammen. Von der Beschleunigung oder Geschwindigkeit gelangt man durch Integration zur jeweils „niedrigeren" Größe, wobei eine Integrationskonstante den Anfangswert (\(t=0\)) repräsentiert.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-kreis-kinematik-flowchart">
         <img style="width:85%" class="grafik" src="bilder/kreis_kinematik_flowchart.png" alt="Flowchart der Zusammenhänge der kinematischen Größen bei der Kreisbewegung" draggable="false">
         <figcaption>Zusammenhänge der kinematischen Größen bei der Kreisbewegung. Ableitungen führen nach rechts, Integrationen nach links. Die Bahngrößen sind direkt mit den skalaren Rotationsgrößen verknüpft. Es wurden die Abkürzungen \(\vec{e}_\text{t}\) für den tangentialen Einheitsvektor und \(\vec{e}_\text{r}\) für den radialen Einheitsvektor eingeführt.</figcaption>
     </figure>
@@ -743,9 +743,9 @@
         <p>Deshalb definieren wir nicht den Winkel \(\varphi\) als Vektor, sondern die <strong>infinitesimale Winkeländerung</strong> \(\mathrm{d}\vec{\varphi}\).</p>
     </div>
 
-    <p>Welche Richtung hat nun \(\mathrm{d}\vec \varphi\)? Jede Kreisbewegung findet ja in einer bestimmten Ebene im Raum statt (trifft das nicht zu, so handelt es sich nicht um eine Kreisbewegung, sondern z.B. um eine Schraubenbahn oder um eine noch kompliziertere geometrische Figur). Die Achse, die senkrecht auf dieser Ebene steht und durch den Mittelpunkt der Kreisbewegung verläuft, nennen wir die <strong>Drehachse</strong>. Diese Drehachse hat eine Richtung, die wir mit der sogenannten <strong>Korkenzieherregel</strong> beschreiben, siehe Abbildung 1.54.</p>
+    <p>Welche Richtung hat nun \(\mathrm{d}\vec \varphi\)? Jede Kreisbewegung findet ja in einer bestimmten Ebene im Raum statt (trifft das nicht zu, so handelt es sich nicht um eine Kreisbewegung, sondern z.B. um eine Schraubenbahn oder um eine noch kompliziertere geometrische Figur). Die Achse, die senkrecht auf dieser Ebene steht und durch den Mittelpunkt der Kreisbewegung verläuft, nennen wir die <strong>Drehachse</strong>. Diese Drehachse hat eine Richtung, die wir mit der sogenannten <strong>Korkenzieherregel</strong> beschreiben, siehe <a class="xref" data-ref-fig="fig-right-hand-grip-rule">Abbildung 1.54</a>.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-right-hand-grip-rule">
         <img style="width:25%" class="grafik" src="bilder/Right-hand_grip_rule.png" alt="">
         <figcaption>Korkenzieherregel – die Richtung der Drehachse ist durch die Korkenzieherregel bestimmt. Dabei hält man die rechte Hand so, dass die gekrümmten Finger in Richtung der Winkeländerung zeigen. Dann zeigt der Daumen die Richtung der Drehachse an. Eine Winkeländerung im Uhrzeigersinn führt dazu, dass die Hand so gehalten werden muss, dass die gekrümmten Finger nach unten zeigen, eine Winkeländerung gegen den Uhrzeigersinn bedingt eine Handhaltung, die die gekrümmten Finger nach oben zeigen.<span class="bildquelle">Bildquelle: Wizard191, Wikimedia Commons, Public Domain.</span></figcaption>
     </figure>
@@ -817,13 +817,13 @@
         <p>Dies ist exakt die skalare Beziehung, die wir bereits hergeleitet hatten. Der Betrag ist also korrekt.</p>
     </div>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-flemings-right-hand-rule">
         <img style="width:60%" class="grafik" src="bilder/Flemings_right_hand_rule.png" alt="">
         <figcaption>Historische Analogie zur Vektordarstellung der Drehung: die Rechte-Hand-Regel nach Fleming aus der Elektrodynamik. Sie wurde ursprünglich genutzt, um den Zusammenhang zwischen der <strong>Bewegung</strong> eines Leiters (Daumen), der Richtung des <strong>Magnetfeldes</strong> (Zeigefinger) und der Richtung des induzierten elektrischen <strong>Stromes</strong> (Mittelfinger) zu beschreiben. Das zugrundeliegende mathematische Prinzip – die Beschreibung der Orientierung dreier zueinander senkrecht stehender Vektoren – ist jedoch identisch mit unserer Anwendung in der Kinematik. Wir nutzen es, um den Zusammenhang zwischen dem Vektor der Winkeländerung (\(\mathrm{d}\vec{\varphi}\)) (Daumen), dem Ortsvektor (\(\vec{r}\)) (Zeigefinger) und der daraus resultierenden tangentialen Verschiebung (\(\mathrm{d}\vec{r}\)) (Mittelfinger) zu bestimmen. Allgemein gilt beim Kreuzprodukt \(\vec c = \vec a \times \vec b\): Der Daumen zeigt in die Richtung des ersten Vektors \(\vec a\), der Zeigefinger zeigt in die Richtung des zweiten Vektors \(\vec b\), und der Mittelfinger zeigt in die Richtung des resultierenden Vektors \(\vec c\).<span class="bildquelle">Bildquelle: Fleming, J. A., Wikimedia Commons, public domain.</span></figcaption>
     </figure>
 
     <div class="bemerkung" data-title="Überprüfung der Richtung">
-        <p>Die Richtung des aus dem Kreuzprodukt resultierenden Vektors wird durch die Rechte-Hand-Regel bestimmt, siehe Abbildung 1.55. Um die Konsistenz zu prüfen, stellen wir uns ein konkretes Szenario vor:</p>
+        <p>Die Richtung des aus dem Kreuzprodukt resultierenden Vektors wird durch die Rechte-Hand-Regel bestimmt, siehe <a class="xref" data-ref-fig="fig-flemings-right-hand-rule">Abbildung 1.55</a>. Um die Konsistenz zu prüfen, stellen wir uns ein konkretes Szenario vor:</p>
         <p>Eine Punktmasse bewegt sich auf einer Kreisbahn in der \(x\)-\(y\)-Ebene gegen den Uhrzeigersinn (im mathematisch positiven Sinn).</p>
         <ul>
             <li>Gemäß der Korkenzieherregel zeigt der Vektor der Winkeländerung in diesem Fall in die positive \(z\)-Richtung: \(\mathrm{d}\vec{\varphi}\) ist parallel zur \(z\)-Achse.</li>
@@ -844,7 +844,7 @@
         {\mathrm{d}\vec{r} = \mathrm{d}\vec{\varphi} \times \vec{r}}
     \end{equation}
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-dphi-dr">
         <img style="width:40%" class="grafik" src="bilder/skript_kreisbewegung_dphi_dr.png" alt="">
         <figcaption>Abbildung zur Veranschaulichung der Beziehung zwischen der <span style="color:#1555a2">infinitesimalen Winkeländerung \(\mathrm{d}\vec{\varphi}\) (in blau)</span> und der <span style="color:#f47a2d">infinitesimalen Ortsänderung \(\mathrm{d}\vec{r}\) (in orange)</span> bei einer Kreisbewegung. Der Vektor \(\mathrm{d}\vec{\varphi}\) steht senkrecht auf der Bewegungsebene und zeigt entlang der Drehachse, während \(\mathrm{d}\vec{r}\) tangential zur Kreisbahn verläuft. Der <span style="color:#474747">Ortsvektor \(\vec r\) (in grau) zeigt vom Ursprung zur Masse auf die Kreisbahn.</span> Das Kreuzprodukt \(\mathrm{d}\vec{\varphi} \times \vec{r}\) ergibt die korrekte Richtung und den korrekten Betrag von \(\mathrm{d}\vec{r}\). Beachten Sie, dass die Vektoren \(\mathrm{d}\vec{\varphi}\) und \(\mathrm{d}\vec{r}\) natürlich stark übertrieben dargestellt sind, um die geometrischen Beziehungen zu verdeutlichen. Diese Vektoren sind in Wirklichkeit infinitesimal klein.</figcaption>
     </figure>
@@ -879,7 +879,7 @@
 
 <h3 class="inhaltsverzeichnis">1.4.8 Winkelgeschwindigkeit als Vektor</h3>
 <section>
-    <p>Wir hatten im Abschnitt 1.4.5 die Winkelgeschwindigkeit \(\omega(t)\) als skalare Funktion der Zeit \(t\) betrachtet. Da wir im Abschnitt 1.4.7 den Vektor der Winkeländerung \(\mathrm{d}\vec{\varphi}\) eingeführt haben, ist es sinnvoll, auch die Winkelgeschwindigkeit als Vektor zu betrachten.</p>
+    <p>Wir hatten im <a class="xref" data-ref-sec="p-1-4-5">Abschnitt 1.4.5</a> die Winkelgeschwindigkeit \(\omega(t)\) als skalare Funktion der Zeit \(t\) betrachtet. Da wir im <a class="xref" data-ref-sec="p-1-4-7">Abschnitt 1.4.7</a> den Vektor der Winkeländerung \(\mathrm{d}\vec{\varphi}\) eingeführt haben, ist es sinnvoll, auch die Winkelgeschwindigkeit als Vektor zu betrachten.</p>
 
     <p>Der Zusammenhang zwischen dem infinitesimalen Wegstück \(\mathrm{d}\vec{r}\) und der infinitesimalen Winkeländerung \(\mathrm{d}\vec{\varphi}\) haben wir ausgedrückt durch:</p>
 
@@ -913,7 +913,7 @@
 
     <p>Das bedeutet: ganz allgemein ist die Bahngeschwindigkeit eines Massenpunktes auf einer Kreisbahn gegeben durch das Kreuzprodukt der vektoriellen Winkelgeschwindigkeit \(\vec{\omega}(t)\) und dem Ortsvektor \(\vec{r}(t)\). Aus den Eigenschaften des Kreuzproduktes folgt, dass es für den Ortsvektor \(\vec r\) egal ist, ob der Ursprung des Koordinatensystems im Mittelpunkt der Kreisbahn liegt oder ob der Ursprung nach oben oder unten verschoben ist, zum Kreuzprodukt trägt immer nur die Komponente bei, die in der Bewegungsebene liegt.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-dphi-dr">
         <div class="abbildung-sub-imgs">
             <div class="subfig" style="width:48%">
                 <img style="width:90%" class="grafik" src="bilder/skript_kreisbewegung_dphi_dr.png" alt="">
@@ -924,7 +924,7 @@
                 <div class="subcap">(b) Winkelgeschwindigkeit in negativer z-Richtung führt zu einer Bewegung im Uhrzeigersinn.</div>
             </div>
         </div>
-        <figcaption>Abbildung zur Veranschaulichung der Beziehung \(\vec v = \vec \omega \times \vec{r}\). Der <span style="color:#1555a2">Vektor der Winkelgeschwindigkeit (in Blau) \(\vec \omega\)</span> steht senkrecht auf der Bewegungsebene und zeigt entlang der Drehachse. Das Kreuzprodukt mit dem <span style="color:#474747">Ortsvektor (in Grau) \(\vec{r}\)</span> ergibt die <span style="color:#f47a2d">tangentiale Geschwindigkeit (in Orange) \(\vec v\)</span>. Die Abbildungen sind sehr ähnlich zu Abbildung 1.56, da \(\vec \omega\) und \(\mathrm{d}\vec{\varphi}\) sowie \(\vec v\) und \(\mathrm{d}\vec{r}\) in die gleiche Richtung zeigen. Die Richtung von \(\vec \omega\) bestimmt die Drehrichtung der Kreisbewegung.</figcaption>
+        <figcaption>Abbildung zur Veranschaulichung der Beziehung \(\vec v = \vec \omega \times \vec{r}\). Der <span style="color:#1555a2">Vektor der Winkelgeschwindigkeit (in Blau) \(\vec \omega\)</span> steht senkrecht auf der Bewegungsebene und zeigt entlang der Drehachse. Das Kreuzprodukt mit dem <span style="color:#474747">Ortsvektor (in Grau) \(\vec{r}\)</span> ergibt die <span style="color:#f47a2d">tangentiale Geschwindigkeit (in Orange) \(\vec v\)</span>. Die Abbildungen sind sehr ähnlich zu <a class="xref" data-ref-fig="fig-skript-kreisbewegung-dphi-dr">Abbildung 1.56</a>, da \(\vec \omega\) und \(\mathrm{d}\vec{\varphi}\) sowie \(\vec v\) und \(\mathrm{d}\vec{r}\) in die gleiche Richtung zeigen. Die Richtung von \(\vec \omega\) bestimmt die Drehrichtung der Kreisbewegung.</figcaption>
     </figure>
 
     <div class="aufgabe" data-title="Kettenkarussell">
@@ -972,7 +972,7 @@
 
     <p>Damit ist auch der Betrag der Zentripetalbeschleunigung \(\vec a_{ZP}(t)\) korrekt.</p>
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-zentripetalkreuz2">
         <div class="abbildung-sub-imgs">
             <div class="subfig" style="width:48%">
                 <img style="width:90%" class="grafik" src="bilder/skript_kreisbewegung_zentripetalkreuz2.png" alt="">
@@ -989,13 +989,13 @@
 
 <h3 class="inhaltsverzeichnis">1.4.9 Die Winkelbeschleunigung als Vektor</h3>
 <section>
-    <p>Analog zur skalaren Definition der Winkelbeschleunigung im Abschnitt 1.4.5 können wir auch die Winkelbeschleunigung als Vektor definieren. Die Winkelbeschleunigung \(\vec \alpha(t)\) ist definiert als die zeitliche Ableitung der Winkelgeschwindigkeit \(\vec \omega(t)\):</p>
+    <p>Analog zur skalaren Definition der Winkelbeschleunigung im <a class="xref" data-ref-sec="p-1-4-5">Abschnitt 1.4.5</a> können wir auch die Winkelbeschleunigung als Vektor definieren. Die Winkelbeschleunigung \(\vec \alpha(t)\) ist definiert als die zeitliche Ableitung der Winkelgeschwindigkeit \(\vec \omega(t)\):</p>
 
     \begin{equation}
     \vec \alpha(t) = \frac{\mathrm{d}\vec \omega(t)}{\mathrm{d}t}
     \end{equation}
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-alphavecpos">
         <div class="abbildung-sub-imgs">
             <div class="subfig" style="width:49.5%">
                 <img style="width:99%" class="grafik" src="bilder/skript_kreisbewegung_alphavecpos.png" alt="">
@@ -1011,7 +1011,7 @@
 
     <p>Die Richtung der Winkelbeschleunigung \(\vec \alpha(t)\) ist die gleiche wie die Richtung der (vektoriellen) Winkelgeschwindigkeit, also die Richtung der Drehachse. Der Vektor der Winkelbeschleunigung kann also parallel oder antiparallel zur Winkelgeschwindigkeit \(\vec \omega(t)\) sein. Das Vorzeichen der Winkelbeschleunigung \(\vec \alpha(t)\) gibt an, ob die Winkelgeschwindigkeit \(\vec \omega(t)\) zunimmt oder abnimmt. Ist \(\vec \alpha(t)\) positiv, so nimmt die Winkelgeschwindigkeit \(\vec \omega(t)\) zu, ist \(\vec \alpha(t)\) negativ, so nimmt die Winkelgeschwindigkeit \(\vec \omega(t)\) ab.</p>
 
-    <p>Nun wollen wir den Zusammenhang zwischen der vektoriellen Winkelbeschleunigung \(\vec \alpha(t)\) und der Bahnbeschleunigung \(\vec a(t)\) untersuchen. Wir hatten im Abschnitt 1.4.5 die Bahnbeschleunigung \(\vec a(t)\) in zwei Komponenten zerlegt:</p>
+    <p>Nun wollen wir den Zusammenhang zwischen der vektoriellen Winkelbeschleunigung \(\vec \alpha(t)\) und der Bahnbeschleunigung \(\vec a(t)\) untersuchen. Wir hatten im <a class="xref" data-ref-sec="p-1-4-5">Abschnitt 1.4.5</a> die Bahnbeschleunigung \(\vec a(t)\) in zwei Komponenten zerlegt:</p>
 
     \begin{equation}
     \vec a(t) = \vec a_\text{Tangential}(t) + \vec a_\text{ZP}(t)= \alpha(t) \cdot R \cdot \begin{pmatrix}
@@ -1020,7 +1020,7 @@
     \end{pmatrix}+\vec a_\text{ZP}(t)
     \end{equation}
 
-    <p>Die Zentripetalbeschleunigung \(\vec a_\text{ZP}(t)\) hatten wir schon im Abschnitt 1.4.3 genauer untersucht. Wir widmen uns nun dem anderen Term, der Tangentialbeschleunigung \(\vec a_\text{Tangential}(t)\). Wir bedienen uns dabei einer Analogie: für den Zusammenhang zwischen Bahngeschwindigkeit \(\vec v(t)\) und der Winkelgeschwindigkeit \(\vec \omega(t)\) haben wir gefunden:</p>
+    <p>Die Zentripetalbeschleunigung \(\vec a_\text{ZP}(t)\) hatten wir schon im <a class="xref" data-ref-sec="p-1-4-3">Abschnitt 1.4.3</a> genauer untersucht. Wir widmen uns nun dem anderen Term, der Tangentialbeschleunigung \(\vec a_\text{Tangential}(t)\). Wir bedienen uns dabei einer Analogie: für den Zusammenhang zwischen Bahngeschwindigkeit \(\vec v(t)\) und der Winkelgeschwindigkeit \(\vec \omega(t)\) haben wir gefunden:</p>
 
     \begin{equation}
     \vec v(t) = \vec \omega(t) \times \vec r(t)
@@ -1049,7 +1049,7 @@
     \end{pmatrix}
     \end{align}
 
-    <figure class="abbildung">
+    <figure class="abbildung" id="fig-skript-kreisbewegung-hoeheiso">
         <img style="width:40%" class="grafik" src="bilder/skript_kreisbewegung_hoeheiso.png" alt="">
         <figcaption>Visualisierung der relevanten Vektoren bei einer Kreisbewegung in einer Ebene oberhalb der x-y-Ebene. Der Ortsvektor \(\vec r\) (in Grau) zeigt vom Ursprung zum Massenpunkt auf der Kreisbahn und hat die Höhe \(h\) als z-Komponente. Liegen \(\vec \alpha\) und \(\vec \omega\) auch in \(z\)-Richtung, so beeinflusst die Höhe \(h\) weder die Richtung der Bahngeschwindigkeit \(\vec v\) noch die der Zentripetalbeschleunigung \(\vec a_{ZP}\) noch die der Tangentialbeschleunigung \(\vec a_{T}\).</figcaption>
     </figure>
