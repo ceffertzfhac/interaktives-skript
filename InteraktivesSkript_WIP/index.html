@@ -39,7 +39,12 @@
               processEnvironments: true,   // \begin{equation}/\begin{align} auch ohne $$/\[\]-Wrapper erkennen (Default)
               processRefs: true,            // \ref/\eqref auch außerhalb des Math-Modus (Default)
               tagformat: {
-                number: (n) => '1.4.' + n,
+                // Kein festes Praefix mehr: numbering.js::renumber_equations()
+                // baut nach dem ersten Typeset die Zuordnung "laufende
+                // MathJax-Nummer -> 1.4.3" auf (pro Abschnitt neu zaehlend, wie
+                // v0.13s \numberwithin{equation}{section}) und loest einen
+                // zweiten Lauf aus. Bis dahin steht die laufende Nummer da.
+                number: (n) => (window.eq_tag_map && window.eq_tag_map[n]) || String(n),
                 tag:   (tag) => '(' + tag + ')',
                 id:    (id)  => 'eq-' + id
               }

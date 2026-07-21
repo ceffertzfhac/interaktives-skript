@@ -186,14 +186,21 @@ export function test(){
 // numbering.js injizierten .eq-number-Badges weg -- window.renumber_equations
 // (Bruecke statt Import, s. numbering.js) stellt sie danach wieder her.
 export function reload_mathjax(){
-    if (window.MathJax && MathJax.typesetPromise) {
-        MathJax.typesetPromise().then(() => {
-            if (window.renumber_equations) window.renumber_equations();
-            // Formelverweise (<a data-ref-eq>) zeigen erst nach dem Typeset die
-            // richtige Nummer -- MathJax vergibt sie beim Rendern.
-            if (window.resolve_eq_refs) window.resolve_eq_refs();
-        });
-    }
+    if (!(window.MathJax && MathJax.typesetPromise)) return Promise.resolve();
+    return MathJax.typesetPromise().then(() => {
+        // Nach dem ersten Lauf steht fest, wie viele nummerierte Zeilen auf
+        // welcher Seite liegen -> Zuordnung "laufende Nummer -> 1.4.3" bauen
+        // (window-Bruecke statt Import, s. numbering.js). Aendert sie sich,
+        // ist ein zweiter Lauf noetig, der die Nummern einsetzt; danach ist
+        // sie stabil, also genau ein Nachlauf.
+        if (window.renumber_equations && window.renumber_equations()) {
+            return MathJax.typesetPromise();
+        }
+    }).then(() => {
+        // Formelverweise (<a data-ref-eq>) zeigen erst nach dem Typeset die
+        // richtige Nummer -- MathJax vergibt sie beim Rendern.
+        if (window.resolve_eq_refs) window.resolve_eq_refs();
+    });
 }
 export function toggle_darkmode(){
     darkmode_on = !darkmode_on;

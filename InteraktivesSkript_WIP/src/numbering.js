@@ -187,6 +187,41 @@ function resolveSecRefs() {
     });
 }
 
+// ── Formelnummern pro Abschnitt ─────────────────────────────────────────────
+// v0.13 nummeriert Gleichungen mit \numberwithin{equation}{section}, zaehlt
+// also pro Abschnitt neu. MathJax zaehlt dagegen dokumentweit durch und kennt
+// beim Formatieren einer Nummer keinen Kontext: tagformat.number(n) bekommt
+// nur die laufende Nummer. Ein festes Praefix funktioniert daher nur, solange
+// genau ein Abschnitt im Dokument steht.
+//
+// Zwei Wege wurden verworfen, beide nachgemessen:
+//   * \setcounter{equation}{0} im Text -- MathJax ignoriert es stillschweigend.
+//   * tags.reset(0) zwischen Teil-Typesets -- setzt zwar den Zaehler zurueck,
+//     loescht aber allLabels/allIds, womit alle \ref-Verweise verlieren.
+//
+// Stattdessen zwei Durchgaenge: Nach dem ersten Typeset steht im DOM je
+// nummerierter Zeile ein [data-mml-node="mlabeledtr"] -- MathJax' eigene
+// Markierung, die auch mehrzeilige align-Umgebungen korrekt einzeln zaehlt.
+// Daraus wird die Zuordnung "laufende Nummer -> 1.4.3" gebaut; ein zweiter
+// Lauf setzt sie ein. Der zweite Lauf aendert die Zeilenzahl nicht, die
+// Zuordnung bleibt gleich -> kein weiterer Durchgang (keine Endlosschleife).
+export function renumber_equations() {
+    const pages = getPages();
+    const map = [];            // Index = laufende MathJax-Nummer (ab 1)
+    let laufend = 0, section = null, lokal = 0;
+    pages.forEach((page, i) => {
+        const prefix = sectionPrefix(page, i);
+        if (prefix !== section) { section = prefix; lokal = 0; }
+        page.el.querySelectorAll('[data-mml-node="mlabeledtr"]').forEach(() => {
+            laufend++; lokal++;
+            map[laufend] = prefix + '.' + lokal;
+        });
+    });
+    const vorher = JSON.stringify(window.eq_tag_map || null);
+    window.eq_tag_map = map;
+    return JSON.stringify(map) !== vorher;   // true -> zweiter Typeset noetig
+}
+
 export function resolve_eq_refs() {
     const links = document.querySelectorAll('a[data-ref-eq]');
     if (!links.length) return;
@@ -243,3 +278,4 @@ export function init_numbering() {
 // erneut aufloesen -- ein Import wuerde den Zyklus core->numbering->pages->core
 // erzeugen (gleiches Muster wie update_all/window.updateN).
 window.resolve_eq_refs = resolve_eq_refs;
+window.renumber_equations = renumber_equations;
