@@ -185,16 +185,34 @@ export function test(){
 // Re-Typeset baut jede <mjx-container> neu auf und wirft damit die von
 // numbering.js injizierten .eq-number-Badges weg -- window.renumber_equations
 // (Bruecke statt Import, s. numbering.js) stellt sie danach wieder her.
+// Vollstaendiges Neu-Setzen. Wichtig: ein blosses typesetPromise() rendert
+// nur NEU hinzugekommene Mathematik -- bereits gesetzte Formeln laesst es
+// unberuehrt. Fuer ein echtes Re-Rendering muss der Dokumentzustand
+// zurueckgesetzt werden (document.state(0)); texReset() setzt zusaetzlich den
+// Gleichungszaehler auf 0, damit die laufenden Nummern wieder bei 1 beginnen
+// und zur Zuordnung aus renumber_equations() passen. Ohne texReset zaehlte
+// der zweite Lauf bei 89 weiter, die Zuordnung griff ins Leere und der zweite
+// Abschnitt lief mit fortlaufenden Nummern statt bei 1.5.1 weiter.
+function typeset_alles() {
+    // Laufindex fuer tagformat.number (s. index.html) vor jedem Lauf auf null.
+    window.eq_run_index = 0;
+    if (MathJax.startup && MathJax.startup.document && MathJax.startup.document.state) {
+        MathJax.startup.document.state(0);
+    }
+    if (MathJax.texReset) MathJax.texReset();
+    return MathJax.typesetPromise();
+}
+
 export function reload_mathjax(){
     if (!(window.MathJax && MathJax.typesetPromise)) return Promise.resolve();
-    return MathJax.typesetPromise().then(() => {
+    return typeset_alles().then(() => {
         // Nach dem ersten Lauf steht fest, wie viele nummerierte Zeilen auf
         // welcher Seite liegen -> Zuordnung "laufende Nummer -> 1.4.3" bauen
         // (window-Bruecke statt Import, s. numbering.js). Aendert sie sich,
         // ist ein zweiter Lauf noetig, der die Nummern einsetzt; danach ist
         // sie stabil, also genau ein Nachlauf.
         if (window.renumber_equations && window.renumber_equations()) {
-            return MathJax.typesetPromise();
+            return typeset_alles();
         }
     }).then(() => {
         // Formelverweise (<a data-ref-eq>) zeigen erst nach dem Typeset die
