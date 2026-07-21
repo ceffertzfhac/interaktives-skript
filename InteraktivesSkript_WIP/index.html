@@ -31,7 +31,10 @@
               // sondern auch als Paket aktiviert werden -- sonst bleibt
               // tagformat wirkungslos und die Tags erscheinen als "(1)"
               // statt "(1.4.1)". color liefert \textcolor in Formeln.
-              packages: {'[+]': ['tagformat', 'color']},
+              // physics liefert die v0.13-Makros \dd, \eval, \abs, \norm …
+              // (die Quelle laedt \usepackage{physics}) -- ohne das Paket
+              // muesste jede Fundstelle von Hand ersetzt werden.
+              packages: {'[+]': ['tagformat', 'color', 'physics']},
               tags: 'ams',
               inlineMath: [['\\(', '\\)']],
               displayMath: [['$$', '$$'], ['\\[', '\\]']],
@@ -49,7 +52,7 @@
                 id:    (id)  => 'eq-' + id
               }
             },
-            loader: { load: ['[tex]/tagformat', '[tex]/color'] }
+            loader: { load: ['[tex]/tagformat', '[tex]/color', '[tex]/physics'] }
           };
         </script>
         <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-svg.js"></script>
@@ -180,6 +183,7 @@
                 </aside>
                 <div id="paper">
                     <div data-chapter="ch_01_kreisbewegungen"></div>
+                    <div data-chapter="ch_02_dynamik_drehbewegung"></div>
                     <div class="chapter-pagenav">
                         <button type="button" id="chapter_prev_btn" data-action="chapter_prev">‹ Zurück</button>
                         <button type="button" id="chapter_next_btn" data-action="chapter_next">Weiter ›</button>
