@@ -45,6 +45,23 @@ function renderMarginalia(page) {
     });
 }
 
+// Seitenregister in Abschnitte gruppieren: jede h2-Seite eroeffnet einen
+// Abschnitt, die folgenden h3-Seiten gehoeren dazu. Schiene und Kopfleiste
+// nutzen dieselbe Gruppierung.
+function sectionsOf() {
+    const sections = [];
+    getPages().forEach(p => {
+        if (p.level === 'h2') sections.push({ page: p, children: [] });
+        else if (sections.length) sections[sections.length - 1].children.push(p);
+    });
+    return sections;
+}
+
+// Abschnitt, in dem die uebergebene Seite liegt (Kapitel-Intro eingeschlossen).
+function activeSection(sections, page) {
+    return sections.find(s => s.page === page || s.children.indexOf(page) >= 0) || null;
+}
+
 // "Auf dieser Seite": Sprungmarken zu Highlight-Boxen + Grafiken der aktiven
 // Seite. Highlight-Boxen tragen nach generate_highlight_boxes() bereits einen
 // Titel (.highlight_box_title); Grafiken bekommen ihren Sektionstitel als Label.
@@ -99,16 +116,10 @@ function renderRailInto(container, page) {
     // eine Zeile; nur der aktive Abschnitt klappt seine Unterabschnitte (h3)
     // aus. So bleibt die Schiene bei 15+ Kapiteln lesbar, und die Nachbarn
     // ("1.3 …", "1.5 …") sind einen Klick entfernt, ohne die Liste zu fluten.
-    const pages = getPages();
-    const sections = [];
-    pages.forEach(p => {
-        if (p.level === 'h2') sections.push({ page: p, children: [] });
-        else if (sections.length) sections[sections.length - 1].children.push(p);
-    });
+    const sections = sectionsOf();
     if (sections.length === 0) return;
     const current = getCurrentPage();
-    const active = sections.find(s => s.page === current || s.children.indexOf(current) >= 0)
-                   || sections[0];
+    const active = activeSection(sections, current) || sections[0];
 
     const chBlock = document.createElement('div');
     chBlock.className = 'rail-block rail-chapter';
@@ -165,9 +176,29 @@ function renderAppbar(page) {
         crumbChapter.textContent = chapterPage.title;
     }
     if (crumbCurrent) crumbCurrent.textContent = page ? page.title : '';
-    const idx = getCurrentIndex() + 1;
-    if (progress) progress.textContent = 'Seite ' + idx + '/' + pages.length;
-    if (progressBar) progressBar.style.width = Math.round((idx / pages.length) * 100) + '%';
+    // Fortschritt kapitelrelativ, nicht dokumentweit: eine "Seite" ist hier ein
+    // Unterabschnitt, davon hat ein Kapitel gut ein Dutzend -- eine Groesse, die
+    // man als Fortschritt erlebt. Dokumentweit waere die Zahl bei 15+ Kapiteln
+    // nicht nur entmutigend, sondern auch instabil: jeder nachtraeglich
+    // migrierte Abschnitt verschoebe alle folgenden Seitenzahlen. Der Ort im
+    // Buch steht ohnehin in der Krume und in der Schiene. Der Gesamtstand
+    // bleibt als title/aria-label abrufbar, ohne eine zweite Zahl zu zeigen.
+    const sections = sectionsOf();
+    const active = activeSection(sections, page);
+    const seiten = active ? [active.page].concat(active.children) : pages;
+    const pos = Math.max(0, seiten.indexOf(page)) + 1;
+    if (progress) progress.textContent = pos + ' / ' + seiten.length;
+    if (progressBar) {
+        progressBar.style.width = Math.round((pos / seiten.length) * 100) + '%';
+        const box = progressBar.closest('.chapter-progress');
+        if (box) {
+            const nr = active ? sections.indexOf(active) + 1 : 1;
+            box.title = 'Seite ' + pos + ' von ' + seiten.length + ' in diesem Abschnitt'
+                + '  ·  Abschnitt ' + nr + ' von ' + sections.length
+                + '  ·  insgesamt Seite ' + (getCurrentIndex() + 1) + ' von ' + pages.length;
+            box.setAttribute('aria-label', box.title);
+        }
+    }
 }
 
 function renderPrevNext(page) {
