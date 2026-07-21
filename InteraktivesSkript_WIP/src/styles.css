@@ -1459,11 +1459,14 @@ input[type="range"]::-moz-range-track {
 .chapter-crumb #chapter_crumb_current { font-size: 0.85em; color: var(--ink); font-weight: 600; }
 .chapter-crumb .crumb-toc-icon {
     flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+    /* So hoch wie der zweizeilige Krumen-Block: 0.72em + 0.85em Schriftgroesse
+       bei line-height 1.25 ergeben rund 1.95em. In em statt px, damit das Icon
+       der Textgroessen-Einstellung folgt. */
+    width: 1.95em;
+    height: 1.95em;
     fill: none;
     stroke: var(--ink-3);
-    stroke-width: 1.8;
+    stroke-width: 1.6;
     stroke-linecap: round;
 }
 .chapter-crumb:hover .crumb-toc-icon { stroke: var(--teal-darker); }
