@@ -14,6 +14,7 @@ import { paginate } from './pages.js';
 import { init_shell, toggle_drawer, close_drawer, chapter_prev, chapter_next, goto_page } from './shell.js';
 import { init_figure_panels, toggle_panel } from './figures/panels.js';
 import { init_numbering } from './numbering.js';
+import { loadChapters, typesetAfterLoad } from './chapters.js';
 
 // Figuren laden (Seiteneffekt: Registrierung von updateN/animateN/clearN).
 import './figures/fig_1.js';
@@ -84,10 +85,14 @@ function dispatch_click(e) {
     }
 }
 
-function init() {
+async function init() {
     bind_events();
     init_text_size_controls();
     init_width_mode();
+    // Kapitel-Fragmente holen + injizieren + flachen, BEVOR irgendetwas auf
+    // den Kapitel-DOM loslaeuft (highlight boxes, paginate, toc, shell,
+    // figure panels, numbering). await, damit die Injektion steht.
+    await loadChapters();
     generate_highlight_boxes();
     safari_bug();
     // paginate() muss vor generate_toc()/init_shell() laufen: beide lesen das
@@ -97,6 +102,9 @@ function init() {
     init_shell();
     init_figure_panels();
     init_numbering();
+    // Injizierte Formeln re-typesetzen, sobald MathJax bereit ist (Gate wie
+    // numbering.js). renumber laeuft ueber reload_mathjax mit.
+    typesetAfterLoad();
     offsetAnchor();
     make_static();
     if(interaktiv) {
