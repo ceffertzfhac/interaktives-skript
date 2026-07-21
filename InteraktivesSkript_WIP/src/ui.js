@@ -49,7 +49,9 @@ export function zoom(parent_gc) {
 
     target_div.setAttribute("style","transform: scale("+zoom_faktor+");");
     ge("zoom").setAttribute("style","width: " + (zoom_faktor*tw+20) + "px;height: " + (zoom_faktor*th+20) + "px;");
-    document.querySelector(".zoom_button").classList.add("zoom_minimize");
+    const zb = document.querySelector(".zoom_button");
+    zb.classList.add("zoom_minimize");
+    zb.setAttribute("aria-label", "Abbildung verkleinern");
 
 
 }

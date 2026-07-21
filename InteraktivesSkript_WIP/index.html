@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +19,7 @@
             <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation">☰</button>
             <div id="header_brand">
                 <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
-                <span id="span_title">Interaktives Skript <span id="header_version">v1.5</span></span>
+                <span id="span_title">Interaktives Skript <span id="header_version">v1.6</span></span>
             </div>
             <div id="header_divider"></div>
             <div class="chapter-crumb">
@@ -31,9 +31,9 @@
             <div id="header_spacer"></div>
 
             <div id="toolbar">
-                <div class="navbar_button" data-action="toc">Inhaltsverzeichnis</div>
-                <div class="navbar_button" data-action="init_print">Drucken</div>
-                <div class="navbar_button" data-action="kontakt">Kontakt</div>
+                <button type="button" class="navbar_button" data-action="toc">Inhaltsverzeichnis</button>
+                <button type="button" class="navbar_button" data-action="init_print">Drucken</button>
+                <button type="button" class="navbar_button" data-action="kontakt">Kontakt</button>
             </div>
             <div id="text_size_controls" aria-label="Textgroesse links">
                 <button type="button" id="text_size_minus" class="text_size_button" data-action="adjust_text_size" data-step="-1">A-</button>
@@ -45,7 +45,7 @@
                 <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="normal">Normal</button>
                 <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="breit">Extrabreit</button>
             </div>
-            <div class="darkmode_icon" data-action="toggle_darkmode"></div>
+            <button type="button" class="darkmode_icon" data-action="toggle_darkmode" aria-label="Darkmode umschalten"></button>
 
             <div class="chapter-progress">
                 <div class="chapter-progress-track"><span id="chapter_progress_bar"></span></div>
