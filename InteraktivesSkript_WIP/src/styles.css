@@ -1457,7 +1457,16 @@ input[type="range"]::-moz-range-track {
 .chapter-crumb #chapter_crumb_current { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chapter-crumb #chapter_crumb_chapter { font-size: 0.72em; color: var(--ink-3); }
 .chapter-crumb #chapter_crumb_current { font-size: 0.85em; color: var(--ink); font-weight: 600; }
-.chapter-crumb .crumb-caret { flex-shrink: 0; font-size: 0.7em; color: var(--ink-3); }
+.chapter-crumb .crumb-toc-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: var(--ink-3);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+}
+.chapter-crumb:hover .crumb-toc-icon { stroke: var(--teal-darker); }
 .chapter-progress {
     display: flex;
     align-items: center;
@@ -1482,6 +1491,24 @@ input[type="range"]::-moz-range-track {
 
 /* ── Rail (links): "Auf dieser Seite" + Kapitel-Mininav ─────────────────── */
 #chapter_rail_desktop, #chapter_drawer_panel { text-align: left; }
+/* Abschnittszeile in der Schiene: etwas kraeftiger als die Unterabschnitte,
+   der aktive Abschnitt (.open) zusaetzlich abgesetzt -- darunter haengen
+   eingerueckt seine Unterabschnitte (s. shell.js). */
+.rail-sectionlink {
+    display: block;
+    padding: 7px 10px;
+    margin-top: 4px;
+    border-radius: 7px;
+    font-size: 0.84em;
+    font-weight: 600;
+    color: var(--ink-2);
+    text-decoration: none;
+    text-align: left;
+}
+.rail-sectionlink:hover { background: var(--surface-3); text-decoration: none; }
+.rail-sectionlink.open { color: var(--teal-darker); }
+.rail-sectionlink.current { background: var(--teal-tint); color: var(--teal-darker); }
+.rail-chapternav .rail-chapterlink { padding-left: 22px; }
 .rail-block { margin-bottom: 22px; }
 .rail-heading {
     font-size: 0.68em;

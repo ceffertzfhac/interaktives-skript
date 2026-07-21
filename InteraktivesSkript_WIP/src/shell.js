@@ -95,27 +95,53 @@ function renderRailInto(container, page) {
     onPage.appendChild(nav);
     container.appendChild(onPage);
 
-    const chapterPages = getPages().filter(p => p.level === 'h3');
-    if (chapterPages.length === 0) return;
+    // Abschnittsnavigation: alle Abschnitte (h2) in Dokumentreihenfolge als je
+    // eine Zeile; nur der aktive Abschnitt klappt seine Unterabschnitte (h3)
+    // aus. So bleibt die Schiene bei 15+ Kapiteln lesbar, und die Nachbarn
+    // ("1.3 …", "1.5 …") sind einen Klick entfernt, ohne die Liste zu fluten.
+    const pages = getPages();
+    const sections = [];
+    pages.forEach(p => {
+        if (p.level === 'h2') sections.push({ page: p, children: [] });
+        else if (sections.length) sections[sections.length - 1].children.push(p);
+    });
+    if (sections.length === 0) return;
+    const current = getCurrentPage();
+    const active = sections.find(s => s.page === current || s.children.indexOf(current) >= 0)
+                   || sections[0];
+
     const chBlock = document.createElement('div');
     chBlock.className = 'rail-block rail-chapter';
-    const chTitle = getPages()[0] ? getPages()[0].title.replace(/^[0-9.]+\s*/, '') : 'Kapitel';
     const chHeading = document.createElement('div');
     chHeading.className = 'rail-heading';
-    chHeading.textContent = chTitle;
+    chHeading.textContent = 'Abschnitte';
     chBlock.appendChild(chHeading);
     const chNav = document.createElement('div');
     chNav.className = 'rail-chapternav';
-    chapterPages.forEach(p => {
+
+    const link = (p, cls, dot) => {
         const a = document.createElement('a');
         a.href = '#' + p.id;
-        a.className = 'rail-chapterlink' + (p === getCurrentPage() ? ' current' : '');
-        a.innerHTML = '<span class="rail-dot">' + (p === getCurrentPage() ? '●' : '○') + '</span>' + p.title;
+        a.className = cls + (p === current ? ' current' : '');
+        if (dot) {
+            a.innerHTML = '<span class="rail-dot">' + (p === current ? '●' : '○') + '</span>';
+            a.appendChild(document.createTextNode(p.title));
+        } else {
+            a.textContent = p.title;
+        }
         // data-action statt eigenem Listener (zentraler Binder, s. main.js).
         a.dataset.action = 'goto_page';
         a.dataset.arg = p.id;
-        chNav.appendChild(a);
+        return a;
+    };
+
+    sections.forEach(s => {
+        const istAktiv = s === active;
+        chNav.appendChild(link(s.page, 'rail-sectionlink' + (istAktiv ? ' open' : ''), false));
+        if (!istAktiv) return;
+        s.children.forEach(p => chNav.appendChild(link(p, 'rail-chapterlink', true)));
     });
+
     chBlock.appendChild(chNav);
     container.appendChild(chBlock);
 }
