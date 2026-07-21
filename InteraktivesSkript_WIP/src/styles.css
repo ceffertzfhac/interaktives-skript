@@ -322,8 +322,11 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     height: 1.15em;
     margin: 0 0.15em;
     padding: 0;
-    vertical-align: baseline;
-    transform: translateY(0.12em);
+    /* Auf der normalen Textlinie stehen, nicht tiefgestellt: eine inline-flex
+       Box legt ihre Baseline auf die Unterkante, mit vertical-align:baseline
+       rutscht das Pictogramm dadurch unter die Zeile. `middle` zentriert es
+       stattdessen auf der Mittellinie des Fliesstextes. */
+    vertical-align: middle;
     border: none;
     border-radius: 50%;
     /* Gefuelltes Info-Pictogramm wie im ILIAS-Lernraum: voller Kreis,
