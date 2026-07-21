@@ -240,3 +240,16 @@ input[type="range"]::-moz-range-track {
 .highlight_box_title {
     color: color-mix(in srgb, var(--box-accent, var(--teal)) 35%, var(--ink));
 }
+
+/* Fussnoten-Pictogramm: auf dunklem Grund kehrt sich das Verhaeltnis um --
+   ein helles "i" auf mittelblauem Kreis kaeme nur auf ~2,9:1. Daher heller
+   Kreis mit dunklem Buchstaben (6,54:1) -- der Kreis hebt sich zugleich
+   deutlich vom Seitenhintergrund ab (8,79:1). */
+:root {
+  --info: #9ccbef;
+  --info-dark: #9ccbef;
+}
+#paper .fn-marker, #paper .fussnote-icon { color: #0d3d63; }
+#paper .fussnote-panel {
+  background-color: color-mix(in srgb, var(--info) 8%, var(--surface));
+}

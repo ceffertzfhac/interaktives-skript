@@ -33,6 +33,10 @@
   --c2: #d17d00;
   --c3: #4db100;
   --c4: #7000b1;
+
+  /* Info-Blau fuer Fussnoten-Pictogramm und -Panel (ILIAS-Anmutung) */
+  --info: #1f6fb2;
+  --info-dark: #16527f;
 }
 
 
@@ -305,14 +309,72 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     color: var(--ink-3);
 }
 /* Fussnoten (v0.13 \footnote): inline als kleine hellere Klammer-Notiz */
-#paper .fussnote {
-    /* Gleiche Schriftgroesse wie der Fliesstext (Nutzer-Feedback): die
-       Fussnoten stehen inline mitten im Absatz, ein kleinerer Grad macht die
-       Zeile unruhig. Abgesetzt wird nur ueber die Farbe. */
-    color: var(--ink-3);
+/* Fussnoten (v0.13 \footnote): footnotes.js ersetzt den Inline-Text durch
+   einen kleinen (i)-Marker und haengt den Text als aufklappbares Panel unter
+   den Absatz (Nutzer-Feedback: ausgeschrieben unterbrechen sie den Satz).
+   Der Marker laeuft in Fliesstextgroesse mit, damit die Zeile ruhig bleibt. */
+#paper .fn-marker,
+#paper .fussnote-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.15em;
+    height: 1.15em;
+    margin: 0 0.15em;
+    padding: 0;
+    vertical-align: baseline;
+    transform: translateY(0.12em);
+    border: none;
+    border-radius: 50%;
+    /* Gefuelltes Info-Pictogramm wie im ILIAS-Lernraum: voller Kreis,
+       weisses "i" -- nicht nur eine Kontur. */
+    background-color: var(--info);
+    color: #fff;
+    font-family: var(--font-ui);
+    font-size: 0.74em;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
 }
-#paper .fussnote::before { content: " ("; }
-#paper .fussnote::after  { content: ")"; }
+#paper .fn-marker:hover,
+#paper .fn-marker.open {
+    background-color: var(--info-dark);
+}
+#paper .fussnote-panel {
+    margin: 6px 0 14px;
+    padding: 10px 14px;
+    border-left: 2px solid var(--info);
+    background-color: color-mix(in srgb, var(--info) 5%, var(--surface));
+    border-radius: 0 8px 8px 0;
+    color: var(--info-dark);
+    text-align: left;
+}
+#paper .fussnote-item { display: none; color: var(--info-dark); }
+#paper .fussnote-item.open { display: block; }
+#paper .fussnote-item + .fussnote-item.open { margin-top: 8px; }
+#paper .fussnote-icon {
+    cursor: default;
+    margin: 0 0.5em 0 0;
+    flex-shrink: 0;
+}
+/* Nur fuer Screenreader: die laufende Nummer, die visuell durch das
+   Pictogramm ersetzt ist. */
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+/* Im Druck gibt es kein Aufklappen: alle Fussnoten sichtbar, Marker weg. */
+@media print {
+    #paper .fussnote-panel { display: block !important; }
+    #paper .fussnote-item { display: block !important; }
+    #paper .fn-marker { display: none !important; }
+}
 /* Tabellen (v0.13 \begin{tabular}/\begin{table}) */
 #paper table {
     border-collapse: collapse;
