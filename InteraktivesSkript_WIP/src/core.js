@@ -82,7 +82,13 @@ export function generate_highlight_boxes() {
     }
 }
 
-export function safari_bug() { //mit Positionierung von Text im SVG
+// Safari mis-positoniert HTML-Text innerhalb von <foreignObject> in SVG
+// (Render-Verhalten, keine fehlende API) -> @supports kann das nicht
+// detektieren, deshalb hier UA-Sniff als pragmatischer Workaround: auf
+// Safari wird .fo_inner die Klasse .fixed gegeben (150px-Margin-Shift, s.
+// styles.css). Revidieren, sobald ein CSS-only-Fix fuer foreignObject
+// bekannt ist. Auf Nicht-Safari bleibt alles unveraendert (kein .fixed).
+export function safari_bug() {
     const IS_SAFARI = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
     const fo = document.getElementsByClassName("fo_inner");
     if(IS_SAFARI){
@@ -118,25 +124,25 @@ function gcd_rec(a, b) { //größter gemeinsamer Teiler
 
 export function make_static(){ //interaktives Skript statisch machen für Evaluation
     if(!interaktiv){
-        ge("gc4").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/image002.png" class="grafik" id="" draggable="false"><br><img src="bilder/image003.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc4").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/image002.png" class="grafik" id="" draggable="false"><br><img src="bilder/image003.png" class="grafik" id="" draggable="false"></div>';
 
-        ge("gc1").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/phi_0.png" class="grafik" id="" draggable="false"><br></div>';
+        ge("gc1").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/phi_0.png" class="grafik" id="" draggable="false"><br></div>';
 
-        ge("gc9").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/kreis-xy_koord.png" class="grafik" id="" draggable="false"><br></div>';
+        ge("gc9").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/kreis-xy_koord.png" class="grafik" id="" draggable="false"><br></div>';
 
-        ge("gc31").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/geschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc31").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/geschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
 
-        ge("gc32").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/winkelgeschwindigkeit_v.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc32").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/winkelgeschwindigkeit_v.png" class="grafik" id="" draggable="false"></div>';
 
-        ge("gc51").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/beschleunigung.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc51").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/beschleunigung.png" class="grafik" id="" draggable="false"></div>';
 
-        ge("gc3").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/omega_vektor.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc3").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/omega_vektor.png" class="grafik" id="" draggable="false"></div>';
 
-        ge("gc5").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/winkelbeschleunigung.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc5").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/winkelbeschleunigung.png" class="grafik" id="" draggable="false"></div>';
 
         ge("gc6").innerHTML = "";
 
-        ge("gc8").innerHTML = '<div class="grafik-container-inner"><div class="zoom_button zoom_maximize" data-action="zoom"></div><img src="bilder/radialgeschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
+        ge("gc8").innerHTML = '<div class="grafik-container-inner"><button type="button" class="zoom_button zoom_maximize" data-action="zoom" aria-label="Abbildung vergrößern"></button><img src="bilder/radialgeschwindigkeit.png" class="grafik" id="" draggable="false"></div>';
 
         // gc10 (Kreisbewegung, src/figures/kreisbewegung/) hat kein statisches
         // Bild-Pendant und bleibt bewusst interaktiv, auch im statischen Modus
