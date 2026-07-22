@@ -99,11 +99,16 @@ const PANEL_LEFT = `
   </div>
 </div>`;
 
-// Rechtes Analyse-Panel (breit + Lupe).
+// Rechtes Analyse-Panel (breit + Lupe). Kopf-Leiste + Body wie die Stand-alone
+// (panel-header mit ph-label + Doppel-Chevron, panel-body); eingeklappt wird
+// der Body ausgeblendet und die Leiste zum schmalen vertikalen Streifen.
 const PANEL_RIGHT = `
 <div class="aspekt-panel aspekt-panel-right">
-  <div class="panel-section collapsible">
-    <button type="button" class="panel-label" data-action="toggle_panel_section" aria-expanded="true">Analyse<span class="acc-chevron" aria-hidden="true">▾</span></button>
+  <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" title="Analyse ein-/ausklappen">
+    <span class="ph-label">Analyse</span>
+    <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
+  </button>
+  <div class="panel-body">
     <dl class="aspekt-werte">
       <dt>\\(\\varphi\\)</dt><dd id="ak_val_phi"></dd>
       <dt>\\(R\\)</dt><dd id="ak_val_r"></dd>
@@ -131,7 +136,12 @@ function drawAxes() {
     const g = ge('kb_aspekt_axes');
     if (!g) return;
     const ppm = store.currentPixelsPerMeter;
-    const len = Math.max(2.0, store.R) * ppm * 1.08;
+    // Achsenlaenge gedeckelt, damit Pfeilspitze + Achsenlabel nicht an den
+    // Rand des Darstellungsbereichs stossen (viewBox 450x480, Mitte 225/260;
+    // der knappste Halbraum ist ANIM_CY..unten = 220 -> 194 laesst ~26 px fuer
+    // Spitze + Label). Bei grossem R haelt updateZoom() den Kreis ohnehin
+    // innerhalb, die Achse ragt dann knapp darueber hinaus.
+    const len = Math.min(Math.max(2.0, store.R) * ppm * 1.08, 194);
     const NS = 'http://www.w3.org/2000/svg';
     g.textContent = '';
     const line = (x1, y1, x2, y2, arrow) => {
@@ -254,11 +264,12 @@ export function toggle_aspekt(btn) {
 
 export function close_aspekt_overlay() { closeOverlay(); }
 
-// Ein-/Ausklappen einer collapsible Panel-Sektion (Analyse) -- wie die Vorlage.
-export function toggle_panel_section(btn) {
-    const sec = btn.closest('.panel-section');
-    if (!sec) return;
-    const collapsed = sec.classList.toggle('collapsed');
+// Analyse-Panel ein-/ausklappen (Kopf-Leiste, wie die Stand-alone): der Body
+// verschwindet, das Panel wird zum schmalen Streifen (CSS ueber .collapsed).
+export function toggle_analyse(btn) {
+    const panel = btn.closest('.aspekt-panel-right');
+    if (!panel) return;
+    const collapsed = panel.classList.toggle('collapsed');
     btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
 }
 

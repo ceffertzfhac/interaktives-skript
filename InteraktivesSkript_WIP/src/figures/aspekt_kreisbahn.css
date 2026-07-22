@@ -58,19 +58,29 @@
     font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
     color: var(--kb-text3); margin-bottom: 10px;
 }
-/* collapsible (Vorlage): panel-label ist ein Button, Chevron dreht, Inhalt
-   klappt ein. Genutzt fuer das Analyse-Panel (breit + Lupe). */
-.aspekt-figur .panel-section.collapsible > .panel-label {
+/* Analyse-Panel mit Kopf-Leiste + Body (Stand-alone-UX): panel-header ist ein
+   Button (ph-label + Doppel-Chevron), panel-body haelt die Werte. Eingeklappt
+   (.aspekt-panel-right.collapsed) verschwindet der Body und die Leiste wird
+   zum schmalen vertikalen Streifen (Label gedreht, Chevron zeigt zum
+   Aufklappen). */
+.aspekt-figur .aspekt-panel-right { display: flex; flex-direction: column; }
+.aspekt-figur .panel-header {
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    width: 100%; padding: 0; background: transparent; border: none;
-    text-align: left; font: inherit; cursor: pointer;
-    font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--kb-text3);
+    width: 100%; padding: 11px 14px; background: var(--kb-surface); border: none;
+    border-bottom: 1px solid var(--kb-border); cursor: pointer; color: var(--kb-text2); font: inherit;
 }
-.aspekt-figur .panel-section.collapsible > .panel-label:hover { color: var(--kb-text2); }
-.aspekt-figur .acc-chevron { transition: transform .15s ease; }
-.aspekt-figur .panel-section.collapsed > .panel-label { margin-bottom: 0; }
-.aspekt-figur .panel-section.collapsed > .panel-label .acc-chevron { transform: rotate(-90deg); }
-.aspekt-figur .panel-section.collapsed > .panel-label ~ * { display: none !important; }
+.aspekt-figur .panel-header:hover { color: var(--kb-text); }
+.aspekt-figur .ph-label { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.aspekt-figur .ph-chevron { width: 14px; height: 14px; flex-shrink: 0; transition: transform .15s ease; }
+.aspekt-figur .panel-body { padding: 12px 14px; }
+/* eingeklappt: Body weg, Leiste vertikal + schmal, Chevron gedreht */
+.aspekt-figur .aspekt-panel-right.collapsed .panel-body { display: none; }
+.aspekt-figur .aspekt-panel-right.collapsed .panel-header {
+    flex-direction: column; justify-content: flex-start; gap: 12px;
+    height: 100%; padding: 14px 0; border-bottom: none;
+}
+.aspekt-figur .aspekt-panel-right.collapsed .ph-label { writing-mode: vertical-rl; transform: rotate(180deg); }
+.aspekt-figur .aspekt-panel-right.collapsed .ph-chevron { transform: rotate(180deg); }
 .aspekt-figur .slider-label { font-size: 12px; color: var(--kb-text2); margin-bottom: 3px; }
 .aspekt-figur .slider-row {
     display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 12px;
@@ -124,22 +134,26 @@
 }
 .aspekt-figur .aspekt-caption .fig-label { font-weight: 600; color: var(--ink-2, #4c5266); }
 
-/* ── Layout je Breiten-Modus ───────────────────────────────────────────── */
+/* ── Layout je Breiten-Modus ───────────────────────────────────────────────
+   Die Modus-Regeln gelten NUR ausserhalb des Overlays (:not(.aspekt-im-overlay)),
+   sonst wuerden sie wegen hoeherer Spezifitaet die Overlay-Regeln schlagen und
+   im Zoom bei schmal/normal die Analyse-Spalte verschwinden lassen. */
 .aspekt-figur .aspekt-body { display: block; }
-.aspekt-figur .aspekt-panel-right { display: none; }
+.aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-right { display: none; }
+/* Szene bekommt in JEDEM Modus Innenabstand, damit die Grafik nicht an den
+   Rand des Darstellungsbereichs stoesst (auch gestapelt/schmal). */
+.aspekt-figur .aspekt-scene { padding: 14px; }
 /* normal: Panel links | Szene */
-:root[data-width-mode="normal"] .aspekt-figur .aspekt-body {
+:root[data-width-mode="normal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body {
     display: grid; grid-template-columns: 220px minmax(0, 1fr); align-items: stretch;
 }
-:root[data-width-mode="normal"] .aspekt-figur .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
-:root[data-width-mode="normal"] .aspekt-figur .aspekt-scene { padding: 14px; }
-/* breit: Panel links | Szene | Analyse */
-:root[data-width-mode="breit"] .aspekt-figur .aspekt-body {
-    display: grid; grid-template-columns: 220px minmax(0, 1fr) 230px; align-items: stretch;
+:root[data-width-mode="normal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
+/* breit: Panel links | Szene | Analyse (Analyse-Spalte auto -> schrumpft beim Einklappen) */
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body {
+    display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; align-items: stretch;
 }
-:root[data-width-mode="breit"] .aspekt-figur .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
-:root[data-width-mode="breit"] .aspekt-figur .aspekt-panel-right { display: block; border-left: 1px solid var(--kb-border); }
-:root[data-width-mode="breit"] .aspekt-figur .aspekt-scene { padding: 14px; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-right { display: flex; border-left: 1px solid var(--kb-border); }
 
 /* ── Overlay (Lupe): schwebt ueber dem Skript, Layout wie breit ────────── */
 .aspekt-overlay-back {
@@ -158,22 +172,24 @@
     display: flex; flex-direction: column;
     box-shadow: 0 24px 60px rgba(24,27,33,.35);
 }
+/* Im Overlay IMMER dreispaltig (Analyse stets sichtbar, auch wenn die Seite im
+   Modus schmal/normal steht). Analyse-Spalte auto -> schrumpft beim Einklappen. */
 .aspekt-figur.aspekt-im-overlay .aspekt-body {
     flex: 1 1 auto; min-height: 0;
-    display: grid; grid-template-columns: 240px minmax(0, 1fr) 250px;
+    display: grid; grid-template-columns: 240px minmax(0, 1fr) auto;
     grid-template-rows: minmax(0, 1fr); align-items: stretch;
 }
 .aspekt-figur.aspekt-im-overlay .aspekt-panel-left  { border-right: 1px solid var(--kb-border); overflow: auto; min-height: 0; }
-.aspekt-figur.aspekt-im-overlay .aspekt-panel-right { display: block; border-left: 1px solid var(--kb-border); overflow: auto; min-height: 0; }
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-right { display: flex; border-left: 1px solid var(--kb-border); overflow: auto; min-height: 0; }
 .aspekt-figur.aspekt-im-overlay .aspekt-scene { padding: 18px; min-height: 0; overflow: hidden; }
 .aspekt-figur.aspekt-im-overlay .aspekt-svg { width: 100%; height: 100%; max-width: none; max-height: none; }
 body.aspekt-overlay-open { overflow: hidden; }
 
-/* Tablet: immer gestapelt */
+/* Tablet: gestapelt -- aber NICHT im Overlay (Analyse bleibt im Zoom sichtbar). */
 @media (max-width: 1024px) {
-    :root[data-width-mode] .aspekt-figur .aspekt-body { display: block; }
-    :root[data-width-mode] .aspekt-figur .aspekt-panel-right { display: none; }
-    :root[data-width-mode] .aspekt-figur .aspekt-panel-left { border-right: none; }
+    :root[data-width-mode] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body { display: block; }
+    :root[data-width-mode] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-right { display: none; }
+    :root[data-width-mode] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: none; }
 }
 
 /* Legacy-Muster: interaktive Figur am Bildschirm, statisches Bild im Druck. */
