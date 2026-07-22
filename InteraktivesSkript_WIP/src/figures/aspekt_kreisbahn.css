@@ -55,7 +55,13 @@
 .aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: 13px; font-style: italic; }
 /* Winkel-Visualisierung (Bogen + φ-Label) */
 .aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: 2; }
-.aspekt-figur .aspekt-angle-label { fill: var(--kb-accent); font-family: var(--font-serif, serif); font-style: italic; font-size: 18px; text-anchor: middle; }
+/* varphi-Label im foreignObject (MathJax) -- Farbe akzent, zentriert */
+.aspekt-figur .aspekt-angle-fo {
+    display: flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; color: var(--kb-accent);
+    font-size: 15px; line-height: 1;
+}
+.aspekt-figur .aspekt-angle-fo mjx-container { margin: 0 !important; color: var(--kb-accent); }
 .aspekt-figur .legend-swatch[data-c="phi"] { background: var(--kb-accent); height: 3px; }
 
 /* ── Panel (Parameter / Legende / Analyse) — Vorlagen-Klassen ──────────── */

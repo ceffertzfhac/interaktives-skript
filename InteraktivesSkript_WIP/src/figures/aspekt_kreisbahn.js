@@ -54,6 +54,12 @@ const SVG_SCENE = `
     <g id="kb_animation_coord_system"></g>
     <circle id="kb_disk" cx="225" cy="260" r="100" fill="none" stroke-width="0" opacity="0.06"/>
     <g id="kb_aspekt_angle"></g>
+    <!-- phi-Label als foreignObject mit MathJax (garantiert das geschwungene
+         \varphi, unabhaengig vom Font). Separat von kb_aspekt_angle, das
+         drawAngle() bei jedem Neuzeichnen leert; hier wird nur x/y gesetzt. -->
+    <foreignObject id="kb_angle_label" width="30" height="30" style="overflow:visible; visibility:hidden">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="aspekt-angle-fo">\\(\\varphi\\)</div>
+    </foreignObject>
     <path id="kb_trajectory_path" fill="none" stroke-width="2" stroke-dasharray="4,4" d=""/>
     <circle id="kb_point" cx="325" cy="260" r="8" stroke-width="1"/>
     <text id="kb_zoom_text_display" x="12" y="20" class="zoom-text"></text>
@@ -78,7 +84,7 @@ const PANEL_LEFT = `
 <div class="aspekt-panel aspekt-panel-left">
   <div class="panel-section">
     <div class="panel-label">Parameter</div>
-    <div class="slider-label">Winkel \\(\\phi\\)</div>
+    <div class="slider-label">Winkel \\(\\varphi\\)</div>
     <div class="slider-row">
       <input id="ak_phi" type="range" min="0" max="360" step="0.5" value="60">
       <span class="slider-val" id="ak_phi_out"></span>
@@ -95,7 +101,7 @@ const PANEL_LEFT = `
       <div class="legend-swatch" data-c="r"></div>   <div class="legend-label">Ortsvektor \\(\\vec{r}\\)</div>
       <div class="legend-swatch" data-c="rx"></div>  <div class="legend-label">Komponente \\(r_x\\)</div>
       <div class="legend-swatch" data-c="ry"></div>  <div class="legend-label">Komponente \\(r_y\\)</div>
-      <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\phi\\)</div>
+      <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\varphi\\)</div>
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
   </div>
@@ -114,7 +120,7 @@ const PANEL_RIGHT = `
     <div class="panel-section">
       <div class="panel-label">Live-Analyse</div>
       <div class="analysis-grid">
-        <div class="analysis-cell key">Winkel \\(\\phi\\)</div><div class="analysis-cell val" id="ak_val_phi"></div>
+        <div class="analysis-cell key">Winkel \\(\\varphi\\)</div><div class="analysis-cell val" id="ak_val_phi"></div>
         <div class="analysis-cell key">Radius \\(R\\)</div><div class="analysis-cell val" id="ak_val_r"></div>
         <div class="analysis-cell key">Position \\(x = r_x\\)</div><div class="analysis-cell val" id="ak_val_x"></div>
         <div class="analysis-cell key">Position \\(y = r_y\\)</div><div class="analysis-cell val" id="ak_val_y"></div>
@@ -180,7 +186,8 @@ function drawAngle(phiDeg) {
     const g = ge('kb_aspekt_angle');
     if (!g) return;
     g.textContent = '';
-    if (phiDeg <= 0.5) return;
+    const lbl0 = ge('kb_angle_label');
+    if (phiDeg <= 0.5) { if (lbl0) lbl0.style.visibility = 'hidden'; return; }
     const NS = 'http://www.w3.org/2000/svg';
     const cx = ANIM_CX, cy = ANIM_CY;
     const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42);
@@ -193,16 +200,16 @@ function drawAngle(phiDeg) {
     arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
     arc.setAttribute('class', 'aspekt-angle-arc');
     g.appendChild(arc);
-    // Label auf der Winkelhalbierenden INNERHALB des Bogens (zwischen Ursprung
-    // und Bogen). Zeichen: gerades phi (ϕ, U+03D5 = LaTeX \phi), nicht das
-    // geschwungene varphi.
+    // varphi-Label (foreignObject/MathJax) auf der Winkelhalbierenden INNERHALB
+    // des Bogens positionieren (30x30 -> um 15 zentrieren).
     const lr = rArc * 0.62, mid = rad / 2;
     const lx = cx + lr * Math.cos(mid), ly = cy - lr * Math.sin(mid);
-    const t = document.createElementNS(NS, 'text');
-    t.setAttribute('x', lx.toFixed(2)); t.setAttribute('y', (ly + 5).toFixed(2));
-    t.setAttribute('class', 'aspekt-angle-label');
-    t.textContent = 'ϕ';   // ϕ (gerades phi)
-    g.appendChild(t);
+    const label = ge('kb_angle_label');
+    if (label) {
+        label.setAttribute('x', (lx - 15).toFixed(2));
+        label.setAttribute('y', (ly - 15).toFixed(2));
+        label.style.visibility = 'visible';
+    }
 }
 
 function draw(phiDeg) {
