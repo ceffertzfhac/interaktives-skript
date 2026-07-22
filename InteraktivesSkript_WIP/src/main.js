@@ -16,7 +16,109 @@ import { init_figure_panels, toggle_panel } from './figures/panels.js';
 import { init_numbering, resolve_eq_refs } from './numbering.js';
 import { loadChapters, typesetAfterLoad } from './chapters.js';
 import { init_footnotes, toggle_footnote } from './footnotes.js';
-import { init_aspekt_figuren, toggle_aspekt, close_aspekt_overlay, toggle_analyse, label_aspekt_figuren } from './figures/aspekt_kreisbahn.js';
+import { toggle_aspekt, close_aspekt_overlay, toggle_analyse, toggle_panel_left, buildKreisbahnFig } from './figures/aspekt_kreisbahn.js';
+import { buildWegZeitFig } from './figures/aspekt_weg_zeit.js';
+
+// Aspekt-Figuren: jede .aspekt-figur wird ueber data-aspekt einer Factory
+// zugeordnet, die ihre EIGENE Motor-Instanz (Prefix + storeInstance) baut
+// (s. kreisbewegung/runtime.js) -> beliebig viele Figuren, auch auf derselben
+// Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
+const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig };
+
+function init_aspekt_figuren() {
+    document.querySelectorAll('.aspekt-figur[data-aspekt]').forEach(fig => {
+        const build = ASPEKT_FACTORIES[fig.dataset.aspekt];
+        if (build) build(fig);
+        // Linkes Bedienfeld einklappbar (seitlich): Kopf-Taste ins linke Panel
+        // setzen — spart Platz fuer Simulation/Diagramm. Generisch fuer jede
+        // .aspekt-figur (s. toggle_panel_left in aspekt_kreisbahn.js).
+        const pl = fig.querySelector('.aspekt-panel-left');
+        if (pl && !pl.querySelector('.panel-header')) {
+            const hdr = document.createElement('button');
+            hdr.type = 'button';
+            hdr.className = 'panel-header panel-header-left';
+            hdr.dataset.action = 'toggle_panel_left';
+            hdr.setAttribute('aria-expanded', 'true');
+            hdr.title = 'Bedienfeld ein-/ausklappen';
+            hdr.innerHTML = '<span class="ph-label">Bedienung</span>' +
+                '<svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4 L8 8 L13 12"/><path d="M8 4 L3 8 L8 12"/></svg>';
+            pl.prepend(hdr);
+        }
+        // Physik-Sektion im rechten Panel (nur wenn die Figur relevante
+        // Gleichungen deklariert). Der Inhalt — die gerenderten Formeln — wird
+        // erst nach dem MathJax-Typeset von fill_physik_panels() eingefuellt
+        // (s. unten), weil die Gleichungen im DOM erst dann existieren.
+        if (fig.dataset.eqs) {
+            const body = fig.querySelector('.aspekt-panel-right .panel-body');
+            if (body && !body.querySelector('.physik-list')) {
+                const sec = document.createElement('div');
+                sec.className = 'panel-section';
+                const lbl = document.createElement('div');
+                lbl.className = 'panel-label';
+                lbl.textContent = 'Physik';
+                const list = document.createElement('div');
+                list.className = 'physik-list';
+                list.id = fig.id + '-physik';
+                sec.appendChild(lbl);
+                sec.appendChild(list);
+                body.insertBefore(sec, body.firstChild);
+            }
+        }
+    });
+}
+
+// Fuellt die Physik-Sektionen der rechten Seitenleisten: pro .aspekt-figur
+// werden die in data-eqs genannten Gleichungen UNNUMMERIERT gerendert —
+// LaTeX-Quelle aus window.eq_latex (s. chapters.js::captureEqLatex, vor dem
+// MathJax-Typeset vom rohen Kapitel-HTML erfasst) als \[...\] neu gesetzt,
+// ohne Formelnummer, optisch an die Stand-alone-Vorlagen angelehnt. So
+// steht wirklich nur die Formel, die zur aktuellen Figur an der aktuellen
+// Skriptstelle gehoert. Laeuft erst, nachdem MathJax fertig ist (aufgerufen
+// aus chapters.js::typesetAfterLoad, analog window.resolve_eq_refs).
+// Idempotent via dataset.filled; gibt das Typeset-Promise zurueck.
+function fill_physik_panels() {
+    const src = window.eq_latex || {};
+    const jobs = [];
+    document.querySelectorAll('.aspekt-figur[data-eqs]').forEach(fig => {
+        const box = fig.querySelector('.physik-list');
+        if (!box || box.dataset.filled) return;
+        const want = fig.dataset.eqs.trim().split(/\s+/);
+        let any = false;
+        want.forEach(key => {
+            const displayMath = src[key];
+            if (!displayMath) return;
+            const el = document.createElement('div');
+            el.className = 'physik-eq';
+            el.textContent = displayMath;   // schon \[...\] bzw. \begin{align*}…\end{align*}
+            box.appendChild(el);
+            any = true;
+        });
+        if (any) { box.dataset.filled = '1'; jobs.push(box); }
+    });
+    if (jobs.length && window.MathJax && window.MathJax.typesetPromise) {
+        return window.MathJax.typesetPromise(jobs);
+    }
+}
+window.fill_physik_panels = fill_physik_panels;
+
+// Nach init_numbering: Nummer der zugehoerigen statischen Abbildung (data-figref)
+// in die interaktive Bildunterschrift uebernehmen (am Bildschirm sichtbar).
+function label_aspekt_figuren() {
+    document.querySelectorAll('.aspekt-figur[data-figref]').forEach(fig => {
+        const ref = document.getElementById(fig.dataset.figref);
+        const label = ref && ref.querySelector('.fig-label');
+        const cap = fig.querySelector('.aspekt-caption');
+        if (!label || !cap) return;
+        let badge = cap.querySelector(':scope > .fig-label');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'fig-label';
+            cap.insertBefore(document.createTextNode(' '), cap.firstChild);
+            cap.insertBefore(badge, cap.firstChild);
+        }
+        badge.textContent = label.textContent;
+    });
+}
 
 // Figuren laden (Seiteneffekt: Registrierung von updateN/animateN/clearN).
 // Seit v1.7 ist Kapitel 1.4 rein statisch (v0.13-Abbildungen, keine
@@ -87,6 +189,7 @@ function dispatch_click(e) {
         case "toggle_aspekt": toggle_aspekt(el); break;
         case "close_aspekt_overlay": if (e.target === el) close_aspekt_overlay(); break;
         case "toggle_analyse": toggle_analyse(el); break;
+        case "toggle_panel_left": toggle_panel_left(el); break;
         case "toggle_drawer": toggle_drawer(); break;
         case "close_drawer": close_drawer(); break;
         case "chapter_prev": chapter_prev(); break;
