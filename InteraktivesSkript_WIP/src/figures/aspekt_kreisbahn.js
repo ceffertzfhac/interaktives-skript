@@ -145,3 +145,39 @@ export function initAspektKreisbahn(host) {
     });
     readInputs(host);
 }
+
+// Ein-/Ausklappen zwischen kleiner Inline- und grosser Stufe (Lupe). Wird vom
+// zentralen data-action-Binder in main.js aufgerufen.
+export function toggle_aspekt(btn) {
+    const fig = btn.closest('.aspekt-figur');
+    if (fig) fig.classList.toggle('aspekt-gross');
+}
+
+// Findet jede <div class="aspekt-figur" data-aspekt="kreisbahn"> im Dokument,
+// baut die Figur hinein und ergaenzt Lupe + Bildunterschrift. So braucht das
+// Kapitel-Markup nur den leeren Platzhalter (O(1), wie die uebrigen Figuren).
+export function init_aspekt_figuren() {
+    document.querySelectorAll('.aspekt-figur[data-aspekt="kreisbahn"]').forEach(fig => {
+        if (fig.dataset.built) return;
+        fig.dataset.built = '1';
+        const caption = fig.dataset.caption || '';
+        const scene = document.createElement('div');
+        fig.appendChild(scene);
+        initAspektKreisbahn(scene);
+        // Lupe oben rechts
+        const lupe = document.createElement('button');
+        lupe.type = 'button';
+        lupe.className = 'aspekt-lupe';
+        lupe.dataset.action = 'toggle_aspekt';
+        lupe.setAttribute('aria-label', 'Figur vergrößern');
+        lupe.title = 'Vergrößern';
+        lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
+        fig.insertBefore(lupe, fig.firstChild);
+        if (caption) {
+            const cap = document.createElement('div');
+            cap.className = 'aspekt-caption';
+            cap.innerHTML = caption;
+            fig.appendChild(cap);
+        }
+    });
+}

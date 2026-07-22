@@ -1,0 +1,126 @@
+/* aspekt_kreisbahn.css — Optik der Aspekt-Figur. Die Farb-Tokens sind
+   VERBATIM aus src/figures/kreisbewegung/styles.css uebernommen, damit die
+   Figur denselben Wiedererkennungswert wie die grosse Simulation hat. Gescopt
+   auf .aspekt-figur (nicht #gc10), damit die Figur unabhaengig von der vollen
+   Sim lebt. Nur die Szene wird gestylt (Kreis, Punkt, Vektoren, Regler) --
+   kein Graph-/Stoppuhr-/Control-Chrome der grossen Sim. */
+.aspekt-figur {
+    --kb-surface: #ffffff;
+    --kb-border: #e3e1d7;
+    --kb-text: #181b21;
+    --kb-text2: #4c5266;
+    --kb-accent: var(--fh, #00b2a9);
+    --kb-r: #b08010;      /* Ortsvektor */
+    --kb-rx: #1f77b4;     /* x-Komponente */
+    --kb-ry: #1a8a50;     /* y-Komponente */
+    --kb-traj: #7f7f7f;   /* durchlaufener Bogen */
+    --kb-grid-line: #e8eaf0;
+    --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
+    --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);
+
+    font-family: var(--kb-font);
+    color: var(--kb-text);
+    background: var(--kb-surface);
+    border: 1px solid var(--kb-border);
+    border-radius: 10px;
+}
+
+/* Szene */
+.aspekt-figur .aspekt-scene { width: 100%; }
+.aspekt-figur .aspekt-svg { display: block; width: 100%; height: auto; }
+.aspekt-figur #kb_disk { stroke: var(--kb-traj); }
+.aspekt-figur #kb_trajectory_path { stroke: var(--kb-traj); }
+.aspekt-figur #kb_point { fill: var(--kb-accent); stroke: var(--kb-text); }
+.aspekt-figur #kb_position_vector   { stroke: var(--kb-r); }
+.aspekt-figur #kb_position_vector_x { stroke: var(--kb-rx); }
+.aspekt-figur #kb_position_vector_y { stroke: var(--kb-ry); }
+.aspekt-figur #kb_arrowhead-r  polygon { fill: var(--kb-r); }
+.aspekt-figur #kb_arrowhead-rx polygon { fill: var(--kb-rx); }
+.aspekt-figur #kb_arrowhead-ry polygon { fill: var(--kb-ry); }
+.aspekt-figur .zoom-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: 11px; }
+/* Achsen (in drawCoordSystem als <line>/<text> erzeugt) */
+.aspekt-figur #kb_animation_coord_system line { stroke: var(--kb-text2); stroke-width: 1; }
+.aspekt-figur #kb_animation_coord_system text { fill: var(--kb-text2); font-family: var(--kb-font); font-size: 13px; }
+
+/* Regler */
+.aspekt-figur .aspekt-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px 14px;
+    border-top: 1px solid var(--kb-border);
+}
+.aspekt-figur .aspekt-row {
+    display: grid;
+    grid-template-columns: 8.5em 1fr 4.5em;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+.aspekt-figur .aspekt-name { color: var(--kb-text2); }
+.aspekt-figur .aspekt-name i { font-family: var(--font-serif, serif); }
+.aspekt-figur .aspekt-val {
+    font-family: var(--kb-font-mono);
+    font-size: 0.85rem;
+    color: var(--kb-text);
+    text-align: right;
+}
+.aspekt-figur input[type="range"] { accent-color: var(--kb-accent); width: 100%; }
+
+/* ── Zweistufig: klein im Fliesstext, gross aufgeklappt ─────────────────────
+   Beide Stufen zeigen dieselbe Figur, der Unterschied ist nur die Breite.
+   Klein sitzt die Figur eingerueckt mit einer Lupe oben rechts; ein Klick auf
+   die Lupe schaltet .aspekt-gross und gibt der Figur die volle Spaltenbreite. */
+.aspekt-figur {
+    position: relative;
+    margin: 22px auto;
+    max-width: 340px;          /* kleine Inline-Stufe */
+    transition: max-width 0.25s ease;
+}
+.aspekt-figur.aspekt-gross { max-width: 560px; }
+
+.aspekt-figur .aspekt-lupe {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--kb-border);
+    border-radius: 8px;
+    background: var(--kb-surface);
+    color: var(--kb-text2);
+    cursor: pointer;
+}
+.aspekt-figur .aspekt-lupe:hover { color: var(--kb-accent); border-color: var(--kb-accent); }
+.aspekt-figur .aspekt-lupe svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+/* Bildunterschrift der interaktiven Figur (uebernimmt die Rolle von Abb. 1.38
+   am Bildschirm; die Nummer setzt numbering.js). */
+.aspekt-figur figcaption,
+.aspekt-figur .aspekt-caption {
+    padding: 10px 14px 0;
+    font-size: 0.85em;
+    line-height: 1.45;
+    color: var(--ink-3, #666d80);
+    text-align: left;
+}
+
+@media (max-width: 1024px) {
+    .aspekt-figur, .aspekt-figur.aspekt-gross { max-width: 100%; }
+}
+
+/* Legacy-Muster: interaktive Figur am Bildschirm, statisches Bild im Druck.
+   Beide zaehlen fuer die Abbildungsnummerierung (numbering.js zaehlt
+   figure.abbildung unabhaengig von der Sichtbarkeit) -- deshalb bleibt Abb.
+   1.38 die Nummer des statischen Bildes, die interaktive Figur teilt sie sich
+   im Lesefluss. */
+.abbildung.nur-druck { display: none; }
+@media print {
+    .aspekt-figur.nur-bildschirm { display: none; }
+    .abbildung.nur-druck { display: block; }
+}
