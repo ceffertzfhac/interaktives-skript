@@ -21,6 +21,7 @@
     --kb-r-sm: 6px;
     --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
     --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);
+    --kb-text-scale: var(--paper-graphics-scale, 1);
 
     /* Box wie die Formelkarten: volle Lesespaltenbreite, gleiche Ausrichtung
        (display:block, kein max-width/auto-Zentrieren). */
@@ -57,17 +58,17 @@
 .aspekt-figur .aspekt-scene [id$="arrowhead-r"]  polygon { fill: var(--kb-r); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-rx"] polygon { fill: var(--kb-rx); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-ry"] polygon { fill: var(--kb-ry); }
-.aspekt-figur .zoom-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: 11px; }
+.aspekt-figur .zoom-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: calc(11px * var(--kb-text-scale)); }
 .aspekt-figur .aspekt-axis { stroke: var(--kb-text); stroke-width: 1.2; }
 .aspekt-figur .aspekt-scene [id$="ax_arrow"] polygon { fill: var(--kb-text); }
-.aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: 13px; font-style: italic; }
+.aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale)); font-style: italic; }
 /* Winkel-Visualisierung (Bogen + φ-Label) */
 .aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: 2; }
 /* varphi-Label im foreignObject (MathJax) -- Farbe akzent, zentriert */
 .aspekt-figur .aspekt-angle-fo {
     display: flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; color: var(--kb-accent);
-    font-size: 15px; line-height: 1;
+    font-size: calc(15px * var(--kb-text-scale)); line-height: 1;
 }
 .aspekt-figur .aspekt-angle-fo mjx-container { margin: 0 !important; color: var(--kb-accent); }
 .aspekt-figur .legend-swatch[data-c="phi"] { background: var(--kb-accent); height: 3px; }
@@ -76,7 +77,7 @@
 .aspekt-figur .panel-section { padding: 12px 14px; border-bottom: 1px solid var(--kb-border); }
 .aspekt-figur .panel-section:last-child { border-bottom: none; }
 .aspekt-figur .panel-label {
-    font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    font-size: calc(10.5px * var(--kb-text-scale)); font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
     color: var(--kb-text3); margin-bottom: 10px;
 }
 /* Analyse-Panel mit Kopf-Leiste + Body (Stand-alone-UX): panel-header ist ein
@@ -91,7 +92,7 @@
     border-bottom: 1px solid var(--kb-border); cursor: pointer; color: var(--kb-text2); font: inherit;
 }
 .aspekt-figur .panel-header:hover { color: var(--kb-text); }
-.aspekt-figur .ph-label { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.aspekt-figur .ph-label { font-size: calc(10.5px * var(--kb-text-scale)); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .aspekt-figur .ph-chevron { width: 14px; height: 14px; flex-shrink: 0; transition: transform .15s ease; }
 .aspekt-figur .panel-body { padding: 12px 14px; }
 /* eingeklappt: Body weg, Leiste vertikal + schmal, Chevron gedreht. Breite
@@ -105,13 +106,13 @@
 }
 .aspekt-figur .aspekt-panel-right.collapsed .ph-label { writing-mode: vertical-rl; transform: rotate(180deg); }
 .aspekt-figur .aspekt-panel-right.collapsed .ph-chevron { transform: rotate(180deg); }
-.aspekt-figur .slider-label { font-size: 12px; color: var(--kb-text2); margin-bottom: 3px; }
+.aspekt-figur .slider-label { font-size: calc(12px * var(--kb-text-scale)); color: var(--kb-text2); margin-bottom: 3px; }
 .aspekt-figur .slider-row {
     display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 12px;
 }
 .aspekt-figur .slider-row:last-child { margin-bottom: 0; }
 .aspekt-figur .slider-val {
-    font-family: var(--kb-font-mono); font-size: 11.5px; color: var(--kb-accent);
+    font-family: var(--kb-font-mono); font-size: calc(11.5px * var(--kb-text-scale)); color: var(--kb-accent);
     text-align: right; min-width: 52px;
 }
 .aspekt-figur input[type=range] {
@@ -133,7 +134,7 @@
 .aspekt-figur .legend-swatch[data-c="rx"]   { background: var(--kb-rx); }
 .aspekt-figur .legend-swatch[data-c="ry"]   { background: var(--kb-ry); }
 .aspekt-figur .legend-swatch[data-c="traj"] { background: repeating-linear-gradient(90deg, var(--kb-traj) 0 4px, transparent 4px 7px); height: 2px; }
-.aspekt-figur .legend-label { font-size: 11.5px; color: var(--kb-text2); }
+.aspekt-figur .legend-label { font-size: calc(11.5px * var(--kb-text-scale)); color: var(--kb-text2); }
 
 /* ── Analyse-Werte (Struktur + Optik VERBATIM aus der Stand-alone) ──────── */
 .aspekt-figur .panel-body { padding: 0; }
@@ -143,7 +144,7 @@
     display: grid; grid-template-columns: auto 1fr; gap: 1px;
     background: var(--kb-border); border-top: 1px solid var(--kb-border);
 }
-.aspekt-figur .analysis-cell { background: var(--kb-surface2); padding: 4px 8px; font-size: 11px; }
+.aspekt-figur .analysis-cell { background: var(--kb-surface2); padding: 4px 8px; font-size: calc(11px * var(--kb-text-scale)); }
 .aspekt-figur .analysis-cell.key { color: var(--kb-text3); }
 .aspekt-figur .analysis-cell.val { font-family: var(--kb-font-mono); color: var(--kb-text); text-align: right; }
 
@@ -158,12 +159,12 @@
     border: 1px solid var(--kb-border2);
     border-radius: var(--kb-r-sm);
     padding: 10px 12px;
-    font-size: 12.5px;
+    font-size: calc(12.5px * var(--kb-text-scale));
     color: var(--kb-text2);
     line-height: 1.75;
 }
 .aspekt-figur .formula-box-cap {
-    font-size: 11px;
+    font-size: calc(11px * var(--kb-text-scale));
     color: var(--kb-text3);
     margin-bottom: 2px;
 }

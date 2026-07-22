@@ -245,8 +245,12 @@ function read_paper_metrics() {
 }
 
 function metrics_for_level(level) {
-    const font_scale = [0, 0, 1, 1.2, 1.4, 5 / 3][level] || 1;
-    const line_scale = [0, 0, 1, 1.2, 1.4, 5 / 3][level] || 1;
+    // Stufenkurve (Nutzerwunsch):
+    // - 1 und 2 bleiben wie bisher
+    // - 5 entspricht dem frueheren Level 4 (1.4x)
+    // - 3 und 4 liegen dazwischen
+    const font_scale = [0, 0, 1, 1.13, 1.26, 1.4][level] || 1;
+    const line_scale = [0, 0, 1, 1.13, 1.26, 1.4][level] || 1;
     const font_size = level === 1
         ? Math.max(1, paper_base_font_size - 1)
         : paper_base_font_size * font_scale;
@@ -269,10 +273,18 @@ function apply_text_size() {
     const paper = read_paper_metrics();
     if (!paper) return;
     const { font_size, line_height } = metrics_for_level(text_level);
+    // Grafik-/Panel-/Regler-Texte sollen sanfter skalieren als der Fliesstext.
+    // 1/2 unveraendert, danach nur leichte Schritte.
+    const graphics_scale = [0, 1, 1, 1.04, 1.08, 1.12][text_level] || 1;
+    // Zeilenabstand in Grafiktexten noch zusaetzlich gedaempft, damit die
+    // UI-Elemente bei hohen Stufen kompakt bleiben.
+    const graphics_line_scale = [0, 1, 1, 1.02, 1.04, 1.06][text_level] || 1;
     paper.style.setProperty("--paper-base-font-size", paper_base_font_size.toFixed(2) + "px");
     paper.style.setProperty("--paper-base-line-height", paper_base_line_height.toFixed(2) + "px");
     paper.style.setProperty("--paper-font-size", font_size.toFixed(2) + "px");
     paper.style.setProperty("--paper-line-height", line_height.toFixed(2) + "px");
+    paper.style.setProperty("--paper-graphics-scale", graphics_scale.toFixed(3));
+    paper.style.setProperty("--paper-graphics-line-scale", graphics_line_scale.toFixed(3));
     sync_text_size_ui();
     if (window.relayout_eq_numbers) window.relayout_eq_numbers();
 }

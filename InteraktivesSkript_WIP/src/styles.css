@@ -150,8 +150,8 @@ body {
 #paper .highlight_box_title,
 #paper .chapter-pagenav {
     font-family: var(--font-ui);
-    font-size: var(--paper-base-font-size);
-    line-height: var(--paper-base-line-height);
+    font-size: calc(var(--paper-base-font-size) * var(--paper-graphics-scale, 1));
+    line-height: calc(var(--paper-base-line-height) * var(--paper-graphics-line-scale, var(--paper-graphics-scale, 1)));
 }
 /* Feste Druck-Textbreite wie im Legacy (~700px A4-Spalte), UNABHAENGIG vom
    Bildschirm-Breiten-Modus. Die Schriftgroesse bleibt ueber --paper-font-size
