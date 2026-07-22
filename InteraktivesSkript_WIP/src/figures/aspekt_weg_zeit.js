@@ -51,6 +51,7 @@ import { setupScene, updateScene, updateGraph, updateGraphHover,
 import { R_MIN, R_MAX } from './kreisbewegung/constants.js';
 import { createRuntime } from './kreisbewegung/runtime.js';
 import { attachGraphHover } from './kreisbewegung/lib/hover.js';
+import { resetOnPlayAfterAutoStop } from './playback.js';
 import { ge } from '../core.js';
 
 const T_AUTO = 6;             // fester Auto-Stopp nach 6 s (nicht 1,5 T) — bei
@@ -420,7 +421,6 @@ export function buildWegZeitFig(fig) {
     let playing = false;
     let rafId = null;
     let lastTs = 0;
-    const AUTO_STOP_EPS = 1e-6;
 
     function frame(ts) {
         if (!playing) return;
@@ -439,9 +439,8 @@ export function buildWegZeitFig(fig) {
     }
     function start() {
       if (playing) return;
-      // Allgemein fuer Auto-Stopp-Simulationen: Nach erreichtem Endpunkt
-      // startet ein neuer Play-Klick mit einem automatischen Reset.
-      if (curT >= T_AUTO - AUTO_STOP_EPS) reset();
+      // Einheitliches Auto-Stopp-Verhalten: Play nach Ende startet neu.
+      resetOnPlayAfterAutoStop(curT, T_AUTO, reset);
       playing = true;
       lastTs = 0;
       rafId = requestAnimationFrame(frame);
