@@ -1,0 +1,217 @@
+/* aspekt_kreisbahn.css — Optik der Aspekt-Figur, so nah wie moeglich an der
+   Stand-alone-Sim (src/figures/kreisbewegung/, Vorlage
+   Input/Simulationen/Project_kreisbewegung_simulation). Farb-Tokens und
+   Panel-/Slider-/Legenden-Regeln VERBATIM aus der portierten styles.css
+   uebernommen, nur auf .aspekt-figur statt #gc10 gescopt. Keine eigene
+   Strichstaerke auf den Vektoren: sie muss zur fixen Pfeil-Verkuerzung in
+   render.js passen (ARROW_LEN=5·strokeWidth), sonst landet die Spitze daneben. */
+.aspekt-figur {
+    --kb-surface: #ffffff;
+    --kb-surface2: #f6f4ef;
+    --kb-border: #e3e1d7;
+    --kb-border2: #d1cebf;
+    --kb-text: #181b21;
+    --kb-text2: #4c5266;
+    --kb-text3: #878ea1;
+    --kb-accent: var(--fh, #00b2a9);
+    --kb-r: #b08010;      /* Ortsvektor */
+    --kb-rx: #1f77b4;     /* x-Komponente */
+    --kb-ry: #1a8a50;     /* y-Komponente */
+    --kb-traj: #7f7f7f;   /* durchlaufener Bogen */
+    --kb-r-sm: 6px;
+    --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
+    --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);
+
+    /* Box wie die Formelkarten: volle Lesespaltenbreite, gleiche Ausrichtung
+       (display:block, kein max-width/auto-Zentrieren). */
+    position: relative;
+    display: block;
+    margin: 0 0 20px;
+    background: var(--kb-surface);
+    border: 1px solid var(--kb-border);
+    border-radius: 8px;
+    font-family: var(--kb-font);
+    color: var(--kb-text);
+    overflow: hidden;
+}
+
+/* ── Szene (Geometrie exakt wie Vorlage) ───────────────────────────────── */
+.aspekt-figur .aspekt-scene { min-width: 0; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; }
+/* Inline-Groesse (nicht-Zoom): 460 war richtig. Im Overlay wird das
+   ueberschrieben und die SVG an der verfuegbaren HOEHE gedeckelt (s. unten). */
+.aspekt-figur .aspekt-svg { display: block; width: 100%; max-width: 460px; height: auto; }
+.aspekt-figur #kb_disk { stroke: var(--kb-traj); stroke-width: 1.5; opacity: 0.32; }
+.aspekt-figur #kb_trajectory_path { stroke: var(--kb-traj); }
+.aspekt-figur #kb_point { fill: var(--kb-accent); stroke: var(--kb-text); }
+.aspekt-figur #kb_position_vector   { stroke: var(--kb-r);  stroke-width: 5; }   /* 2x Vorlage (2.5) */
+.aspekt-figur #kb_position_vector_x { stroke: var(--kb-rx); stroke-width: 4; }   /* 2x Vorlage (2) */
+.aspekt-figur #kb_position_vector_y { stroke: var(--kb-ry); stroke-width: 4; }
+.aspekt-figur #kb_arrowhead-r  polygon { fill: var(--kb-r); }
+.aspekt-figur #kb_arrowhead-rx polygon { fill: var(--kb-rx); }
+.aspekt-figur #kb_arrowhead-ry polygon { fill: var(--kb-ry); }
+.aspekt-figur .zoom-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: 11px; }
+.aspekt-figur .aspekt-axis { stroke: var(--kb-text); stroke-width: 1.2; }
+.aspekt-figur #kb_ax_arrow polygon { fill: var(--kb-text); }
+.aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: 13px; font-style: italic; }
+/* Winkel-Visualisierung (Bogen + φ-Label) */
+.aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: 2; }
+/* varphi-Label im foreignObject (MathJax) -- Farbe akzent, zentriert */
+.aspekt-figur .aspekt-angle-fo {
+    display: flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; color: var(--kb-accent);
+    font-size: 15px; line-height: 1;
+}
+.aspekt-figur .aspekt-angle-fo mjx-container { margin: 0 !important; color: var(--kb-accent); }
+.aspekt-figur .legend-swatch[data-c="phi"] { background: var(--kb-accent); height: 3px; }
+
+/* ── Panel (Parameter / Legende / Analyse) — Vorlagen-Klassen ──────────── */
+.aspekt-figur .panel-section { padding: 12px 14px; border-bottom: 1px solid var(--kb-border); }
+.aspekt-figur .panel-section:last-child { border-bottom: none; }
+.aspekt-figur .panel-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--kb-text3); margin-bottom: 10px;
+}
+/* Analyse-Panel mit Kopf-Leiste + Body (Stand-alone-UX): panel-header ist ein
+   Button (ph-label + Doppel-Chevron), panel-body haelt die Werte. Eingeklappt
+   (.aspekt-panel-right.collapsed) verschwindet der Body und die Leiste wird
+   zum schmalen vertikalen Streifen (Label gedreht, Chevron zeigt zum
+   Aufklappen). */
+.aspekt-figur .aspekt-panel-right { display: flex; flex-direction: column; }
+.aspekt-figur .panel-header {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    width: 100%; padding: 11px 14px; background: var(--kb-surface); border: none;
+    border-bottom: 1px solid var(--kb-border); cursor: pointer; color: var(--kb-text2); font: inherit;
+}
+.aspekt-figur .panel-header:hover { color: var(--kb-text); }
+.aspekt-figur .ph-label { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.aspekt-figur .ph-chevron { width: 14px; height: 14px; flex-shrink: 0; transition: transform .15s ease; }
+.aspekt-figur .panel-body { padding: 12px 14px; }
+/* eingeklappt: Body weg, Leiste vertikal + schmal, Chevron gedreht */
+.aspekt-figur .aspekt-panel-right.collapsed .panel-body { display: none; }
+.aspekt-figur .aspekt-panel-right.collapsed .panel-header {
+    flex-direction: column; justify-content: flex-start; gap: 12px;
+    height: 100%; padding: 14px 0; border-bottom: none;
+}
+.aspekt-figur .aspekt-panel-right.collapsed .ph-label { writing-mode: vertical-rl; transform: rotate(180deg); }
+.aspekt-figur .aspekt-panel-right.collapsed .ph-chevron { transform: rotate(180deg); }
+.aspekt-figur .slider-label { font-size: 12px; color: var(--kb-text2); margin-bottom: 3px; }
+.aspekt-figur .slider-row {
+    display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 12px;
+}
+.aspekt-figur .slider-row:last-child { margin-bottom: 0; }
+.aspekt-figur .slider-val {
+    font-family: var(--kb-font-mono); font-size: 11.5px; color: var(--kb-accent);
+    text-align: right; min-width: 52px;
+}
+.aspekt-figur input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 3px; background: var(--kb-border2); border-radius: 2px; outline: none;
+}
+.aspekt-figur input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--kb-accent); cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--kb-accent);
+}
+.aspekt-figur input[type=range]::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--kb-accent); cursor: pointer; border: 2px solid #fff;
+}
+
+/* ── Legende (Vorlagen-Klassen) ────────────────────────────────────────── */
+.aspekt-figur .legend-grid { display: grid; grid-template-columns: 14px 1fr; gap: 4px 7px; align-items: center; }
+.aspekt-figur .legend-swatch { width: 14px; height: 10px; border-radius: 2px; }
+.aspekt-figur .legend-swatch[data-c="r"]    { background: var(--kb-r); }
+.aspekt-figur .legend-swatch[data-c="rx"]   { background: var(--kb-rx); }
+.aspekt-figur .legend-swatch[data-c="ry"]   { background: var(--kb-ry); }
+.aspekt-figur .legend-swatch[data-c="traj"] { background: repeating-linear-gradient(90deg, var(--kb-traj) 0 4px, transparent 4px 7px); height: 2px; }
+.aspekt-figur .legend-label { font-size: 11.5px; color: var(--kb-text2); }
+
+/* ── Analyse-Werte (Struktur + Optik VERBATIM aus der Stand-alone) ──────── */
+.aspekt-figur .panel-body { padding: 0; }
+.aspekt-figur .panel-body .panel-section { padding: 12px 14px; }
+.aspekt-figur .panel-body .panel-label { margin-bottom: 8px; }
+.aspekt-figur .analysis-grid {
+    display: grid; grid-template-columns: auto 1fr; gap: 1px;
+    background: var(--kb-border); border-top: 1px solid var(--kb-border);
+}
+.aspekt-figur .analysis-cell { background: var(--kb-surface2); padding: 4px 8px; font-size: 11px; }
+.aspekt-figur .analysis-cell.key { color: var(--kb-text3); }
+.aspekt-figur .analysis-cell.val { font-family: var(--kb-font-mono); color: var(--kb-text); text-align: right; }
+
+/* ── Lupe ──────────────────────────────────────────────────────────────── */
+.aspekt-figur .aspekt-lupe {
+    position: absolute; top: 8px; right: 8px; z-index: 2;
+    width: 32px; height: 32px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border); border-radius: 8px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur .aspekt-lupe:hover { color: var(--kb-accent); border-color: var(--kb-accent); }
+.aspekt-figur .aspekt-lupe svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+/* ── Bildunterschrift (uebernimmt die Rolle von Abb. 1.38 am Bildschirm) ── */
+.aspekt-figur .aspekt-caption {
+    padding: 10px 14px 12px; font-size: 0.85em; line-height: 1.45;
+    color: var(--ink-3, #666d80); text-align: left; border-top: 1px solid var(--kb-border);
+}
+.aspekt-figur .aspekt-caption .fig-label { font-weight: 600; color: var(--ink-2, #4c5266); }
+
+/* ── Layout je Breiten-Modus ───────────────────────────────────────────────
+   Die Modus-Regeln gelten NUR ausserhalb des Overlays (:not(.aspekt-im-overlay)),
+   sonst wuerden sie wegen hoeherer Spezifitaet die Overlay-Regeln schlagen und
+   im Zoom bei schmal/normal die Analyse-Spalte verschwinden lassen. */
+.aspekt-figur .aspekt-body { display: block; }
+.aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-right { display: none; }
+/* Szene bekommt in JEDEM Modus Innenabstand, damit die Grafik nicht an den
+   Rand des Darstellungsbereichs stoesst (auch gestapelt/schmal). */
+.aspekt-figur .aspekt-scene { padding: 14px; }
+/* normal: Panel links | Szene */
+:root[data-width-mode="normal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body {
+    display: grid; grid-template-columns: 220px minmax(0, 1fr); align-items: stretch;
+}
+:root[data-width-mode="normal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
+/* breit: Panel links | Szene | Analyse (Analyse-Spalte auto -> schrumpft beim Einklappen) */
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body {
+    display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; align-items: stretch;
+}
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-right { display: flex; border-left: 1px solid var(--kb-border); }
+
+/* ── Overlay (Lupe): schwebt ueber dem Skript, Layout wie breit ────────── */
+.aspekt-overlay-back {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(24, 27, 33, .45);
+}
+/* Overlay: der Wrap hat eine maximale Hoehe (JS: ~0.95 der verfuegbaren Hoehe),
+   overflow:auto als Sicherheitsnetz. Die SVG wird an der VIEWPORT-HOEHE
+   gedeckelt (max-width: min(100%, 62vh) -> Bildhoehe ~66vh), damit die
+   Simulation im Zoom nie ueber den Bildschirm hinausragt -- unabhaengig von
+   verschachteltem flex/grid. */
+.aspekt-overlay-wrap { overflow: auto; }
+.aspekt-figur.aspekt-im-overlay {
+    margin: 0; width: 100%;
+    box-shadow: 0 24px 60px rgba(24,27,33,.35);
+}
+/* Im Overlay IMMER dreispaltig (Analyse stets sichtbar, auch wenn die Seite im
+   Modus schmal/normal steht). Analyse-Spalte auto -> schrumpft beim Einklappen. */
+.aspekt-figur.aspekt-im-overlay .aspekt-body {
+    display: grid; grid-template-columns: 240px minmax(0, 1fr) auto; align-items: start;
+}
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-left  { border-right: 1px solid var(--kb-border); }
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-right { display: flex; border-left: 1px solid var(--kb-border); }
+.aspekt-figur.aspekt-im-overlay .aspekt-scene { padding: 18px; }
+.aspekt-figur.aspekt-im-overlay .aspekt-svg { width: 100%; height: auto; max-width: min(100%, 62vh); }
+body.aspekt-overlay-open { overflow: hidden; }
+
+/* Tablet: gestapelt -- aber NICHT im Overlay (Analyse bleibt im Zoom sichtbar). */
+@media (max-width: 1024px) {
+    :root[data-width-mode] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body { display: block; }
+    :root[data-width-mode] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-right { display: none; }
+    :root[data-width-mode] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: none; }
+}
+
+/* Legacy-Muster: interaktive Figur am Bildschirm, statisches Bild im Druck. */
+.abbildung.nur-druck { display: none; }
+@media print {
+    .aspekt-figur.nur-bildschirm { display: none; }
+    .abbildung.nur-druck { display: block; }
+}

@@ -446,6 +446,15 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     color: var(--ink);
     white-space: nowrap;
 }
+#header_author,
+#header-author {
+    font-size: 10.5px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: .01em;
+    color: var(--ink-3);
+    white-space: nowrap;
+}
 #header_version { opacity: .55; font-size: .62em; font-weight: 400; margin-left: 3px; }
 #header_divider {
     width: 1px;
@@ -1614,6 +1623,8 @@ input[type="range"]::-moz-range-track {
 /* ── Tablet-Breakpoint (erste responsive Regel im Projekt) ───────────────── */
 @media (max-width: 1024px) {
     #header #chapter_hamburger { display: flex; align-items: center; justify-content: center; }
+    #header_author,
+    #header-author { display: none; }
     .chapter-crumb #chapter_crumb_chapter { display: none; }
     .chapter-body {
         grid-template-columns: 1fr;

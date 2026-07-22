@@ -306,6 +306,10 @@ export function set_width_mode(mode, persist = true) {
     if (content) content.style.width = contentW + "px";
     if (container) container.style.width = (contentW + CONTAINER_SLACK) + "px";
     if (paper) paper.style.setProperty("--paper-max-width", PAPER_MAX_WIDTHS[mode]);
+    // Modus als CSS-Signal an der Wurzel (schmal/normal/breit) -- z. B. fuer
+    // die Aspekt-Figuren, deren Layout (Regler links, Analyse rechts) vom
+    // Breiten-Modus abhaengt.
+    document.documentElement.dataset.widthMode = mode;
     mark_active_width_segment(mode);
     if (persist) {
         try { localStorage.setItem(WIDTH_STORAGE_KEY, mode); } catch (_) {}
