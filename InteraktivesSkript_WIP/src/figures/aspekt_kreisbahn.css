@@ -218,6 +218,15 @@
 :root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left .panel-header-left .ph-chevron {
     transform: rotate(90deg);
 }
+/* schmal: Legende platzsparend in 3 Spalten (jeweils Swatch + Label). */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left .legend-grid {
+    grid-template-columns: 14px minmax(0, 1fr) 14px minmax(0, 1fr) 14px minmax(0, 1fr);
+    gap: 6px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left .legend-label {
+    font-size: calc(10.8px * var(--kb-text-scale));
+    line-height: 1.25;
+}
 /* breit: Panel links | Szene | Analyse (Analyse-Spalte auto -> schrumpft beim Einklappen) */
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body {
     display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto; align-items: stretch;
