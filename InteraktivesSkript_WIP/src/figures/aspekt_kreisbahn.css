@@ -35,23 +35,26 @@
     overflow: hidden;
 }
 
-/* ── Szene (Geometrie exakt wie Vorlage) ───────────────────────────────── */
+/* ── Szene (Geometrie exakt wie Vorlage) ─────────────────────────────────
+   IDs sind pro Instanz prefixt (kb<n>_, s. runtime.js) -> hier Suffix-Selektoren
+   statt fester #kb_-IDs. Gescopt unter .aspekt-scene, damit z.B. [id$="point"]
+   nicht auch den Graph-Punkt (id …graph_point) einer Weg-Zeit-Figur trifft. */
 .aspekt-figur .aspekt-scene { min-width: 0; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; }
 /* Inline-Groesse (nicht-Zoom): 460 war richtig. Im Overlay wird das
    ueberschrieben und die SVG an der verfuegbaren HOEHE gedeckelt (s. unten). */
 .aspekt-figur .aspekt-svg { display: block; width: 100%; max-width: 460px; height: auto; }
-.aspekt-figur #kb_disk { stroke: var(--kb-traj); stroke-width: 1.5; opacity: 0.32; }
-.aspekt-figur #kb_trajectory_path { stroke: var(--kb-traj); }
-.aspekt-figur #kb_point { fill: var(--kb-accent); stroke: var(--kb-text); }
-.aspekt-figur #kb_position_vector   { stroke: var(--kb-r);  stroke-width: 5; }   /* 2x Vorlage (2.5) */
-.aspekt-figur #kb_position_vector_x { stroke: var(--kb-rx); stroke-width: 4; }   /* 2x Vorlage (2) */
-.aspekt-figur #kb_position_vector_y { stroke: var(--kb-ry); stroke-width: 4; }
-.aspekt-figur #kb_arrowhead-r  polygon { fill: var(--kb-r); }
-.aspekt-figur #kb_arrowhead-rx polygon { fill: var(--kb-rx); }
-.aspekt-figur #kb_arrowhead-ry polygon { fill: var(--kb-ry); }
+.aspekt-figur .aspekt-scene [id$="disk"] { stroke: var(--kb-traj); stroke-width: 1.5; opacity: 0.32; }
+.aspekt-figur .aspekt-scene [id$="trajectory_path"] { stroke: var(--kb-traj); }
+.aspekt-figur .aspekt-scene [id$="point"] { fill: var(--kb-accent); stroke: var(--kb-text); }
+.aspekt-figur .aspekt-scene [id$="position_vector"]   { stroke: var(--kb-r);  stroke-width: 5; }   /* 2x Vorlage (2.5) */
+.aspekt-figur .aspekt-scene [id$="position_vector_x"] { stroke: var(--kb-rx); stroke-width: 4; }   /* 2x Vorlage (2) */
+.aspekt-figur .aspekt-scene [id$="position_vector_y"] { stroke: var(--kb-ry); stroke-width: 4; }
+.aspekt-figur .aspekt-scene [id$="arrowhead-r"]  polygon { fill: var(--kb-r); }
+.aspekt-figur .aspekt-scene [id$="arrowhead-rx"] polygon { fill: var(--kb-rx); }
+.aspekt-figur .aspekt-scene [id$="arrowhead-ry"] polygon { fill: var(--kb-ry); }
 .aspekt-figur .zoom-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: 11px; }
 .aspekt-figur .aspekt-axis { stroke: var(--kb-text); stroke-width: 1.2; }
-.aspekt-figur #kb_ax_arrow polygon { fill: var(--kb-text); }
+.aspekt-figur .aspekt-scene [id$="ax_arrow"] polygon { fill: var(--kb-text); }
 .aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: 13px; font-style: italic; }
 /* Winkel-Visualisierung (Bogen + φ-Label) */
 .aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: 2; }
@@ -86,7 +89,10 @@
 .aspekt-figur .ph-label { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .aspekt-figur .ph-chevron { width: 14px; height: 14px; flex-shrink: 0; transition: transform .15s ease; }
 .aspekt-figur .panel-body { padding: 12px 14px; }
-/* eingeklappt: Body weg, Leiste vertikal + schmal, Chevron gedreht */
+/* eingeklappt: Body weg, Leiste vertikal + schmal, Chevron gedreht. Breite
+   wie das linke Bedienfeld (36 px Streifen) — gleiche Erscheinung/UX wie das
+   Ein-/Ausklappen der Bedienung (s. .aspekt-panel-left.collapsed). */
+.aspekt-figur .aspekt-panel-right.collapsed { width: 36px; }
 .aspekt-figur .aspekt-panel-right.collapsed .panel-body { display: none; }
 .aspekt-figur .aspekt-panel-right.collapsed .panel-header {
     flex-direction: column; justify-content: flex-start; gap: 12px;
@@ -136,6 +142,23 @@
 .aspekt-figur .analysis-cell.key { color: var(--kb-text3); }
 .aspekt-figur .analysis-cell.val { font-family: var(--kb-font-mono); color: var(--kb-text); text-align: right; }
 
+/* ── Physik-Sektion (rechte Seitenleiste): die fuer die jeweilige Figur
+   relevanten Formeln, UNNUMMERIERT (kein Tag — bewusst ohne Formelnummer, s.
+   main.js::fill_physik_panels, das sie aus window.eq_latex als \[...\] neu
+   setzt). Optik an die Stand-alone-Sims angelehnt: rahmenlos auf der Panel-
+   Flaeche, keine Lesefluss-Formelkarte, zentriert und ggf. auf die Panel-
+   breite skaliert. Hoeher spezifisch als die Lesefluss-Kartenregel und als
+   darkmode.css' mjx-container[display]-Ueberschreibung. */
+.aspekt-figur .physik-list { display: flex; flex-direction: column; gap: 2px; }
+.aspekt-figur .physik-eq { line-height: 0; }
+.aspekt-figur .physik-list mjx-container[display="true"] {
+    display: block;
+    background: none; border: none; border-radius: 0;
+    padding: 4px 0; margin: 0 0 6px;
+    text-align: center;
+}
+.aspekt-figur .physik-list mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
+
 /* ── Lupe ──────────────────────────────────────────────────────────────── */
 .aspekt-figur .aspekt-lupe {
     position: absolute; top: 8px; right: 8px; z-index: 2;
@@ -165,15 +188,43 @@
 .aspekt-figur .aspekt-scene { padding: 14px; }
 /* normal: Panel links | Szene */
 :root[data-width-mode="normal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body {
-    display: grid; grid-template-columns: 220px minmax(0, 1fr); align-items: stretch;
+    display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; align-items: stretch;
 }
 :root[data-width-mode="normal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
 /* breit: Panel links | Szene | Analyse (Analyse-Spalte auto -> schrumpft beim Einklappen) */
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body {
-    display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; align-items: stretch;
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto; align-items: stretch;
 }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-right { display: flex; border-left: 1px solid var(--kb-border); }
+
+/* Streifen bis unten: die Panels spannen beide Grid-Zeilen (Inhalt + Caption),
+   damit ihr linker/rechter Trennrand bis ans untere Ende der Figur durchlaeuft.
+   Die Caption sitzt in Spalte 2 unter dem Inhalt (direkte Grid-Kinder via >). */
+.aspekt-figur .aspekt-body > .aspekt-panel-left { grid-column: 1; grid-row: 1 / -1; }
+.aspekt-figur .aspekt-body > .aspekt-panel-right { grid-column: 3; grid-row: 1 / -1; }
+.aspekt-figur .aspekt-body > .aspekt-main,
+.aspekt-figur .aspekt-body > .aspekt-scene { grid-column: 2; grid-row: 1; align-self: start; }
+.aspekt-figur .aspekt-body > .aspekt-caption { grid-column: 2; grid-row: 2; }
+
+/* ── Linkes Bedienfeld seitlich einklappbar (Normal + Breit) ──────────────
+   Die Grid-Spalte ist auto -> das Panel gibt seine Breite vor (220 px bzw.
+   240 px im Overlay) und schrumpft eingeklappt auf einen schmalen Streifen
+   (36 px). Die Mittel-Spalte (minmax(0,1fr)) nimmt den Rest — die SVGs bleiben
+   an der Viewport-HOEHE gedeckelt, wachsen also nur in die Breite, nie ueber
+   den Bildschirm. Kopf-Taste (.panel-header, in main.js eingesetzt) wird zum
+   vertikalen Streifen, die Sektionen verschwinden (CSS-Spiegelung von
+   .aspekt-panel-right.collapsed). */
+.aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { width: 220px; }
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-left { width: 240px; }
+.aspekt-figur .aspekt-panel-left.collapsed { width: 36px; }
+.aspekt-figur .aspekt-panel-left.collapsed .panel-section { display: none; }
+.aspekt-figur .aspekt-panel-left.collapsed .panel-header {
+    flex-direction: column; justify-content: flex-start; gap: 12px;
+    height: 100%; padding: 14px 0; border-bottom: none;
+}
+.aspekt-figur .aspekt-panel-left.collapsed .ph-label { writing-mode: vertical-rl; transform: rotate(180deg); }
+.aspekt-figur .aspekt-panel-left.collapsed .ph-chevron { transform: rotate(180deg); }
 
 /* ── Overlay (Lupe): schwebt ueber dem Skript, Layout wie breit ────────── */
 .aspekt-overlay-back {
@@ -194,7 +245,7 @@
 /* Im Overlay IMMER dreispaltig (Analyse stets sichtbar, auch wenn die Seite im
    Modus schmal/normal steht). Analyse-Spalte auto -> schrumpft beim Einklappen. */
 .aspekt-figur.aspekt-im-overlay .aspekt-body {
-    display: grid; grid-template-columns: 240px minmax(0, 1fr) auto; align-items: start;
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto; align-items: stretch;
 }
 .aspekt-figur.aspekt-im-overlay .aspekt-panel-left  { border-right: 1px solid var(--kb-border); }
 .aspekt-figur.aspekt-im-overlay .aspekt-panel-right { display: flex; border-left: 1px solid var(--kb-border); }

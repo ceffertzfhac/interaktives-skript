@@ -1,0 +1,122 @@
+/* aspekt_weg_zeit.css — Optik der Weg-Zeit-Aspekt-Figur (Abb. 1.40).
+   Farb-Tokens, Panel-/Slider-/Legenden-/Analyse-/Lupe-/Caption-Regeln und das
+   Layout je Breiten-Modus + das Overlay kommen unverändert aus
+   aspekt_kreisbahn.css (geladen), weil diese Figur ebenfalls .aspekt-figur ist.
+   Hier stehen NUR die Ergänzungen: die Graph-Klassen (aus der portierten
+   styles.css der Sim, hier auf [data-aspekt="weg-zeit"] gescopt), die
+   Linienfarben x(t)=blau / y(t)=grün (statt Sim-Akzent, damit Kurve und
+   Komponenten-Vektor zusammengehören) und die Mittel-Spalte (.aspekt-main),
+   die Szene + Diagramm übereinander stapelt. */
+
+/* ── Mittel-Spalte: Szene oben, Diagramm unten (gestapelt) ───────────────────
+   Beide SVGs an der Viewport-HOEHE deckeln, damit Szene UND beide (übereinander
+   gestapelte) Diagramme gleichzeitig auf den Bildschirm passen. Die SVGs tragen
+   preserveAspectRatio="xMidYMid meet" -> der Inhalt skaliert mit erhaltenem
+   Seitenverhältnis in die Box (width:100% × Nvh) und zentriert sich (ggf. mit
+   seitlichem Freiraum). Szene bewusst klein (der Aspekt sind die Diagramme). */
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-main {
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-main .aspekt-scene { padding: 8px; flex: 0 0 auto; }
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-main .aspekt-svg {
+    display: block; width: 100%; height: 26vh; max-width: none;
+}
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 auto; }
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-graph-svg {
+    display: block; width: 100%; height: 54vh; max-width: none;
+    margin: 0 auto;
+}
+
+/* ── Graph-Klassen (VERBATIM Struktur aus der Sim, gescopt) ────────────────── */
+.aspekt-figur[data-aspekt="weg-zeit"] .graph-bg { fill: var(--kb-graph-bg, #ffffff); }
+.aspekt-figur[data-aspekt="weg-zeit"] .grid-line { stroke: var(--kb-grid-line, #e8eaf0); }
+.aspekt-figur[data-aspekt="weg-zeit"] .axis-line { stroke: var(--kb-text); }
+.aspekt-figur[data-aspekt="weg-zeit"] .axis-label { fill: var(--kb-text); font-size: 13px; font-family: var(--kb-font); }
+.aspekt-figur[data-aspekt="weg-zeit"] .tick-label { fill: var(--kb-text3); font-size: 11px; font-family: var(--kb-font-mono); }
+.aspekt-figur[data-aspekt="weg-zeit"] .graph-title-text { fill: var(--kb-text); font-size: 15px; font-family: var(--kb-font); font-weight: 600; }
+.aspekt-figur[data-aspekt="weg-zeit"] .graph-title-text.small { font-size: 13px; }
+.aspekt-figur[data-aspekt="weg-zeit"] .graph-hover-line { stroke: var(--kb-text3); stroke-width: 1.5; stroke-dasharray: 4,3; pointer-events: none; }
+.aspekt-figur[data-aspekt="weg-zeit"] .graph-hover-point { fill: none; stroke-width: 2; pointer-events: none; }
+.aspekt-figur[data-aspekt="weg-zeit"] .graph-hover-tooltip-bg { fill: var(--kb-surface2); fill-opacity: .85; stroke: var(--kb-border2); stroke-width: 1; rx: 4; }
+.aspekt-figur[data-aspekt="weg-zeit"] .graph-hover-tooltip-text { fill: var(--kb-text); font-size: 11px; font-family: var(--kb-font-mono); pointer-events: none; }
+/* Hit-Rect nur im Zoom/Overlay fangbar (pointer-events + Fadenkreuz-Cursor);
+   sonst pointer-events:none -> Hoverfeature ist dort NUR aktiv (Nutzervorgabe).
+    Das JS (aspekt_weg_zeit.js) gated onMove zusaetzlich auf .aspekt-im-overlay. */
+.aspekt-figur[data-aspekt="weg-zeit"] .graph-hit-rect { fill: none; pointer-events: none; }
+.aspekt-figur[data-aspekt="weg-zeit"].aspekt-im-overlay .graph-hit-rect { pointer-events: all; cursor: crosshair; }
+
+/* ── Linienfarben: x(t) in Blau (rx), y(t) in Grün (ry) — passend zu den
+   Komponenten-Vektoren in der Szene. Punkte entsprechend eingefärbt. IDs sind
+   pro Instanz prefixt (kb<n>_, s. runtime.js) -> Suffix-Selektoren. ───────── */
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_line_top"]    { stroke: var(--kb-rx); }
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_point_top"]   { fill: var(--kb-rx); }
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_line_bottom"] { stroke: var(--kb-ry); }
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_point_bottom"] { fill: var(--kb-ry); }
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_line"]        { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_point"]       { fill: var(--kb-accent); }
+
+/* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme, ca. 60 %) ─────────── */
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-btn-row {
+    display: flex; gap: 6px;
+}
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-btn.aspekt-btn-icon {
+    flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border2); border-radius: 6px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-btn.aspekt-btn-icon:hover {
+    color: var(--kb-accent); border-color: var(--kb-accent);
+}
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-btn.aspekt-btn-icon svg {
+    width: 15px; height: 15px; display: block;
+}
+
+/* ── Tempo-Pills (Slow-Mo analog zur Vorlage: 1× … ⅛×) ──────────────────── */
+.aspekt-figur[data-aspekt="weg-zeit"] .speed-pills { display: flex; gap: 5px; }
+.aspekt-figur[data-aspekt="weg-zeit"] .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: 11.5px;
+    color: var(--kb-text2); cursor: pointer; transition: all .15s;
+    position: relative; user-select: none;
+}
+.aspekt-figur[data-aspekt="weg-zeit"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+.aspekt-figur[data-aspekt="weg-zeit"] .speed-pill.active {
+    background: color-mix(in srgb, var(--kb-accent) 12%, transparent);
+    border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
+}
+
+/* ── Stoppuhr (analog, nach Vorlage) — gescopt unter .aspekt-scene, Suffix-
+   Selektoren wegen per-Instanz-Prefix. Digital-Display bleibt ausgeblendet. ─ */
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-scene [id$="stopwatch_circle"] { fill: var(--kb-surface); stroke: var(--kb-text); }
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-scene [id$="subdial_face"] { fill: var(--kb-surface); stroke: var(--kb-text3); }
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-scene [id$="stopwatch_main_hand"] { stroke: var(--kb-text); }
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-scene [id$="stopwatch_sub_hand"] { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-scene .sw-mark { stroke: var(--kb-text3); }
+
+/* ── Breit-Modus: Szene und (gestapeltes) Diagramm NEBENEINANDER (Zeile) ─────
+   Normal/schmal bleiben gestapelt (.aspekt-main ist flex-column). Im breiten
+   Modus wird .aspekt-main zur Zeile; Szene und Diagramm teilen sich die Breite
+   und bekommen beide eine Viewport-Hoehe, die nebeneinander auf den Bildschirm
+   passt. */
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: row; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main .aspekt-scene { flex: 0 0 42%; padding: 8px; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main .aspekt-graph { flex: 1 1 58%; padding: 0 8px 8px; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-svg { height: 60vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-graph-svg { height: 60vh; }
+
+/* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
+   Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
+   aspekt_kreisbahn.css. ─────────────────────────────────────────────────── */
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: row; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main .aspekt-scene { flex: 0 0 42%; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-svg {
+    width: 100%; height: 64vh; max-width: none;
+}
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-graph-svg {
+    max-width: none; width: 100%; height: 64vh;
+}
+
+/* Tablet (gestapelt): Diagramm vollbreit unter der Szene — nichts extra nötig,
+   .aspekt-main ist ohnehin flex-column. */
