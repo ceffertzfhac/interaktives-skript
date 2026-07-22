@@ -31,10 +31,22 @@ const entryArg = (args.find(a => a.startsWith('--entry=')) || '').split('=')[1]
     || (args.includes('--entry') ? args[args.indexOf('--entry') + 1] : '');
 const entries = (entryArg || 'setupScene,updateScene').split(',').map(s => s.trim()).filter(Boolean);
 
-// 1) prop -> 'kb_id' aus state.js
+// 1) prop -> '<prefix>id' aus state.js. q() addiert den Prefix pro Instanz:
+//    neu:  q = id => document.getElementById(store.idPrefix + id)   (Default idPrefix:'kb_')
+//    alt:  q = id => document.getElementById('kb_' + id)              (festes Literal)
+// Die q('main_svg')-Literale enthalten KEIN kb_ mehr — der Prefix wird hier addiert.
 const stateSrc = fs.readFileSync(path.join(dir, 'state.js'), 'utf8');
-const prefixM = stateSrc.match(/const\s+q\s*=\s*id\s*=>\s*document\.getElementById\(\s*['"]([^'"]*)['"]\s*\+\s*id\s*\)/);
-const prefix = prefixM ? prefixM[1] : '';
+const qMatch = stateSrc.match(/const\s+q\s*=\s*id\s*=>\s*document\.getElementById\(\s*(.+?)\s*\+\s*id\s*\)/);
+let prefix = '';
+if (qMatch) {
+    const head = qMatch[1].trim();
+    const litM = head.match(/^['"]([^'"]*)['"]$/);                  // festes Literal
+    if (litM) prefix = litM[1];
+    else if (/store\.idPrefix/.test(head)) {                        // store.idPrefix + id
+        const def = stateSrc.match(/idPrefix:\s*['"]([^'"]+)['"]/); // Default in state.js
+        prefix = def ? def[1] : 'kb_';
+    }
+}
 const propToId = {};
 for (const m of stateSrc.matchAll(/DOM\.(\w+)\s*=\s*q\(\s*['"]([^'"]+)['"]\s*\)/g)) propToId[m[1]] = prefix + m[2];
 // Sammel-Objekte: DOM.x = { a: q('id'), … } -> die q('id') mit erfassen
@@ -84,6 +96,7 @@ const kern = needed.filter(id => !isExtra(id));
 const extra = needed.filter(id => isExtra(id));
 
 console.log(`Praefix "${prefix}"  |  erreichbare render-Funktionen ab [${entries.join(', ')}]: ${[...reachable].join(', ')}`);
+console.log(`Hinweis: in der Aspekt-Figur stehen diese IDs als 'kb_…' im Skelett-Template und werden pro Instanz per .replace(/kb_/g, prefix) prefixt (createRuntime).`);
 console.log('\n=== Skelett MUSS diese kb_-IDs enthalten (im erreichbaren Code dereferenziert) ===');
 console.log('\nKern-Szene (meist SICHTBAR, als <line>/<circle>/<g>/<path>/<text> anlegen):');
 kern.forEach(id => console.log('  ', id));
