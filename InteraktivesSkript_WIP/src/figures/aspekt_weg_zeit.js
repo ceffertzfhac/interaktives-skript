@@ -265,9 +265,9 @@ export function buildWegZeitFig(fig) {
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
 
-    // Lupe-Button: INS Bild der Kernsimulation setzen (rechts darin, also links
-    // neben dem vertikalen Trennstreifen zur rechten Seitenleiste), nicht an die
-    // figure-Ecke. .aspekt-main ist position:relative (s. CSS).
+    // Lupe-Button: immer an die rechte Kante der Hauptsimulations-Spalte setzen
+    // (direkt links neben der vertikalen Trennlinie zur Analyse). Deshalb an
+    // .aspekt-main anhaengen; die Positionierungsbasis kommt aus dem CSS.
     const lupe = document.createElement('button');
     lupe.type = 'button';
     lupe.className = 'aspekt-lupe';
@@ -420,6 +420,7 @@ export function buildWegZeitFig(fig) {
     let playing = false;
     let rafId = null;
     let lastTs = 0;
+    const AUTO_STOP_EPS = 1e-6;
 
     function frame(ts) {
         if (!playing) return;
@@ -436,7 +437,15 @@ export function buildWegZeitFig(fig) {
         });
         if (playing) rafId = requestAnimationFrame(frame);
     }
-    function start() { if (playing) return; playing = true; lastTs = 0; rafId = requestAnimationFrame(frame); }
+    function start() {
+      if (playing) return;
+      // Allgemein fuer Auto-Stopp-Simulationen: Nach erreichtem Endpunkt
+      // startet ein neuer Play-Klick mit einem automatischen Reset.
+      if (curT >= T_AUTO - AUTO_STOP_EPS) reset();
+      playing = true;
+      lastTs = 0;
+      rafId = requestAnimationFrame(frame);
+    }
     function stop()  { playing = false; if (rafId && typeof cancelAnimationFrame === 'function') cancelAnimationFrame(rafId); rafId = null; }
     function reset() {
         stop();

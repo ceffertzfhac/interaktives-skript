@@ -142,18 +142,29 @@
 .aspekt-figur .analysis-cell.key { color: var(--kb-text3); }
 .aspekt-figur .analysis-cell.val { font-family: var(--kb-font-mono); color: var(--kb-text); text-align: right; }
 
-/* ── Physik-Sektion (rechte Seitenleiste): kompakt und NUR auf die jeweilige
-   Figur gemünzt, UNNUMMERIERT (kein Tag — bewusst ohne Formelnummer). Inline
-   als \[...\] im figuren-eigenen PANEL_RIGHT, kein Umweg über window.eq_latex
-   (das ist die Form, die vor „Physik raus" stand). Optik an die Stand-alone-
-   Sims angelehnt: rahmenlos auf der Panel-Flaeche, zentriert und auf die
-   Panelbreite skaliert (max-width:100% — eine breite Formel skaliert statt
-   das Panel und damit die Simulation aufzuweiten). */
-.aspekt-figur .formula-box { display: flex; flex-direction: column; gap: 4px; }
-.aspekt-figur .formula-box-cap { font-size: 11px; color: var(--kb-text3); margin-bottom: 2px; }
+/* ── Physik-Sektion (rechte Seitenleiste): NUR Optik wie Stand-alone-Sim
+   (Formelkarte mit zarter Akzentflaeche/Rahmen, gleiche Typografie), Inhalt
+   bleibt unveraendert im jeweiligen Figuren-Template. */
+.aspekt-figur .formula-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--kb-surface2);
+    border: 1px solid var(--kb-border2);
+    border-radius: var(--kb-r-sm);
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: var(--kb-text2);
+    line-height: 1.75;
+}
+.aspekt-figur .formula-box-cap {
+    font-size: 11px;
+    color: var(--kb-text3);
+    margin-bottom: 2px;
+}
 .aspekt-figur .formula-box mjx-container[display="true"] {
     display: block; background: none; border: none; border-radius: 0;
-    padding: 2px 0; margin: 0; text-align: center;
+    padding: 2px 0; margin: 0 0 2px; text-align: center;
 }
 .aspekt-figur .formula-box mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 
