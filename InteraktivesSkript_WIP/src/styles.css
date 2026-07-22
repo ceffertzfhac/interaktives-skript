@@ -76,7 +76,7 @@ body {
    Breiten-Modus (Schmal/Normal/Extrabreit) setzt nur noch --paper-max-width
    (s. core.js::set_width_mode) -- kein --scale/--g/Sticky-Grafikspalte mehr. */
 #content {
-    width: 1150px;
+    width: 1280px;
     max-width: calc(100vw - 40px);
     margin: 0 auto 40px;
     border-radius: 14px;

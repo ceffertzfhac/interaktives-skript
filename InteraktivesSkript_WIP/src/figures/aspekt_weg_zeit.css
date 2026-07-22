@@ -18,6 +18,23 @@
     position: relative;
     display: flex; flex-direction: column; align-items: stretch; min-width: 0;
 }
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-main-content {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-aspekt="weg-zeit"] .aspekt-runbar {
+    position: sticky;
+    top: 0;
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 8px;
+    background: var(--kb-surface);
+    border-bottom: none;
+    box-shadow: none;
+}
 .aspekt-figur[data-aspekt="weg-zeit"] .aspekt-main .aspekt-scene { padding: 8px; flex: 0 0 auto; }
 .aspekt-figur[data-aspekt="weg-zeit"] .aspekt-main .aspekt-svg {
     display: block; width: 100%; height: 26vh; max-width: none;
@@ -79,7 +96,7 @@
     flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
     background: var(--kb-surface); text-align: center; font-size: 11.5px;
     color: var(--kb-text2); cursor: pointer; transition: all .15s;
-    position: relative; user-select: none;
+    position: relative; -webkit-user-select: none; user-select: none;
 }
 .aspekt-figur[data-aspekt="weg-zeit"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
 .aspekt-figur[data-aspekt="weg-zeit"] .speed-pill.active {
@@ -100,9 +117,10 @@
    Modus wird .aspekt-main zur Zeile; Szene und Diagramm teilen sich die Breite
    und bekommen beide eine Viewport-Hoehe, die nebeneinander auf den Bildschirm
    passt. */
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: row; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main .aspekt-scene { flex: 0 0 42%; padding: 8px; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main .aspekt-graph { flex: 1 1 58%; padding: 0 8px 8px; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: column; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main-content { flex-direction: row; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 8px; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 8px 8px; }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-svg { height: 60vh; }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-graph-svg { height: 60vh; }
 
@@ -110,13 +128,57 @@
    Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
    aspekt_kreisbahn.css. ─────────────────────────────────────────────────── */
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: row; }
-.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main .aspekt-scene { flex: 0 0 42%; padding: 12px; }
-.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: column; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content { flex-direction: row; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-svg {
     width: 100%; height: 64vh; max-width: none;
 }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-graph-svg {
     max-width: none; width: 100%; height: 64vh;
+}
+
+/* Zoom + schmal: Szene und Diagramm untereinander (nur dieser Modus). */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content {
+    flex-direction: column;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 auto;
+}
+
+/* Zoom + schmal: Platz auf Bildschirm priorisieren (ohne andere Modi zu aendern).
+   Statt der generischen 3-Spalten-Overlay-Ansicht wird die Figur einspaltig,
+   die rechte Analyse-Leiste ausgeblendet und die Kernflaechen kompakter gesetzt,
+   damit Szene + Diagramm gleichzeitig sichtbar bleiben. */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-body {
+    display: block;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-panel-left {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-panel-right {
+    display: none;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-runbar {
+    padding: 6px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-scene {
+    padding: 6px 8px 4px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-graph {
+    padding: 0 8px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-svg {
+    height: min(24vh, 220px);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-graph-svg {
+    height: min(42vh, 360px);
 }
 
 /* Tablet (gestapelt): Diagramm vollbreit unter der Szene — nichts extra nötig,

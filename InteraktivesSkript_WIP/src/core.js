@@ -6,12 +6,12 @@
 // #content-Breite je Modus (wie zuvor in splitter.js erprobt); #container
 // laeuft mit CONTAINER_SLACK mit, damit #content (margin:auto) nicht ueber
 // einen schmaleren Elternrahmen hinaus zentriert werden muss.
-const CONTENT_WIDTHS = { schmal: 900, normal: 1150, breit: 1500 };
+const CONTENT_WIDTHS = { schmal: 1000, normal: 1280, breit: 1800 };
 const CONTAINER_SLACK = 50;
 // Lesespalten-Deckel: bei schmal/normal begrenzt ohnehin das Grid (Rail 220px +
 // Marginalie 210px + Gaps/Padding) die Breite staerker als dieser Wert: er
 // greift wirksam erst bei breit.
-const PAPER_MAX_WIDTHS = { schmal: "640px", normal: "760px", breit: "980px" };
+const PAPER_MAX_WIDTHS = { schmal: "710px", normal: "845px", breit: "1175px" };
 const WIDTH_STORAGE_KEY = "skript_width_mode";
 
 export let interaktiv = true; //statisches oder interaktives Skript

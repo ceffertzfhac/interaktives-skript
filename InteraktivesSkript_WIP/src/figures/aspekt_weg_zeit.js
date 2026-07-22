@@ -176,13 +176,7 @@ const PANEL_LEFT = `
     </div>
   </div>
   <div class="panel-section">
-    <div class="panel-label">Ablauf</div>
-    <div class="aspekt-btn-row">
-      <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="start" aria-label="Start: automatischen Ablauf abspielen" title="Start"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5 L19 12 L8 19 Z" fill="currentColor"/></svg></button>
-      <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="stop" aria-label="Stop: Ablauf anhalten" title="Stop"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/></svg></button>
-      <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="reset" aria-label="Reset: auf Anfang zurücksetzen" title="Reset"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.74 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4z" fill="currentColor"/></svg></button>
-    </div>
-    <div class="panel-label" style="margin-top:12px">Tempo</div>
+    <div class="panel-label">Tempo</div>
     <div class="speed-pills">
       <label class="speed-pill"><input type="radio" name="ak_speed" value="1.0" checked><span>1×</span></label>
       <label class="speed-pill"><input type="radio" name="ak_speed" value="0.5"><span>½×</span></label>
@@ -198,6 +192,18 @@ const PANEL_LEFT = `
       <div class="legend-swatch" data-c="ry"></div>  <div class="legend-label">Komponente \\(r_y = y(t)\\)</div>
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
+  </div>
+</div>`;
+
+// -- Klebende Ablaufleiste oberhalb der eigentlichen Simulationsflaeche
+//    (Szene + Diagramm): nur Start/Stop/Reset bleiben beim Scrollen jederzeit
+//    erreichbar. Tempo bleibt bewusst im linken Panel (nicht permanent sichtbar).
+const RUNBAR = `
+<div class="aspekt-runbar" role="group" aria-label="Ablaufsteuerung">
+  <div class="aspekt-btn-row">
+    <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="start" aria-label="Start: automatischen Ablauf abspielen" title="Start"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5 L19 12 L8 19 Z" fill="currentColor"/></svg></button>
+    <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="stop" aria-label="Stop: Ablauf anhalten" title="Stop"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/></svg></button>
+    <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="reset" aria-label="Reset: auf Anfang zurücksetzen" title="Reset"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.74 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4z" fill="currentColor"/></svg></button>
   </div>
 </div>`;
 
@@ -260,9 +266,10 @@ export function buildWegZeitFig(fig) {
     // Skelett mit Per-Instanz-Prefix einhaengen (kb_ -> p, ak_ -> p+ak_), dann
     // DOM an diese Instanz binden. Reihenfolge: erst IDs im Dokument, dann bindDom.
     scene.innerHTML =
-        `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`)}` +
-        `<div class="aspekt-main"><div class="aspekt-scene">${SVG_SCENE.replace(/kb_/g, p)}</div>` +
-        `<div class="aspekt-graph">${SVG_GRAPH.replace(/kb_/g, p)}</div></div>` +
+      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`)}` +
+      `<div class="aspekt-main">${RUNBAR.replace(/name="ak_speed"/g, `name="${p}speed"`)}<div class="aspekt-main-content">` +
+      `<div class="aspekt-scene">${SVG_SCENE.replace(/kb_/g, p)}</div>` +
+      `<div class="aspekt-graph">${SVG_GRAPH.replace(/kb_/g, p)}</div></div></div>` +
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
 
@@ -276,7 +283,7 @@ export function buildWegZeitFig(fig) {
     lupe.setAttribute('aria-label', 'Figur vergrößern');
     lupe.title = 'Vergrößern';
     lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
-    scene.querySelector('.aspekt-main').appendChild(lupe);
+    scene.querySelector('.aspekt-main-content').appendChild(lupe);
 
     // Bildunterschrift aus data-caption aufbauen (die statische Abbildung
     // uebernimmt am Bildschirm diese Rolle). Inside .aspekt-body, damit die
@@ -472,6 +479,15 @@ export function buildWegZeitFig(fig) {
 
     [ak_t, ak_r, ak_T].forEach(inp => inp.addEventListener('input', onInput));
     rebuild();
+
+    // Beim Oeffnen/Schliessen der Lupe sofort neu zeichnen: so greift der
+    // schmal+Zoom-spezifische Diagramm-Layout-Switch ohne weitere Nutzeraktion.
+    fig.addEventListener('aspekt-overlay-toggled', () => {
+      rt.withStore(() => {
+        draw(curT);
+        updateLabels(curT, parseFloat(ak_T.value));
+      });
+    });
 
     // -- Graph-Hover (nur im Zoom/Overlay) — wie die Stand-alone-Sim: ueber dem
     //    Diagramm eine vertikale Linie + Punkt + Tooltip mit dem Wert an der

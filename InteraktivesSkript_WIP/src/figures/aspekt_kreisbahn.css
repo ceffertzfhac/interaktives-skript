@@ -205,6 +205,18 @@
     display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; align-items: stretch;
 }
 :root[data-width-mode="normal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
+/* schmal: Bedienung ist keine Seitenleiste, sondern eine obere Leiste */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left .panel-header-left {
+    border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left .panel-header-left .ph-chevron {
+    transform: rotate(90deg);
+}
 /* breit: Panel links | Szene | Analyse (Analyse-Spalte auto -> schrumpft beim Einklappen) */
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-body {
     display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto; align-items: stretch;
@@ -239,6 +251,43 @@
 }
 .aspekt-figur .aspekt-panel-left.collapsed .ph-label { writing-mode: vertical-rl; transform: rotate(180deg); }
 .aspekt-figur .aspekt-panel-left.collapsed .ph-chevron { transform: rotate(180deg); }
+
+/* schmal: Einklappen/Ausklappen vertikal (oben/unten) statt seitlich */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left.collapsed {
+    width: auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left.collapsed .panel-header {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    height: auto;
+    padding: 11px 14px;
+    border-bottom: none;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left.collapsed .ph-label {
+    writing-mode: horizontal-tb;
+    transform: none;
+}
+/* schmal: Beschriftung bleibt auch eingeklappt horizontal (inkl. Overlay). */
+:root[data-width-mode="schmal"] .aspekt-figur .aspekt-panel-left.collapsed .ph-label {
+    writing-mode: horizontal-tb;
+    transform: none;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left.collapsed .ph-chevron {
+    transform: rotate(-90deg);
+}
+
+/* schmal (global, inkl. Overlay): Chevron direkt neben Label und nach unten. */
+:root[data-width-mode="schmal"] .aspekt-figur .aspekt-panel-left.collapsed .panel-header {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur .aspekt-panel-left.collapsed .ph-chevron {
+    transform: rotate(-90deg);
+}
 
 /* ── Overlay (Lupe): schwebt ueber dem Skript, Layout wie breit ────────── */
 .aspekt-overlay-back {

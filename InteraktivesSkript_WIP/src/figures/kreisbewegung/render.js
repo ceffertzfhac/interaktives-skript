@@ -45,6 +45,14 @@ const ARROW_LEN_AXIS = 5 * 1.2;
 // statischen Druck-Vorlage.)
 function stackedDualGeom() {
     const w = GRAPH_W_STACK, h = GRAPH_H_STACK;
+    const fig = DOM.graphSvg && DOM.graphSvg.closest ? DOM.graphSvg.closest('.aspekt-figur') : null;
+    const isSchmalOverlay = !!(fig
+        && fig.dataset && fig.dataset.aspekt === 'weg-zeit'
+        && fig.classList && fig.classList.contains('aspekt-im-overlay')
+        && document.documentElement.dataset.widthMode === 'schmal');
+    if (isSchmalOverlay) {
+        return { vbW: w * 2 + GRAPH_STACKED_GAP, vbH: h, slotH: h, off2: { x: w + GRAPH_STACKED_GAP, y: 0 } };
+    }
     return { vbW: w, vbH: h * 2 + GRAPH_STACKED_GAP, slotH: h, off2: { x: 0, y: h + GRAPH_STACKED_GAP } };
 }
 

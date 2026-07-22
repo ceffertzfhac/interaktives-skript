@@ -420,6 +420,7 @@ function openOverlay(fig) {
     back.appendChild(wrap);
     document.body.appendChild(back);
     document.body.classList.add('aspekt-overlay-open');
+    fig.dispatchEvent(new CustomEvent('aspekt-overlay-toggled', { detail: { open: true } }));
 }
 
 function closeOverlay() {
@@ -429,6 +430,7 @@ function closeOverlay() {
     if (fig && overlayReturn) {
         fig.classList.remove('aspekt-im-overlay');
         overlayReturn.parent.insertBefore(fig, overlayReturn.next);
+      fig.dispatchEvent(new CustomEvent('aspekt-overlay-toggled', { detail: { open: false } }));
     }
     back.remove();
     document.body.classList.remove('aspekt-overlay-open');
