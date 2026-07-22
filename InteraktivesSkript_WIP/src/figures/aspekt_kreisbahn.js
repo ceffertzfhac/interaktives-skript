@@ -109,12 +109,22 @@ const PANEL_RIGHT = `
     <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
   </button>
   <div class="panel-body">
-    <dl class="aspekt-werte">
-      <dt>\\(\\varphi\\)</dt><dd id="ak_val_phi"></dd>
-      <dt>\\(R\\)</dt><dd id="ak_val_r"></dd>
-      <dt>\\(r_x = R\\cos\\varphi\\)</dt><dd id="ak_val_x"></dd>
-      <dt>\\(r_y = R\\sin\\varphi\\)</dt><dd id="ak_val_y"></dd>
-    </dl>
+    <div class="panel-section">
+      <div class="panel-label">Live-Analyse</div>
+      <div class="analysis-grid">
+        <div class="analysis-cell key">Winkel \\(\\varphi\\)</div><div class="analysis-cell val" id="ak_val_phi"></div>
+        <div class="analysis-cell key">Radius \\(R\\)</div><div class="analysis-cell val" id="ak_val_r"></div>
+        <div class="analysis-cell key">Position \\(x = r_x\\)</div><div class="analysis-cell val" id="ak_val_x"></div>
+        <div class="analysis-cell key">Position \\(y = r_y\\)</div><div class="analysis-cell val" id="ak_val_y"></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-label">Physik</div>
+      <div class="formula-box">
+        <div>Position auf der Kreisbahn:</div>
+        <div>\\[\\vec{r} = \\begin{pmatrix} R\\cos\\varphi \\\\ R\\sin\\varphi \\end{pmatrix}\\]</div>
+      </div>
+    </div>
   </div>
 </div>`;
 
@@ -188,13 +198,15 @@ function refresh() {
     drawAxes();
     draw(phi);
     const R = store.R, rad = phi * Math.PI / 180;
-    ge('ak_phi_out').textContent = phi.toFixed(0) + ' °';
-    ge('ak_r_out').textContent = R.toFixed(2) + ' m';
+    // Deutsches Dezimalkomma wie in der Vorlage.
+    const n = (x, d) => x.toFixed(d).replace('.', ',');
+    ge('ak_phi_out').textContent = n(phi, 0) + ' °';
+    ge('ak_r_out').textContent = n(R, 2) + ' m';
     const vp = ge('ak_val_phi'); if (vp) {
-        vp.textContent = phi.toFixed(0) + ' °';
-        ge('ak_val_r').textContent = R.toFixed(2) + ' m';
-        ge('ak_val_x').textContent = (R * Math.cos(rad)).toFixed(2) + ' m';
-        ge('ak_val_y').textContent = (R * Math.sin(rad)).toFixed(2) + ' m';
+        vp.textContent = n(phi, 1) + ' °';
+        ge('ak_val_r').textContent = n(R, 2) + ' m';
+        ge('ak_val_x').textContent = n(R * Math.cos(rad), 2) + ' m';
+        ge('ak_val_y').textContent = n(R * Math.sin(rad), 2) + ' m';
     }
 }
 

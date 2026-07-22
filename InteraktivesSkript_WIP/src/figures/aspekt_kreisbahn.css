@@ -18,6 +18,7 @@
     --kb-rx: #1f77b4;     /* x-Komponente */
     --kb-ry: #1a8a50;     /* y-Komponente */
     --kb-traj: #7f7f7f;   /* durchlaufener Bogen */
+    --kb-r-sm: 6px;
     --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
     --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);
 
@@ -111,10 +112,24 @@
 .aspekt-figur .legend-swatch[data-c="traj"] { background: repeating-linear-gradient(90deg, var(--kb-traj) 0 4px, transparent 4px 7px); height: 2px; }
 .aspekt-figur .legend-label { font-size: 11.5px; color: var(--kb-text2); }
 
-/* ── Analyse-Werte ─────────────────────────────────────────────────────── */
-.aspekt-figur .aspekt-werte { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 7px 12px; align-items: baseline; }
-.aspekt-figur .aspekt-werte dt { color: var(--kb-text2); font-size: 12px; }
-.aspekt-figur .aspekt-werte dd { margin: 0; font-family: var(--kb-font-mono); font-size: 11.5px; color: var(--kb-text); text-align: right; }
+/* ── Analyse-Werte (Struktur + Optik VERBATIM aus der Stand-alone) ──────── */
+.aspekt-figur .panel-body { padding: 0; }
+.aspekt-figur .panel-body .panel-section { padding: 12px 14px; }
+.aspekt-figur .panel-body .panel-label { margin-bottom: 8px; }
+.aspekt-figur .analysis-grid {
+    display: grid; grid-template-columns: auto 1fr; gap: 1px;
+    background: var(--kb-border); border-top: 1px solid var(--kb-border);
+}
+.aspekt-figur .analysis-cell { background: var(--kb-surface2); padding: 4px 8px; font-size: 11px; }
+.aspekt-figur .analysis-cell.key { color: var(--kb-text3); }
+.aspekt-figur .analysis-cell.val { font-family: var(--kb-font-mono); color: var(--kb-text); text-align: right; }
+.aspekt-figur .formula-box {
+    background: color-mix(in srgb, var(--kb-accent) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--kb-accent) 20%, transparent);
+    border-radius: var(--kb-r-sm); padding: 10px 12px; font-size: 12.5px;
+    color: var(--kb-text2); line-height: 1.75;
+}
+.aspekt-figur .formula-box mjx-container[display="true"] { margin: 4px 0 0; }
 
 /* ── Lupe ──────────────────────────────────────────────────────────────── */
 .aspekt-figur .aspekt-lupe {
