@@ -46,6 +46,11 @@
 .aspekt-figur .aspekt-scene [id$="disk"] { stroke: var(--kb-traj); stroke-width: 1.5; opacity: 0.32; }
 .aspekt-figur .aspekt-scene [id$="trajectory_path"] { stroke: var(--kb-traj); }
 .aspekt-figur .aspekt-scene [id$="point"] { fill: var(--kb-accent); stroke: var(--kb-text); }
+.aspekt-figur .aspekt-scene [id$="point"] {
+    cursor: grab;
+    touch-action: none;
+}
+.aspekt-figur.is-dragging-point .aspekt-scene [id$="point"] { cursor: grabbing; }
 .aspekt-figur .aspekt-scene [id$="position_vector"]   { stroke: var(--kb-r);  stroke-width: 5; }   /* 2x Vorlage (2.5) */
 .aspekt-figur .aspekt-scene [id$="position_vector_x"] { stroke: var(--kb-rx); stroke-width: 4; }   /* 2x Vorlage (2) */
 .aspekt-figur .aspekt-scene [id$="position_vector_y"] { stroke: var(--kb-ry); stroke-width: 4; }

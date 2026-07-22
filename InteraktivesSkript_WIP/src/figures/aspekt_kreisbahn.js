@@ -327,8 +327,77 @@ export function buildKreisbahnFig(fig) {
         });
     }
 
+        // Punkt greifen/ziehen: Maus-/Touch-Position -> (R, phi) umrechnen und
+        // dieselbe Render-Pipeline wie die Slider verwenden.
+        const svg = ge(p + 'main_svg');
+        const pointEl = ge(p + 'point');
+        let draggingPoint = false;
+
+        const snapToStep = (value, step) => Math.round(value / step) * step;
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+        function toSvgPoint(evt) {
+          if (!svg) return null;
+          const m = svg.getScreenCTM();
+          if (!m) return null;
+          const pt = svg.createSVGPoint();
+          pt.x = evt.clientX;
+          pt.y = evt.clientY;
+          return pt.matrixTransform(m.inverse());
+        }
+
+        function updateFromPointer(evt) {
+          const sp = toSvgPoint(evt);
+          if (!sp) return;
+          // SVG-y waechst nach unten -> fuer phi in Mathe-Konvention invertieren.
+          const dx = sp.x - ANIM_CX;
+          const dy = ANIM_CY - sp.y;
+          const phiDegRaw = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360;
+          const ppm = store.currentPixelsPerMeter || 1;
+          const rRaw = Math.hypot(dx, dy) / ppm;
+
+          const phiDeg = snapToStep(phiDegRaw, 0.5);
+          const r = snapToStep(clamp(rRaw, R_MIN, R_MAX), 0.05);
+
+          ak_phi.value = String(phiDeg);
+          ak_r.value = String(r);
+          refresh();
+        }
+
+        function onPointerMove(evt) {
+          if (!draggingPoint) return;
+          evt.preventDefault();
+          updateFromPointer(evt);
+        }
+
+        function stopPointDrag(evt) {
+          if (!draggingPoint) return;
+          draggingPoint = false;
+          fig.classList.remove('is-dragging-point');
+          if (pointEl && pointEl.releasePointerCapture && evt.pointerId !== undefined) {
+            try { pointEl.releasePointerCapture(evt.pointerId); } catch {}
+          }
+          window.removeEventListener('pointermove', onPointerMove);
+          window.removeEventListener('pointerup', stopPointDrag);
+          window.removeEventListener('pointercancel', stopPointDrag);
+        }
+
+        function startPointDrag(evt) {
+          if (evt.button !== undefined && evt.button !== 0) return;
+          draggingPoint = true;
+          fig.classList.add('is-dragging-point');
+          if (pointEl && pointEl.setPointerCapture && evt.pointerId !== undefined) {
+            try { pointEl.setPointerCapture(evt.pointerId); } catch {}
+          }
+          updateFromPointer(evt);
+          window.addEventListener('pointermove', onPointerMove, { passive: false });
+          window.addEventListener('pointerup', stopPointDrag);
+          window.addEventListener('pointercancel', stopPointDrag);
+        }
+
     [ak_phi, ak_r].forEach(inp => inp.addEventListener('input', refresh));
     refresh();
+        if (pointEl) pointEl.addEventListener('pointerdown', startPointDrag);
 }
 
 // ── Lupe: Overlay ueber dem Skript (GENERISCH, alle Aspekt-Figuren) ────────────
