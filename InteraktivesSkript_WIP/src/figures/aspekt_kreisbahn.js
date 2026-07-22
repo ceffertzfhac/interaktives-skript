@@ -207,7 +207,10 @@ function drawAngle(phiDeg) {
     // (30x30-foreignObject -> um 15 zentrieren.)
     const lr = (store.R >= 1.2) ? rArc * 0.62 : rArc + 15;
     const mid = rad / 2;
-    const lx = cx + lr * Math.cos(mid), ly = cy - lr * Math.sin(mid);
+    // Kleiner Versatz (nach rechts + halb so viel nach unten), damit das Label
+    // nicht mit dem Ortsvektor kollidiert (z. B. bei 60 Grad).
+    const OFF_X = 6, OFF_Y = 3;
+    const lx = cx + lr * Math.cos(mid) + OFF_X, ly = cy - lr * Math.sin(mid) + OFF_Y;
     const label = ge('kb_angle_label');
     if (label) {
         label.setAttribute('x', (lx - 15).toFixed(2));
