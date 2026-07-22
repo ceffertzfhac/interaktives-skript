@@ -148,9 +148,13 @@ body {
     font-size: var(--paper-base-font-size);
     line-height: var(--paper-base-line-height);
 }
+/* Feste Druck-Textbreite wie im Legacy (~700px A4-Spalte), UNABHAENGIG vom
+   Bildschirm-Breiten-Modus. Die Schriftgroesse bleibt ueber --paper-font-size
+   erhalten (in print.js nicht entfernt). */
 #print_container #paper {
-    padding: 20px 40px;
-    max-width: none;
+    width: 700px;
+    max-width: 700px;
+    padding: 30px 30px 50px 40px;
 }
 /* Display-Formeln auf die Textspalte begrenzen (v1.4.3): MathJax-SVGs haben
    feste Pixelbreite und koennen sich nicht umbrechen -- bei schmaler Textspalte

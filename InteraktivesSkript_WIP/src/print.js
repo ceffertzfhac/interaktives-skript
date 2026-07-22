@@ -48,6 +48,19 @@ export function print_page() {
 
     restorePagination();
 
+    // Breiten-Modus vom Druck ENTkoppeln (Nutzer-Feedback): set_width_mode
+    // setzt Inline-Breiten auf #content (width) und #paper (--paper-max-width);
+    // die wandern beim Klonen mit und wuerden per Inline-Spezifitaet die
+    // A4-Druck-CSS schlagen -> der Ausdruck haenge sonst an Schmal/Normal/Breit.
+    // Papier ist immer A4, also die Inline-Breiten im Klon entfernen. Die
+    // Schriftgroesse (--paper-font-size / --paper-line-height etc.) bleibt
+    // bewusst erhalten -- sie ist die einzige Einstellung, die fuer den Druck
+    // sinnvoll ist.
+    const pcContent = pc.querySelector("#content");
+    if (pcContent) pcContent.style.removeProperty("width");
+    const pcPaper = pc.querySelector("#paper");
+    if (pcPaper) pcPaper.style.removeProperty("--paper-max-width");
+
     const gci = pc.querySelectorAll(".grafik-container-inner");
     for(let i=0;i<gci.length;i++){
         gci[i].setAttribute("style","position:static;")
