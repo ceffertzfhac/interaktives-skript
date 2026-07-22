@@ -16,7 +16,7 @@ import { init_figure_panels, toggle_panel } from './figures/panels.js';
 import { init_numbering, resolve_eq_refs } from './numbering.js';
 import { loadChapters, typesetAfterLoad } from './chapters.js';
 import { init_footnotes, toggle_footnote } from './footnotes.js';
-import { init_aspekt_figuren, toggle_aspekt } from './figures/aspekt_kreisbahn.js';
+import { init_aspekt_figuren, toggle_aspekt, close_aspekt_overlay, label_aspekt_figuren } from './figures/aspekt_kreisbahn.js';
 
 // Figuren laden (Seiteneffekt: Registrierung von updateN/animateN/clearN).
 // Seit v1.7 ist Kapitel 1.4 rein statisch (v0.13-Abbildungen, keine
@@ -85,6 +85,7 @@ function dispatch_click(e) {
         case "toggle_panel": toggle_panel(el); break;
         case "toggle_footnote": toggle_footnote(el); break;
         case "toggle_aspekt": toggle_aspekt(el); break;
+        case "close_aspekt_overlay": if (e.target === el) close_aspekt_overlay(); break;
         case "toggle_drawer": toggle_drawer(); break;
         case "close_drawer": close_drawer(); break;
         case "chapter_prev": chapter_prev(); break;
@@ -113,6 +114,7 @@ async function init() {
     init_footnotes();
     init_aspekt_figuren();
     init_numbering();
+    label_aspekt_figuren();   // Nummer der statischen Abb. in die interaktive Bildunterschrift
     // Injizierte Formeln re-typesetzen, sobald MathJax bereit ist (Gate wie
     // numbering.js). renumber laeuft ueber reload_mathjax mit.
     typesetAfterLoad();

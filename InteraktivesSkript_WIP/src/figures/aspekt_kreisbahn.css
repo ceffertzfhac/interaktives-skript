@@ -1,33 +1,42 @@
-/* aspekt_kreisbahn.css — Optik der Aspekt-Figur. Die Farb-Tokens sind
-   VERBATIM aus src/figures/kreisbewegung/styles.css uebernommen, damit die
-   Figur denselben Wiedererkennungswert wie die grosse Simulation hat. Gescopt
-   auf .aspekt-figur (nicht #gc10), damit die Figur unabhaengig von der vollen
-   Sim lebt. Nur die Szene wird gestylt (Kreis, Punkt, Vektoren, Regler) --
-   kein Graph-/Stoppuhr-/Control-Chrome der grossen Sim. */
+/* aspekt_kreisbahn.css — Optik der Aspekt-Figur, so nah wie moeglich an der
+   Stand-alone-Sim (src/figures/kreisbewegung/, Vorlage
+   Input/Simulationen/Project_kreisbewegung_simulation). Farb-Tokens und
+   Panel-/Slider-/Legenden-Regeln VERBATIM aus der portierten styles.css
+   uebernommen, nur auf .aspekt-figur statt #gc10 gescopt. Keine eigene
+   Strichstaerke auf den Vektoren: sie muss zur fixen Pfeil-Verkuerzung in
+   render.js passen (ARROW_LEN=5·strokeWidth), sonst landet die Spitze daneben. */
 .aspekt-figur {
     --kb-surface: #ffffff;
+    --kb-surface2: #f6f4ef;
     --kb-border: #e3e1d7;
+    --kb-border2: #d1cebf;
     --kb-text: #181b21;
     --kb-text2: #4c5266;
+    --kb-text3: #878ea1;
     --kb-accent: var(--fh, #00b2a9);
     --kb-r: #b08010;      /* Ortsvektor */
     --kb-rx: #1f77b4;     /* x-Komponente */
     --kb-ry: #1a8a50;     /* y-Komponente */
     --kb-traj: #7f7f7f;   /* durchlaufener Bogen */
-    --kb-grid-line: #e8eaf0;
     --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
     --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);
 
-    font-family: var(--kb-font);
-    color: var(--kb-text);
+    /* Box wie die Formelkarten: volle Lesespaltenbreite, gleiche Ausrichtung
+       (display:block, kein max-width/auto-Zentrieren). */
+    position: relative;
+    display: block;
+    margin: 0 0 20px;
     background: var(--kb-surface);
     border: 1px solid var(--kb-border);
-    border-radius: 10px;
+    border-radius: 8px;
+    font-family: var(--kb-font);
+    color: var(--kb-text);
+    overflow: hidden;
 }
 
-/* Szene */
-.aspekt-figur .aspekt-scene { width: 100%; }
-.aspekt-figur .aspekt-svg { display: block; width: 100%; height: auto; }
+/* ── Szene (Geometrie exakt wie Vorlage) ───────────────────────────────── */
+.aspekt-figur .aspekt-scene { min-width: 0; display: flex; align-items: flex-start; justify-content: center; }
+.aspekt-figur .aspekt-svg { display: block; width: 100%; max-width: 460px; height: auto; }
 .aspekt-figur #kb_disk { stroke: var(--kb-traj); }
 .aspekt-figur #kb_trajectory_path { stroke: var(--kb-traj); }
 .aspekt-figur #kb_point { fill: var(--kb-accent); stroke: var(--kb-text); }
@@ -38,87 +47,112 @@
 .aspekt-figur #kb_arrowhead-rx polygon { fill: var(--kb-rx); }
 .aspekt-figur #kb_arrowhead-ry polygon { fill: var(--kb-ry); }
 .aspekt-figur .zoom-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: 11px; }
-/* Achsen (in drawCoordSystem als <line>/<text> erzeugt) */
-.aspekt-figur #kb_animation_coord_system line { stroke: var(--kb-text2); stroke-width: 1; }
-.aspekt-figur #kb_animation_coord_system text { fill: var(--kb-text2); font-family: var(--kb-font); font-size: 13px; }
+.aspekt-figur .aspekt-axis { stroke: var(--kb-text); stroke-width: 1.2; }
+.aspekt-figur #kb_ax_arrow polygon { fill: var(--kb-text); }
+.aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: 13px; font-style: italic; }
 
-/* Regler */
-.aspekt-figur .aspekt-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 12px 14px 14px;
-    border-top: 1px solid var(--kb-border);
+/* ── Panel (Parameter / Legende / Analyse) — Vorlagen-Klassen ──────────── */
+.aspekt-figur .panel-section { padding: 12px 14px; border-bottom: 1px solid var(--kb-border); }
+.aspekt-figur .panel-section:last-child { border-bottom: none; }
+.aspekt-figur .panel-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--kb-text3); margin-bottom: 10px;
 }
-.aspekt-figur .aspekt-row {
-    display: grid;
-    grid-template-columns: 8.5em 1fr 4.5em;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
+.aspekt-figur .slider-label { font-size: 12px; color: var(--kb-text2); margin-bottom: 3px; }
+.aspekt-figur .slider-row {
+    display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 12px;
 }
-.aspekt-figur .aspekt-name { color: var(--kb-text2); }
-.aspekt-figur .aspekt-name i { font-family: var(--font-serif, serif); }
-.aspekt-figur .aspekt-val {
-    font-family: var(--kb-font-mono);
-    font-size: 0.85rem;
-    color: var(--kb-text);
-    text-align: right;
+.aspekt-figur .slider-row:last-child { margin-bottom: 0; }
+.aspekt-figur .slider-val {
+    font-family: var(--kb-font-mono); font-size: 11.5px; color: var(--kb-accent);
+    text-align: right; min-width: 52px;
 }
-.aspekt-figur input[type="range"] { accent-color: var(--kb-accent); width: 100%; }
+.aspekt-figur input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 3px; background: var(--kb-border2); border-radius: 2px; outline: none;
+}
+.aspekt-figur input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--kb-accent); cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--kb-accent);
+}
+.aspekt-figur input[type=range]::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--kb-accent); cursor: pointer; border: 2px solid #fff;
+}
 
-/* ── Zweistufig: klein im Fliesstext, gross aufgeklappt ─────────────────────
-   Beide Stufen zeigen dieselbe Figur, der Unterschied ist nur die Breite.
-   Klein sitzt die Figur eingerueckt mit einer Lupe oben rechts; ein Klick auf
-   die Lupe schaltet .aspekt-gross und gibt der Figur die volle Spaltenbreite. */
-.aspekt-figur {
-    position: relative;
-    margin: 22px auto;
-    max-width: 340px;          /* kleine Inline-Stufe */
-    transition: max-width 0.25s ease;
-}
-.aspekt-figur.aspekt-gross { max-width: 560px; }
+/* ── Legende (Vorlagen-Klassen) ────────────────────────────────────────── */
+.aspekt-figur .legend-grid { display: grid; grid-template-columns: 14px 1fr; gap: 4px 7px; align-items: center; }
+.aspekt-figur .legend-swatch { width: 14px; height: 10px; border-radius: 2px; }
+.aspekt-figur .legend-swatch[data-c="r"]    { background: var(--kb-r); }
+.aspekt-figur .legend-swatch[data-c="rx"]   { background: var(--kb-rx); }
+.aspekt-figur .legend-swatch[data-c="ry"]   { background: var(--kb-ry); }
+.aspekt-figur .legend-swatch[data-c="traj"] { background: repeating-linear-gradient(90deg, var(--kb-traj) 0 4px, transparent 4px 7px); height: 2px; }
+.aspekt-figur .legend-label { font-size: 11.5px; color: var(--kb-text2); }
 
+/* ── Analyse-Werte ─────────────────────────────────────────────────────── */
+.aspekt-figur .aspekt-werte { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 7px 12px; align-items: baseline; }
+.aspekt-figur .aspekt-werte dt { color: var(--kb-text2); font-size: 12px; }
+.aspekt-figur .aspekt-werte dd { margin: 0; font-family: var(--kb-font-mono); font-size: 11.5px; color: var(--kb-text); text-align: right; }
+
+/* ── Lupe ──────────────────────────────────────────────────────────────── */
 .aspekt-figur .aspekt-lupe {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 2;
-    width: 30px;
-    height: 30px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: 1px solid var(--kb-border);
-    border-radius: 8px;
-    background: var(--kb-surface);
-    color: var(--kb-text2);
-    cursor: pointer;
+    position: absolute; top: 8px; right: 8px; z-index: 2;
+    width: 32px; height: 32px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border); border-radius: 8px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
 }
 .aspekt-figur .aspekt-lupe:hover { color: var(--kb-accent); border-color: var(--kb-accent); }
-.aspekt-figur .aspekt-lupe svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.aspekt-figur .aspekt-lupe svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 
-/* Bildunterschrift der interaktiven Figur (uebernimmt die Rolle von Abb. 1.38
-   am Bildschirm; die Nummer setzt numbering.js). */
-.aspekt-figur figcaption,
+/* ── Bildunterschrift (uebernimmt die Rolle von Abb. 1.38 am Bildschirm) ── */
 .aspekt-figur .aspekt-caption {
-    padding: 10px 14px 0;
-    font-size: 0.85em;
-    line-height: 1.45;
-    color: var(--ink-3, #666d80);
-    text-align: left;
+    padding: 10px 14px 12px; font-size: 0.85em; line-height: 1.45;
+    color: var(--ink-3, #666d80); text-align: left; border-top: 1px solid var(--kb-border);
 }
+.aspekt-figur .aspekt-caption .fig-label { font-weight: 600; color: var(--ink-2, #4c5266); }
 
+/* ── Layout je Breiten-Modus ───────────────────────────────────────────── */
+.aspekt-figur .aspekt-body { display: block; }
+.aspekt-figur .aspekt-panel-right { display: none; }
+/* normal: Panel links | Szene */
+:root[data-width-mode="normal"] .aspekt-figur .aspekt-body {
+    display: grid; grid-template-columns: 220px minmax(0, 1fr); align-items: stretch;
+}
+:root[data-width-mode="normal"] .aspekt-figur .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
+:root[data-width-mode="normal"] .aspekt-figur .aspekt-scene { padding: 14px; }
+/* breit: Panel links | Szene | Analyse */
+:root[data-width-mode="breit"] .aspekt-figur .aspekt-body {
+    display: grid; grid-template-columns: 220px minmax(0, 1fr) 230px; align-items: stretch;
+}
+:root[data-width-mode="breit"] .aspekt-figur .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
+:root[data-width-mode="breit"] .aspekt-figur .aspekt-panel-right { display: block; border-left: 1px solid var(--kb-border); }
+:root[data-width-mode="breit"] .aspekt-figur .aspekt-scene { padding: 14px; }
+
+/* ── Overlay (Lupe): schwebt ueber dem Skript, Layout wie breit ────────── */
+.aspekt-overlay-back {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(24, 27, 33, .45);
+}
+.aspekt-overlay-wrap { overflow: auto; }
+.aspekt-figur.aspekt-im-overlay { margin: 0; width: 100%; box-shadow: 0 24px 60px rgba(24,27,33,.35); }
+.aspekt-figur.aspekt-im-overlay .aspekt-body {
+    display: grid; grid-template-columns: 240px minmax(0, 1fr) 250px; align-items: stretch;
+}
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-right { display: block; border-left: 1px solid var(--kb-border); }
+.aspekt-figur.aspekt-im-overlay .aspekt-scene { padding: 18px; }
+.aspekt-figur.aspekt-im-overlay .aspekt-svg { max-width: none; }
+body.aspekt-overlay-open { overflow: hidden; }
+
+/* Tablet: immer gestapelt */
 @media (max-width: 1024px) {
-    .aspekt-figur, .aspekt-figur.aspekt-gross { max-width: 100%; }
+    :root[data-width-mode] .aspekt-figur .aspekt-body { display: block; }
+    :root[data-width-mode] .aspekt-figur .aspekt-panel-right { display: none; }
+    :root[data-width-mode] .aspekt-figur .aspekt-panel-left { border-right: none; }
 }
 
-/* Legacy-Muster: interaktive Figur am Bildschirm, statisches Bild im Druck.
-   Beide zaehlen fuer die Abbildungsnummerierung (numbering.js zaehlt
-   figure.abbildung unabhaengig von der Sichtbarkeit) -- deshalb bleibt Abb.
-   1.38 die Nummer des statischen Bildes, die interaktive Figur teilt sie sich
-   im Lesefluss. */
+/* Legacy-Muster: interaktive Figur am Bildschirm, statisches Bild im Druck. */
 .abbildung.nur-druck { display: none; }
 @media print {
     .aspekt-figur.nur-bildschirm { display: none; }
