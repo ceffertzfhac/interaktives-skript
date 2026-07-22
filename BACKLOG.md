@@ -154,6 +154,8 @@ Hintergrund in `MIGRATION_v0.13_nach_HTML.md`.
 
 ---
 
+- [x] **Druck: durchgehend eingefaerbter Hintergrund vermeiden (Toner!).** Im Druck darf es keinen flaechigen, durchgehend eingefaerbten Hintergrund geben (verbraucht unnoetig Toner/Farbe). `#content` (und `#paper`) tragen `background-color: var(--paper)` (#f6f4ef, cremefarben), das im Druck nicht zurueckgesetzt wurde. Box-Hintergruende sind ok (kleine Flaechen). *Fix (v1.7): `#print_container #content`/`#paper` auf `background:#fff`; zusaetzlich `@media print { body, #content, #paper { background:#fff !important } }`.* *(S)*
+
 ## P5 — Bekannte Fehler (Interaktivitaet / Shell)
 
 - [ ] **Schiene „Auf dieser Seite" zeigt beim ERSTEN Laden nur den Box-Typ.** Nach dem Neuladen steht in der linken Schiene oft nur „Wichtig", „Beispiel" … ohne Titel; nach Hin-und-Herspringen dann korrekt „Beispiel: …". **Ursache:** `main.js::init()` ruft `init_shell()` (baut die Schiene, liest `.highlight_box_title`) **vor** `init_numbering()`, das die Box-Titel erst auf „Beispiel 1.4.1: Titel" setzt. **Fix-Richtung:** `init_shell()` nach `init_numbering()` aufrufen oder nach der Nummerierung einen Schienen-Refresh ausloesen. *(S)*

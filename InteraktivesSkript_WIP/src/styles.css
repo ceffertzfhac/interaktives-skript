@@ -94,9 +94,14 @@ body {
 #print_container #content {
     border-radius: 0;
     box-shadow: 0px 0px 0px #fff;
+    /* Kein durchgehend eingefaerbter Hintergrund im Druck (Toner!): #content/
+       #paper tragen am Bildschirm das cremefarbene --paper; im Druck weiss.
+       Box-Hintergruende (kleine Flaechen) bleiben. */
+    background: #fff;
     width:800px;
     margin: 0;
 }
+#print_container #paper { background: #fff; }
 
 /* Dritte Spalte ist `auto`, nicht fix 210px: hat die aktive Seite keine
    Marginalien-Boxen, setzt shell.js `.hidden` auf #chapter_marginalia
@@ -838,6 +843,9 @@ line, ellipse, polyline, circle {
     body {
         zoom: 120%;
     }
+    /* Sicherheitsnetz gegen flaechigen Hintergrund im Druck (Toner) --
+       unabhaengig vom #print_container-Pfad. Box-Hintergruende bleiben. */
+    body, #content, #paper { background: #fff !important; }
     /* Seitenumbruch-Regeln lebten vormals CSS-genested in @page, was
        Browser ignorieren (s. BACKLOG.md P2) -- jetzt als echte Regeln
        mit modernem break-* und page-break-*-Fallback. */
