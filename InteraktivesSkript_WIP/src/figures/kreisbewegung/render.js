@@ -38,11 +38,14 @@ const ARROW_LEN_MAIN = 5 * 2.5;
 const ARROW_LEN_COMP = 5 * 2;
 const ARROW_LEN_AXIS = 5 * 1.2;
 
-// Zwei-Diagramm-Geometrie: immer "nebeneinander" (Landscape-Slots), da das
-// Sim/Diagramm-Grid hier stets gestapelt ist (kein Split-Probe-Layout).
+// Zwei-Diagramm-Geometrie: "übereinander" (Portrait-Slots) — das obere Diagramm
+// bei translate(0,0), das untere darunter (Slot-Hoehe h + Luecke). vbW = Slot-
+// Breite, vbH = zwei Slot-Hoehen + Luecke. (Früher Landscape-nebeneinander; die
+// Weg-Zeit-Aspekt-Figur Abb. 1.40 stellt x(t)/y(t) übereinander dar, passend zur
+// statischen Druck-Vorlage.)
 function stackedDualGeom() {
     const w = GRAPH_W_STACK, h = GRAPH_H_STACK;
-    return { vbW: w * 2 + GRAPH_STACKED_GAP, vbH: h, slotH: h, off2: { x: w + GRAPH_STACKED_GAP, y: 0 } };
+    return { vbW: w, vbH: h * 2 + GRAPH_STACKED_GAP, slotH: h, off2: { x: 0, y: h + GRAPH_STACKED_GAP } };
 }
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -71,7 +74,7 @@ export function drawCoordSystem() {
     const axEnd = shortenEnd(ANIM_CX - 10, cy, ANIM_CX + axLen, cy, ARROW_LEN_AXIS);
     DOM.animationCoordSystem.appendChild(el('line', {
         x1: ANIM_CX - 10, y1: cy, x2: axEnd.x2, y2: axEnd.y2,
-        stroke: 'var(--text)', 'stroke-width': 1.2, 'marker-end': 'url(#kb_anim-arrowhead)',
+        stroke: 'var(--text)', 'stroke-width': 1.2, 'marker-end': `url(#${store.idPrefix}anim-arrowhead)`,
     }));
     const xl = el('text', { x: ANIM_CX + axLen + 8, y: cy + 4, 'font-size': 13, fill: 'var(--text)' });
     xl.textContent = 'x';
@@ -79,7 +82,7 @@ export function drawCoordSystem() {
     const ayEnd = shortenEnd(ANIM_CX, cy + 10, ANIM_CX, cy - axLen, ARROW_LEN_AXIS);
     DOM.animationCoordSystem.appendChild(el('line', {
         x1: ANIM_CX, y1: cy + 10, x2: ayEnd.x2, y2: ayEnd.y2,
-        stroke: 'var(--text)', 'stroke-width': 1.2, 'marker-end': 'url(#kb_anim-arrowhead)',
+        stroke: 'var(--text)', 'stroke-width': 1.2, 'marker-end': `url(#${store.idPrefix}anim-arrowhead)`,
     }));
     const yl = el('text', { x: ANIM_CX - 14, y: cy - axLen - 4, 'font-size': 13, fill: 'var(--text)' });
     yl.textContent = 'y';
@@ -316,8 +319,8 @@ function drawGraphSlot(attrs) {
 
     gridEl.appendChild(el('rect', { x: plotL, y: plotT, width: plotW, height: plotH, class: 'graph-bg' }));
 
-    gridEl.appendChild(el('line', { x1: plotL, y1: hAxisY, x2: plotL + plotW, y2: hAxisY, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': 'url(#kb_graph-arrowhead)' }));
-    gridEl.appendChild(el('line', { x1: vAxisX, y1: plotBottom, x2: vAxisX, y2: plotT, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': 'url(#kb_graph-arrowhead)' }));
+    gridEl.appendChild(el('line', { x1: plotL, y1: hAxisY, x2: plotL + plotW, y2: hAxisY, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': `url(#${store.idPrefix}graph-arrowhead)` }));
+    gridEl.appendChild(el('line', { x1: vAxisX, y1: plotBottom, x2: vAxisX, y2: plotT, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': `url(#${store.idPrefix}graph-arrowhead)` }));
 
     const yStep = niceStepLE(yRng, 4);
     const yDec = yStep % 1 === 0 ? 0 : (yStep >= 0.1 ? 1 : 2);

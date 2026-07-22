@@ -21,6 +21,12 @@ export const store = {
     isStacked: false,
     rememberedTrajType: null,
 
+    // ID-Prefix fuer die Skelett-Elemente (kb_<id>). Default 'kb_' = die
+    // schlafende gc10-Sim. Aspekt-Figuren setzen einen eindeutigen Prefix pro
+    // Instanz, damit mehrere wiederverwendete Motoren nicht ueber gleiche IDs
+    // kollidieren (s. aspekt_*/runtime.js). q() liest dies zur Bindung.
+    idPrefix: 'kb_',
+
     graphScale: { single: null, top: null, bottom: null },
     hoverSourceSlot: null,
     hoverT: null,
@@ -54,7 +60,7 @@ export const store = {
 
 export const DOM = {};
 
-const q = id => document.getElementById('kb_' + id);
+const q = id => document.getElementById(store.idPrefix + id);
 
 export function initDOM() {
     DOM.mainSvg = q('main_svg');
