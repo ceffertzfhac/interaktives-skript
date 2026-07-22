@@ -2,17 +2,25 @@
 
 Anleitung, um aus einer der umfangreichen Stand-alone-Simulationen
 (`Input/Simulationen/Project_*`) eine **interaktive Aspekt-Figur** an einer
-konkreten Stelle im Skript zu bauen — nach dem Muster der ersten Umsetzung
-(`src/figures/aspekt_kreisbahn.js`, Abbildung 1.38 in 1.4.1).
+konkreten Stelle im Skript zu bauen. Zwei Referenz-Implementierungen:
 
-Geschrieben als **Runbook**: erst das Konzept und die Architektur, dann Schritt
-für Schritt, dann ein Katalog der real aufgetretenen Fallstricke (das ist der
-wertvollste Teil), zuletzt eine Checkliste.
+- **Abbildung 1.38** — `src/figures/aspekt_kreisbahn.js` + `.css`
+  (Positions-Aspekt in 1.4.1; Regler φ, R; Massenpunkt greifbar).
+- **Abbildung 1.40** — `src/figures/aspekt_weg_zeit.js` + `.css`
+  (Weg-Zeit-Aspekt; Regler t, R, T; Auto-Stopp-Animation 0…6 s + Graph).
 
-> Referenz-Implementierung, an der sich alles Folgende belegt:
-> `src/figures/aspekt_kreisbahn.js` (374 Z.) + `src/figures/aspekt_kreisbahn.css`
-> (217 Z.) + Verdrahtung in `src/main.js` + Einbettung in
-> `chapters/ch_01_kreisbewegungen.html`.
+Geschrieben als **Runbook**: erst Konzept & Architektur, dann Schritt für
+Schritt, dann der Katalog der real aufgetretenen Fallstricke (der wertvollste
+Teil), zuletzt eine Checkliste. Die Begleit-Doku zu allen Änderungen seit der
+ersten Anlage (Singleton → Per-Instanz, 2. Figur, Grundgerüst) liegt in
+`CHANGES_aspekt_1.38_1.40_und_grundgeruest.md`.
+
+> **Architektur-Regel:** Jede Aspekt-Figur holt sich ihren **eigenen** Motor per
+> `createRuntime()` (`kreisbewegung/runtime.js`) — `store`/`DOM` werden *pro
+> Instanz* isoliert, mehrere Figuren auf derselben Seite stören sich nicht. Der
+> Sim-Motor wird **wiederverwendet, nicht nachgebaut**: `physics`/`render`/
+> `state`/`constants` werden importiert, alle Aufrufe laufen inside
+> `rt.withStore(…)`, und `store.show*`-Flags schalten alles Nicht-Relevante ab.
 
 ---
 
@@ -20,47 +28,57 @@ wertvollste Teil), zuletzt eine Checkliste.
 
 Die Stand-alone-Sims im `Input/`-Ordner sind **sehr umfangreich** (Auto-Play,
 viele Regler, Dutzende Graph-Typen, alle Vektoren, Export …). Im interaktiven
-Skript soll aber — wie schon im Legacy-Skript — **pro Kapitel-Aspekt nur ein
-Teil** interaktiv sein. Gleichzeitig sollen die interaktiven Elemente **optisch
-und technisch an den Stand-alone-Sims** hängen (hoher Wiedererkennungswert,
-konsistente UI/UX).
+Skript soll — wie im Legacy — **pro Kapitel-Aspekt nur ein Teil** interaktiv
+sein, aber optisch/technisch an den Stand-alone-Sims hängen.
 
-Daraus folgen die drei Leitentscheidungen:
+Daraus folgen die Leitentscheidungen:
 
 1. **Motor wiederverwenden, nicht nachbauen.** Die Figur importiert
-   `physics`/`render`/`state`/`constants` der bereits portierten Sim
-   (`src/figures/kreisbewegung/`) und *feature-gated* sie auf den relevanten
-   Aspekt. Kein eigener Zeichencode → die Optik ist 1:1 die der Sim.
-2. **Zweistufig mit Lupe.** Inline in der Lesespalte (relativ kompakt, aber
-   voll interaktiv), und per Lupe ein Overlay, das über dem Skript schwebt
-   (~0.95 Breite/Höhe).
-3. **Nur relevante Features.** Store-Flags schalten alles Nicht-Relevante ab
-   (bei der Kreisbahn: nur Position — Ortsvektor + Komponenten + durchlaufener
-   Bogen; keine v/a, keine Graphen, kein Play/Pause).
+   `physics`/`render`/`state`/`constants` der portierten Sim
+   (`src/figures/kreisbewegung/`) und feature-gated sie auf den Aspekt. Kein
+   eigener Zeichencode → die Optik ist 1:1 die der Sim.
+2. **Per-Instanz-Isolation.** `createRuntime()` erzeugt pro Figur einen eigenen
+   `store`/`DOM`-Kontext mit eindeutigem ID-Prefix (`kb0_`, `kb1_`, …). So können
+   mehrere Aspekt-Figuren (und die schlafende `gc10`-Sim) unabhängig nebeneinander
+   laufen. (Vormals Fallstrick #11, „offener Punkt" — gelöst.)
+3. **Zweistufig mit Lupe.** Inline in der Lesespalte (kompakt, voll
+   interaktiv), und per Lupe ein Overlay, das über dem Skript schwebt.
+4. **Nur relevante Features.** `store.show*`-Flags schalten alles Nicht-Relevante
+   ab (bei der Kreisbahn: nur Position — Ortsvektor + Komponenten + Bogen +
+   Winkel; keine v/a, keine Graphen, kein Play/Pause. Bei Weg-Zeit: Position +
+   x(t)/y(t)-Graphen + Auto-Stopp-Animation).
+5. **Factory-Dispatch, keine zentrale Fabrik.** Jede Figur ist eine eigene
+   `buildXFig(fig)`-Funktion, registriert in `ASPEKT_FACTORIES` (`main.js`).
+   Generische Bedienfunktionen (Overlay/Analyse/Panel-Klapp) leben in
+   `aspekt_kreisbahn.js` und werden für alle Aspekt-Figuren angebunden.
 
-**Vorher entscheiden (mit dem Nutzer):** Welcher Aspekt? Welche Regler? Ersetzt
-die interaktive Figur die statische Abbildung im Lesefluss oder ergänzt sie sie?
-(Bei 1.4.1: interaktiv am Bildschirm, statische Abbildung bleibt Druck-Fallback
-— das Legacy-Muster.)
+**Vorher mit dem Nutzer klären:** Welcher Aspekt? Welche Regler? Ersetzt die
+interaktive Figur die statische Abbildung im Lesefluss oder ergänzt sie? (Bei
+1.38/1.40: interaktiv am Bildschirm, statische Abbildung bleibt Druck-Fallback —
+das Legacy-Muster.)
 
 ---
 
 ## 1. Vorarbeit: die Quelle verstehen
 
-1. **Ist die Sim schon portiert?** Kreisbewegung lag bereits als
+1. **Ist die Sim schon portiert?** Kreisbewegung lag als
    `src/figures/kreisbewegung/` vor (aus `Project_kreisbewegung_simulation`,
    inkl. `lib/` = die `shared/js/*` der Vorlage). Eine noch nicht portierte Sim
-   muss zuerst wie diese portiert werden (IDs mit `kb_`-Präfix o. ä., damit sie
-   neben den übrigen Figuren im gemeinsamen Dokument kollisionsfrei ist).
+   muss zuerst portiert werden (IDs mit `kb_`-Präfix o. ä., kollisionsfrei).
 2. **Den Motor lesen** (`kreisbewegung/`):
    - `physics.js`: `angleRad(t)=φ0+ω·t`, `position(t)`, `velocity(t)`,
      `acceleration(t)`, `precompute()`, `recomputeDerived()`.
    - `render.js`: `setupScene()` (Zoom + Achsen + Scheibe, gibt `centers`
      zurück), `updateScene(t, p, v, a, centers)` (zeichnet Punkt, Vektoren,
      Bogen — **gated über `store.show*`-Flags**), `drawCoordSystem()`,
-     `drawTrajectoryCircle()`.
-   - `state.js`: der **Singleton-`store`** (Parameter + `show*`-Flags +
-     Zeitreihen) und `DOM`/`initDOM()` (der DOM-Cache mit `kb_`-IDs).
+     `drawTrajectoryCircle()`, ggf. `updateGraph`/`updateGraphHover`.
+   - `state.js`: der `store` (Parameter + `show*`-Flags + Zeitreihen) und
+     `DOM`/`initDOM()` (der DOM-Cache). `q(id) = document.getElementById(
+     store.idPrefix + id)` — die `q('main_svg')`-Literale enthalten **kein**
+     `kb_`, der Prefix wird addiert.
+   - `runtime.js`: `createRuntime()` → `{ prefix, withStore, bindDom,
+     storeInstance }`. **Das ist die Per-Instanz-Fassade**, die jede Aspekt-Figur
+     nutzt. `DEFAULT_STORE` ist ein Snapshot des `store` bei Modulladezeit.
    - `constants.js`: `ANIM_W/ANIM_CX`, `R_MIN/R_MAX`, `DEFAULT_PIXELS_PER_METER`.
 3. **Den Aspekt festlegen.** Welche `show*`-Flags sind an? Welche Regler? Ein
    Blick in die Legacy-Figur an derselben Stelle hilft (gc1 „Kreisbahn" hatte
@@ -68,26 +86,32 @@ die interaktive Figur die statische Abbildung im Lesefluss oder ergänzt sie sie
 
 ---
 
-## 2. Den Motor feature-gated ansteuern
+## 2. Den Motor per-Instanz ansteuern
 
-Der Kern-Trick: **den zeit-/ω-getriebenen Motor mit einem Regler statt einer
-Animationsschleife füttern.** Für die Kreisbahn wird der φ-Regler auf eine
-Pseudo-Zeit abgebildet:
+**Kern-Trick:** den zeit-/ω-getriebenen Motor mit einem Regler statt einer
+Animationsschleife füttern — und zwar **inside `rt.withStore(…)`**, damit der
+Singleton-Motor während des Zeichnens den Zustand dieser Instanz sieht. Für die
+Kreisbahn wird der φ-Regler auf eine Pseudo-Zeit abgebildet:
 
 ```js
-const OMEGA_DEG = 60;                 // beliebig, nur ≠ 0; nie als Wert gezeigt
+const rt = createRuntime();
+const p = rt.prefix;
+// … Skelett einhängen, rt.bindDom() …
 function draw(phiDeg) {
-    const t = (phiDeg * Math.PI / 180) / store.omega;   // φ → Pseudo-Zeit
-    precompute();                     // erzeugt die Zeitreihe (Bogen) bis t
-    updateScene(t, position(t), velocity(t), acceleration(t), sceneCenters);
-    drawAngle(phiDeg);                // aspekt-spezifische Zusatz-Zeichnung
+    rt.withStore(() => {
+        const t = (phiDeg * Math.PI / 180) / store.omega;   // φ → Pseudo-Zeit
+        precompute();                       // Zeitreihe (Bogen) bis t
+        updateScene(t, position(t), velocity(t), acceleration(t), sceneCenters);
+    });
+    drawAngle(phiDeg);                      // aspekt-spezifische Zusatz-Zeichnung
 }
 ```
 
-Flags setzen (alles Nicht-Relevante aus):
+Flags setzen (alles Nicht-Relevante aus) — ebenfalls inside `withStore`, oder
+direkt auf `rt.storeInstance` (die Instanz ist die Wahrheit):
 
 ```js
-Object.assign(store, {
+Object.assign(rt.storeInstance, {
     showPositionVector: true, showPositionComponents: true, showTrajectory: true,
     showVelocityVector: false, showVelocityComponents: false,
     showAccelerationVector: false, showAccelerationComponents: false,
@@ -95,61 +119,87 @@ Object.assign(store, {
 });
 ```
 
-**Bei R-Änderung neu skalieren:** `setupScene()` erneut aufrufen (aktualisiert
-Zoom + Scheibe), dann die eigenen Achsen, dann `draw(φ)`. Nur bei φ-Änderung
-reicht `draw(φ)` — im Referenzcode wird der Einfachheit halber bei jedem Input
-`setupScene()` aufgerufen (billig).
+**Bei R-Änderung neu skalieren:** inside `withStore` `setupScene()` erneut
+aufrufen (Zoom + Scheibe), dann eigene Achsen, dann `draw(φ)`. Nur bei
+φ-Änderung reicht `draw(φ)`. Bei Figuren mit Animation (Weg-Zeit) läuft eine
+eigene `requestAnimationFrame`-Schleife pro Instanz im Closure; jeder Frame
+zeichnet inside `withStore`. Auto-Stopp-Reset via `playback.js` (s. §6).
 
 ---
 
 ## 3. Das DOM-Skelett (der heikle Teil)
 
-`render.js` liest aus dem Singleton-`DOM`, den `initDOM()` per `kb_`-ID füllt.
-Das Skelett muss **exakt die Elemente enthalten, die `setupScene()` und
-`updateScene()` anfassen** — inklusive versteckter Stubs:
+`render.js` liest aus dem `DOM`-Cache, den `initDOM()` per ID füllt. Das Skelett
+muss **alle** von `setupScene()`/`updateScene()` berührten Elemente enthalten —
+inkl. versteckter Stubs (sonst Null-Zugriff). Die IDs stehen im Template als
+`kb_*` und werden pro Instanz zu `${prefix}*` ersetzt:
 
-- **Szene sichtbar:** `kb_main_svg`, `kb_animation_coord_system`, `kb_disk`,
-  `kb_trajectory_path`, `kb_point`, `kb_zoom_text_display`, `kb_position_vector`
-  (+ `_x`/`_y`).
-- **Stubs versteckt, aber vorhanden** (sonst Null-Zugriffe!):
-  - v/a-Vektoren `kb_velocity_vector`/`kb_acceleration_vector` (+ Komponenten) —
-    `updateScene` setzt ihre `visibility`.
-  - Stoppuhr `kb_stopwatch`/`_circle`/`_marks`/`kb_subdial`/`_main_hand`/
-    `_sub_hand`/`kb_digital_display_group` — `updateScene` schreibt die Zeiger.
-  - Live-Panel `kb_time_label` + `kb_live_t/phi/x/y/vx/vy/vabs/ax/ay/aabs` —
-    `updateScene` beschreibt sie **immer** am Ende.
+```js
+scene.innerHTML = `…${SVG_SCENE.replace(/kb_/g, p)}…${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`)}…`;
+rt.bindDom();   // DOM-Cache an die prefixten Elemente binden
+```
+
+Welche IDs das sind, sagt der Analysator (statt Trial-and-Error):
+
+```bash
+node .claude/skills/interaktive-aspekt-figur/scripts/dom_vertrag.mjs \
+     InteraktivesSkript_WIP/src/figures/kreisbewegung
+```
+
+Ausgabe: die `kb_`-IDs, die das Skelett enthalten muss — getrennt in
+**Kern-Szene** (sichtbar) und **Stubs** (Stoppuhr/Live-Panel, versteckt, aber
+vorhanden) inkl. fertiger HTML-Stubzeile.
+
+**Stubs, die regelmäßig nötig sind** (vormals Fallstrick #1):
+
+- **v/a-Vektoren** `kb_velocity_vector`/`kb_acceleration_vector` (+ Komponenten)
+  — `updateScene` setzt ihre `visibility`. Als versteckte leere `<line>`.
+- **Stoppuhr** `kb_stopwatch`/`_circle`/`_marks`/`kb_subdial`/`_marks`/
+  `_main_hand`/`_sub_hand`/`kb_digital_display_group` — `initDOM` dereferenziert
+  sie. Versteckt (`display:none`), außer die Figur zeigt sie (Weg-Zeit: aktiv).
+- **Live-Panel** `kb_time_label` + `kb_live_t/phi/x/y/vx/vy/vabs/ax/ay/aabs` —
+  `updateScene` schreibt sie **immer** am Ende. Als versteckte `<span>`.
 
 > **Merke:** `initDOM()` ist null-sicher (`DOM.x = q(id)` → `null` schadet
-> nicht). `updateScene()` ist es **nicht** — es dereferenziert `timeLabel`,
-> die Live-Spans und die Stoppuhr-Zeiger. Genau diese Null-Zugriffe hat der
+> nicht). `updateScene()` ist es **nicht** — es dereferenziert `timeLabel`, die
+> Live-Spans und die Stoppuhr-Zeiger. Genau diese Null-Zugriffe hat der
 > Headless-Test gefunden; die Stubs decken sie ab.
 
-`initDOM()` unverändert aufrufen; fehlende Graph-/Control-IDs werden harmlos
-`null`, solange die zugehörigen Funktionen (Graph-Zeichnung etc.) nicht laufen.
+**Akzeptierter Bruch:** `initDOM` sucht fest `input[name="kb_speed"]`/
+`input[name="kb_diagram_mode"]`. Die Aspekt-Figuren prefixen ihre Radios zu
+`name="${p}speed"` und greifen sie selbst per `scene.querySelectorAll` ab — nicht
+über `DOM.speedRadios`. Für die Instanz bleibt `DOM.speedRadios` `null` (harmlos).
 
 ---
 
-## 4. Optik: verbatim aus der Vorlage
+## 4. Optik: von der Vorlage abgeleitet
 
 Für den Wiedererkennungswert werden **Farb-Tokens und Panel-/Slider-/Legenden-/
-Analyse-Regeln VERBATIM** aus der portierten `kreisbewegung/styles.css`
-übernommen, aber **auf eine Klasse (`.aspekt-figur`) statt `#gc10` gescopt**:
+Analyse-Regeln** aus der portierten `kreisbewegung/styles.css` **abgeleitet** und
+auf `.aspekt-figur` statt `#gc10` gescopt — in zwei Dateien:
 
-- Tokens: `--kb-surface/border/text/text2/text3/accent/r/rx/ry/traj/font/…`.
-- Struktur & Klassen der Vorlage 1:1 verwenden: `panel-section` + `panel-label`
-  (Versal-Header), `slider-label` über dem Regler, `slider-row` + `slider-val`
-  (Akzentfarbe), `legend-grid` mit `legend-swatch`/`legend-label`, die
-  Range-Slider mit eigenem Track/Thumb, und für die Analyse `analysis-grid` mit
-  `analysis-cell key`/`val` + `panel-header`/`panel-body` (Kopf-Leiste zum
-  Ein-/Ausklappen).
+- `aspekt_kreisbahn.css` — **gemeinsame** Aspekt-Optik, geladen für **alle**
+  Aspekt-Figuren. Tokens (`aspekt_kreisbahn.css:8-24`): `--kb-surface*`,
+  `--kb-border*`, `--kb-text*`, `--kb-accent (var(--fh,#00b2a9))`,
+  `--kb-r/-rx/-ry/-traj` (figuren-eigene Farben), `--kb-text-scale
+  (var(--paper-graphics-scale,1))` (Grafik-UI-Skalierung, s. §C).
+  Struktur-Klassen: `panel-section` + `panel-label`, `panel-header` +
+  `panel-body` (Kopf-Leiste zum Ein-/Ausklappen), `slider-label`/`slider-row`/
+  `slider-val`, `legend-grid`/`legend-swatch`/`legend-label`, `analysis-grid`/
+  `analysis-cell(.key/.val)`.
+- `aspekt_weg_zeit.css` — nur Ergänzungen für Weg-Zeit, gescopt auf
+  `[data-aspekt="weg-zeit"]` (`.aspekt-main`/`-runbar`/`-graph`-Layout,
+  Graph-Tokens `--kb-graph-bg`/`-grid-line`, Stoppuhr-Farben).
+
 - Formelzeichen als **MathJax** (`\(\varphi\)`, `\(R\)`, `\(r_x\)`) — nicht als
-  rohes Unicode (s. Fallstrick unten). Werte mit **deutschem Dezimalkomma**.
+  rohes Unicode (s. Fallstrick). Werte mit **deutschem Dezimalkomma**
+  (`.toFixed(d).replace('.', ',')`).
 
-**Layout je Breiten-Modus** über `data-width-mode` an der Wurzel (setzt
-`core.js::set_width_mode`): schmal = gestapelt; normal = Panel links | Szene;
-breit = Panel links | Szene | Analyse rechts. Overlay (Lupe) = immer
-dreispaltig. **Wichtig:** die Modus-Regeln mit `:not(.aspekt-im-overlay)`
-scopen, sonst schlagen sie per Spezifität die Overlay-Regeln (s. Fallstrick).
+**Layout je Breiten-Modus** über `<html data-width-mode="…">` (gesetzt von
+`core.js::set_width_mode`): schmal = gestapelt (Panel oben); normal = Panel
+links | Szene; breit = Panel links | Szene | Analyse rechts. Overlay (Lupe) =
+immer dreispaltig. **Wichtig:** die Modus-Regeln mit `:not(.aspekt-im-overlay)`
+scopen, sonst schlagen sie per Spezifität die Overlay-Regeln (s. Fallstrick #4).
 
 ---
 
@@ -159,11 +209,17 @@ scopen, sonst schlagen sie per Spezifität die Overlay-Regeln (s. Fallstrick).
   `margin:0 0 20px`, wie die Formelkarten), die SVG per `max-width` gedeckelt.
 - **Lupe → Overlay:** Die *lebende* Figur wird per DOM **verschoben** (nicht
   geklont) in ein `position:fixed`-Overlay; auf Schließen zurück an die
-  Ursprungsstelle (`overlayReturn = {parent, next}`). Der Motor-DOM-Cache bleibt
-  gültig, weil dieselben Knoten wandern.
+  Ursprungsstelle (`overlayReturn = {parent, next}`). Da dieselben Knoten
+  wandern, bleibt der DOM-Cache der Instanz gültig. Die Figur bekommt im Overlay
+  die Klasse `.aspekt-im-overlay` (CSS-Signal, dispatcht
+  `aspekt-overlay-toggled`).
 - **Overlay-Höhe:** die SVG an der **Viewport-Höhe** deckeln
   (`max-width: min(100%, 62vh)`), **nicht** über verschachteltes flex/grid
-  `height:100%` — das ist fragil (s. Fallstrick). Wrap: `maxHeight` + `overflow:auto`.
+  `height:100%` — das ist fragil (s. Fallstrick #5). Wrap: `maxHeight` +
+  `overflow:auto`.
+- **Lupe-Button** anlegen in der Factory (`data-action="toggle_aspekt"`), INS
+  Bild der Kernsimulation (`.aspekt-scene` bzw. `.aspekt-main`, die
+  `position:relative` sein müssen), nicht an die Figuren-Ecke.
 
 ---
 
@@ -171,27 +227,62 @@ scopen, sonst schlagen sie per Spezifität die Overlay-Regeln (s. Fallstrick).
 
 - **Markup im Kapitel** — nur ein leerer Platzhalter:
   ```html
-  <div class="aspekt-figur nur-bildschirm" data-aspekt="kreisbahn"
-       data-figref="fig-<statische-abbildung-id>"
+  <div class="aspekt-figur nur-bildschirm" id="aspekt-<name>"
+       data-aspekt="<name>"
+       data-title="<Kurztitel>"          <!-- Rail-Landmarke + Panel-Titel -->
+       data-figref="fig-<statische-abbildung-id>"   <!-- Caption-Nummer-Transfer -->
+       data-eqs="<label1> <label2>"       <!-- dynamische Physik-Sektion (optional) -->
        data-caption="… Bildunterschrift 1:1 aus der statischen Abbildung …"></div>
   ```
-  Die statische Abbildung daneben bekommt `class="abbildung nur-druck"`.
-- **`main.js`:** `import { init_aspekt_figuren, toggle_aspekt,
-  close_aspekt_overlay, toggle_analyse, label_aspekt_figuren }`, in `init()`
-  aufrufen (`init_aspekt_figuren()` **vor** `init_numbering()`,
-  `label_aspekt_figuren()` **danach**), und die `data-action`-Fälle
-  (`toggle_aspekt`, `close_aspekt_overlay`, `toggle_analyse`) im `dispatch_click`
-  ergänzen.
-- **Stylesheet:** `<link href="src/figures/aspekt_kreisbahn.css">` in `index.html`.
-
-`init_aspekt_figuren()` findet jede `.aspekt-figur[data-aspekt="…"]`, baut Szene
-+ Panels + Lupe + Bildunterschrift hinein. `label_aspekt_figuren()` übernimmt
-**nach** der Nummerierung die „Abb. 1.n" der statischen Abbildung (`data-figref`)
-in die interaktive Bildunterschrift, damit die Nummer am Bildschirm sichtbar ist.
+  Die statische Abbildung daneben bekommt `class="abbildung nur-druck"` und
+  **muss** direkt daneben stehen (sonst zeigt `data-figref` aufs falsche Label).
+- **Factory im Modul:** `export function buildXFig(fig) { … }` (Sig. s. Referenz).
+- **`main.js`:**
+  - `import { buildXFig } from './figures/aspekt_<name>.js'` und ergänze
+    `ASPEKT_FACTORIES['<name>'] = buildXFig` (`main.js:26`).
+  - `init_aspekt_figuren()` läuft vor `init_numbering()` über alle
+    `.aspekt-figur[data-aspekt]` und ruft die Factory; es erzeugt zusätzlich den
+    `.panel-header-left` fürs einklappbare linke Bedienfeld.
+  - `label_aspekt_figuren()` **nach** der Nummerierung überträgt die „Abb. 1.n"
+    der statischen Abbildung (`data-figref`) in die interaktive
+    `.aspekt-caption` (damit die Nummer am Bildschirm sichtbar ist).
+  - Die `data-action`-Fälle `toggle_aspekt`, `close_aspekt_overlay`,
+    `toggle_analyse`, `toggle_panel_left` sind generisch (in
+    `aspekt_kreisbahn.js` definiert, in `main.js:192` gebunden) — für jede Figur
+    vorhanden, kein eigener Dispatch nötig.
+- **Stylesheet:** `<link href="src/figures/aspekt_kreisbahn.css">` (immer) und
+  ggf. ein figuren-eigenes `aspekt_<name>.css` in `index.html`.
 
 **Nummerierung bleibt intakt:** `numbering.js` zählt `figure.abbildung`
 unabhängig von `display:none` — die statische (versteckte) Abbildung behält ihre
 Nummer, die interaktive Figur erzeugt keine zweite.
+
+### Physik-Sektion (Formeln zur Figur im rechten Analyse-Panel)
+
+Zwei Pfade — die Figur wählt:
+
+- **Statisch** (Default für feste Formeln): `.formula-box` mit inline
+  `\[…\]`-LaTeX direkt ins `PANEL_RIGHT`-Template. MathJax setzt beim Laden.
+  `main.js` erkennt den statischen Block (`hasStaticPhysik`) und erzeugt **keine**
+  dynamische Liste.
+- **Dynamisch** (Formeln aus dem Lesefluss): kein `.formula-box` im Template,
+  dafür `data-eqs="label1 label2"` im HTML. `chapters.js::captureEqLatex`
+  erfasst **vor** dem MathJax-Typeset jede gelabelte Gleichung unnummeriert unter
+  `window.eq_latex[label]`. Nach dem Typeset füllt `fill_physik_panels` (aus
+  `chapters.js::typesetAfterLoad`, idempotent) eine `.physik-list` mit `.physik-eq`
+  aus `window.eq_latex`. Voraussetzung: das Label existiert im Kapitel als
+  gelabelte Gleichung.
+
+Am HEAD nutzen beide Figuren die statische `.formula-box`; `data-eqs` ist
+deklariert, aber dormant (statischer Block gewinnt). Beide Pfade sind
+verfügbar — wählen, nicht mischen.
+
+### Auto-Stopp-Animation (nur wenn die Figur Play/Pause hat)
+
+Für Sim-Figuren mit Auto-Stopp (Weg-Zeit): `playback.js` liefert den gemeinsamen
+Helfer `resetOnPlayAfterAutoStop(currentTime, autoStopTime, resetFn)` — im
+`start()` aufrufen, damit ein Play-Klick am Ende erst resettet. Künftige
+Auto-Stopp-Figuren rufen denselben Helfer statt eigenem Schwellen.
 
 ---
 
@@ -199,36 +290,53 @@ Nummer, die interaktive Figur erzeugt keine zweite.
 
 | # | Symptom | Ursache | Lösung |
 |---|---|---|---|
-| 1 | Null-Zugriff beim Init | `updateScene` schreibt `timeLabel`/Live-Spans/Stoppuhr-Zeiger | alle als **versteckte Stubs** ins Skelett (Abschnitt 3) |
+| 1 | Null-Zugriff beim Init | `updateScene`/`initDOM` dereferenziert `timeLabel`/Live-Spans/Stoppuhr-Zeiger/v/a-Vektoren | alle als **versteckte Stubs** ins Skelett (Abschnitt 3); `dom_vertrag.mjs` listet sie |
 | 2 | Pfeilspitze landet nicht am Punkt | `render.js` kürzt den Schaft um `ARROW_LEN = 5·strokeWidth` (fix); größere Marker **oder** dickere Striche zerstören die Abstimmung | Marker `markerUnits="userSpaceOnUse"` mit **fester Länge = ARROW_LEN** (12.5 / 10) → Strichstärke frei |
 | 3 | Achsen doppelt beschriftet | `setupScene()` ruft intern `drawCoordSystem()` (eigene Achsen), zusätzlich eigene gezeichnet | nach `setupScene()` `kb_animation_coord_system` leeren, nur eigene Achsen behalten |
 | 4 | Analyse-Spalte im Zoom verschwindet (schmal/normal) | `:root[data-width-mode]`-Regeln schlagen per Spezifität die Overlay-Regeln | Modus-Regeln mit `:not(.aspekt-im-overlay)` scopen |
 | 5 | Sim sprengt im Zoom die Vertikale | verschachteltes flex/grid `height:100%` ist fragil | SVG an **Viewport-Höhe** deckeln: `max-width: min(100%, 62vh)` |
-| 6 | Mittelbereich zu groß / über den Rand | greedy `1fr`-Szene + breite Formel bläht `auto`-Analyse-Spalte auf | SVG-`max-width` maßvoll; keine breite Formel in `auto`-Spalte |
+| 6 | Mittelbereich zu groß / über den Rand | greedy `1fr`-Szene + breite Formel bläht `auto`-Analyse-Spalte auf | `.aspekt-panel-right { max-width: 260px }`; keine breite Formel in `auto`-Spalte |
 | 7 | Achse/Label stößt an den Rand | eigene Achsenlänge zu groß (viewBox 450×480, Mitte 225/260) | Länge deckeln (z. B. `min(…, 194)`), Szene bekommt Innen-Padding |
-| 8 | φ als **gerades** statt geschwungenes Zeichen | rohes Unicode (U+03C6/U+03D5) rendert fontabhängig | Zeichen als **MathJax** rendern — im SVG per `foreignObject` mit `\(\varphi\)` (wie die Legacy-Figuren), fontunabhängig |
+| 8 | φ als **gerades** statt geschwungenes Zeichen | rohes Unicode (U+03C6/U+03D5) rendert fontabhängig | Zeichen als **MathJax** rendern — im SVG per `foreignObject` mit `\(\varphi\)`, fontunabhängig |
 | 9 | Formel im Panel verschiebt Kapitel-Nummerierung | nummerierte Umgebung erhöht den Gleichungszähler | nur **`\[…\]`** (unnummeriert) verwenden; offline mit `mathjax-full` prüfen (0 `mlabeledtr` / 0 `width="full"`) |
 | 10 | Abschnitts-Links navigieren nicht | Seiten tragen `data-page-id`, **nicht** `id`; der `#`-Handler suchte per `getElementById` | Handler auf `.chapter-page[data-page-id="…"]` zurückfallen lassen (in `main.js` behoben) |
-| 11 | Store-Konflikt | `state.js`-`store` ist **Singleton** | eine Aspekt-Figur pro Seite; für mehrere muss der Store instanziierbar werden (offener Punkt) |
+| 11 | ~~Store-Konflikt (eine Figur pro Seite)~~ | `state.js`-`store` war **Singleton** | **gelöst:** `createRuntime()`/`withStore` isoliert `store`/`DOM` pro Instanz; mehrere Figuren unabhängig |
+| 12 | Graph-Hover-Null-Zugriff (Weg-Zeit) | `drawGraphSlot` dereferenziert `DOM.graphHitRect[slot]` | Graph-Skelett 1:1 aus der Sim inkl. **aller** HitRect-/Hover-Elemente (Single + Top/Bottom) |
+| 13 | Hover im Inline stört den Lesefluss | Graph-HitRects fangen Pointer im Inline ab | `.graph-hit-rect` default `pointer-events:none`, nur `.aspekt-im-overlay` gibt sie frei; JS zusätzlich auf `.aspekt-im-overlay` gaten |
+| 14 | Speed-Radios kollidieren zwischen Instanzen | `name="ak_speed"` wäre shared | pro Instanz prefixen: `name="${p}speed"`; Radios selbst per `scene.querySelectorAll` abgreifen (nicht `DOM.speedRadios`) |
+| 15 | Runbar-Tasten lösen nicht aus | `data-action`-Dispatch greift nicht pro Instanz | Runbar-Buttons mit `data-act="start|stop|reset"`, Listener direkt am Container in der Factory |
+| 16 | Analyse-Leiste im breit-Modus verschoben | `auto`-Analyse-Spalte zu breit | `.aspekt-panel-right { max-width: 260px }` (s. #6) |
 
 ---
 
 ## 8. Verifikation (was geht headless, was nicht)
 
 **Headless prüfbar** (jsdom, `/tmp/node_modules`):
-- Figur baut, Regler-Werte korrekt (z. B. `x = R·cos φ`), Achsen innerhalb der
-  viewBox, Overlay auf/zu mit Rückverschiebung, Collapse-Toggle, Nummer im
-  Caption, φ-Bogen (Pfad + Label, `large-arc` ab 180°, kein Bogen bei φ=0),
-  Abschnitts-Link-Navigation.
-- `node --check` auf alle `.js`; CSS-Klammern balanciert (Kommentare vorher
-  entfernen — ein `*/` in einem Kommentar beendet ihn vorzeitig).
-- Formeln im Panel unnummeriert (offline `mathjax-full`).
-- `dom_harness.mjs` (Skill v013-verifikation): Kapitel-Nummerierung unverändert.
+
+```bash
+# Baut die Figur headless, uebt alle Regler + Overlay/Analyse -> findet Null-Zugriffe
+node .claude/skills/interaktive-aspekt-figur/scripts/figur_smoke.mjs \
+     InteraktivesSkript_WIP/src/figures/aspekt_kreisbahn.js           # default: buildKreisbahnFig
+node .claude/skills/interaktive-aspekt-figur/scripts/figur_smoke.mjs \
+     InteraktivesSkript_WIP/src/figures/aspekt_weg_zeit.js --init=buildWegZeitFig
+
+node --check <figur>.js                      # Syntax
+# CSS-Klammern balanciert (Kommentare vorher entfernen -- ein */ im Kommentar beendet ihn)
+# Panel-Formel unnummeriert? offline mit mathjax-full: 0 mlabeledtr / 0 width="full"
+# Kapitel-Nummerierung unveraendert:
+node .claude/skills/v013-verifikation/scripts/dom_harness.mjs InteraktivesSkript_WIP
+```
+
+Headless abgesichert: Figur baut (per `buildXFig`), Regler-Werte korrekt
+(z. B. `x = R·cos φ`), Achsen innerhalb der viewBox, Overlay auf/zu mit
+Rückverschiebung, Collapse-Toggle, Nummer im Caption, φ-Bogen, Abschnitts-Link-
+Navigation, Graph-Aufbau (Weg-Zeit).
 
 **Nur im Browser / nur mit den Augen des Nutzers:**
 - Ob Vektoren/Farben tatsächlich wie die Stand-alone wirken.
 - Größenverhältnisse (inline vs. Zoom), Kollisionen, Label-Platzierung.
 - Die MathJax-Glyphen (varphi geschwungen), foreignObject unter Safari.
+- Schmalmodus-Legende (3-Spalten), Breitenmodus-Layouts, Darkmode.
 
 > **Prozess-Wahrheit:** Die visuelle Feinarbeit ist **inhärent iterativ** und
 > braucht den Nutzer als Auge. Plane mehrere Feedback-Runden ein; formuliere
@@ -240,18 +348,20 @@ Nummer, die interaktive Figur erzeugt keine zweite.
 
 ## 9. Reflexion — was diese Umsetzung geprägt hat
 
-- **Wiederverwenden schlägt Nachbauen.** Der größte Hebel war, den Sim-Motor
-  anzuzapfen statt Vektoren neu zu zeichnen. Das kostet Verständnis-Aufwand
-  vorab (Abschnitt 3), zahlt sich aber in Optik-Treue und Wartbarkeit aus.
-- **Die Vorlage ist die Design-Quelle.** „Orientiere dich an der Vorlage" hieß
-  konkret: Tokens und Panel-/Slider-/Legenden-/Analyse-CSS **verbatim**
-  übernehmen, nicht eigen erfinden. Jede Eigen-Erfindung (eigenes `<dl>`-Layout,
-  eigene Marker-Größen) wurde zurückgebaut.
-- **Feste Kopplungen respektieren.** `ARROW_LEN = 5·strokeWidth` und die
-  `kb_`-DOM-IDs sind harte Verträge des Motors; sie zu verletzen kostet Zeit.
-  Im Code stehen jetzt Warnkommentare an diesen Stellen.
-- **Headless verifizieren, wo es geht.** Der jsdom-Test hat zwei Null-Zugriffe,
-  den Achsen-Cap und die Nummerierungs-Neutralität abgesichert — Dinge, die im
+- **Per-Instanz statt Singleton.** Der größte architektonische Schritt war,
+  `createRuntime()`/`withStore` einzuführen — das hat den ehemaligen „offenen
+  Punkt" (Fallstrick #11) gelöst und die zweite Figur (1.40) überhaupt erst
+  ermöglicht.
+- **Wiederverwenden schlägt Nachbauen.** Den Sim-Motor anzuzapfen statt Vektoren
+  neu zu zeichnen kostet Verständnis-Aufwand vorab (Abschnitt 1), zahlt sich in
+  Optik-Treue und Wartbarkeit aus.
+- **Die Vorlage ist die Design-Quelle.** Tokens und Panel-/Slider-/Legenden-/
+  Analyse-CSS aus `kreisbewegung/styles.css` ableiten, nicht eigen erfinden.
+- **Feste Kopplungen respektieren.** `ARROW_LEN = 5·strokeWidth`, die `kb_`-DOM-
+  IDs und `q(id) = getElementById(store.idPrefix + id)` sind harte Verträge des
+  Motors; sie zu verletzen kostet Zeit. Warnkommentare stehen an diesen Stellen.
+- **Headless verifizieren, wo es geht.** Der jsdom-Test hat Null-Zugriffe, den
+  Achsen-Cap und die Nummerierungs-Neutralität abgesichert — Dinge, die im
   Browser mühsam zu finden gewesen wären.
 - **Klein committen.** Pro logischer Einheit ein Commit mit Begründung; das hat
   die vielen Feedback-Runden nachvollziehbar gehalten.
@@ -263,22 +373,27 @@ Nummer, die interaktive Figur erzeugt keine zweite.
 **Vorbereitung**
 - [ ] Sim portiert? (sonst zuerst portieren, IDs kollisionsfrei)
 - [ ] Aspekt + Regler + „ersetzt/ergänzt statisch" mit dem Nutzer geklärt
-- [ ] `physics`/`render`/`state`-Verträge gelesen (welche `show*`-Flags, welche DOM-IDs)
+- [ ] `physics`/`render`/`state`/`runtime`-Verträge gelesen (welche `show*`-Flags, welche DOM-IDs, `createRuntime`/`withStore`/`bindDom`)
 
 **Bauen**
-- [ ] Regler → Motor abbilden (Pseudo-Zeit o. ä.), `show*`-Flags gaten
-- [ ] Skelett mit **allen** von `setupScene`/`updateScene` berührten IDs (inkl. versteckter Stubs)
+- [ ] `createRuntime()` pro Figur; alle Motor-Aufrufe inside `rt.withStore(…)`
+- [ ] Skelett-Templates mit `kb_*`-IDs; per `.replace(/kb_/g, p)` prefixen; `rt.bindDom()` danach
+- [ ] Skelett mit **allen** von `setupScene`/`updateScene`/`initDOM` berührten IDs (inkl. versteckter Stubs — `dom_vertrag.mjs`)
 - [ ] Marker `userSpaceOnUse` mit Länge = `ARROW_LEN`, Strichstärke frei
 - [ ] Eigene Zusatz-Zeichnung (Winkelbogen o. ä.) in **eigener** Gruppe; `kb_animation_coord_system` bei eigenen Achsen leeren
-- [ ] Optik: Tokens + Panel-/Slider-/Legenden-/Analyse-CSS **verbatim**, auf `.aspekt-figur` gescopt
+- [ ] Regler-Closure pro Instanz; Speed-Radios `name="${p}speed"`; Runbar `data-act` + Container-Listener
+- [ ] Optik: Tokens + Panel-/Slider-/Legenden-/Analyse-CSS aus `kreisbewegung/styles.css` ableiten, auf `.aspekt-figur` gescopt; `--kb-text-scale` für UI-Schrift
 - [ ] Zeichen/Formeln als **MathJax** (im SVG per `foreignObject`); Panel-Formeln nur `\[…\]`
-- [ ] Layout-Regeln mit `:not(.aspekt-im-overlay)`; Overlay-SVG per `vh` gedeckelt
-- [ ] Verdrahtung: Platzhalter im Kapitel, Imports + `init`/`label` + `data-action`-Fälle in `main.js`, Stylesheet in `index.html`
-- [ ] Legacy-Muster: `.nur-bildschirm`/`.nur-druck`, `data-figref` für die Nummer
+- [ ] Physik-Sektion: statisch `.formula-box` im Template **oder** dynamisch via `data-eqs` + gelabelte Gleichung — nicht mischen
+- [ ] Auto-Stopp? → `resetOnPlayAfterAutoStop` aus `playback.js` im `start()`
+- [ ] Greifbarer Punkt? → Pointer-Drag-Handler im `buildXFig`-Body nach Vorbild 1.38 (SVG-`getScreenCTM`, Snap, Clamp, gleiche `refresh()`-Pipeline)
+- [ ] Layout-Regeln mit `:not(.aspekt-im-overlay)`; Overlay-SVG per `vh` gedeckelt; Lupe an `.aspekt-scene`/`.aspekt-main` (`position:relative`)
+- [ ] Verdrahtung: Platzhalter im Kapitel (`id`/`data-aspekt`/`data-title`/`data-figref`/`data-eqs`/`data-caption`), `ASPEKT_FACTORIES`-Eintrag + Imports in `main.js`, Stylesheet in `index.html`
+- [ ] Legacy-Muster: `.nur-bildschirm`/`.nur-druck`, statische Abbildung direkt daneben, `data-figref` für die Nummer
 
 **Prüfen**
 - [ ] `node --check` alle Module; CSS-Klammern balanciert
-- [ ] jsdom-Test: Aufbau, Werte, Overlay, Collapse, Winkel, Navigation
+- [ ] `figur_smoke.mjs` (mit `--init=buildXFig`): Aufbau, Werte, Overlay, Collapse, Graph, Runbar
 - [ ] Panel-Formel unnummeriert (offline `mathjax-full`: 0 `mlabeledtr`)
 - [ ] `dom_harness.mjs`: Kapitel-Nummerierung unverändert
-- [ ] **Im Browser mit dem Nutzer:** Optik, Größen, Kollisionen, Glyphen — iterativ
+- [ ] **Im Browser mit dem Nutzer:** Optik, Größen, Kollisionen, Glyphen, Schmal-/Breit-Modus, Darkmode — iterativ
