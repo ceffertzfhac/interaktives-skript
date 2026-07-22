@@ -37,12 +37,12 @@
 /* ── Szene (Geometrie exakt wie Vorlage) ───────────────────────────────── */
 .aspekt-figur .aspekt-scene { min-width: 0; display: flex; align-items: flex-start; justify-content: center; }
 .aspekt-figur .aspekt-svg { display: block; width: 100%; max-width: 460px; height: auto; }
-.aspekt-figur #kb_disk { stroke: var(--kb-traj); }
+.aspekt-figur #kb_disk { stroke: var(--kb-traj); stroke-width: 1.5; opacity: 0.32; }
 .aspekt-figur #kb_trajectory_path { stroke: var(--kb-traj); }
 .aspekt-figur #kb_point { fill: var(--kb-accent); stroke: var(--kb-text); }
-.aspekt-figur #kb_position_vector   { stroke: var(--kb-r); }
-.aspekt-figur #kb_position_vector_x { stroke: var(--kb-rx); }
-.aspekt-figur #kb_position_vector_y { stroke: var(--kb-ry); }
+.aspekt-figur #kb_position_vector   { stroke: var(--kb-r);  stroke-width: 5; }   /* 2x Vorlage (2.5) */
+.aspekt-figur #kb_position_vector_x { stroke: var(--kb-rx); stroke-width: 4; }   /* 2x Vorlage (2) */
+.aspekt-figur #kb_position_vector_y { stroke: var(--kb-ry); stroke-width: 4; }
 .aspekt-figur #kb_arrowhead-r  polygon { fill: var(--kb-r); }
 .aspekt-figur #kb_arrowhead-rx polygon { fill: var(--kb-rx); }
 .aspekt-figur #kb_arrowhead-ry polygon { fill: var(--kb-ry); }
@@ -58,6 +58,19 @@
     font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
     color: var(--kb-text3); margin-bottom: 10px;
 }
+/* collapsible (Vorlage): panel-label ist ein Button, Chevron dreht, Inhalt
+   klappt ein. Genutzt fuer das Analyse-Panel (breit + Lupe). */
+.aspekt-figur .panel-section.collapsible > .panel-label {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    width: 100%; padding: 0; background: transparent; border: none;
+    text-align: left; font: inherit; cursor: pointer;
+    font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--kb-text3);
+}
+.aspekt-figur .panel-section.collapsible > .panel-label:hover { color: var(--kb-text2); }
+.aspekt-figur .acc-chevron { transition: transform .15s ease; }
+.aspekt-figur .panel-section.collapsed > .panel-label { margin-bottom: 0; }
+.aspekt-figur .panel-section.collapsed > .panel-label .acc-chevron { transform: rotate(-90deg); }
+.aspekt-figur .panel-section.collapsed > .panel-label ~ * { display: none !important; }
 .aspekt-figur .slider-label { font-size: 12px; color: var(--kb-text2); margin-bottom: 3px; }
 .aspekt-figur .slider-row {
     display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 12px;
@@ -134,15 +147,26 @@
     display: flex; align-items: center; justify-content: center;
     background: rgba(24, 27, 33, .45);
 }
-.aspekt-overlay-wrap { overflow: auto; }
-.aspekt-figur.aspekt-im-overlay { margin: 0; width: 100%; box-shadow: 0 24px 60px rgba(24,27,33,.35); }
-.aspekt-figur.aspekt-im-overlay .aspekt-body {
-    display: grid; grid-template-columns: 240px minmax(0, 1fr) 250px; align-items: stretch;
+/* Overlay: der Wrap hat eine DEFINITE Hoehe (JS: ~0.95 der verfuegbaren
+   Hoehe), overflow:hidden. Die Figur fuellt ihn als Flex-Spalte; die Szene
+   bekommt die Rest-Hoehe (grid-Zeile minmax(0,1fr)) und die SVG skaliert per
+   preserveAspectRatio="meet" hinein -- so sprengt die Darstellung nie den
+   Bildschirm in der Vertikalen. */
+.aspekt-overlay-wrap { overflow: hidden; }
+.aspekt-figur.aspekt-im-overlay {
+    margin: 0; width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    box-shadow: 0 24px 60px rgba(24,27,33,.35);
 }
-.aspekt-figur.aspekt-im-overlay .aspekt-panel-left { border-right: 1px solid var(--kb-border); }
-.aspekt-figur.aspekt-im-overlay .aspekt-panel-right { display: block; border-left: 1px solid var(--kb-border); }
-.aspekt-figur.aspekt-im-overlay .aspekt-scene { padding: 18px; }
-.aspekt-figur.aspekt-im-overlay .aspekt-svg { max-width: none; }
+.aspekt-figur.aspekt-im-overlay .aspekt-body {
+    flex: 1 1 auto; min-height: 0;
+    display: grid; grid-template-columns: 240px minmax(0, 1fr) 250px;
+    grid-template-rows: minmax(0, 1fr); align-items: stretch;
+}
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-left  { border-right: 1px solid var(--kb-border); overflow: auto; min-height: 0; }
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-right { display: block; border-left: 1px solid var(--kb-border); overflow: auto; min-height: 0; }
+.aspekt-figur.aspekt-im-overlay .aspekt-scene { padding: 18px; min-height: 0; overflow: hidden; }
+.aspekt-figur.aspekt-im-overlay .aspekt-svg { width: 100%; height: 100%; max-width: none; max-height: none; }
 body.aspekt-overlay-open { overflow: hidden; }
 
 /* Tablet: immer gestapelt */

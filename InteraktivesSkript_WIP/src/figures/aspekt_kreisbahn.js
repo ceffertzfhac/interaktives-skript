@@ -39,10 +39,15 @@ const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 const SVG_SCENE = `
 <svg id="kb_main_svg" viewBox="0 0 450 480" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <defs>
-    <marker id="kb_ax_arrow"     markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
-    <marker id="kb_arrowhead-r"  markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
-    <marker id="kb_arrowhead-rx" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
-    <marker id="kb_arrowhead-ry" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
+    <!-- markerUnits=userSpaceOnUse: die Pfeilspitze hat eine FESTE Laenge in
+         Nutzereinheiten, unabhaengig von der Strichstaerke. Diese Laenge ist
+         genau die Verkuerzung, die render.js anwendet (ARROW_LEN_MAIN=5·2.5=12.5,
+         ARROW_LEN_COMP=5·2=10) -> die Spitze landet exakt auf dem Zielpunkt,
+         waehrend die Strichstaerke frei per CSS gesetzt werden kann. -->
+    <marker id="kb_ax_arrow"     markerUnits="userSpaceOnUse" markerWidth="9"    markerHeight="7"    refX="0" refY="3.5"   orient="auto"><polygon points="0 0, 9 3.5, 0 7"/></marker>
+    <marker id="kb_arrowhead-r"  markerUnits="userSpaceOnUse" markerWidth="12.5" markerHeight="8.75" refX="0" refY="4.375" orient="auto"><polygon points="0 0, 12.5 4.375, 0 8.75"/></marker>
+    <marker id="kb_arrowhead-rx" markerUnits="userSpaceOnUse" markerWidth="10"   markerHeight="7"    refX="0" refY="3.5"   orient="auto"><polygon points="0 0, 10 3.5, 0 7"/></marker>
+    <marker id="kb_arrowhead-ry" markerUnits="userSpaceOnUse" markerWidth="10"   markerHeight="7"    refX="0" refY="3.5"   orient="auto"><polygon points="0 0, 10 3.5, 0 7"/></marker>
   </defs>
   <g id="kb_animation_group">
     <g id="kb_aspekt_axes"></g>
@@ -97,8 +102,8 @@ const PANEL_LEFT = `
 // Rechtes Analyse-Panel (breit + Lupe).
 const PANEL_RIGHT = `
 <div class="aspekt-panel aspekt-panel-right">
-  <div class="panel-section">
-    <div class="panel-label">Analyse</div>
+  <div class="panel-section collapsible">
+    <button type="button" class="panel-label" data-action="toggle_panel_section" aria-expanded="true">Analyse<span class="acc-chevron" aria-hidden="true">▾</span></button>
     <dl class="aspekt-werte">
       <dt>\\(\\varphi\\)</dt><dd id="ak_val_phi"></dd>
       <dt>\\(R\\)</dt><dd id="ak_val_r"></dd>
@@ -166,6 +171,10 @@ function refresh() {
     store.omegaDeg = OMEGA_DEG;
     recomputeDerived();
     sceneCenters = setupScene();   // Neuskalierung bei R-Aenderung (Zoom, Scheibe)
+    // setupScene() ruft drawCoordSystem() der Sim auf, das eigene Achsen +
+    // x/y-Labels in kb_animation_coord_system zeichnet -> leeren, sonst waeren
+    // die Achsen doppelt beschriftet (wir zeichnen eigene mit Negativ-Ast).
+    const cs = ge('kb_animation_coord_system'); if (cs) cs.textContent = '';
     drawAxes();
     draw(phi);
     const R = store.R, rad = phi * Math.PI / 180;
@@ -214,7 +223,7 @@ function openOverlay(fig) {
     const w = content ? content.clientWidth * 0.95 : window.innerWidth * 0.9;
     const h = (window.innerHeight - 64) * 0.95;
     wrap.style.width = Math.round(w) + 'px';
-    wrap.style.maxHeight = Math.round(h) + 'px';
+    wrap.style.height = Math.round(h) + 'px';   // definite Hoehe -> Szene fuellt sie, SVG passt sich an
     overlayReturn = { parent: fig.parentNode, next: fig.nextSibling };
     fig.classList.add('aspekt-im-overlay');
     wrap.appendChild(fig);
@@ -244,6 +253,14 @@ export function toggle_aspekt(btn) {
 }
 
 export function close_aspekt_overlay() { closeOverlay(); }
+
+// Ein-/Ausklappen einer collapsible Panel-Sektion (Analyse) -- wie die Vorlage.
+export function toggle_panel_section(btn) {
+    const sec = btn.closest('.panel-section');
+    if (!sec) return;
+    const collapsed = sec.classList.toggle('collapsed');
+    btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+}
 
 // ── Aufbau + Nummer-Label ───────────────────────────────────────────────────
 export function init_aspekt_figuren() {
