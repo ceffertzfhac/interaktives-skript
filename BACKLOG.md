@@ -156,6 +156,18 @@ Hintergrund in `MIGRATION_v0.13_nach_HTML.md`.
 
 - [x] **Druck: durchgehend eingefaerbter Hintergrund vermeiden (Toner!).** Im Druck darf es keinen flaechigen, durchgehend eingefaerbten Hintergrund geben (verbraucht unnoetig Toner/Farbe). `#content` (und `#paper`) tragen `background-color: var(--paper)` (#f6f4ef, cremefarben), das im Druck nicht zurueckgesetzt wurde. Box-Hintergruende sind ok (kleine Flaechen). *Fix (v1.7): `#print_container #content`/`#paper` auf `background:#fff`; zusaetzlich `@media print { body, #content, #paper { background:#fff !important } }`.* *(S)*
 
+- [ ] **QR-Codes im Druck verweisen auf die interaktiven Aspekt-Figuren (Variante A).** Im Legacy trug jede gedruckte Grafik einen QR-Code, der zurueck auf die interaktive Version zeigte. Im WIP fehlt das: `print.js` hat `create_qr()`/`from_qr()` noch (aus Legacy), qrjs2 ist geladen, die CSS (`.qr_container`/`.qr_title`) existiert -- aber `print_page()` ruft `create_qr` nur fuer `.grafik-container` auf, die es im migrierten (statischen) Kapitel nicht mehr gibt. Der interaktive Teil sind jetzt die **Aspekt-Figuren** (`.aspekt-figur`, z. B. Abb. 1.38), im Druck erscheint ihr statisches `.nur-druck`-Gegenstueck.
+
+  **Umsetzung (drei Bausteine):**
+  1. Stabiler Anker an der Aspekt-Figur: in `init_aspekt_figuren()` eine feste id vergeben (z. B. `id="ak-kreisbahn"` aus `data-aspekt`).
+  2. QR im Druck aufs statische Bild, Link zur Figur: in `print_page()` ueber die Aspekt-Figuren iterieren, im Klon das `data-figref`-Ziel (das gedruckte Bild) finden und dort `create_qr(zielElement, "…?g=ak-…")` anhaengen. Nur Abbildungen MIT interaktivem Pendant bekommen einen QR (Nutzervorgabe: „verweisen auf den interaktiven Part").
+  3. **Variante A** fuer `from_qr()`: paginierungs-bewusst -- beim Ankommen mit `?g=ak-…` die Seite der Figur via `showPage` einblenden UND die Lupe-Overlay-Ansicht oeffnen (`openOverlay`), also die Figur prominent gross zeigen (Analogon zum Legacy-`zoom()`). Alt-Links `?g=gcN` behalten den `zoom`-Fallback. (Aktuell ist `from_qr` nicht paginierungs-bewusst und laedt auf einer versteckten Seite ins Leere -- muss ohnehin gefixt werden.)
+
+  **`create_qr` verallgemeinern:** aktuell fuegt es den QR *in* das Element mit `id` ein und baut den Link aus der id; auf `create_qr(zielElement, linkZiel)` umstellen (minimal-invasiv).
+
+  **Beschriftung allgemeiner:** der Legacy-Hinweis „Sie muessen im Ilias angemeldet sein" ist ILIAS-spezifisch und muss weg. Neutraler formulieren (z. B. „Interaktive Version im Browser oeffnen") -- unabhaengig von der konkreten Hosting-Plattform.
+  *(M)*
+
 ## P5 — Bekannte Fehler (Interaktivitaet / Shell)
 
 - [ ] **Schiene „Auf dieser Seite" zeigt beim ERSTEN Laden nur den Box-Typ.** Nach dem Neuladen steht in der linken Schiene oft nur „Wichtig", „Beispiel" … ohne Titel; nach Hin-und-Herspringen dann korrekt „Beispiel: …". **Ursache:** `main.js::init()` ruft `init_shell()` (baut die Schiene, liest `.highlight_box_title`) **vor** `init_numbering()`, das die Box-Titel erst auf „Beispiel 1.4.1: Titel" setzt. **Fix-Richtung:** `init_shell()` nach `init_numbering()` aufrufen oder nach der Nummerierung einen Schienen-Refresh ausloesen. *(S)*
