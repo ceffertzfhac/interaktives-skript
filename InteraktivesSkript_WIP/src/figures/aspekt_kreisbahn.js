@@ -78,7 +78,7 @@ const PANEL_LEFT = `
 <div class="aspekt-panel aspekt-panel-left">
   <div class="panel-section">
     <div class="panel-label">Parameter</div>
-    <div class="slider-label">Winkel \\(\\varphi\\)</div>
+    <div class="slider-label">Winkel \\(\\phi\\)</div>
     <div class="slider-row">
       <input id="ak_phi" type="range" min="0" max="360" step="0.5" value="60">
       <span class="slider-val" id="ak_phi_out"></span>
@@ -95,7 +95,7 @@ const PANEL_LEFT = `
       <div class="legend-swatch" data-c="r"></div>   <div class="legend-label">Ortsvektor \\(\\vec{r}\\)</div>
       <div class="legend-swatch" data-c="rx"></div>  <div class="legend-label">Komponente \\(r_x\\)</div>
       <div class="legend-swatch" data-c="ry"></div>  <div class="legend-label">Komponente \\(r_y\\)</div>
-      <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\varphi\\)</div>
+      <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\phi\\)</div>
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
   </div>
@@ -114,7 +114,7 @@ const PANEL_RIGHT = `
     <div class="panel-section">
       <div class="panel-label">Live-Analyse</div>
       <div class="analysis-grid">
-        <div class="analysis-cell key">Winkel \\(\\varphi\\)</div><div class="analysis-cell val" id="ak_val_phi"></div>
+        <div class="analysis-cell key">Winkel \\(\\phi\\)</div><div class="analysis-cell val" id="ak_val_phi"></div>
         <div class="analysis-cell key">Radius \\(R\\)</div><div class="analysis-cell val" id="ak_val_r"></div>
         <div class="analysis-cell key">Position \\(x = r_x\\)</div><div class="analysis-cell val" id="ak_val_x"></div>
         <div class="analysis-cell key">Position \\(y = r_y\\)</div><div class="analysis-cell val" id="ak_val_y"></div>
@@ -193,13 +193,15 @@ function drawAngle(phiDeg) {
     arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
     arc.setAttribute('class', 'aspekt-angle-arc');
     g.appendChild(arc);
-    // Label auf der Winkelhalbierenden, knapp ausserhalb des Bogens
-    const lr = rArc + 15, mid = rad / 2;
+    // Label auf der Winkelhalbierenden INNERHALB des Bogens (zwischen Ursprung
+    // und Bogen). Zeichen: gerades phi (ϕ, U+03D5 = LaTeX \phi), nicht das
+    // geschwungene varphi.
+    const lr = rArc * 0.62, mid = rad / 2;
     const lx = cx + lr * Math.cos(mid), ly = cy - lr * Math.sin(mid);
     const t = document.createElementNS(NS, 'text');
     t.setAttribute('x', lx.toFixed(2)); t.setAttribute('y', (ly + 5).toFixed(2));
     t.setAttribute('class', 'aspekt-angle-label');
-    t.textContent = 'φ';   // φ
+    t.textContent = 'ϕ';   // ϕ (gerades phi)
     g.appendChild(t);
 }
 
