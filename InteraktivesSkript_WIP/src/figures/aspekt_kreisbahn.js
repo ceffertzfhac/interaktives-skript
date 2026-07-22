@@ -200,9 +200,10 @@ function drawAngle(phiDeg) {
     arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
     arc.setAttribute('class', 'aspekt-angle-arc');
     g.appendChild(arc);
-    // varphi-Label (foreignObject/MathJax) auf der Winkelhalbierenden INNERHALB
-    // des Bogens positionieren (30x30 -> um 15 zentrieren).
-    const lr = rArc * 0.62, mid = rad / 2;
+    // varphi-Label (foreignObject/MathJax) auf der Winkelhalbierenden knapp
+    // AUSSERHALB des Bogens positionieren (frueheres, besseres Placement;
+    // 30x30 -> um 15 zentrieren).
+    const lr = rArc + 15, mid = rad / 2;
     const lx = cx + lr * Math.cos(mid), ly = cy - lr * Math.sin(mid);
     const label = ge('kb_angle_label');
     if (label) {
