@@ -39,7 +39,7 @@
    IDs sind pro Instanz prefixt (kb<n>_, s. runtime.js) -> hier Suffix-Selektoren
    statt fester #kb_-IDs. Gescopt unter .aspekt-scene, damit z.B. [id$="point"]
    nicht auch den Graph-Punkt (id …graph_point) einer Weg-Zeit-Figur trifft. */
-.aspekt-figur .aspekt-scene { min-width: 0; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; }
+.aspekt-figur .aspekt-scene { min-width: 0; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; position: relative; }
 /* Inline-Groesse (nicht-Zoom): 460 war richtig. Im Overlay wird das
    ueberschrieben und die SVG an der verfuegbaren HOEHE gedeckelt (s. unten). */
 .aspekt-figur .aspekt-svg { display: block; width: 100%; max-width: 460px; height: auto; }
@@ -79,7 +79,7 @@
    (.aspekt-panel-right.collapsed) verschwindet der Body und die Leiste wird
    zum schmalen vertikalen Streifen (Label gedreht, Chevron zeigt zum
    Aufklappen). */
-.aspekt-figur .aspekt-panel-right { display: flex; flex-direction: column; }
+.aspekt-figur .aspekt-panel-right { display: flex; flex-direction: column; max-width: 260px; }
 .aspekt-figur .panel-header {
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
     width: 100%; padding: 11px 14px; background: var(--kb-surface); border: none;
@@ -142,22 +142,20 @@
 .aspekt-figur .analysis-cell.key { color: var(--kb-text3); }
 .aspekt-figur .analysis-cell.val { font-family: var(--kb-font-mono); color: var(--kb-text); text-align: right; }
 
-/* ── Physik-Sektion (rechte Seitenleiste): die fuer die jeweilige Figur
-   relevanten Formeln, UNNUMMERIERT (kein Tag — bewusst ohne Formelnummer, s.
-   main.js::fill_physik_panels, das sie aus window.eq_latex als \[...\] neu
-   setzt). Optik an die Stand-alone-Sims angelehnt: rahmenlos auf der Panel-
-   Flaeche, keine Lesefluss-Formelkarte, zentriert und ggf. auf die Panel-
-   breite skaliert. Hoeher spezifisch als die Lesefluss-Kartenregel und als
-   darkmode.css' mjx-container[display]-Ueberschreibung. */
-.aspekt-figur .physik-list { display: flex; flex-direction: column; gap: 2px; }
-.aspekt-figur .physik-eq { line-height: 0; }
-.aspekt-figur .physik-list mjx-container[display="true"] {
-    display: block;
-    background: none; border: none; border-radius: 0;
-    padding: 4px 0; margin: 0 0 6px;
-    text-align: center;
+/* ── Physik-Sektion (rechte Seitenleiste): kompakt und NUR auf die jeweilige
+   Figur gemünzt, UNNUMMERIERT (kein Tag — bewusst ohne Formelnummer). Inline
+   als \[...\] im figuren-eigenen PANEL_RIGHT, kein Umweg über window.eq_latex
+   (das ist die Form, die vor „Physik raus" stand). Optik an die Stand-alone-
+   Sims angelehnt: rahmenlos auf der Panel-Flaeche, zentriert und auf die
+   Panelbreite skaliert (max-width:100% — eine breite Formel skaliert statt
+   das Panel und damit die Simulation aufzuweiten). */
+.aspekt-figur .formula-box { display: flex; flex-direction: column; gap: 4px; }
+.aspekt-figur .formula-box-cap { font-size: 11px; color: var(--kb-text3); margin-bottom: 2px; }
+.aspekt-figur .formula-box mjx-container[display="true"] {
+    display: block; background: none; border: none; border-radius: 0;
+    padding: 2px 0; margin: 0; text-align: center;
 }
-.aspekt-figur .physik-list mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
+.aspekt-figur .formula-box mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 
 /* ── Lupe ──────────────────────────────────────────────────────────────── */
 .aspekt-figur .aspekt-lupe {

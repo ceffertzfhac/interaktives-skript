@@ -55,11 +55,23 @@ export async function loadChapters() {
 // Physik-Sektion setzt. Nur am HTML-String lauffaehig (vor MathJax-Typeset).
 window.eq_latex = window.eq_latex || {};
 function captureEqLatex(html) {
+    // HTML-Kommentare koennen dokumentarischen LaTeX-Text enthalten
+    // (z. B. "\\begin{align}" in Hinweisen). Der Extractor darf diese
+    // Marker NICHT als echte Umgebungen interpretieren.
+    const source = html.replace(/<!--[\s\S]*?-->/g, '');
     const env = /\\begin\{(equation\*?|align\*?)\}([\s\S]*?)\\end\{\1\}/g;
+
+    const decodeEntities = (s) => s
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+
     let m;
-    while ((m = env.exec(html)) !== null) {
+    while ((m = env.exec(source)) !== null) {
         const envName = m[1].replace(/\*$/, '');
-        const inner = m[2].replace(/\\label\{[^}]+\}/, '').trim();
+        const inner = decodeEntities(m[2].replace(/\\label\{[^}]+\}/, '')).trim();
         if (!inner) continue;
         const label = (m[2].match(/\\label\{([^}]+)\}/) || [])[1];
         if (!label) continue;

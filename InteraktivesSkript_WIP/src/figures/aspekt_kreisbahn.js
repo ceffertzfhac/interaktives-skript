@@ -121,11 +121,16 @@ const PANEL_LEFT = `
 // Rechtes Analyse-Panel (breit + Lupe). Kopf-Leiste + Body wie die Stand-alone
 // (panel-header mit ph-label + Doppel-Chevron, panel-body); eingeklappt wird
 // der Body ausgeblendet und die Leiste zum schmalen vertikalen Streifen.
+// Kopf-Leiste: Chevrons LINKS (zeigen zur Simulation), „Analyse" RECHTS —
+// spiegelbildlich zum linken Bedienfeld (dessen Chevron nach rechts zeigt).
+// Physik-Sektion: kompakt und NUR auf diese Figur gemünzt (R, φ — kein t, kein
+// T), UNNUMMERIERT, inline als \[...\] (MathJax setzt es direkt, kein Umweg
+// über window.eq_latex/label — das ist die Form, die vor „Physik raus" stand).
 const PANEL_RIGHT = `
 <div class="aspekt-panel aspekt-panel-right">
   <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" title="Analyse ein-/ausklappen">
-    <span class="ph-label">Analyse</span>
     <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
+    <span class="ph-label">Analyse</span>
   </button>
   <div class="panel-body">
     <div class="panel-section">
@@ -135,6 +140,13 @@ const PANEL_RIGHT = `
         <div class="analysis-cell key">Radius \\(R\\)</div><div class="analysis-cell val" id="ak_val_r"></div>
         <div class="analysis-cell key">Position \\(x = r_x\\)</div><div class="analysis-cell val" id="ak_val_x"></div>
         <div class="analysis-cell key">Position \\(y = r_y\\)</div><div class="analysis-cell val" id="ak_val_y"></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-label">Physik</div>
+      <div class="formula-box">
+        <div class="formula-box-cap">Position auf der Kreisbahn:</div>
+        <div>\\[\\vec{r} = \\begin{pmatrix} R\\cos\\varphi \\\\ R\\sin\\varphi \\end{pmatrix}\\]</div>
       </div>
     </div>
   </div>
@@ -157,16 +169,6 @@ export function buildKreisbahnFig(fig) {
     const rt = createRuntime();
     const p = rt.prefix;
 
-    // Lupe-Button (generischer toggle_aspekt-Handler).
-    const lupe = document.createElement('button');
-    lupe.type = 'button';
-    lupe.className = 'aspekt-lupe';
-    lupe.dataset.action = 'toggle_aspekt';
-    lupe.setAttribute('aria-label', 'Figur vergrößern');
-    lupe.title = 'Vergrößern';
-    lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
-    fig.appendChild(lupe);
-
     const scene = document.createElement('div');
     fig.appendChild(scene);
 
@@ -176,6 +178,19 @@ export function buildKreisbahnFig(fig) {
         `<div class="aspekt-scene">${SVG_SCENE.replace(/kb_/g, p)}</div>` +
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
+
+    // Lupe-Button: INS Bild der Kernsimulation setzen (rechts darin, also links
+    // neben dem vertikalen Trennstreifen zur rechten Seitenleiste), nicht an die
+    // figure-Ecke (wo sie zuvor auf dem Analyse-Header sass). .aspekt-scene ist
+    // position:relative (s. CSS) -> absolute Top/Right bezieht sich darauf.
+    const lupe = document.createElement('button');
+    lupe.type = 'button';
+    lupe.className = 'aspekt-lupe';
+    lupe.dataset.action = 'toggle_aspekt';
+    lupe.setAttribute('aria-label', 'Figur vergrößern');
+    lupe.title = 'Vergrößern';
+    lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
+    scene.querySelector('.aspekt-scene').appendChild(lupe);
 
     // Bildunterschrift aus data-caption aufbauen (die statische Abbildung
     // uebernimmt am Bildschirm diese Rolle). Inside .aspekt-body, damit die

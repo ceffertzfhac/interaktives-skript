@@ -205,8 +205,8 @@ const PANEL_LEFT = `
 const PANEL_RIGHT = `
 <div class="aspekt-panel aspekt-panel-right">
   <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" title="Analyse ein-/ausklappen">
-    <span class="ph-label">Analyse</span>
     <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
+    <span class="ph-label">Analyse</span>
   </button>
   <div class="panel-body">
     <div class="panel-section">
@@ -218,6 +218,14 @@ const PANEL_RIGHT = `
         <div class="analysis-cell key">Periodendauer \\(T\\)</div>    <div class="analysis-cell val" id="ak_val_T"></div>
         <div class="analysis-cell key">Position \\(x\\)</div>         <div class="analysis-cell val" id="ak_val_x"></div>
         <div class="analysis-cell key">Position \\(y\\)</div>         <div class="analysis-cell val" id="ak_val_y"></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-label">Physik</div>
+      <div class="formula-box">
+        <div class="formula-box-cap">Ort und Winkel auf der Kreisbahn:</div>
+        <div>\\[\\vec{r}(t) = \\begin{pmatrix} R\\cos(\\varphi(t)) \\\\ R\\sin(\\varphi(t)) \\end{pmatrix}\\]</div>
+        <div>\\[\\varphi(t) = \\tfrac{2\\pi}{T}\\,t\\]</div>
       </div>
     </div>
   </div>
@@ -245,16 +253,6 @@ export function buildWegZeitFig(fig) {
     const rt = createRuntime();
     const p = rt.prefix;
 
-    // Lupe-Button (generischer toggle_aspekt-Handler).
-    const lupe = document.createElement('button');
-    lupe.type = 'button';
-    lupe.className = 'aspekt-lupe';
-    lupe.dataset.action = 'toggle_aspekt';
-    lupe.setAttribute('aria-label', 'Figur vergrößern');
-    lupe.title = 'Vergrößern';
-    lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
-    fig.appendChild(lupe);
-
     const scene = document.createElement('div');
     fig.appendChild(scene);
 
@@ -266,6 +264,18 @@ export function buildWegZeitFig(fig) {
         `<div class="aspekt-graph">${SVG_GRAPH.replace(/kb_/g, p)}</div></div>` +
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
+
+    // Lupe-Button: INS Bild der Kernsimulation setzen (rechts darin, also links
+    // neben dem vertikalen Trennstreifen zur rechten Seitenleiste), nicht an die
+    // figure-Ecke. .aspekt-main ist position:relative (s. CSS).
+    const lupe = document.createElement('button');
+    lupe.type = 'button';
+    lupe.className = 'aspekt-lupe';
+    lupe.dataset.action = 'toggle_aspekt';
+    lupe.setAttribute('aria-label', 'Figur vergrößern');
+    lupe.title = 'Vergrößern';
+    lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
+    scene.querySelector('.aspekt-main').appendChild(lupe);
 
     // Bildunterschrift aus data-caption aufbauen (die statische Abbildung
     // uebernimmt am Bildschirm diese Rolle). Inside .aspekt-body, damit die

@@ -50,7 +50,10 @@ function init_aspekt_figuren() {
         // (s. unten), weil die Gleichungen im DOM erst dann existieren.
         if (fig.dataset.eqs) {
             const body = fig.querySelector('.aspekt-panel-right .panel-body');
-            if (body && !body.querySelector('.physik-list')) {
+            // Manche Aspekt-Figuren bringen bereits einen statischen Physik-Block
+            // (.formula-box) mit. Dann keine zweite Physik-Sektion erzeugen.
+            const hasStaticPhysik = body && !!body.querySelector('.formula-box');
+            if (body && !hasStaticPhysik && !body.querySelector('.physik-list')) {
                 const sec = document.createElement('div');
                 sec.className = 'panel-section';
                 const lbl = document.createElement('div');
