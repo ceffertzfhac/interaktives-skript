@@ -53,6 +53,7 @@ const SVG_SCENE = `
     <g id="kb_aspekt_axes"></g>
     <g id="kb_animation_coord_system"></g>
     <circle id="kb_disk" cx="225" cy="260" r="100" fill="none" stroke-width="0" opacity="0.06"/>
+    <g id="kb_aspekt_angle"></g>
     <path id="kb_trajectory_path" fill="none" stroke-width="2" stroke-dasharray="4,4" d=""/>
     <circle id="kb_point" cx="325" cy="260" r="8" stroke-width="1"/>
     <text id="kb_zoom_text_display" x="12" y="20" class="zoom-text"></text>
@@ -94,6 +95,7 @@ const PANEL_LEFT = `
       <div class="legend-swatch" data-c="r"></div>   <div class="legend-label">Ortsvektor \\(\\vec{r}\\)</div>
       <div class="legend-swatch" data-c="rx"></div>  <div class="legend-label">Komponente \\(r_x\\)</div>
       <div class="legend-swatch" data-c="ry"></div>  <div class="legend-label">Komponente \\(r_y\\)</div>
+      <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\varphi\\)</div>
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
   </div>
@@ -116,13 +118,6 @@ const PANEL_RIGHT = `
         <div class="analysis-cell key">Radius \\(R\\)</div><div class="analysis-cell val" id="ak_val_r"></div>
         <div class="analysis-cell key">Position \\(x = r_x\\)</div><div class="analysis-cell val" id="ak_val_x"></div>
         <div class="analysis-cell key">Position \\(y = r_y\\)</div><div class="analysis-cell val" id="ak_val_y"></div>
-      </div>
-    </div>
-    <div class="panel-section">
-      <div class="panel-label">Physik</div>
-      <div class="formula-box">
-        <div>Position auf der Kreisbahn:</div>
-        <div>\\[\\vec{r} = \\begin{pmatrix} R\\cos\\varphi \\\\ R\\sin\\varphi \\end{pmatrix}\\]</div>
       </div>
     </div>
   </div>
@@ -177,10 +172,42 @@ function drawAxes() {
     label(ANIM_CX - 14, ANIM_CY - len - 8, 'y');
 }
 
+// Winkel-Visualisierung: kleiner Bogen am Ursprung zwischen der positiven
+// x-Achse und dem Radius (Ortsvektor), plus ein "φ"-Label -- die klassische
+// Darstellung (auch in Abb. 1.38 und der Legacy-Figur). Der Bogenradius
+// skaliert mit dem Kreis, gedeckelt, damit er den Punkt nicht ueberlappt.
+function drawAngle(phiDeg) {
+    const g = ge('kb_aspekt_angle');
+    if (!g) return;
+    g.textContent = '';
+    if (phiDeg <= 0.5) return;
+    const NS = 'http://www.w3.org/2000/svg';
+    const cx = ANIM_CX, cy = ANIM_CY;
+    const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42);
+    const rad = phiDeg * Math.PI / 180;
+    // Bildschirm-y ist nach unten -> Winkel φ (math, CCW) endet bei y = cy - …
+    const x0 = cx + rArc, y0 = cy;
+    const x1 = cx + rArc * Math.cos(rad), y1 = cy - rArc * Math.sin(rad);
+    const large = phiDeg > 180 ? 1 : 0;
+    const arc = document.createElementNS(NS, 'path');
+    arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
+    arc.setAttribute('class', 'aspekt-angle-arc');
+    g.appendChild(arc);
+    // Label auf der Winkelhalbierenden, knapp ausserhalb des Bogens
+    const lr = rArc + 15, mid = rad / 2;
+    const lx = cx + lr * Math.cos(mid), ly = cy - lr * Math.sin(mid);
+    const t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', lx.toFixed(2)); t.setAttribute('y', (ly + 5).toFixed(2));
+    t.setAttribute('class', 'aspekt-angle-label');
+    t.textContent = 'φ';   // φ
+    g.appendChild(t);
+}
+
 function draw(phiDeg) {
     const t = (phiDeg * Math.PI / 180) / store.omega;
     precompute();
     updateScene(t, position(t), velocity(t), acceleration(t), sceneCenters);
+    drawAngle(phiDeg);
 }
 
 function refresh() {
@@ -245,7 +272,7 @@ function openOverlay(fig) {
     const w = content ? content.clientWidth * 0.95 : window.innerWidth * 0.9;
     const h = (window.innerHeight - 64) * 0.95;
     wrap.style.width = Math.round(w) + 'px';
-    wrap.style.height = Math.round(h) + 'px';   // definite Hoehe -> Szene fuellt sie, SVG passt sich an
+    wrap.style.maxHeight = Math.round(h) + 'px';   // Deckel; die SVG begrenzt sich selbst per vh (s. CSS)
     overlayReturn = { parent: fig.parentNode, next: fig.nextSibling };
     fig.classList.add('aspekt-im-overlay');
     wrap.appendChild(fig);

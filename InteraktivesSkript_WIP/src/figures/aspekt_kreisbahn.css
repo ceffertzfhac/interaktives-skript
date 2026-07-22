@@ -36,7 +36,9 @@
 }
 
 /* ── Szene (Geometrie exakt wie Vorlage) ───────────────────────────────── */
-.aspekt-figur .aspekt-scene { min-width: 0; display: flex; align-items: flex-start; justify-content: center; }
+.aspekt-figur .aspekt-scene { min-width: 0; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; }
+/* Inline-Groesse (nicht-Zoom): 460 war richtig. Im Overlay wird das
+   ueberschrieben und die SVG an der verfuegbaren HOEHE gedeckelt (s. unten). */
 .aspekt-figur .aspekt-svg { display: block; width: 100%; max-width: 460px; height: auto; }
 .aspekt-figur #kb_disk { stroke: var(--kb-traj); stroke-width: 1.5; opacity: 0.32; }
 .aspekt-figur #kb_trajectory_path { stroke: var(--kb-traj); }
@@ -51,6 +53,10 @@
 .aspekt-figur .aspekt-axis { stroke: var(--kb-text); stroke-width: 1.2; }
 .aspekt-figur #kb_ax_arrow polygon { fill: var(--kb-text); }
 .aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: 13px; font-style: italic; }
+/* Winkel-Visualisierung (Bogen + φ-Label) */
+.aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: 2; }
+.aspekt-figur .aspekt-angle-label { fill: var(--kb-accent); font-family: var(--font-serif, serif); font-style: italic; font-size: 18px; text-anchor: middle; }
+.aspekt-figur .legend-swatch[data-c="phi"] { background: var(--kb-accent); height: 3px; }
 
 /* ── Panel (Parameter / Legende / Analyse) — Vorlagen-Klassen ──────────── */
 .aspekt-figur .panel-section { padding: 12px 14px; border-bottom: 1px solid var(--kb-border); }
@@ -123,13 +129,6 @@
 .aspekt-figur .analysis-cell { background: var(--kb-surface2); padding: 4px 8px; font-size: 11px; }
 .aspekt-figur .analysis-cell.key { color: var(--kb-text3); }
 .aspekt-figur .analysis-cell.val { font-family: var(--kb-font-mono); color: var(--kb-text); text-align: right; }
-.aspekt-figur .formula-box {
-    background: color-mix(in srgb, var(--kb-accent) 5%, transparent);
-    border: 1px solid color-mix(in srgb, var(--kb-accent) 20%, transparent);
-    border-radius: var(--kb-r-sm); padding: 10px 12px; font-size: 12.5px;
-    color: var(--kb-text2); line-height: 1.75;
-}
-.aspekt-figur .formula-box mjx-container[display="true"] { margin: 4px 0 0; }
 
 /* ── Lupe ──────────────────────────────────────────────────────────────── */
 .aspekt-figur .aspekt-lupe {
@@ -176,28 +175,25 @@
     display: flex; align-items: center; justify-content: center;
     background: rgba(24, 27, 33, .45);
 }
-/* Overlay: der Wrap hat eine DEFINITE Hoehe (JS: ~0.95 der verfuegbaren
-   Hoehe), overflow:hidden. Die Figur fuellt ihn als Flex-Spalte; die Szene
-   bekommt die Rest-Hoehe (grid-Zeile minmax(0,1fr)) und die SVG skaliert per
-   preserveAspectRatio="meet" hinein -- so sprengt die Darstellung nie den
-   Bildschirm in der Vertikalen. */
-.aspekt-overlay-wrap { overflow: hidden; }
+/* Overlay: der Wrap hat eine maximale Hoehe (JS: ~0.95 der verfuegbaren Hoehe),
+   overflow:auto als Sicherheitsnetz. Die SVG wird an der VIEWPORT-HOEHE
+   gedeckelt (max-width: min(100%, 62vh) -> Bildhoehe ~66vh), damit die
+   Simulation im Zoom nie ueber den Bildschirm hinausragt -- unabhaengig von
+   verschachteltem flex/grid. */
+.aspekt-overlay-wrap { overflow: auto; }
 .aspekt-figur.aspekt-im-overlay {
-    margin: 0; width: 100%; height: 100%;
-    display: flex; flex-direction: column;
+    margin: 0; width: 100%;
     box-shadow: 0 24px 60px rgba(24,27,33,.35);
 }
 /* Im Overlay IMMER dreispaltig (Analyse stets sichtbar, auch wenn die Seite im
    Modus schmal/normal steht). Analyse-Spalte auto -> schrumpft beim Einklappen. */
 .aspekt-figur.aspekt-im-overlay .aspekt-body {
-    flex: 1 1 auto; min-height: 0;
-    display: grid; grid-template-columns: 240px minmax(0, 1fr) auto;
-    grid-template-rows: minmax(0, 1fr); align-items: stretch;
+    display: grid; grid-template-columns: 240px minmax(0, 1fr) auto; align-items: start;
 }
-.aspekt-figur.aspekt-im-overlay .aspekt-panel-left  { border-right: 1px solid var(--kb-border); overflow: auto; min-height: 0; }
-.aspekt-figur.aspekt-im-overlay .aspekt-panel-right { display: flex; border-left: 1px solid var(--kb-border); overflow: auto; min-height: 0; }
-.aspekt-figur.aspekt-im-overlay .aspekt-scene { padding: 18px; min-height: 0; overflow: hidden; }
-.aspekt-figur.aspekt-im-overlay .aspekt-svg { width: 100%; height: 100%; max-width: none; max-height: none; }
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-left  { border-right: 1px solid var(--kb-border); }
+.aspekt-figur.aspekt-im-overlay .aspekt-panel-right { display: flex; border-left: 1px solid var(--kb-border); }
+.aspekt-figur.aspekt-im-overlay .aspekt-scene { padding: 18px; }
+.aspekt-figur.aspekt-im-overlay .aspekt-svg { width: 100%; height: auto; max-width: min(100%, 62vh); }
 body.aspekt-overlay-open { overflow: hidden; }
 
 /* Tablet: gestapelt -- aber NICHT im Overlay (Analyse bleibt im Zoom sichtbar). */
