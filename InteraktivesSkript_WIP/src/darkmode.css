@@ -205,12 +205,15 @@ input[type="range"]::-moz-range-track {
 .toc_group.toc_group_current .toc_group_body { border-top-color: #2a4a45; }
 .toc_sub_link.toc_sub_current { color: #04302f; }
 
-/* ── Kreisbewegung-Simulation (src/figures/kreisbewegung/): dieselben
-   #gc10-Variablen wie in figures/kreisbewegung/styles.css, dunkles Set --
-   folgt dem Selector-Override-Muster dieser Datei statt eines eigenen
-   body.dark-Klassenumschalters (die Portierung nutzt bewusst dieselben CSS-
-   Variablen weiter, s. figures/kreisbewegung/ui.js-Kommentar). */
-#gc10 {
+/* ── Aspekt-Figuren (.aspekt-figur) UND die (derzeit nicht in ch1.4
+   eingebundene) Kreisbewegungs-Sim (#gc10): dunkles --kb-*-Set nach der
+   Stand-alone-Vorlage (Input/Simulationen/Project_kreisbewegung_simulation,
+   body.dark) — dunkel-navy Graph-Hintergrund mit dezenter Navy-Gitterlinie
+   und hellere Vektorfarben auf dunklem Grund (Bernstein/Blau/Gruen). Folgt dem
+   Selector-Override-Muster dieser Datei statt eines body.dark-Klassen-
+   umschalters (die Portierung nutzt bewusst dieselben CSS-Variablen weiter,
+   s. figures/kreisbewegung/ui.js-Kommentar). */
+.aspekt-figur, #gc10 {
     --kb-bg: #1b1b1b;
     --kb-surface: #262626;
     --kb-surface2: #202020;
@@ -219,18 +222,18 @@ input[type="range"]::-moz-range-track {
     --kb-text: #eee;
     --kb-text2: #bbb;
     --kb-text3: #888;
-    --kb-r: #e0b040;
-    --kb-vel: #5b9bd5;
-    --kb-acc: #e06666;
-    --kb-rx: #6fa8dc;
-    --kb-ry: #6fcf97;
-    --kb-vx: #ffd966;
-    --kb-vy: #e07070;
-    --kb-ax: #4fc3d9;
-    --kb-ay: #f2a35e;
-    --kb-traj: #999;
-    --kb-graph-bg: #202020;
-    --kb-grid-line: #333;
+    --kb-r: #ffcc33;      /* Vorlage body.dark --c-r  (Bernstein) */
+    --kb-vel: #66aaff;
+    --kb-acc: #ff7777;
+    --kb-rx: #66aaff;     /* Vorlage --c-rx (Blau) */
+    --kb-ry: #55ee99;     /* Vorlage --c-ry (Gruen) */
+    --kb-vx: #ffcc33;
+    --kb-vy: #ff7777;
+    --kb-ax: #56b4e9;
+    --kb-ay: #f0e442;
+    --kb-traj: #9aa3b8;   /* Vorlage --c-traj */
+    --kb-graph-bg: #161925;  /* Vorlage --graph-bg (dunkles Navy) */
+    --kb-grid-line: #262c42; /* Vorlage --grid-line */
 }
 /* Box-Titel: im Light-Mode wird der Typ-Akzent mit --ink abgedunkelt (55 %
    Akzent). Auf dunklem Grund kehrt sich das um -- dort muss der helle
