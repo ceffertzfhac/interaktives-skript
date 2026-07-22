@@ -137,6 +137,14 @@ Formelnummern kommen aus MathJax' `parseOptions.tags.allLabels`, weil MathJax
 `\ref` nur als Text rendert. Seitenübergreifende Sprünge erledigt der zentrale
 `a[href^="#"]`-Handler in `main.js`.
 
+**`\label` leistet Doppeldienst:** `chapters.js::captureEqLatex` erfasst **vor**
+dem MathJax-Typeset jede gelabelte Gleichung unnummeriert unter
+`window.eq_latex[label]` — das speist die *dynamische* Physik-Sektion einer
+Aspekt-Figur (Skill `interaktive-aspekt-figur`), falls diese `data-eqs="…"`
+führt und keinen statischen Formelblock mitbringt. Ein Label also nicht
+lightly umbenennen/entfernen — es bricht ggf. nicht nur den `data-ref-eq`-
+Querverweis, sondern auch eine Aspekt-Figur.
+
 ## Schritt 7 — Neue Box-Typen? Fünf Stellen anfassen
 
 Fehlt eine, ist der Fehler **still** (Box ohne Rahmen, Icon rutscht in die
