@@ -69,16 +69,22 @@ function landmarksFor(page) {
     if (!page) return [];
     const items = [];
     let n = 0;
-    // .bemerkung/.wichtig sind die v0.13-Namen (seit Kapitel 1.4) und muessen
-    // hier mitgefuehrt werden, sonst fehlen sie in der Seiten-Navigation.
-    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung, .bemerkung, .wichtig').forEach(el => {
-        if (!el.id) el.id = page.id + '-landmark-' + (n++);
-        const t = el.querySelector('.highlight_box_title');
-        items.push({ id: el.id, label: t ? t.textContent : 'Abschnitt' });
-    });
-    page.el.querySelectorAll('.grafik-container').forEach(el => {
-        if (!el.id) return;
-        items.push({ id: el.id, label: el.dataset.title || 'Interaktive Simulation' });
+    // Bemerkungen/Anmerkungen bleiben bewusst weg (Anmerkungen wandern in die
+    // Marginalie, Bemerkungen wuerden die Liste nur zupflastern) — dafuer
+    // erscheinen die interaktiven Abbildungen (s.u.). Ein EINZIGER combined
+    // Selektor statt zweier Durchlaeufe: querySelectorAll liefert sowieso
+    // Dokumentreihenfolge, zwei getrennte Durchlaefe haetten erst alle Boxen,
+    // dann alle Figuren gelistet — nicht die Reihenfolge im Skript.
+    const FIG = new Set(['grafik-container', 'aspekt-figur']);
+    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .wichtig, .grafik-container, .aspekt-figur').forEach(el => {
+        if ([...el.classList].some(c => FIG.has(c))) {
+            if (!el.id) return;
+            items.push({ id: el.id, label: el.dataset.title || 'Interaktive Abbildung' });
+        } else {
+            if (!el.id) el.id = page.id + '-landmark-' + (n++);
+            const t = el.querySelector('.highlight_box_title');
+            items.push({ id: el.id, label: t ? t.textContent : 'Abschnitt' });
+        }
     });
     return items;
 }
