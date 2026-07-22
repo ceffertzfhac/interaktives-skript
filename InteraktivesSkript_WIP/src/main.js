@@ -10,21 +10,27 @@ import { interaktiv, generate_highlight_boxes, safari_bug, make_static,
          init_width_mode } from './core.js';
 import { generate_toc, offsetAnchor, toc, toc_filter, kontakt, close_zoom, zoom, pause } from './ui.js';
 import { init_print, check_print, from_qr } from './print.js';
-import { paginate } from './pages.js';
+import { paginate, showPage } from './pages.js';
 import { init_shell, toggle_drawer, close_drawer, chapter_prev, chapter_next, goto_page } from './shell.js';
 import { init_figure_panels, toggle_panel } from './figures/panels.js';
-import { init_numbering } from './numbering.js';
+import { init_numbering, resolve_eq_refs } from './numbering.js';
 import { loadChapters, typesetAfterLoad } from './chapters.js';
+import { init_footnotes, toggle_footnote } from './footnotes.js';
 
 // Figuren laden (Seiteneffekt: Registrierung von updateN/animateN/clearN).
-import './figures/fig_1.js';
-import './figures/fig_3.js';
-import './figures/fig_4.js';
-import './figures/fig_5.js';
-import './figures/fig_6.js';
-import './figures/fig_8.js';
-import './figures/fig_9.js';
-import { initKreisbewegung } from './figures/kreisbewegung/ui.js';
+// Seit v1.7 ist Kapitel 1.4 rein statisch (v0.13-Abbildungen, keine
+// interaktiven gcN-Container). Die fig_NN-Module + Kreisbewegung-Figur
+// bleiben auf der Platte und werden schrittweise wieder eingebunden, sobald
+// die entsprechenden interaktiven Grafiken zurueckkehren — dann hier die
+// Imports wieder aktivieren:
+//   import './figures/fig_1.js';
+//   import './figures/fig_3.js';
+//   import './figures/fig_4.js';
+//   import './figures/fig_5.js';
+//   import './figures/fig_6.js';
+//   import './figures/fig_8.js';
+//   import './figures/fig_9.js';
+//   import { initKreisbewegung } from './figures/kreisbewegung/ui.js';
 
 // Zentrales Event-Binding (Stage 2): Inline-Handler sind durch data-action-
 // Attribute ersetzt; ein delegierter Listener je Event-Typ dispatcht an die
@@ -76,6 +82,7 @@ function dispatch_click(e) {
         case "pause-animate": pause(el); fig_call("animate", el.dataset.fig); break;
         case "hide": hide(el.dataset.target); break;
         case "toggle_panel": toggle_panel(el); break;
+        case "toggle_footnote": toggle_footnote(el); break;
         case "toggle_drawer": toggle_drawer(); break;
         case "close_drawer": close_drawer(); break;
         case "chapter_prev": chapter_prev(); break;
@@ -101,6 +108,7 @@ async function init() {
     generate_toc();
     init_shell();
     init_figure_panels();
+    init_footnotes();
     init_numbering();
     // Injizierte Formeln re-typesetzen, sobald MathJax bereit ist (Gate wie
     // numbering.js). renumber laeuft ueber reload_mathjax mit.
@@ -109,7 +117,8 @@ async function init() {
     make_static();
     if(interaktiv) {
         update_all();
-        initKreisbewegung();
+        // initKreisbewegung() entfaellt v1.7 (kein gc10-Container mehr in
+        // Kapitel 1.4); s. auskommentierte Imports oben.
     }
     from_qr();
     check_print();
@@ -121,5 +130,26 @@ window.addEventListener('afterprint', (event) => {
     window.history.replaceState(null, null, window.location.pathname);
 });
 window.addEventListener("hashchange", offsetAnchor);
+
+// Seitenbewusste Sprungmarken: das Skript zeigt immer nur eine .chapter-page,
+// ein reiner #anker-Link wuerde bei einem Ziel auf einer anderen Seite ins
+// Leere laufen. Daher zentral abfangen -- erst die Zielseite einblenden, dann
+// zum Element scrollen. Deckt alle Querverweise ab (Abbildung/Abschnitt/Formel)
+// und bleibt gueltig fuer alles, was kuenftig #-Links erzeugt.
+document.addEventListener('click', (event) => {
+    const a = event.target.closest ? event.target.closest('a[href^="#"]') : null;
+    if (!a) return;
+    const raw = a.getAttribute('href').slice(1);
+    if (!raw) return;
+    const id = decodeURIComponent(raw);
+    const target = document.getElementById(id);
+    if (!target) return;
+    event.preventDefault();
+    const pageEl = target.closest('.chapter-page');
+    if (pageEl && pageEl.dataset.pageId) showPage(pageEl.dataset.pageId);
+    // Ist das Ziel selbst die Seite, reicht der Seitenwechsel.
+    if (target !== pageEl) target.scrollIntoView({ block: 'center' });
+    offsetAnchor();
+});
 
 init();

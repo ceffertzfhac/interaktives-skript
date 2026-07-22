@@ -6,11 +6,64 @@
         <title>Physik Skript</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500&display=swap">
         <link rel="stylesheet" href="src/styles.css">
-        <link rel="stylesheet" href="src/figures/kreisbewegung/styles.css">
+        <!-- Ruht mit der gc10-Figur (s. main.js): Kapitel 1.4 ist rein statisch,
+             es gibt keine .grafik-container mehr. Wieder aktivieren, sobald die
+             Kreisbewegungs-Simulation zurueckkehrt.
+        <link rel="stylesheet" href="src/figures/kreisbewegung/styles.css"> -->
         <link id="darkmode_stylesheet" rel="stylesheet" href="src/darkmode.css" disabled="true">
 
         <script src="https://cdn.jsdelivr.net/gh/englishextra/qrjs2@0.1.12/js/qrjs2.min.js" integrity="sha384-dGptHqaP5AGRc3+qdh8CmS8E2WEAs/swpat25AVKvKjdC/uoH5WSAhnk0yAZQjmv" crossorigin="anonymous"></script>
         <script type="module" src="src/main.js"></script>
+        <!-- MathJax v3, konfiguriert VOR dem CDN-Script (async) -- s. CLAUDE.md.
+             tex.tags='ams' aktiviert LaTeX-Nummerierung: \begin{equation}/
+             \begin{align} werden automatisch pro Zeile nummeriert (mit \nonumber/
+             \label/\ref/\eqref wie in v0.13), equation*/align* und \[\] bleiben
+             unnummeriert. tagformat formatiert die Tags auf "(1.4.n)" -- der
+             Section-Praefix ist aktuell Konstante "1.4", da das WIP nur Abschnitt
+             1.4 enthaelt (v0.13: \numberwithin{equation}{section}; Mechanik =
+             Kap. 1, Abschnitt 1.4 = "Kinematik der Drehbewegung und Kreisbahnen";
+             v0.13 setzt die erste Section per \addtocounter{section}{-1} auf 1.0).
+             Fuer weitere Sections muss der Praefix pro Seite ermittelt werden. -->
+        <script>
+          window.MathJax = {
+            tex: {
+              // tagformat/color muessen NICHT nur geladen (loader unten),
+              // sondern auch als Paket aktiviert werden -- sonst bleibt
+              // tagformat wirkungslos und die Tags erscheinen als "(1)"
+              // statt "(1.4.1)". color liefert \textcolor in Formeln.
+              // physics liefert die v0.13-Makros \dd, \eval, \abs, \norm …
+              // (die Quelle laedt \usepackage{physics}) -- ohne das Paket
+              // muesste jede Fundstelle von Hand ersetzt werden.
+              packages: {'[+]': ['tagformat', 'color', 'physics']},
+              tags: 'ams',
+              inlineMath: [['\\(', '\\)']],
+              displayMath: [['$$', '$$'], ['\\[', '\\]']],
+              processEscapes: true,
+              processEnvironments: true,   // \begin{equation}/\begin{align} auch ohne $$/\[\]-Wrapper erkennen (Default)
+              processRefs: true,            // \ref/\eqref auch außerhalb des Math-Modus (Default)
+              tagformat: {
+                // Kein festes Praefix mehr: numbering.js::renumber_equations()
+                // baut nach dem ersten Typeset die Zuordnung "laufende
+                // MathJax-Nummer -> 1.4.3" auf (pro Abschnitt neu zaehlend, wie
+                // v0.13s \numberwithin{equation}{section}) und loest einen
+                // zweiten Lauf aus. Bis dahin steht die laufende Nummer da.
+                // Eigener Laufindex statt MathJax' Zaehler n: number() wird
+                // je Typeset-Lauf in Dokumentreihenfolge aufgerufen, der
+                // Index wird vor jedem Lauf zurueckgesetzt (core.js::
+                // typeset_alles). Damit stimmt die Zuordnung auch dann, wenn
+                // MathJax' eigener Zaehler weiterlaeuft statt neu zu starten.
+                number: (n) => {
+                  window.eq_run_index = (window.eq_run_index || 0) + 1;
+                  return (window.eq_tag_map && window.eq_tag_map[window.eq_run_index])
+                         || String(n);
+                },
+                tag:   (tag) => '(' + tag + ')',
+                id:    (id)  => 'eq-' + id
+              }
+            },
+            loader: { load: ['[tex]/tagformat', '[tex]/color', '[tex]/physics'] }
+          };
+        </script>
         <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-svg.js"></script>
 
     </head>
@@ -19,37 +72,54 @@
             <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation">☰</button>
             <div id="header_brand">
                 <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
-                <span id="span_title">Interaktives Skript <span id="header_version">v1.6</span></span>
+                <span id="span_title">Interaktives Skript <span id="header_version">v1.7</span></span>
             </div>
             <div id="header_divider"></div>
-            <div class="chapter-crumb">
-                <span id="chapter_crumb_chapter"></span>
-                <span>›</span>
-                <span id="chapter_crumb_current"></span>
-            </div>
-
-            <div id="header_spacer"></div>
-
-            <div id="toolbar">
-                <button type="button" class="navbar_button" data-action="toc">Inhaltsverzeichnis</button>
-                <button type="button" class="navbar_button" data-action="init_print">Drucken</button>
-                <button type="button" class="navbar_button" data-action="kontakt">Kontakt</button>
-            </div>
-            <div id="text_size_controls" aria-label="Textgroesse links">
-                <button type="button" id="text_size_minus" class="text_size_button" data-action="adjust_text_size" data-step="-1">A-</button>
-                <span id="text_size_status">Text 2/5</span>
-                <button type="button" id="text_size_plus" class="text_size_button" data-action="adjust_text_size" data-step="1">A+</button>
-            </div>
-            <div id="width_mode_controls" aria-label="Ansichtsbreite">
-                <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="schmal">Schmal</button>
-                <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="normal">Normal</button>
-                <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="breit">Extrabreit</button>
-            </div>
-            <button type="button" class="darkmode_icon" data-action="toggle_darkmode" aria-label="Darkmode umschalten"></button>
+            <!-- Die Krume ist selbst der Zugang zum Inhaltsverzeichnis
+                 (Nutzer-Feedback): ein Klick auf "1 … › 1.4 …" oeffnet das TOC,
+                 der frueher danebenstehende Button "Inhaltsverzeichnis"
+                 entfaellt. Sie ist das einzige flexible Element im Header und
+                 kuerzt als erstes per Ellipse. -->
+            <button type="button" class="chapter-crumb" data-action="toc" aria-label="Inhaltsverzeichnis öffnen">
+                <!-- Listen-Pictogramm statt Chevron: der Klick oeffnet das
+                     Inhaltsverzeichnis, nicht ein Aufklappmenue. -->
+                <svg class="crumb-toc-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M4 6h2M9 6h11M4 12h2M9 12h11M4 18h2M9 18h11"/>
+                </svg>
+                <span class="crumb-lines">
+                    <span id="chapter_crumb_chapter"></span>
+                    <span id="chapter_crumb_current"></span>
+                </span>
+            </button>
 
             <div class="chapter-progress">
                 <div class="chapter-progress-track"><span id="chapter_progress_bar"></span></div>
                 <span id="chapter_progress_label"></span>
+            </div>
+
+            <!-- Rechter Bedien-Cluster: erst Lese-Einstellungen (Textgroesse,
+                 Breite), dann Aktionen als Symbole (Drucken/Kontakt/Darkmode).
+                 Alles feste Breite, damit nur die Krume schrumpft. -->
+            <div id="header_controls">
+                <div id="text_size_controls" aria-label="Textgroesse">
+                    <button type="button" id="text_size_minus" class="text_size_button" data-action="adjust_text_size" data-step="-1">A-</button>
+                    <span id="text_size_status">Text 2/5</span>
+                    <button type="button" id="text_size_plus" class="text_size_button" data-action="adjust_text_size" data-step="1">A+</button>
+                </div>
+                <div id="width_mode_controls" aria-label="Ansichtsbreite">
+                    <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="schmal" title="Schmale Textspalte">Schmal</button>
+                    <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="normal" title="Normale Textspalte">Normal</button>
+                    <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="breit" title="Extrabreite Textspalte">Breit</button>
+                </div>
+                <div id="toolbar">
+                    <button type="button" class="icon_button" data-action="init_print" title="Drucken" aria-label="Drucken">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 8V3h10v5M7 18H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 15h10v6H7z"/></svg>
+                    </button>
+                    <button type="button" class="icon_button" data-action="kontakt" title="Kontakt" aria-label="Kontakt">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg>
+                    </button>
+                    <button type="button" class="darkmode_icon" data-action="toggle_darkmode" title="Darkmode umschalten" aria-label="Darkmode umschalten"></button>
+                </div>
             </div>
         </div>
         <div id="zoom_overlay" class="hidden" data-action="close_zoom"></div>
@@ -126,7 +196,7 @@
                 </aside>
                 <div id="paper">
                     <div data-chapter="ch_01_kreisbewegungen"></div>
-                    <div data-chapter="ch_02_kinematik_starrer_koerper"></div>
+                    <div data-chapter="ch_02_dynamik_drehbewegung"></div>
                     <div class="chapter-pagenav">
                         <button type="button" id="chapter_prev_btn" data-action="chapter_prev">‹ Zurück</button>
                         <button type="button" id="chapter_next_btn" data-action="chapter_next">Weiter ›</button>

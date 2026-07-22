@@ -1,0 +1,236 @@
+<!-- Kapitel-Fragment: v0.13 Abschnitt 1.5 "Dynamik der Drehbewegung und
+     Rotation starrer Koerper", transkribiert aus
+     Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex.
+     Rein statisch (v0.13-Abbildungen), wie ch_01. -->
+
+<!-- Startwerte der kapitelweit laufenden Zaehler (v0.13: figure ohne
+     \numberwithin, zusammenfassungcounter \numberwithin{chapter}): Abschnitt
+     1.5 beginnt im PDF bei Abbildung 1.61 und Zusammenfassung 1.8. Entfaellt,
+     sobald die Abschnitte 1.0-1.3 migriert sind -- dann zaehlen die Zaehler
+     von selbst richtig weiter. -->
+<h2 class="inhaltsverzeichnis" data-figure-offset="60" data-zusammenfassung-offset="7">1.5 Dynamik der Drehbewegung und Rotation starrer Körper</h2>
+
+<section>
+    <p>Im <a class="xref" data-ref-sec="p-1-4">Abschnitt 1.4</a> haben wir die Kinematik der Drehbewegung und Kreisbahnen betrachtet. Der Begriff <em>Kinematik</em> weist dabei darauf hin, dass wir uns nur mit der Beschreibung der Bewegung beschäftigen, ohne die Ursachen der Bewegung zu betrachten. In diesem Abschnitt wollen wir uns nun einerseits mit den <strong>Ursachen</strong> der Drehbewegung beschäftigen, also mit den wirkenden Kräften und Momenten, und andererseits die Bewegung von <strong>starren Körpern</strong> betrachten, also von Körpern, deren Ausdehnung nicht vernachlässigt werden kann. Dabei werden wir auch die Begriffe <em>Drehimpuls</em>, <em>Drehmoment</em> und <em>(Massen-)Trägheitsmoment</em> einführen.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.1 Motivation</h3>
+
+<section>
+    <p>In der Vorlesung führen wir folgendes Experiment durch: Wir lassen zwei äußerlich identische Kaffeedosen, die auch noch bei einer Messung mit einer Waage die selbe Masse aufweisen, aus gleicher Höhe eine schiefe Ebene herunterrollen. Obwohl die beiden Dosen äußerlich identisch sind, erreicht die eine Dose das Ende der schiefen Ebene deutlich früher als die andere Dose. Woran liegt das? Betrachten wir die beiden Dosen etwas genauer sieht man: Die eine Dose ist enthält einen Zylinder, welcher auf die Achse der Dose aufgeschraubt wurde, die andere Dose enthält ein Blech, welches in die Dose eingespannt worden ist. Während die Masse der leeren Dose an und für sich eher klein ist, so trägt der Zylinder und das Blech deutlich zur Gesamtmasse der Dose bei. Die Dose, die dieses „Zylinderrennen" gewinnt, ist die Dose mit dem Zylinder. Den Grund dafür werden wir in diesem Abschnitt verstehen.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.2 Starre Körper</h3>
+
+<section>
+    <p>Ein <strong>starrer Körper</strong> ist ein Körper, dessen Ausdehnung nicht vernachlässigt werden kann. Während wir bisher alle Körper als Punktmassen aufgefasst hatten, bei denen wir uns die gesamte Masse als in einem Punkt konzentriert vorstellen konnten, so müssen wir bei starren Körpern die räumliche Ausdehnung des Körpers berücksichtigen. Dabei kann ein starrer Körper als eine Ansammlung von vielen Punktmassen aufgefasst werden, die durch die starren Bindungen des Körpers fest miteinander verbunden sind. Ein starrer Körper kann sich also nicht verformen, sondern nur als Ganzes bewegen. Die Bewegung eines starren Körpers kann in eine Translation (Verschiebung) und eine Rotation (Drehung) zerlegt werden. In diesem Abschnitt werden wir uns hauptsächlich mit der Rotation starrer Körper beschäftigen.</p>
+
+    <p>Um den starren Körper physiklaisch beschreiben zu können, zerlegen wir den Körper (gedanklich) in viele infinitesimale kleine Würfel, und numerieren diese Würfel (gedanklich) durch \(i=1,2,3,\ldots,n\). Jeder dieser Würfel hat eine Masse \(\mathrm{d} m_i\), ein Volumen \(\mathrm{d} V_i\) und befindet sich an einem Ort \(\vec{r}_i\). Die Dichte eines jeden kleinen Würfels ist gegeben durch</p>
+
+    \begin{equation}
+    \rho_i = \frac{\mathrm{d} m_i}{\mathrm{d} V_i}\quad \text{mit} \, \left[ \rho\right]= \frac{\mathrm{kg}}{\mathrm{m}^3}.
+    \end{equation}
+
+    <figure class="abbildung" id="fig-skript-dreh-starrerk">
+        <img class="grafik" style="width:50%" src="bilder/skript_dreh_starrerk.png" alt="">
+        <figcaption>Visualisierung der Idee des starren Körpers. Ein ausgedehnter Körper wird gedanklich in viele kleine „Elementarwürfel" zerlegt, die sich relativ zueinander nicht bewegen können. Der Körper kann als ganzes eine translatorische Bewegung und eine Rotation ausführen. Die Elementarwürfel können, beginnend bei einem beliebigen Würfel, nummeriert werden, sodass jedem Würfel eine Zahl, eine (zeitabhängige) Position und eine (gegebenenfalls infinitesimale) Masse zugeordnet werden kann. Werden die Elementarwürfel unendlich klein, so besteht der Körper aus unendlich vielen Elementarwürfeln.</figcaption>
+    </figure>
+
+    <p>Jeder einzelne dieser <em>Elementarwürfel</em> kann eine andere Masse haben, daher hängt ist die Dichte im allgmeinen einen Funktoin des Orts, an dem sich der Würfel befindet, also</p>
+
+    \begin{equation}
+    \rho = \rho(\vec{r})=\frac{\dd m(\vec r)}{\dd V}
+    \end{equation}
+
+    <p>Hat der Körper überall dieselbe Dichte, so spricht <strong>homogener Körper</strong>, ansonsten von einem <strong>inhomogenen Körper</strong>. Die Gesamtmasse des starren Körpers ergibt sich aus der Summe der Massen aller Elementarwürfel:</p>
+
+    \begin{equation}
+    m = \sum_{i=1}^n \mathrm{d} m_i
+    \end{equation}
+
+    <p>Im Grenzfall, wenn die Elementarwürfel unendlich klein werden, wird aus der Summe ein Integral:</p>
+
+    \begin{equation}
+    m = \int \mathrm{d} m = \int \rho(\vec{r}) \, \mathrm{d} V.
+    \end{equation}
+
+    <p>Dieses Integral ist ein Volumentintegral. Volumenintegral sind Thema der höheren Mathematikvorlesungen und werden daher hier nur kurz angerissen. Der Ausdruck \(\int_V \ldots \, \mathrm{d} V\) bedeutet, dass über das gesamte Volumen \(V\) des Körpers integriert wird. In kartesischen Koordinaten kann das Volumenintegral als dreifaches Integral geschrieben werden:</p>
+
+    \begin{equation}
+    \int_V \ldots \, \mathrm{d} V = \int_{x_\text{min}}^{x_\text{max}} \int_{y_\text{min}}^{y_\text{max}} \int_{z_\text{min}}^{z_\text{max}} \ldots \, \mathrm{d} x \, \mathrm{d} y \, \mathrm{d} z
+    \end{equation}
+
+    <p>wobei \(x_\text{min}\), \(x_\text{max}\), \(y_\text{min}\), \(y_\text{max}\), \(z_\text{min}\) und \(z_\text{max}\) die Grenzen des Körpers in den jeweiligen Richtungen sind. Praktisch bedeutet das Volumenintegral, dass man zunächst über die \(z\)-Richtung integriert, dann über die \(y\)-Richtung und schließlich über die \(x\)-Richtung.</p>
+
+    <p>Das Volumenintegral heisst unter anderem deswegen <em>Volumen</em>integral, weil man mithilfe des Integrals das Volumen eines Körpers berechnen kann. Betrachten wir dazu als einfachstes Beispiel das Volumen eines Quaders mit den Kantenlängen \(a\), \(b\) und \(c\). Das Volumen des Quaders ist gegeben durch:</p>
+
+    \begin{align}
+    V &amp;= \int_V \dd V
+    = \int_0^a \int_0^b \int_0^c \dd z \, \dd y \, \dd x \\[6pt]
+    &amp;= \int_0^a \int_0^b \eval{z}_{0}^{c} \dd y \, \dd x
+    = \int_0^a \int_0^b c \, \dd y \, \dd x \\[6pt]
+    &amp;= \int_0^a \eval{c y}_{0}^{b} \dd x
+    = \int_0^a c b \, \dd x
+    = \eval{c b x}_{0}^{a} \\[6pt]
+    &amp;= a b c
+    \end{align}
+
+    <p>Die Integration wird dabei schrittweise von innen nach außen durchgeführt. Zunächst wird über \(z\) integriert, dann über \(y\) und schließlich über \(x\). Das Ergebnis ist das bekannte Volumen eines Quaders<span class="fussnote">Mehr müssen Sie im Rahmen dieser Vorlesung nicht über die Volumenintegrale wissen</span>.</p>
+
+    <p>Bei einem homogenen Körper ist die Dichte konstant, daher ist auch die Dichte eines jeden Elementarwürfels gleich der Dichte des gesamten Körpers, also \(\rho_i = \rho = \text{konst}\). In diesem Fall kann die Gesamtmasse des Körpers auch als Produkt aus Dichte und Volumen geschrieben werden:</p>
+
+    \begin{equation}
+    m = \rho V
+    \end{equation}
+
+    <p>wobei \(V\) das Volumen des gesamten Körpers ist.</p>
+
+    <p>Um nun die Rotation eines solchen starren Körpers zu verstehen und zu beschreiben, müssen wir uns noch eine Sache klarmachen: Rotiert ein starrer Körper um eine feste Achse, so bewegen sich die einzelnen Elementarwürfel des Körpers auf Kreisbahnen um diese Achse. Jeder Elementarwürfel hat daher einen anderen Abstand zur Rotationsachse und bewegt sich mit einer anderen Bahngeschwindigkeit jedoch bewegen sich alle Elementarwürfel mit derselben Winkelgeschwindigkeit. Beschleunigt die Rotation des Körpers, so erfahren alle Elementarwürfel dieselbe Winkelbeschleunigung. Diese Tatsache ist sehr wichtig und wird uns in diesem Abschnitt immer wieder begegnen.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.3 Drehimpuls und (Massen-)Trägheitsmoment</h3>
+
+<section>
+    <p>Bei der Beschäftigung mit den Bewegungen eines Massenpunktes haben wir den Impuls als eine charakteristische Größe der Bewegung kennengelernt. Den Impuls haben wir dabei definiert als das Produkt aus Masse und Geschwindigkeit:</p>
+
+    \begin{equation}
+    \vec{p} = m \vec{v}.
+    \end{equation}
+
+    <p>Der Impuls ist dabei eine Eigenschaft eines Körpers, jedem Körper im Universum kann ein Impuls zugeordnet werden. Analog dazu führen wir zur Beschreibung der Drehbewegung den <strong>Drehimpuls</strong> ein. Der Drehimpuls ist auch eine Eigenschaft eines Körpers, jedem Körper im Universum kann ein Drehimpuls zugeordnet werden. Der Drehimpuls eines Massenpunktes ist definiert als das Kreuzprodukt aus Ortsvektor und Impuls:</p>
+
+    \begin{equation}
+    \text{Drehimpuls} = \text{Ortsvektor} \times \text{Impulsvektor} = \vec{r} \times \vec{p} = \vec{r} \times m \vec{v}
+    \end{equation}
+
+    <p>Das Formelzeichen für den Drehimpuls ist üblicherweise \(\vec{L}\), also</p>
+
+    \begin{equation}
+    \vec{L} = \vec{r} \times m \vec{v}.
+    \end{equation}
+
+    <p>Die Einheit des Drehimpulses ist \(\left[ \vec{L} \right] = \mathrm{kg\,m^2/s}\).</p>
+
+    <p>In der Formel zum Drehimpuls kommt der Ortsvektor vor. Welcher Vektor ist das? Der Ortsvektor ist der Vektor, der vom Koordinatenursprung zum Massenpunkt zeigt. Dabei hat es sich als praktisch, aber nicht unbedingt notwendig erwiesen, den Koordinatenursprung auf die Rotationsachse zu legen. Oft legt man den Ursprung in den Schnittpunkt der Rotationsachse mit der Ebene, in der sich der Massenpunkt bewegt.</p>
+
+    <figure class="abbildung" id="fig-skript-dreh-drehimpuls">
+        <img class="grafik" style="width:50%" src="bilder/skript_dreh_drehimpuls.png" alt="">
+        <figcaption>Visualisierung des Drehimpulses eines Massenpunktes. Ein Massenpunkt mit der Masse \(m\) bewegt sich mit der Bahngeschwindigkeit \(\vec{v}\) bzw. der Winkelgeschwindigkeit \(\vec{\omega}\) auf einer Kreisbahn mit Radius \(R\), seine momentane Position wird durch den Ortsvektor \(\vec{r}\) beschrieben. Der Drehimpulsvektor \(\vec{L}\) ergibt sich als Kreuzprodukt aus Ortsvektor und Impulsvektor. Der Drehimpulsvektor steht senkrecht auf der Ebene, die durch Ortsvektor und Bahngeschwindigkeitsvektor aufgespannt wird, seine Richtung wird durch die Rechte-Hand-Regel bestimmt. Damit ist der Drehimpulsvektor parallel zum Winkelgeschwindigkeitsvektor.</figcaption>
+    </figure>
+
+    <p>Setzen wir in die Formel für den Drehimpuls die Formel für den Impulsvektor ein, so erhalten wir</p>
+
+    \begin{equation}
+    \vec{L} = \vec{r} \times m \vec{v} = m \left( \vec{r} \times \vec{v} \right).
+    \end{equation}
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.4 (Massen-)Trägheitsmoment</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.4 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.5 Drehmoment</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.5 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.6 Anwendung des Drehmoments – Wippe und Hebelgesetz</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.6 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.7 Die Kippbedingung bei starren Körpern</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.7 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.8 Zusammenhang zwischen Drehmoment und Drehimpuls</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.8 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.9 Drehimpulserhaltung</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.9 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.10 Experimente zum Drehmoment, Drehimpuls und zur Drehimpulserhaltung</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.10 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.11 Rotationsenergie</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.11 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.12 Rotation und Translation</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.12 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.13 Rollbewegung</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.13 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.5.14 Zusammenfassung</h3>
+
+<section>
+    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
+        <p>Der Inhalt von Abschnitt 1.5.14 steht noch nicht im interaktiven Skript.
+        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
+        Bis zur Migration bitte das PDF verwenden.</p>
+    </div>
+</section>

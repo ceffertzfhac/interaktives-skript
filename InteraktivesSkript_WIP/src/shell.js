@@ -45,6 +45,23 @@ function renderMarginalia(page) {
     });
 }
 
+// Seitenregister in Abschnitte gruppieren: jede h2-Seite eroeffnet einen
+// Abschnitt, die folgenden h3-Seiten gehoeren dazu. Schiene und Kopfleiste
+// nutzen dieselbe Gruppierung.
+function sectionsOf() {
+    const sections = [];
+    getPages().forEach(p => {
+        if (p.level === 'h2') sections.push({ page: p, children: [] });
+        else if (sections.length) sections[sections.length - 1].children.push(p);
+    });
+    return sections;
+}
+
+// Abschnitt, in dem die uebergebene Seite liegt (Kapitel-Intro eingeschlossen).
+function activeSection(sections, page) {
+    return sections.find(s => s.page === page || s.children.indexOf(page) >= 0) || null;
+}
+
 // "Auf dieser Seite": Sprungmarken zu Highlight-Boxen + Grafiken der aktiven
 // Seite. Highlight-Boxen tragen nach generate_highlight_boxes() bereits einen
 // Titel (.highlight_box_title); Grafiken bekommen ihren Sektionstitel als Label.
@@ -52,7 +69,9 @@ function landmarksFor(page) {
     if (!page) return [];
     const items = [];
     let n = 0;
-    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung').forEach(el => {
+    // .bemerkung/.wichtig sind die v0.13-Namen (seit Kapitel 1.4) und muessen
+    // hier mitgefuehrt werden, sonst fehlen sie in der Seiten-Navigation.
+    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung, .bemerkung, .wichtig').forEach(el => {
         if (!el.id) el.id = page.id + '-landmark-' + (n++);
         const t = el.querySelector('.highlight_box_title');
         items.push({ id: el.id, label: t ? t.textContent : 'Abschnitt' });
@@ -93,27 +112,47 @@ function renderRailInto(container, page) {
     onPage.appendChild(nav);
     container.appendChild(onPage);
 
-    const chapterPages = getPages().filter(p => p.level === 'h3');
-    if (chapterPages.length === 0) return;
+    // Abschnittsnavigation: alle Abschnitte (h2) in Dokumentreihenfolge als je
+    // eine Zeile; nur der aktive Abschnitt klappt seine Unterabschnitte (h3)
+    // aus. So bleibt die Schiene bei 15+ Kapiteln lesbar, und die Nachbarn
+    // ("1.3 …", "1.5 …") sind einen Klick entfernt, ohne die Liste zu fluten.
+    const sections = sectionsOf();
+    if (sections.length === 0) return;
+    const current = getCurrentPage();
+    const active = activeSection(sections, current) || sections[0];
+
     const chBlock = document.createElement('div');
     chBlock.className = 'rail-block rail-chapter';
-    const chTitle = getPages()[0] ? getPages()[0].title.replace(/^[0-9.]+\s*/, '') : 'Kapitel';
     const chHeading = document.createElement('div');
     chHeading.className = 'rail-heading';
-    chHeading.textContent = chTitle;
+    chHeading.textContent = 'Abschnitte';
     chBlock.appendChild(chHeading);
     const chNav = document.createElement('div');
     chNav.className = 'rail-chapternav';
-    chapterPages.forEach(p => {
+
+    const link = (p, cls, dot) => {
         const a = document.createElement('a');
         a.href = '#' + p.id;
-        a.className = 'rail-chapterlink' + (p === getCurrentPage() ? ' current' : '');
-        a.innerHTML = '<span class="rail-dot">' + (p === getCurrentPage() ? '●' : '○') + '</span>' + p.title;
+        a.className = cls + (p === current ? ' current' : '');
+        if (dot) {
+            a.innerHTML = '<span class="rail-dot">' + (p === current ? '●' : '○') + '</span>';
+            a.appendChild(document.createTextNode(p.title));
+        } else {
+            a.textContent = p.title;
+        }
         // data-action statt eigenem Listener (zentraler Binder, s. main.js).
         a.dataset.action = 'goto_page';
         a.dataset.arg = p.id;
-        chNav.appendChild(a);
+        return a;
+    };
+
+    sections.forEach(s => {
+        const istAktiv = s === active;
+        chNav.appendChild(link(s.page, 'rail-sectionlink' + (istAktiv ? ' open' : ''), false));
+        if (!istAktiv) return;
+        s.children.forEach(p => chNav.appendChild(link(p, 'rail-chapterlink', true)));
     });
+
     chBlock.appendChild(chNav);
     container.appendChild(chBlock);
 }
@@ -125,11 +164,41 @@ function renderAppbar(page) {
     const progressBar = ge('chapter_progress_bar');
     const pages = getPages();
     if (!pages.length) return;
-    if (crumbChapter) crumbChapter.textContent = pages[0].title;
+    // Kapitel-Krume = die naechste h2-Seite oberhalb der aktiven, nicht
+    // pauschal pages[0] -- sonst zeigt sie ab dem zweiten Kapitel weiterhin
+    // den Titel des ersten an.
+    if (crumbChapter) {
+        const from = Math.max(0, getCurrentIndex());
+        let chapterPage = pages[0];
+        for (let i = from; i >= 0; i--) {
+            if (pages[i].level === 'h2') { chapterPage = pages[i]; break; }
+        }
+        crumbChapter.textContent = chapterPage.title;
+    }
     if (crumbCurrent) crumbCurrent.textContent = page ? page.title : '';
-    const idx = getCurrentIndex() + 1;
-    if (progress) progress.textContent = 'Seite ' + idx + '/' + pages.length;
-    if (progressBar) progressBar.style.width = Math.round((idx / pages.length) * 100) + '%';
+    // Fortschritt kapitelrelativ, nicht dokumentweit: eine "Seite" ist hier ein
+    // Unterabschnitt, davon hat ein Kapitel gut ein Dutzend -- eine Groesse, die
+    // man als Fortschritt erlebt. Dokumentweit waere die Zahl bei 15+ Kapiteln
+    // nicht nur entmutigend, sondern auch instabil: jeder nachtraeglich
+    // migrierte Abschnitt verschoebe alle folgenden Seitenzahlen. Der Ort im
+    // Buch steht ohnehin in der Krume und in der Schiene. Der Gesamtstand
+    // bleibt als title/aria-label abrufbar, ohne eine zweite Zahl zu zeigen.
+    const sections = sectionsOf();
+    const active = activeSection(sections, page);
+    const seiten = active ? [active.page].concat(active.children) : pages;
+    const pos = Math.max(0, seiten.indexOf(page)) + 1;
+    if (progress) progress.textContent = pos + ' / ' + seiten.length;
+    if (progressBar) {
+        progressBar.style.width = Math.round((pos / seiten.length) * 100) + '%';
+        const box = progressBar.closest('.chapter-progress');
+        if (box) {
+            const nr = active ? sections.indexOf(active) + 1 : 1;
+            box.title = 'Seite ' + pos + ' von ' + seiten.length + ' in diesem Abschnitt'
+                + '  ·  Abschnitt ' + nr + ' von ' + sections.length
+                + '  ·  insgesamt Seite ' + (getCurrentIndex() + 1) + ' von ' + pages.length;
+            box.setAttribute('aria-label', box.title);
+        }
+    }
 }
 
 function renderPrevNext(page) {

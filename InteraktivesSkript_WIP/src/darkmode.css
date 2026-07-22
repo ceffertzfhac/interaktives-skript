@@ -232,3 +232,24 @@ input[type="range"]::-moz-range-track {
     --kb-graph-bg: #202020;
     --kb-grid-line: #333;
 }
+/* Box-Titel: im Light-Mode wird der Typ-Akzent mit --ink abgedunkelt (55 %
+   Akzent). Auf dunklem Grund kehrt sich das um -- dort muss der helle
+   --ink-Anteil ueberwiegen, sonst faellt der Titel unter WCAG AA (Lernziel
+   kaeme mit 55 % auf 3,69:1, Zusammenfassung auf 4,32:1). Mit 35 % Akzent
+   liegt der schlechteste Wert bei 5,71:1. */
+.highlight_box_title {
+    color: color-mix(in srgb, var(--box-accent, var(--teal)) 35%, var(--ink));
+}
+
+/* Fussnoten-Pictogramm: auf dunklem Grund kehrt sich das Verhaeltnis um --
+   ein helles "i" auf mittelblauem Kreis kaeme nur auf ~2,9:1. Daher heller
+   Kreis mit dunklem Buchstaben (6,54:1) -- der Kreis hebt sich zugleich
+   deutlich vom Seitenhintergrund ab (8,79:1). */
+:root {
+  --info: #9ccbef;
+  --info-dark: #9ccbef;
+}
+#paper .fn-marker, #paper .fussnote-icon { color: #0d3d63; }
+#paper .fussnote-panel {
+  background-color: color-mix(in srgb, var(--info) 8%, var(--surface));
+}

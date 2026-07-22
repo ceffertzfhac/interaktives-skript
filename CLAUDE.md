@@ -32,7 +32,9 @@ The repo root holds:
 
 Inside the WIP site folder the structure is:
   - `index.html` — **the shell only**: header/overlays, `#paper` mount holding one `<div data-chapter="…">` placeholder per chapter + the global `.chapter-pagenav`. Chapter prose lives in `chapters/` and is injected at runtime (see `src/chapters.js`). MathJax `$$…$$` / `\[…\]` / `\(…\)` formulas sit inside the chapter fragments, not here.
-  - `chapters/` — **one HTML fragment per chapter** (`ch_NN_<slug>.html`): `ch_01_kreisbewegungen.html` (the migrated chapter 1.5) and `ch_02_kinematik_starrer_koerper.html` (a scaffold). Each fragment holds the h2 chapter intro + h3 subsections + their `<section>`s, figures, sliders, highlight boxes — everything that used to be inline in `index.html`. Fetched + injected by `src/chapters.js` before `paginate()`. **Adding a chapter = one new file here + one `<div data-chapter="…">` line in `index.html` (O(1)).**
+  - `chapters/` — **one HTML fragment per chapter** (`ch_NN_<slug>.html`): `ch_01_kreisbewegungen.html` (v0.13 **section 1.4** "Kinematik der Drehbewegung und Kreisbahnen", 12 subsections 1.4.1–1.4.12, transcribed 1:1 from `Input/v0.13/pskript_mech_kin_dreh_und_kreis_v1.tex` — **purely static**: no `.grafik-container`/`svgN`/sliders, interactivity comes back later) and `ch_02_kinematik_starrer_koerper.html` (a scaffold). Each fragment holds the h2 chapter intro + h3 subsections + their `<section>`s, figures, sliders, highlight boxes — everything that used to be inline in `index.html`. Fetched + injected by `src/chapters.js` before `paginate()`. **Adding a chapter = one new file here + one `<div data-chapter="…">` line in `index.html` (O(1)).**
+  - `MIGRATION_v0.13_nach_HTML.md` — **runbook for migrating the next chapter out of `Input/v0.13/`** (German): counter scopes, asset pipeline (PDF/TikZ → PNG), LaTeX→HTML macro mapping, MathJax config, cross-references, the three verification harnesses, a catalogue of 13 real pitfalls with how each was detected, and a checklist. **Read it before starting another chapter** — most of the listed traps are silent (wrong-but-consistent numbering, an image that is a PDF wearing a `.png` extension, a loaded-but-not-enabled MathJax package).
+  - `VERIFIKATION_kapitel_1.4.md` — phase-by-phase test plan for the migrated chapter, with acceptance criteria
   - `src/` — the ESM modules (`main.js` entry + `core/transform/ui/print/pages/shell/chapters.js` + `figures/*.js`); no monolithic `script.js` (that survives only in `Input/InteraktivesSkript_legacy/`)
   - `src/styles.css`, `src/darkmode.css` — styles; `darkmode.css` is loaded but `disabled` and toggled at runtime
   - `bilder/` — static figure PNGs/SVGs used in static mode and prose
@@ -67,16 +69,20 @@ src/shell.js       chapter app bar (breadcrumb/progress/hamburger), left rail (o
 src/ui.js          toc (full-screen accordion + search filter, built from pages.js's page
                    registry), generate_toc, toc_filter, kontakt, offsetAnchor,
                    toggle_body_scroll, zoom, close_zoom, pause
-src/numbering.js   init_numbering() — v0.13-style per-subsection numbering (\numberwithin
-                   {equation}{section} equivalent): equations "(1.5.1.3)", Beispiel/Aufgabe/
-                   Lernziel/Anmerkung/Zusammenfassung box titles, Simulation (grafik-container)
-                   titles, and standalone Abbildung images all number generically off
-                   pages.js's registry, reset per .chapter-page. Equation numbering waits on
-                   MathJax's startup promise (mjx-container only exists after that resolves);
-                   exposes window.renumber_equations as a re-run bridge for core.js's
-                   reload_mathjax() (which rebuilds mjx-container and would otherwise drop the
-                   injected .eq-number badges) — window bridge instead of an import to avoid
-                   the core→numbering→pages→core cycle, same pattern as update_all/window.updateN.
+src/numbering.js   init_numbering() — box, figure and image numbering off pages.js's
+                   registry. **The v0.13 counter scopes are not uniform** (see
+                   Physik_skript_header_gmni_v3.tex) and the code mirrors that exactly:
+                     * beispiel/bemerkung/wichtig/lernziel/aufgabe -> {section} -> "1.4.n"
+                     * zusammenfassung                            -> {chapter} -> "1.n"
+                     * figure (no \numberwithin at all)           -> {chapter} -> "Abb. 1.n"
+                   CHAPTER_SCOPED marks the chapter-wide box types; chapter-wide counters
+                   get their start value from data-figure-offset/data-zusammenfassung-offset
+                   on the chapter's h2 (sections 1.0–1.3 aren't migrated yet, so ch_01 starts
+                   at Abb. 1.38 / Zusammenfassung 1.4 — remove the offsets once they are).
+                   Box titles are split into <span class="hb-type"> (type + number, uppercased
+                   via CSS) and <span class="hb-name"> (the box's own title, normal case, so
+                   formula parts aren't mangled) — core.js creates the type span, numbering.js
+                   refills both. Equations are numbered by MathJax itself (tags:'ams'), not here.
 src/print.js       init_print, check_print, print_page, create_qr, from_qr, findGetParameter
 src/figures/factory.js   createFigure() + shared omega-circle hooks (circleStep/Wrap/Render, omega*)
 src/figures/fig_NN.js     one file per figure; self-registers updateN/animateN/clearN on window
@@ -129,6 +135,9 @@ A deliberately-preserved legacy bug: `fig_5.js`'s gc51 `>6.27` wrap increments *
 - **Accessibility (v1.6)**: `<html lang="de">` is set. All toolbar controls (Inhaltsverzeichnis/Drucken/Kontakt), the darkmode toggle, and every zoom button (including the ones `make_static()` generates for static-mode figures) are real `<button type="button">` with `aria-label`s — keyboard-focusable, Enter-activatable. There are no inline `on*` handlers (see "Central event binding"). CSS button resets (`.navbar_button`, `.darkmode_icon`, `.zoom_button`) strip browser defaults so existing background/icon styles survive.
 - **Safari foreignObject workaround (kept v1.6)**: `core.js::safari_bug()` UA-sniffs Safari and adds a `.fixed` class (150px margin shift) to `.fo_inner` elements to compensate for Safari mis-positioning HTML text inside SVG `<foreignObject>`. This is a *rendering* quirk, not a missing API, so `@supports` cannot detect it — UA sniff is the pragmatic fallback, documented inline. Revisit if a CSS-only fix for foreignObject becomes known. Non-Safari browsers are unchanged (no `.fixed`).
 - **Responsive scope (v1.6)**: **Desktop/Tablet-only by decision** — no phone support. The viewport meta (`width=device-width, initial-scale=1`) is correct; the only responsive breakpoint is `@media (max-width: 1024px)` (tablet), which swaps the left rail + right marginalia for a slide-in drawer. Do not add phone-targeted CSS without revisiting that decision.
+- **MathJax equation numbering (v1.7)**: equations are numbered by MathJax, not by `numbering.js` — `tex.tags:'ams'` in the inline config in `index.html`, with `tagformat.number` producing `1.4.n`. **A loaded extension is not an enabled one**: `[tex]/tagformat` and `[tex]/color` must appear *both* in `loader.load` *and* in `tex.packages: {'[+]': […]}`, otherwise tags silently fall back to `(1)` and `\textcolor` doesn't render. The `'1.4.'` prefix is currently a constant — revisit when a second section enters the WIP.
+- **Keep the box class lists in sync**: the v0.13 box types `bemerkung`/`wichtig` were added in v1.7, and *five* independent places enumerate box classes — `core.js::generate_highlight_boxes` (icons), `numbering.js::BOX_LABELS` (titles), `styles.css` (the card look + the 50px icon gutter), the `mjx-container[display="true"]` "no box-in-box" rule, and `shell.js::landmarksFor` (left rail). Missing one is silent: a box without the CSS rule loses its frame *and* its icon escapes into the rail. When adding a type, grep all five.
+- **Figure sizing follows v0.13**: each `<img class="grafik">` inside `figure.abbildung` carries an inline `style="width:xx%"` taken from the source's `\includegraphics[width=0.8\textwidth]` (they range 0.25–0.99), and sub-figure containers carry the `\begin{subfigure}{0.48\textwidth}` outer width. This is necessary because the legacy `.grafik { width:100% }` rule would otherwise stretch every image to the column and upscale small diagrams past their native resolution — `#paper figure.abbildung > img.grafik { width:auto }` neutralizes it. The two TikZ figures are rendered via standalone `pdflatex` + `pdftocairo -png -r 300` (sources not kept in the repo, only the PNGs in `bilder/`).
 - **MathJax note**: `reload_mathjax()` uses the MathJax **v3** API (`MathJax.typesetPromise()`, guarded for when MathJax isn't loaded yet). It re-renders all formulas and is wired to the "tt" easter egg in the Kontakt box and to `make_static()`. (Earlier this called the v2 `MathJax.Hub.Queue(...)` API, which was a no-op under v3 — fixed.)
 - Content and code comments are in German; match the surrounding language when editing prose or comments.
 - Only edit `InteraktivesSkript_WIP/`. `Input/` is read-only reference material — never modify it (the frozen baseline now lives at `Input/InteraktivesSkript_legacy/`). Within WIP, `Archiv/` is a historical copy and should likewise be left alone.
