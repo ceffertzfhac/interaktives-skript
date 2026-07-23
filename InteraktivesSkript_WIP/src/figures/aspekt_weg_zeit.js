@@ -325,20 +325,54 @@ export function buildWegZeitFig(fig) {
     //    css) und über dem neuen Durchlauf stehen lassen. Nur die jeweils letzte
     //    Kurve (keine Ansammlung). Weg-Zeit läuft gestapelt -> top + bottom; der
     //    Einzel-Slot wird mitgeführt, falls isStacked mal aus ist.
-    const prevLines = ['graph_prev_line', 'graph_prev_line_top', 'graph_prev_line_bottom']
-        .map(id => ge(p + id));
-    function snapshotPrev() {
-        const cur = ['graph_line', 'graph_line_top', 'graph_line_bottom'];
-        prevLines.forEach((pl, i) => {
-            if (!pl) return;
-            const c = ge(p + cur[i]);
-            const pts = c && c.getAttribute('points') || '';
-            pl.setAttribute('points', pts);
-            pl.setAttribute('visibility', pts ? 'visible' : 'hidden');
-        });
+    //
+    //    Gespeichert werden DATEN (t/x/y), nicht Pixel: die y-Achsen skalieren mit
+    //    R (±1,1·R) und die x-Achse mit der Laufzeit. Eine in Pixeln eingefrorene
+    //    Polyline bliebe beim nächsten Parameterwechsel stehen, während die Achse
+    //    unter ihr wegskaliert — die Geisterlinie schien sich dann "mitzuändern".
+    //    Deshalb wird sie bei jedem Zeichnen aus den Rohdaten neu auf die AKTUELLE
+    //    Achse projiziert. (Gleiche Lösung wie in aspekt_winkel_zeit.js.)
+    const prevLines = {
+        single: ge(p + 'graph_prev_line'),
+        top: ge(p + 'graph_prev_line_top'),
+        bottom: ge(p + 'graph_prev_line_bottom'),
+    };
+    let prevSeries = null;                // {t:[…], x:[…], y:[…]} — komplette Kurven
+    function snapshotPrev() {             // inside withStore aufrufen
+        prevSeries = store.tData.length
+            ? { t: store.tData.slice(), x: store.xData.slice(), y: store.yData.slice() }
+            : null;
     }
     function clearPrev() {
-        prevLines.forEach(pl => { if (pl) { pl.setAttribute('points', ''); pl.setAttribute('visibility', 'hidden'); } });
+        prevSeries = null;
+        Object.values(prevLines).forEach(pl => {
+            if (pl) { pl.setAttribute('points', ''); pl.setAttribute('visibility', 'hidden'); }
+        });
+    }
+    // Geisterkurven auf die aktuelle Achsenskalierung projizieren. store.graphScale
+    // [slot] liefert Plot-Rechteck + Wertebereich genau so, wie drawGraphSlot() die
+    // laufenden Kurven zeichnet. Slot -> Datenreihe folgt dem Diagrammtyp.
+    function renderPrev() {
+        const series = { xt: prevSeries && prevSeries.x, yt: prevSeries && prevSeries.y };
+        for (const slot of ['single', 'top', 'bottom']) {
+            const pl = prevLines[slot];
+            if (!pl) continue;
+            const gs = store.graphScale[slot];
+            const vals = gs && series[gs.type];
+            if (!prevSeries || !gs || !vals) { pl.setAttribute('visibility', 'hidden'); continue; }
+            const { plotL, plotT, plotW, plotH, xMin, xMax, yMin, yMax } = gs;
+            const xR = (xMax - xMin) || 1, yR = (yMax - yMin) || 1;
+            let pts = '';
+            for (let i = 0; i < prevSeries.t.length; i++) {
+                const t = prevSeries.t[i];
+                if (t < xMin || t > xMax) continue;
+                const px = plotL + ((t - xMin) / xR) * plotW;
+                const py = plotT + plotH - ((vals[i] - yMin) / yR) * plotH;
+                pts += `${px.toFixed(1)},${py.toFixed(1)} `;
+            }
+            pl.setAttribute('points', pts);
+            pl.setAttribute('visibility', pts ? 'visible' : 'hidden');
+        }
     }
 
     // -- Eigene Achsen (Pfeil in positive, Fortsetzung in negative Richtung) -----
@@ -383,6 +417,16 @@ export function buildWegZeitFig(fig) {
         if (store.R <= 0) { recalculateAxisLimits(); return; }
         extendMotionData(duration);
         recalculateAxisLimits();
+        // Geisterkurven mit in die y-Achsen einrechnen: sonst läuft die alte Kurve
+        // (größeres R) oben/unten aus dem Diagramm heraus und der Vergleich bricht ab.
+        if (prevSeries && prevSeries.t.length) {
+            const amp = arr => Math.max(...arr.map(Math.abs)) * 1.1;
+            for (const [key, arr] of [['xt', prevSeries.x], ['yt', prevSeries.y]]) {
+                const lim = store.axisLimits[key];
+                const need = amp(arr);
+                if (lim && need > lim.yMax) { lim.yMax = need; lim.yMin = -need; }
+            }
+        }
     }
 
     // -- Zeichnen an der aktuellen Zeit (kein Rebuild der Daten). ---------------
@@ -390,6 +434,7 @@ export function buildWegZeitFig(fig) {
         curT = t;
         updateScene(t, position(t), velocity(t), acceleration(t), sceneCenters);
         updateGraph(t);
+        renderPrev();   // nach updateGraph: store.graphScale ist dann aktuell
     }
 
     // -- Analyse-/Slider-Werte (deutsches Dezimalkomma wie die Vorlage). --------
@@ -414,8 +459,19 @@ export function buildWegZeitFig(fig) {
 
     // -- Rebuild: R/T geaendert -> Flags + Parameter, Datenreihe neu, Szene neu
     //    skalieren. Alle Motor-Aufrufe inside withStore (Singleton = diese Instanz).
-    function rebuild() {
+    //    `paramChange` = der Aufruf kommt von einem Regler, der die KURVENFORM
+    //    ändert (R oder T): dann wird die eben gezeigte Kurve — falls "Letzte Kurve
+    //    behalten" aktiv ist — als Geisterkurve eingefroren und die Laufzeit t
+    //    springt auf 0 zurück, damit der neue Verlauf von vorn über dem alten
+    //    entsteht und wirklich vergleichbar ist (wie in den Stand-alone-Sims,
+    //    z. B. schiefer Wurf).
+    function rebuild(paramChange = false) {
         rt.withStore(() => {
+            if (paramChange) {
+                if (keepPrev) snapshotPrev();   // ALTE Daten einfrieren, vor dem Neurechnen
+                stop();
+                curT = 0;
+            }
             Object.assign(store, {
                 isStacked: true, graphType1: 'xt', graphType2: 'yt',
                 showPositionVector: true, showPositionComponents: true, showTrajectory: true,
@@ -456,7 +512,7 @@ export function buildWegZeitFig(fig) {
             const T = parseFloat(ak_T.value);
             rt.withStore(() => { draw(t); updateLabels(t, T); });
         } else {
-            rebuild();
+            rebuild(true);
         }
     }
 
@@ -487,7 +543,8 @@ export function buildWegZeitFig(fig) {
       if (playing) return;
       // Vergleichslinie: am Ende angelangt -> die gerade fertigen Kurven vor
       // dem Reset als Ghost einfrieren (nur bei echtem Neudurchlauf).
-      if (keepPrev && isAtAutoStopEnd(curT, T_AUTO)) snapshotPrev();
+      // snapshotPrev() liest store -> muss auf DIESER Instanz laufen.
+      if (keepPrev && isAtAutoStopEnd(curT, T_AUTO)) rt.withStore(snapshotPrev);
       // Einheitliches Auto-Stopp-Verhalten: Play nach Ende startet neu.
       resetOnPlayAfterAutoStop(curT, T_AUTO, reset);
       playing = true;
