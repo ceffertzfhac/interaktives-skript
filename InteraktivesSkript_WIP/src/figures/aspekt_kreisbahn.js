@@ -67,6 +67,11 @@ const SVG_SCENE = `
     <marker id="kb_arrowhead-r"  markerUnits="userSpaceOnUse" markerWidth="18.75" markerHeight="13.125" refX="6.25" refY="6.5625" orient="auto"><polygon points="0 0, 18.75 6.5625, 0 13.125"/></marker>
     <marker id="kb_arrowhead-rx" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
     <marker id="kb_arrowhead-ry" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
+    <!-- Pfeilspitze am Winkelbogen (zeigt die positive Drehrichtung, P-Wunsch).
+         markerUnits=strokeWidth (Default, kein Attribut noetig): Groesse
+         skaliert automatisch mit der Bogen-Strichstaerke (--kb-lw), anders als
+         die Vektorspitzen oben (die render.js' ARROW_LEN-Verkuerzung brauchen). -->
+    <marker id="kb_angle_arrow" markerWidth="4" markerHeight="3" refX="0" refY="1.5" orient="auto"><polygon points="0 0, 4 1.5, 0 3"/></marker>
   </defs>
   <g id="kb_animation_group">
     <g id="kb_aspekt_axes"></g>
@@ -274,13 +279,23 @@ export function buildKreisbahnFig(fig) {
         const cx = ANIM_CX, cy = ANIM_CY;
         const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42);
         const rad = phiDeg * Math.PI / 180;
+        // Pfeillaengen-Kopplung (bekannter Fallstrick, s. ARROW_LEN in render.js):
+        // die Pfeilspitze (markerUnits=strokeWidth, markerWidth=4, refX=0) ragt
+        // ca. 4x Strichstaerke ueber das Pfadende hinaus. Ohne Kuerzung zeigt der
+        // Bogen dadurch einen zu GROSSEN Winkel an. Der Pfad wird daher um den
+        // Ueberschuss (in Grad, radiusabhaengig) gekuerzt, sodass die SPITZE (nicht
+        // das Pfadende) exakt auf phiDeg landet -- analog zur Vektor-Verkuerzung.
+        const ARC_ARROW_OVERSHOOT_PX = 12;   // ~ 4 (markerWidth) * 3px (Bogen-Strichstaerke bei --kb-lw=1,5)
+        const overshootRad = Math.min(rad, ARC_ARROW_OVERSHOOT_PX / rArc);
+        const radEnd = rad - overshootRad;
         // Bildschirm-y ist nach unten -> Winkel φ (math, CCW) endet bei y = cy - …
         const x0 = cx + rArc, y0 = cy;
-        const x1 = cx + rArc * Math.cos(rad), y1 = cy - rArc * Math.sin(rad);
-        const large = phiDeg > 180 ? 1 : 0;
+        const x1 = cx + rArc * Math.cos(radEnd), y1 = cy - rArc * Math.sin(radEnd);
+        const large = (radEnd * 180 / Math.PI) > 180 ? 1 : 0;
         const arc = document.createElementNS(NS, 'path');
         arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
         arc.setAttribute('class', 'aspekt-angle-arc');
+        arc.setAttribute('marker-end', `url(#${p}angle_arrow)`);
         g.appendChild(arc);
         // varphi-Label (foreignObject/MathJax) auf der Winkelhalbierenden. Ob es
         // INNERHALB oder ausserhalb des Bogens sitzt, haengt vom Radius ab: ab
@@ -431,6 +446,10 @@ function openOverlay(fig) {
     wrap.style.maxHeight = Math.round(h) + 'px';   // Deckel; die SVG begrenzt sich selbst per vh (s. CSS)
     overlayReturn = { parent: fig.parentNode, next: fig.nextSibling };
     fig.classList.add('aspekt-im-overlay');
+    // Bedienung + Analyse sind im Fliesstext default eingeklappt (Nutzervorgabe,
+    // s. main.js::init_aspekt_figuren) -- im Zoom bleibt es beim bisherigen
+    // Verhalten (aufgeklappt), daher hier immer aufklappen.
+    setPanelsExpanded(fig, true);
     wrap.appendChild(fig);
     back.appendChild(wrap);
     document.body.appendChild(back);
@@ -445,11 +464,24 @@ function closeOverlay() {
     if (fig && overlayReturn) {
         fig.classList.remove('aspekt-im-overlay');
         overlayReturn.parent.insertBefore(fig, overlayReturn.next);
+        // Zurueck im Fliesstext -> wieder auf den Default (eingeklappt).
+        setPanelsExpanded(fig, false);
       fig.dispatchEvent(new CustomEvent('aspekt-overlay-toggled', { detail: { open: false } }));
     }
     back.remove();
     document.body.classList.remove('aspekt-overlay-open');
     overlayReturn = null;
+}
+
+// Bedienung (links) + Analyse (rechts, falls vorhanden) gemeinsam auf-/zuklappen.
+// Generisch fuer jede .aspekt-figur (beide Panels teilen dieselbe .collapsed-
+// Klasse + aria-expanded-Konvention, s. toggle_panel_left/toggle_analyse).
+function setPanelsExpanded(fig, expanded) {
+    fig.querySelectorAll('.aspekt-panel-left, .aspekt-panel-right').forEach(panel => {
+        panel.classList.toggle('collapsed', !expanded);
+        const hdr = panel.querySelector('.panel-header');
+        if (hdr) hdr.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
 }
 
 export function toggle_aspekt(btn) {

@@ -99,11 +99,25 @@ const SVG_SCENE = `
          Massstab noetig, da diese Figur (anders als 1.42) v ohne Komponenten
          zeigt und daher bei derselben Strichstaerke wie r bleibt. -->
     <marker id="kb_arrowhead-v"  markerUnits="userSpaceOnUse" markerWidth="18.75" markerHeight="13.125" refX="6.25" refY="6.5625" orient="auto"><polygon points="0 0, 18.75 6.5625, 0 13.125"/></marker>
+    <!-- Pfeilspitze am Winkelbogen (zeigt die positive Drehrichtung, P-Wunsch;
+         Bogen selbst fuer Konsistenz innerhalb Abschnitt 1.4.2 ergaenzt -- alle
+         Aspekt-Figuren dort zeigen jetzt denselben durchlaufenen Winkelbogen
+         wie 1.41/1.44). markerUnits=strokeWidth (Default): Groesse skaliert
+         automatisch mit der Bogen-Strichstaerke (--kb-lw). Nur der AKTUELLE
+         Bogen bekommt sie (per JS gesetzt), nicht die verblassten Geisterbögen. -->
+    <marker id="kb_angle_arrow" markerWidth="4" markerHeight="3" refX="0" refY="1.5" orient="auto"><polygon points="0 0, 4 1.5, 0 3"/></marker>
   </defs>
   <g id="kb_animation_group">
     <g id="kb_aspekt_axes"></g>
     <g id="kb_animation_coord_system"></g>
     <circle id="kb_disk" cx="225" cy="260" r="100" fill="none" stroke-width="0" opacity="0.06"/>
+    <g id="kb_aspekt_angle"></g>
+    <!-- phi-Label als foreignObject mit MathJax (garantiert das geschwungene
+         \varphi, unabhaengig vom Font). Separat von kb_aspekt_angle, das
+         drawAngle() bei jedem Neuzeichnen leert; hier wird nur x/y gesetzt. -->
+    <foreignObject id="kb_angle_label" width="30" height="30" style="overflow:visible; visibility:hidden">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="aspekt-angle-fo">\\(\\varphi\\)</div>
+    </foreignObject>
     <path id="kb_trajectory_path" fill="none" stroke-width="2" stroke-dasharray="4,4" d=""/>
     <circle id="kb_point" cx="325" cy="260" r="8" stroke-width="1"/>
     <text id="kb_zoom_text_display" x="12" y="20" class="zoom-text"></text>
@@ -222,6 +236,7 @@ const PANEL_LEFT = `
     <div class="legend-grid">
       <div class="legend-swatch" data-c="r"></div>   <div class="legend-label">Ortsvektor \\(\\vec{r}\\)</div>
       <div class="legend-swatch" data-c="v"></div>   <div class="legend-label">Geschwindigkeitsvektor \\(\\vec{v}\\)</div>
+      <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\varphi\\)</div>
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
   </div>
@@ -435,6 +450,94 @@ export function buildBetragVZeitFig(fig) {
         label(ANIM_CX - 14, ANIM_CY - len - 8, 'y');
     }
 
+    // -- Winkel-Visualisierung (aus 1.41/1.44 übernommen, für Konsistenz
+    //    innerhalb Abschnitt 1.4.2 — alle Aspekt-Figuren dort zeigen denselben
+    //    durchlaufenen Winkelbogen, auch wenn der Aspekt hier |v| statt φ/ω
+    //    ist): der AKTUELLE Umlauf wird als Teilbogen (0…φ, volle Opazität,
+    //    φ-Label auf der Winkelhalbierenden, Pfeilspitze in Drehrichtung)
+    //    gezeichnet; jede bereits vollendete Umdrehung bleibt als verblasster
+    //    Vollkreis im Hintergrund stehen (Geisterspur, .aspekt-angle-arc-prev).
+    //    Läuft inside withStore.
+    function drawAngle(phiDeg) {
+        const g = ge(p + 'aspekt_angle');
+        if (!g) return;
+        g.textContent = '';
+        const lbl0 = ge(p + 'angle_label');
+        if (phiDeg <= 0.5) { if (lbl0) lbl0.style.visibility = 'hidden'; return; }
+        const NS = 'http://www.w3.org/2000/svg';
+        const cx = ANIM_CX, cy = ANIM_CY;
+        const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42) * 1.3;
+        const revCount = Math.floor(phiDeg / 360);      // vollendete Umdrehungen
+        const partial = phiDeg - revCount * 360;        // aktueller Umdrehungswinkel (0…360)
+
+        // Aktueller Bogen: an Umdrehungs-Grenzen (partial ≈ 0, revCount > 0) die
+        // gerade vollendete Umdrehung als hellen Vollkreis nehmen, nur die
+        // FRÜHEREN als Geister -> immer ein heller aktueller Bogen (wie 1.38).
+        let curAngle = partial;
+        let ghostCount = revCount;
+        if (partial <= 0.5 && revCount > 0) { curAngle = 360; ghostCount = revCount - 1; }
+
+        // Geisterbögen: je ein Vollkreis pro früherer Umdrehung, verblasst.
+        for (let i = 0; i < ghostCount; i++) {
+            const ghost = document.createElementNS(NS, 'path');
+            ghost.setAttribute('d',
+                `M ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)} ` +
+                `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx - rArc).toFixed(2)} ${cy.toFixed(2)} ` +
+                `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)}`);
+            ghost.setAttribute('class', 'aspekt-angle-arc aspekt-angle-arc-prev');
+            g.appendChild(ghost);
+        }
+
+        // Aktueller Bogen (Teilbogen oder Vollkreis) — Geometrie wie 1.38.
+        const rad = curAngle * Math.PI / 180;
+        const arc = document.createElementNS(NS, 'path');
+        if (curAngle >= 360 - 0.01) {
+            arc.setAttribute('d',
+                `M ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)} ` +
+                `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx - rArc).toFixed(2)} ${cy.toFixed(2)} ` +
+                `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)}`);
+        } else {
+            // Pfeillaengen-Kopplung (bekannter Fallstrick, s. ARROW_LEN in
+            // render.js): die Pfeilspitze (markerUnits=strokeWidth, markerWidth=4,
+            // refX=0) ragt ca. 4x Strichstaerke ueber das Pfadende hinaus. Ohne
+            // Kuerzung zeigt der Bogen dadurch einen zu GROSSEN Winkel an. Der
+            // Pfad wird daher um den Ueberschuss (in Grad, radiusabhaengig)
+            // gekuerzt, sodass die SPITZE (nicht das Pfadende) exakt auf curAngle
+            // landet -- analog zur Vektor-Verkuerzung.
+            const ARC_ARROW_OVERSHOOT_PX = 12;   // ~ 4 (markerWidth) * 3px (Bogen-Strichstaerke bei --kb-lw=1,5)
+            const overshootRad = Math.min(rad, ARC_ARROW_OVERSHOOT_PX / rArc);
+            const radEnd = rad - overshootRad;
+            // Bildschirm-y ist nach unten -> Winkel φ (math, CCW) endet bei y = cy - …
+            const x0 = cx + rArc, y0 = cy;
+            const x1 = cx + rArc * Math.cos(radEnd), y1 = cy - rArc * Math.sin(radEnd);
+            const large = (radEnd * 180 / Math.PI) > 180 ? 1 : 0;
+            arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
+        }
+        arc.setAttribute('class', 'aspekt-angle-arc');
+        arc.setAttribute('marker-end', `url(#${p}angle_arrow)`);
+        g.appendChild(arc);
+
+        // φ-Label: Referenz ist ein Punkt auf dem aktuellen Bogen, der konstant
+        // 20° hinter der Spitze liegt (Kollisionsabstand zum Ortsvektor/Pfeil).
+        const LABEL_TRAIL_DEG = 20;
+        const labelRad = rad - (LABEL_TRAIL_DEG * Math.PI / 180);
+        const tipX = cx + rArc * Math.cos(labelRad);
+        const tipY = cy - rArc * Math.sin(labelRad);
+        const rTip = Math.hypot(tipX - cx, tipY - cy) || 1;
+        const ux = (tipX - cx) / rTip;
+        const uy = (tipY - cy) / rTip;
+        const LABEL_RADIAL_GAP = 18;
+        const lx = tipX - ux * LABEL_RADIAL_GAP;
+        const ly = tipY - uy * LABEL_RADIAL_GAP;
+        if (lbl0) lbl0.style.visibility = 'hidden';
+        const phiLabel = document.createElementNS(NS, 'text');
+        phiLabel.setAttribute('x', lx.toFixed(2));
+        phiLabel.setAttribute('y', ly.toFixed(2));
+        phiLabel.setAttribute('class', 'aspekt-angle-label');
+        phiLabel.textContent = 'φ';
+        g.appendChild(phiLabel);
+    }
+
     // -- Zeitreihe auf feste 12 s begrenzen (3 Perioden bei T=4 s, wie 1.39/1.41).
     //    precompute() des Motors nimmt max(4T, 10s); daher hier eine eigene,
     //    schmale Variante, die nur extendMotionData + recalculateAxisLimits nutzt.
@@ -462,6 +565,7 @@ export function buildBetragVZeitFig(fig) {
         updateScene(t, position(t), velocity(t), acceleration(t), sceneCenters);
         updateGraph(t);
         renderPrev();   // nach updateGraph: store.graphScale.single ist dann aktuell
+        drawAngle((store.omega * t) * 180 / Math.PI);
     }
 
     // -- Analyse-/Slider-Werte (deutsches Dezimalkomma wie die Vorlage). --------

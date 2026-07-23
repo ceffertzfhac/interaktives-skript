@@ -136,6 +136,12 @@
 .aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); font-style: italic; }
 /* Winkel-Visualisierung (Bogen + φ-Label) */
 .aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: calc(2px * var(--kb-lw)); }
+/* Pfeilspitze am Bogenende (P-Wunsch): zeigt die positive Drehrichtung an.
+   markerUnits=strokeWidth (Default) -> Groesse skaliert automatisch mit der
+   Bogen-Strichstaerke (und damit mit --kb-lw), kein Extra-Handling noetig.
+   Nur der AKTUELLE Bogen traegt den Marker (per JS gesetzt), nicht die
+   verblassten Geisterbögen vergangener Umdrehungen. */
+.aspekt-figur .aspekt-scene [id$="angle_arrow"] polygon { fill: var(--kb-accent); }
 /* Geisterbögen vollendeter Umdrehungen (1.41): jeder abgeschlossene Umlauf
    bleibt als verblasster Vollkreis im Hintergrund stehen. Opazität so gewählt,
    dass die Summe der alten Bögen schwächer bleibt als der aktuelle Bogen (0,3
