@@ -84,9 +84,23 @@
 .aspekt-figur .aspekt-angle-fo {
     display: flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; color: var(--kb-accent);
-    font-size: calc(15px * var(--kb-text-scale)); line-height: 1;
+    font-size: calc(15px * var(--kb-text-scale)); line-height: 0;
 }
-.aspekt-figur .aspekt-angle-fo mjx-container { margin: 0 !important; color: var(--kb-accent); }
+/* Der Anker liegt in der Mitte des 30×30-foreignObject; zentriert werden muss
+   also die GLYPHE, nicht ihre Zeilenbox. MathJax (tex-svg) rendert das φ als
+   inline-<svg> auf der Grundlinie mit vertical-align:-0.493ex — der
+   mjx-container ist dann die Zeilenbox (Höhe ~1,12 em), die Glyphe (~0,43 em)
+   hängt darin unten. Flex zentrierte die Zeilenbox, wodurch das φ konstant
+   ~2,6 Einheiten zu tief saß: sein Anker war nicht sein Schwerpunkt, die
+   "Laufbahn" um den Ursprung entsprechend nach unten verschoben.
+   display:block auf dem inneren <svg> nimmt es aus dem Inline-Fluss (kein
+   Grundlinien-/vertical-align-Versatz mehr) -> Containerbox = Glyphenbox, und
+   Flex zentriert die Glyphe selbst exakt auf dem Anker. */
+.aspekt-figur .aspekt-angle-fo mjx-container {
+    margin: 0 !important; color: var(--kb-accent);
+    display: block; line-height: 0;
+}
+.aspekt-figur .aspekt-angle-fo mjx-container > svg { display: block; vertical-align: top; }
 .aspekt-figur .legend-swatch[data-c="phi"] { background: var(--kb-accent); height: 3px; }
 
 /* ── Diagramm-Optik (shared für alle Aspekt-Figuren MIT Graph, z.Zt. 1.39/1.41)
