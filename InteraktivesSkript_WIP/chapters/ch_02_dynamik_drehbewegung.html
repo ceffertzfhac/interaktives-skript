@@ -344,9 +344,9 @@
     <p>Leiten wir diese Gleichung nach der Zeit ab, so erhalten wir</p>
 
     \begin{align}
-    \frac{\mathrm{d} \vec{L}}{\mathrm{d} t} &amp;= \frac{\mathrm{d}}{\mathrm{d} t} \left( \vec{r} \times m \vec{v} \right) \\
-    &amp;= \frac{\mathrm{d} \vec{r}}{\mathrm{d} t} \times m \vec{v} + \vec{r} \times m \frac{\mathrm{d} \vec{v}}{\mathrm{d} t} \\
-    &amp;= \vec{v} \times m \vec{v} + \vec{r} \times m \frac{\mathrm{d} \vec{v}}{\mathrm{d} t}\\
+    \frac{\mathrm{d} \vec{L}}{\mathrm{d} t} &amp;= \frac{\mathrm{d}}{\mathrm{d} t} \left( \vec{r} \times m \vec{v} \right) \\[6pt]
+    &amp;= \frac{\mathrm{d} \vec{r}}{\mathrm{d} t} \times m \vec{v} + \vec{r} \times m \frac{\mathrm{d} \vec{v}}{\mathrm{d} t} \\[6pt]
+    &amp;= \vec{v} \times m \vec{v} + \vec{r} \times m \frac{\mathrm{d} \vec{v}}{\mathrm{d} t}\\[6pt]
     &amp;= m(\vec v \times \vec v)+ \vec{r} \times m \frac{\mathrm{d} \vec{v}}{\mathrm{d} t}.
     \end{align}
 
@@ -410,8 +410,8 @@
     <p>Damit können wir die ersten beiden Terme in der Formel für das gesamte Drehmoment zusammenfassen:</p>
 
     \begin{align}
-    \vec M_{AB} + \vec M_{BA} &amp;= \vec r_A \times \vec F_{AB} + \vec r_B \times \vec F_{BA} \\
-    &amp;= \vec r_A \times \vec F_{AB} - \vec r_B \times \vec F_{AB} \\
+    \vec M_{AB} + \vec M_{BA} &amp;= \vec r_A \times \vec F_{AB} + \vec r_B \times \vec F_{BA} \\[6pt]
+    &amp;= \vec r_A \times \vec F_{AB} - \vec r_B \times \vec F_{AB} \\[6pt]
     &amp;= (\vec r_A - \vec r_B) \times \vec F_{AB}.
     \end{align}
 
@@ -582,11 +582,530 @@
 <h3 class="inhaltsverzeichnis">1.5.13 Rollbewegung</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.13 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
+    <figure class="abbildung" id="fig-skript-rotation-rollbewegung-schritt5">
+        <img class="grafik" style="width:70%" src="bilder/skript_rotation_rollbewegung_schritt5.png" alt="">
+        <figcaption>Zur Ursache der Rollbewegung. Damit eine reine Rollbewegung entsteht, darf der Körper nicht die schiefe Ebene hinunterrutschen, sondern muss sich so bewegen, dass der Auflagepunkt des Körpers auf der Ebene immer (für einen sehr kurzen Moment) ruht. Dies wird durch Haftreibungskräfte zwischen Körper und Ebene ermöglicht, welche die Hangabtriebskraft am Auflagepunkt (dem Berührungspunkt zwischen rollendem Körper und der schiefen Ebene) kompensieren. Dadurch wird der Auflagepunkt zum Drehpunkt. Am Schwerpunkt des Körpers greift die Gewichtskraft an, die eine Hangabtriebskraft entlang der schiefen Ebene erzeugt. Dadurch wird ein Drehmoment um den Auflagepunkt erzeugt, das den Körper in Rotation versetzt. Die Rotation des Körpers um den Auflagepunkt führt dazu, dass der Schwerpunkt des Körpers nach unten bewegt wird.</figcaption>
+    </figure>
+
+    <figure class="abbildung" id="fig-skript-rotation-rollbewegung-schritt4">
+        <img class="grafik" style="width:70%" src="bilder/skript_rotation_rollbewegung_schritt4.png" alt="">
+        <figcaption>Alternative Betrachtung der Ursache der Rollbewegung. Die Gewichtskraft kann in zwei Komponenten zerlegt werden: eine Komponente senkrecht zur schiefen Ebene, die durch die Normalkraft der Ebene kompensiert wird, und eine Komponente entlang der schiefen Ebene, die sogenannte Hangabtriebskraft. Die Hangabtriebskraft greift am Schwerpunkt des Körpers an, ein Teil der Hangabtriebskraft bewirkt eine Beschleunigung des Schwerpunkts entlang der schiefen Ebene. Die am Kontaktpunkt zwischen Körper und Ebene wirkende Haftreibungskraft erzeugt bezüglich des Schwerpunkts ein Drehmoment, das den Körper in Rotation versetzt. Die Reibung führt gleichzeitig dazu, dass nicht die gesamte Hangabtriebskraft der Translation zur Verfügung steht. Die Bewegung des Körpers kann als Überlagerung von Rotation um den Schwerpunkt und Translation des Schwerpunkts aufgefasst werden.</figcaption>
+    </figure>
+
+    <p>Die Rollbewegung ist eine solche Bewegung, die aus Translation und Rotation besteht. Rollt ein starrer Körper auf einer ebenen Fläche, so kann man die Bewegung des Körpers auffassen als eine Überlagerung von Rotation um Schwerpunkt und Translation des Schwerpunkts. Die kinetische Energie des rollenden Körpers ist dann die Summe aus der Rotationsenergie um den Schwerpunkt und der kinetischen Energie des Schwerpunkts:</p>
+
+    \begin{equation}
+    E_\text{kin} = \frac{1}{2} J \omega^2 + \frac{1}{2} m v^2,
+    \end{equation}
+
+    <p>wobei \(J\) das Massenträgheitsmoment des Körpers um die Achse durch den Schwerpunkt ist, \(m\) die Masse des Körpers und \(v\) die Geschwindigkeit des Schwerpunkts. Der Auflagepunkt des Körpers auf der Ebene hat den Abstand \(r\) zum Schwerpunkt, wobei \(r\) der Außenradius des Körpers ist. Daher kann – wenn der Körper rollt ohne zu rutschen – die Winkelgeschwindigkeit \(\omega\) des Körpers mit der Geschwindigkeit \(v\) des Schwerpunkts in Beziehung gesetzt werden:</p>
+
+    \begin{equation}
+    v = \vec r \times \vec \omega
+    \end{equation}
+
+    <p>Da in der kinetischen Energie die Geschwindigkeit quadratisch vorkommt, kann die Winkelgeschwindigkeit auch geschrieben werden als</p>
+
+    \begin{equation}
+    \omega^2 = \frac{v^2}{r^2}.
+    \end{equation}
+
+    <p>Damit kann die kinetische Energie des rollenden Körpers auch geschrieben werden als</p>
+
+    \begin{align}
+    E_\text{kin} &amp;= \frac{1}{2} J \frac{v^2}{r^2} + \frac{1}{2} m v^2 \\[6pt]
+    &amp;=\frac{1}{2}\left(\frac{J}{r^2}+m\right)v^2\\[6pt]
+    &amp;=\frac{1}{2} J \omega + \frac{1}{2} m \omega^2 r^2\\[6pt]
+    &amp;=\frac{1}{2}\left(J+m\cdot r^2\right)\omega^2.
+    \end{align}
+
+    <p>Schaut man sich die letzte Variante der Formel an, so kann man den Faktor \(J + m \cdot r^2\) als ein <em>effektives</em> Massenträgheitsmoment \(J_\text{eff}\) auffassen:</p>
+
+    \begin{equation}
+    J_\text{eff} = J + m \cdot r^2.
+    \end{equation}
+
+    <p>Erinnern wir uns nun an den Satz von Steiner, der besagt, dass das Massenträgheitsmoment \(J\) eines Körpers um eine Achse, die parallel zur Achse durch den Schwerpunkt des Körpers verläuft, gegeben ist durch</p>
+
+    \begin{equation}
+    J = J_\text{sym} + m d^2,
+    \end{equation}
+
+    <p>wobei \(J_\text{sym}\) das Massenträgheitsmoment des Körpers um die Achse durch den Schwerpunkt ist, \(m\) die Masse des Körpers und \(d\) der Abstand zwischen den beiden Achsen, erkennt man: Das effektive Massenträgheitsmoment \(J_\text{eff}\) des rollenden Körpers ist das Massenträgheitsmoment des Körpers um eine Achse, die durch den Auflagepunkt des Körpers auf der Ebene geht (nach Steiner).</p>
+
+    <p>Das ist eine sehr wichtige Erkenntnis, denn es bedeutet: Rollt ein Körper ohne zu rutschen auf einer ebenen Fläche, so kann man die Bewegung auf zwei Arten beschreiben: Einerseits kann man die Bewegung als Überlagerung von Rotation um den Schwerpunkt und Translation des Schwerpunkts auffassen, andererseits als Rotation um den Auflagepunkt des Körpers auf der Ebene. Beide Beschreibungen sind äquivalent.</p>
+
+    <div class="beispiel" data-title="Zylinderrennen entlang einer schiefen Ebene">
+        <p>Ein Hohlzylinder und ein Vollzylinder mit gleichen Massen rollen ohne zu rutschen eine schiefe Ebene der Höhe \(h\) hinunter. Welcher Körper erreicht den Boden der schiefen Ebene zuerst?</p>
+
+        <p><strong>Lösung:</strong> Beide Zylinder haben die gleiche potentielle Energie am Anfang, nämlich</p>
+
+        \begin{equation}
+        E_\text{pot} = m g h.
+        \end{equation}
+
+        <p>Diese potentielle Energie wird in kinetische Energie umgewandelt, wenn die Zylinder die schiefe Ebene hinunterrollen. Die kinetische Energie des rollenden Zylinders ist die Summe aus der Rotationsenergie um den Schwerpunkt und der kinetischen Energie des Schwerpunkts:</p>
+
+        \begin{equation}
+        E_\text{kin} = \frac{1}{2} \left(J_{\text{sym}} + m r^2\right) \omega^2,
+        \end{equation}
+
+        <p>wobei \(J_{\text{sym}}\) das Massenträgheitsmoment des Zylinders um die Achse durch den Schwerpunkt ist, \(m\) die Masse des Zylinders, und \(r\) der Außenradius des Zylinders.</p>
+
+        <p>Schauen wir uns einen Punkt am Ende der schiefen Ebene an, so können wir mit Hilfe der Energieerhaltung die Endgeschwindigkeit des Zylinders bestimmen. Am Ende der schiefen Ebene ist die potentielle Energie null, die gesamte potentielle Energie wurde in kinetische Energie umgewandelt:</p>
+
+        \begin{equation}
+        m g h = \frac{1}{2} \left(\frac{J_{\text{sym}}}{r^2} + m \right) v_\text{End}^2.
+        \end{equation}
+
+        <p>Die Endgeschwindigkeit des Zylinders ist also</p>
+
+        \begin{equation}
+        v_\text{End} = \sqrt{\frac{2 m g h}{\frac{J_{\text{sym}}}{r^2} + m}}.
+        \end{equation}
+
+        <p>Das Massenträgheitsmoment des Vollzylinders um die Achse durch den Schwerpunkt ist \(J_{\text{sym,VZ}} = \frac{1}{2} m r^2\), das Massenträgheitsmoment des Hohlzylinders um die Achse durch den Schwerpunkt ist \(J_{\text{sym,HZ}} = m r^2\). Damit erhalten wir für die Endgeschwindigkeit des Vollzylinders</p>
+
+        \begin{equation}
+        v_{\text{End,VZ}} = \sqrt{\frac{2 m g h}{\frac{1}{2} m + m}} = \sqrt{\frac{4}{3} g h}
+        \end{equation}
+
+        <p>und für die Endgeschwindigkeit des Hohlzylinders</p>
+
+        \begin{equation}
+        v_{\text{End,HZ}} = \sqrt{\frac{2 m g h}{m + m}} = \sqrt{g h}.
+        \end{equation}
+
+        <p>Der Vollzylinder hat also die größere Endgeschwindigkeit. Wenn er aber die größere Endgeschwindigkeit hat, dann muss er auch zu <strong>jedem</strong> Zeitpunkt der Bewegung die größere Geschwindigkeit haben, und er erreicht daher auch als erster den Boden der schiefen Ebene.</p>
     </div>
+
+    <p>Über die Energieerhaltung lassen sich die Bewegungsgleichungen für die Rollbewegung entlang einer schiefen Ebene herleiten, indem Sie die Konstanz der mechanischen Energie verwenden.</p>
+
+    <p>Im Beispiel des Zylinderrennens wurde eine Formel für die Geschwindigkeit am Ende der schiefen Ebene hergeleitet. Diese Formel lässt sich verallgemeinert ausdrücken als:</p>
+
+    \begin{align}
+    v(h)= \sqrt{\frac{2 m g h}{\frac{J_{\text{sym}}}{r^2} + m}}.
+    \end{align}
+
+    <p>Damit haben wir eine Formel, mit der wir die Geschwindigkeit eines rollenden Körpers, der aus der Ruhe startet, in Abhängigkeit der zurückgelegten Höhe \(h\) bestimmen können. Beachten Sie, dass wir mit dieser Formel den Betrag der Geschwindigkeit bestimmen können, nicht aber die Richtung. Die Richtung der Geschwindigkeit ergibt sich aus der Geometrie der schiefen Ebene, auf der der Körper rollt. Betrachten wir beispielsweise die schiefe Ebene, wie sie in Abbildung <a class="xref" data-ref-fig="fig-skript-rotation-rollbewegung-schritt5"></a> dargestellt ist, so zeigt der Geschwindigkeitsvektor des rollenden Körpers in negative x-Richtung und in negative y-Richtung, also entlang der schiefen Ebene nach unten. Ist die schiefe Ebene um einen Winkel \(\alpha\) gegen die Horizontale geneigt, so sind die Komponenten der Geschwindigkeit in x- und y-Richtung:</p>
+
+    \begin{align}
+    v_x(h) &amp;= -v(h) \cos(\alpha) = -\sqrt{\frac{2 m g h}{\frac{J_{\text{sym}}}{r^2} + m}} \cos(\alpha), \\[6pt]
+    v_y(h) &amp;= -v(h) \sin(\alpha) = -\sqrt{\frac{2 m g h}{\frac{J_{\text{sym}}}{r^2} + m}} \sin(\alpha)
+    \end{align}
+
+    <p>und somit der Geschwindigkeitsvektor:</p>
+
+    \begin{align}
+    \vec v(h) &amp;= \begin{pmatrix}
+    v_x(h) \\
+    v_y(h)
+    \end{pmatrix} = \begin{pmatrix}
+    -\sqrt{\frac{2 m g h}{\frac{J_{\text{sym}}}{r^2} + m}} \cos(\alpha) \\
+    -\sqrt{\frac{2 m g h}{\frac{J_{\text{sym}}}{r^2} + m}} \sin(\alpha)
+    \end{pmatrix}=-\sqrt{\frac{2 m g h}{\frac{J_{\text{sym}}}{r^2} + m}} \begin{pmatrix}
+    \cos(\alpha) \\
+    \sin(\alpha)
+    \end{pmatrix}.
+    \end{align}
+
+    <p>Im Allgemeinen möchten wir allerdings nicht den Geschwindigkeitsvektor in Abhängigkeit der Höhe \(h\) angeben, sondern in Abhängigkeit der Zeit \(t\). Die Zeit \(t\) kommt jedoch in unserer Formel für die Geschwindigkeit nicht <strong>explizit<span class="fussnote">„Ausdrücklich“</span></strong> vor, sondern nur <strong>implizit</strong>, da die Höhe \(h\) des rollenden Körpers von der Zeit \(t\) abhängt. Das Problem an der Sache: wir kennen die Zeitabhängigkeit der Höhe \(h(t)\) nicht. Also müssen wir uns eines Tricks bedienen, um die Zeitabhängigkeit der Geschwindigkeit herzuleiten. Diesen Trick können Sie nicht nur hier anwenden, sondern auch in vielen anderen physikalischen Problemen, in denen eine Größe von einer anderen abhängt, die aber selbst wiederum von der Zeit abhängt, beispielsweise wenn die Geschwindigkeit von der Höhe abhängt bei der Atwood'schen Fallmaschine.</p>
+
+    <p>Da die Höhe \(h\) des rollenden Körpers von der Zeit \(t\) abhängt, können wir die Höhe \(h\) als Funktion der Zeit \(t\) schreiben: \(h(t)\). Damit können wir die Geschwindigkeit auch als Funktion der Zeit schreiben:</p>
+
+    \begin{align}
+    v(t) = \sqrt{\frac{2 m g h(t)}{\frac{J_{\text{sym}}}{r^2} + m}}.
+    \end{align}
+
+    <p>Der Geschwindigkeitsbetrag, den wir auf diese Weise finden, ist eine Geschwindigkeit entlang der schiefen Ebene.</p>
+
+    <p>Leitet man nun die Geschwindigkeit nach der Zeit ab, so muss man die Kettenregel anwenden:</p>
+
+    \begin{align}
+    a(t) = \frac{\mathrm{d} v(t)}{\mathrm{d} t} = \frac{\mathrm{d} v(h)}{\mathrm{d} h} \cdot \frac{\mathrm{d} h(t)}{\mathrm{d} t}.
+    \end{align}
+
+    <p>Der erste Faktor auf der rechten Seite ist die Ableitung der Geschwindigkeit nach der Höhe, der zweite Faktor ist die Ableitung der Höhe nach der Zeit, also die Vertikalgeschwindigkeit:</p>
+
+    \begin{align}
+    a(t) = \frac{\mathrm{d} v(h)}{\mathrm{d} h} \cdot v_\mathrm{vertikal}(t).
+    \end{align}
+
+    <p>Die Ableitung der Geschwindigkeit nach der Höhe ist</p>
+
+    \begin{align}
+    \frac{\mathrm{d} v(h)}{\mathrm{d} h} = \frac{1}{2} \sqrt{\frac{2 m g}{\frac{J_{\text{sym}}}{r^2} + m}} \cdot \frac{1}{\sqrt{h}}.
+    \end{align}
+
+    <p>Damit ist die Beschleunigung des rollenden Körpers</p>
+
+    \begin{align}
+    a(t) = \frac{1}{2} \sqrt{\frac{2 m g}{\frac{J_{\text{sym}}}{r^2} + m}} \cdot \frac{1}{\sqrt{h(t)}} \cdot v_\mathrm{vertikal}(t).
+    \end{align}
+
+    <p>Die Vertikalgeschwindigkeit des rollenden Körpers hängt mit der Höhe zusammen über</p>
+
+    \begin{align}
+    v_\mathrm{vertikal}(t) = \sin(\alpha) \cdot v(t).
+    \end{align}
+
+    <p>Daher ist die Beschleunigung des rollenden Körpers</p>
+
+    \begin{align}
+    a(t) = \frac{1}{2} \sqrt{\frac{2 m g}{\frac{J_{\text{sym}}}{r^2} + m}} \cdot \frac{1}{\sqrt{h(t)}} \cdot \sin(\alpha) \cdot \sqrt{\frac{2 m g h(t)}{\frac{J_{\text{sym}}}{r^2} + m}}.
+    \end{align}
+
+    <p>Die Höhe \(h(t)\) kürzt sich heraus und die beiden Wurzeln können so zusammengeführt werden, dass alle Größen unter der Wurzel im Quadrat stehen, und es bleibt übrig:</p>
+
+    \begin{align}
+    a(t) = \frac{m\cdot g \cdot \sin(\alpha)}{\frac{J_{\text{sym}}}{r^2} + m}.
+    \end{align}
+
+    <p>Die Beschleunigung des rollenden Körpers ist also konstant und hängt nur von der Masse \(m\), von \(g\) und dem Massenträgheitsmoment \(J_{\text{sym}}\) des Körpers um die Achse durch den Schwerpunkt sowie dem Außenradius \(r\) des Körpers ab.</p>
+
+    <p>Wollen wir diese Größen vektoriell ausdrücken, so müssen wir die weiter oben beschriebene Zerlegung durchführen.</p>
+
+    <p>Der Beschleunigungsvektor ist dann</p>
+
+    \begin{align}
+    \vec a = \begin{pmatrix}
+    a_x \\
+    a_y
+    \end{pmatrix} = \begin{pmatrix}
+    -\frac{m g \cdot \sin(\alpha)}{\frac{J_{\text{sym}}}{r^2} + m} \cos(\alpha) \\
+    -\frac{m g \cdot \sin(\alpha)}{\frac{J_{\text{sym}}}{r^2} + m} \sin(\alpha)
+    \end{pmatrix}=-\frac{m g \cdot \sin(\alpha)}{\frac{J_{\text{sym}}}{r^2} + m} \begin{pmatrix}
+    \cos(\alpha) \\
+    \sin(\alpha)
+    \end{pmatrix}.
+    \end{align}
+
+    <p>Mit den Zusammenhängen der Kinematik können wir nun auch den Geschwindigkeitsvektor und den Ortsvektor in Abhängigkeit der Zeit angeben:</p>
+
+    \begin{align}
+    \vec v(t) &amp;= \vec a t + \vec v_0 = -\frac{m g \cdot \sin(\alpha)}{\frac{J_{\text{sym}}}{r^2} + m} \cdot \begin{pmatrix}
+    \cos(\alpha) \\
+    \sin(\alpha)
+    \end{pmatrix}\cdot t + v_0 \cdot \begin{pmatrix}
+    \cos(\alpha) \\
+    \sin(\alpha)
+    \end{pmatrix}.
+    \end{align}
+
+    <p>Die Strecke des rollenden Körpers in Abhängigkeit der Zeit ist dann</p>
+
+    \begin{align}
+    \vec s(t) &amp;= \frac{1}{2} \vec a t^2 + \vec v_0 t + \vec s_0 \\[6pt]
+    &amp;= -\frac{1}{2} \frac{m g \cdot \sin(\alpha)}{\frac{J_{\text{sym}}}{r^2} + m} \cdot \begin{pmatrix}
+    \cos(\alpha) \\
+    \sin(\alpha)
+    \end{pmatrix}\cdot t^2 + v_0 \cdot \begin{pmatrix}
+    \cos(\alpha) \\
+    \sin(\alpha) \end{pmatrix} t +s_0 \cdot \begin{pmatrix}
+    \cos(\alpha) \\
+    \sin(\alpha)
+    \end{pmatrix}.
+    \end{align}
+
+    <p>Dabei haben wir beachtet, dass die Anfangsgeschwindigkeit \(\vec v_0\) und der Anfangsort \(\vec s_0\) des rollenden Körpers jeweils entlang der schiefen Ebene liegen müssen.</p>
+
+    <p>Die Anfangshöhe und der Anfangsort des rollenden Körpers hängen zusammen über die Geometrie der schiefen Ebene:</p>
+
+    \begin{align}
+    h_0 = s_0 \sin(\alpha).
+    \end{align}
+
+    <p>Anmerkung: Die folgenden beiden Herleitungen der Bewegungsgleichungen für die Rollbewegung sind optional und dienen nur der Vertiefung für interessierte Leser*innen und Expert*innen.</p>
+
+    <p>Selbstverständlich lässt sich die Rollbewegung auch über die Anwendung des Zusammenhangs zwischen Drehmoment und Winkelbeschleunigung herleiten. Alle anderen überspringen die Schritte und fahren mit dem nächsten Abschnitt fort.</p>
+
+    <p>Hierbei spielt besonders eine Rolle, dass Sie sich für eine der beiden möglichen Betrachtungsweisen der Rollbewegung entscheiden müssen: Entweder Sie betrachten die Rollbewegung als Überlagerung von Rotation um den Schwerpunkt und Translation des Schwerpunkts (siehe Abbildung <a class="xref" data-ref-fig="fig-skript-rotation-rollbewegung-vgl"></a>(a)), oder Sie betrachten die Rollbewegung als Rotation um den Auflagepunkt des Körpers auf der Ebene (siehe Abbildung <a class="xref" data-ref-fig="fig-skript-rotation-rollbewegung-vgl"></a>(b)). Beide Betrachtungsweisen sind äquivalent, jedoch ist die Herleitung der Bewegungsgleichungen in der einen oder anderen Betrachtungsweise unterschiedlich. Bei beiden Herleitungen nutzen wir abweichend von der Abbildung ein Koordinatensystem, bei dem die x-Achse entlang der schiefen Ebene nach oben zeigt und die y-Achse senkrecht zur schiefen Ebene nach oben zeigt.</p>
+
+    <p>Zunächst nutzen wir die <strong>Betrachtungsweise: Rotation um den Auflagepunkt</strong>, da diese Herleitung etwas einfacher ist.</p>
+
+    <p>Der Auflagepunkt des Körpers auf der Ebene ist der Drehpunkt der Rotation, der Punkt selbst ist zu jedem Zeitpunkt in Ruhe. Nach dem 1. Newtonschen Gesetz ist, wenn ein Körper in Ruhe ist, die Summe aller auf den Körper wirkenden Kräfte null. Am Auflagepunkt wirkt die Hangabtriebskraft auf das Masseelement des Körpers, das am Auflagepunkt liegt, sowie die Reibungskraft. Diese beiden Kräfte heben sich gegenseitig auf, sodass die Summe aller auf den Auflagepunkt wirkenden Kräfte null ist. Daher bleibt der Auflagepunkt in Ruhe und bildet den Drehpunkt der Rotation.</p>
+
+    <p>Nach dem Schwerpunktsatz greift am Schwerpunkt des Körpers die Gewichtskraft an, diese verursacht ein Drehmoment um den Auflagepunkt, das den Körper in Rotation versetzt. Das Drehmoment \(\vec M\) um den Auflagepunkt ist gegeben durch:</p>
+
+    \begin{equation}
+    \vec M = \vec r \times m \vec g,
+    \end{equation}
+
+    <p>wobei \(\vec r\) der Vektor vom Auflagepunkt zum Schwerpunkt des Körpers ist. Im gedrehten Koordinatensystem, bei dem die x-Achse entlang der schiefen Ebene nach oben zeigt und die y-Achse senkrecht zur schiefen Ebene nach oben zeigt, ist der Vektor von der Drehachse zum Angriffspunkt der Kraft \(\vec r\) gegeben durch:</p>
+
+    \begin{equation}
+    \vec r = \begin{pmatrix}
+    0 \\
+    r \\
+    0
+    \end{pmatrix},
+    \end{equation}
+
+    <p>wobei \(r\) der Außenradius des Körpers ist. Der Vektor der Gewichtskraft im gedrehten Koordinatensystem ist:</p>
+
+    \begin{equation}
+    m \vec g = \begin{pmatrix}
+    -m g \sin(\alpha) \\
+    -m g \cos(\alpha)\\
+    0
+    \end{pmatrix}.
+    \end{equation}
+
+    <p>Das Drehmoment um den Auflagepunkt ist somit:</p>
+
+    \begin{align}
+    \vec M &amp;= \begin{pmatrix}
+    0 \\
+    r \\
+    0
+    \end{pmatrix} \times \begin{pmatrix}
+    -m g \sin(\alpha) \\
+    -m g \cos(\alpha)\\0
+    \end{pmatrix} \\[6pt]
+    &amp;= \begin{pmatrix}
+    0 \\
+    0 \\
+    0 \cdot (-m g \cos(\alpha))-r \cdot (-m g \sin(\alpha))
+    \end{pmatrix} \\[6pt]
+    &amp;= \begin{pmatrix}
+    0 \\
+    0 \\
+    m g r \sin(\alpha)
+    \end{pmatrix}.
+    \end{align}
+
+    <p>Das Drehmoment um den Auflagepunkt hat also nur eine Komponente in z-Richtung, die den Betrag</p>
+
+    \begin{equation}
+    M = m g r \sin(\alpha)
+    \end{equation}
+
+    <p>hat.</p>
+
+    <p>Man sieht außerdem: durch die Eigenschaft des Kreuzproduktes, nur auf die Komponente der Gewichtskraft zu wirken, die senkrecht zum Vektor \(\vec r\) steht, hängt das Drehmoment nur von der Komponente der Gewichtskraft ab, die entlang der schiefen Ebene wirkt, also der Hangabtriebskraft. Die Komponente der Gewichtskraft, die senkrecht zur schiefen Ebene wirkt, trägt nicht zum Drehmoment bei und wird durch die Normalkraft der Ebene kompensiert.</p>
+
+    <p>Nach dem Zusammenhang zwischen Drehmoment und Winkelbeschleunigung gilt:</p>
+
+    \begin{equation}
+    \vec M = J_\mathrm{Steiner}\cdot \vec \alpha,
+    \end{equation}
+
+    <p>also ist die Winkelbeschleunigung des Körpers:</p>
+
+    \begin{equation}
+    \vec \alpha = \frac{\vec M}{J_\mathrm{Steiner}}=\frac{m g r \sin(\alpha)}{J_\mathrm{Steiner}}\cdot \begin{pmatrix}
+        0 \\
+        0 \\
+        1
+    \end{pmatrix}.
+    \end{equation}
+
+    <p>Der Körper erfährt also eine konstante Winkelbeschleunigung entlang der positiven z-Achse des gedrehten Koordinatensystems, d.h. er dreht sich immer schneller gegen den Uhrzeigersinn.</p>
+
+    <p>In dieser Betrachtung hat der Körper eigentlich keine Translationsbewegung, also keine Schwerpunktsbeschleunigung, da die Bewegung des Körpers als reine Rotation um den Auflagepunkt aufgefasst wird. Die Bewegung des Schwerpunkts ergibt sich jedoch aus der Rotation um den Auflagepunkt. Der Schwerpunkt bewegt sich auf einer Kreisbahn um den Auflagepunkt mit dem Radius \(\vec r\). Die Schwerpunktsbeschleunigung ist dann gegeben durch:</p>
+
+    \begin{equation}
+    \vec a_\text{SP} = \vec \alpha \times \vec r.
+    \end{equation}
+
+    <p>Das Kreuzprodukt ergibt:</p>
+
+    \begin{align}
+    \vec a_\text{SP} &amp;= \frac{m g r \sin(\alpha)}{J_\mathrm{Steiner}} \cdot \begin{pmatrix}
+        0 \\
+        0 \\
+        1
+    \end{pmatrix} \times \begin{pmatrix}
+    0 \\
+    r \\
+    0
+    \end{pmatrix} \\[6pt]
+    &amp;= \frac{m g r \sin(\alpha)}{J_\mathrm{Steiner}} \cdot \begin{pmatrix}
+    0-1\cdot r \\
+    0 \\
+    0
+    \end{pmatrix} \\[6pt]
+    &amp;= \begin{pmatrix}
+    -\frac{m g r^2 \sin(\alpha)}{J_\mathrm{Steiner}} \\
+    0 \\ 0 \end{pmatrix}.
+    \end{align}
+
+    <p>Die Schwerpunktsbeschleunigung zeigt also entlang der negativen x-Achse des gedrehten Koordinatensystems, also entlang der schiefen Ebene nach unten.</p>
+
+    <p>Mit dem Satz von Steiner ergibt das:</p>
+
+    \begin{equation}
+    \vec a_\text{SP} = \begin{pmatrix}
+    -\frac{m g r^2 \sin(\alpha)}{J_{\text{sym}} + m r^2} \\
+    0 \\ 0 \end{pmatrix}=- \frac{m g r^2 \sin(\alpha)}{J_{\text{sym}} + m r^2} \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}.
+    \label{eq_beschleunigung_rotation_um_auflagepunkt}
+    \end{equation}
+
+    <p>Nun betrachten wir die Rollbewegung aus der anderen Perspektive, nämlich als <strong>Überlagerung von Translation des Schwerpunkts und Rotation um den Schwerpunkt</strong> (siehe Abbildung <a class="xref" data-ref-fig="fig-skript-rotation-rollbewegung-vgl"></a>(a)).</p>
+
+    <p>In dieser Betrachtungsweise hat der Körper eine Schwerpunktsbeschleunigung \(\vec a_\text{SP}\), die durch einen Teil der Hangabtriebskraft verursacht wird. Die Reibungskraft am Auflagepunkt des Körpers auf der Ebene sorgt für eine Rotation des Körpers um den Schwerpunkt, indem sie ein Drehmoment um den Schwerpunkt erzeugt.</p>
+
+    <p>Für das Drehmoment um den Schwerpunkt gilt:</p>
+
+    \begin{equation}
+    \vec M = \vec r \times \vec F_\text{R},
+    \end{equation}
+
+    <p>wobei diesmal der Vektor \(\vec r\) vom Schwerpunkt des Körpers (Drehachse) zum Auflagepunkt des Körpers (Angriffspunkt der Reibungskraft) zeigt, ausgedrückt im gedrehten Koordinatensystem (x-Achse entlang der schiefen Ebene nach oben, y-Achse senkrecht zur schiefen Ebene nach oben):</p>
+
+    \begin{equation}
+    \vec r = \begin{pmatrix}
+    0 \\
+    -r \\
+    0
+    \end{pmatrix}.
+    \end{equation}
+
+    <p>Die Reibungskraft \(\vec F_\text{R}\) zeigt entlang der schiefen Ebene nach oben, also im gedrehten Koordinatensystem:</p>
+
+    \begin{equation}
+    \vec F_\text{R} = \begin{pmatrix}
+    F_\text{R} \\
+    0 \\
+    0
+    \end{pmatrix}.
+    \end{equation}
+
+    <p>Das Drehmoment um den Schwerpunkt ist somit:</p>
+
+    \begin{align}
+    \vec M &amp;= \begin{pmatrix}
+    0 \\
+    -r \\
+    0
+    \end{pmatrix} \times \begin{pmatrix}
+    F_\text{R} \\
+    0 \\
+    0
+    \end{pmatrix} \\[6pt]
+    &amp;= \begin{pmatrix}
+    0 \\
+    0 \\
+    0\cdot 0 - (-r) \cdot F_\text{R}
+    \end{pmatrix} \\[6pt]
+    &amp;= \begin{pmatrix}
+    0 \\
+    0 \\
+    r \cdot F_\text{R}
+    \end{pmatrix}.
+    \end{align}
+
+    <p>Das Drehmoment um den Schwerpunkt hat also nur eine Komponente in z-Richtung, die den Betrag</p>
+
+    \begin{equation}
+    M = r \cdot F_\text{R}
+    \end{equation}
+
+    <p>hat.</p>
+
+    <p>Das Drehmoment zeigt entlang der positiven z-Achse des gedrehten Koordinatensystems, winkelbeschleunigt den Körper gegen den Uhrzeigersinn (genau wie in der ersten Betrachtungsweise).</p>
+
+    <p>Der Zusammenhang zwischen Drehmoment und Winkelbeschleunigung liefert die Winkelbeschleunigung des Körpers:</p>
+
+    \begin{equation}
+    \vec \alpha = \frac{\vec M}{J_\text{SP}} = \frac{r \cdot F_\text{R}}{J_\text{SP}} \cdot \begin{pmatrix}
+        0 \\
+        0 \\
+        1
+    \end{pmatrix},
+    \end{equation}
+
+    <p>wobei \(J_\text{SP}\) das Massenträgheitsmoment des Körpers um die Achse durch den Schwerpunkt ist, was bedeutet, dass in diesem Fall nicht der Satz von Steiner zur Anwendung kommen muss. Aus dem Schwerpunktsatz, der besagt, dass die Beschleunigung eines Körpers berechnet werden kann, als wenn alle Masse des Körpers im Schwerpunkt vereint wäre und als wenn alle Kräfte am Schwerpunkt angreifen würden, ergibt sich die Schwerpunktsbeschleunigung des Körpers. Die auf den Schwerpunkt wirkende Kraft ist die Hangabtriebskraft minus der Reibungskraft:</p>
+
+    \begin{equation}
+    \vec a_\text{SP} = -\frac{m g \sin(\alpha) + F_\text{R}}{m} \cdot \begin{pmatrix}
+        1 \\
+        0 \\
+        0
+    \end{pmatrix}.
+    \label{eq_beschleunigung_translation_um_schwerpunkt_ursprung}
+    \end{equation}
+
+    <p>Dabei wurde beachtet, dass die Hangabtriebskraft entlang der schiefen Ebene nach unten zeigt (negative x-Richtung im gedrehten Koordinatensystem), die Reibungskraft entlang der schiefen Ebene nach oben (positive x-Richtung im gedrehten Koordinatensystem).</p>
+
+    <p>Die Winkelbeschleunigung und die Schwerpunktsbeschleunigung sind nicht unabhängig, sondern haben, wenn der Körper rollt ohne zu rutschen, einen festen Zusammenhang:</p>
+
+    \begin{equation}
+    \vec a_\text{SP} = \vec \alpha \times \vec r^\prime.
+    \end{equation}
+
+    <p>Was ist der Vektor \(\vec r^\prime\)? Dazu müssen wir uns überlegen, welche (Bahn-)beschleunigung wir bekämen, wenn wir einfach nur das Kreuzprodukt der Winkelbeschleunigung \(\vec \alpha\) mit dem Vektor vom Schwerpunkt zum Auflagepunkt des Körpers bilden würden.</p>
+
+    <p>Diese Beschleunigung wäre die Tangentialbeschleunigung des Auflagepunkts des Körpers auf der Ebene, also die Beschleunigung, die der Auflagepunkt hätte, wenn er sich auf einer Kreisbahn um den Schwerpunkt des Körpers bewegen würde. Diese Beschleunigung ist jedoch nicht die Schwerpunktsbeschleunigung des Körpers, die wir suchen. Die Schwerpunktsbeschleunigung des Körpers ist die Beschleunigung des Schwerpunkts, also die Beschleunigung des Punktes, der sich im Abstand \(\vec r^\prime\) vom Auflagepunkt befindet.</p>
+
+    <p>Der Vektor \(\vec r^\prime\) ist also der Vektor vom Auflagepunkt des Körpers auf der Ebene zum Schwerpunkt des Körpers:</p>
+
+    \begin{equation}
+    \vec r^\prime = - \vec r = \begin{pmatrix}
+    0 \\
+    r \\
+    0
+    \end{pmatrix}.
+    \end{equation}
+
+    <p>Das Kreuzprodukt ergibt:</p>
+
+    \begin{align}
+    \vec a_\text{SP} &amp;= \vec \alpha \times \vec r^\prime= \frac{r \cdot F_\text{R}}{J_\text{SP}} \cdot \begin{pmatrix}
+        0 \\
+        0 \\
+        1
+    \end{pmatrix} \times \begin{pmatrix}
+    0 \\
+    r \\
+    0
+    \end{pmatrix} \\[6pt]
+    &amp;= \frac{r \cdot F_\text{R}}{J_\text{SP}} \cdot \begin{pmatrix}
+    0-1\cdot r \\
+    0 \\
+    0
+    \end{pmatrix} \\[6pt]
+    &amp;= \begin{pmatrix}
+    -\frac{r^2 \cdot F_\text{R}}{J_\text{SP}} \\
+    0 \\ 0 \end{pmatrix}.
+    \label{eq_beschleunigung_translation_um_schwerpunkt}
+    \end{align}
+
+    <p>Wir haben nun mit Gleichung <a class="xref" data-ref-eq="eq_beschleunigung_translation_um_schwerpunkt_ursprung"></a> und Gleichung <a class="xref" data-ref-eq="eq_beschleunigung_translation_um_schwerpunkt"></a> zwei verschiedene Ausdrücke für die Schwerpunktsbeschleunigung des Körpers erhalten. Diese beiden Ausdrücke müssen gleich sein, also gilt:</p>
+
+    \begin{equation}
+    -\frac{m g \sin(\alpha) + F_\text{R}}{m} = -\frac{r^2 \cdot F_\text{R}}{J_\text{SP}}.
+    \end{equation}
+
+    <p>Diese Gleichung kann nach der Reibungskraft \(F_\text{R}\) aufgelöst werden:</p>
+
+    \begin{equation}
+    F_\text{R} = \frac{m g \sin(\alpha) \cdot J_\text{SP}}{m r^2 + J_\text{SP}}.
+    \end{equation}
+
+    <p>Dieser Ausdruck ist die Reibungskraft, die am Auflagepunkt des Körpers auf der Ebene wirken muss, damit der Körper rollt ohne zu rutschen. Sie hängt von der Masse des Körpers, von der Neigung der schiefen Ebene, vom Außenradius des Körpers und vom Massenträgheitsmoment des Körpers um die Achse durch den Schwerpunkt ab. Diese Information konnte uns die Herleitung in der Betrachtungsweise der Rotation um den Auflagepunkt nicht liefern.</p>
+
+    <p>Setzen wir diesen Ausdruck in eine der beiden Gleichungen für die Schwerpunktsbeschleunigung ein, beispielsweise in Gleichung <a class="xref" data-ref-eq="eq_beschleunigung_translation_um_schwerpunkt_ursprung"></a>, so erhalten wir die Schwerpunktsbeschleunigung des Körpers:</p>
+
+    \begin{equation}
+    \vec a_\text{SP} = -\frac{m g \sin(\alpha) \cdot m r^2}{m (m r^2 + J_\text{SP})} \cdot \begin{pmatrix}
+        1 \\
+        0 \\
+        0
+    \end{pmatrix} = -\frac{m g r^2 \sin(\alpha)}{m r^2 + J_\text{SP}} \cdot \begin{pmatrix}
+        1 \\
+        0 \\
+        0
+    \end{pmatrix}.
+    \end{equation}
+
+    <p>Vergleichen wir diesen Ausdruck mit dem Ausdruck für die Schwerpunktsbeschleunigung aus der ersten Betrachtungsweise (Gleichung <a class="xref" data-ref-eq="eq_beschleunigung_rotation_um_auflagepunkt"></a>), so sehen wir, dass beide Ausdrücke identisch sind. Das ist auch gut so, denn beide Betrachtungsweisen sind äquivalent und müssen zum gleichen Ergebnis führen.</p>
+
+    <p>Aus der (konstanten) Schwerpunktsbeschleunigung können wir nun wieder mit den Kinematik-Gleichungen die Geschwindigkeit und den Ort des rollenden Körpers in Abhängigkeit der Zeit bestimmen, wie wir das bereits im vorherigen Abschnitt gemacht haben.</p>
+
+    <p>Wir haben nun zwei äquivalente Herleitungen der Bewegungsgleichungen für die Rollbewegung eines Körpers entlang einer schiefen Ebene kennengelernt: eine Herleitung über die Energieerhaltung und eine Herleitung über das Drehmoment. Beide Herleitungen führen zum gleichen Ergebnis. Außerdem haben wir gesehen, dass es zwei verschiedene Betrachtungsweisen der Rollbewegung gibt: die Betrachtungsweise der Rotation um den Auflagepunkt und die Betrachtungsweise der Translation des Schwerpunkts und der Rotation um den Schwerpunkt. Beide Betrachtungsweisen sind äquivalent und führen zum gleichen Ergebnis, jedoch ist die Herleitung in der einen oder anderen Betrachtungsweise unterschiedlich.</p>
+
+    <p>Welche dieser Herleitungen und Betrachtungsweisen Sie in Zukunft verwenden, bleibt Ihnen überlassen. Wichtig ist nur, dass Sie die Zusammenhänge zwischen Drehmoment, Winkelbeschleunigung, Schwerpunktsbeschleunigung und Reibungskraft verstehen und anwenden können.</p>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.14 Zusammenfassung</h3>
