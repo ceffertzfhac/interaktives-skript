@@ -14,9 +14,41 @@
     --kb-text2: #4c5266;
     --kb-text3: #878ea1;
     --kb-accent: var(--fh, #00b2a9);
-    --kb-r: #b08010;      /* Ortsvektor */
-    --kb-rx: #1f77b4;     /* x-Komponente */
-    --kb-ry: #1a8a50;     /* y-Komponente */
+    /* ── Kapitel-1.4-Vektorfarbpalette (P-AF-2: kapitelweit konsistent UND
+       farbfehlsicher). EINZIGE Farbquelle für ALLE 1.4-Aspekt-Figuren — jede
+       Figur referenziert diese Tokens, definiert keine eigenen (einzige Ausnahme
+       ist der HV-Strichstärken-Override in aspekt_vxvy_zeit.css). Werte an
+       Okabe-Ito (CVD-safe) angelehnt; die freigegebenen Hauptvektoren r/v und
+       der Akzent bleiben unverändert (1.38/1.42 optisch freigegeben).
+       Bedeutung → Token → Farbe:
+         r    Ortsvektor        gold    #b08010  (freigegeben 1.38)
+         rx   r_x-Komponente    blau    #1f77b4  (freigegeben 1.38)
+         ry   r_y-Komponente    grün    #1a8a50  (freigegeben 1.38)
+         v    Geschwindigkeit   blau    #0072b2  (Okabe-Ito, freigegeben 1.42)
+         vx   v_x-Komponente    violett #cc79a7  (Okabe-Ito; WAR #b8860b gold →
+                                                  kollidierte mit r gold in 1.42)
+         vy   v_y-Komponente    rot     #c03030
+         traj durchlaufener Bogen grau   #7f7f7f
+       Reserviert für künftige Beschleunigungs-Figur (Werte aus der Sim; bei
+       Einführung auf CVD-Sicherheit prüfen — a #c0392b und vy #c03030 beide rot,
+       in keiner Figur gleichzeitig, aber dokumentieren):
+         a    Beschleunigung    rot     #c0392b
+         ax   a_x-Komponente    cyan    #17a2b8
+         ay   a_y-Komponente    orange  #e0782d
+       Erweiterungsregel: neues Vektor-Objekt in 1.4 → Token HIER anlegen, Farbe
+       CVD-distinkt zu obigen wählen (Okabe-Ito-Palette). 1.5 darf eine EIGENE
+       Palette definieren (eigene Tokens/Datei). Bekannte Schwäche: v (#0072b2)
+       und rx (#1f77b4) beide blau — in keiner 1.4-Figur gleichzeitig gezeigt;
+       bei einer künftigen Figur mit r- UND v-Familie prüfen. */
+    --kb-r: #b08010;
+    --kb-rx: #1f77b4;
+    --kb-ry: #1a8a50;
+    --kb-vel: #0072b2;
+    --kb-vx: #cc79a7;
+    --kb-vy: #c03030;
+    --kb-acc: #c0392b;
+    --kb-ax: #17a2b8;
+    --kb-ay: #e0782d;
     --kb-traj: #7f7f7f;   /* durchlaufener Bogen */
     --kb-r-sm: 6px;
     --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);

@@ -2,25 +2,26 @@
    Farb-Tokens, Panel-/Slider-/Legenden-/Analyse-/Lupe-/Caption-Regeln und das
    Layout je Breiten-Modus + das Overlay kommen unverändert aus
    aspekt_kreisbahn.css (geladen), weil diese Figur ebenfalls .aspekt-figur ist.
-   Hier stehen NUR die Ergänzungen: die Geschwindigkeits-FARB-TOKENS (--kb-vel
-   /--kb-vx/--kb-vy, aus der Sim-styles.css übernommen, in der Vorlage nur auf
-   #gc10 definiert — hier auf diese Figur gescopt), die Datenlinien-FARBEN
-   (v_x(t)=vx / v_y(t)=vy), die Vergleichslinie, die Vektorfarben in der Szene
-   und die Mittel-Spalte (.aspekt-main), die Szene + Diagramm uebereinander
-   stapelt. Die Graph-STRUKTUR (Hintergrund, Gitter, Achsen, Skalen, Titel,
-   Hover, Linienbreiten/-schriften) liegt zentral in aspekt_kreisbahn.css
-   (inkl. ×1,5-Skalierung via --kb-lw/--kb-fs).
+   Hier stehen NUR die Ergänzungen: der HV-Strichstärken-Override (--kb-vec-hw,
+   bewusst dünner als 1.38/1.39/1.41), die Datenlinien-FARBEN (v_x(t)=vx /
+   v_y(t)=vy), die Vergleichslinie, die Vektorfarben in der Szene und die
+   Mittel-Spalte (.aspekt-main), die Szene + Diagramm uebereinander stapelt.
+   Die Farb-TOKENS liegen zentral in aspekt_kreisbahn.css (kapitelweite
+   1.4-Palette, P-AF-2) und werden hier nur referenziert. Die Graph-STRUKTUR
+   (Hintergrund, Gitter, Achsen, Skalen, Titel, Hover, Linienbreiten/-
+   schriften) liegt ebenfalls zentral in aspekt_kreisbahn.css (inkl.
+   ×1,5-Skalierung via --kb-lw/--kb-fs).
 
    Layout 1:1 von aspekt_weg_zeit.css (gleiche Interaktion: gestapelte Dual-
    Graphen + Szene) — nur der Aspekt-Farb scopes und die Datenfarben wechseln. */
 
-/* ── Geschwindigkeits-Farb-Tokens (Sim-styles.css-Werte, hier auf die Figur
-   gescopt — in der Vorlage nur #gc10). --kb-vel: Geschwindigkeitsvektor (blau),
-   --kb-vx: v_x-Komponente (gold), --kb-vy: v_y-Komponente (rot). ──────────── */
+/* ── Figur-spezifischer Override NUR der Vektor-STRICHSTÄRKE (--kb-vec-hw).
+   Die Farb-Tokens (--kb-vel/--kb-vx/--kb-vy) liegen ZENTRAL in
+   aspekt_kreisbahn.css (kapitelweite 1.4-Palette, P-AF-2) und werden hier nur
+   referenziert (s. Datenlinien-/Szenen-/Legenden-Regeln unten). v_x ist dort
+   violett (#cc79a7, Okabe-Ito), nicht mehr gold — löst die frühere Gold-Kollision
+   mit dem Ortsvektor r. ──────────────────────────────────────────────────── */
 .aspekt-figur[data-aspekt="vxvy-zeit"] {
-    --kb-vel: #0072b2;
-    --kb-vx: #b8860b;
-    --kb-vy: #c03030;
     /* Vektor-Strichstärke: bewusst DÜNNER als 1.38/1.39/1.41 (2,5 px statt 4 px
        -> 3,75 px statt 6 px nach --kb-lw). Diese Figur zeigt r UND v plus vier
        Komponenten — dünnere Vektoren halten die Szene ruhig. Die 0,8-Regel
@@ -69,7 +70,7 @@
 /* ── Graph-Struktur (Hintergrund, Gitter, Achsen, Skalen, Titel, Hover, Hit-
    Rect, Linienbreiten/-schriften) liegt ZENTRAL in aspekt_kreisbahn.css
    (gescopt auf .aspekt-figur, inkl. der ×1,5-Skalierung via --kb-lw/--kb-fs).
-   Hier pro Figur NUR die Datenlinien-FARBEN — v_x(t)=vx (gold), v_y(t)=vy
+   Hier pro Figur NUR die Datenlinien-FARBEN — v_x(t)=vx (violett), v_y(t)=vy
    (rot), passend zu den Komponenten-Vektoren in der Szene. Punkte entsprechend
    eingefärbt. IDs sind pro Instanz prefixt (kb<n>_, s. runtime.js) -> Suffix-
    Selektoren. ───────────────────────────────────────────────────────────── */
