@@ -247,8 +247,14 @@
 .aspekt-figur .formula-box mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 
 /* ── Lupe ──────────────────────────────────────────────────────────────── */
+/* Immer oben rechts in der Hauptspalte (Grid-Spalte 2 des .aspekt-body): in 1.38
+   ist das die .aspekt-scene, in 1.39/1.41 die .aspekt-main. Deren rechte Kante ist
+   die Trennlinie zur Analyse-Leiste -> Analyse sichtbar = Lupe links daneben,
+   Analyse ausgeblendet = Hauptspalte reicht bis zum Figurenrand, Lupe also mit
+   denselben 8 px in der Figuren-Ecke. z-index über der sticky .aspekt-runbar
+   (z-index 7 in 1.39/1.41), sonst verschwindet die Lupe hinter der Ablaufleiste. */
 .aspekt-figur .aspekt-lupe {
-    position: absolute; top: 8px; right: 8px; z-index: 2;
+    position: absolute; top: 8px; right: 8px; z-index: 8;
     width: 32px; height: 32px; padding: 0;
     display: inline-flex; align-items: center; justify-content: center;
     border: 1px solid var(--kb-border); border-radius: 8px;

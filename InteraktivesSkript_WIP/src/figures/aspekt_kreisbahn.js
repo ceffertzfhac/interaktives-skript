@@ -187,10 +187,14 @@ export function buildKreisbahnFig(fig) {
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
 
-    // Lupe-Button: INS Bild der Kernsimulation setzen (rechts darin, also links
-    // neben dem vertikalen Trennstreifen zur rechten Seitenleiste), nicht an die
-    // figure-Ecke (wo sie zuvor auf dem Analyse-Header sass). .aspekt-scene ist
-    // position:relative (s. CSS) -> absolute Top/Right bezieht sich darauf.
+    // Lupe-Button: IMMER oben rechts in der HAUPTSPALTE der Figur (Referenz 1.38).
+    // Die Hauptspalte ist Grid-Spalte 2 des .aspekt-body: in 1.38 die .aspekt-scene,
+    // in 1.39/1.41 die .aspekt-main (Runbar + Szene + Diagramm). Ihre rechte Kante
+    // ist genau die Trennlinie zur Analyse-Leiste -> ist die Analyse sichtbar,
+    // sitzt die Lupe links daneben; ist sie ausgeblendet, dehnt sich die
+    // Hauptspalte bis zum Figurenrand und die Lupe steht mit denselben 8 px
+    // Abstand in der oberen rechten Ecke der Figur. Positionierungsbasis kommt
+    // aus dem CSS (beide Container sind position:relative).
     const lupe = document.createElement('button');
     lupe.type = 'button';
     lupe.className = 'aspekt-lupe';
@@ -198,7 +202,7 @@ export function buildKreisbahnFig(fig) {
     lupe.setAttribute('aria-label', 'Figur vergrößern');
     lupe.title = 'Vergrößern';
     lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
-    scene.querySelector('.aspekt-scene').appendChild(lupe);
+    (scene.querySelector('.aspekt-main') || scene.querySelector('.aspekt-scene')).appendChild(lupe);
 
     // Bildunterschrift aus data-caption aufbauen (die statische Abbildung
     // uebernimmt am Bildschirm diese Rolle). Inside .aspekt-body, damit die
