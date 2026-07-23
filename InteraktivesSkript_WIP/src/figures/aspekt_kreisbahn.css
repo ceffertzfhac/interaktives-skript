@@ -32,6 +32,14 @@
     --kb-lw: 1.5;
     --kb-fs: 1.5;
 
+    /* Vektor-Strichstärken-Regel (Nutzervorgabe, kapitelweit konsistent in 1.4):
+       alle Hauptvektoren (r, v, a) GLEICH dick (--kb-vec-hw), Komponenten stets
+       0,8 der HV (--kb-vec-cw). Default 4 px / 3,2 px (1.38/1.39/1.41); 1.42
+       überschreibt --kb-vec-hw auf 2,5 px (bewusst dünnere Vektoren). Beide ×
+       --kb-lw (×1,5-Skalierung). Fest als Token, nicht pro Figur hart. */
+    --kb-vec-hw: 4px;
+    --kb-vec-cw: calc(0.8 * var(--kb-vec-hw));
+
     /* Box wie die Formelkarten: volle Lesespaltenbreite, gleiche Ausrichtung
        (display:block, kein max-width/auto-Zentrieren). */
     position: relative;
@@ -61,15 +69,28 @@
     touch-action: none;
 }
 .aspekt-figur.is-dragging-point .aspekt-scene [id$="point"] { cursor: grabbing; }
-/* Schaftbreiten ×0,8 gegenüber der vorherigen Setzung (5 -> 4, 4 -> 3.2): der
-   Schaft wirkte im Verhältnis zur Spitze zu dick. Die Pfeilspitzen bleiben
-   unverändert — sie sind markerUnits="userSpaceOnUse" mit fester Geometrie und
-   hängen NICHT an der Strichstärke; auch die Verkürzung (shortenEnd mit
-   ARROW_LEN) ist strichstärken-unabhängig, die Spitze sitzt also weiter exakt
-   auf dem Zielpunkt. */
-.aspekt-figur .aspekt-scene [id$="position_vector"]   { stroke: var(--kb-r);  stroke-width: calc(4px * var(--kb-lw)); }     /* Vorlage 2.5, ×2 ×0,8 (CSS) × --kb-lw */
-.aspekt-figur .aspekt-scene [id$="position_vector_x"] { stroke: var(--kb-rx); stroke-width: calc(3.2px * var(--kb-lw)); }   /* Vorlage 2, ×2 ×0,8 (CSS) × --kb-lw */
-.aspekt-figur .aspekt-scene [id$="position_vector_y"] { stroke: var(--kb-ry); stroke-width: calc(3.2px * var(--kb-lw)); }
+/* ── Vektor-STRICHSTÄRKEN (kapitelweite Regel, s. --kb-vec-hw/--kb-vec-cw oben):
+   alle Hauptvektoren (r, v, a) gleich dick, Komponenten 0,8 der HV. Zentrale
+   Regel für JEDE Aspekt-Figur (Suffix-Selektor trifft prefix-te IDs); 1.42
+   überschreibt nur den Token --kb-vec-hw, nicht diese Regeln. Pfeilspitzen:
+   1.38 markerUnits=userSpaceOnUse (feste Geometrie, strichstärke­unabhängig),
+   1.39/1.41/1.42 markerUnits=strokeWidth (Spitze = 5×Strichstärke, mit­skalierend);
+   in BEIDEN Fällen hält die Motor-Kopplung ARROW_LEN=5·strokeWidth (via
+   arrowLenScale) die Spitze exakt aufs Ziel — die Strichstärke ist also frei
+   per CSS, eine Änderung verschiebt die Spitze NICHT. */
+.aspekt-figur .aspekt-scene [id$="position_vector"],
+.aspekt-figur .aspekt-scene [id$="velocity_vector"],
+.aspekt-figur .aspekt-scene [id$="acceleration_vector"]   { stroke-width: calc(var(--kb-vec-hw) * var(--kb-lw)); }
+.aspekt-figur .aspekt-scene [id$="position_vector_x"],
+.aspekt-figur .aspekt-scene [id$="position_vector_y"],
+.aspekt-figur .aspekt-scene [id$="velocity_vector_x"],
+.aspekt-figur .aspekt-scene [id$="velocity_vector_y"],
+.aspekt-figur .aspekt-scene [id$="acceleration_vector_x"],
+.aspekt-figur .aspekt-scene [id$="acceleration_vector_y"] { stroke-width: calc(var(--kb-vec-cw) * var(--kb-lw)); }
+/* Vektor-FARBEN (pro Figur; 1.42 überschreibt v/vx/vy in aspekt_vxvy_zeit.css). */
+.aspekt-figur .aspekt-scene [id$="position_vector"]   { stroke: var(--kb-r); }
+.aspekt-figur .aspekt-scene [id$="position_vector_x"] { stroke: var(--kb-rx); }
+.aspekt-figur .aspekt-scene [id$="position_vector_y"] { stroke: var(--kb-ry); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-r"]  polygon { fill: var(--kb-r); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-rx"] polygon { fill: var(--kb-rx); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-ry"] polygon { fill: var(--kb-ry); }

@@ -21,6 +21,12 @@
     --kb-vel: #0072b2;
     --kb-vx: #b8860b;
     --kb-vy: #c03030;
+    /* Vektor-Strichstärke: bewusst DÜNNER als 1.38/1.39/1.41 (2,5 px statt 4 px
+       -> 3,75 px statt 6 px nach --kb-lw). Diese Figur zeigt r UND v plus vier
+       Komponenten — dünnere Vektoren halten die Szene ruhig. Die 0,8-Regel
+       (Komponenten = 0,8 der HV) bleibt erhalten, sie steckt im shared Token
+       --kb-vec-cw (s. aspekt_kreisbahn.css); nur der HV-Wert wird hier override. */
+    --kb-vec-hw: 2.5px;
 }
 
 /* ── Mittel-Spalte: Szene oben, Diagramm unten (gestapelt) ───────────────────
@@ -98,20 +104,11 @@
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="arrowhead-vx"] polygon { fill: var(--kb-vx); }
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="arrowhead-vy"] polygon { fill: var(--kb-vy); }
 
-/* ── Vektor-Strichstärken ×1,5 (Nutzervorgabe „die Vektoren x1,5 dicker, Spitze
-   mit skalieren"). Sim-Basis (Haupt 2,5 px / Neben 2 px) × --kb-lw (=1,5) =
-   3,75 px / 3 px. r und v auf GLEICHE Strichstärke geführt, weil die Pfeilspitzen
-   markerUnits=strokeWidth nutzen (Spitze = 5×Strichstärke) und der Motor pro
-   Haupt-/Neben-Vektor nur einen Verkürzungs­wert kennt (arrowLenScale 1,5) —
-   bei ungleicher Strichstärke landete eine Spitze daneben. Überschreibt die
-   shared aspekt_kreisbahn.css (dort r = calc(4px×--kb-lw) = 6 px, hier 3,75 px).
-   Farbe bleibt von dort (--kb-r/-rx/-ry) bzw. oben (--kb-vel/-vx/-vy). ──────── */
-.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="position_vector"]    { stroke-width: calc(2.5px * var(--kb-lw)); }
-.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="position_vector_x"],
-.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="position_vector_y"],
-.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="velocity_vector_x"],
-.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="velocity_vector_y"]  { stroke-width: calc(2px * var(--kb-lw)); }
-.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="velocity_vector"]   { stroke-width: calc(2.5px * var(--kb-lw)); }
+/* ── Vektor-STRICHSTÄRKEN liegen zentral in aspekt_kreisbahn.css (Regel: alle
+   Hauptvektoren gleich dick, Komponenten 0,8 der HV via --kb-vec-hw/−cw). Diese
+   Figur überschreibt nur den HV-Token --kb-vec-hw auf 2,5 px (s. Figuren-Block
+   oben) — die shared Regeln greifen, Komponenten folgen automatisch zu 0,8·2,5
+   = 2 px. Farben s. unten. */
 
 /* ── Legende: Swatch-Farben für Geschwindigkeitsvektor + Komponenten + Bogen. */
 .aspekt-figur[data-aspekt="vxvy-zeit"] .legend-swatch[data-c="v"]    { background: var(--kb-vel); }
