@@ -155,6 +155,14 @@
     display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 12px;
 }
 .aspekt-figur .slider-row:last-child { margin-bottom: 0; }
+/* Checkbox-Zeile (z. B. „Letzte Kurve behalten" — Vergleichslinie in 1.39/1.41).
+   Bedien-Element -> Schrift bewusst OHNE --kb-fs (nicht Teil der ×1,5-Skalierung). */
+.aspekt-figur .aspekt-check {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    font-size: calc(12px * var(--kb-text-scale)); color: var(--kb-text2);
+    -webkit-user-select: none; user-select: none;
+}
+.aspekt-figur .aspekt-check input { width: 16px; height: 16px; margin: 0; accent-color: var(--kb-accent); cursor: pointer; }
 .aspekt-figur .slider-val {
     font-family: var(--kb-font-mono); font-size: calc(11.5px * var(--kb-text-scale)); color: var(--kb-accent);
     text-align: right; min-width: 52px;

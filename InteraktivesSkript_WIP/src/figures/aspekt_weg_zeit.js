@@ -51,7 +51,7 @@ import { setupScene, updateScene, updateGraph, updateGraphHover,
 import { R_MIN, R_MAX } from './kreisbewegung/constants.js';
 import { createRuntime } from './kreisbewegung/runtime.js';
 import { attachGraphHover } from './kreisbewegung/lib/hover.js';
-import { resetOnPlayAfterAutoStop } from './playback.js';
+import { resetOnPlayAfterAutoStop, isAtAutoStopEnd } from './playback.js';
 import { ge } from '../core.js';
 
 const T_AUTO = 12;            // fester Auto-Stopp nach 12 s — bei Vorgabe T=4 s
@@ -114,6 +114,7 @@ const SVG_GRAPH = `
   </defs>
   <g id="kb_graph_group_single" transform="translate(0,0)">
     <g id="kb_grid_group"></g>
+    <polyline id="kb_graph_prev_line" fill="none" stroke-width="2" points="" visibility="hidden"/>
     <polyline id="kb_graph_line" fill="none" stroke-width="2" points=""/>
     <circle id="kb_graph_point" r="4" visibility="hidden"/>
     <text id="kb_graph_title" x="350" y="18" text-anchor="middle" class="graph-title-text"></text>
@@ -127,6 +128,7 @@ const SVG_GRAPH = `
   </g>
   <g id="kb_graph_group_stacked_top" transform="translate(0,0)" style="visibility:hidden">
     <g id="kb_grid_group_top"></g>
+    <polyline id="kb_graph_prev_line_top" fill="none" stroke-width="2" points="" visibility="hidden"/>
     <polyline id="kb_graph_line_top" fill="none" stroke-width="2" points=""/>
     <circle id="kb_graph_point_top" r="3" visibility="hidden"/>
     <text id="kb_graph_title_top" x="350" y="14" text-anchor="middle" class="graph-title-text small"></text>
@@ -140,6 +142,7 @@ const SVG_GRAPH = `
   </g>
   <g id="kb_graph_group_stacked_bottom" transform="translate(0,210)" style="visibility:hidden">
     <g id="kb_grid_group_bottom"></g>
+    <polyline id="kb_graph_prev_line_bottom" fill="none" stroke-width="2" points="" visibility="hidden"/>
     <polyline id="kb_graph_line_bottom" fill="none" stroke-width="2" points=""/>
     <circle id="kb_graph_point_bottom" r="3" visibility="hidden"/>
     <text id="kb_graph_title_bottom" x="350" y="14" text-anchor="middle" class="graph-title-text small"></text>
@@ -191,6 +194,10 @@ const PANEL_LEFT = `
       <div class="legend-swatch" data-c="ry"></div>  <div class="legend-label">Komponente \\(r_y = y(t)\\)</div>
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
+  </div>
+  <div class="panel-section">
+    <div class="panel-label">Vergleich</div>
+    <label class="aspekt-check"><input type="checkbox" id="ak_keep"><span>Letzte Kurve behalten</span></label>
   </div>
 </div>`;
 
@@ -300,10 +307,33 @@ export function buildWegZeitFig(fig) {
 
     // Per-Instanz-Regler + Zustand (Closure, nicht Modul-Ebene).
     const ak_t = ge(p + 'ak_t'), ak_r = ge(p + 'ak_r'), ak_T = ge(p + 'ak_T');
+    const ak_keep = ge(p + 'ak_keep');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let sceneCenters = null;
     let curT = T_AUTO;                    // Initial: volle 12 s (Vorgabe T=4 s -> 3 Perioden)
     let speedFactor = 1.0;
+    let keepPrev = false;                 // Vergleichslinie: letzte Kurve bei Neudurchlauf behalten
+
+    // -- Vergleichslinie (Ghost): die gerade fertigen x(t)/y(t)-Kurven beim Start
+    //    eines Neudurchlaufs einfrieren (gestrichelt + dünner, s. aspekt_weg_zeit.
+    //    css) und über dem neuen Durchlauf stehen lassen. Nur die jeweils letzte
+    //    Kurve (keine Ansammlung). Weg-Zeit läuft gestapelt -> top + bottom; der
+    //    Einzel-Slot wird mitgeführt, falls isStacked mal aus ist.
+    const prevLines = ['graph_prev_line', 'graph_prev_line_top', 'graph_prev_line_bottom']
+        .map(id => ge(p + id));
+    function snapshotPrev() {
+        const cur = ['graph_line', 'graph_line_top', 'graph_line_bottom'];
+        prevLines.forEach((pl, i) => {
+            if (!pl) return;
+            const c = ge(p + cur[i]);
+            const pts = c && c.getAttribute('points') || '';
+            pl.setAttribute('points', pts);
+            pl.setAttribute('visibility', pts ? 'visible' : 'hidden');
+        });
+    }
+    function clearPrev() {
+        prevLines.forEach(pl => { if (pl) { pl.setAttribute('points', ''); pl.setAttribute('visibility', 'hidden'); } });
+    }
 
     // -- Eigene Achsen (Pfeil in positive, Fortsetzung in negative Richtung) -----
     function drawAxes() {
@@ -448,6 +478,9 @@ export function buildWegZeitFig(fig) {
     }
     function start() {
       if (playing) return;
+      // Vergleichslinie: am Ende angelangt -> die gerade fertigen Kurven vor
+      // dem Reset als Ghost einfrieren (nur bei echtem Neudurchlauf).
+      if (keepPrev && isAtAutoStopEnd(curT, T_AUTO)) snapshotPrev();
       // Einheitliches Auto-Stopp-Verhalten: Play nach Ende startet neu.
       resetOnPlayAfterAutoStop(curT, T_AUTO, reset);
       playing = true;
@@ -478,6 +511,11 @@ export function buildWegZeitFig(fig) {
         speedRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
     }));
     speedRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
+
+    if (ak_keep) ak_keep.addEventListener('change', () => {
+        keepPrev = ak_keep.checked;
+        if (!keepPrev) clearPrev();
+    });
 
     [ak_t, ak_r, ak_T].forEach(inp => inp.addEventListener('input', onInput));
     rebuild();

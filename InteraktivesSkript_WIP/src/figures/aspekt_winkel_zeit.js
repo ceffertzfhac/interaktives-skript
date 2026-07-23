@@ -60,7 +60,7 @@ import { recomputeDerived, position, velocity, acceleration,
 import { setupScene, updateScene, updateGraph, updateGraphHover } from './kreisbewegung/render.js';
 import { createRuntime } from './kreisbewegung/runtime.js';
 import { attachGraphHover } from './kreisbewegung/lib/hover.js';
-import { resetOnPlayAfterAutoStop } from './playback.js';
+import { resetOnPlayAfterAutoStop, isAtAutoStopEnd } from './playback.js';
 import { ge } from '../core.js';
 
 const T_AUTO = 12;            // fester Auto-Stopp nach 12 s — bei Vorgabe T=4 s
@@ -124,6 +124,7 @@ const SVG_GRAPH = `
   </defs>
   <g id="kb_graph_group_single" transform="translate(0,0)">
     <g id="kb_grid_group"></g>
+    <polyline id="kb_graph_prev_line" fill="none" stroke-width="2" points="" visibility="hidden"/>
     <polyline id="kb_graph_line" fill="none" stroke-width="2" points=""/>
     <circle id="kb_graph_point" r="4" visibility="hidden"/>
     <text id="kb_graph_title" x="350" y="18" text-anchor="middle" class="graph-title-text"></text>
@@ -196,6 +197,10 @@ const PANEL_LEFT = `
       <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\varphi\\)</div>
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
+  </div>
+  <div class="panel-section">
+    <div class="panel-label">Vergleich</div>
+    <label class="aspekt-check"><input type="checkbox" id="ak_keep"><span>Letzte Kurve behalten</span></label>
   </div>
 </div>`;
 
@@ -305,10 +310,30 @@ export function buildWinkelZeitFig(fig) {
 
     // Per-Instanz-Regler + Zustand (Closure, nicht Modul-Ebene).
     const ak_t = ge(p + 'ak_t'), ak_T = ge(p + 'ak_T');
+    const ak_keep = ge(p + 'ak_keep');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let sceneCenters = null;
     let curT = T_AUTO;                    // Initial: volle 12 s (Vorgabe T=4 s -> 3 Perioden)
     let speedFactor = 1.0;
+    let keepPrev = false;                 // Vergleichslinie: letzte Kurve bei Neudurchlauf behalten
+
+    // -- Vergleichslinie (Ghost): die gerade fertige φ(t)-Kurve beim Start eines
+    //    Neudurchlaufs einfrieren (gestrichelt + dünner, s. aspekt_winkel_zeit.css)
+    //    und über dem neuen Durchlauf stehen lassen. Nur die jeweils letzte Kurve
+    //    (keine Ansammlung). Ein-/Ausblenden ausschließlich hier (kein Motor-Bsp.).
+    const prevLine = ge(p + 'graph_prev_line');
+    function snapshotPrev() {
+        if (!prevLine) return;
+        const cur = ge(p + 'graph_line');
+        const pts = cur && cur.getAttribute('points') || '';
+        prevLine.setAttribute('points', pts);
+        prevLine.setAttribute('visibility', pts ? 'visible' : 'hidden');
+    }
+    function clearPrev() {
+        if (!prevLine) return;
+        prevLine.setAttribute('points', '');
+        prevLine.setAttribute('visibility', 'hidden');
+    }
 
     // -- Eigene Achsen (Pfeil in positive, Fortsetzung in negative Richtung) -----
     function drawAxes() {
@@ -505,6 +530,10 @@ export function buildWinkelZeitFig(fig) {
     }
     function start() {
       if (playing) return;
+      // Vergleichslinie: am Ende angelangt -> die gerade fertige Kurve vor dem
+      // Reset als Ghost einfrieren (nur bei echtem Neudurchlauf, nicht beim
+      // Weiterlaufen aus der Mitte heraus).
+      if (keepPrev && isAtAutoStopEnd(curT, T_AUTO)) snapshotPrev();
       // Einheitliches Auto-Stopp-Verhalten: Play nach Ende startet neu.
       resetOnPlayAfterAutoStop(curT, T_AUTO, reset);
       playing = true;
@@ -535,6 +564,11 @@ export function buildWinkelZeitFig(fig) {
         speedRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
     }));
     speedRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
+
+    if (ak_keep) ak_keep.addEventListener('change', () => {
+        keepPrev = ak_keep.checked;
+        if (!keepPrev) clearPrev();
+    });
 
     [ak_t, ak_T].forEach(inp => inp.addEventListener('input', onInput));
     rebuild();

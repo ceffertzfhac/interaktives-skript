@@ -62,6 +62,21 @@
 .aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_line"]        { stroke: var(--kb-accent); }
 .aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_point"]       { fill: var(--kb-accent); }
 
+/* ── Vergleichslinie (vorheriger Durchlauf): gestrichelt + dünner als die
+   aktuelle Kurve, gleiche Farbe wie deren Komponente (x(t)=rx, y(t)=ry,
+   Einzel=akzent). Eingeblendet vom JS, sobald ein Neudurchlauf startet
+   (Feature-Vorgabe: letzte Kurve zum Vergleichen stehen lassen). ──────────── */
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_prev_line_top"]    { stroke: var(--kb-rx); }
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_prev_line_bottom"] { stroke: var(--kb-ry); }
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_prev_line"]        { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_prev_line"],
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_prev_line_top"],
+.aspekt-figur[data-aspekt="weg-zeit"] [id$="graph_prev_line_bottom"] {
+    fill: none; stroke-opacity: .5;
+    stroke-width: calc(1.5px * var(--kb-lw, 1)); stroke-dasharray: 6,4;
+    pointer-events: none;
+}
+
 /* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme, ca. 60 %) ─────────── */
 .aspekt-figur[data-aspekt="weg-zeit"] .aspekt-btn-row {
     display: flex; gap: 6px;
