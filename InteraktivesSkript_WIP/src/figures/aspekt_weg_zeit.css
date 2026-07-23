@@ -127,7 +127,6 @@
 /* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
    Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
    aspekt_kreisbahn.css. ─────────────────────────────────────────────────── */
-.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: row; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: column; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content { flex-direction: row; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
