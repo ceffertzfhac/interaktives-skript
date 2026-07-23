@@ -321,22 +321,49 @@ export function buildWinkelZeitFig(fig) {
     let speedFactor = 1.0;
     let keepPrev = false;                 // Vergleichslinie: letzte Kurve bei Neudurchlauf behalten
 
-    // -- Vergleichslinie (Ghost): die gerade fertige φ(t)-Kurve beim Start eines
-    //    Neudurchlaufs einfrieren (gestrichelt + dünner, s. aspekt_winkel_zeit.css)
-    //    und über dem neuen Durchlauf stehen lassen. Nur die jeweils letzte Kurve
-    //    (keine Ansammlung). Ein-/Ausblenden ausschließlich hier (kein Motor-Bsp.).
+    // -- Vergleichslinie (Ghost): die φ(t)-Kurve des letzten Parametersatzes
+    //    einfrieren (gestrichelt + dünner, s. aspekt_winkel_zeit.css) und über
+    //    dem neuen Durchlauf stehen lassen. Nur die jeweils letzte Kurve (keine
+    //    Ansammlung). Ein-/Ausblenden ausschließlich hier (kein Motor-Bsp.).
+    //
+    //    Gespeichert werden DATEN (t/φ), nicht Pixel: die y-Achse skaliert mit T
+    //    (φ_max = 360°·12 s/T, also 540° bei T=8 s gegen 2160° bei T=2 s). Eine in
+    //    Pixeln eingefrorene Polyline würde beim nächsten Parameterwechsel
+    //    stehenbleiben, während die Achse unter ihr wegskaliert — die Geisterlinie
+    //    schien sich dann "mitzuändern". Deshalb wird sie bei jedem Zeichnen aus
+    //    den Rohdaten neu auf die AKTUELLE Achse projiziert.
     const prevLine = ge(p + 'graph_prev_line');
-    function snapshotPrev() {
-        if (!prevLine) return;
-        const cur = ge(p + 'graph_line');
-        const pts = cur && cur.getAttribute('points') || '';
-        prevLine.setAttribute('points', pts);
-        prevLine.setAttribute('visibility', pts ? 'visible' : 'hidden');
+    let prevSeries = null;                // {t:[…], phi:[…]} — komplette Kurve
+    function snapshotPrev() {             // inside withStore aufrufen
+        prevSeries = store.tData.length
+            ? { t: store.tData.slice(), phi: store.phitData.slice() }
+            : null;
     }
     function clearPrev() {
+        prevSeries = null;
         if (!prevLine) return;
         prevLine.setAttribute('points', '');
         prevLine.setAttribute('visibility', 'hidden');
+    }
+    // Geisterkurve auf die aktuelle Achsenskalierung projizieren. store.graphScale
+    // .single liefert Plot-Rechteck + Wertebereich genau so, wie drawGraphSlot()
+    // die laufende Kurve zeichnet (Single-Layout, isStacked = false).
+    function renderPrev() {
+        if (!prevLine) return;
+        const gs = store.graphScale.single;
+        if (!prevSeries || !gs) { prevLine.setAttribute('visibility', 'hidden'); return; }
+        const { plotL, plotT, plotW, plotH, xMin, xMax, yMin, yMax } = gs;
+        const xR = (xMax - xMin) || 1, yR = (yMax - yMin) || 1;
+        let pts = '';
+        for (let i = 0; i < prevSeries.t.length; i++) {
+            const t = prevSeries.t[i];
+            if (t < xMin || t > xMax) continue;
+            const px = plotL + ((t - xMin) / xR) * plotW;
+            const py = plotT + plotH - ((prevSeries.phi[i] - yMin) / yR) * plotH;
+            pts += `${px.toFixed(1)},${py.toFixed(1)} `;
+        }
+        prevLine.setAttribute('points', pts);
+        prevLine.setAttribute('visibility', pts ? 'visible' : 'hidden');
     }
 
     // -- Eigene Achsen (Pfeil in positive, Fortsetzung in negative Richtung) -----
@@ -480,6 +507,14 @@ export function buildWinkelZeitFig(fig) {
         if (store.R <= 0) { recalculateAxisLimits(); return; }
         extendMotionData(duration);
         recalculateAxisLimits();
+        // Geisterkurve mit in die y-Achse einrechnen: sonst läuft die alte Kurve
+        // (kleineres T -> größeres φ_max) oben aus dem Diagramm heraus und der
+        // Vergleich bricht ab.
+        if (prevSeries && prevSeries.phi.length) {
+            const lim = store.axisLimits.phit;
+            const need = Math.max(...prevSeries.phi) * 1.1;
+            if (lim && need > lim.yMax) lim.yMax = need;
+        }
     }
 
     // -- Zeichnen an der aktuellen Zeit (kein Rebuild der Daten). ---------------
@@ -487,6 +522,7 @@ export function buildWinkelZeitFig(fig) {
         curT = t;
         updateScene(t, position(t), velocity(t), acceleration(t), sceneCenters);
         updateGraph(t);
+        renderPrev();   // nach updateGraph: store.graphScale.single ist dann aktuell
         drawAngle((store.omega * t) * 180 / Math.PI);
     }
 
@@ -508,8 +544,19 @@ export function buildWinkelZeitFig(fig) {
 
     // -- Rebuild: T geaendert -> Flags + Parameter, Datenreihe neu, Szene neu
     //    skalieren. Alle Motor-Aufrufe inside withStore (Singleton = diese Instanz).
-    function rebuild() {
+    //    `paramChange` = der Aufruf kommt von einem Regler, der die KURVENFORM
+    //    ändert (hier T): dann wird die eben gezeigte Kurve — falls "Letzte Kurve
+    //    behalten" aktiv ist — als Geisterkurve eingefroren und die Laufzeit t
+    //    springt auf 0 zurück, damit der neue Verlauf von vorn über dem alten
+    //    entsteht und wirklich vergleichbar ist (wie in den Stand-alone-Sims,
+    //    z. B. schiefer Wurf).
+    function rebuild(paramChange = false) {
         rt.withStore(() => {
+            if (paramChange) {
+                if (keepPrev) snapshotPrev();   // ALTE Daten einfrieren, vor dem Neurechnen
+                stop();
+                curT = 0;
+            }
             Object.assign(store, {
                 isStacked: false, graphType1: 'phit',
                 showPositionVector: true, showPositionComponents: false, showTrajectory: true,
@@ -543,7 +590,7 @@ export function buildWinkelZeitFig(fig) {
             const T = parseFloat(ak_T.value);
             rt.withStore(() => { draw(t); updateLabels(t, T); });
         } else {
-            rebuild();
+            rebuild(true);
         }
     }
 
@@ -575,7 +622,8 @@ export function buildWinkelZeitFig(fig) {
       // Vergleichslinie: am Ende angelangt -> die gerade fertige Kurve vor dem
       // Reset als Ghost einfrieren (nur bei echtem Neudurchlauf, nicht beim
       // Weiterlaufen aus der Mitte heraus).
-      if (keepPrev && isAtAutoStopEnd(curT, T_AUTO)) snapshotPrev();
+      // snapshotPrev() liest store -> muss auf DIESER Instanz laufen.
+      if (keepPrev && isAtAutoStopEnd(curT, T_AUTO)) rt.withStore(snapshotPrev);
       // Einheitliches Auto-Stopp-Verhalten: Play nach Ende startet neu.
       resetOnPlayAfterAutoStop(curT, T_AUTO, reset);
       playing = true;
