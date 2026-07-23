@@ -1,0 +1,62 @@
+name: GitHub Pages
+
+# Veroeffentlicht InteraktivesSkript_WIP/ als statische Site.
+#
+# Warum ueber Actions und nicht ueber "Deploy from a branch": Pages kann aus
+# einem Branch nur das Wurzelverzeichnis oder /docs ausliefern — die Site liegt
+# hier aber in einem Unterordner. Der Artefakt-Upload nimmt beliebige Pfade, es
+# muss also nichts umsortiert oder dupliziert werden.
+#
+# Gebaut wird NICHTS (bewusst kein Build-System, s. CLAUDE.md): der Ordner wird
+# unveraendert hochgeladen. Chapter-Fragmente werden zur Laufzeit per fetch()
+# nachgeladen, was ueber https funktioniert.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'InteraktivesSkript_WIP/**'
+      - '.github/workflows/pages.yml'
+  # Manuell aus einem beliebigen Branch veroeffentlichen (Actions -> GitHub Pages
+  # -> Run workflow), solange diese Datei auf dem Branch existiert.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Laufende Veroeffentlichungen nicht abbrechen, aber auch nicht parallel starten.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Pages konfigurieren
+        uses: actions/configure-pages@v5
+
+      # Archiv/ ist ein historischer Schnappschuss derselben Site (nicht verlinkt,
+      # nicht aktiv). Mitveroeffentlicht waere er unter eigenen URLs erreichbar
+      # und indexierbar -- deshalb vorher aussortieren.
+      - name: Site zusammenstellen (ohne Archiv/)
+        run: |
+          mkdir -p _site
+          rsync -a --exclude='Archiv/' InteraktivesSkript_WIP/ _site/
+
+      - name: Site als Artefakt hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Veroeffentlichen
+        id: deployment
+        uses: actions/deploy-pages@v4
