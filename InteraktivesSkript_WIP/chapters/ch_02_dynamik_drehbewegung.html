@@ -107,6 +107,7 @@
 
     \begin{equation}
     \vec{L} = \vec{r} \times m \vec{v}.
+    \label{eq_drehimpuls_massenpunkt}
     \end{equation}
 
     <p>Die Einheit des Drehimpulses ist \(\left[ \vec{L} \right] = \mathrm{kg\,m^2/s}\).</p>
@@ -128,41 +129,201 @@
 <h3 class="inhaltsverzeichnis">1.5.4 (Massen-)Trägheitsmoment</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.4 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
-    </div>
+    <h4>Das Massenträgheitsmoment eines Massenpunktes</h4>
+
+    <p>Im vorangegangenen Abschnitt hatten wir den Drehimpuls für einen einzelnen Massenpunkt definiert. Wie sieht es aber bei einem starren Körper aus, der aus vielen Massenpunkten besteht? Um diesen Drehimpuls zu berechnen, führen wir eine neue Größe ein, das <strong>Massenträgheitsmoment</strong> \(J\).</p>
+
+    <p>Das Massenträgheitsmoment ist die Proportionalitätskonstante zwischen Drehimpuls und Winkelgeschwindigkeit:</p>
+
+    \begin{equation}
+    \vec{L} = J \vec{\omega},
+    \label{eq_drehimpuls_mit_traegheitsmoment}
+    \end{equation}
+
+    <p>analog zur Masse beim Impuls des Massenpunktes. Vergleicht man nun Formel <a class="xref" data-ref-eq="eq_drehimpuls_mit_traegheitsmoment"></a> mit Formel <a class="xref" data-ref-eq="eq_drehimpuls_massenpunkt"></a>, so sieht man, dass das Massenträgheitsmoment für einen einzelnen Massenpunkt gegeben ist durch</p>
+
+    \begin{equation}
+    J = m r^2.
+    \end{equation}
+
+    <h4>Das Massenträgheitsmoment eines starren Körpers</h4>
+
+    <p>Ein starrer Körper besteht jedoch nicht aus einem Massenpunkt, sondern aus vielen.</p>
+
+    <p>Betrachten wir den \(i\)-ten Elementarwürfel des starren Körpers. Dieser Elementarwürfel hat die Masse \(\mathrm{d} m_i\) und befindet sich im Abstand \(R_i\) von der Rotationsachse. Dreht sich der \(i\)-te Elementarwürfel des starren Körpers mit der Winkelgeschwindigkeit \(\vec{\omega}\) um die Rotationsachse, so hat dieser Elementarwürfel einen Drehimpuls</p>
+
+    \begin{equation}
+    \vec{L}_i = \mathrm{d} m_i R_i^2 \vec{\omega_i}
+    \end{equation}
+
+    <p>Da wir aber festgestellt hatten, dass alle Elementarwürfel eines starren Körpers mit derselben Winkelgeschwindigkeit rotieren, also \(\vec{\omega}_i = \vec{\omega}\) für alle \(i\), können wir auf den Index \(i\) verzichten und schreiben</p>
+
+    \begin{equation}
+    \vec{L}_i = \mathrm{d} m_i R_i^2 \vec{\omega}.
+    \end{equation}
+
+    <figure class="abbildung" id="fig-skript-dreh-starrerk-rot">
+        <img class="grafik" style="width:70%" src="bilder/skript_dreh_starrerk_rot.png" alt="">
+        <figcaption>Rotiert ein starrer Körper um eine beliebige Drehachse, so rotieren alle Elementarwürfel des Körpers mit derselben Winkelgeschwindigkeit \(\vec{\omega}\) um diese Achse. Die Bahngeschwindigkeit der Elementarwürfel hängt dabei vom Abstand \(R_i\) des jeweiligen Elementarwürfels zur Rotationsachse ab, es gilt \(v_i = \omega R_i\). Somit ist die Bahngeschwindigkeit von Elementarwürfeln, die sich genau auf der Rotationsachse befinden, gleich null, während die Bahngeschwindigkeit der Elementarwürfel mit zunehmendem Abstand zur Rotationsachse immer größer wird. Den Drehimpuls jedes Elementarwürfels kann mit der Formel für den Drehimpuls eines Massenpunktes berechnet werden.</figcaption>
+    </figure>
+
+    <p>Den gesamten Drehimpuls des starren Körpers erhalten wir durch die Summe der Drehimpulse aller Elementarwürfel:</p>
+
+    \begin{equation}
+    \vec{L} = \sum_{i=1}^n \vec{L}_i = \sum_{i=1}^n \mathrm{d} m_i R_i^2 \vec{\omega} = \left( \sum_{i=1}^n \mathrm{d} m_i R_i^2 \right) \vec{\omega}.
+    \end{equation}
+
+    <p>Vergleichen wir diese Formel mit Formel <a class="xref" data-ref-eq="eq_drehimpuls_mit_traegheitsmoment"></a>, so sehen wir, dass das Massenträgheitsmoment des starren Körpers gegeben ist durch</p>
+
+    \begin{equation}
+    J = \sum_{i=1}^n \mathrm{d} m_i R_i^2.
+    \end{equation}
+
+    <p>Im Grenzfall, wenn die Elementarwürfel unendlich klein werden, wird aus der Summe wieder ein Volumenintegral:</p>
+
+    \begin{equation}
+    J = \int R^2 \, \mathrm{d} m = \int R^2 \rho(\vec{r}) \, \mathrm{d} V.
+    \end{equation}
+
+    <p>Dieses Volumenintegral für das Massenträgheitsmoment eines starren Körpers ist in der Praxis oft schwierig zu berechnen – zumindest für komplizierte Körper und mit den mathematischen Methoden, die Ihnen im ersten Studiensemester zur Verfügung stehen. Für viele einfache Körper, wie z.B. Kugeln, Zylinder, Ringe, Stäbe usw. sind die Formeln für das Massenträgheitsmoment jedoch in der Literatur tabelliert. In Tabelle 1.2 sind einige dieser Formeln aufgelistet.</p>
+
+    <table>
+        <caption>Tabelle 1.2: Massenträgheitsmomente für Kugeln und Zylinder um die Symmetrieachse, mit dem Außenradius \(R_a\), dem Innenradius \(R_i\) und der Masse \(m\). Beachten Sie: während für den Zylinder die Spezialfälle des Vollzylinders (\(R_i = 0\)) und des dünnwandigen Hohlzylinders (\(R_i \approx R_a\)) leicht errechnet werden können, muss man im Falle der Kugel für die Ermittlung des Massenträgheitsmoments auch im Spezialfall der dünnwandigen Hohlkugel (\(R_i \approx R_a\)) z.B. den Satz von l'Hospital anwenden, um die Formel herzuleiten.</caption>
+        <thead>
+            <tr><th>Körper</th><th>Art</th><th>Massenträgheitsmoment</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Massenpunkt</strong></td><td></td><td>\(J = m R^2\)</td></tr>
+            <tr><td rowspan="3"><strong>Kugel</strong></td><td>Vollkugel</td><td>\(J = \frac{2}{5} m R_a^2\)</td></tr>
+            <tr><td>Dünnwandige Hohlkugel</td><td>\(J = \frac{2}{3} m R_a^2\)</td></tr>
+            <tr><td>Hohlkugel (allgemein)</td><td>\(J = \frac{2}{5} m \frac{R_a^5 - R_i^5}{R_a^3 - R_i^3}\)</td></tr>
+            <tr><td rowspan="3"><strong>Zylinder</strong></td><td>Vollzylinder</td><td>\(J = \frac{1}{2} m R_a^2\)</td></tr>
+            <tr><td>Dünnwandiger Hohlzylinder</td><td>\(J = m R_a^2\)</td></tr>
+            <tr><td>Hohlzylinder (allgemein)</td><td>\(J = \frac{1}{2} m (R_a^2 + R_i^2)\)</td></tr>
+            <tr><td rowspan="2"><strong>Stab</strong></td><td>Homogener Stab (um Mitte)</td><td>\(J = \frac{1}{12} m L^2\)</td></tr>
+            <tr><td>Homogener Stab (um Ende)</td><td>\(J = \frac{1}{3} m L^2\)</td></tr>
+        </tbody>
+    </table>
+
+    <p>Auch ohne detailierte Berechnung erkennt man: Je größer der Anteil der Masse ist, der sich weit von der Rotationsachse entfernt befindet, desto größer ist das Massenträgheitsmoment. Das Massenträgheitsmoment hängt also nicht nur von der Gesamtmasse des Körpers ab, sondern auch davon, wie diese Masse im Raum verteilt ist.</p>
+
+    <p>Die in Tabelle 1.2 angegebenen Formeln für das Massenträgheitsmoment gelten immer für eine Rotation um die Symmetrieachse des Körpers.</p>
+
+    <figure class="abbildung" id="fig-skript-dreh-traegheitsmoment-vgl">
+        <div class="abbildung-sub-imgs">
+            <div class="subfig" style="width:49%">
+                <img class="grafik" style="width:70%" src="bilder/skript_dreh_traegheitsmoment_zylinder.png" alt="">
+                <div class="subcap">(a) Zylinder</div>
+            </div>
+            <div class="subfig" style="width:49%">
+                <img class="grafik" style="width:55%" src="bilder/skript_dreh_traegheitsmoment_kugel.png" alt="">
+                <div class="subcap">(b) Kugel</div>
+            </div>
+        </div>
+        <figcaption>Das Massenträgheitsmoment eines starren Körpers hängt nicht nur von der Gesamtmasse des Körpers ab, sondern auch davon, wie diese Masse im Raum verteilt ist. Das Massenträgheitsmoment \(J\) eines (Hohl-)zylinders bei der Rotation um seine Symmetrieachse hängt von der Masse \(m\) des Zylinders sowie dem Innen- und Außenradius \(R_i\) und \(R_a\) ab. Die Seitenlänge \(l\) des Zylinders hat keinen Einfluss auf das Massenträgheitsmoment, da sich bei der Rotation um die Symmetrieachse alle Massenpunkte des Zylinders im selben Abstand zur Rotationsachse befinden. Das Massenträgheitsmoment \(J\) einer (Hohl-)kugel bei der Rotation um ihre Symmetrieachse hängt von der Masse \(m\) der Kugel sowie dem Innen- und Außenradius \(R_i\) und \(R_a\) ab. Die Masse, die sich weiter außen befindet, trägt stärker zum Massenträgheitsmoment bei als die Masse, die sich weiter innen befindet.</figcaption>
+    </figure>
+
+    <p>Rotiert das Objekt um einen Punkt, der weiter außerhalb des Körpers liegt, ist also die Ausdehnung des Körpers sehr viel kleiner als der Abstand zwischen Rotationsachse und Körper, so kann das Massenträgheitsmoment näherungsweise als</p>
+
+    \begin{equation}
+    J = m R^2
+    \end{equation}
+
+    <p>angenommen werden, wobei \(R\) der Abstand zwischen Rotationsachse und Schwerpunkt des Körpers ist. Der Körper verhält sich also wieder wie ein Massenpunkt.</p>
+
+    <h4>Der Satz von Steiner</h4>
+
+    <p>Was passiert allerdings, wenn der Körper um eine Achse rotiert, die weder durch den Schwerpunkt des Körpers geht, noch so weit außerhalb des Körpers liegt, dass der Körper als Massenpunkt betrachtet werden kann? In diesem Fall kann das Massenträgheitsmoment mit dem <strong>Satz von Steiner</strong> berechnet werden. Der Satz von Steiner besagt, dass das Massenträgheitsmoment \(J\) eines Körpers um eine Achse, die parallel zur Achse durch den Schwerpunkt des Körpers verläuft, gegeben ist durch</p>
+
+    \begin{equation}
+    J = J_\text{sym} + m d^2,
+    \end{equation}
+
+    <p>wobei \(J_\text{sym}\) das Massenträgheitsmoment des Körpers um die Achse durch den Schwerpunkt ist, \(m\) die Masse des Körpers und \(d\) der Abstand zwischen den beiden Achsen.</p>
+
+    <figure class="abbildung" id="fig-skript-dreh-starrerk-steiner">
+        <img class="grafik" style="width:50%" src="bilder/skript_dreh_starrerk_steiner.png" alt="">
+        <figcaption>Satz von Steiner: Für eine Achse, die parallel zur Schwerpunktachse (bei homogenen Körpern: Symmetrieachse) verläuft, gilt \(J = J_{\text{sym}} + m d^2\), wobei \(d\) der Abstand der beiden Achsen ist. Bei verschobener Achse ist \(J\) stets größer, da die Masse im Mittel weiter von der Rotationsachse entfernt liegt.</figcaption>
+    </figure>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.5 Drehmoment</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.5 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
-    </div>
+    <p>Im Kapitel zur Dynamik der Massenpunkte hatten wir die Kraft als Ursache für die Änderung der (Eigenschaft des Massenpunktes) Impulses kennengelernt. Analog dazu führen wir zur Beschreibung der Drehbewegung das <strong>Drehmoment</strong> \(\vec{M}\) ein.</p>
+
+    <figure class="abbildung" id="fig-skript-dreh-drehmom">
+        <img class="grafik" style="width:50%" src="bilder/skript_dreh_drehmom.png" alt="">
+        <figcaption>Durch einen starren Körper wird eine Achse geführt, so dass der Körper sich nur noch um diese Achse drehen kann. An einem Punkt eines starren Körpers, der durch den Ortsvektor \(\vec{r}\) vom Koordinatenursprung (der auf der Achse liegt) beschrieben wird, greift eine einzelne Kraft \(\vec{F}\) an. Die Kraft erzeugt ein Drehmoment \(\vec{M}\) auf den Körper, das durch das Kreuzprodukt aus Ortsvektor und Kraftvektor gegeben ist. Die Komponente des Drehmomentvektors, der parallel zur Rotationsachse steht, bewirkt eine Winkelbeschleunigung des Körpers um die Achse. Ist die Achse des Körpers nicht fixiert, so kann das Drehmoment auch eine Änderung der Richtung der Rotationsachse bewirken. Dieser Effekt ist als Präzession bekannt. Auf die Betrachtung dieses Effektes wird hier jedoch verzichtet. Wir gehen im folgenden davon aus, dass eine bestimmte Achse des Körpers festgelegt ist, um die sich der Körper drehen kann.</figcaption>
+    </figure>
+
+    <p>Wir überlegen uns folgendes: durch einen starren Körper wird eine (in unserer Vorstellung massenlose) Achse geführt, um die sich der Körper drehen kann. An einem Punkt des Körpers, der durch den Ortsvektor \(\vec{r}\) vom Koordinatenursprung (der auf der Achse liegt) beschrieben wird, greift nun eine einzelne Kraft \(\vec{F}\) an. Dann übt diese Kraft ein Drehmoment auf den Körper aus, das durch das Vektorprodukt aus Ortsvektor und Kraftvektor gegeben ist:</p>
+
+    \begin{equation}
+    \text{Drehmoment} = \text{Ortsvektor} \times \text{angreifende Kraft}.
+    \end{equation}
+
+    <p>Das Formelzeichen für das Drehmoment ist \(\vec{M}\), also</p>
+
+    \begin{equation}
+    \vec{M} = \vec{r} \times \vec{F}.
+    \end{equation}
+
+    <p>Die Einheit des Drehmoments ist \(\left[ \vec{M} \right] = \mathrm{\frac{kg\cdot m^2}{s^2}} = \mathrm{Nm}\).</p>
+
+    <p>Man sagt: die Kraft <em>erzeugt</em> ein Drehmoment. Aufgrund des Kreuzproduktes sieht man: auch das Drehmoment ist ein Vektor, der senkrecht auf der Ebene steht, die durch Ortsvektor und Kraftvektor aufgespannt wird. Die Richtung des Drehmoments wird durch die Rechte-Hand-Regel bestimmt. Der Betrag des Drehmoments ist gegeben durch</p>
+
+    \begin{equation}
+    M = r F \sin(\beta),
+    \label{eq_drehmoment_betrag}
+    \end{equation}
+
+    <p>wobei \(\beta\) der Winkel zwischen Ortsvektor und Kraftvektor ist. Das Drehmoment ist also umso größer, je größer der Abstand \(r\) zwischen Angriffspunkt der Kraft und Rotationsachse ist, je größer die Kraft \(F\) ist und je näher der Winkel \(\beta\) bei \(90^\circ\) liegt.</p>
+
+    <p>Bei der Betrachtung von Formel <a class="xref" data-ref-eq="eq_drehmoment_betrag"></a> erkennt man zwei wichtige Spezialfälle:</p>
+    <ul>
+        <li>Greift die Kraft parallel zum Ortsvektor an, also \(\beta = 0^\circ\) oder \(\beta = 180^\circ\), so ist das Drehmoment \(M=0\). Die Kraft kann in diesem Fall den Körper nicht drehen.</li>
+        <li>Greift die Kraft senkrecht zum Ortsvektor an, also \(\beta = 90^\circ\), so ist das Drehmoment \(M = r F\). Die Kraft bewirkt in diesem Fall das (bei diesem Abstand) größtmögliche Drehmoment.</li>
+    </ul>
+
+    <p>In der Schule haben Sie vielleicht gelernt, dass das Drehmoment als Produkt aus Kraft und Kraftarm berechnet wird. Unserer Definition folgend ist der Kraftarm der Abstand zwischen Rotationsachse und der <em>Lotrechten</em> auf die Wirkungslinie der Kraft. Der Kraftarm ist also der Abstand, den die Wirkungslinie der Kraft von der Rotationsachse entfernt ist.</p>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.6 Anwendung des Drehmoments – Wippe und Hebelgesetz</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.6 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
-    </div>
+    <p>Das Drehmoment ist eine sehr wichtige Größe in der Technik. Viele Werkzeuge und Maschinen funktionieren nur, weil sie ein Drehmoment erzeugen. Ein einfaches Beispiel ist eine Wippe. Eine Wippe besteht aus einem Balken, der auf einem Drehpunkt gelagert ist. Wird auf einen Punkt der Wippe eine Kraft ausgeübt, so erzeugt diese Kraft ein Drehmoment um den Drehpunkt. Dieses Drehmoment kann genutzt werden, um eine andere Kraft an einem anderen Punkt der Wippe auszuüben. Dabei gilt das <strong>Hebelgesetz</strong>: Sind auf beiden Seiten des Drehpunkts Kräfte \(F_1\) und \(F_2\) in Abständen \(r_1\) und \(r_2\) vom Drehpunkt angreifend, so sind die Drehmomente im Gleichgewicht, wenn</p>
+
+    \begin{equation}
+    \vec r_1 \times \vec F_1 = \vec r_2 \times \vec F_2.
+    \end{equation}
+
+    <p>Das Hebelgesetz kann z.B. genutzt werden, um mit einem kleinen Kraftaufwand eine große Kraft zu erzeugen. Dazu wird die kleine Kraft an einem Punkt mit großem Abstand zum Drehpunkt angreifend genutzt, um eine große Kraft an einem Punkt mit kleinem Abstand zum Drehpunkt zu erzeugen. Auch beim Autoreifenwechsel wird das Hebelgesetz genutzt: Mit einem langen Radkreuz (großer Abstand zum Drehpunkt) kann mit relativ wenig Kraftaufwand eine große Kraft auf die Radmuttern (kleiner Abstand zum Drehpunkt) ausgeübt werden. Auch eine Balkenwaage funktioniert nach dem Hebelgesetz.</p>
+
+    <p>In <strong>Getrieben</strong> wird das Drehmoment genutzt, um Übersetzungen zu realisieren. Durch die Kombination von Zahnrädern unterschiedlicher Größe kann ein Eingangsdrehmoment in ein größeres oder kleineres Ausgangsdrehmoment umgewandelt werden, wobei sich die Winkelgeschwindigkeiten entsprechend umgekehrt verhalten. So kann beispielsweise in einem Fahrradgetriebe mit geringer Kraft (und damit geringem Drehmoment) am Pedal über eine große Übersetzung (großes vorderes Zahnrad, kleines hinteres Zahnrad) eine hohe Drehzahl am Hinterrad erreicht werden, während bei einer „Bergübersetzung“ (kleines vorderes Zahnrad, großes hinteres Zahnrad) ein hohes Drehmoment am Hinterrad bei geringerer Drehzahl erzielt wird. Ähnliche Prinzipien finden sich in Autogetrieben, Windkraftanlagen oder Uhrwerken, wo Drehmomente und Drehzahlen gezielt angepasst werden.</p>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.7 Die Kippbedingung bei starren Körpern</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.7 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
-    </div>
+    <p>Ein starrer Körper, der auf einer Unterlage steht, kann kippen, wenn ein ausreichend großes Drehmoment auf ihn wirkt. Um die Kippbedingung zu verstehen, betrachten wir einen starren Körper, der auf einer ebenen Unterlage steht. Der Körper hat einen Schwerpunkt \(S\), der durch den Ortsvektor \(\vec{r}_S\) beschrieben wird. Die Gewichtskraft \(\vec{F}_G\) wirkt im Schwerpunkt des Körpers nach unten.</p>
+
+    <p>Entscheidend für die Kippbedingung ist die Lage des Schwerpunkts \(S\) relativ zur Aufstandsfläche des Körpers. Die Aufstandsfläche ist die Fläche, auf der der Körper mit der Unterlage in Kontakt stand, als er aufrecht (ohne zu kippen) stand. Aus der Aufstandsfläche und einem Vektor senkrecht zur Unterlage kann ein Volumen definiert werden, das den Bereich beschreibt, in dem der Schwerpunkt liegen muss, damit der Körper nicht kippt. Nennen wir dieses Volumen das Aufstandsvolumen.</p>
+
+    <p>Liegt der Schwerpunkt \(S\) innerhalb des Aufstandsvolumens, so liegt der Ortsvektor, der den Kipppunkt mit dem Schwerpunkt verbindet, auch innerhalb des Aufstandsvolumens. Das dann durch die Gewichtskraft erzeugte Drehmoment hat dann immer eine Komponente, die den Körper wieder in die aufrechte Position zurückdreht. Der Körper kippt also nicht um. Liegt der Schwerpunkt \(S\) jedoch außerhalb des Aufstandsvolumens, so liegt der Ortsvektor, der den Kipppunkt mit dem Schwerpunkt verbindet, zumindest teilweise außerhalb des Aufstandsvolumens. Das dann durch die Gewichtskraft erzeugte Drehmoment hat dann eine Komponente, die den Körper weiter umkippen lässt. Der Körper kippt also um.</p>
+
+    <figure class="abbildung" id="fig-skript-rotation-kippbedingung">
+        <div class="abbildung-sub-imgs">
+            <div class="subfig" style="width:49%">
+                <img class="grafik" style="width:98%" src="bilder/skript_rotation_kippbedingung_1.png" alt="">
+                <div class="subcap">(a) Stabiler Fall: Der Schwerpunkt \(S\) des Körpers liegt innerhalb des Aufstandsvolumens (rot transparent). Das durch die zum Ortsvektor \(\vec r\) senkrechte Komponente der Gewichtskraft \(\vec{F}_{G,\perp}\) erzeugte Drehmoment wirkt dem Kippen entgegen, der Körper bleibt aufrecht stehen.</div>
+            </div>
+            <div class="subfig" style="width:49%">
+                <img class="grafik" style="width:98%" src="bilder/skript_rotation_kippbedingung_2.png" alt="">
+                <div class="subcap">(b) Instabiler Fall: Der Schwerpunkt \(S\) des Körpers liegt außerhalb des Aufstandsvolumens (rot transparent). Das durch die zum Ortsvektor \(\vec r\) senkrechte Komponente der Gewichtskraft \(\vec{F}_{G,\perp}\) erzeugte Drehmoment wirkt dem Kippen förderlich, der Körper kippt um.</div>
+            </div>
+        </div>
+    </figure>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.8 Zusammenhang zwischen Drehmoment und Drehimpuls</h3>
