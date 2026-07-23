@@ -381,6 +381,14 @@ export function buildWinkelZeitFig(fig) {
     //    withStore. Der kumulierte φ(t)-Verlauf bleibt dem Diagramm vorbehalten;
     //    die Szene zeigt pro Umdrehung die aktuelle Stellung + die vollendeten
     //    Umdrehungen als verblassende Geisterbögen.
+    //
+    //    Analog zu 1.38 (das stets einen Bogen zeichnet): an einer Umdrehungs-
+    //    grenze (partial ≈ 0) würde der aktuelle Teilbogen entarten/verschwinden
+    //    und das φ-Label auf 3 Uhr springen. Stattdessen wird die gerade VOLL-
+    //    ENDETE Umdrehung als heller Vollkreis gezeichnet (aktueller Bogen) und
+    //    nur die FRÜHEREN Umdrehungen verblasst als Geister — so bleibt immer ein
+    //    heller aktueller Bogen sichtbar und das Label sitzt stabil auf dessen
+    //    Winkelhalbierenden.
     function drawAngle(phiDeg) {
         const g = ge(p + 'aspekt_angle');
         if (!g) return;
@@ -392,11 +400,19 @@ export function buildWinkelZeitFig(fig) {
         const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42);
         const revCount = Math.floor(phiDeg / 360);      // vollendete Umdrehungen
         const partial = phiDeg - revCount * 360;        // aktueller Umdrehungswinkel (0…360)
-        // Geisterbögen: je ein Vollkreis pro vollendeter Umdrehung, verblasst.
+
+        // Aktueller Bogen: an Umdrehungs-Grenzen (partial ≈ 0, revCount > 0) die
+        // gerade vollendete Umdrehung als hellen Vollkreis nehmen, nur die
+        // FRÜHEREN als Geister -> immer ein heller aktueller Bogen (wie 1.38).
+        let curAngle = partial;
+        let ghostCount = revCount;
+        if (partial <= 0.5 && revCount > 0) { curAngle = 360; ghostCount = revCount - 1; }
+
+        // Geisterbögen: je ein Vollkreis pro früherer Umdrehung, verblasst.
         // Zweihalbkreis-Pfad (ein A-Bogen kann 360° nicht in einem Stück). Die
         // Vollkreise überlagern sich -> mit jeder Umdrehung minimal dunkler,
         // aber die Summe bleibt < aktueller Bogen.
-        for (let i = 0; i < revCount; i++) {
+        for (let i = 0; i < ghostCount; i++) {
             const ghost = document.createElementNS(NS, 'path');
             ghost.setAttribute('d',
                 `M ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)} ` +
@@ -405,18 +421,26 @@ export function buildWinkelZeitFig(fig) {
             ghost.setAttribute('class', 'aspekt-angle-arc aspekt-angle-arc-prev');
             g.appendChild(ghost);
         }
-        // Aktueller Bogen wie 1.38: Teilbogen am geometrischen Winkel (partial).
-        const rad = partial * Math.PI / 180;
-        if (partial > 0.5) {
+
+        // Aktueller Bogen (Teilbogen oder Vollkreis) — Geometrie wie 1.38.
+        const rad = curAngle * Math.PI / 180;
+        const arc = document.createElementNS(NS, 'path');
+        if (curAngle >= 360 - 0.01) {
+            // Vollkreis als zwei Halbkreise (ein A-Bogen kann 360° nicht abbilden).
+            arc.setAttribute('d',
+                `M ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)} ` +
+                `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx - rArc).toFixed(2)} ${cy.toFixed(2)} ` +
+                `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)}`);
+        } else {
             // Bildschirm-y ist nach unten -> Winkel φ (math, CCW) endet bei y = cy - …
             const x0 = cx + rArc, y0 = cy;
             const x1 = cx + rArc * Math.cos(rad), y1 = cy - rArc * Math.sin(rad);
-            const large = partial > 180 ? 1 : 0;
-            const arc = document.createElementNS(NS, 'path');
+            const large = curAngle > 180 ? 1 : 0;
             arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
-            arc.setAttribute('class', 'aspekt-angle-arc');
-            g.appendChild(arc);
         }
+        arc.setAttribute('class', 'aspekt-angle-arc');
+        g.appendChild(arc);
+
         // varphi-Label (foreignObject/MathJax) auf der Winkelhalbierenden (wie
         // 1.38). Bei R >= 1.2 ist der Bogen groß genug -> Label innen (0.62*rArc);
         // sonst knapp außerhalb (rArc+15). (30x30-foreignObject -> um 15 zentren.)
