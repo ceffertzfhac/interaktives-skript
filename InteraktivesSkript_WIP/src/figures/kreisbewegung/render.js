@@ -217,28 +217,34 @@ export function updateScene(t, p, v, a, centers) {
     const ppm = store.currentPixelsPerMeter;
     const { cx, cy } = centers;
     const px = cx + p.x * ppm, py = cy - p.y * ppm;
+    // Per-Instanz-Skalierung der Pfeil-Länge (mit der Strichstärke mitwachsen
+    // lassen, s. store.arrowLenScale). Default 1 = Vorlagen-Verhalten; eine
+    // Figur, die ihre Vektoren ×n dicker zeichnet (Strich + Marker), setzt n,
+    // damit die Linie um n·ARROW_LEN gekürzt wird und die Spitze wieder exakt
+    // auf dem Zielpunkt landet (Pfeillängen-Kopplung ARROW_LEN=5·strokeWidth).
+    const arrScale = store.arrowLenScale || 1;
 
     DOM.point.setAttribute('cx', px); DOM.point.setAttribute('cy', py);
 
     const showR = store.showPositionVector;
-    setVec(DOM.positionVector, cx, cy, px, py, showR, ARROW_LEN_MAIN);
+    setVec(DOM.positionVector, cx, cy, px, py, showR, ARROW_LEN_MAIN * arrScale);
     const showRc = store.showPositionComponents && showR;
-    setVec(DOM.positionVectorX, cx, cy, px, cy, showRc, ARROW_LEN_COMP);
-    setVec(DOM.positionVectorY, px, cy, px, py, showRc, ARROW_LEN_COMP);
+    setVec(DOM.positionVectorX, cx, cy, px, cy, showRc, ARROW_LEN_COMP * arrScale);
+    setVec(DOM.positionVectorY, px, cy, px, py, showRc, ARROW_LEN_COMP * arrScale);
 
     const vScale = PIXELS_PER_VELOCITY_UNIT * store.zoomFactor;
     const vxe = px + v.x * vScale, vye = py - v.y * vScale;
-    setVec(DOM.velocityVector, px, py, vxe, vye, store.showVelocityVector, ARROW_LEN_MAIN);
+    setVec(DOM.velocityVector, px, py, vxe, vye, store.showVelocityVector, ARROW_LEN_MAIN * arrScale);
     const showVc = store.showVelocityComponents && store.showVelocityVector;
-    setVec(DOM.velocityVectorX, px, py, vxe, py, showVc, ARROW_LEN_COMP);
-    setVec(DOM.velocityVectorY, vxe, py, vxe, vye, showVc, ARROW_LEN_COMP);
+    setVec(DOM.velocityVectorX, px, py, vxe, py, showVc, ARROW_LEN_COMP * arrScale);
+    setVec(DOM.velocityVectorY, vxe, py, vxe, vye, showVc, ARROW_LEN_COMP * arrScale);
 
     const aScale = PIXELS_PER_ACCELERATION_UNIT * store.zoomFactor;
     const axe = px + a.x * aScale, aye = py - a.y * aScale;
-    setVec(DOM.accelerationVector, px, py, axe, aye, store.showAccelerationVector, ARROW_LEN_MAIN);
+    setVec(DOM.accelerationVector, px, py, axe, aye, store.showAccelerationVector, ARROW_LEN_MAIN * arrScale);
     const showAc = store.showAccelerationComponents && store.showAccelerationVector;
-    setVec(DOM.accelerationVectorX, px, py, axe, py, showAc, ARROW_LEN_COMP);
-    setVec(DOM.accelerationVectorY, axe, py, axe, aye, showAc, ARROW_LEN_COMP);
+    setVec(DOM.accelerationVectorX, px, py, axe, py, showAc, ARROW_LEN_COMP * arrScale);
+    setVec(DOM.accelerationVectorY, axe, py, axe, aye, showAc, ARROW_LEN_COMP * arrScale);
 
     if (!store.showTrajectory) {
         DOM.trajectoryPath.style.visibility = 'hidden';

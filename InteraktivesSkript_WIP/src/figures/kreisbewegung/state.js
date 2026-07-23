@@ -52,6 +52,13 @@ export const store = {
     showAccelerationComponents: false,
     showTrajectory: true,
 
+    // Pfeil-Längen-Skalierung (mit der Strichstärke mitwachsen lassen, s.
+    // render.js::updateScene). Default 1 = Vorlage; eine Figur, die Vektoren
+    // ×n dicker zeichnet (Strich + Marker), setzt n — sonst bliebe die Spitze
+    // bei dickerem Schaft auf altem, zu kurz gekürztem Platz (Kopplung
+    // ARROW_LEN = 5·strokeWidth). Opt-in, nur фигурsetzen die das wollen.
+    arrowLenScale: 1,
+
     tData: [], xData: [], yData: [],
     vxData: [], vyData: [], axData: [], ayData: [],
     vabsData: [], aabsData: [], phitData: [],
