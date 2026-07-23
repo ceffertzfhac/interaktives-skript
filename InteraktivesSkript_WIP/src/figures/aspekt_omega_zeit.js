@@ -5,8 +5,11 @@
 // Periode T KONSTANT (waagerechte Linie), obwohl der Punkt sich sichtbar
 // weiterbewegt. Der Kontrast zu 1.41 (φ(t) wächst linear, Steigung = ω) ist
 // hier der Aspekt: φ ändert sich, ihre Änderungsrate ω bleibt gleich.
-// Regler: Zeit t (0 … 12 s), Periodendauer T (→ ω = 2π/T). R ist fest (1,5 m),
-// da der Radius die ω-Kurve nicht beeinflusst (ω=2π/T, unabhängig von R).
+// Regler: Zeit t (0 … 12 s), Radius R, Periodendauer T (→ ω = 2π/T). R ist
+// hier (Nutzervorgabe, analog 1.43) ein Regler statt fest: er ändert die
+// ω-Kurve NICHT (ω=2π/T, unabhängig von R) — das Ziehen an R demonstriert
+// diese Unabhängigkeit gerade dadurch, dass die Linie unverändert bleibt,
+// während die Szene (Kreisradius) sichtbar reagiert.
 //
 // TECHNIK: kein eigener Zeichencode außer dem Winkelbogen (an aspekt_kreisbahn
 // angelehnt, 1:1 aus 1.41 übernommen — der Bogen zeigt weiterhin φ, denn ω
@@ -67,6 +70,7 @@ import { store } from './kreisbewegung/state.js';
 import { recomputeDerived, position, velocity, acceleration,
          extendMotionData, recalculateAxisLimits } from './kreisbewegung/physics.js';
 import { setupScene, updateScene, updateGraph, updateGraphHover } from './kreisbewegung/render.js';
+import { R_MIN, R_MAX } from './kreisbewegung/constants.js';
 import { createRuntime } from './kreisbewegung/runtime.js';
 import { attachGraphHover } from './kreisbewegung/lib/hover.js';
 import { resetOnPlayAfterAutoStop, isAtAutoStopEnd } from './playback.js';
@@ -80,7 +84,12 @@ const T_STEP = 0.1;
 // reziproke des T-Bereichs: T_MAX -> kleinstes ω, T_MIN -> größtes ω.
 const OMEGA_MIN = 2 * Math.PI / T_MAX, OMEGA_MAX = 2 * Math.PI / T_MIN,
       OMEGA_DEFAULT = 2 * Math.PI / T_DEFAULT, OMEGA_STEP = 0.01;
-const R_FIXED = 1.5;          // Radius fest (aendert die omega-Kurve nicht: omega=2pi/T)
+// R ist hier (anders als in der urspruenglichen 1.41-Vorlage) ein Regler, nicht
+// fest (Nutzervorgabe, analog 1.43): R aendert die omega-Kurve NICHT (omega=2pi/T,
+// unabhaengig von R) -- der Regler demonstriert das gerade dadurch, dass die
+// Linie beim Ziehen an R unveraendert bleibt, waehrend die Szene (Kreisradius)
+// sichtbar reagiert.
+const R_DEFAULT = 1.5;
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 
 // -- Szene: exakt die Vorlagen-Geometrie (wie aspekt_kreisbahn, MIT Winkelbogen
@@ -99,6 +108,11 @@ const SVG_SCENE = `
     <marker id="kb_arrowhead-r"  markerUnits="userSpaceOnUse" markerWidth="18.75" markerHeight="13.125" refX="6.25" refY="6.5625" orient="auto"><polygon points="0 0, 18.75 6.5625, 0 13.125"/></marker>
     <marker id="kb_arrowhead-rx" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
     <marker id="kb_arrowhead-ry" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
+    <!-- Pfeilspitze am Winkelbogen (zeigt die positive Drehrichtung, P-Wunsch).
+         markerUnits=strokeWidth (Default): Groesse skaliert automatisch mit
+         der Bogen-Strichstaerke (--kb-lw). Nur der AKTUELLE Bogen bekommt sie
+         (per JS gesetzt), nicht die verblassten Geisterbögen. -->
+    <marker id="kb_angle_arrow" markerWidth="4" markerHeight="3" refX="0" refY="1.5" orient="auto"><polygon points="0 0, 4 1.5, 0 3"/></marker>
   </defs>
   <g id="kb_animation_group">
     <g id="kb_aspekt_axes"></g>
@@ -184,7 +198,8 @@ const SVG_GRAPH = `
 </svg>`;
 
 // -- Linkes Bedien-Panel (Parameter + Legende) -- Klassen wie die Stand-alone.
-//    Kein R-Regler (R ist fest) — nur Zeit t und Periodendauer T (→ ω).
+//    R ist hier ein Regler (Nutzervorgabe, analog 1.43): zeigt gerade durch
+//    seine WIRKUNGSLOSIGKEIT auf die Kurve, dass omega nicht von R abhaengt.
 const PANEL_LEFT = `
 <div class="aspekt-panel aspekt-panel-left">
   <div class="panel-section">
@@ -193,6 +208,11 @@ const PANEL_LEFT = `
     <div class="slider-row">
       <input id="ak_t" type="range" min="0" max="12" step="0.05" value="12">
       <span class="slider-val" id="ak_t_out"></span>
+    </div>
+    <div class="slider-label">Radius \\(R\\)</div>
+    <div class="slider-row">
+      <input id="ak_r" type="range" min="${R_MIN}" max="${R_MAX}" step="0.05" value="${R_DEFAULT}">
+      <span class="slider-val" id="ak_r_out"></span>
     </div>
     <div class="slider-label">Periodendauer \\(T\\)</div>
     <div class="slider-row">
@@ -255,6 +275,7 @@ const PANEL_RIGHT = `
       <div class="panel-label">Live-Analyse</div>
       <div class="analysis-grid">
         <div class="analysis-cell key">Zeit \\(t\\)</div>              <div class="analysis-cell val" id="ak_val_t"></div>
+        <div class="analysis-cell key">Radius \\(R\\)</div>             <div class="analysis-cell val" id="ak_val_r"></div>
         <div class="analysis-cell key">Winkelgeschw. \\(\\omega\\)</div><div class="analysis-cell val" id="ak_val_omega"></div>
         <div class="analysis-cell key">Periodendauer \\(T\\)</div>      <div class="analysis-cell val" id="ak_val_T"></div>
         <div class="analysis-cell key">Winkel \\(\\varphi\\)</div>      <div class="analysis-cell val" id="ak_val_phi"></div>
@@ -341,7 +362,7 @@ export function buildOmegaZeitFig(fig) {
     }
 
     // Per-Instanz-Regler + Zustand (Closure, nicht Modul-Ebene).
-    const ak_t = ge(p + 'ak_t'), ak_T = ge(p + 'ak_T'), ak_omega = ge(p + 'ak_omega');
+    const ak_t = ge(p + 'ak_t'), ak_r = ge(p + 'ak_r'), ak_T = ge(p + 'ak_T'), ak_omega = ge(p + 'ak_omega');
     const ak_keep = ge(p + 'ak_keep');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let sceneCenters = null;
@@ -493,13 +514,24 @@ export function buildOmegaZeitFig(fig) {
                 `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx - rArc).toFixed(2)} ${cy.toFixed(2)} ` +
                 `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)}`);
         } else {
+            // Pfeillaengen-Kopplung (bekannter Fallstrick, s. ARROW_LEN in
+            // render.js): die Pfeilspitze (markerUnits=strokeWidth, markerWidth=4,
+            // refX=0) ragt ca. 4x Strichstaerke ueber das Pfadende hinaus. Ohne
+            // Kuerzung zeigt der Bogen dadurch einen zu GROSSEN Winkel an. Der
+            // Pfad wird daher um den Ueberschuss (in Grad, radiusabhaengig)
+            // gekuerzt, sodass die SPITZE (nicht das Pfadende) exakt auf curAngle
+            // landet -- analog zur Vektor-Verkuerzung.
+            const ARC_ARROW_OVERSHOOT_PX = 12;   // ~ 4 (markerWidth) * 3px (Bogen-Strichstaerke bei --kb-lw=1,5)
+            const overshootRad = Math.min(rad, ARC_ARROW_OVERSHOOT_PX / rArc);
+            const radEnd = rad - overshootRad;
             // Bildschirm-y ist nach unten -> Winkel φ (math, CCW) endet bei y = cy - …
             const x0 = cx + rArc, y0 = cy;
-            const x1 = cx + rArc * Math.cos(rad), y1 = cy - rArc * Math.sin(rad);
-            const large = curAngle > 180 ? 1 : 0;
+            const x1 = cx + rArc * Math.cos(radEnd), y1 = cy - rArc * Math.sin(radEnd);
+            const large = (radEnd * 180 / Math.PI) > 180 ? 1 : 0;
             arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
         }
         arc.setAttribute('class', 'aspekt-angle-arc');
+        arc.setAttribute('marker-end', `url(#${p}angle_arrow)`);
         g.appendChild(arc);
 
         // φ-Label: Referenz ist ein Punkt auf dem aktuellen Bogen, der konstant
@@ -563,22 +595,29 @@ export function buildOmegaZeitFig(fig) {
         const n = (x, d) => Number.isFinite(x) ? x.toFixed(d).replace('.', ',') : '—';
         ge(p + 'ak_t_out').textContent = n(t, 2) + ' s';
         const td = ge(p + 'time_display'); if (td) td.textContent = `t = ${n(t, 2)} s`;
+        ge(p + 'ak_r_out').textContent = n(store.R, 2) + ' m';
         ge(p + 'ak_T_out').textContent = n(T, 1) + ' s';
         ge(p + 'ak_omega_out').textContent = n(omegaOf(T), 3) + ' rad/s';
         const vt = ge(p + 'ak_val_t');
         if (vt) {
             const phiDeg = (store.omega * t) * 180 / Math.PI;
             vt.textContent = n(t, 2) + ' s';
+            ge(p + 'ak_val_r').textContent = n(store.R, 2) + ' m';
             ge(p + 'ak_val_phi').textContent = n(phiDeg, 0) + ' °';
             ge(p + 'ak_val_T').textContent = n(T, 2) + ' s';
             ge(p + 'ak_val_omega').textContent = n(store.omega, 3) + ' rad/s';
         }
     }
 
-    // -- Rebuild: T geaendert -> Flags + Parameter, Datenreihe neu, Szene neu
+    // -- Rebuild: R/T geaendert -> Flags + Parameter, Datenreihe neu, Szene neu
     //    skalieren. Alle Motor-Aufrufe inside withStore (Singleton = diese Instanz).
+    //    R aendert die omega-Kurve NICHT (omega=2pi/T) -- der Regler ist trotzdem
+    //    ein Rebuild-Ausloeser, weil er die SZENE (Kreisradius) neu skaliert;
+    //    Nutzervorgabe: gerade das Ausbleiben einer Kurvenaenderung beim Ziehen
+    //    an R demonstriert die R-Unabhaengigkeit.
     //    `paramChange` = der Aufruf kommt von einem Regler, der die KURVENFORM
-    //    ändert (hier T): dann wird die eben gezeigte Kurve — falls "Letzte Kurve
+    //    ändert (hier T; R aendert die Kurve nicht, loest aber denselben Ghost-
+    //    Mechanismus aus): dann wird die eben gezeigte Kurve — falls "Letzte Kurve
     //    behalten" aktiv ist — als Geisterkurve eingefroren und die Laufzeit t
     //    springt auf 0 zurück, damit der neue Verlauf von vorn über dem alten
     //    entsteht und wirklich vergleichbar ist (wie in den Stand-alone-Sims,
@@ -594,7 +633,7 @@ export function buildOmegaZeitFig(fig) {
                 isDigitalDisplay: false,
                 graphFontScale: 1.5,  // Graph-Schrift ×1,5 (--kb-fs) -> render.js skaliert Padding/Label-Abstand
             });
-            store.R = R_FIXED;
+            store.R = parseFloat(ak_r.value);
             const T = parseFloat(ak_T.value);
             store.phi0Deg = 0;
             store.omegaDeg = 360 / T;          // ω [deg/s] = 360 / T  (T = 2π/ω)
@@ -646,7 +685,7 @@ export function buildOmegaZeitFig(fig) {
         }
     }
     let paramGesture = false;
-    [ak_T, ak_omega].forEach(inp => inp.addEventListener('change', () => { paramGesture = false; }));
+    [ak_r, ak_T, ak_omega].forEach(inp => inp.addEventListener('change', () => { paramGesture = false; }));
 
     // -- Automatischer Ablauf (Sim-Zeit 0 … 12 s, Slow-Mo via Tempo-Pills, Auto-
     //    Stopp am Ende — kein Umbrechen). Pro Instanz im Closure; Knöpfe/Pills
@@ -714,7 +753,7 @@ export function buildOmegaZeitFig(fig) {
         if (!keepPrev) clearPrev();
     });
 
-    [ak_t, ak_T, ak_omega].forEach(inp => inp.addEventListener('input', onInput));
+    [ak_t, ak_r, ak_T, ak_omega].forEach(inp => inp.addEventListener('input', onInput));
     rebuild();
 
     // Beim Oeffnen/Schliessen der Lupe sofort neu zeichnen: so greift der

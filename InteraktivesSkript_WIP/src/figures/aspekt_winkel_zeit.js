@@ -90,6 +90,11 @@ const SVG_SCENE = `
     <marker id="kb_arrowhead-r"  markerUnits="userSpaceOnUse" markerWidth="18.75" markerHeight="13.125" refX="6.25" refY="6.5625" orient="auto"><polygon points="0 0, 18.75 6.5625, 0 13.125"/></marker>
     <marker id="kb_arrowhead-rx" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
     <marker id="kb_arrowhead-ry" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
+    <!-- Pfeilspitze am Winkelbogen (zeigt die positive Drehrichtung, P-Wunsch).
+         markerUnits=strokeWidth (Default): Groesse skaliert automatisch mit
+         der Bogen-Strichstaerke (--kb-lw). Nur der AKTUELLE Bogen bekommt sie
+         (per JS gesetzt), nicht die verblassten Geisterbögen. -->
+    <marker id="kb_angle_arrow" markerWidth="4" markerHeight="3" refX="0" refY="1.5" orient="auto"><polygon points="0 0, 4 1.5, 0 3"/></marker>
   </defs>
   <g id="kb_animation_group">
     <g id="kb_aspekt_axes"></g>
@@ -484,13 +489,24 @@ export function buildWinkelZeitFig(fig) {
                 `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx - rArc).toFixed(2)} ${cy.toFixed(2)} ` +
                 `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)}`);
         } else {
+            // Pfeillaengen-Kopplung (bekannter Fallstrick, s. ARROW_LEN in
+            // render.js): die Pfeilspitze (markerUnits=strokeWidth, markerWidth=4,
+            // refX=0) ragt ca. 4x Strichstaerke ueber das Pfadende hinaus. Ohne
+            // Kuerzung zeigt der Bogen dadurch einen zu GROSSEN Winkel an. Der
+            // Pfad wird daher um den Ueberschuss (in Grad, radiusabhaengig)
+            // gekuerzt, sodass die SPITZE (nicht das Pfadende) exakt auf curAngle
+            // landet -- analog zur Vektor-Verkuerzung.
+            const ARC_ARROW_OVERSHOOT_PX = 12;   // ~ 4 (markerWidth) * 3px (Bogen-Strichstaerke bei --kb-lw=1,5)
+            const overshootRad = Math.min(rad, ARC_ARROW_OVERSHOOT_PX / rArc);
+            const radEnd = rad - overshootRad;
             // Bildschirm-y ist nach unten -> Winkel φ (math, CCW) endet bei y = cy - …
             const x0 = cx + rArc, y0 = cy;
-            const x1 = cx + rArc * Math.cos(rad), y1 = cy - rArc * Math.sin(rad);
-            const large = curAngle > 180 ? 1 : 0;
+            const x1 = cx + rArc * Math.cos(radEnd), y1 = cy - rArc * Math.sin(radEnd);
+            const large = (radEnd * 180 / Math.PI) > 180 ? 1 : 0;
             arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
         }
         arc.setAttribute('class', 'aspekt-angle-arc');
+        arc.setAttribute('marker-end', `url(#${p}angle_arrow)`);
         g.appendChild(arc);
 
         // φ-Label: Referenz ist ein Punkt auf dem aktuellen Bogen, der konstant
