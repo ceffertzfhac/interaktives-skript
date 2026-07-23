@@ -101,6 +101,16 @@
                 <span id="chapter_progress_label"></span>
             </div>
 
+            <!-- Seitennavigation (Zurück/Weiter) ganz oben, rechts und dezenter
+                 gehalten als reine Chevron-Tasten auf Hoehe der Abschnitts-
+                 uebersicht (Krume). Gleiche Aktionen wie die Tasten unten im
+                 Papier (data-action=chapter_prev/next, s. main.js/shell.js);
+                 shell.js::renderPrevNext setzt die disabled-Zustaende mit. -->
+            <div id="header_pagenav" role="navigation" aria-label="Seitennavigation">
+                <button type="button" id="header_prev_btn" class="pagenav-btn" data-action="chapter_prev" aria-label="Vorherige Seite" title="Vorherige Seite (Zurück)">‹</button>
+                <button type="button" id="header_next_btn" class="pagenav-btn" data-action="chapter_next" aria-label="Nächste Seite" title="Nächste Seite (Weiter)">›</button>
+            </div>
+
             <!-- Rechter Bedien-Cluster: erst Lese-Einstellungen (Textgroesse,
                  Breite), dann Aktionen als Symbole (Drucken/Kontakt/Darkmode).
                  Alles feste Breite, damit nur die Krume schrumpft. -->

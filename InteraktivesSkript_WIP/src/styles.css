@@ -478,8 +478,40 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     align-items: center;
     gap: 12px;
     flex-shrink: 0;
-    margin-left: auto;
 }
+
+/* Seitennavigation (Zurück/Weiter) oben rechts, dezente Chevron-Tasten auf
+   Hoehe der Abschnittsuebersicht. margin-left:auto drueckt diesen Cluster
+   (und die folgenden #header_controls) an den rechten Rand; ein trennender
+   Spalt zurueck zu den Lese-Einstellungen. Gleiche disabled-Logik wie die
+   Tasten unten im Papier (shell.js::renderPrevNext). */
+#header_pagenav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-right: 12px;
+    border-right: 1px solid var(--border);
+}
+.pagenav-btn {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background-color: transparent;
+    color: var(--ink-2);
+    font-size: 19px;
+    line-height: 1;
+    cursor: pointer;
+}
+.pagenav-btn:hover:not(:disabled) { background-color: var(--surface-2); color: var(--ink); }
+.pagenav-btn:active:not(:disabled) { background-color: var(--surface-3); }
+.pagenav-btn:disabled { opacity: 0.35; cursor: default; }
 
 /* Symbol-Buttons (Drucken/Kontakt) -- gleiche Groesse wie der Darkmode-
    Schalter, Beschriftung nur noch als title/aria-label. */

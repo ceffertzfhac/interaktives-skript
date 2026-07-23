@@ -210,10 +210,18 @@ function renderAppbar(page) {
 function renderPrevNext(page) {
     const pages = getPages();
     const i = getCurrentIndex();
+    const atFirst = i <= 0;
+    const atLast = i >= pages.length - 1;
+    // Untere Tasten im Papier …
     const prevBtn = ge('chapter_prev_btn');
     const nextBtn = ge('chapter_next_btn');
-    if (prevBtn) prevBtn.disabled = i <= 0;
-    if (nextBtn) nextBtn.disabled = i >= pages.length - 1;
+    if (prevBtn) prevBtn.disabled = atFirst;
+    if (nextBtn) nextBtn.disabled = atLast;
+    // … und die dezenteren Tasten oben rechts im Header (gleiche Aktionen).
+    const hPrev = ge('header_prev_btn');
+    const hNext = ge('header_next_btn');
+    if (hPrev) hPrev.disabled = atFirst;
+    if (hNext) hNext.disabled = atLast;
 }
 
 function renderAll() {
