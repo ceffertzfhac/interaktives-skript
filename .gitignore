@@ -14,3 +14,7 @@ Archiv.zip
 # Quellmaterial: NICHT veroeffentlichen (v0.13-Skript, Stand-alone-Sims,
 # eingefrorener Alt-Stand). Bleibt lokal erhalten, ist aber kein Repo-Inhalt.
 Input/
+
+# Design-Prototyp: Referenz-Schnappschuss der Gestaltung, soll aktuell nicht
+# oeffentlich sein. Bleibt lokal erhalten, ist aber kein Repo-Inhalt.
+InteraktivesSkript_DesignPrototype/
