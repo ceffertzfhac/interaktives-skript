@@ -90,17 +90,23 @@ const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 const SVG_SCENE = `
 <svg id="kb_main_svg" viewBox="0 0 450 480" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <defs>
-    <!-- Pfeilspitzen ×1,5 vergroessert (Szenen-Strichstärken skalieren via
-         --kb-lw ×1,5), spitzen-erhaltend via refX = markerWidth' − ARROW_LEN
-         (r/v: 18.75−12.5=6.25; rx/ry/vx/vy: 15−10=5; ax: 13.5−6=7.5). Begründung
-         im Kommentarblock in aspekt_kreisbahn.js. -->
+    <!-- Koordinatenachsen-Pfeilspitze bleibt userSpaceOnUse (feste Groeße; die
+         Achse ist kein Physik-Vektor und wird nicht mit --kb-lw/dick-skaliert). -->
     <marker id="kb_ax_arrow"     markerUnits="userSpaceOnUse" markerWidth="13.5" markerHeight="10.5"  refX="7.5" refY="5.25"  orient="auto"><polygon points="0 0, 13.5 5.25, 0 10.5"/></marker>
-    <marker id="kb_arrowhead-r"  markerUnits="userSpaceOnUse" markerWidth="18.75" markerHeight="13.125" refX="6.25" refY="6.5625" orient="auto"><polygon points="0 0, 18.75 6.5625, 0 13.125"/></marker>
-    <marker id="kb_arrowhead-rx" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
-    <marker id="kb_arrowhead-ry" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
-    <marker id="kb_arrowhead-v"  markerUnits="userSpaceOnUse" markerWidth="18.75" markerHeight="13.125" refX="6.25" refY="6.5625" orient="auto"><polygon points="0 0, 18.75 6.5625, 0 13.125"/></marker>
-    <marker id="kb_arrowhead-vx" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
-    <marker id="kb_arrowhead-vy" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
+    <!-- Physik-Vektor-Pfeilspitzen in STRICHSTÄRKEN-Einheiten (markerUnits=
+         strokeWidth): die Spitze wächst mit der Strichstärke mit (Nutzervorgabe
+         „Spitze mit skalieren"). markerWidth=5 -> Spitze = 5×Strichstärke
+         (Vorlagen-Proportion 5:1), refX=0 -> Basis am Linienende. Der Motor kürzt
+         die Linie um ARROW_LEN×arrowLenScale (= 5×Strichstärke), sodaß die
+         Spitze exakt aufs Ziel trifft (Pfeillängen-Kopplung ARROW_LEN=5·sw).
+         r und v führen hierfür auf GLEICHE Strichstärke (s. CSS), weil der Motor
+         pro Haupt-/Neben-Vektor nur EINEN Verkürzungs­wert kennt. -->
+    <marker id="kb_arrowhead-r"  markerUnits="strokeWidth" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
+    <marker id="kb_arrowhead-rx" markerUnits="strokeWidth" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
+    <marker id="kb_arrowhead-ry" markerUnits="strokeWidth" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
+    <marker id="kb_arrowhead-v"  markerUnits="strokeWidth" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
+    <marker id="kb_arrowhead-vx" markerUnits="strokeWidth" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
+    <marker id="kb_arrowhead-vy" markerUnits="strokeWidth" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
   </defs>
   <g id="kb_animation_group">
     <g id="kb_aspekt_axes"></g>
@@ -110,14 +116,14 @@ const SVG_SCENE = `
     <circle id="kb_point" cx="325" cy="260" r="8" stroke-width="1"/>
     <text id="kb_zoom_text_display" x="12" y="20" class="zoom-text"></text>
 
-    <line id="kb_position_vector"   stroke-width="2.5" marker-end="url(#kb_arrowhead-r)"  visibility="hidden"/>
-    <line id="kb_position_vector_x" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#kb_arrowhead-rx)" visibility="hidden"/>
-    <line id="kb_position_vector_y" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#kb_arrowhead-ry)" visibility="hidden"/>
+    <line id="kb_position_vector"   stroke-width="3.75" marker-end="url(#kb_arrowhead-r)"  visibility="hidden"/>
+    <line id="kb_position_vector_x" stroke-width="3" stroke-dasharray="4,4" marker-end="url(#kb_arrowhead-rx)" visibility="hidden"/>
+    <line id="kb_position_vector_y" stroke-width="3" stroke-dasharray="4,4" marker-end="url(#kb_arrowhead-ry)" visibility="hidden"/>
 
     <!-- Geschwindigkeitsvektor (tangential) = die gezeigte Groesse + Komponenten. -->
-    <line id="kb_velocity_vector"   stroke-width="2.5" marker-end="url(#kb_arrowhead-v)"  visibility="hidden"/>
-    <line id="kb_velocity_vector_x" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#kb_arrowhead-vx)" visibility="hidden"/>
-    <line id="kb_velocity_vector_y" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#kb_arrowhead-vy)" visibility="hidden"/>
+    <line id="kb_velocity_vector"   stroke-width="3.75" marker-end="url(#kb_arrowhead-v)"  visibility="hidden"/>
+    <line id="kb_velocity_vector_x" stroke-width="3" stroke-dasharray="4,4" marker-end="url(#kb_arrowhead-vx)" visibility="hidden"/>
+    <line id="kb_velocity_vector_y" stroke-width="3" stroke-dasharray="4,4" marker-end="url(#kb_arrowhead-vy)" visibility="hidden"/>
 
     <line id="kb_acceleration_vector"/><line id="kb_acceleration_vector_x"/><line id="kb_acceleration_vector_y"/>
 
@@ -221,6 +227,7 @@ const PANEL_LEFT = `
   <div class="panel-section">
     <div class="panel-label">Legende</div>
     <div class="legend-grid">
+      <div class="legend-swatch" data-c="r"></div>   <div class="legend-label">Ortsvektor \\(\\vec{r}\\)</div>
       <div class="legend-swatch" data-c="v"></div>   <div class="legend-label">Geschwindigkeitsvektor \\(\\vec{v}\\)</div>
       <div class="legend-swatch" data-c="vx"></div>  <div class="legend-label">Komponente \\(v_x\\)</div>
       <div class="legend-swatch" data-c="vy"></div>  <div class="legend-label">Komponente \\(v_y\\)</div>
@@ -505,10 +512,14 @@ export function buildVxVyZeitFig(fig) {
             if (paramChange) { stop(); curT = 0; }
             Object.assign(store, {
                 isStacked: true, graphType1: 'vxt', graphType2: 'vyt',
-                showPositionVector: false, showPositionComponents: false, showTrajectory: true,
+                showPositionVector: true, showPositionComponents: false, showTrajectory: true,
                 showVelocityVector: true, showVelocityComponents: showComponents,
                 showAccelerationVector: false, showAccelerationComponents: false,
                 isDigitalDisplay: false,
+                // Vektoren ×1,5 dicker (Strich + Spitze mit­skalierend, s. CSS +
+                // strokeWidth-Marker): Pfeil-Länge mit­skalieren, sonst landet die
+                // Spitze bei dickerem Schaft auf altem, zu kurz gekürztem Platz.
+                arrowLenScale: 1.5,
                 graphFontScale: 1.5,  // Graph-Schrift ×1,5 (--kb-fs) -> render.js skaliert Padding/Label-Abstand
             });
             store.R = parseFloat(ak_r.value);
@@ -531,7 +542,7 @@ export function buildVxVyZeitFig(fig) {
             drawStopwatchMarks();
             drawSubdialMarks();
             const sw = ge(p + 'stopwatch');
-            if (sw) sw.setAttribute('transform', 'translate(205, -10) scale(0.59)');
+            if (sw) sw.setAttribute('transform', 'translate(205, -10) scale(0.71)');
             draw(curT);
             updateLabels(curT, T);
         });

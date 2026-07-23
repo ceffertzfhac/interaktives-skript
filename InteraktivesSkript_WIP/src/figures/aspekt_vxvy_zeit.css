@@ -98,6 +98,21 @@
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="arrowhead-vx"] polygon { fill: var(--kb-vx); }
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="arrowhead-vy"] polygon { fill: var(--kb-vy); }
 
+/* ── Vektor-Strichstärken ×1,5 (Nutzervorgabe „die Vektoren x1,5 dicker, Spitze
+   mit skalieren"). Sim-Basis (Haupt 2,5 px / Neben 2 px) × --kb-lw (=1,5) =
+   3,75 px / 3 px. r und v auf GLEICHE Strichstärke geführt, weil die Pfeilspitzen
+   markerUnits=strokeWidth nutzen (Spitze = 5×Strichstärke) und der Motor pro
+   Haupt-/Neben-Vektor nur einen Verkürzungs­wert kennt (arrowLenScale 1,5) —
+   bei ungleicher Strichstärke landete eine Spitze daneben. Überschreibt die
+   shared aspekt_kreisbahn.css (dort r = calc(4px×--kb-lw) = 6 px, hier 3,75 px).
+   Farbe bleibt von dort (--kb-r/-rx/-ry) bzw. oben (--kb-vel/-vx/-vy). ──────── */
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="position_vector"]    { stroke-width: calc(2.5px * var(--kb-lw)); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="position_vector_x"],
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="position_vector_y"],
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="velocity_vector_x"],
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="velocity_vector_y"]  { stroke-width: calc(2px * var(--kb-lw)); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="velocity_vector"]   { stroke-width: calc(2.5px * var(--kb-lw)); }
+
 /* ── Legende: Swatch-Farben für Geschwindigkeitsvektor + Komponenten + Bogen. */
 .aspekt-figur[data-aspekt="vxvy-zeit"] .legend-swatch[data-c="v"]    { background: var(--kb-vel); }
 .aspekt-figur[data-aspekt="vxvy-zeit"] .legend-swatch[data-c="vx"]  { background: var(--kb-vx); }
@@ -146,9 +161,12 @@
    Normal/schmal bleiben gestapelt (.aspekt-main ist flex-column). Im breiten
    Modus wird .aspekt-main zur Zeile; Szene und Diagramm teilen sich die Breite
    und bekommen beide eine Viewport-Hoehe, die nebeneinander auf den Bildschirm
-   passt. */
+   passt.
+   align-items:center (globale Regel für Szene-neben-Diagramm-Layout, s.
+   aspekt_weg_zeit.css fuer die Begründung): Szenemitte bündig mit der Mitte
+   des Diagramm-Blocks (als EINS gerechnet). */
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main { flex-direction: column; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content { flex-direction: row; align-items: flex-start; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content { flex-direction: row; align-items: center; }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 8px; }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 8px 8px; }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-svg { height: auto; max-height: 50vh; }
@@ -158,7 +176,7 @@
    Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
    aspekt_kreisbahn.css. ─────────────────────────────────────────────────── */
 .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main { flex-direction: column; }
-.aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content { flex-direction: row; align-items: flex-start; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content { flex-direction: row; align-items: center; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-svg {
