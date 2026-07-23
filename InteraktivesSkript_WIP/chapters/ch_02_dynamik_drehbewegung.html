@@ -1111,9 +1111,64 @@
 <h3 class="inhaltsverzeichnis">1.5.14 Zusammenfassung</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.14 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
+    <div class="zusammenfassung">
+        <ul>
+            <li><strong>Starre Körper:</strong>
+                <ul>
+                    <li>Können sich nicht verformen, Bewegung ist Überlagerung von Translation und Rotation.</li>
+                    <li>Alle Punkte rotieren mit gleicher Winkelgeschwindigkeit und -beschleunigung.</li>
+                    <li><strong>Massenverteilung</strong> ist entscheidend und wird durch die Dichte \(\rho(\vec{r})\) beschrieben.</li>
+                </ul>
+            </li>
+
+            <li><strong>Drehimpuls (\(\vec{L}\)):</strong>
+                <ul>
+                    <li>Maß für die Rotationsbewegung, analog zum Impuls.</li>
+                    <li>Für Massenpunkt: \(\boxed{\vec{L} = \vec{r} \times m \vec{v}}\). Für Körper um feste Achse: \(\boxed{\vec{L} = J \vec{\omega}}\).</li>
+                    <li>Einheit: \(\mathrm{kg\,m^2/s}\).</li>
+                </ul>
+            </li>
+
+            <li><strong>(Massen-)Trägheitsmoment (\(J\)):</strong>
+                <ul>
+                    <li>Maß für den Widerstand eines Körpers gegen Rotationsänderungen.</li>
+                    <li>Hängt von der <strong>Masse</strong> und ihrer <strong>Verteilung</strong> zur Rotationsachse ab.</li>
+                    <li>Für Massenpunkt: \(J = m r^2\). Für starren Körper: \(J = \int R^2 \, \mathrm{d} m\).</li>
+                    <li><strong>Satz von Steiner:</strong> \(J = J_\text{sym} + m d^2\) (für Achse parallel zur Schwerpunktachse).</li>
+                    <li>Erklärung des „Zylinderrennens“: Körper mit geringerem \(J\) (z.B. Vollzylinder) gewinnt, da weniger Energie in Rotation gebunden wird.</li>
+                </ul>
+            </li>
+
+            <li><strong>Drehmoment (\(\vec{M}\)):</strong>
+                <ul>
+                    <li>Ursache für die Änderung des Drehimpulses.</li>
+                    <li>Definition: \(\boxed{\vec{M} = \vec{r} \times \vec{F}}\).</li>
+                    <li>Einheit: \(\mathrm{Nm}\).</li>
+                    <li>Betrag: \(M = r F \sin(\beta)\). Maximal bei \(\beta=90^\circ\).</li>
+                    <li>Fundamentaler Zusammenhang: \(\boxed{\vec{M} = \frac{\mathrm{d} \vec{L}}{\mathrm{d} t}}\).</li>
+                </ul>
+            </li>
+
+            <li><strong>Drehimpulserhaltungssatz:</strong>
+                <ul>
+                    <li>In einem <strong>abgeschlossenen System</strong> (keine externen Drehmomente) bleibt der <strong>Gesamtdrehimpuls konstant</strong>: \(\vec{L}_\text{ges} = \text{konst}\).</li>
+                    <li>Demonstrationen: Drehschemel (verringertes \(J \implies\) erhöhtes \(\omega\)), drehende Räder.</li>
+                </ul>
+            </li>
+
+            <li><strong>Rotationsenergie (\(E_\text{rot}\)):</strong>
+                <ul>
+                    <li>Kinetische Energie der Rotation: \(\boxed{E_\text{rot} = \frac{1}{2} J \omega^2}\).</li>
+                    <li>Gesamtkinetische Energie einer kombinierten Bewegung: \(E_\text{kin} = \frac{1}{2} J_\text{sym} \omega^2 + \frac{1}{2} m v^2\).</li>
+                </ul>
+            </li>
+
+            <li><strong>Rollbewegung (ohne Rutschen):</strong>
+                <ul>
+                    <li>\(v= r \omega\).</li>
+                    <li>Kinetische Energie kann als Rotation um den Auflagepunkt verstanden werden: \(E_\text{kin} = \frac{1}{2} (J_\text{sym} + m r^2) \omega^2\).</li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </section>
