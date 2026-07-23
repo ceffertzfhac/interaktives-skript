@@ -61,9 +61,15 @@
     touch-action: none;
 }
 .aspekt-figur.is-dragging-point .aspekt-scene [id$="point"] { cursor: grabbing; }
-.aspekt-figur .aspekt-scene [id$="position_vector"]   { stroke: var(--kb-r);  stroke-width: calc(5px * var(--kb-lw)); }   /* Vorlage 2.5, ×2 (CSS) × --kb-lw */
-.aspekt-figur .aspekt-scene [id$="position_vector_x"] { stroke: var(--kb-rx); stroke-width: calc(4px * var(--kb-lw)); }   /* Vorlage 2, ×2 (CSS) × --kb-lw */
-.aspekt-figur .aspekt-scene [id$="position_vector_y"] { stroke: var(--kb-ry); stroke-width: calc(4px * var(--kb-lw)); }
+/* Schaftbreiten ×0,8 gegenüber der vorherigen Setzung (5 -> 4, 4 -> 3.2): der
+   Schaft wirkte im Verhältnis zur Spitze zu dick. Die Pfeilspitzen bleiben
+   unverändert — sie sind markerUnits="userSpaceOnUse" mit fester Geometrie und
+   hängen NICHT an der Strichstärke; auch die Verkürzung (shortenEnd mit
+   ARROW_LEN) ist strichstärken-unabhängig, die Spitze sitzt also weiter exakt
+   auf dem Zielpunkt. */
+.aspekt-figur .aspekt-scene [id$="position_vector"]   { stroke: var(--kb-r);  stroke-width: calc(4px * var(--kb-lw)); }     /* Vorlage 2.5, ×2 ×0,8 (CSS) × --kb-lw */
+.aspekt-figur .aspekt-scene [id$="position_vector_x"] { stroke: var(--kb-rx); stroke-width: calc(3.2px * var(--kb-lw)); }   /* Vorlage 2, ×2 ×0,8 (CSS) × --kb-lw */
+.aspekt-figur .aspekt-scene [id$="position_vector_y"] { stroke: var(--kb-ry); stroke-width: calc(3.2px * var(--kb-lw)); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-r"]  polygon { fill: var(--kb-r); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-rx"] polygon { fill: var(--kb-rx); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-ry"] polygon { fill: var(--kb-ry); }
