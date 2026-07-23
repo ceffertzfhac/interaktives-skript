@@ -54,9 +54,8 @@ import { attachGraphHover } from './kreisbewegung/lib/hover.js';
 import { resetOnPlayAfterAutoStop } from './playback.js';
 import { ge } from '../core.js';
 
-const T_AUTO = 6;             // fester Auto-Stopp nach 6 s (nicht 1,5 T) — bei
-                              // Vorgabe T=4 s sind das anderthalb Perioden wie in
-                              // der statischen Vorlage
+const T_AUTO = 12;            // fester Auto-Stopp nach 12 s — bei Vorgabe T=4 s
+                              // sind das drei Perioden (Bereich 0…12 s, wie 1.39)
 const T_MIN = 2, T_MAX = 8, T_DEFAULT = 4;
 const R_FIXED = 1.5;          // Radius fest (ändert die Winkelkurve nicht)
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
@@ -163,7 +162,7 @@ const PANEL_LEFT = `
     <div class="panel-label">Parameter</div>
     <div class="slider-label">Zeit \\(t\\)</div>
     <div class="slider-row">
-      <input id="ak_t" type="range" min="0" max="6" step="0.05" value="6">
+      <input id="ak_t" type="range" min="0" max="12" step="0.05" value="12">
       <span class="slider-val" id="ak_t_out"></span>
     </div>
     <div class="slider-label">Periodendauer \\(T\\)</div>
@@ -261,9 +260,12 @@ export function buildWinkelZeitFig(fig) {
 
     // Skelett mit Per-Instanz-Prefix einhängen (kb_ -> p, ak_ -> p+ak_), dann
     // DOM an diese Instanz binden. Reihenfolge: erst IDs im Dokument, dann bindDom.
+    // Tempo-Pills liegen im PANEL_LEFT (nicht im RUNBAR) → deren name="ak_speed"
+    // HIER prefixen, sonst passt querySelectorAll('input[name="${p}speed"]') auf
+    // nichts und Slow-Mo bleibt wirkungslos (speedFactor stets 1,0).
     scene.innerHTML =
-      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`)}` +
-      `<div class="aspekt-main">${RUNBAR.replace(/name="ak_speed"/g, `name="${p}speed"`)}<div class="aspekt-main-content">` +
+      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`)}` +
+      `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE.replace(/kb_/g, p)}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH.replace(/kb_/g, p)}</div></div></div>` +
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
@@ -296,7 +298,7 @@ export function buildWinkelZeitFig(fig) {
     const ak_t = ge(p + 'ak_t'), ak_T = ge(p + 'ak_T');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let sceneCenters = null;
-    let curT = T_AUTO;                    // Initial: volle 6 s (Vorgabe T=4 s -> 1,5 Perioden)
+    let curT = T_AUTO;                    // Initial: volle 12 s (Vorgabe T=4 s -> 3 Perioden)
     let speedFactor = 1.0;
 
     // -- Eigene Achsen (Pfeil in positive, Fortsetzung in negative Richtung) -----
@@ -334,20 +336,28 @@ export function buildWinkelZeitFig(fig) {
     //    am Ursprung zwischen der positiven x-Achse und dem Radius (Ortsvektor),
     //    plus ein "φ"-Label (foreignObject/MathJax für das geschwungene \varphi).
     //    Der Bogenradius skaliert mit dem Kreis, gedeckelt. Läuft inside withStore.
+    //    WICHTIG: der kumulierte Winkel φ(t) wächst über 360° hinaus (Default
+    //    1,5…3 Perioden → bis 1080°). Ein SVG-Bogen kann >360° nicht zeichnen,
+    //    und das Label rutschte an die falsche Stelle. Daher Bogen + Label am
+    //    AUF 0…360° UMGEBROCHENEN Winkel gezeichnet — der echte geometrische
+    //    Winkel auf dem Kreis, an dem der Massenpunkt (cos/sin sind periodisch)
+    //    auch physisch sitzt. Der kumulierte Verlauf bleibt dem φ(t)-Diagramm
+    //    vorbehalten; die Szene zeigt stets die aktuelle Stellung.
     function drawAngle(phiDeg) {
         const g = ge(p + 'aspekt_angle');
         if (!g) return;
         g.textContent = '';
         const lbl0 = ge(p + 'angle_label');
-        if (phiDeg <= 0.5) { if (lbl0) lbl0.style.visibility = 'hidden'; return; }
+        const phiWrap = ((phiDeg % 360) + 360) % 360;   // 0…360° (geometrisch)
+        if (phiWrap <= 0.5) { if (lbl0) lbl0.style.visibility = 'hidden'; return; }
         const NS = 'http://www.w3.org/2000/svg';
         const cx = ANIM_CX, cy = ANIM_CY;
         const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42);
-        const rad = phiDeg * Math.PI / 180;
+        const rad = phiWrap * Math.PI / 180;
         // Bildschirm-y ist nach unten -> Winkel φ (math, CCW) endet bei y = cy - …
         const x0 = cx + rArc, y0 = cy;
         const x1 = cx + rArc * Math.cos(rad), y1 = cy - rArc * Math.sin(rad);
-        const large = phiDeg > 180 ? 1 : 0;
+        const large = phiWrap > 180 ? 1 : 0;
         const arc = document.createElementNS(NS, 'path');
         arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
         arc.setAttribute('class', 'aspekt-angle-arc');

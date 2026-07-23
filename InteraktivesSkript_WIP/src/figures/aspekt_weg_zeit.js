@@ -54,9 +54,8 @@ import { attachGraphHover } from './kreisbewegung/lib/hover.js';
 import { resetOnPlayAfterAutoStop } from './playback.js';
 import { ge } from '../core.js';
 
-const T_AUTO = 6;             // fester Auto-Stopp nach 6 s (nicht 1,5 T) — bei
-                              // Vorgabe T=4 s sind das anderthalb Perioden wie in
-                              // der statischen Vorlage
+const T_AUTO = 12;            // fester Auto-Stopp nach 12 s — bei Vorgabe T=4 s
+                              // sind das drei Perioden (Bereich 0…12 s, wie 1.41)
 const T_MIN = 2, T_MAX = 8, T_DEFAULT = 4;
 const R_DEFAULT = 1.5;
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
@@ -161,7 +160,7 @@ const PANEL_LEFT = `
     <div class="panel-label">Parameter</div>
     <div class="slider-label">Zeit \\(t\\)</div>
     <div class="slider-row">
-      <input id="ak_t" type="range" min="0" max="6" step="0.05" value="6">
+      <input id="ak_t" type="range" min="0" max="12" step="0.05" value="12">
       <span class="slider-val" id="ak_t_out"></span>
     </div>
     <div class="slider-label">Radius \\(R\\)</div>
@@ -265,9 +264,12 @@ export function buildWegZeitFig(fig) {
 
     // Skelett mit Per-Instanz-Prefix einhaengen (kb_ -> p, ak_ -> p+ak_), dann
     // DOM an diese Instanz binden. Reihenfolge: erst IDs im Dokument, dann bindDom.
+    // Tempo-Pills liegen im PANEL_LEFT (nicht im RUNBAR) → deren name="ak_speed"
+    // HIER prefixen, sonst passt querySelectorAll('input[name="${p}speed"]') auf
+    // nichts und Slow-Mo bleibt wirkungslos (speedFactor stets 1,0).
     scene.innerHTML =
-      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`)}` +
-      `<div class="aspekt-main">${RUNBAR.replace(/name="ak_speed"/g, `name="${p}speed"`)}<div class="aspekt-main-content">` +
+      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`)}` +
+      `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE.replace(/kb_/g, p)}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH.replace(/kb_/g, p)}</div></div></div>` +
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
@@ -300,7 +302,7 @@ export function buildWegZeitFig(fig) {
     const ak_t = ge(p + 'ak_t'), ak_r = ge(p + 'ak_r'), ak_T = ge(p + 'ak_T');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let sceneCenters = null;
-    let curT = T_AUTO;                    // Initial: volle 6 s (Vorgabe T=4 s -> 1,5 Perioden)
+    let curT = T_AUTO;                    // Initial: volle 12 s (Vorgabe T=4 s -> 3 Perioden)
     let speedFactor = 1.0;
 
     // -- Eigene Achsen (Pfeil in positive, Fortsetzung in negative Richtung) -----
