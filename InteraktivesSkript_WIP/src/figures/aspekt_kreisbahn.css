@@ -73,6 +73,11 @@
 .aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); font-style: italic; }
 /* Winkel-Visualisierung (Bogen + φ-Label) */
 .aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: calc(2px * var(--kb-lw)); }
+/* Geisterbögen vollendeter Umdrehungen (1.41): jeder abgeschlossene Umlauf
+   bleibt als verblasster Vollkreis im Hintergrund stehen. Opazität so gewählt,
+   dass die Summe der alten Bögen schwächer bleibt als der aktuelle Bogen (0,3
+   × ≤3 Umläufe ≈ 0,66 < 1,0). Gleiche Strichstärke wie der aktuelle Bogen. */
+.aspekt-figur .aspekt-angle-arc-prev { opacity: 0.3; }
 /* varphi-Label im foreignObject (MathJax) -- Farbe akzent, zentriert.
    Schrift BEWUSST ohne --kb-fs: das varphi-Label soll NICHT mitskalieren
    (Nutzervorgabe: Beschriftungen außer varphi bekommen ×1,5). */

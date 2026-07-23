@@ -2,29 +2,39 @@
 // „Die Geschwindigkeit …", Winkel-Zeit-Diagramm). Zeigt die Kreisbahn-Szene
 // mit Ortsvektor r, durchlaufenem Bogen und dem Winkel φ (Bogen + φ-Label) sowie
 // rechts daneben das Winkel-Zeit-Diagramm φ(t) — der kumulierte Winkel wächst
-// gleichmäßig mit der Zeit (Steigung = ω), über anderthalb Perioden.
-// Regler: Zeit t (0 … 1,5 T), Periodendauer T (→ ω = 2π/T). R ist fest (1,5 m),
+// gleichmäßig mit der Zeit (Steigung = ω), über drei Perioden (0 … 12 s).
+// Regler: Zeit t (0 … 12 s), Periodendauer T (→ ω = 2π/T). R ist fest (1,5 m),
 // da der Radius die Winkelkurve nicht beeinflusst — nur ω bestimmt ihre Steigung.
 //
-// TECHNIK: kein eigener Zeichencode außer dem Winkelbogen (aus aspekt_kreisbahn).
-// Der Motor der großen Kreisbewegungs-Simulation (src/figures/kreisbewegung/)
-// zeichnet Szene (updateScene) UND Diagramm (updateGraph), feature-gated auf den
-// Winkel-Aspekt. EINZELNES Diagramm mit graphType1='phit' (nicht gestapelt wie
-// 1.39): der Motor liefert phit nativ als kumulativen Winkel in Grad (φ wächst
-// linear, Steigung = ω). Der Motor ist zeit-/ω-getrieben (angleRad(t)=φ0+ω·t);
-// der t-Regler steuert direkt die Pseudo-Zeit, die precompute()-Datenreihe wird
-// auf feste 6 s begrenzt (Auto-Stopp; bei Vorgabe T=4 s = 1,5 Perioden wie in
-// der statischen Vorlage), updateScene()+updateGraph() zeichnen daraus Punkt,
-// Ortsvektor, Bahnspur, die wachsende φ(t)-Kurve — die optionale Anim-Schleife
-// fährt die Zeit von 0 bis 6 s (Slow-Mo via Tempo-Pills).
+// TECHNIK: kein eigener Zeichencode außer dem Winkelbogen (an aspekt_kreisbahn
+// angelehnt). Der Motor der großen Kreisbewegungs-Simulation
+// (src/figures/kreisbewegung/) zeichnet Szene (updateScene) UND Diagramm
+// (updateGraph), feature-gated auf den Winkel-Aspekt. EINZELNES Diagramm mit
+// graphType1='phit' (nicht gestapelt wie 1.39): der Motor liefert phit nativ als
+// kumulativen Winkel in Grad (φ wächst linear, Steigung = ω). Der Motor ist
+// zeit-/ω-getrieben (angleRad(t)=φ0+ω·t); der t-Regler steuert direkt die
+// Pseudo-Zeit, die precompute()-Datenreihe wird auf feste 12 s begrenzt
+// (Auto-Stopp; bei Vorgabe T=4 s = 3 Perioden), updateScene()+updateGraph()
+// zeichnen daraus Punkt, Ortsvektor, Bahnspur, die wachsende φ(t)-Kurve — die
+// optionale Anim-Schleife fährt die Zeit von 0 bis 12 s (Slow-Mo via Tempo-Pills).
+//
+// WINKEL-BOGEN (Szene): an 1.38 orientiert, erweitert für mehrere Umdrehungen.
+// φ(t) wächst kumuliert bis 1080° (3 Umläufe); ein SVG-Bogen kann >360° nicht
+// zeichnen. Daher: der AKTUELLE Umlauf wird wie in 1.38 als Teilbogen (0…φ,
+// volle Opazität, φ-Label auf der Winkelhalbierenden) gezeichnet; jede bereits
+// vollendete Umdrehung bleibt als verblasster Vollkreis im Hintergrund stehen
+// (Geisterspur, .aspekt-angle-arc-prev). Sobald der nächste Umlauf beginnt,
+// verblasst der bisherige Bogen, bleibt aber sichtbar — Summe der alten Bögen
+// schwächer als der aktuelle. Der kumulierte Verlauf steht im φ(t)-Diagramm.
 //
 // OPTIK: Farb-Tokens und Panel-/Slider-/Legenden-Klassen VERBATIM aus der
 // portierten styles.css (über aspekt_kreisbahn.css für .aspekt-figur), dazu die
-// Graph-Klassen (graph-bg/axis-line/…) aus der Sim, gescopt auf diese Figur.
-// Die Pfeil-Geometrie ist die der Vorlage (Marker markerUnits=userSpaceOnUse
-// mit fester Länge = ARROW_LEN), damit render.js' Verkürzung die Spitze exakt
-// auf den Zielpunkt setzt. Strichstärken nicht ändern. Winkelbogen UND φ(t)-
-// Kurve in --kb-accent (der φ-Farbe), damit Szene und Diagramm zusammengehören.
+// Graph-Klassen (graph-bg/axis-line/…) zentral in aspekt_kreisbahn.css (inkl.
+// ×1,5-Skalierung via --kb-lw/--kb-fs). Die Pfeil-Geometrie ist die der Vorlage
+// (Marker markerUnits=userSpaceOnUse mit fester Länge = ARROW_LEN), damit
+// render.js' Verkürzung die Spitze exakt auf den Zielpunkt setzt. Strichstärken
+// nicht ändern. Winkelbogen UND φ(t)-Kurve in --kb-accent (der φ-Farbe), damit
+// Szene und Diagramm zusammengehören.
 //
 // LAYOUT: anders als 1.39 (dort Szene über dem gestapelten Diagramm) steht hier
 // die Kreisbahn-Szene NEBEN dem φ(t)-Diagramm (Zeile) — wie die statische Vorlage
@@ -33,10 +43,9 @@
 //
 // ABLAUF: neben dem Zeit-Regler Start-/Stop-/Reset-Knöpfe (Pictogramme) sowie
 // Tempo-Pills (1× … ⅛×, Slow-Mo analog zur Vorlage) für den automatischen Ablauf.
-// Der läuft in Sim-Zeit, stoppt nach festen 6 s (nicht 1,5 T — bei Vorgabe T=4 s
-// sind 6 s = 1,5 Perioden) und wiederholt nicht. Pro Instanz im Closure; Knöpfe/
-// Pills hängen direkt am Container (kein data-action — sie brauchen Instanz-
-// Zustand, wie die Slider).
+// Der läuft in Sim-Zeit, stoppt nach festen 12 s (3 Perioden bei T=4 s) und
+// wiederholt nicht. Pro Instanz im Closure; Knöpfe/Pills hängen direkt am
+// Container (kein data-action — sie brauchen Instanz-Zustand, wie die Slider).
 //
 // PER-INSTANZ-ISOLATION: der Motor-Store ist ein Modul-Singleton. Diese Figur
 // holt sich über createRuntime() einen EIGENEN Prefix (kb<n>_) + einen EIGENEN
@@ -332,39 +341,56 @@ export function buildWinkelZeitFig(fig) {
         label(ANIM_CX - 14, ANIM_CY - len - 8, 'y');
     }
 
-    // -- Winkel-Visualisierung (aus aspekt_kreisbahn übernommen): kleiner Bogen
-    //    am Ursprung zwischen der positiven x-Achse und dem Radius (Ortsvektor),
-    //    plus ein "φ"-Label (foreignObject/MathJax für das geschwungene \varphi).
-    //    Der Bogenradius skaliert mit dem Kreis, gedeckelt. Läuft inside withStore.
-    //    WICHTIG: der kumulierte Winkel φ(t) wächst über 360° hinaus (Default
-    //    1,5…3 Perioden → bis 1080°). Ein SVG-Bogen kann >360° nicht zeichnen,
-    //    und das Label rutschte an die falsche Stelle. Daher Bogen + Label am
-    //    AUF 0…360° UMGEBROCHENEN Winkel gezeichnet — der echte geometrische
-    //    Winkel auf dem Kreis, an dem der Massenpunkt (cos/sin sind periodisch)
-    //    auch physisch sitzt. Der kumulierte Verlauf bleibt dem φ(t)-Diagramm
-    //    vorbehalten; die Szene zeigt stets die aktuelle Stellung.
+    // -- Winkel-Visualisierung (an 1.38 orientiert, erweitert für mehrere
+    //    Umdrehungen — Nutzervorgabe): der AKTUELLE Umdrehungsbogen wird wie in
+    //    1.38 gezeichnet (Teilbogen 0…φ, volle Opazität, φ-Label auf der
+    //    Winkelhalbierenden). Jede bereits vollendete Umdrehung bleibt als
+    //    verblasster Vollkreis im Hintergrund stehen — eine Geisterspur: sobald
+    //    die nächste Umdrehung beginnt, verblasst der bisherige Bogen, bleibt
+    //    aber sichtbar. Die Summe der alten Bögen bleibt schwächer als der
+    //    aktuelle (s. .aspekt-angle-arc-prev, Opazität ~0,3). Läuft inside
+    //    withStore. Der kumulierte φ(t)-Verlauf bleibt dem Diagramm vorbehalten;
+    //    die Szene zeigt pro Umdrehung die aktuelle Stellung + die vollendeten
+    //    Umdrehungen als verblassende Geisterbögen.
     function drawAngle(phiDeg) {
         const g = ge(p + 'aspekt_angle');
         if (!g) return;
         g.textContent = '';
         const lbl0 = ge(p + 'angle_label');
-        const phiWrap = ((phiDeg % 360) + 360) % 360;   // 0…360° (geometrisch)
-        if (phiWrap <= 0.5) { if (lbl0) lbl0.style.visibility = 'hidden'; return; }
+        if (phiDeg <= 0.5) { if (lbl0) lbl0.style.visibility = 'hidden'; return; }
         const NS = 'http://www.w3.org/2000/svg';
         const cx = ANIM_CX, cy = ANIM_CY;
         const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42);
-        const rad = phiWrap * Math.PI / 180;
-        // Bildschirm-y ist nach unten -> Winkel φ (math, CCW) endet bei y = cy - …
-        const x0 = cx + rArc, y0 = cy;
-        const x1 = cx + rArc * Math.cos(rad), y1 = cy - rArc * Math.sin(rad);
-        const large = phiWrap > 180 ? 1 : 0;
-        const arc = document.createElementNS(NS, 'path');
-        arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
-        arc.setAttribute('class', 'aspekt-angle-arc');
-        g.appendChild(arc);
-        // varphi-Label (foreignObject/MathJax) auf der Winkelhalbierenden. Bei
-        // R >= 1.2 ist der Bogen groß genug -> Label innen (0.62*rArc); sonst
-        // knapp außerhalb (rArc+15). (30x30-foreignObject -> um 15 zentrieren.)
+        const revCount = Math.floor(phiDeg / 360);      // vollendete Umdrehungen
+        const partial = phiDeg - revCount * 360;        // aktueller Umdrehungswinkel (0…360)
+        // Geisterbögen: je ein Vollkreis pro vollendeter Umdrehung, verblasst.
+        // Zweihalbkreis-Pfad (ein A-Bogen kann 360° nicht in einem Stück). Die
+        // Vollkreise überlagern sich -> mit jeder Umdrehung minimal dunkler,
+        // aber die Summe bleibt < aktueller Bogen.
+        for (let i = 0; i < revCount; i++) {
+            const ghost = document.createElementNS(NS, 'path');
+            ghost.setAttribute('d',
+                `M ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)} ` +
+                `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx - rArc).toFixed(2)} ${cy.toFixed(2)} ` +
+                `A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 1 0 ${(cx + rArc).toFixed(2)} ${cy.toFixed(2)}`);
+            ghost.setAttribute('class', 'aspekt-angle-arc aspekt-angle-arc-prev');
+            g.appendChild(ghost);
+        }
+        // Aktueller Bogen wie 1.38: Teilbogen am geometrischen Winkel (partial).
+        const rad = partial * Math.PI / 180;
+        if (partial > 0.5) {
+            // Bildschirm-y ist nach unten -> Winkel φ (math, CCW) endet bei y = cy - …
+            const x0 = cx + rArc, y0 = cy;
+            const x1 = cx + rArc * Math.cos(rad), y1 = cy - rArc * Math.sin(rad);
+            const large = partial > 180 ? 1 : 0;
+            const arc = document.createElementNS(NS, 'path');
+            arc.setAttribute('d', `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rArc.toFixed(2)} ${rArc.toFixed(2)} 0 ${large} 0 ${x1.toFixed(2)} ${y1.toFixed(2)}`);
+            arc.setAttribute('class', 'aspekt-angle-arc');
+            g.appendChild(arc);
+        }
+        // varphi-Label (foreignObject/MathJax) auf der Winkelhalbierenden (wie
+        // 1.38). Bei R >= 1.2 ist der Bogen groß genug -> Label innen (0.62*rArc);
+        // sonst knapp außerhalb (rArc+15). (30x30-foreignObject -> um 15 zentren.)
         const lr = (store.R >= 1.2) ? rArc * 0.62 : rArc + 15;
         const mid = rad / 2;
         // Kleiner Versatz, damit das Label nicht mit dem Ortsvektor kollidiert.
@@ -377,7 +403,7 @@ export function buildWinkelZeitFig(fig) {
         }
     }
 
-    // -- Zeitreihe auf 1,5 T begrenzen (anderthalb Perioden wie die Vorlage).
+    // -- Zeitreihe auf feste 12 s begrenzen (3 Perioden bei T=4 s, wie 1.39).
     //    precompute() des Motors nimmt max(4T, 10s); daher hier eine eigene,
     //    schmale Variante, die nur extendMotionData + recalculateAxisLimits nutzt.
     //    Läuft inside withStore (operiert nur auf dem (Instanz-)store).
@@ -430,7 +456,7 @@ export function buildWinkelZeitFig(fig) {
             store.phi0Deg = 0;
             store.omegaDeg = 360 / T;          // ω [deg/s] = 360 / T  (T = 2π/ω)
             recomputeDerived();
-            precomputeRange(T_AUTO);          // fest 0 … 6 s (Auto-Stopp), nicht 1,5 T
+            precomputeRange(T_AUTO);          // fest 0 … 12 s (Auto-Stopp), nicht 1,5 T
             if (curT > T_AUTO) curT = T_AUTO;
             ak_t.max = T_AUTO.toFixed(3);
             ak_t.value = curT.toFixed(3);
@@ -454,7 +480,7 @@ export function buildWinkelZeitFig(fig) {
         }
     }
 
-    // -- Automatischer Ablauf (Sim-Zeit 0 … 6 s, Slow-Mo via Tempo-Pills, Auto-
+    // -- Automatischer Ablauf (Sim-Zeit 0 … 12 s, Slow-Mo via Tempo-Pills, Auto-
     //    Stopp am Ende — kein Umbrechen). Pro Instanz im Closure; Knöpfe/Pills
     //    hängen direkt am Container (kein data-action — sie brauchen Instanz-
     //    Zustand, wie die Slider).
@@ -469,7 +495,7 @@ export function buildWinkelZeitFig(fig) {
         lastTs = ts;
         rt.withStore(() => {
             curT += dt * speedFactor;        // Slow-Mo: Tempo-Pills (1× … ⅛×)
-            if (curT >= T_AUTO) curT = T_AUTO;  // Auto-Stopp nach 6 s (kein Umbrechen)
+            if (curT >= T_AUTO) curT = T_AUTO;  // Auto-Stopp nach 12 s (kein Umbrechen)
             ak_t.value = curT.toFixed(3);
             draw(curT);
             updateLabels(curT, parseFloat(ak_T.value));
