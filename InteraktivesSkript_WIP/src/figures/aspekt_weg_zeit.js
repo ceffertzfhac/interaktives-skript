@@ -422,6 +422,7 @@ export function buildWegZeitFig(fig) {
                 showVelocityVector: false, showVelocityComponents: false,
                 showAccelerationVector: false, showAccelerationComponents: false,
                 isDigitalDisplay: false,
+                graphFontScale: 1.5,  // Graph-Schrift ×1,5 (--kb-fs) -> render.js skaliert Padding/Label-Abstand
             });
             store.R = parseFloat(ak_r.value);
             const T = parseFloat(ak_T.value);

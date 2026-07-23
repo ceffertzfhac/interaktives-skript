@@ -300,7 +300,12 @@ function drawGraphSlot(attrs) {
 
     const gW = graphW;
     const gH = graphHeight;
-    const padL = 60, padR = 18, padT = 28, padB = 38;
+    // Padding/Label-Offsets skalieren mit der Graph-Schrift (Aspekt-Figuren
+    // setzen store.graphFontScale = --kb-fs = 1.5, damit Tick-Beschriftungen im
+    // Abstand zur Achse und der letzte Tick rechts nicht abgeschnitten werden;
+    // gc10 lässt das Feld weg -> fs=1 -> alle Werte wie zuvor, bit-identisch).
+    const fs = store.graphFontScale || 1;
+    const padL = 60 * fs, padR = 18 * fs, padT = 28 * fs, padB = 38 * fs;
     const fullW = gW - padL - padR;
     const fullH = gH - padT - padB;
 
@@ -336,7 +341,7 @@ function drawGraphSlot(attrs) {
         const yp = scY(vv);
         if (Math.abs(yp - y0) > 1.5)
             gridEl.appendChild(el('line', { x1: plotL, y1: yp, x2: plotL + plotW, y2: yp, class: 'grid-line' }));
-        const tv = el('text', { x: plotL - 8, y: yp + 4, 'text-anchor': 'end', class: 'tick-label' });
+        const tv = el('text', { x: plotL - 8 * fs, y: yp + 4 * fs, 'text-anchor': 'end', class: 'tick-label' });
         tv.textContent = fmt(vv, yDec);
         gridEl.appendChild(tv);
     }
@@ -347,20 +352,21 @@ function drawGraphSlot(attrs) {
         const xp = scX(Math.min(xc, xMax));
         if (Math.abs(xp - x0) > 2)
             gridEl.appendChild(el('line', { x1: xp, y1: plotT, x2: xp, y2: plotBottom, class: 'grid-line' }));
-        const tv = el('text', { x: xp, y: plotBottom + 16, 'text-anchor': 'middle', class: 'tick-label' });
+        const tv = el('text', { x: xp, y: plotBottom + 16 * fs, 'text-anchor': 'middle', class: 'tick-label' });
         tv.textContent = fmt(xc, xDec);
         gridEl.appendChild(tv);
     }
 
-    const tlY = el('text', { x: plotL - 42, y: plotT + plotH / 2, transform: `rotate(-90 ${plotL - 42} ${plotT + plotH / 2})`, 'text-anchor': 'middle', class: 'axis-label' });
+    const tlYx = plotL - 42 * fs;
+    const tlY = el('text', { x: tlYx, y: plotT + plotH / 2, transform: `rotate(-90 ${tlYx} ${plotT + plotH / 2})`, 'text-anchor': 'middle', class: 'axis-label' });
     setAxisLabel(tlY, limits.yLabel);
     gridEl.appendChild(tlY);
-    const tlX = el('text', { x: plotL + plotW / 2, y: plotBottom + 32, 'text-anchor': 'middle', class: 'axis-label' });
+    const tlX = el('text', { x: plotL + plotW / 2, y: plotBottom + 32 * fs, 'text-anchor': 'middle', class: 'axis-label' });
     setAxisLabel(tlX, limits.xLabel);
     gridEl.appendChild(tlX);
 
     titleEl.setAttribute('x', plotL + plotW / 2);
-    titleEl.setAttribute('y', plotT - 10);
+    titleEl.setAttribute('y', plotT - 10 * fs);
     setGraphTitle(titleEl, graphTitles[type] ?? type);
 
     if (!limits.xIsTime) {
