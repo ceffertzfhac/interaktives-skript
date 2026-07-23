@@ -18,9 +18,13 @@
     position: relative;
     display: flex; flex-direction: column; align-items: stretch; min-width: 0;
 }
+/* align-items:center statt flex-start: Szene (450×480, hoch) und Diagramm
+   (700×410, breit) sind unterschiedlich hoch — oben ausgerichtet hing das
+   Diagramm über der Szene und beide standen sichtbar versetzt. Zentriert
+   liegen Kreisbahn und Diagramm auf gleicher Höhe. */
 .aspekt-figur[data-aspekt="winkel-zeit"] .aspekt-main-content {
     position: relative;
-    display: flex; flex-direction: row; align-items: flex-start; min-width: 0;
+    display: flex; flex-direction: row; align-items: center; min-width: 0;
 }
 .aspekt-figur[data-aspekt="winkel-zeit"] .aspekt-runbar {
     position: sticky;
