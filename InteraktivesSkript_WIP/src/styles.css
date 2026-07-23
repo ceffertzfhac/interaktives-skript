@@ -1681,7 +1681,13 @@ input[type="range"]::-moz-range-track {
 
 /* Lizenzhinweis (CC BY-NC-SA), dezent: reduzierte Deckkraft im Ruhezustand,
    volle Deckkraft bei Hover/Fokus signalisiert Interaktivitaet ohne staendig
-   Aufmerksamkeit zu binden. Badge klein (60x21, Original 120x42 halbiert). */
+   Aufmerksamkeit zu binden. Badge-Hoehe zunaechst an die sichtbare Rahmenbox-
+   Hoehe von "‹ Zurück"/"Weiter ›" angeglichen (gemessene Border-Box-Hoehe der
+   Buttons bei Standard-Textgroesse, 46px), dann auf Nutzerwunsch (wirkte zu
+   prominent) auf 0,8x skaliert (37px) -- vertikal zentriert per align-items
+   auf der .chapter-pagenav-Grid-Zeile, bleibt also mittig zu Zurück/Weiter
+   trotz geringerer Hoehe. Breite skaliert proportional mit (Original-
+   Seitenverhaeltnis 120:42). */
 .chapter-pagenav-license {
     justify-self: center;
     display: inline-flex;
@@ -1691,7 +1697,7 @@ input[type="range"]::-moz-range-track {
 }
 .chapter-pagenav-license:hover,
 .chapter-pagenav-license:focus-visible { opacity: 1; }
-.chapter-pagenav-license img { display: block; height: 21px; width: auto; }
+.chapter-pagenav-license img { display: block; height: 37px; width: auto; }
 
 /* ── Tablet-Drawer (Slide-in, s. shell.js::toggle_drawer) ────────────────── */
 #chapter_drawer_overlay {
