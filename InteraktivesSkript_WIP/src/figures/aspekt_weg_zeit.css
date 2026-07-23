@@ -42,7 +42,7 @@
 }
 .aspekt-figur[data-aspekt="weg-zeit"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 auto; }
 .aspekt-figur[data-aspekt="weg-zeit"] .aspekt-graph-svg {
-    display: block; width: 100%; height: 54vh; max-width: none;
+    display: block; width: 100%; height: auto; max-height: 44vh; max-width: none;
     margin: 0 auto;
 }
 
@@ -123,24 +123,24 @@
    und bekommen beide eine Viewport-Hoehe, die nebeneinander auf den Bildschirm
    passt. */
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: column; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main-content { flex-direction: row; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main-content { flex-direction: row; align-items: flex-start; }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 8px; }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 8px 8px; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-svg { height: 60vh; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-graph-svg { height: 60vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-svg { height: auto; max-height: 50vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="weg-zeit"] .aspekt-graph-svg { height: auto; max-height: 50vh; }
 
 /* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
    Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
    aspekt_kreisbahn.css. ─────────────────────────────────────────────────── */
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main { flex-direction: column; }
-.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content { flex-direction: row; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content { flex-direction: row; align-items: flex-start; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-svg {
-    width: 100%; height: 64vh; max-width: none;
+    width: 100%; height: auto; max-height: 56vh; max-width: none;
 }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="weg-zeit"] .aspekt-graph-svg {
-    max-width: none; width: 100%; height: 64vh;
+    max-width: none; width: 100%; height: auto; max-height: 56vh;
 }
 
 /* Zoom + schmal: Szene und Diagramm untereinander (nur dieser Modus). */

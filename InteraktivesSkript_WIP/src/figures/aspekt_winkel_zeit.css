@@ -20,7 +20,7 @@
 }
 .aspekt-figur[data-aspekt="winkel-zeit"] .aspekt-main-content {
     position: relative;
-    display: flex; flex-direction: row; align-items: stretch; min-width: 0;
+    display: flex; flex-direction: row; align-items: flex-start; min-width: 0;
 }
 .aspekt-figur[data-aspekt="winkel-zeit"] .aspekt-runbar {
     position: sticky;
@@ -37,11 +37,11 @@
 }
 .aspekt-figur[data-aspekt="winkel-zeit"] .aspekt-main .aspekt-scene { padding: 8px; flex: 0 0 40%; min-width: 0; }
 .aspekt-figur[data-aspekt="winkel-zeit"] .aspekt-main .aspekt-svg {
-    display: block; width: 100%; height: 50vh; max-width: none; margin: 0 auto;
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none; margin: 0 auto;
 }
 .aspekt-figur[data-aspekt="winkel-zeit"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 60%; }
 .aspekt-figur[data-aspekt="winkel-zeit"] .aspekt-graph-svg {
-    display: block; width: 100%; height: 50vh; max-width: none; margin: 0 auto;
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none; margin: 0 auto;
 }
 
 /* ── Graph-Struktur (Hintergrund, Gitter, Achsen, Skalen, Titel, Hover, Hit-
@@ -105,11 +105,26 @@
 :root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-main-content .aspekt-graph {
     flex: 1 1 auto;
 }
+/* ── Schmal-Modus: Szene und Diagramm UNTEREINANDER (gestapelt) — nur dieser
+   Modus. Normal/breit bleiben Zeile (.aspekt-main-content ist flex-row).
+   Nutzer-Vorgabe: kernsim größer (×1,4: 24→34 vh), Diagramm dafür kleiner
+   (Breite ×0,9, Höhe ×0,7: 48→34 vh). Szene per width:auto auf 34 vh Höhe
+   begrenzt -> Kreis füllt die Box ohne horizontalen Letterbox; Diagramm per
+   height:auto + Cap, Inhalt treibt die Höhe (kein Weißraum), Breite 90 %. ──── */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-main-content {
+    flex-direction: column;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 auto;
+}
 :root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-svg {
-    height: 24vh;
+    height: 34vh; width: auto; max-width: 100%; margin: 0 auto;
 }
 :root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-graph-svg {
-    height: 48vh;
+    height: auto; max-height: 34vh; width: 90%; margin: 0 auto;
 }
 
 /* ── Breit-Modus: Szene und Diagramm NEBENEINANDER (bleibt Zeile) mit mehr
@@ -120,8 +135,8 @@
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-main-content .aspekt-graph {
     flex: 1 1 58%; padding: 0 8px 8px;
 }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-svg { height: 60vh; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-graph-svg { height: 60vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-svg { max-height: 60vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="winkel-zeit"] .aspekt-graph-svg { max-height: 60vh; }
 
 /* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
    Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
@@ -131,10 +146,10 @@
 .aspekt-figur.aspekt-im-overlay[data-aspekt="winkel-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="winkel-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="winkel-zeit"] .aspekt-svg {
-    width: 100%; height: 64vh; max-width: none;
+    width: 100%; height: auto; max-height: 64vh; max-width: none;
 }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="winkel-zeit"] .aspekt-graph-svg {
-    max-width: none; width: 100%; height: 64vh;
+    max-width: none; width: 100%; height: auto; max-height: 64vh;
 }
 
 /* Zoom + schmal: Szene und Diagramm untereinander (nur dieser Modus). */
@@ -173,10 +188,10 @@
     padding: 0 8px 8px;
 }
 :root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="winkel-zeit"] .aspekt-svg {
-    height: min(24vh, 220px);
+    height: min(34vh, 308px); width: auto; max-width: 100%; margin: 0 auto;
 }
 :root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="winkel-zeit"] .aspekt-graph-svg {
-    height: min(42vh, 360px);
+    height: auto; max-height: min(29vh, 252px); width: 90%; margin: 0 auto;
 }
 
 /* Tablet (gestapelt): Diagramm vollbreit unter der Szene — schmal-Regeln greifen
