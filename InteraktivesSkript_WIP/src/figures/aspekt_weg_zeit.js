@@ -500,11 +500,13 @@ export function buildWegZeitFig(fig) {
             drawAxes();
             // Stoppuhr (analog, nach Vorlage): Skalenstriche zeichnen und oben rechts
             // in der Szene platzieren (setupScene setzt scale 0.8 — hier kleiner,
-            // damit die Uhr in die verkleinerte Szene passt).
+            // damit die Uhr in die verkleinerte Szene passt). Einen Hauch kleiner
+            // (0,71 -> 0,66) UND einen Hauch nach links (205 -> 190), damit sie nicht
+            // minimal mit dem rechts daneben liegenden Diagramm kollidiert.
             drawStopwatchMarks();
             drawSubdialMarks();
             const sw = ge(p + 'stopwatch');
-            if (sw) sw.setAttribute('transform', 'translate(205, -10) scale(0.71)');
+            if (sw) sw.setAttribute('transform', 'translate(190, -10) scale(0.66)');
             draw(curT);
             updateLabels(curT, T);
         });
