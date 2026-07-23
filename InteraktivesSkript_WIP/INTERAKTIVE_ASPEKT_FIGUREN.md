@@ -59,6 +59,56 @@ das Legacy-Muster.)
 
 ---
 
+## 0a. Vorlagen-Prinzip — die wichtigste Effizienzregel
+
+> **Kopieren und feature-gaten schlägt Neuschreiben. Immer.** Vor der ersten
+> Zeile Code wird entschieden, *welche bestehende Figur die Vorlage ist* — und
+> davon wird abgewichen nur dort, wo der Aspekt es erzwingt.
+
+Das ist keine Stilfrage, sondern der Hebel für Token- und Zeiteffizienz. Die
+Erfahrung aus 1.38 → 1.39 → 1.41: alles, was aus einer Vorlage übernommen wurde,
+lief auf Anhieb; **jede** eigene Erfindung an einer Stelle, für die es schon eine
+Vorlage gab, hat Feedback-Runden gekostet (φ-Platzierung, Lupe-Verankerung,
+Vergleichslinie). Runden mit dem Nutzer sind das Teuerste im ganzen Prozess.
+
+**Vorlagen-Kaskade — in dieser Reihenfolge suchen:**
+
+1. **Die nächstähnliche Aspekt-Figur.** Gleiches Interaktionsmuster gewinnt vor
+   gleichem Thema: Figur mit Play/Pause + Graph → `aspekt_weg_zeit.js` (gestapelt)
+   bzw. `aspekt_winkel_zeit.js` (einzeln); rein Slider-getrieben → `aspekt_kreisbahn.js`.
+   Modul kopieren, umbenennen, Aspekt-Flags/Regler/Graphtyp ändern — fertig.
+2. **Die Stand-alone-Sim** (`Input/Simulationen/Project_*` bzw. die portierte
+   `src/figures/kreisbewegung/`). Sie ist die Quelle für Optik *und* für
+   **Bedienkonventionen**: was passiert beim Parameterwechsel, wie sieht ein
+   Vergleichslauf aus, wie ist die Ablaufsteuerung beschriftet. Beispiel: die
+   Regel „Parameteränderung setzt den Laufparameter auf 0" stammt aus den
+   Stand-alones (schiefer Wurf) — sie selbst herzuleiten hat zwei Runden gekostet.
+3. **Die statische v0.13-Abbildung** für Bildaufbau, Beschriftung, Achsen.
+4. **Die Legacy-Figur** an derselben Stelle für den gemeinten Aspekt.
+
+**Konsequenzen für die Arbeitsweise:**
+
+- **„Wie in 1.38" heißt pixelgleich, nicht sinngemäß.** Sagt der Nutzer, eine
+  bestehende Figur sei die Referenz, dann ist jede Abweichung ein Fehler — auch
+  eine, die für sich genommen „richtiger" ist. In 1.41 wurde ein konstanter
+  Label-Versatz entfernt, weil er mathematisch nicht auf der Winkelhalbierenden
+  liegt; das Ergebnis war „immer noch falsch", weil die Figuren nun verschieden
+  aussahen. Erst zurückbauen auf 1.38-Parität hat es gelöst.
+- **Gemeinsames zentral halten.** Was in zwei Figuren gleich ist, gehört in
+  `aspekt_kreisbahn.css` bzw. in ein geteiltes Modul (`playback.js`,
+  `runtime.js`) — nicht dupliziert. Eine Regel für alle statt drei Sonderfälle:
+  die Lupe hängt in *allen* Figuren an derselben Stelle (Ablaufleiste, sonst
+  `.aspekt-scene`), statt pro Figur eigene Positionierung.
+- **Erst diffen, dann fragen.** Weicht eine Figur optisch von der Vorlage ab,
+  ist der schnellste Weg `git diff`/Vergleich der beiden Module an genau der
+  Stelle — nicht Messen und nicht Raten.
+- **Token-Ökonomie:** ein kopiertes Modul + gezielte Edits kostet einen Bruchteil
+  von „Datei ganz lesen, neu schreiben, iterieren". Beim Abweichen von der
+  Vorlage im Kommentar **begründen, warum** — sonst wird die Abweichung später
+  für einen Fehler gehalten (oder „reparieren" bringt sie zurück).
+
+---
+
 ## 1. Vorarbeit: die Quelle verstehen
 
 1. **Ist die Sim schon portiert?** Kreisbewegung lag als
@@ -297,7 +347,7 @@ Auto-Stopp-Figuren rufen denselben Helfer statt eigenem Schwellen.
 | 5 | Sim sprengt im Zoom die Vertikale | verschachteltes flex/grid `height:100%` ist fragil | SVG an **Viewport-Höhe** deckeln: `max-width: min(100%, 62vh)` |
 | 6 | Mittelbereich zu groß / über den Rand | greedy `1fr`-Szene + breite Formel bläht `auto`-Analyse-Spalte auf | `.aspekt-panel-right { max-width: 260px }`; keine breite Formel in `auto`-Spalte |
 | 7 | Achse/Label stößt an den Rand | eigene Achsenlänge zu groß (viewBox 450×480, Mitte 225/260) | Länge deckeln (z. B. `min(…, 194)`), Szene bekommt Innen-Padding |
-| 8 | φ als **gerades** statt geschwungenes Zeichen | rohes Unicode (U+03C6/U+03D5) rendert fontabhängig | Zeichen als **MathJax** rendern — im SVG per `foreignObject` mit `\(\varphi\)`, fontunabhängig |
+| 8 | φ als **gerades** statt geschwungenes Zeichen | rohes Unicode (U+03C6/U+03D5) rendert fontabhängig | **Erst MathJax-`foreignObject`, seit 1.41 revidiert → s. #17.** Kurzfassung: natives `<svg:text>` mit `font-style:italic` (Klasse `.aspekt-angle-label`) und Glyphenform im Browser prüfen; `foreignObject` nur, wenn eine echte Formel gesetzt werden muss |
 | 9 | Formel im Panel verschiebt Kapitel-Nummerierung | nummerierte Umgebung erhöht den Gleichungszähler | nur **`\[…\]`** (unnummeriert) verwenden; offline mit `mathjax-full` prüfen (0 `mlabeledtr` / 0 `width="full"`) |
 | 10 | Abschnitts-Links navigieren nicht | Seiten tragen `data-page-id`, **nicht** `id`; der `#`-Handler suchte per `getElementById` | Handler auf `.chapter-page[data-page-id="…"]` zurückfallen lassen (in `main.js` behoben) |
 | 11 | ~~Store-Konflikt (eine Figur pro Seite)~~ | `state.js`-`store` war **Singleton** | **gelöst:** `createRuntime()`/`withStore` isoliert `store`/`DOM` pro Instanz; mehrere Figuren unabhängig |
@@ -306,6 +356,12 @@ Auto-Stopp-Figuren rufen denselben Helfer statt eigenem Schwellen.
 | 14 | Speed-Radios kollidieren zwischen Instanzen | `name="ak_speed"` wäre shared | pro Instanz prefixen: `name="${p}speed"`; Radios selbst per `scene.querySelectorAll` abgreifen (nicht `DOM.speedRadios`) |
 | 15 | Runbar-Tasten lösen nicht aus | `data-action`-Dispatch greift nicht pro Instanz | Runbar-Buttons mit `data-act="start|stop|reset"`, Listener direkt am Container in der Factory |
 | 16 | Analyse-Leiste im breit-Modus verschoben | `auto`-Analyse-Spalte zu breit | `.aspekt-panel-right { max-width: 260px }` (s. #6) |
+| 17 | Einzelnes Zeichen im `foreignObject` sitzt **konstant zu tief** — das Label „wandert falsch mit", seine Bahn wirkt verschoben | MathJax (tex-svg) setzt die Glyphe als inline-`<svg>` auf die Grundlinie (`vertical-align:-0.493ex`). Der `mjx-container` ist damit die **Zeilenbox** (~1,12 em), die Glyphe (~0,43 em) hängt darin unten. Wer den Container zentriert, zentriert die Zeilenbox — nicht das Sichtbare | Sofortfix: `display:block` auf dem inneren `<svg>` + `line-height:0` → Containerbox = Glyphenbox. **Besser (1.41): gar kein `foreignObject`** für einzelne Zeichen, sondern natives `<svg:text>` mit `text-anchor:middle`/`dominant-baseline:middle` — kein Boxproblem, kein Safari-Sonderfall |
+| 18 | „Letzte Kurve behalten" zeigt praktisch dieselbe Kurve wie der neue Lauf; nur die Achsenbeschriftung ändert sich | `<input type=range>` feuert **ein `input`-Event pro Zwischenwert**. Wurde bei jedem eingefroren, ist die „letzte Kurve" die des vorletzten Zwischenwerts (T = 7,9 s statt 4,0 s) | Genau **ein** Schnappschuss pro Zieh-Geste: Flag beim ersten `input` setzen, im `change`-Event (Loslassen) zurücksetzen. Eingefroren wird der Zustand **vor** der Geste |
+| 19 | Eingefrorene Vergleichskurve passt nach Parameterwechsel nicht mehr zur Achse | Kurve war als **Pixel**-Polyline gespeichert; die Achsen skalieren aber mit den Parametern (φ_max = 360°·T_ges/T; y = ±1,1·R). Die Linie blieb stehen, während die Achse unter ihr wegskalierte | Rohdaten (t/φ bzw. t/x/y) speichern und bei **jedem** Zeichnen neu auf `store.graphScale[slot]` projizieren; die y-Grenzen in `recalculateAxisLimits()` um die Geisterkurve erweitern, sonst läuft sie aus dem Bild |
+| 20 | Vergleich zweier Parameter ist unphysikalisch/unverständlich | Nach Parameterwechsel lief die Zeit an der alten Stelle weiter | **Konvention der Stand-alones (schiefer Wurf):** ändert ein Regler die *Kurvenform*, springt der Laufparameter `t` auf 0 und die Animation stoppt — der neue Verlauf entsteht von vorn über dem alten |
+| 21 | **Gar keine** Figur rendert (auch die unbeteiligten) | `main.js` importiert alle Figurenmodule als Seiteneffekt — ein **Syntaxfehler in einem** Modul reißt den ganzen Modulgraph mit. Real: `-00` ist in ES-Modulen (immer strict) ein Oktal-Literal → `SyntaxError` | Erstdiagnose bei „nichts da": Konsolenfehler lesen, dann `node --input-type=module --check < <modul>.js` über alle geänderten Module |
+| 22 | Element am oberen Figurenrand (z. B. Lupe) ist beim Lesen nicht sichtbar | `.aspekt-figur { overflow:hidden }` macht die Figur zum Scroll-Container für `position:sticky` → die `.aspekt-runbar` klebt nie; und der obere Rand von `.aspekt-main` verschwindet beim Scrollen unter der klebenden Seiten-Kopfleiste | Bedienelemente an einen Container hängen, der in Leseposition sichtbar ist (hier: **in** die Ablaufleiste, `position:static` + `margin-left:auto`), nicht absolut an den oberen Rand des Hauptbereichs |
 
 ---
 
@@ -332,11 +388,38 @@ Headless abgesichert: Figur baut (per `buildXFig`), Regler-Werte korrekt
 Rückverschiebung, Collapse-Toggle, Nummer im Caption, φ-Bogen, Abschnitts-Link-
 Navigation, Graph-Aufbau (Weg-Zeit).
 
-**Nur im Browser / nur mit den Augen des Nutzers:**
-- Ob Vektoren/Farben tatsächlich wie die Stand-alone wirken.
-- Größenverhältnisse (inline vs. Zoom), Kollisionen, Label-Platzierung.
-- Die MathJax-Glyphen (varphi geschwungen), foreignObject unter Safari.
-- Schmalmodus-Legende (3-Spalten), Breitenmodus-Layouts, Darkmode.
+**Im echten Browser prüfbar — ohne den Nutzer** (headless Chromium, seit 1.41):
+
+```bash
+npm install --prefix /tmp playwright-core          # Chromium aus ~/.cache/ms-playwright
+cd InteraktivesSkript_WIP && python3 -m http.server 8765 &
+
+# Screenshot der Szene, Regler gesetzt, hohe Aufloesung
+node .claude/skills/interaktive-aspekt-figur/scripts/figur_screenshot.mjs \
+     --fig=aspekt-winkel-zeit --sel='svg[id$=main_svg]' --set=ak_t=1.5 --scale=3 --out=/tmp/szene.png
+# Layout je Breiten-Modus / im Lupe-Overlay
+node …/figur_screenshot.mjs --fig=aspekt-weg-zeit --mode=breit --overlay --out=/tmp/breit.png
+# Geometrie messen -- und zwar die INK-Box, nicht den Container (s. Fallstrick #17)
+node …/figur_screenshot.mjs --fig=aspekt-kreisbahn --set=ak_phi=135 \
+     --measure='foreignObject[id$=angle_label]' --ink
+```
+
+Damit sind Platzierung, Kollisionen, Größenverhältnisse, Sichtbarkeit und die
+Modus-Layouts **selbst** prüfbar, bevor der Nutzer hinschaut. Das verkürzt
+Feedback-Runden erheblich — genau die sind der teuerste Teil.
+
+> **Merksatz aus 1.41: anschauen schlägt ausmessen.** Eine falsche
+> φ-Platzierung wurde dreimal per DOM-Messung als „korrekt" bestätigt, weil die
+> gemessene Box (`mjx-container` = Zeilenbox) nicht das war, was man sieht (die
+> Glyphe). Ein einziger Screenshot hätte es in Runde 1 gezeigt. Wenn gemessen
+> wird, dann das **innerste gezeichnete Element** (`--ink`).
+
+**Weiterhin nur mit den Augen des Nutzers:**
+- Ob Vektoren/Farben tatsächlich wie die Stand-alone *wirken* (Geschmack).
+- Ob eine Beschriftung „richtig" sitzt, wenn mehrere Setzungen vertretbar sind —
+  dann **mit konkreten Optionen fragen** (Vorschau-Skizzen), nicht raten. In 1.41
+  haben drei Rateversuche mehr gekostet als eine Rückfrage.
+- Darkmode-Eindruck, Schriftwirkung, Safari-Rendering.
 
 > **Prozess-Wahrheit:** Die visuelle Feinarbeit ist **inhärent iterativ** und
 > braucht den Nutzer als Auge. Plane mehrere Feedback-Runden ein; formuliere
@@ -365,12 +448,30 @@ Navigation, Graph-Aufbau (Weg-Zeit).
   Browser mühsam zu finden gewesen wären.
 - **Klein committen.** Pro logischer Einheit ein Commit mit Begründung; das hat
   die vielen Feedback-Runden nachvollziehbar gehalten.
+- **Vorlage schlägt eigene Herleitung — auch die bessere.** Der teuerste Teil
+  von 1.41 war nicht das Bauen, sondern das Nachziehen von Details, für die es
+  in 1.38/1.39 oder in den Stand-alones längst eine Setzung gab (s. Abschnitt
+  0a). Faustregel: bevor eine Platzierung, eine Bedienkonvention oder ein
+  Interaktionsdetail *hergeleitet* wird, erst nachsehen, ob es sie schon gibt.
+- **Im Browser nachsehen, bevor der Nutzer es tut.** Seit `figur_screenshot.mjs`
+  ist das ohne Nutzerrunde möglich; das ersetzt einen guten Teil der bisherigen
+  „iterativen Feinarbeit" durch Selbstprüfung.
+- **Bei mehrdeutiger optischer Kritik früh mit Optionen fragen.** „Sitzt falsch"
+  hat viele mögliche Bedeutungen (Anker, Radius, Winkel, innen/außen). Eine
+  Rückfrage mit 3–4 konkreten, skizzierten Varianten kostet eine Runde; Raten hat
+  drei gekostet.
+- **Bei „nichts geht" zuerst die Modul-Syntax prüfen.** Ein Syntaxfehler in einem
+  einzigen Figurenmodul legt über die Seiteneffekt-Importe in `main.js` alle
+  Figuren still (Fallstrick #21).
 
 ---
 
 ## 10. Checkliste für die nächste Aspekt-Figur
 
 **Vorbereitung**
+- [ ] **Vorlage bestimmt** (Abschnitt 0a): nächstähnliche Aspekt-Figur nach
+      Interaktionsmuster, Stand-alone für Optik **und Bedienkonventionen**,
+      statische v0.13-Abbildung für Bildaufbau — Modul kopieren statt neu schreiben
 - [ ] Sim portiert? (sonst zuerst portieren, IDs kollisionsfrei)
 - [ ] Aspekt + Regler + „ersetzt/ergänzt statisch" mit dem Nutzer geklärt
 - [ ] `physics`/`render`/`state`/`runtime`-Verträge gelesen (welche `show*`-Flags, welche DOM-IDs, `createRuntime`/`withStore`/`bindDom`)
@@ -383,7 +484,8 @@ Navigation, Graph-Aufbau (Weg-Zeit).
 - [ ] Eigene Zusatz-Zeichnung (Winkelbogen o. ä.) in **eigener** Gruppe; `kb_animation_coord_system` bei eigenen Achsen leeren
 - [ ] Regler-Closure pro Instanz; Speed-Radios `name="${p}speed"`; Runbar `data-act` + Container-Listener
 - [ ] Optik: Tokens + Panel-/Slider-/Legenden-/Analyse-CSS aus `kreisbewegung/styles.css` ableiten, auf `.aspekt-figur` gescopt; `--kb-text-scale` für UI-Schrift
-- [ ] Zeichen/Formeln als **MathJax** (im SVG per `foreignObject`); Panel-Formeln nur `\[…\]`
+- [ ] Einzelne Zeichen (φ o. ä.) als natives `<svg:text>` (`.aspekt-angle-label`), **nicht** per `foreignObject` (Fallstrick #17); Panel-Formeln nur `\[…\]`
+- [ ] Animierte Figur mit Vergleichslauf? → Geisterkurve als **Daten** speichern und pro Zeichnen neu projizieren (#19); Schnappschuss **einmal pro Zieh-Geste** (#18); kurvenformender Regler setzt `t` auf 0 und stoppt (#20)
 - [ ] Physik-Sektion: statisch `.formula-box` im Template **oder** dynamisch via `data-eqs` + gelabelte Gleichung — nicht mischen
 - [ ] Auto-Stopp? → `resetOnPlayAfterAutoStop` aus `playback.js` im `start()`
 - [ ] Greifbarer Punkt? → Pointer-Drag-Handler im `buildXFig`-Body nach Vorbild 1.38 (SVG-`getScreenCTM`, Snap, Clamp, gleiche `refresh()`-Pipeline)
@@ -392,8 +494,9 @@ Navigation, Graph-Aufbau (Weg-Zeit).
 - [ ] Legacy-Muster: `.nur-bildschirm`/`.nur-druck`, statische Abbildung direkt daneben, `data-figref` für die Nummer
 
 **Prüfen**
-- [ ] `node --check` alle Module; CSS-Klammern balanciert
+- [ ] `node --input-type=module --check` über **alle** geänderten Module (ein Syntaxfehler killt alle Figuren, #21); CSS-Klammern balanciert
 - [ ] `figur_smoke.mjs` (mit `--init=buildXFig`): Aufbau, Werte, Overlay, Collapse, Graph, Runbar
 - [ ] Panel-Formel unnummeriert (offline `mathjax-full`: 0 `mlabeledtr`)
 - [ ] `dom_harness.mjs`: Kapitel-Nummerierung unverändert
-- [ ] **Im Browser mit dem Nutzer:** Optik, Größen, Kollisionen, Glyphen, Schmal-/Breit-Modus, Darkmode — iterativ
+- [ ] **Selbst im Browser:** `figur_screenshot.mjs` je Breiten-Modus + Overlay ansehen (nicht nur messen); bei Geometrie `--ink` verwenden
+- [ ] **Danach mit dem Nutzer:** Optik-Geschmack, Glyphenwirkung, Darkmode — bei mehrdeutiger Kritik mit konkreten Optionen zurückfragen statt raten
