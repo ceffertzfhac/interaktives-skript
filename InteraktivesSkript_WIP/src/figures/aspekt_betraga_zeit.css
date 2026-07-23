@@ -1,0 +1,210 @@
+/* aspekt_betraga_zeit.css — Optik der Betrag-der-Bahnbeschleunigungs-Aspekt-
+   Figur (Abb. 1.47, |a(t)|). 1:1 vom Layout der Betrag-v-Zeit-Figur (Abb. 1.43)
+   abgeleitet (Kopie + data-aspekt umbenannt) — gleiches Interaktionsmuster
+   (Szene neben einzelnem Diagramm, Play/Pause), nur andere Kurve (|a(t)|,
+   konstant) und anderer Szenen-Vektor (a statt v). Farb-Tokens, Panel-/Slider-/
+   Legenden-/Analyse-/Lupe-/Caption-Regeln und das Layout je Breiten-Modus +
+   das Overlay kommen unverändert aus aspekt_kreisbahn.css (geladen), weil diese
+   Figur ebenfalls .aspekt-figur ist. Hier stehen NUR die Ergänzungen: die
+   Graph-Klassen (hier auf [data-aspekt="betrag-a-zeit"] gescopt), die |a(t)|-
+   Linienfarbe in --kb-acc, die Vektorfarbe des Beschleunigungsvektors (a ist
+   NICHT zentral in aspekt_kreisbahn.css gefärbt, nur r/rx/ry — s. Kommentar
+   dort Z.122, „Vektor-FARBEN pro Figur"; daher hier explizit) und die Mittel-
+   Spalte (.aspekt-main), die Szene + Diagramm NEBENEINANDER stellt — wie die
+   statische Vorlage. Nur im Schmal-Modus wird gestapelt. */
+
+/* ── Mittel-Spalte: Szene links, Diagramm rechts (Zeile) ──────────────────────
+   Beide SVGs an der Viewport-HOEHE deckeln, damit Szene UND Diagramm gleichzeitig
+   nebeneinander auf den Bildschirm passen. Die SVGs tragen
+   preserveAspectRatio="xMidYMid meet" -> der Inhalt skaliert mit erhaltenem
+   Seitenverhältnis in die Box (width:100% × Nvh) und zentriert sich. */
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-main {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+/* align-items:center statt flex-start: Szene (450×480, hoch) und Diagramm
+   (700×410, breit) sind unterschiedlich hoch — oben ausgerichtet hing das
+   Diagramm über der Szene und beide standen sichtbar versetzt. Zentriert
+   liegen Kreisbahn und Diagramm auf gleicher Höhe. */
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-main-content {
+    position: relative;
+    display: flex; flex-direction: row; align-items: center; min-width: 0;
+}
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-runbar {
+    position: sticky;
+    top: 0;
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 8px;
+    background: var(--kb-surface);
+    border-bottom: none;
+    box-shadow: none;
+}
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-main .aspekt-scene { padding: 8px; flex: 0 0 40%; min-width: 0; }
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-main .aspekt-svg {
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none; margin: 0 auto;
+}
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 60%; }
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-graph-svg {
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none; margin: 0 auto;
+}
+
+/* ── Graph-Struktur (Hintergrund, Gitter, Achsen, Skalen, Titel, Hover, Hit-
+   Rect, Linienbreiten/-schriften) liegt ZENTRAL in aspekt_kreisbahn.css
+   (gescopt auf .aspekt-figur, inkl. der ×1,5-Skalierung via --kb-lw/--kb-fs).
+   Hier pro Figur NUR die Datenlinien-FARBE — |a(t)|=--kb-acc (gleich der
+   Beschleunigungsvektor-Farbe in der Szene, damit Szene und Diagramm
+   zusammengehören). IDs sind pro Instanz prefixt (kb<n>_, s. runtime.js) ->
+   Suffix-Selektoren. ──────────────────────────────────────────────────────── */
+.aspekt-figur[data-aspekt="betrag-a-zeit"] [id$="graph_line"]  { stroke: var(--kb-acc); }
+.aspekt-figur[data-aspekt="betrag-a-zeit"] [id$="graph_point"] { fill: var(--kb-acc); }
+
+/* ── Szene: Beschleunigungsvektor (radial, antiparallel zu r) = die gezeigte
+   Groesse. a ist NICHT zentral in aspekt_kreisbahn.css gefärbt (nur r/rx/ry
+   sind dort generisch, s. Kommentar Z.122 „Vektor-FARBEN pro Figur") — daher
+   hier explizit scope, sonst bliebe der Vektor unsichtbar (stroke-Default =
+   none). Pfeilspitze (arrowhead-a) passend eingefärbt. r kommt zentral über
+   --kb-r. Suffix-Selektoren wegen per-Instanz-Prefix. ──────────────────────── */
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-scene [id$="acceleration_vector"] { stroke: var(--kb-acc); }
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-scene [id$="arrowhead-a"] polygon { fill: var(--kb-acc); }
+
+/* Legende: data-c="a" ist NICHT zentral in aspekt_kreisbahn.css definiert
+   (nur "r"/"phi"/"traj" sind dort generisch) — hier die analoge Ergaenzung
+   fuer diese Figur (wie 1.43 sie fuer "v" hat). */
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .legend-swatch[data-c="a"] { background: var(--kb-acc); }
+
+/* ── Vergleichslinie (vorheriger Durchlauf): gestrichelt + dünner als die
+   aktuelle |a(t)|-Linie. Eingeblendet vom JS, sobald ein Neudurchlauf startet
+   (Feature-Vorgabe: letzte Kurve zum Vergleichen stehen lassen). ──────────── */
+.aspekt-figur[data-aspekt="betrag-a-zeit"] [id$="graph_prev_line"] {
+    stroke: var(--kb-acc); stroke-opacity: .5;
+    stroke-width: calc(1.5px * var(--kb-lw, 1)); stroke-dasharray: 6,4;
+    fill: none; pointer-events: none;
+}
+
+/* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme, ca. 60 %) ─────────── */
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-btn-row {
+    display: flex; gap: 6px;
+}
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-btn.aspekt-btn-icon {
+    flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border2); border-radius: 6px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-btn.aspekt-btn-icon:hover {
+    color: var(--kb-accent); border-color: var(--kb-accent);
+}
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .aspekt-btn.aspekt-btn-icon svg {
+    width: 15px; height: 15px; display: block;
+}
+
+/* ── Tempo-Pills (Slow-Mo analog zur Vorlage: 1× … ⅛×) ──────────────────── */
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .speed-pills { display: flex; gap: 5px; }
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: calc(11.5px * var(--kb-text-scale, 1));
+    color: var(--kb-text2); cursor: pointer; transition: all .15s;
+    position: relative; -webkit-user-select: none; user-select: none;
+}
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+.aspekt-figur[data-aspekt="betrag-a-zeit"] .speed-pill.active {
+    background: color-mix(in srgb, var(--kb-accent) 12%, transparent);
+    border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
+}
+
+/* ── Schmal-Modus: Szene und Diagramm UNTEREINANDER (gestapelt) — nur dieser
+   Modus. Normal/breit bleiben Zeile (.aspekt-main-content ist flex-row). Szene
+   bewusst klein (der Aspekt ist das Diagramm), Diagramm bekommt den Rest.
+   Nutzer-Vorgabe: kernsim größer (×1,4: 24→34 vh), Diagramm dafür kleiner
+   (Breite ×0,9, Höhe ×0,7: 48→34 vh). Szene per width:auto auf 34 vh Höhe
+   begrenzt -> Kreis füllt die Box ohne horizontalen Letterbox; Diagramm per
+   height:auto + Cap, Inhalt treibt die Höhe (kein Weißraum), Breite 90 %. ──── */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="betrag-a-zeit"] .aspekt-main-content {
+    flex-direction: column;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="betrag-a-zeit"] .aspekt-svg {
+    height: 34vh; width: auto; max-width: 100%; margin: 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="betrag-a-zeit"] .aspekt-graph-svg {
+    height: auto; max-height: 34vh; width: 90%; margin: 0 auto;
+}
+
+/* ── Breit-Modus: Szene und Diagramm NEBENEINANDER (bleibt Zeile) mit mehr
+   Hoehe, damit beide neben dem Analysis-Panel gut auf den Bildschirm passen. ─ */
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 42%; padding: 8px;
+}
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 58%; padding: 0 8px 8px;
+}
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="betrag-a-zeit"] .aspekt-svg { max-height: 60vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="betrag-a-zeit"] .aspekt-graph-svg { max-height: 60vh; }
+
+/* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
+   Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
+   aspekt_kreisbahn.css. ─────────────────────────────────────────────────── */
+.aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-main { flex-direction: column; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-main-content { flex-direction: row; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-svg {
+    width: 100%; height: auto; max-height: 64vh; max-width: none;
+}
+.aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-graph-svg {
+    max-width: none; width: 100%; height: auto; max-height: 64vh;
+}
+
+/* Zoom + schmal: Szene und Diagramm untereinander (nur dieser Modus). */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-main-content {
+    flex-direction: column;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 auto;
+}
+
+/* Zoom + schmal: Platz auf Bildschirm priorisieren (ohne andere Modi zu aendern).
+   Statt der generischen 3-Spalten-Overlay-Ansicht wird die Figur einspaltig,
+   die rechte Analyse-Leiste ausgeblendet und die Kernflaechen kompakter gesetzt,
+   damit Szene + Diagramm gleichzeitig sichtbar bleiben. */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-body {
+    display: block;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-panel-left {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-panel-right {
+    display: none;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-runbar {
+    padding: 6px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-scene {
+    padding: 6px 8px 4px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-main-content .aspekt-graph {
+    padding: 0 8px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-svg {
+    height: min(34vh, 308px); width: auto; max-width: 100%; margin: 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="betrag-a-zeit"] .aspekt-graph-svg {
+    height: auto; max-height: min(29vh, 252px); width: 90%; margin: 0 auto;
+}
+
+/* Tablet (gestapelt): Diagramm vollbreit unter der Szene — schmal-Regeln greifen
+   über die Breakpoint-Logik (s. aspekt_kreisbahn.css / shell). nichts extra nötig. */

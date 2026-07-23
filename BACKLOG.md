@@ -274,6 +274,20 @@ Zuweisung per Freigabe-Tipp.
   `aspekt_kreisbahn.css` (r 4px / rx,ry 3,2px) und `aspekt_vxvy_zeit.css`
   (v 2,5px / vy 2px) eingehalten. Konsistenz kapitelweit (1.4) sichern, Regel als
   Token/Konstante festhalten statt pro Figur hart. *(S)*
+- [ ] **P-AF-6: Interaktive Aspekt-Figur 1.46 — aₓ(t)/a_y(t)-Zeit-Diagramm.**
+  statische `fig-skript-kreisbewegungen-axaydiagramm` interaktiv nachbauen, analog
+  zu P-AF/1.42 (`aspekt_vxvy_zeit.js|.css`): gestapeltes Dual-Graph (oben aₓ(t),
+  unten a_y(t)), Zeit-Regler t tastet ab, R + T einstellbar, Kernsim zeigt
+  Beschleunigungsvektor a⃗ mit optionaler Zerlegung in aₓ/a_y. Copy & feature-gate
+  der 1.42 (nicht von null, s. INTERAKTIVE_ASPEKT_FIGUREN.md §0a). Motor per
+  `createRuntime()`; Registrierung `main.js::ASPEKT_FACTORIES` + `data-aspekt`
+  + `data-figref`. a⃗-Farbe kapitelweit `--kb-a`. *(M)*
+- [ ] **P-AF-7: Interaktive Aspekt-Figur 1.47 — Betrag der Bahnbeschleunigung.**
+  statische `fig-skript-kreisbewegungen-betragatdiagramm` interaktiv nachbauen,
+  analog zu P-AF/1.43 (`aspekt_betragv_zeit.js|.css`): einzelner Graph |a⃗(t)|
+  (konstant), Zeit-Regler t tastet ab, R + T einstellbar, Kernsim zeigt
+  Beschleunigungsvektor a⃗, dessen Betrag trotz wechselnder Richtung konstant
+  bleibt. Copy & feature-gate der 1.43. *(S–M)*
 
 ## Reihenfolge-Empfehlung
 
