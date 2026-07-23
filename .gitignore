@@ -11,3 +11,6 @@ __MACOSX/
 
 # Duplicate archive snapshot (already tracked as Archiv/)
 Archiv.zip
+# Quellmaterial: NICHT veroeffentlichen (v0.13-Skript, Stand-alone-Sims,
+# eingefrorener Alt-Stand). Bleibt lokal erhalten, ist aber kein Repo-Inhalt.
+Input/

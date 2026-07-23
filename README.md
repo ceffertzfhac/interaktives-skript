@@ -54,7 +54,6 @@ python3 -m http.server 8000
 | `InteraktivesSkript_WIP/chapters/` | ein HTML-Fragment je Kapitel, zur Laufzeit eingehängt |
 | `InteraktivesSkript_WIP/src/` | ES-Module: `main.js` + Kern, Seiten, Shell, Druck, `figures/` |
 | `InteraktivesSkript_WIP/bilder/` | statische Abbildungen (auch Druck-Fallback) |
-| `Input/` | Quellmaterial, **nur lesend**: LaTeX-Skript v0.13, Stand-alone-Simulationen, eingefrorener Alt-Stand |
 | `BACKLOG.md` | Roadmap und offene Punkte |
 | `CLAUDE.md` | Architektur- und Konventionsübersicht für die Weiterentwicklung |
 
@@ -87,8 +86,34 @@ Fehler und Verbesserungsvorschläge gern als
 Änderungen: kleine, thematisch getrennte Commits, deutsche Commit-Messages,
 und vor größeren Umbauten ein Blick in `CLAUDE.md` und die Runbooks oben.
 
+> Das Quellmaterial (LaTeX-Fassung des Skripts, Stand-alone-Simulationen,
+> eingefrorener Alt-Stand) liegt in einem lokalen `Input/`-Ordner und ist
+> **bewusst nicht Teil dieses Repositorys**.
+
+## Haftungsausschluss
+
+Lehr- und Übungsmaterial, bereitgestellt „wie besehen" — **ohne Gewährleistung
+und ohne Haftungsübernahme**. Insbesondere sind die interaktiven Simulationen
+didaktisch vereinfachte Modelle und liefern **keine** physikalisch belastbaren
+Berechnungen; das Skript ersetzt weder die Vorlesung noch die offiziellen
+Veranstaltungsunterlagen. Vollständiger Text: **[`DISCLAIMER.md`](DISCLAIMER.md)**.
+
 ## Lizenz
 
-Bislang nicht festgelegt. Ohne ausgewiesene Lizenz gilt das gesetzliche
-Urheberrecht — eine Nachnutzung ist damit nicht gestattet. Für den Einsatz in
-der Lehre bitte den Autor ansprechen.
+[![Lizenz: CC BY-NC-SA 4.0](https://img.shields.io/badge/Lizenz-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de)
+
+**[Creative Commons Namensnennung – Nicht kommerziell – Weitergabe unter
+gleichen Bedingungen 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de)**
+(CC BY-NC-SA 4.0), siehe [`LICENSE`](LICENSE). Das gilt für Texte, Abbildungen
+und Quellcode dieses Repositorys.
+
+Kurz gefasst: Weitergabe und Bearbeitung sind erlaubt, wenn **Urheber und
+Lizenz genannt** werden, die Nutzung **nicht kommerziell** erfolgt und
+Bearbeitungen **unter derselben Lizenz** weitergegeben werden.
+
+Namensnennung z. B.: *„Interaktives Physik-Skript – Drehbewegungen auf
+Kreisbahnen" von C. Effertz, FH Aachen, lizenziert unter CC BY-NC-SA 4.0.*
+
+Nicht von dieser Lizenz erfasst sind eingebundene Fremdkomponenten, die unter
+ihren eigenen Lizenzen stehen: **MathJax** (Apache-2.0) und **qrjs2** (MIT,
+siehe `InteraktivesSkript_WIP/src/vendor/README.md`).
