@@ -490,7 +490,6 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     align-items: center;
     gap: 4px;
     flex-shrink: 0;
-    margin-left: auto;
     padding-right: 12px;
     border-right: 1px solid var(--border);
 }
@@ -666,7 +665,12 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 .darkmode_icon:hover{
     opacity: 100%;
 }
-#header .chapter-progress { flex-shrink: 0; }
+/* Der Fortschrittsbalken sitzt MITTIG zwischen der Abschnittsuebersicht (Krume,
+   links) und den Zurueck/Weiter-Chevrons (rechts): zwei auto-Margins teilen den
+   freien Platz zwischen beiden gleichmaessig auf. Deshalb darf #header_pagenav
+   KEIN margin-left:auto mehr tragen — sonst gaebe es drei auto-Margins und der
+   Balken landete bei einem Drittel statt in der Mitte. */
+#header .chapter-progress { flex-shrink: 0; margin-left: auto; margin-right: auto; }
 /* Waehrend der TOC-Vollbild-Screen offen ist, uebernimmt dessen eigene
    Kopfleiste (#toc_screen_bar) die Rolle von #header (Mockup-Prinzip: eine
    Kopfleiste je Ansicht, keine gestapelten Balken). */
