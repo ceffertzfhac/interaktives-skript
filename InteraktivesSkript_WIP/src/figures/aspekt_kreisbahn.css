@@ -260,6 +260,10 @@
     border: 1px solid var(--kb-border); border-radius: 8px;
     background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
 }
+/* In der Ablaufleiste (1.39/1.41) laeuft die Lupe im Flex-Fluss mit: ganz rechts
+   (margin-left:auto), vertikal von der Leiste zentriert. Kein absolute noetig —
+   und weil die Leiste sticky ist, bleibt die Lupe beim Scrollen sichtbar. */
+.aspekt-figur .aspekt-runbar .aspekt-lupe { position: static; margin-left: auto; }
 .aspekt-figur .aspekt-lupe:hover { color: var(--kb-accent); border-color: var(--kb-accent); }
 .aspekt-figur .aspekt-lupe svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 

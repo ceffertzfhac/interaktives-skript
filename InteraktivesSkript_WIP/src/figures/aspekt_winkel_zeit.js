@@ -289,11 +289,25 @@ export function buildWinkelZeitFig(fig) {
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
 
-    // KEINE Lupe in dieser Figur (Nutzervorgabe): Szene und Diagramm stehen hier
-    // bereits nebeneinander bzw. gestapelt in voller Breite, die Vergrösserung
-    // brachte nichts. Nur 1.38 hat die Lupe. Der Overlay-Code (toggle_aspekt,
-    // .aspekt-im-overlay-Regeln in aspekt_winkel_zeit.css) bleibt bestehen — er ist
-    // hier lediglich ohne Auslöser.
+    // Lupe-Button: oben rechts in der HAUPTSPALTE (Grid-Spalte 2 des .aspekt-body),
+    // deren rechte Kante die Trennlinie zur Analyse-Leiste ist — Analyse sichtbar
+    // = Lupe links daneben, Analyse aus = Lupe in der Figuren-Ecke.
+    //
+    // Verankert wird sie in der Ablaufleiste (.aspekt-runbar), NICHT am oberen
+    // Rand von .aspekt-main: die Leiste ist position:sticky und bleibt beim
+    // Scrollen oben stehen, der Rand von .aspekt-main dagegen wandert nach oben
+    // weg und verschwindet unter der klebenden Seiten-Kopfleiste — die Lupe war
+    // dort beim Lesen schlicht nicht zu sehen. In der Leiste klebt sie mit.
+    // 1.38 hat keine Ablaufleiste -> Rückfall auf .aspekt-scene (dort war die
+    // Position schon richtig).
+    const lupe = document.createElement('button');
+    lupe.type = 'button';
+    lupe.className = 'aspekt-lupe';
+    lupe.dataset.action = 'toggle_aspekt';
+    lupe.setAttribute('aria-label', 'Figur vergrößern');
+    lupe.title = 'Vergrößern';
+    lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
+    (scene.querySelector('.aspekt-runbar') || scene.querySelector('.aspekt-scene')).appendChild(lupe);
 
     // Bildunterschrift aus data-caption aufbauen (die statische Abbildung
     // übernimmt am Bildschirm diese Rolle). Inside .aspekt-body, damit die
