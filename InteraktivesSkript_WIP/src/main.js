@@ -36,17 +36,32 @@ function init_aspekt_figuren() {
         // Linkes Bedienfeld einklappbar (seitlich): Kopf-Taste ins linke Panel
         // setzen — spart Platz fuer Simulation/Diagramm. Generisch fuer jede
         // .aspekt-figur (s. toggle_panel_left in aspekt_kreisbahn.js).
+        // Default EINGEKLAPPT (Nutzervorgabe) -- gilt nur im Fliesstext-Modus,
+        // beim Oeffnen der Lupe klappt openOverlay() beide Panels wieder auf
+        // (s. aspekt_kreisbahn.js), unveraendert zum bisherigen Zoom-Verhalten.
         const pl = fig.querySelector('.aspekt-panel-left');
         if (pl && !pl.querySelector('.panel-header')) {
             const hdr = document.createElement('button');
             hdr.type = 'button';
             hdr.className = 'panel-header panel-header-left';
             hdr.dataset.action = 'toggle_panel_left';
-            hdr.setAttribute('aria-expanded', 'true');
+            hdr.setAttribute('aria-expanded', 'false');
             hdr.title = 'Bedienfeld ein-/ausklappen';
             hdr.innerHTML = '<span class="ph-label">Bedienung</span>' +
                 '<svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4 L8 8 L13 12"/><path d="M8 4 L3 8 L8 12"/></svg>';
             pl.prepend(hdr);
+            pl.classList.add('collapsed');
+        }
+        // Rechtes Analyse-Panel: gleicher Default (eingeklappt im Fliesstext,
+        // aufgeklappt im Zoom). Der Button/aria-expanded steht bereits im
+        // PANEL_RIGHT-Template jeder Figur (dort "true", da vor dieser
+        // Nutzervorgabe geschrieben) -- hier zentral auf den neuen Default
+        // korrigiert, statt in 6 Dateien einzeln.
+        const prPanel = fig.querySelector('.aspekt-panel-right');
+        const prBtn = prPanel && prPanel.querySelector('.panel-header[data-action="toggle_analyse"]');
+        if (prBtn) {
+            prBtn.setAttribute('aria-expanded', 'false');
+            prPanel.classList.add('collapsed');
         }
         // Physik-Sektion im rechten Panel (nur wenn die Figur relevante
         // Gleichungen deklariert). Der Inhalt — die gerenderten Formeln — wird
