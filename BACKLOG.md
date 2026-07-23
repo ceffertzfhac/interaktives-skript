@@ -229,6 +229,52 @@ langfristig — Verweise werden O(1) pro Knoten statt pro Mechanismus.)*
 
 ---
 
+## P-Aspekt-Figuren — Optik & Interaktion (Kapitel 1.4)
+
+Eingetragen 2026-07-23 nach Nutzervorgabe (s. Memory: backlog-first-workflow).
+Betroffen: `src/figures/aspekt_{kreisbahn,weg_zeit,winkel_zeit,vxvy_zeit}.js|.css`
++ `src/figures/kreisbewegung/` (Motor). Farben sollen kapitelweise konsistent
+sein (s. P-AF-2).
+
+**Status 2026-07-23: alle 5 erledigt** (P-AF-1/3/4/5 + P-AF-2). Offene Folge für
+P-AF-2 (geschmacksabhängig, nicht selbst verifizierbar — Screenshot-Freigabe):
+(a) v #0072b2 und rx #1f77b4 beide blau — in keiner 1.4-Figur gleichzeitig,
+küftig ggf. deduplizieren; (b) 1.42 HV-Strichstärke 3,75 px vs 1.38/1.39/1.41
+6 px kapitelweit angleichen? (c) CVD-Sichtprüfung der neuen vx-Violett-
+Zuweisung per Freigabe-Tipp.
+
+- [x] **P-AF-1: ω-Regler, an T gekoppelt.** Zusätzlicher Regler für die
+  Winkelgeschwindigkeit ω, bidirektional an die Periode T gekoppelt (ω = 2π/T):
+  bewegt man einen, folgt der andere. In jeder Aspekt-Figur, die T/ω exposes
+  (Kreisbahn 1.38, Winkel-Zeit 1.41, ggf. Weg-Zeit 1.39 / vx-vy 1.42). Beachten:
+  T-Slider ist logarithmisch/gequantelt — ω-Regler entsprechend abbilden.
+  *(S–M)*
+- [x] **P-AF-2: Kapitel-konsistente, farbfehlsichere Farbpalette.** Farben
+  konsistent UND farbfehlsicher (colorblind-safe); wenn neue Objekte hinzukommen,
+  braucht es mehr/andere, weiterhin unterscheidbare Farben. Konsistenz erstreckt
+  sich über ein ganzes Kapitel (1.4: alle Figuren 1.4.1–1.4.x konsistent — r/v/a
+  haben kapitelweit dieselbe Farbe); in 1.5 dürfen andere Farben stehen.
+  Heutiger Stand: `--kb-r`/`--kb-rx`/`--kb-ry`/`--kb-v`/`--kb-a`/`--kb-traj`/…
+  in `aspekt_kreisbahn.css` — prüfen, ob das schon kapitelweit einheitlich und
+  cb-safe ist; ggf. zentrale Kapitel-Palette (Token-Datei pro Kapitel) anlegen,
+  aus der alle Aspekt-Figuren + der gc10-Motor schöpfen. *(M–L, konzeptionell)*
+- [x] **P-AF-3: Zeitanzeige unten links im Kernsim-Bereich.** Kleine
+  Zeit-/Stopp-Uhr-Anzeige unten links im Kernsim (.aspekt-scene), inspiriert von
+  den Stand-alone-Simulationen (`Input/Simulationen/Project_kreisbewegung_*`).
+  Pro-Instanz (per `createRuntime`), an den Animations-/Play-Zustand gekoppelt.
+  *(S)*
+- [x] **P-AF-4: Uhr minimal kleiner + minimal nach links.** Stoppuhr in den
+  Szenen leicht verkleinern und minimal nach links verschieben — derzeit minimale
+  optische Kollision mit den Diagrammen. Berührt `scale` (aktuell 0,71× nach
+  fca90a3) + Position in `aspekt_*_zeit.css`. *(S)*
+- [x] **P-AF-5: Vektorstrichstärken-Regel konsistent halten.** Hauptvektoren
+  (r, v, a, …) gleich dick; Komponenten stets 0,8 der HV-Strichstärke. Verifikation
+  (2026-07-23): letzter Schritt (`3401265`) machte Vektoren ×1,5 **dicker**
+  (gewünscht/gefordert, kein Fehler); HV-/Komponenten-Verhältnis 0,8 ist in
+  `aspekt_kreisbahn.css` (r 4px / rx,ry 3,2px) und `aspekt_vxvy_zeit.css`
+  (v 2,5px / vy 2px) eingehalten. Konsistenz kapitelweit (1.4) sichern, Regel als
+  Token/Konstante festhalten statt pro Figur hart. *(S)*
+
 ## Reihenfolge-Empfehlung
 
 1. Erst **P0** abarbeiten (rasch, niedriges Risiko, senkt schon das Token-Volumen spürbar).
