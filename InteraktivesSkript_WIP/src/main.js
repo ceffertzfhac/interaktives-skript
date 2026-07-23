@@ -218,12 +218,16 @@ async function init() {
     // Seitenregister (h2/h3 -> .chapter-page) auf, das paginate() aufbaut.
     paginate();
     generate_toc();
-    init_shell();
     init_figure_panels();
     init_footnotes();
     init_aspekt_figuren();
     init_numbering();
     label_aspekt_figuren();   // Nummer der statischen Abb. in die interaktive Bildunterschrift
+    // NACH init_numbering: die Schiene („Auf dieser Seite") liest .highlight_box_title,
+    // das init_numbering erst setzt. Stand init_shell() bisher UEBER init_numbering(),
+    // zeigte die Schiene beim ersten Laden nur den Box-Typ („Beispiel") ohne
+    // Nummer/Titel (s. BACKLOG P5). paginate() bleibt vorher (Seitenregister).
+    init_shell();
     // Injizierte Formeln re-typesetzen, sobald MathJax bereit ist (Gate wie
     // numbering.js). renumber laeuft ueber reload_mathjax mit.
     typesetAfterLoad();
