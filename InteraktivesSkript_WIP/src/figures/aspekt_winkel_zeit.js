@@ -289,9 +289,11 @@ export function buildWinkelZeitFig(fig) {
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
 
-    // Lupe-Button: an die rechte Kante der Hauptsimulations-Spalte setzen
-    // (direkt links neben der vertikalen Trennlinie zur Analyse). Deshalb an
-    // .aspekt-main-content anhängen; die Positionierungsbasis kommt aus dem CSS.
+    // Lupe-Button: INS Bild der Kernsimulation setzen (rechts oben darin) — wie
+    // in 1.38. An .aspekt-main-content gehängt landete sie am rechten Rand der
+    // GESAMTEN Zeile, also über dem Diagramm statt über der Szene.
+    // .aspekt-scene ist position:relative (s. CSS) -> absolute Top/Right
+    // bezieht sich darauf.
     const lupe = document.createElement('button');
     lupe.type = 'button';
     lupe.className = 'aspekt-lupe';
@@ -299,7 +301,7 @@ export function buildWinkelZeitFig(fig) {
     lupe.setAttribute('aria-label', 'Figur vergrößern');
     lupe.title = 'Vergrößern';
     lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
-    scene.querySelector('.aspekt-main-content').appendChild(lupe);
+    scene.querySelector('.aspekt-scene').appendChild(lupe);
 
     // Bildunterschrift aus data-caption aufbauen (die statische Abbildung
     // übernimmt am Bildschirm diese Rolle). Inside .aspekt-body, damit die
