@@ -30,19 +30,22 @@
     --kb-vec-hw: 2.5px;
 }
 
-/* ── Mittel-Spalte: Szene oben, Diagramm unten (gestapelt) ───────────────────
-   Beide SVGs an der Viewport-HOEHE deckeln, damit Szene UND beide (übereinander
-   gestapelte) Diagramme gleichzeitig auf den Bildschirm passen. Die SVGs tragen
-   preserveAspectRatio="xMidYMid meet" -> der Inhalt skaliert mit erhaltenem
-   Seitenverhältnis in die Box (width:100% × Nvh) und zentriert sich (ggf. mit
-   seitlichem Freiraum). Szene bewusst klein (der Aspekt sind die Diagramme). */
+/* ── Mittel-Spalte: Szene NEBEN dem (gestapelten) Diagramm (Zeile) — normal
+   UND breit (Nutzervorgabe); nur schmal bleibt gestapelt (s. Schmal-Override
+   weiter unten, dort nicht genug Breite fuer eine Zeile). Vertikal zentriert
+   (align-items:center): Szenemitte bündig mit der Mitte des (als EINS
+   gerechneten) Diagramm-Blocks. Beide SVGs an der Viewport-HOEHE deckeln,
+   damit Szene UND beide (übereinander gestapelten) Diagramme gleichzeitig auf
+   den Bildschirm passen. Die SVGs tragen preserveAspectRatio="xMidYMid meet"
+   -> der Inhalt skaliert mit erhaltenem Seitenverhältnis in die Box und
+   zentriert sich (ggf. mit seitlichem Freiraum). ────────────────────────── */
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main {
     position: relative;
     display: flex; flex-direction: column; align-items: stretch; min-width: 0;
 }
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main-content {
     position: relative;
-    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+    display: flex; flex-direction: row; align-items: center; min-width: 0;
 }
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-runbar {
     position: sticky;
@@ -57,13 +60,13 @@
     border-bottom: none;
     box-shadow: none;
 }
-.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main .aspekt-scene { padding: 8px; flex: 0 0 auto; }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-scene { padding: 8px; flex: 0 0 42%; }
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main .aspekt-svg {
-    display: block; width: 100%; height: 26vh; max-width: none;
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none;
 }
-.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 auto; }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 58%; }
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-graph-svg {
-    display: block; width: 100%; height: auto; max-height: 44vh; max-width: none;
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none;
     margin: 0 auto;
 }
 
@@ -155,20 +158,17 @@
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="stopwatch_sub_hand"] { stroke: var(--kb-accent); }
 .aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene .sw-mark { stroke: var(--kb-text3); }
 
-/* ── Breit-Modus: Szene und (gestapeltes) Diagramm NEBENEINANDER (Zeile) ─────
-   Normal/schmal bleiben gestapelt (.aspekt-main ist flex-column). Im breiten
-   Modus wird .aspekt-main zur Zeile; Szene und Diagramm teilen sich die Breite
-   und bekommen beide eine Viewport-Hoehe, die nebeneinander auf den Bildschirm
-   passt.
-   align-items:center (globale Regel für Szene-neben-Diagramm-Layout, s.
-   aspekt_weg_zeit.css fuer die Begründung): Szenemitte bündig mit der Mitte
-   des Diagramm-Blocks (als EINS gerechnet). */
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main { flex-direction: column; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content { flex-direction: row; align-items: center; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 8px; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 8px 8px; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-svg { height: auto; max-height: 50vh; }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-graph-svg { height: auto; max-height: 50vh; }
+/* ── Schmal-Modus: Szene und (gestapeltes) Diagramm bleiben UNTEREINANDER
+   (gestapelt) — hier ist nicht genug Breite für eine Zeile (Nutzervorgabe:
+   normal + breit stehen nebeneinander, s. Basis-Regeln oben; nur schmal
+   gestapelt). Gleiche Werte wie vor dieser Umstellung. ─────────────────────── */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content {
+    flex-direction: column; align-items: stretch;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 auto; padding: 8px; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-svg { height: 26vh; max-height: none; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 auto; padding: 0 8px 8px; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-graph-svg { max-height: 44vh; }
 
 /* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
    Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
