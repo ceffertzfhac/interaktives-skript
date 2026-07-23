@@ -554,11 +554,7 @@ export function buildWinkelZeitFig(fig) {
     //    z. B. schiefer Wurf).
     function rebuild(paramChange = false) {
         rt.withStore(() => {
-            if (paramChange) {
-                if (keepPrev) snapshotPrev();   // ALTE Daten einfrieren, vor dem Neurechnen
-                stop();
-                curT = 0;
-            }
+            if (paramChange) { stop(); curT = 0; }
             Object.assign(store, {
                 isStacked: false, graphType1: 'phit',
                 showPositionVector: true, showPositionComponents: false, showTrajectory: true,
@@ -592,9 +588,22 @@ export function buildWinkelZeitFig(fig) {
             const T = parseFloat(ak_T.value);
             rt.withStore(() => { draw(t); updateLabels(t, T); });
         } else {
+            // Genau EIN Schnappschuss pro Zieh-Geste: ein <input type=range>
+            // feuert beim Ziehen ein input-Event PRO Zwischenwert. Wurde bei
+            // jedem davon eingefroren, war die "letzte Kurve" am Ende die des
+            // vorletzten Zwischenwerts — praktisch dieselbe Kurve wie die neue,
+            // nur die Achsenskalierung sah anders aus. Jetzt wird die Kurve
+            // eingefroren, die VOR dem Ziehen zu sehen war; das change-Event
+            // (Loslassen) beendet die Geste.
+            if (!paramGesture) {
+                paramGesture = true;
+                if (keepPrev) rt.withStore(snapshotPrev);
+            }
             rebuild(true);
         }
     }
+    let paramGesture = false;
+    [ak_T].forEach(inp => inp.addEventListener('change', () => { paramGesture = false; }));
 
     // -- Automatischer Ablauf (Sim-Zeit 0 … 12 s, Slow-Mo via Tempo-Pills, Auto-
     //    Stopp am Ende — kein Umbrechen). Pro Instanz im Closure; Knöpfe/Pills
