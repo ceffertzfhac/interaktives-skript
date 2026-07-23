@@ -77,10 +77,14 @@ const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 const SVG_SCENE = `
 <svg id="kb_main_svg" viewBox="0 0 450 480" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <defs>
-    <marker id="kb_ax_arrow"     markerUnits="userSpaceOnUse" markerWidth="9"    markerHeight="7"    refX="0" refY="3.5"   orient="auto"><polygon points="0 0, 9 3.5, 0 7"/></marker>
-    <marker id="kb_arrowhead-r"  markerUnits="userSpaceOnUse" markerWidth="12.5" markerHeight="8.75" refX="0" refY="4.375" orient="auto"><polygon points="0 0, 12.5 4.375, 0 8.75"/></marker>
-    <marker id="kb_arrowhead-rx" markerUnits="userSpaceOnUse" markerWidth="10"   markerHeight="7"    refX="0" refY="3.5"   orient="auto"><polygon points="0 0, 10 3.5, 0 7"/></marker>
-    <marker id="kb_arrowhead-ry" markerUnits="userSpaceOnUse" markerWidth="10"   markerHeight="7"    refX="0" refY="3.5"   orient="auto"><polygon points="0 0, 10 3.5, 0 7"/></marker>
+    <!-- Pfeilspitzen ×1,5 vergroessert (Szenen-Strichstärken skalieren via
+         --kb-lw ×1,5), spitzen-erhaltend via refX = markerWidth' − ARROW_LEN
+         (r: 18.75−12.5=6.25; rx/ry: 15−10=5; ax: 13.5−6=7.5). Herleitung im
+         Kommentarblock in aspekt_kreisbahn.js. -->
+    <marker id="kb_ax_arrow"     markerUnits="userSpaceOnUse" markerWidth="13.5" markerHeight="10.5"  refX="7.5" refY="5.25"  orient="auto"><polygon points="0 0, 13.5 5.25, 0 10.5"/></marker>
+    <marker id="kb_arrowhead-r"  markerUnits="userSpaceOnUse" markerWidth="18.75" markerHeight="13.125" refX="6.25" refY="6.5625" orient="auto"><polygon points="0 0, 18.75 6.5625, 0 13.125"/></marker>
+    <marker id="kb_arrowhead-rx" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
+    <marker id="kb_arrowhead-ry" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
   </defs>
   <g id="kb_animation_group">
     <g id="kb_aspekt_axes"></g>

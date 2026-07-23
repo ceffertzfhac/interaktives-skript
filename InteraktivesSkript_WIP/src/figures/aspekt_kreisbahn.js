@@ -51,14 +51,22 @@ const SVG_SCENE = `
 <svg id="kb_main_svg" viewBox="0 0 450 480" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <defs>
     <!-- markerUnits=userSpaceOnUse: die Pfeilspitze hat eine FESTE Laenge in
-         Nutzereinheiten, unabhaengig von der Strichstaerke. Diese Laenge ist
-         genau die Verkuerzung, die render.js anwendet (ARROW_LEN_MAIN=5·2.5=12.5,
-         ARROW_LEN_COMP=5·2=10) -> die Spitze landet exakt auf dem Zielpunkt,
-         waehrend die Strichstaerke frei per CSS gesetzt werden kann. -->
-    <marker id="kb_ax_arrow"     markerUnits="userSpaceOnUse" markerWidth="9"    markerHeight="7"    refX="0" refY="3.5"   orient="auto"><polygon points="0 0, 9 3.5, 0 7"/></marker>
-    <marker id="kb_arrowhead-r"  markerUnits="userSpaceOnUse" markerWidth="12.5" markerHeight="8.75" refX="0" refY="4.375" orient="auto"><polygon points="0 0, 12.5 4.375, 0 8.75"/></marker>
-    <marker id="kb_arrowhead-rx" markerUnits="userSpaceOnUse" markerWidth="10"   markerHeight="7"    refX="0" refY="3.5"   orient="auto"><polygon points="0 0, 10 3.5, 0 7"/></marker>
-    <marker id="kb_arrowhead-ry" markerUnits="userSpaceOnUse" markerWidth="10"   markerHeight="7"    refX="0" refY="3.5"   orient="auto"><polygon points="0 0, 10 3.5, 0 7"/></marker>
+         Nutzereinheiten, unabhaengig von der Strichstaerke. render.js verkuerzt
+         jede Vektor-/Achsen-Linie um ihre ARROW_LEN (MAIN=5·2.5=12.5, COMP=5·2=10,
+         AXIS=5·1.2=6) und setzt die Spitze (markerWidth, refY) per refX=0 aufs
+         Linienende -> die Spitze landet exakt auf dem Zielpunkt, die Strichstaerke
+         ist frei per CSS.
+         Die Aspekt-Figuren skalieren die Szenen-Strichstärken ×1,5 (--kb-lw in
+         aspekt_kreisbahn.css). Damit der Pfeilkopf mit dem dickeren Schaft
+         weiter im gleichen Verhaeltnis bleibt (12.5:5 = 18.75:7.5 = 2.5:1),
+         wird hier die Spitze ×1.5 vergroessert UND refX = markerWidth' − ARROW_LEN
+         gesetzt (z.B. r: 18.75 − 12.5 = 6.25). So verschiebt sich der Referenz-
+         punkt so, dass die Spitze weiterhin exakt auf dem Zielpunkt liegt, ohne
+         render.js (mit dem gc10 die ARROW_LEN teilt) anfassen zu muessen. -->
+    <marker id="kb_ax_arrow"     markerUnits="userSpaceOnUse" markerWidth="13.5" markerHeight="10.5"  refX="7.5" refY="5.25"  orient="auto"><polygon points="0 0, 13.5 5.25, 0 10.5"/></marker>
+    <marker id="kb_arrowhead-r"  markerUnits="userSpaceOnUse" markerWidth="18.75" markerHeight="13.125" refX="6.25" refY="6.5625" orient="auto"><polygon points="0 0, 18.75 6.5625, 0 13.125"/></marker>
+    <marker id="kb_arrowhead-rx" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
+    <marker id="kb_arrowhead-ry" markerUnits="userSpaceOnUse" markerWidth="15"   markerHeight="10.5"  refX="5"    refY="5.25"  orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
   </defs>
   <g id="kb_animation_group">
     <g id="kb_aspekt_axes"></g>
