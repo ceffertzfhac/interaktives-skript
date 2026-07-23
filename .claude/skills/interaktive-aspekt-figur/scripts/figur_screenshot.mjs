@@ -80,11 +80,22 @@ const browser = await chromium.launch({ executablePath: EXEC });
 const page = await browser.newPage({ viewport: { width: 1600, height: 1100 }, deviceScaleFactor: scale });
 const fehler = [];
 page.on('pageerror', e => fehler.push('pageerror: ' + e.message));
-page.on('console', m => { if (m.type() === 'error') fehler.push('console: ' + m.text()); });
+page.on('console', m => {
+    // /favicon.ico fordert der Browser von sich aus an; die Seite deklariert
+    // keins -> 404 als Dauerrauschen. Herausfiltern, damit echte Fehler auffallen.
+    if (m.type() !== 'error') return;
+    if ((m.location()?.url || '').endsWith('/favicon.ico')) return;
+    fehler.push('console: ' + m.text());
+});
 
 await page.goto(url, { waitUntil: 'networkidle' });
-// Kapitel werden zur Laufzeit nachgeladen -> auf die gebaute Figur warten.
-await page.waitForSelector(`#${figId}[data-built]`, { state: 'attached', timeout: 20000 })
+// Kapitel werden zur Laufzeit nachgeladen -> auf die GEBAUTE Figur warten.
+// Kriterium bewusst implementierungsfrei ("Platzhalter hat Inhalt bekommen")
+// statt an `data-built` oder `.aspekt-body` zu haengen — beides sind interne
+// Details der Factories und koennen sich aendern.
+await page.waitForFunction(
+    id => { const f = document.getElementById(id); return !!f && f.children.length > 0; },
+    figId, { timeout: 20000 })
     .catch(() => fehler.push(`Figur #${figId} wurde nicht gebaut (Modul-Syntaxfehler? s. pageerror)`));
 await page.waitForTimeout(1200);
 
