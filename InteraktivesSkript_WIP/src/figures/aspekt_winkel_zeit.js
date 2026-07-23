@@ -525,7 +525,7 @@ export function buildWinkelZeitFig(fig) {
     function precomputeRange(duration) {
         store.tData = []; store.xData = []; store.yData = [];
         store.vxData = []; store.vyData = []; store.axData = []; store.ayData = [];
-        store.vabsData = []; store.aabsData = []; store.phitData = [];
+        store.vabsData = []; store.aabsData = []; store.phitData = []; store.omegaData = [];
         if (store.R <= 0) { recalculateAxisLimits(); return; }
         extendMotionData(duration);
         recalculateAxisLimits();

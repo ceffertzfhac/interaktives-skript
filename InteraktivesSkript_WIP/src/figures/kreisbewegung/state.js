@@ -61,7 +61,7 @@ export const store = {
 
     tData: [], xData: [], yData: [],
     vxData: [], vyData: [], axData: [], ayData: [],
-    vabsData: [], aabsData: [], phitData: [],
+    vabsData: [], aabsData: [], phitData: [], omegaData: [],
     axisLimits: {},
 };
 

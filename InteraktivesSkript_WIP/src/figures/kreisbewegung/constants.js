@@ -75,6 +75,7 @@ export const graphOptions = {
         vabs: 'Betrag |<i>v</i>(<i>t</i>)| / (m/s)',
         aabs: 'Betrag |<i>a</i>(<i>t</i>)| / (m/s²)',
         phit: 'Winkel <i>φ</i>(<i>t</i>) / °',
+        omega: 'Winkelgeschw. <i>ω</i>(<i>t</i>) / (rad/s)',
     },
 };
 
@@ -84,6 +85,7 @@ export const graphTitles = {
     vxt: 'Geschwindigkeit vₓ(t)', vyt: 'Geschwindigkeit vᵧ(t)',
     axt: 'Beschleunigung aₓ(t)', ayt: 'Beschleunigung aᵧ(t)',
     vabs: 'Betrag |v|(t)', aabs: 'Betrag |a|(t)', phit: 'Winkel φ(t)',
+    omega: 'Winkelgeschwindigkeit ω(t)',
 };
 
 export const graphAxisLabels = {
@@ -91,9 +93,10 @@ export const graphAxisLabels = {
     vxt: 'vₓ / (m/s)', vyt: 'vᵧ / (m/s)',
     axt: 'aₓ / (m/s²)', ayt: 'aᵧ / (m/s²)',
     vabs: '|v| / (m/s)', aabs: '|a| / (m/s²)', phit: 'φ / °',
+    omega: 'ω / (rad/s)',
 };
 
 export const graphXAxisLabels = { yx: 'x / m', xy: 'y / m' };
 
-export const timeSeriesTypes = ['xt', 'yt', 'vxt', 'vyt', 'axt', 'ayt', 'vabs', 'aabs', 'phit'];
+export const timeSeriesTypes = ['xt', 'yt', 'vxt', 'vyt', 'axt', 'ayt', 'vabs', 'aabs', 'phit', 'omega'];
 export const trajectoryTypes = ['yx', 'xy'];

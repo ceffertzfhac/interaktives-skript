@@ -47,7 +47,7 @@ export function precompute() {
     store.vxData = []; store.vyData = [];
     store.axData = []; store.ayData = [];
     store.vabsData = []; store.aabsData = [];
-    store.phitData = [];
+    store.phitData = []; store.omegaData = [];
     if (store.R <= 0) { recalculateAxisLimits(); return; }
     const duration = store.T === Infinity ? 10 : Math.max(4 * store.T, 10);
     extendMotionData(duration);
@@ -65,6 +65,7 @@ export function extendMotionData(duration) {
         store.axData.push(-R * w * w * c); store.ayData.push(-R * w * w * s);
         store.vabsData.push(Math.abs(R * w)); store.aabsData.push(Math.abs(R * w * w));
         store.phitData.push(phi * 180 / Math.PI);
+        store.omegaData.push(w);
     }
 }
 
@@ -75,6 +76,7 @@ export function recalculateAxisLimits() {
     const Rpad = R * 1.1 || 1;
     const vMag = Math.abs(R * store.omega);
     const aMag = Math.abs(R * store.omega * store.omega);
+    const omegaMag = Math.abs(store.omega);
     const maxPhi = store.phitData.length > 0 ? Math.max(...store.phitData) : 360;
     const osc = arr => {
         const m = arr.length > 0 ? Math.max(...arr.map(v => Math.abs(v))) : 1;
@@ -93,6 +95,7 @@ export function recalculateAxisLimits() {
         vabs: { xArr: store.tData, yArr: store.vabsData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: '|v| / (m/s)', ...pos(vMag) },
         aabs: { xArr: store.tData, yArr: store.aabsData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: '|a| / (m/s²)', ...pos(aMag) },
         phit: { xArr: store.tData, yArr: store.phitData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: 'φ / °', ...pos(maxPhi) },
+        omega: { xArr: store.tData, yArr: store.omegaData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: 'ω / (rad/s)', ...pos(omegaMag) },
     };
     for (const key in datasets) {
         const d = datasets[key];
@@ -119,7 +122,7 @@ export function interpolateAt(t) {
         vx: lerp(store.vxData), vy: lerp(store.vyData),
         ax: lerp(store.axData), ay: lerp(store.ayData),
         vabs: lerp(store.vabsData), aabs: lerp(store.aabsData),
-        phi: lerp(store.phitData),
+        phi: lerp(store.phitData), omega: lerp(store.omegaData),
     };
 }
 

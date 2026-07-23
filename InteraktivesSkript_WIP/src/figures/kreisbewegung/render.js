@@ -473,6 +473,7 @@ function currentInterpValue(type, time) {
         vxt: store.vxData, vyt: store.vyData,
         axt: store.axData, ayt: store.ayData,
         vabs: store.vabsData, aabs: store.aabsData, phit: store.phitData,
+        omega: store.omegaData,
     };
     if (type in map) return map[type][i];
     if (type === 'yx') return store.yData[i];

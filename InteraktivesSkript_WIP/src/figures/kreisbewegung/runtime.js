@@ -44,7 +44,7 @@ export function createRuntime() {
     const storeInstance = {
         ...DEFAULT_STORE,
         tData: [], xData: [], yData: [], vxData: [], vyData: [], axData: [], ayData: [],
-        vabsData: [], aabsData: [], phitData: [],
+        vabsData: [], aabsData: [], phitData: [], omegaData: [],
         graphScale: { single: null, top: null, bottom: null },
         axisLimits: {},
         idPrefix: prefix,
