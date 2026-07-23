@@ -453,11 +453,44 @@
 <h3 class="inhaltsverzeichnis">1.5.10 Experimente zum Drehmoment, Drehimpuls und zur Drehimpulserhaltung</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.10 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
-    </div>
+    <h4>Das Maxwell'sche Rad</h4>
+
+    <p>Das Maxwell'sche Rad können Sie sich vorstellen wie ein Jo-Jo für Physiker. Es besteht aus einer Achse, auf der eine Scheibe mit großem Massenträgheitsmoment sitzt. An der Achse ist ein Faden befestigt, der um die Achse gewickelt ist. Lässt man das Maxwell'sche Rad im Zustand mit dem aufgewickelten Faden los, so beginnt das Rad nach unten zu laufen und den Faden abzuwickeln. Dabei wird das Rad in eine immer schnellere Rotation versetzt, die Winkelgeschwindigkeit nimmt zu. Offensichtlich ist hierbei der Drehimpuls nicht konstant, da eine äußere Kraft (die Gewichtskraft) ein Drehmoment auf das Rad ausübt. Am niedrigsten Punkt der Bahn ist der Faden vollständig abgewickelt, das Rad hat seine maximale Winkelgeschwindigkeit erreicht. In diesem Fall steht die Gewichtskraft senkrecht auf dem Ortsvektor, der von der Rotationsachse zum Angriffspunkt der Gewichtskraft zeigt, und es wird kein Drehmoment mehr auf das Rad ausgeübt. Der Drehimpuls ist in diesem Moment also konstant und bleibt erhalten. Dadurch setzt sich die Rotation des Rades fort, und das Rad wickelt den Faden wieder auf und bewegt sich aufwärts. Da die Gewichtskraft nun nicht mehr parallel zum Ortsvektor von der Drehachse zum Angriffspunkt der Gewichtskraft ist, wird wieder ein Drehmoment auf das Rad ausgeübt, welches abbremsend wirkt. Am höchsten Punkt der Bahn ist der Faden wieder vollständig aufgewickelt, die Winkelgeschwindigkeit des Rades ist null, und das Spiel beginnt von vorne. Ein physikalisch spannender Moment ist der tiefste Punkt der Bahn, da hier der Drehimpuls des Rades konstant ist und erhalten bleibt, wodurch sich die Rotation des Rades fortsetzt. Allerdings kehrt sich die Richtung des Geschwindigkeitsvektors des Rades um, was bedeutet, dass eine Impulsänderung stattfindet. Diese Impulsänderung wird durch die Kraft des Fadens bewirkt, die auf die Achse des Rades wirkt. Je nach Drehgeschwindigkeit des Rades im tiefsten Punkt ist diese Impulsänderung groß, weswegen der Faden in diesem Moment stark gespannt ist und sogar reißen kann.</p>
+
+    <figure class="abbildung" id="fig-skript-dreh-maxwell">
+        <img class="grafik" style="width:98%" src="bilder/skript_dreh_maxwell.png" alt="">
+        <figcaption>Das Maxwell'sche Rad besteht aus einer Achse mit geringem Massenträgheitsmoment, auf der eine Scheibe mit großem Massenträgheitsmoment sitzt, in der Abbildung realisiert durch einen Felgenring mit Achsen. Durch zwei Löcher in der Achse wird ein Faden gefädelt, der um die Achse gewickelt wird. Der Faden verlässt die Achse entweder links oder rechts von der Achse tangential, außer am tiefsten Punkt, dort steht der Faden senkrecht auf der Achse. Die am Schwerpunkt des Rades angreifende Gewichtskraft erzeugt ein Drehmoment \(\vec M=\vec r \times \vec F_G\) um die Achse, das das Rad in Rotation versetzt. Bei der Abwärtsbewegung (links) wirkt das Drehmoment beschleunigend, bei der Aufwärtsbewegung (rechts) wirkt es bremsend. Am tiefsten Punkt der Bahn (Mitte) ist das Drehmoment null, da die Gewichtskraft in diesem Moment senkrecht auf dem Ortsvektor vom Rotationszentrum zum Angriffspunkt der Gewichtskraft steht. In diesem Moment ist der Drehimpuls des Rades konstant und bleibt erhalten, wodurch sich die Rotation des Rades fortsetzt. Beachten Sie, dass die Richtung der Rotation aufgrund der Drehimpulserhaltung sowohl bei der Abwärts- als auch bei der Aufwärtsbewegung dieselbe ist.</figcaption>
+    </figure>
+
+    <h4>Drehende Räder</h4>
+
+    <p>Zwei Schubkarreräder sind auf eine Gabel montiert, sodass sowohl die Räder als einzelnes, als auch das System als Ganzes um eine Achse senkrecht zum Erdboden drehbar ist. Die Räder sind so montiert, dass sie entweder sich frei und unabhängig voneinander drehen können, oder dass sie durch eine Feder miteinander verbunden sind, sodass sie ohne Schlupf gegeneinander rotieren.</p>
+
+    <p>Zunächst ist die Gabel nicht in Rotation und beide Räder im Stillstand. Nun wird eines der Räder vom anderen separiert und in Rotation versetzt. Dann werden die beiden Räder wieder miteinander verbunden. Dadurch beginnt nicht nur das zweite Rad zu rotieren (nämlich genau entgegengesetzt zum ersten Rad), sondern auch die Gabel beginnt sich zu drehen. Warum? Das System aus beiden Rädern und der Gabel ist ein abgeschlossenes System, auf das keine äußeren Drehmomente wirken. Daher bleibt der gesamte Drehimpuls des Systems konstant. Zunächst ist der gesamte Drehimpuls null, da weder die Räder noch die Gabel rotieren. Nun wird eines der Räder in Rotation versetzt, es hat nun einen Drehimpuls \(\vec{L}_1\), da das andere Rad und die Achse nicht rotieren ist also der gesamte Drehimpuls des Systems \(\vec{L}_\text{ges} = \vec{L}_1\). Nun werden die beiden Räder wieder miteinander verbunden, sodass sie gegeneinander rotieren. Das zweite Rad beginnt zu rotieren und hat nun einen Drehimpuls \(\vec{L}_2\). Die Gabel beginnt sich ebenfalls zu drehen und hat einen Drehimpuls \(\vec{L}_3\). Der gesamte Drehimpuls des Systems ist nun</p>
+
+    \begin{equation}
+    \vec{L}_\text{ges} = \vec{L}_1 + \vec{L}_2 + \vec{L}_3.
+    \end{equation}
+
+    <p>Da der gesamte Drehimpuls des Systems konstant bleiben muss, also \(\vec{L}_\text{ges} = \text{konst}\), muss gelten</p>
+
+    \begin{equation}
+    \vec{L}_1 + \vec{L}_2 + \vec{L}_3 = \vec{L}_1,
+    \end{equation}
+
+    <p>also</p>
+
+    \begin{equation}
+    \vec{L}_2 + \vec{L}_3 = 0.
+    \end{equation}
+
+    <p>Die Drehimpulse von Rad 2 und der Gabel müssen also entgegengesetzt sein, damit der gesamte Drehimpuls des Systems konstant bleibt. Daher beginnt die Gabel sich in die entgegengesetzte Richtung zu drehen wie Rad 2.</p>
+
+    <h4>Drehschemel</h4>
+
+    <p>Eine Person setzt sich, zwei Hanteln weit vom Körper entfernt haltend, auf einen Drehschemel. Der Drehschemel ist so gelagert, dass er sich reibungsarm um eine senkrechte Achse drehen kann. Eine weitere Person versetzt die Person auf dem Drehschemel in Rotation. Nun zieht die Person auf dem Drehschemel die Hanteln näher an den Körper heran. Dabei erhöht sich die Winkelgeschwindigkeit der Person auf dem Drehschemel deutlich. Warum?</p>
+
+    <p>Das System aus Person, Hanteln und Drehschemel ist ein abgeschlossenes System, auf das keine äußeren Drehmomente wirken. Daher bleibt der gesamte Drehimpuls des Systems konstant. Zunächst ist der gesamte Drehimpuls null, da weder die Person, noch die Hanteln, noch der Drehschemel rotieren. Nun wird die Person in Rotation versetzt, sie hat nun einen Drehimpuls \(\vec{L}_1=J_1\cdot \omega_1\), der sich aus der Multiplikation von Massenträgheitsmoment und Winkelgeschwindigkeit ergibt. Zieht die Person auf dem Drehschemel die Hanteln näher an den Körper heran, so verringert sich das Massenträgheitsmoment \(J_1\) der Person auf dem Drehschemel deutlich. Da der gesamte Drehimpuls des Systems konstant bleiben muss, also \(\vec{L}_\text{ges} = \text{konst}\), muss die Winkelgeschwindigkeit \(\tilde \omega_1\) der Person auf dem Drehschemel deutlich zunehmen, damit der Drehimpuls \(\vec{L}_1=J_1 \cdot \omega_1=\tilde J_1 \cdot \tilde \omega_1\) konstant bleibt. Daher erhöht sich die Winkelgeschwindigkeit der Person auf dem Drehschemel deutlich.</p>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.11 Rotationsenergie</h3>
