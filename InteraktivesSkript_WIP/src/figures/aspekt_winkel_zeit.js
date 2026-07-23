@@ -474,23 +474,19 @@ export function buildWinkelZeitFig(fig) {
         // 1.38). Bei R >= 1.2 ist der Bogen groß genug -> Label innen (0.62*rArc);
         // sonst knapp außerhalb (rArc+15). (30x30-foreignObject -> um 15 zentren.)
         //
-        // Zwei Abweichungen von 1.38 sind hier BEWUSST anders, weil φ in dieser
-        // Figur kontinuierlich durch ALLE Winkel und über 360° hinaus läuft
-        // (in 1.38 stellt der Regler einen festen Winkel ein, da fällt beides
-        // nicht auf):
-        //  1) Der Label-Winkel folgt IMMER dem laufenden Teilwinkel `partial`,
-        //     nie dem Vollkreis-Ersatzbogen (curAngle = 360) an der Umdrehungs-
-        //     grenze — sonst spränge das φ dort auf die Winkelhalbierende des
-        //     Vollkreises (180°, 9 Uhr) und im nächsten Frame zurück auf 3 Uhr.
-        //  2) Kein konstanter kartesischer Versatz (früher OFF_X/OFF_Y = 6/3):
-        //     eine feste Verschiebung ist keine Drehung — sie zieht das Label bei
-        //     jedem Winkel unterschiedlich weit von der Winkelhalbierenden weg
-        //     (bei φ=135° z. B. auf 54° statt 67,5°) und lässt es auf einem um
-        //     (6|3) verschobenen Kreis statt konzentrisch um den Ursprung
-        //     wandern. Rein radiale Platzierung -> φ sitzt exakt mittig im Bogen.
+        // EINE Abweichung von 1.38 ist bewusst: der Label-Winkel folgt immer dem
+        // laufenden Teilwinkel `partial`, nie dem Vollkreis-Ersatzbogen
+        // (curAngle = 360) an der Umdrehungsgrenze — sonst spränge das φ dort auf
+        // die Winkelhalbierende des Vollkreises (180°, 9 Uhr) und im nächsten
+        // Frame zurück auf 3 Uhr. In 1.38 stellt der Regler einen festen Winkel
+        // ein, dort gibt es diesen Fall nicht.
+        // Der konstante Versatz OFF_X/OFF_Y ist derselbe wie in 1.38 (dort die
+        // Referenz-Setzung, Nutzervorgabe) — er hält das Label von Ortsvektor
+        // und x-Achse frei.
         const lr = (store.R >= 1.2) ? rArc * 0.62 : rArc + 15;
         const mid = (partial * Math.PI / 180) / 2;
-        const lx = cx + lr * Math.cos(mid), ly = cy - lr * Math.sin(mid);
+        const OFF_X = 6, OFF_Y = 3;
+        const lx = cx + lr * Math.cos(mid) + OFF_X, ly = cy - lr * Math.sin(mid) + OFF_Y;
         if (lbl0) {
             lbl0.setAttribute('x', (lx - 15).toFixed(2));
             lbl0.setAttribute('y', (ly - 15).toFixed(2));
