@@ -432,7 +432,7 @@ export function buildWinkelZeitFig(fig) {
         if (phiDeg <= 0.5) { if (lbl0) lbl0.style.visibility = 'hidden'; return; }
         const NS = 'http://www.w3.org/2000/svg';
         const cx = ANIM_CX, cy = ANIM_CY;
-        const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42);
+        const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42) * 1.3;
         const revCount = Math.floor(phiDeg / 360);      // vollendete Umdrehungen
         const partial = phiDeg - revCount * 360;        // aktueller Umdrehungswinkel (0…360)
 
@@ -476,25 +476,29 @@ export function buildWinkelZeitFig(fig) {
         arc.setAttribute('class', 'aspekt-angle-arc');
         g.appendChild(arc);
 
-        // varphi-Label (foreignObject/MathJax) auf der Winkelhalbierenden (wie
-        // 1.38). Bei R >= 1.2 ist der Bogen groß genug -> Label innen (0.62*rArc);
-        // sonst knapp außerhalb (rArc+15). (30x30-foreignObject -> um 15 zentren.)
-        //
-        // Label-Winkel: folgt wie der aktuelle Bogen dem aktuell gezeichneten
-        // Winkel (curAngle), damit Bogen und φ-Position entlang derselben Bahn
-        // laufen.
-        // Der konstante Versatz OFF_X/OFF_Y ist derselbe wie in 1.38 (dort die
-        // Referenz-Setzung, Nutzervorgabe) — er hält das Label von Ortsvektor
-        // und x-Achse frei.
-        const lr = (store.R >= 1.2) ? rArc * 0.62 : rArc + 15;
-        const mid = (curAngle * Math.PI / 180) / 2;
-        const OFF_X = 6, OFF_Y = 3;
-        const lx = cx + lr * Math.cos(mid) + OFF_X, ly = cy - lr * Math.sin(mid) + OFF_Y;
-        if (lbl0) {
-            lbl0.setAttribute('x', (lx - 15).toFixed(2));
-            lbl0.setAttribute('y', (ly - 15).toFixed(2));
-            lbl0.style.visibility = 'visible';
-        }
+        // φ-Label: Referenz ist ein Punkt auf dem aktuellen Bogen, der konstant
+        // 20° hinter der Spitze liegt (Kollisionsabstand zum Ortsvektor/Pfeil).
+        // Von dort wird φ radial nach außen versetzt.
+        const LABEL_TRAIL_DEG = 20;
+        const labelRad = rad - (LABEL_TRAIL_DEG * Math.PI / 180);
+        const tipX = cx + rArc * Math.cos(labelRad);
+        const tipY = cy - rArc * Math.sin(labelRad);
+        const rTip = Math.hypot(tipX - cx, tipY - cy) || 1;
+        const ux = (tipX - cx) / rTip;
+        const uy = (tipY - cy) / rTip;
+        const LABEL_RADIAL_GAP = 18;
+        const lx = tipX - ux * LABEL_RADIAL_GAP;
+        const ly = tipY - uy * LABEL_RADIAL_GAP;
+        // foreignObject/MathJax kann browserabhängig große konstante Offsets
+        // erzeugen; in 1.41 daher φ als natives SVG-Textlabel direkt im
+        // Winkel-Layer platzieren (gleiche Geometrie-Referenz wie oben).
+        if (lbl0) lbl0.style.visibility = 'hidden';
+        const phiLabel = document.createElementNS(NS, 'text');
+        phiLabel.setAttribute('x', lx.toFixed(2));
+        phiLabel.setAttribute('y', ly.toFixed(2));
+        phiLabel.setAttribute('class', 'aspekt-angle-label');
+        phiLabel.textContent = 'φ';
+        g.appendChild(phiLabel);
     }
 
     // -- Zeitreihe auf feste 12 s begrenzen (3 Perioden bei T=4 s, wie 1.39).

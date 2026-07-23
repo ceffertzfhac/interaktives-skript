@@ -84,6 +84,15 @@
    dass die Summe der alten Bögen schwächer bleibt als der aktuelle Bogen (0,3
    × ≤3 Umläufe ≈ 0,66 < 1,0). Gleiche Strichstärke wie der aktuelle Bogen. */
 .aspekt-figur .aspekt-angle-arc-prev { opacity: 0.3; }
+.aspekt-figur .aspekt-angle-label {
+    fill: var(--kb-accent);
+    font-family: var(--kb-font);
+    font-size: calc(17px * var(--kb-text-scale));
+    font-style: italic;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+}
 /* varphi-Label im foreignObject (MathJax) -- Farbe akzent, zentriert.
    Schrift BEWUSST ohne --kb-fs: das varphi-Label soll NICHT mitskalieren
    (Nutzervorgabe: Beschriftungen außer varphi bekommen ×1,5). */
