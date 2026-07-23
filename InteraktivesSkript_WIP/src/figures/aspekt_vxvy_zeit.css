@@ -1,0 +1,214 @@
+/* aspekt_vxvy_zeit.css — Optik der v_x/v_y-Zeit-Aspekt-Figur (Abb. 1.42).
+   Farb-Tokens, Panel-/Slider-/Legenden-/Analyse-/Lupe-/Caption-Regeln und das
+   Layout je Breiten-Modus + das Overlay kommen unverändert aus
+   aspekt_kreisbahn.css (geladen), weil diese Figur ebenfalls .aspekt-figur ist.
+   Hier stehen NUR die Ergänzungen: die Geschwindigkeits-FARB-TOKENS (--kb-vel
+   /--kb-vx/--kb-vy, aus der Sim-styles.css übernommen, in der Vorlage nur auf
+   #gc10 definiert — hier auf diese Figur gescopt), die Datenlinien-FARBEN
+   (v_x(t)=vx / v_y(t)=vy), die Vergleichslinie, die Vektorfarben in der Szene
+   und die Mittel-Spalte (.aspekt-main), die Szene + Diagramm uebereinander
+   stapelt. Die Graph-STRUKTUR (Hintergrund, Gitter, Achsen, Skalen, Titel,
+   Hover, Linienbreiten/-schriften) liegt zentral in aspekt_kreisbahn.css
+   (inkl. ×1,5-Skalierung via --kb-lw/--kb-fs).
+
+   Layout 1:1 von aspekt_weg_zeit.css (gleiche Interaktion: gestapelte Dual-
+   Graphen + Szene) — nur der Aspekt-Farb scopes und die Datenfarben wechseln. */
+
+/* ── Geschwindigkeits-Farb-Tokens (Sim-styles.css-Werte, hier auf die Figur
+   gescopt — in der Vorlage nur #gc10). --kb-vel: Geschwindigkeitsvektor (blau),
+   --kb-vx: v_x-Komponente (gold), --kb-vy: v_y-Komponente (rot). ──────────── */
+.aspekt-figur[data-aspekt="vxvy-zeit"] {
+    --kb-vel: #0072b2;
+    --kb-vx: #b8860b;
+    --kb-vy: #c03030;
+}
+
+/* ── Mittel-Spalte: Szene oben, Diagramm unten (gestapelt) ───────────────────
+   Beide SVGs an der Viewport-HOEHE deckeln, damit Szene UND beide (übereinander
+   gestapelte) Diagramme gleichzeitig auf den Bildschirm passen. Die SVGs tragen
+   preserveAspectRatio="xMidYMid meet" -> der Inhalt skaliert mit erhaltenem
+   Seitenverhältnis in die Box (width:100% × Nvh) und zentriert sich (ggf. mit
+   seitlichem Freiraum). Szene bewusst klein (der Aspekt sind die Diagramme). */
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main-content {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-runbar {
+    position: sticky;
+    top: 0;
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 8px;
+    background: var(--kb-surface);
+    border-bottom: none;
+    box-shadow: none;
+}
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main .aspekt-scene { padding: 8px; flex: 0 0 auto; }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-main .aspekt-svg {
+    display: block; width: 100%; height: 26vh; max-width: none;
+}
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 auto; }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-graph-svg {
+    display: block; width: 100%; height: auto; max-height: 44vh; max-width: none;
+    margin: 0 auto;
+}
+
+/* ── Graph-Struktur (Hintergrund, Gitter, Achsen, Skalen, Titel, Hover, Hit-
+   Rect, Linienbreiten/-schriften) liegt ZENTRAL in aspekt_kreisbahn.css
+   (gescopt auf .aspekt-figur, inkl. der ×1,5-Skalierung via --kb-lw/--kb-fs).
+   Hier pro Figur NUR die Datenlinien-FARBEN — v_x(t)=vx (gold), v_y(t)=vy
+   (rot), passend zu den Komponenten-Vektoren in der Szene. Punkte entsprechend
+   eingefärbt. IDs sind pro Instanz prefixt (kb<n>_, s. runtime.js) -> Suffix-
+   Selektoren. ───────────────────────────────────────────────────────────── */
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_line_top"]    { stroke: var(--kb-vx); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_point_top"]   { fill: var(--kb-vx); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_line_bottom"] { stroke: var(--kb-vy); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_point_bottom"] { fill: var(--kb-vy); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_line"]        { stroke: var(--kb-vel); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_point"]       { fill: var(--kb-vel); }
+
+/* ── Vergleichslinie (vorheriger Durchlauf): gestrichelt + dünner als die
+   aktuelle Kurve, gleiche Farbe wie deren Komponente (v_x=vx, v_y=vy,
+   Einzel=vel). Eingeblendet vom JS, sobald ein Neudurchlauf startet. ───────── */
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_prev_line_top"]    { stroke: var(--kb-vx); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_prev_line_bottom"] { stroke: var(--kb-vy); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_prev_line"]        { stroke: var(--kb-vel); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_prev_line"],
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_prev_line_top"],
+.aspekt-figur[data-aspekt="vxvy-zeit"] [id$="graph_prev_line_bottom"] {
+    fill: none; stroke-opacity: .5;
+    stroke-width: calc(1.5px * var(--kb-lw, 1)); stroke-dasharray: 6,4;
+    pointer-events: none;
+}
+
+/* ── Szene: Geschwindigkeitsvektor + (optionale) Komponenten — Farben wie die
+   Sim (kb_velocity_vector etc.). Pfeilspitzen (arrowhead-v/-vx/-vy) passend
+   eingefärbt. Suffix-Selektoren wegen per-Instanz-Prefix. ──────────────────── */
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="velocity_vector"]    { stroke: var(--kb-vel); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="velocity_vector_x"]   { stroke: var(--kb-vx); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="velocity_vector_y"]   { stroke: var(--kb-vy); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="arrowhead-v"] polygon  { fill: var(--kb-vel); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="arrowhead-vx"] polygon { fill: var(--kb-vx); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="arrowhead-vy"] polygon { fill: var(--kb-vy); }
+
+/* ── Legende: Swatch-Farben für Geschwindigkeitsvektor + Komponenten + Bogen. */
+.aspekt-figur[data-aspekt="vxvy-zeit"] .legend-swatch[data-c="v"]    { background: var(--kb-vel); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .legend-swatch[data-c="vx"]  { background: var(--kb-vx); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .legend-swatch[data-c="vy"]  { background: var(--kb-vy); }
+
+/* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme, ca. 60 %) ─────────── */
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-btn-row {
+    display: flex; gap: 6px;
+}
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-btn.aspekt-btn-icon {
+    flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border2); border-radius: 6px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-btn.aspekt-btn-icon:hover {
+    color: var(--kb-accent); border-color: var(--kb-accent);
+}
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-btn.aspekt-btn-icon svg {
+    width: 15px; height: 15px; display: block;
+}
+
+/* ── Tempo-Pills (Slow-Mo analog zur Vorlage: 1× … ⅛×) ──────────────────── */
+.aspekt-figur[data-aspekt="vxvy-zeit"] .speed-pills { display: flex; gap: 5px; }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: calc(11.5px * var(--kb-text-scale, 1));
+    color: var(--kb-text2); cursor: pointer; transition: all .15s;
+    position: relative; -webkit-user-select: none; user-select: none;
+}
+.aspekt-figur[data-aspekt="vxvy-zeit"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .speed-pill.active {
+    background: color-mix(in srgb, var(--kb-accent) 12%, transparent);
+    border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
+}
+
+/* ── Stoppuhr (analog, nach Vorlage) — gescopt unter .aspekt-scene, Suffix-
+   Selektoren wegen per-Instanz-Prefix. Digital-Display bleibt ausgeblendet. ─ */
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="stopwatch_circle"] { fill: var(--kb-surface); stroke: var(--kb-text); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="subdial_face"] { fill: var(--kb-surface); stroke: var(--kb-text3); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="stopwatch_main_hand"] { stroke: var(--kb-text); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene [id$="stopwatch_sub_hand"] { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="vxvy-zeit"] .aspekt-scene .sw-mark { stroke: var(--kb-text3); }
+
+/* ── Breit-Modus: Szene und (gestapeltes) Diagramm NEBENEINANDER (Zeile) ─────
+   Normal/schmal bleiben gestapelt (.aspekt-main ist flex-column). Im breiten
+   Modus wird .aspekt-main zur Zeile; Szene und Diagramm teilen sich die Breite
+   und bekommen beide eine Viewport-Hoehe, die nebeneinander auf den Bildschirm
+   passt. */
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main { flex-direction: column; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content { flex-direction: row; align-items: flex-start; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 8px; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 8px 8px; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-svg { height: auto; max-height: 50vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="vxvy-zeit"] .aspekt-graph-svg { height: auto; max-height: 50vh; }
+
+/* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
+   Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
+   aspekt_kreisbahn.css. ─────────────────────────────────────────────────── */
+.aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main { flex-direction: column; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content { flex-direction: row; align-items: flex-start; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-svg {
+    width: 100%; height: auto; max-height: 56vh; max-width: none;
+}
+.aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-graph-svg {
+    max-width: none; width: 100%; height: auto; max-height: 56vh;
+}
+
+/* Zoom + schmal: Szene und Diagramm untereinander (nur dieser Modus). */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content {
+    flex-direction: column;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 auto;
+}
+
+/* Zoom + schmal: Platz auf Bildschirm priorisieren (ohne andere Modi zu aendern).
+   Statt der generischen 3-Spalten-Overlay-Ansicht wird die Figur einspaltig,
+   die rechte Analyse-Leiste ausgeblendet und die Kernflaechen kompakter gesetzt,
+   damit Szene + Diagramm gleichzeitig sichtbar bleiben. */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-body {
+    display: block;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-panel-left {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-panel-right {
+    display: none;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-runbar {
+    padding: 6px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-scene {
+    padding: 6px 8px 4px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-main-content .aspekt-graph {
+    padding: 0 8px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-svg {
+    height: min(24vh, 220px);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="vxvy-zeit"] .aspekt-graph-svg {
+    height: min(42vh, 360px);
+}
+
+/* Tablet (gestapelt): Diagramm vollbreit unter der Szene — nichts extra nötig,
+   .aspekt-main ist ohnehin flex-column. */
