@@ -44,28 +44,23 @@
     display: block; width: 100%; height: 50vh; max-width: none; margin: 0 auto;
 }
 
-/* ── Graph-Klassen (VERBATIM Struktur aus der Sim, gescopt) ────────────────── */
-.aspekt-figur[data-aspekt="winkel-zeit"] .graph-bg { fill: var(--kb-graph-bg, #ffffff); }
-.aspekt-figur[data-aspekt="winkel-zeit"] .grid-line { stroke: var(--kb-grid-line, #e8eaf0); }
-.aspekt-figur[data-aspekt="winkel-zeit"] .axis-line { stroke: var(--kb-text); }
-.aspekt-figur[data-aspekt="winkel-zeit"] .axis-label { fill: var(--kb-text); font-size: calc(13px * var(--kb-text-scale, 1)); font-family: var(--kb-font); }
-.aspekt-figur[data-aspekt="winkel-zeit"] .tick-label { fill: var(--kb-text3); font-size: calc(11px * var(--kb-text-scale, 1)); font-family: var(--kb-font-mono); }
-.aspekt-figur[data-aspekt="winkel-zeit"] .graph-title-text { fill: var(--kb-text); font-size: calc(15px * var(--kb-text-scale, 1)); font-family: var(--kb-font); font-weight: 600; }
-.aspekt-figur[data-aspekt="winkel-zeit"] .graph-title-text.small { font-size: calc(13px * var(--kb-text-scale, 1)); }
-.aspekt-figur[data-aspekt="winkel-zeit"] .graph-hover-line { stroke: var(--kb-text3); stroke-width: 1.5; stroke-dasharray: 4,3; pointer-events: none; }
-.aspekt-figur[data-aspekt="winkel-zeit"] .graph-hover-point { fill: none; stroke-width: 2; pointer-events: none; }
-.aspekt-figur[data-aspekt="winkel-zeit"] .graph-hover-tooltip-bg { fill: var(--kb-surface2); fill-opacity: .85; stroke: var(--kb-border2); stroke-width: 1; rx: 4; }
-.aspekt-figur[data-aspekt="winkel-zeit"] .graph-hover-tooltip-text { fill: var(--kb-text); font-size: calc(11px * var(--kb-text-scale, 1)); font-family: var(--kb-font-mono); pointer-events: none; }
-/* Hit-Rect nur im Zoom/Overlay fangbar (pointer-events + Fadenkreuz-Cursor);
-   sonst pointer-events:none -> Hoverfeature ist dort NUR aktiv (Nutzervorgabe).
-    Das JS (aspekt_winkel_zeit.js) gated onMove zusaetzlich auf .aspekt-im-overlay. */
-.aspekt-figur[data-aspekt="winkel-zeit"] .graph-hit-rect { fill: none; pointer-events: none; }
-.aspekt-figur[data-aspekt="winkel-zeit"].aspekt-im-overlay .graph-hit-rect { pointer-events: all; cursor: crosshair; }
-
-/* ── Linienfarben: φ(t) in --kb-accent (gleich dem Winkelbogen in der Szene).
-   IDs sind pro Instanz prefixt (kb<n>_, s. runtime.js) -> Suffix-Selektoren. ─ */
+/* ── Graph-Struktur (Hintergrund, Gitter, Achsen, Skalen, Titel, Hover, Hit-
+   Rect, Linienbreiten/-schriften) liegt ZENTRAL in aspekt_kreisbahn.css
+   (gescopt auf .aspekt-figur, inkl. der ×1,5-Skalierung via --kb-lw/--kb-fs).
+   Hier pro Figur NUR die Datenlinien-FARBE — φ(t)=--kb-accent (gleich dem
+   Winkelbogen in der Szene, damit Szene und Diagramm zusammengehören). IDs
+   sind pro Instanz prefixt (kb<n>_, s. runtime.js) -> Suffix-Selektoren. ──── */
 .aspekt-figur[data-aspekt="winkel-zeit"] [id$="graph_line"]  { stroke: var(--kb-accent); }
 .aspekt-figur[data-aspekt="winkel-zeit"] [id$="graph_point"] { fill: var(--kb-accent); }
+
+/* ── Vergleichslinie (vorheriger Durchlauf): gestrichelt + dünner als die
+   aktuelle φ(t)-Linie. Eingeblendet vom JS, sobald ein Neudurchlauf startet
+   (Feature-Vorgabe: letzte Kurve zum Vergleichen stehen lassen). ──────────── */
+.aspekt-figur[data-aspekt="winkel-zeit"] [id$="graph_prev_line"] {
+    stroke: var(--kb-accent); stroke-opacity: .5;
+    stroke-width: calc(1.5px * var(--kb-lw, 1)); stroke-dasharray: 6,4;
+    fill: none; pointer-events: none;
+}
 
 /* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme, ca. 60 %) ─────────── */
 .aspekt-figur[data-aspekt="winkel-zeit"] .aspekt-btn-row {

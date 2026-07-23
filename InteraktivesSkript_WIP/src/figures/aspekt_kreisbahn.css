@@ -22,6 +22,15 @@
     --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
     --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);
     --kb-text-scale: var(--paper-graphics-scale, 1);
+    /* Linien- und Schrift-Skalierung NUR für Kernsim + Diagramm (Nutzervorgabe):
+       Linienbreiten × --kb-lw, Beschriftungen × --kb-fs — AUSGENOMMEN das
+       varphi-Label (s. .aspekt-angle-fo, das --kb-fs bewusst NICHT nutzt) und
+       die Bedien-/Analyse-Panels (diese Variablen greifen nur in Szene/Graph).
+       Pfeilspitzen sind markerUnits=userSpaceOnUse (feste Größe) und die
+       Verkürzung im Motor ist konstant (ARROW_LEN=5·strokeWidthVorlage) →
+       eine reine Strichstärken-Erhöhung verschiebt die Spitzen NICHT. */
+    --kb-lw: 1.5;
+    --kb-fs: 1.5;
 
     /* Box wie die Formelkarten: volle Lesespaltenbreite, gleiche Ausrichtung
        (display:block, kein max-width/auto-Zentrieren). */
@@ -44,27 +53,29 @@
 /* Inline-Groesse (nicht-Zoom): 460 war richtig. Im Overlay wird das
    ueberschrieben und die SVG an der verfuegbaren HOEHE gedeckelt (s. unten). */
 .aspekt-figur .aspekt-svg { display: block; width: 100%; max-width: 460px; height: auto; }
-.aspekt-figur .aspekt-scene [id$="disk"] { stroke: var(--kb-traj); stroke-width: 1.5; opacity: 0.32; }
-.aspekt-figur .aspekt-scene [id$="trajectory_path"] { stroke: var(--kb-traj); }
+.aspekt-figur .aspekt-scene [id$="disk"] { stroke: var(--kb-traj); stroke-width: calc(1.5px * var(--kb-lw)); opacity: 0.32; }
+.aspekt-figur .aspekt-scene [id$="trajectory_path"] { stroke: var(--kb-traj); stroke-width: calc(2px * var(--kb-lw)); }
 .aspekt-figur .aspekt-scene [id$="point"] { fill: var(--kb-accent); stroke: var(--kb-text); }
 .aspekt-figur .aspekt-scene [id$="point"] {
     cursor: grab;
     touch-action: none;
 }
 .aspekt-figur.is-dragging-point .aspekt-scene [id$="point"] { cursor: grabbing; }
-.aspekt-figur .aspekt-scene [id$="position_vector"]   { stroke: var(--kb-r);  stroke-width: 5; }   /* 2x Vorlage (2.5) */
-.aspekt-figur .aspekt-scene [id$="position_vector_x"] { stroke: var(--kb-rx); stroke-width: 4; }   /* 2x Vorlage (2) */
-.aspekt-figur .aspekt-scene [id$="position_vector_y"] { stroke: var(--kb-ry); stroke-width: 4; }
+.aspekt-figur .aspekt-scene [id$="position_vector"]   { stroke: var(--kb-r);  stroke-width: calc(5px * var(--kb-lw)); }   /* Vorlage 2.5, ×2 (CSS) × --kb-lw */
+.aspekt-figur .aspekt-scene [id$="position_vector_x"] { stroke: var(--kb-rx); stroke-width: calc(4px * var(--kb-lw)); }   /* Vorlage 2, ×2 (CSS) × --kb-lw */
+.aspekt-figur .aspekt-scene [id$="position_vector_y"] { stroke: var(--kb-ry); stroke-width: calc(4px * var(--kb-lw)); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-r"]  polygon { fill: var(--kb-r); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-rx"] polygon { fill: var(--kb-rx); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-ry"] polygon { fill: var(--kb-ry); }
-.aspekt-figur .zoom-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: calc(11px * var(--kb-text-scale)); }
-.aspekt-figur .aspekt-axis { stroke: var(--kb-text); stroke-width: 1.2; }
+.aspekt-figur .zoom-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: calc(11px * var(--kb-text-scale) * var(--kb-fs)); }
+.aspekt-figur .aspekt-axis { stroke: var(--kb-text); stroke-width: calc(1.2px * var(--kb-lw)); }
 .aspekt-figur .aspekt-scene [id$="ax_arrow"] polygon { fill: var(--kb-text); }
-.aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale)); font-style: italic; }
+.aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); font-style: italic; }
 /* Winkel-Visualisierung (Bogen + φ-Label) */
-.aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: 2; }
-/* varphi-Label im foreignObject (MathJax) -- Farbe akzent, zentriert */
+.aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: calc(2px * var(--kb-lw)); }
+/* varphi-Label im foreignObject (MathJax) -- Farbe akzent, zentriert.
+   Schrift BEWUSST ohne --kb-fs: das varphi-Label soll NICHT mitskalieren
+   (Nutzervorgabe: Beschriftungen außer varphi bekommen ×1,5). */
 .aspekt-figur .aspekt-angle-fo {
     display: flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; color: var(--kb-accent);
@@ -72,6 +83,34 @@
 }
 .aspekt-figur .aspekt-angle-fo mjx-container { margin: 0 !important; color: var(--kb-accent); }
 .aspekt-figur .legend-swatch[data-c="phi"] { background: var(--kb-accent); height: 3px; }
+
+/* ── Diagramm-Optik (shared für alle Aspekt-Figuren MIT Graph, z.Zt. 1.39/1.41)
+   Struktur VERBATIM aus der portierten styles.css der Sim, hier ZENTRAL auf
+   .aspekt-figur gescopt (vorher pro Figur dupliziert in aspekt_weg_zeit.css /
+   aspekt_winkel_zeit.css). 1.38 hat keinen Graph -> diese Regeln greifen dort
+   nicht. Linien × --kb-lw, Schriften × --kb-fs. Die Datenlinien-FARBEN bleiben
+   pro Figur (x/y=rx/ry bei 1.39, φ=accent bei 1.41), nur Breite/Struktur hier.
+   Achs-Pfeil (graph-arrowhead) ist markerUnits=userSpaceOnUse (fest) -> wird
+   durch Strichstaerke nicht verschoben. */
+.aspekt-figur .graph-bg { fill: var(--kb-graph-bg, #ffffff); }
+.aspekt-figur .grid-line { stroke: var(--kb-grid-line, #e8eaf0); stroke-width: calc(1px * var(--kb-lw)); }
+.aspekt-figur .axis-line { stroke: var(--kb-text); stroke-width: calc(1.5px * var(--kb-lw)); }
+.aspekt-figur .axis-label { fill: var(--kb-text); font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); font-family: var(--kb-font); }
+.aspekt-figur .tick-label { fill: var(--kb-text3); font-size: calc(11px * var(--kb-text-scale) * var(--kb-fs)); font-family: var(--kb-font-mono); }
+.aspekt-figur .graph-title-text { fill: var(--kb-text); font-size: calc(15px * var(--kb-text-scale) * var(--kb-fs)); font-family: var(--kb-font); font-weight: 600; }
+.aspekt-figur .graph-title-text.small { font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); }
+.aspekt-figur .graph-hover-line { stroke: var(--kb-text3); stroke-width: calc(1.5px * var(--kb-lw)); stroke-dasharray: 4,3; pointer-events: none; }
+.aspekt-figur .graph-hover-point { fill: none; stroke-width: calc(2px * var(--kb-lw)); pointer-events: none; }
+.aspekt-figur .graph-hover-tooltip-bg { fill: var(--kb-surface2); fill-opacity: .85; stroke: var(--kb-border2); stroke-width: 1; rx: 4; }
+.aspekt-figur .graph-hover-tooltip-text { fill: var(--kb-text); font-size: calc(11px * var(--kb-text-scale) * var(--kb-fs)); font-family: var(--kb-font-mono); pointer-events: none; }
+/* Hit-Rect nur im Zoom/Overlay fangbar; sonst pointer-events:none -> Hover nur
+   dort aktiv. Das JS gated onMove zusaetzlich auf .aspekt-im-overlay. */
+.aspekt-figur .graph-hit-rect { fill: none; pointer-events: none; }
+.aspekt-figur.aspekt-im-overlay .graph-hit-rect { pointer-events: all; cursor: crosshair; }
+/* Daten-Polyline(n): Strichstaerke zentral (SVG-Attribut 2 wird per CSS
+   ueberschrieben). Selektor auf .aspekt-graph polyline trifft EINZEL- wie
+   gestapelte top/bottom-Linien. Farbe kommt pro Figur dazu. */
+.aspekt-figur .aspekt-graph polyline { stroke-width: calc(2px * var(--kb-lw)); }
 
 /* ── Panel (Parameter / Legende / Analyse) — Vorlagen-Klassen ──────────── */
 .aspekt-figur .panel-section { padding: 12px 14px; border-bottom: 1px solid var(--kb-border); }
