@@ -59,6 +59,11 @@ import { ge } from '../core.js';
 const T_AUTO = 12;            // fester Auto-Stopp nach 12 s — bei Vorgabe T=4 s
                               // sind das drei Perioden (Bereich 0…12 s, wie 1.41)
 const T_MIN = 2, T_MAX = 8, T_DEFAULT = 4;
+const T_STEP = 0.1;
+// ω = 2π/T, bidirektional an den T-Regler gekoppelt (P-AF-1). Der ω-Bereich ist der
+// reziproke des T-Bereichs: T_MAX -> kleinstes ω, T_MIN -> größtes ω.
+const OMEGA_MIN = 2 * Math.PI / T_MAX, OMEGA_MAX = 2 * Math.PI / T_MIN,
+      OMEGA_DEFAULT = 2 * Math.PI / T_DEFAULT, OMEGA_STEP = 0.01;
 const R_DEFAULT = 1.5;
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 
@@ -179,8 +184,13 @@ const PANEL_LEFT = `
     </div>
     <div class="slider-label">Periodendauer \\(T\\)</div>
     <div class="slider-row">
-      <input id="ak_T" type="range" min="${T_MIN}" max="${T_MAX}" step="0.1" value="${T_DEFAULT}">
+      <input id="ak_T" type="range" min="${T_MIN}" max="${T_MAX}" step="${T_STEP}" value="${T_DEFAULT}">
       <span class="slider-val" id="ak_T_out"></span>
+    </div>
+    <div class="slider-label">Winkelgeschw. \\(\\omega = \\tfrac{2\\pi}{T}\\)</div>
+    <div class="slider-row">
+      <input id="ak_omega" type="range" min="${OMEGA_MIN}" max="${OMEGA_MAX}" step="${OMEGA_STEP}" value="${OMEGA_DEFAULT}">
+      <span class="slider-val" id="ak_omega_out"></span>
     </div>
   </div>
   <div class="panel-section">
@@ -320,13 +330,19 @@ export function buildWegZeitFig(fig) {
     }
 
     // Per-Instanz-Regler + Zustand (Closure, nicht Modul-Ebene).
-    const ak_t = ge(p + 'ak_t'), ak_r = ge(p + 'ak_r'), ak_T = ge(p + 'ak_T');
+    const ak_t = ge(p + 'ak_t'), ak_r = ge(p + 'ak_r'), ak_T = ge(p + 'ak_T'), ak_omega = ge(p + 'ak_omega');
     const ak_keep = ge(p + 'ak_keep');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let sceneCenters = null;
     let curT = T_AUTO;                    // Initial: volle 12 s (Vorgabe T=4 s -> 3 Perioden)
     let speedFactor = 1.0;
     let keepPrev = false;                 // Vergleichslinie: letzte Kurve bei Neudurchlauf behalten
+
+    // ω↔T-Kopplung (P-AF-1): ω = 2π/T, beide Regler bidirektional gekoppelt. T ist
+    // die Wahrheit (gequantelt auf T_STEP); ω gezogen -> T abgeleitet+gesetzt,
+    // T/R gezogen -> ω-Schieber nachgeführt.
+    const omegaOf = T => 2 * Math.PI / T;
+    const snapT = v => Math.round(v / T_STEP) * T_STEP;
 
     // -- Vergleichslinie (Ghost): die gerade fertigen x(t)/y(t)-Kurven beim Start
     //    eines Neudurchlaufs einfrieren (gestrichelt + dünner, s. aspekt_weg_zeit.
@@ -452,6 +468,7 @@ export function buildWegZeitFig(fig) {
         ge(p + 'ak_t_out').textContent = n(t, 2) + ' s';
         ge(p + 'ak_r_out').textContent = n(store.R, 2) + ' m';
         ge(p + 'ak_T_out').textContent = n(T, 1) + ' s';
+        ge(p + 'ak_omega_out').textContent = n(omegaOf(T), 3) + ' rad/s';
         const vt = ge(p + 'ak_val_t');
         if (vt) {
             const phiDeg = ((store.omega * t) * 180 / Math.PI) % 360;
@@ -513,27 +530,39 @@ export function buildWegZeitFig(fig) {
     }
 
     function onInput(e) {
+        // ω-Schieber gezogen: T = 2π/ω ableiten, auf T_STEP quantisieren und auf
+        // [T_MIN, T_MAX] beschränken, dann den T-Schieber mitführen. Kein Snap-Back
+        // auf den ω-Schieber während des Ziehens — sonst springt er unter dem Zeiger.
+        if (e.target === ak_omega) {
+            const T = Math.min(T_MAX, Math.max(T_MIN, snapT(2 * Math.PI / parseFloat(ak_omega.value))));
+            ak_T.value = String(T);
+        }
         if (e.target === ak_t) {
             const t = parseFloat(ak_t.value);
             const T = parseFloat(ak_T.value);
             rt.withStore(() => { draw(t); updateLabels(t, T); });
-        } else {
-            // Genau EIN Schnappschuss pro Zieh-Geste: ein <input type=range>
-            // feuert beim Ziehen ein input-Event PRO Zwischenwert. Wurde bei
-            // jedem davon eingefroren, war die "letzte Kurve" am Ende die des
-            // vorletzten Zwischenwerts — praktisch dieselbe Kurve wie die neue,
-            // nur die Achsenskalierung sah anders aus. Jetzt wird die Kurve
-            // eingefroren, die VOR dem Ziehen zu sehen war; das change-Event
-            // (Loslassen) beendet die Geste.
-            if (!paramGesture) {
-                paramGesture = true;
-                if (keepPrev) rt.withStore(snapshotPrev);
-            }
-            rebuild(true);
+            return;
+        }
+        // Genau EIN Schnappschuss pro Zieh-Geste: ein <input type=range>
+        // feuert beim Ziehen ein input-Event PRO Zwischenwert. Wurde bei
+        // jedem davon eingefroren, war die "letzte Kurve" am Ende die des
+        // vorletzten Zwischenwerts — praktisch dieselbe Kurve wie die neue,
+        // nur die Achsenskalierung sah anders aus. Jetzt wird die Kurve
+        // eingefroren, die VOR dem Ziehen zu sehen war; das change-Event
+        // (Loslassen) beendet die Geste.
+        if (!paramGesture) {
+            paramGesture = true;
+            if (keepPrev) rt.withStore(snapshotPrev);
+        }
+        rebuild(true);
+        // War nicht der ω-Schieber die Quelle (R- oder T-Zug) -> ω-Schieber
+        // nachführen, damit beide gekoppelt sichtbar bleiben.
+        if (e.target !== ak_omega) {
+            ak_omega.value = String(omegaOf(parseFloat(ak_T.value)));
         }
     }
     let paramGesture = false;
-    [ak_r, ak_T].forEach(inp => inp.addEventListener('change', () => { paramGesture = false; }));
+    [ak_r, ak_T, ak_omega].forEach(inp => inp.addEventListener('change', () => { paramGesture = false; }));
 
     // -- Automatischer Ablauf (Sim-Zeit 0 … 12 s, Slow-Mo via Tempo-Pills, Auto-
     //    Stopp am Ende — kein Umbrechen). Pro Instanz im Closure; Knoepfe/Pills
@@ -600,7 +629,7 @@ export function buildWegZeitFig(fig) {
         if (!keepPrev) clearPrev();
     });
 
-    [ak_t, ak_r, ak_T].forEach(inp => inp.addEventListener('input', onInput));
+    [ak_t, ak_r, ak_T, ak_omega].forEach(inp => inp.addEventListener('input', onInput));
     rebuild();
 
     // Beim Oeffnen/Schliessen der Lupe sofort neu zeichnen: so greift der
