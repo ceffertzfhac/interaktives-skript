@@ -329,21 +329,125 @@
 <h3 class="inhaltsverzeichnis">1.5.8 Zusammenhang zwischen Drehmoment und Drehimpuls</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.8 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
-    </div>
+    <p>Im Kapitel zur Dynamik der Massenpunkte hatten wir den Zusammenhang zwischen Kraft und Impulsänderung kennengelernt:</p>
+
+    \begin{equation}
+    \vec{F} = \frac{\mathrm{d} \vec{p}}{\mathrm{d} t}.
+    \end{equation}
+
+    <p>Wir wollen nun untersuchen, ob es einen ähnlichen Zusammenhang zwischen Drehmoment und Drehimpulsänderung gibt. Dazu schreiben wir die Definition des Drehimpulses auf:</p>
+
+    \begin{equation}
+    \vec{L} = \vec{r} \times m \vec{v}.
+    \end{equation}
+
+    <p>Leiten wir diese Gleichung nach der Zeit ab, so erhalten wir</p>
+
+    \begin{align}
+    \frac{\mathrm{d} \vec{L}}{\mathrm{d} t} &amp;= \frac{\mathrm{d}}{\mathrm{d} t} \left( \vec{r} \times m \vec{v} \right) \\
+    &amp;= \frac{\mathrm{d} \vec{r}}{\mathrm{d} t} \times m \vec{v} + \vec{r} \times m \frac{\mathrm{d} \vec{v}}{\mathrm{d} t} \\
+    &amp;= \vec{v} \times m \vec{v} + \vec{r} \times m \frac{\mathrm{d} \vec{v}}{\mathrm{d} t}\\
+    &amp;= m(\vec v \times \vec v)+ \vec{r} \times m \frac{\mathrm{d} \vec{v}}{\mathrm{d} t}.
+    \end{align}
+
+    <p>Das erste Glied auf der rechten Seite ist das Kreuzprodukt eines Vektors mit sich selbst, also null. Im zweiten Glied steht die zeitliche Ableitung der Geschwindigkeit, also die Beschleunigung \(\vec{a} = \frac{\mathrm{d} \vec{v}}{\mathrm{d} t}\). Damit erhalten wir</p>
+
+    \begin{equation}
+    \frac{\mathrm{d} \vec{L}}{\mathrm{d} t} = \vec{r} \times m \vec{a}=\vec r \times \vec F.
+    \end{equation}
+
+    <p>Darin haben wir das 2. Newtonsche Axiom \(\vec{F} = m \vec{a}\) verwendet. Der Ausdruck auf der rechten Seite ist die Definition des Drehmoments. Wir haben also den Zusammenhang</p>
+
+    \begin{equation}
+    \vec{M} = \frac{\mathrm{d} \vec{L}}{\mathrm{d} t}
+    \end{equation}
+
+    <p>zwischen Drehmoment und Drehimpulsänderung gefunden. Das Drehmoment ist also die Ursache für die Änderung des Drehimpulses, analog zur Kraft, die die Ursache für die Änderung des Impulses ist.</p>
+
+    <p>Anders gesagt: möchte ich einen starren Körper in Rotation versetzen, oder eine bestehende Rotation abbremsen oder beschleunigen, dann reicht es nicht, irgendeine beliebig gerichtete Kraft auf den Körper auszuüben. Ich muss eine Kraft so auf den Körper ausüben, dass sie ein Drehmoment erzeugt. Das Drehmoment ist die Ursache für die Änderung des Drehimpulses, und damit für die Änderung der Rotation eines starren Körpers.</p>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.9 Drehimpulserhaltung</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.9 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
-    </div>
+    <p>In der Dynamik der Massenpunkte hatten wir das Impulserhaltungsgesetz kennengelernt: In einem abgeschlossenen System bleibt der Gesamtimpuls konstant, genau dann, wenn keine äußeren Kräfte auf das System wirken. Wir wollen nun untersuchen, ob es ein ähnliches Gesetz für den Drehimpuls gibt.</p>
+
+    <p>Angenommen, in einem abgeschlossenen System befinden sich zwei Massen \(A\) und \(B\). Die beiden Massen können Kräfte aufeinander ausüben. Die Masse \(A\) kann auf die Masse \(B\) eine Kraft \(\vec F_{BA}\) ausüben, und die Masse \(B\) kann auf die Masse \(A\) eine Kraft \(\vec F_{AB}\) ausüben. Die Kraft \(F_{AB}\) und \(F_{BA}\) muss dabei nicht weiter spezifiziert werden, sie können z.B. Gravitationskräfte, elektrische Kräfte oder magnetische Kräfte oder etwas anderes sein (vielleicht sind die beiden Massen auch durch eine Feder verbunden, die eine Kraft ausübt).</p>
+
+    <figure class="abbildung" id="fig-skript-dreh-abgeschl-drehimpulserh">
+        <img class="grafik" style="width:50%" src="bilder/skript_dreh_abgeschl_drehimpulserh.png" alt="">
+        <figcaption>In einem abgeschlossenen System befinden sich zwei Massen \(A\) und \(B\) an den Orten \(\vec r_A\) und \(\vec r_B\). Die beiden Massen können Kräfte aufeinander ausüben, die Kraft, die Masse \(A\) auf Masse \(B\) ausübt, ist \(\vec F_{BA}\), die Kraft, die Masse \(B\) auf Masse \(A\) ausübt, ist \(\vec F_{AB}\). Aufgrund von Actio=Reactio sind die beiden Kräfte gleich groß und entgegengesetzt gerichtet.</figcaption>
+    </figure>
+
+    <p>Masse \(A\) befindet sich am Ort \(r_A\), Masse \(B\) befindet sich am Ort \(r_B\). Dann ist das Drehmoment, das Masse \(A\) auf Masse \(B\) ausübt, gegeben durch</p>
+
+    \begin{equation}
+    \vec M_{BA} = \vec r_B \times \vec F_{BA}
+    \end{equation}
+
+    <p>und das Drehmoment, das Masse \(B\) auf Masse \(A\) ausübt, durch</p>
+
+    \begin{equation}
+    \vec M_{AB} = \vec r_A \times \vec F_{AB}.
+    \end{equation}
+
+    <p>Nehmen wir an, es gäbe auch noch äußere Kräfte (von außerhalb des Systems), die auf die beiden Massen wirken, diese nennen wir \(F_{A,\text{ext}}\) und \(F_{B,\text{ext}}\)<span class="fussnote">In \(\vec F_{A,\text{ext}}\) bzw. \(\vec F_{B,\text{ext}}\) können auch viele äußere Kräfte zu einer resultierenden Gesamtkraft summiert werden</span>.</p>
+
+    <p>Das gesamte Drehmoment auf das System ist dann gegeben durch</p>
+
+    \begin{equation}
+    \vec M_\text{ges} = \vec M_{AB} + \vec M_{BA} + \vec r_A \times \vec F_{A,\text{ext}} + \vec r_B \times \vec F_{B,\text{ext}}.
+    \end{equation}
+
+    <p>Die ersten beiden Terme sind die Drehmomente, die die beiden Massen gegenseitig aufeinander ausüben, die letzten beiden Terme sind die Drehmomente, die durch die äußeren Kräfte auf die beiden Massen ausgeübt werden.</p>
+
+    <p>Die Kräfte \(\vec F_{AB}\) und \(\vec F_{BA}\) entstehen durch die Wechselwirkung der beiden Massen untereinander. Nach dem 3. Newtonschen Axiom sind die beiden Kräfte, die die beiden Massen gegenseitig aufeinander ausüben, gleich groß und entgegengesetzt gerichtet:</p>
+
+    \begin{equation}
+    \vec F_{AB} = - \vec F_{BA}.
+    \end{equation}
+
+    <p>Damit können wir die ersten beiden Terme in der Formel für das gesamte Drehmoment zusammenfassen:</p>
+
+    \begin{align}
+    \vec M_{AB} + \vec M_{BA} &amp;= \vec r_A \times \vec F_{AB} + \vec r_B \times \vec F_{BA} \\
+    &amp;= \vec r_A \times \vec F_{AB} - \vec r_B \times \vec F_{AB} \\
+    &amp;= (\vec r_A - \vec r_B) \times \vec F_{AB}.
+    \end{align}
+
+    <p>Der Vektor \(\vec r_A - \vec r_B\) ist der Vektor, der von Masse \(B\) zu Masse \(A\) zeigt. Die Kräfte \(\vec F_{AB}\) und \(\vec F_{BA}\) zeigen entlang der Wirkungslinie der Wechselwirkung zwischen den beiden Massen. Daher sind die Vektoren \(\vec r_A - \vec r_B\) und \(\vec F_{AB}\) parallel zueinander, und das Kreuzprodukt ist null:</p>
+
+    \begin{equation}
+    \vec M_{AB} + \vec M_{BA} = (\vec r_A - \vec r_B) \times \vec F_{AB} = 0.
+    \end{equation}
+
+    <p>Damit vereinfacht sich die Formel für das gesamte Drehmoment auf das System zu</p>
+
+    \begin{equation}
+    \vec M_\text{ges} = \vec r_A \times \vec F_{A,\text{ext}} + \vec r_B \times \vec F_{B,\text{ext}}.
+    \end{equation}
+
+    <p>Wir sehen: die inneren Kräfte, die die beiden Massen gegenseitig aufeinander ausüben, tragen nicht zum gesamten Drehmoment auf das System bei. Nur die äußeren Kräfte, die von außerhalb des Systems auf die beiden Massen wirken, tragen zum gesamten Drehmoment bei.</p>
+
+    <p>Das bedeutet auch: wenn keine äußeren Kräfte auf das System wirken, also \(\vec F_{A,\text{ext}} = 0\) und \(\vec F_{B,\text{ext}} = 0\), dann ist das gesamte Drehmoment auf das System null:</p>
+
+    \begin{equation}
+    \vec M_\text{ges} = 0.
+    \end{equation}
+
+    <p>Nach dem Zusammenhang zwischen Drehmoment und Drehimpulsänderung bedeutet das, dass die Änderung des gesamten Drehimpulses des Systems null ist:</p>
+
+    \begin{equation}
+    \frac{\mathrm{d} \vec{L}_\text{ges}}{\mathrm{d} t} = \vec M_\text{ges} = 0.
+    \end{equation}
+
+    <p>Die zeitliche Ableitung des gesamten Drehimpulses des Systems ist also null, das bedeutet, dass der gesamte Drehimpuls des Systems konstant ist:</p>
+
+    \begin{equation}
+    \vec{L}_\text{ges} = \text{konst}.
+    \end{equation}
+
+    <p>Das ist der <strong>Drehimpulserhaltungssatz</strong>: In einem abgeschlossenen System bleibt der gesamte Drehimpuls konstant, genau dann, wenn keine äußeren Drehmomente auf das System wirken.</p>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.10 Experimente zum Drehmoment, Drehimpuls und zur Drehimpulserhaltung</h3>
