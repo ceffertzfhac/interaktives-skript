@@ -465,6 +465,16 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     white-space: nowrap;
 }
 #header_version { opacity: .55; font-size: .62em; font-weight: 400; margin-left: 3px; }
+/* Prototyp-Plakette neben dem Titel: der Stand ist ausdruecklich vorlaeufig --
+   Umsetzung UND Inhalte. Bewusst in Warnfarbe und immer sichtbar, nicht in
+   einem Untermenue versteckt. */
+#header_prototyp {
+    display: inline-block; margin-left: 7px; padding: 1px 6px;
+    border: 1px solid #d9a441; border-radius: 999px;
+    background: #fdf4e3; color: #8a5a10;
+    font-size: .52em; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; vertical-align: middle; white-space: nowrap;
+}
 #header_divider {
     width: 1px;
     height: 28px;
@@ -675,6 +685,19 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
    Kopfleiste (#toc_screen_bar) die Rolle von #header (Mockup-Prinzip: eine
    Kopfleiste je Ansicht, keine gestapelten Balken). */
 body.toc-open #header { display: none; }
+/* Prototyp-/Haftungshinweis im Kontakt-Kasten: kleiner gesetzt als der uebrige
+   Text, aber mit deutlicher Abgrenzung nach oben -- er soll gelesen und nicht
+   uebersehen werden. */
+.kontakt_hinweis {
+    margin: 18px auto 0;
+    max-width: 62ch;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: .82em;
+    line-height: 1.5;
+    color: var(--ink-2);
+    text-align: left;
+}
 #kontakt {
     background-color: white;
     padding:20px;

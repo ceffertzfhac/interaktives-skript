@@ -10,9 +10,19 @@ Entstanden für die Physik-Vorlesung im Fachbereich 8 der **FH Aachen**
 
 **→ [Skript öffnen](https://ceffertzfhac.github.io/interaktives-skript/)**
 
+> ### ⚠️ Prototyp
+>
+> Dieses Skript ist ein **Prototyp** — und zwar in beidem: in der technischen
+> Umsetzung **und in den Inhalten**. Texte, Formeln, Abbildungen und
+> Simulationen sind ein **Arbeitsstand**, keine fertige, redigierte
+> Ausarbeitung. Rechne mit Fehlern, Lücken, provisorischen Formulierungen und
+> Abschnitten, die sich noch grundlegend ändern. Nichts davon ist als
+> abgeschlossenes Lehrmaterial zu verstehen. Siehe
+> [`DISCLAIMER.md`](DISCLAIMER.md).
+
 ![Screenshot: Abschnitt 1.4.1 mit der interaktiven Kreisbahn-Figur](.github/readme-screenshot.png)
 
-## Was drin ist
+## Was drin ist (Arbeitsstand)
 
 - **Kapitel 1.4 „Kinematik der Drehbewegung und Kreisbahnen"** mit den
   Abschnitten 1.4.1–1.4.12, Formeln in LaTeX-Satz (MathJax), Beispiel-,
@@ -92,8 +102,8 @@ und vor größeren Umbauten ein Blick in `CLAUDE.md` und die Runbooks oben.
 
 ## Haftungsausschluss
 
-Lehr- und Übungsmaterial, bereitgestellt „wie besehen" — **ohne Gewährleistung
-und ohne Haftungsübernahme**. Insbesondere sind die interaktiven Simulationen
+Lehr- und Übungsmaterial im **Prototyp-Stadium**, bereitgestellt „wie besehen"
+— **ohne Gewährleistung und ohne Haftungsübernahme**. Insbesondere sind die interaktiven Simulationen
 didaktisch vereinfachte Modelle und liefern **keine** physikalisch belastbaren
 Berechnungen; das Skript ersetzt weder die Vorlesung noch die offiziellen
 Veranstaltungsunterlagen. Vollständiger Text: **[`DISCLAIMER.md`](DISCLAIMER.md)**.

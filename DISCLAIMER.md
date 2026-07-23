@@ -1,8 +1,18 @@
 # Haftungsausschluss
 
-Dieses interaktive Skript ist **Lehr- und Übungsmaterial**. Es wird
-„wie besehen" („as is") bereitgestellt — **ohne jede Gewährleistung und ohne
-jede Haftungsübernahme**.
+Dieses interaktive Skript ist **Lehr- und Übungsmaterial im Prototyp-Stadium**.
+Es wird „wie besehen" („as is") bereitgestellt — **ohne jede Gewährleistung und
+ohne jede Haftungsübernahme**.
+
+## Prototyp — auch inhaltlich
+
+Prototypisch ist **nicht nur die technische Umsetzung, sondern ausdrücklich auch
+der Inhalt**. Texte, Formeln, Abbildungen und Simulationen sind ein
+**Arbeitsstand** und **keine abgeschlossene, redigierte oder fachlich
+geprüfte Ausarbeitung**. Es ist mit Fehlern, Lücken, vorläufigen Formulierungen,
+uneinheitlicher Notation und Abschnitten zu rechnen, die sich noch grundlegend
+ändern oder wegfallen. Wer damit lernt, sollte das im Bewusstsein tun, ein
+Material in Entwicklung vor sich zu haben.
 
 ## Keine Gewähr für die Inhalte
 
