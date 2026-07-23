@@ -107,7 +107,6 @@
 
     \begin{equation}
     \vec{L} = \vec{r} \times m \vec{v}.
-    \label{eq_drehimpuls_massenpunkt}
     \end{equation}
 
     <p>Die Einheit des Drehimpulses ist \(\left[ \vec{L} \right] = \mathrm{kg\,m^2/s}\).</p>
@@ -124,6 +123,33 @@
     \begin{equation}
     \vec{L} = \vec{r} \times m \vec{v} = m \left( \vec{r} \times \vec{v} \right).
     \end{equation}
+
+    <p>Ersetzen wir den Bahngeschwindigkeitsvektor \(\vec{v}\) durch die Formel für die Bahngeschwindigkeit eines Körpers, der sich auf einer Kreisbahn bewegt, also \(\vec{v} = \vec{\omega} \times \vec{r}\), so erhalten wir</p>
+
+    \begin{equation}
+    \vec{L} = m \left( \vec{r} \times \left( \vec{\omega} \times \vec{r} \right) \right).
+    \end{equation}
+
+    <p>Jetzt können wir die Dreifach-Vektorproduktregel aus der Mathematik anwenden (\(\vec{a} \times (\vec{b} \times \vec{c}) = \vec{b} (\vec{a} \cdot \vec{c}) - \vec{c} (\vec{a} \cdot \vec{b})\)):</p>
+
+    \begin{equation}
+    \vec{L} = m \left( \vec{\omega} (\vec{r} \cdot \vec{r}) - \vec{r} (\vec{r} \cdot \vec{\omega}) \right).
+    \end{equation}
+
+    <p>Der Ausdruck \(\vec{r} \cdot \vec{r}\) ist das Skalarprodukt des Ortsvektors mit sich selbst, also der Betrag des Ortsvektors zum Quadrat:</p>
+
+    \begin{equation}
+    \vec{r} \cdot \vec{r} = r^2.
+    \end{equation}
+
+    <p>Der Ausdruck \(\vec{r} \cdot \vec{\omega}\) ist das Skalarprodukt des Ortsvektors mit dem Winkelgeschwindigkeitsvektor. Wählen wir nun das Koordinatensystem so, dass der Ursprung der Schnittpunkt zwischen Rotationsachse und Bewegungsebene ist, so steht der Ortsvektor immer senkrecht auf dem Winkelgeschwindigkeitsvektor, daher ist das Skalarprodukt \(\vec{r} \cdot \vec{\omega} = 0\). Damit vereinfacht sich die Formel für den Drehimpuls zu</p>
+
+    \begin{equation}
+    \vec{L} = m \left( \vec{\omega} r^2 - \vec{r} \cdot 0 \right) = m r^2 \vec{\omega}.
+    \label{eq_drehimpuls_massenpunkt}
+    \end{equation}
+
+    <p>Der Drehimpuls eines Massenpunktes, der sich auf einer Kreisbahn um eine Achse dreht, ist also proportional zur Masse des Massenpunktes, zum Quadrat des Abstandes des Massenpunktes zur Rotationsachse und zur Winkelgeschwindigkeit des Massenpunktes. Der Drehimpulsvektor zeigt dabei in dieselbe Richtung wie der Winkelgeschwindigkeitsvektor.</p>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.4 (Massen-)Trägheitsmoment</h3>
