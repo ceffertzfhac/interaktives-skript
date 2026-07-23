@@ -120,6 +120,7 @@ const SVG_SCENE = `
     <path id="kb_trajectory_path" fill="none" stroke-width="2" stroke-dasharray="4,4" d=""/>
     <circle id="kb_point" cx="325" cy="260" r="8" stroke-width="1"/>
     <text id="kb_zoom_text_display" x="12" y="20" class="zoom-text"></text>
+    <text id="kb_time_display" x="12" y="470" class="aspekt-time-text"></text>
 
     <line id="kb_position_vector"   stroke-width="3.75" marker-end="url(#kb_arrowhead-r)"  visibility="hidden"/>
     <line id="kb_position_vector_x" stroke-width="3" stroke-dasharray="4,4" marker-end="url(#kb_arrowhead-rx)" visibility="hidden"/>
@@ -500,6 +501,7 @@ export function buildVxVyZeitFig(fig) {
     function updateLabels(t, T) {
         const n = (x, d) => Number.isFinite(x) ? x.toFixed(d).replace('.', ',') : '—';
         ge(p + 'ak_t_out').textContent = n(t, 2) + ' s';
+        const td = ge(p + 'time_display'); if (td) td.textContent = `t = ${n(t, 2)} s`;
         ge(p + 'ak_r_out').textContent = n(store.R, 2) + ' m';
         ge(p + 'ak_T_out').textContent = n(T, 1) + ' s';
         ge(p + 'ak_omega_out').textContent = n(omegaOf(T), 3) + ' rad/s';

@@ -95,6 +95,10 @@
 .aspekt-figur .aspekt-scene [id$="arrowhead-rx"] polygon { fill: var(--kb-rx); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-ry"] polygon { fill: var(--kb-ry); }
 .aspekt-figur .zoom-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: calc(11px * var(--kb-text-scale) * var(--kb-fs)); }
+/* Zeitanzeige unten links im Kernsim (P-AF-3, inspiriert von den Stand-alone-
+   Sims): gleiche Typografie wie zoom-text (Mono, Text2), nur unten links statt
+   oben links. Nur in den animierten Figuren (1.39/1.41/1.42) vorhanden. */
+.aspekt-figur .aspekt-time-text { fill: var(--kb-text2); font-family: var(--kb-font-mono); font-size: calc(11px * var(--kb-text-scale) * var(--kb-fs)); }
 .aspekt-figur .aspekt-axis { stroke: var(--kb-text); stroke-width: calc(1.2px * var(--kb-lw)); }
 .aspekt-figur .aspekt-scene [id$="ax_arrow"] polygon { fill: var(--kb-text); }
 .aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); font-style: italic; }
