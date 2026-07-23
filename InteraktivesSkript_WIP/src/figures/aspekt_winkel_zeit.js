@@ -289,22 +289,11 @@ export function buildWinkelZeitFig(fig) {
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
 
-    // Lupe-Button: IMMER oben rechts in der HAUPTSPALTE der Figur (Referenz 1.38).
-    // Die Hauptspalte ist Grid-Spalte 2 des .aspekt-body: in 1.38 die .aspekt-scene,
-    // in 1.39/1.41 die .aspekt-main (Runbar + Szene + Diagramm). Ihre rechte Kante
-    // ist genau die Trennlinie zur Analyse-Leiste -> ist die Analyse sichtbar,
-    // sitzt die Lupe links daneben; ist sie ausgeblendet, dehnt sich die
-    // Hauptspalte bis zum Figurenrand und die Lupe steht mit denselben 8 px
-    // Abstand in der oberen rechten Ecke der Figur. Positionierungsbasis kommt
-    // aus dem CSS (beide Container sind position:relative).
-    const lupe = document.createElement('button');
-    lupe.type = 'button';
-    lupe.className = 'aspekt-lupe';
-    lupe.dataset.action = 'toggle_aspekt';
-    lupe.setAttribute('aria-label', 'Figur vergrößern');
-    lupe.title = 'Vergrößern';
-    lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
-    (scene.querySelector('.aspekt-main') || scene.querySelector('.aspekt-scene')).appendChild(lupe);
+    // KEINE Lupe in dieser Figur (Nutzervorgabe): Szene und Diagramm stehen hier
+    // bereits nebeneinander bzw. gestapelt in voller Breite, die Vergrösserung
+    // brachte nichts. Nur 1.38 hat die Lupe. Der Overlay-Code (toggle_aspekt,
+    // .aspekt-im-overlay-Regeln in aspekt_winkel_zeit.css) bleibt bestehen — er ist
+    // hier lediglich ohne Auslöser.
 
     // Bildunterschrift aus data-caption aufbauen (die statische Abbildung
     // übernimmt am Bildschirm diese Rolle). Inside .aspekt-body, damit die
@@ -477,17 +466,14 @@ export function buildWinkelZeitFig(fig) {
         // 1.38). Bei R >= 1.2 ist der Bogen groß genug -> Label innen (0.62*rArc);
         // sonst knapp außerhalb (rArc+15). (30x30-foreignObject -> um 15 zentren.)
         //
-        // EINE Abweichung von 1.38 ist bewusst: der Label-Winkel folgt immer dem
-        // laufenden Teilwinkel `partial`, nie dem Vollkreis-Ersatzbogen
-        // (curAngle = 360) an der Umdrehungsgrenze — sonst spränge das φ dort auf
-        // die Winkelhalbierende des Vollkreises (180°, 9 Uhr) und im nächsten
-        // Frame zurück auf 3 Uhr. In 1.38 stellt der Regler einen festen Winkel
-        // ein, dort gibt es diesen Fall nicht.
+        // Label-Winkel: folgt wie der aktuelle Bogen dem aktuell gezeichneten
+        // Winkel (curAngle), damit Bogen und φ-Position entlang derselben Bahn
+        // laufen.
         // Der konstante Versatz OFF_X/OFF_Y ist derselbe wie in 1.38 (dort die
         // Referenz-Setzung, Nutzervorgabe) — er hält das Label von Ortsvektor
         // und x-Achse frei.
         const lr = (store.R >= 1.2) ? rArc * 0.62 : rArc + 15;
-        const mid = (partial * Math.PI / 180) / 2;
+        const mid = (curAngle * Math.PI / 180) / 2;
         const OFF_X = 6, OFF_Y = 3;
         const lx = cx + lr * Math.cos(mid) + OFF_X, ly = cy - lr * Math.sin(mid) + OFF_Y;
         if (lbl0) {

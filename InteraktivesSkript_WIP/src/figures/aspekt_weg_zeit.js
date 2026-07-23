@@ -288,22 +288,11 @@ export function buildWegZeitFig(fig) {
         `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
 
-    // Lupe-Button: IMMER oben rechts in der HAUPTSPALTE der Figur (Referenz 1.38).
-    // Die Hauptspalte ist Grid-Spalte 2 des .aspekt-body: in 1.38 die .aspekt-scene,
-    // in 1.39/1.41 die .aspekt-main (Runbar + Szene + Diagramm). Ihre rechte Kante
-    // ist genau die Trennlinie zur Analyse-Leiste -> ist die Analyse sichtbar,
-    // sitzt die Lupe links daneben; ist sie ausgeblendet, dehnt sich die
-    // Hauptspalte bis zum Figurenrand und die Lupe steht mit denselben 8 px
-    // Abstand in der oberen rechten Ecke der Figur. Positionierungsbasis kommt
-    // aus dem CSS (beide Container sind position:relative).
-    const lupe = document.createElement('button');
-    lupe.type = 'button';
-    lupe.className = 'aspekt-lupe';
-    lupe.dataset.action = 'toggle_aspekt';
-    lupe.setAttribute('aria-label', 'Figur vergrößern');
-    lupe.title = 'Vergrößern';
-    lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
-    (scene.querySelector('.aspekt-main') || scene.querySelector('.aspekt-scene')).appendChild(lupe);
+    // KEINE Lupe in dieser Figur (Nutzervorgabe): Szene und Diagramm stehen hier
+    // bereits nebeneinander bzw. gestapelt in voller Breite, die Vergrösserung
+    // brachte nichts. Nur 1.38 hat die Lupe. Der Overlay-Code (toggle_aspekt,
+    // .aspekt-im-overlay-Regeln in aspekt_weg_zeit.css) bleibt bestehen — er ist
+    // hier lediglich ohne Auslöser.
 
     // Bildunterschrift aus data-caption aufbauen (die statische Abbildung
     // uebernimmt am Bildschirm diese Rolle). Inside .aspekt-body, damit die
