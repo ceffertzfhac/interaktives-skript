@@ -504,7 +504,7 @@ export function buildWegZeitFig(fig) {
             drawStopwatchMarks();
             drawSubdialMarks();
             const sw = ge(p + 'stopwatch');
-            if (sw) sw.setAttribute('transform', 'translate(205, -10) scale(0.59)');
+            if (sw) sw.setAttribute('transform', 'translate(205, -10) scale(0.71)');
             draw(curT);
             updateLabels(curT, T);
         });
