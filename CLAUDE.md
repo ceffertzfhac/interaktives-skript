@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A static, single-page interactive physics script (German, topic: rotational motion / *Drehbewegungen auf Kreisbahnen*) for an FH Aachen course. There is **no build system, package manager, bundler, or test suite** — it is plain HTML/CSS/vanilla JS served as static files. All interactivity is hand-written DOM/SVG manipulation; the only external libraries are loaded from CDNs in `index.html` (MathJax v3 `tex-svg` for LaTeX rendering, `qrjs2` for print QR codes).
+A static, single-page interactive physics script (German, topic: rotational motion / *Drehbewegungen auf Kreisbahnen*) for an FH Aachen course. There is **no build system, package manager, bundler, or test suite** — it is plain HTML/CSS/vanilla JS served as static files. All interactivity is hand-written DOM/SVG manipulation. Two third-party libraries: MathJax v3 `tex-svg` (LaTeX rendering) from a CDN, and `qrjs2` (print QR codes) **vendored locally** at `src/vendor/qrjs2.min.js` — see `src/vendor/README.md` for provenance/licence/checksum and why it is not on a CDN.
 
 > **Scalability is a hard constraint.** The final script will be a *complete* script with **15+ chapters and many more figures** (current WIP: ~9 sections across 2 chapter skeletons (ch_01 fully migrated, ch_02 scaffold) + 11 figures, modularized ESM — the content target lives in `Input/v0.13/`). The original monolithic, copy-paste-per-figure architecture (preserved in `Input/InteraktivesSkript_legacy/`) does not scale there. When proposing changes, optimize for "adding a chapter/figure is O(1) files and small token cost," not O(size-of-whole-file). The modernization plan toward that target lives in `BACKLOG.md` (with a target architecture sketch). When working in the WIP, also weigh **token efficiency of edits** — prefer edits that touch one small module over ones that require loading a whole large file.
 
 ## Running it
 
-Serve the `InteraktivesSkript_WIP/` directory with any static server and open `index.html`. MathJax and qrjs2 load from CDN, so a network connection is needed; and chapter prose is fetched at runtime (`src/chapters.js`), which **requires an http(s) origin — `file://` will load no chapter content** (the page shell still renders). A local server covers both:
+Serve the `InteraktivesSkript_WIP/` directory with any static server and open `index.html`. MathJax loads from a CDN, so a network connection is needed for formulas (qrjs2 is local); and chapter prose is fetched at runtime (`src/chapters.js`), which **requires an http(s) origin — `file://` will load no chapter content** (the page shell still renders). A local server covers both:
 
 ```
 cd InteraktivesSkript_WIP
@@ -47,7 +47,7 @@ Inside the WIP site folder the structure is:
 ## Architecture (WIP — ESM modules + chapter app shell + figure factory)
 
 ### Module layout
-WIP ships as native ESM (no build step, no bundler). `index.html` loads `<script type="module" src="src/main.js">`; modules are deferred, so `main.js` calls `init()` at the end of the module (no `<body onload>`). qrjs2 and MathJax stay classic CDN `<script>` tags → global `window.QRCode` / `window.MathJax`.
+WIP ships as native ESM (no build step, no bundler). `index.html` loads `<script type="module" src="src/main.js">`; modules are deferred, so `main.js` calls `init()` at the end of the module (no `<body onload>`). MathJax stays a classic CDN `<script>` tag and qrjs2 a classic local one (`src/vendor/qrjs2.min.js`) → globals `window.MathJax` / `window.QRCode`.
 
 ```
 src/main.js        entry: init() (async), central data-action binder, afterprint/hashchange listeners
@@ -165,7 +165,7 @@ A deliberately-preserved legacy bug: `fig_5.js`'s gc51 `>6.27` wrap increments *
 ### Highlight boxes, TOC, print, QR, zoom, darkmode
 - `generate_highlight_boxes()` finds every element with one of the classes `lernziel`, `motivation`, `wiederholung`, `beispiel`, `zusammenfassung`, `aufgabe`, `anmerkung` and injects an icon (`src/assets/*.svg`) plus a capitalized title before its original content. To add a new box type, add a `[class, icon]` entry to the `boxes` array.
 - TOC is generated at runtime by `generate_toc()` as an accordion from `pages.js`'s page registry, itself built from every element carrying class `inhaltsverzeichnis` (the `<h2>`/`<h3>` section headings) — see "Chapter app shell" above.
-- Print flow: `init_print()` (toolbar "Drucken") opens the current URL with `?print=true` in a new tab; `check_print()` detects the param and calls `print_page()`, which clones `#container` into `#print_container`, strips zoom buttons, and generates a QR code (via qrjs2) per `gcN` linking back to `?g=gcN`. `from_qr()` handles the reverse: arriving via a QR link deep-zooms the target figure.
+- Print flow: `init_print()` (toolbar "Drucken") opens the current URL with `?print=true` in a new tab; `check_print()` detects the param and calls `print_page()`, which clones `#container` into `#print_container`, strips zoom buttons, and generates a QR code (via the vendored qrjs2) per `gcN` linking back to `?g=gcN`. `from_qr()` handles the reverse: arriving via a QR link deep-zooms the target figure.
 - `zoom(parent_gc)` clones a figure into the `#zoom` overlay and scales it to fit the viewport; `close_zoom()` tears down and re-runs `update_all()`.
 - Darkmode is toggled by `toggle_darkmode()` enabling/disabling the `darkmode.css` `<link>` (id `darkmode_stylesheet`).
 

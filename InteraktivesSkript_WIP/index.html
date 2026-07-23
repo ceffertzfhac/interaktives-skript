@@ -15,7 +15,12 @@
         <link rel="stylesheet" href="src/figures/kreisbewegung/styles.css"> -->
         <link id="darkmode_stylesheet" rel="stylesheet" href="src/darkmode.css" disabled="true">
 
-        <script src="https://cdn.jsdelivr.net/gh/englishextra/qrjs2@0.1.12/js/qrjs2.min.js" integrity="sha384-dGptHqaP5AGRc3+qdh8CmS8E2WEAs/swpat25AVKvKjdC/uoH5WSAhnk0yAZQjmv" crossorigin="anonymous"></script>
+        <!-- qrjs2 (QR-Codes im Druckpfad, global window.QRCode) liegt LOKAL unter
+             src/vendor/ statt am CDN: der frueher gepinnte integrity-Hash passte
+             nicht zum ausgelieferten Skript, der Browser blockierte die Datei und
+             die QR-Codes im Ausdruck fehlten ersatzlos. Herkunft, Lizenz (MIT),
+             Version und Pruefsumme stehen in src/vendor/README.md. -->
+        <script src="src/vendor/qrjs2.min.js"></script>
         <script type="module" src="src/main.js"></script>
         <!-- MathJax v3, konfiguriert VOR dem CDN-Script (async) -- s. CLAUDE.md.
              tex.tags='ams' aktiviert LaTeX-Nummerierung: \begin{equation}/
