@@ -21,6 +21,40 @@ Referenz-Implementierungen: `src/figures/aspekt_kreisbahn.js` (Abb. 1.38, Positi
 
 Nur `InteraktivesSkript_WIP/` verändern; `Input/` ist lesend.
 
+## Schritt 0 — Vorlage wählen (wichtigster Effizienzschritt)
+
+> **Kopieren und feature-gaten schlägt Neuschreiben. Immer.** Zuerst
+> entscheiden, *welche bestehende Figur die Vorlage ist*, das Modul kopieren und
+> nur die aspekt-spezifischen Teile ändern. Erfahrung aus 1.38 → 1.39 → 1.41:
+> was aus einer Vorlage kam, lief auf Anhieb; jede eigene Erfindung an einer
+> Stelle, für die es eine Vorlage gab, kostete Feedback-Runden — und Runden mit
+> dem Nutzer sind das Teuerste im Prozess.
+
+**Vorlagen-Kaskade, in dieser Reihenfolge:**
+
+1. **Nächstähnliche Aspekt-Figur** — Interaktionsmuster schlägt Thema:
+   Play/Pause + gestapelte Graphen → `aspekt_weg_zeit.js`; Play/Pause + ein
+   Graph → `aspekt_winkel_zeit.js`; rein Slider-getrieben → `aspekt_kreisbahn.js`.
+2. **Stand-alone-Sim** (`Input/Simulationen/Project_*` / portierte
+   `kreisbewegung/`) — Quelle für Optik **und Bedienkonventionen** (was beim
+   Parameterwechsel passiert, wie ein Vergleichslauf aussieht, Beschriftung der
+   Ablaufsteuerung). Beispiel: „kurvenformender Regler setzt den Laufparameter
+   auf 0" stammt von dort (schiefer Wurf) — selbst herzuleiten kostete 2 Runden.
+3. **Statische v0.13-Abbildung** für Bildaufbau/Beschriftung/Achsen.
+4. **Legacy-Figur** an derselben Stelle für den gemeinten Aspekt.
+
+**Regeln daraus:**
+- **„Wie in 1.38" heißt pixelgleich**, nicht sinngemäß. Nennt der Nutzer eine
+  bestehende Figur als Referenz, ist jede Abweichung ein Fehler — auch eine, die
+  für sich genommen „richtiger" wäre.
+- **Gemeinsames zentral**: gleiche Optik → `aspekt_kreisbahn.css`; gleiche Logik
+  → geteiltes Modul (`playback.js`, `runtime.js`). Eine Regel für alle Figuren
+  statt Sonderfälle pro Figur.
+- **Erst diffen, dann fragen**, wenn eine Figur optisch von der Vorlage abweicht.
+- **Abweichungen im Kommentar begründen** — sonst gelten sie später als Fehler.
+
+Details: Runbook Abschnitt 0a.
+
 ## Vorab mit dem Nutzer klären
 - Welcher **Aspekt** (welche `show*`-Flags), welche **Regler**?
 - Interaktive Figur **ersetzt** die statische Abbildung im Lesefluss oder
@@ -69,8 +103,17 @@ Graph + Geisterbögen pro Umdrehung) orientieren:
   mit **fester Länge = ARROW_LEN** (12.5/10), damit die Strichstärke frei ist.
 - **Eigene Zusatz-Zeichnung** (Winkelbogen o. ä.) in **eigener** Gruppe; bei
   eigenen Achsen `kb_animation_coord_system` nach `setupScene()` leeren.
-- **Zeichen/Formeln als MathJax**: im SVG per `<foreignObject>` mit `\(\varphi\)`
-  (fontunabhängig); Panel-Formeln nur `\[…\]` (unnummeriert).
+- **Einzelne Zeichen** (φ o. ä.) als natives `<svg:text>` mit Klasse
+  `.aspekt-angle-label` (`text-anchor:middle`/`dominant-baseline:middle`) —
+  **nicht** per `foreignObject`: MathJax setzt die Glyphe auf die Grundlinie
+  einer Zeilenbox, wodurch sie konstant zu tief sitzt (Fallstrick #17).
+  `foreignObject` nur, wenn eine echte Formel gesetzt werden muss.
+  Panel-Formeln nur `\[…\]` (unnummeriert).
+- **Vergleichslauf/„letzte Kurve"** (animierte Figuren): Kurve als **Daten**
+  speichern und pro Zeichnen auf `store.graphScale[slot]` projizieren, nie als
+  Pixel-Polyline (#19); Schnappschuss **einmal pro Zieh-Geste** — ein
+  `<input type=range>` feuert ein `input` pro Zwischenwert, Geste endet mit
+  `change` (#18); ein kurvenformender Regler setzt `t` auf 0 und stoppt (#20).
 - **Speed-Radios** pro Instanz `name="${p}speed"`, selbst abgreifen (nicht
   `DOM.speedRadios`); **Runbar**-Buttons mit `data-act="start|stop|reset"` +
   Container-Listener in der Factory.
@@ -121,26 +164,45 @@ node .claude/skills/interaktive-aspekt-figur/scripts/figur_smoke.mjs \
 node .claude/skills/interaktive-aspekt-figur/scripts/figur_smoke.mjs \
      InteraktivesSkript_WIP/src/figures/aspekt_weg_zeit.js --init=buildWegZeitFig
 
-node --check <figur>.js                      # Syntax
+node --input-type=module --check < <figur>.js   # Syntax ALLER geaenderten Module:
+                                               # ein Fehler killt ueber main.js alle Figuren
 # CSS-Klammern balanciert (Kommentare vorher entfernen -- ein */ im Kommentar beendet ihn)
 # Panel-Formel unnummeriert? offline mit mathjax-full: 0 mlabeledtr / 0 width="full"
 # Kapitel-Nummerierung unveraendert:
 node .claude/skills/v013-verifikation/scripts/dom_harness.mjs InteraktivesSkript_WIP
 ```
 
-**Nur im Browser / mit dem Auge des Nutzers**: Optik/Farben wie die Sim,
-Größenverhältnisse (inline vs. Zoom), Kollisionen, Label-Platzierung, MathJax-
-Glyphen (varphi geschwungen), foreignObject unter Safari, Schmal-/Breit-Modus,
-Darkmode. Diese Feinarbeit ist **iterativ** — mehrere Feedback-Runden einplanen;
-bei „eine Version zurück" klären, welche.
+**Selbst im echten Browser prüfen** (headless Chromium — spart Nutzerrunden):
+
+```bash
+npm install --prefix /tmp playwright-core        # Chromium aus ~/.cache/ms-playwright
+cd InteraktivesSkript_WIP && python3 -m http.server 8765 &
+node .claude/skills/interaktive-aspekt-figur/scripts/figur_screenshot.mjs \
+     --fig=aspekt-winkel-zeit --sel='svg[id$=main_svg]' --set=ak_t=1.5 --scale=3 --out=/tmp/s.png
+node …/figur_screenshot.mjs --fig=aspekt-weg-zeit --mode=breit --overlay --out=/tmp/b.png
+node …/figur_screenshot.mjs --fig=aspekt-kreisbahn --measure='text.aspekt-angle-label' --ink
+```
+
+> **Anschauen schlägt ausmessen.** In 1.41 wurde eine falsche φ-Platzierung
+> dreimal per DOM-Messung als „korrekt" bestätigt, weil die gemessene Box
+> (`mjx-container` = Zeilenbox) nicht das Sichtbare war. Beim Messen `--ink`
+> nutzen (innerstes gezeichnetes Element).
+
+**Danach mit dem Auge des Nutzers**: Optik-Geschmack, Glyphenwirkung, Darkmode,
+Safari. Bei **mehrdeutiger** optischer Kritik („sitzt falsch") früh mit 3–4
+konkreten, skizzierten Optionen zurückfragen statt zu raten — Raten hat in 1.41
+drei Runden gekostet, die Rückfrage eine. Bei „eine Version zurück" klären, welche.
 
 ## Fallstricke
-Der vollständige Katalog (16 Stück, alle real aufgetreten) steht im Runbook,
+Der vollständige Katalog (22 Stück, alle real aufgetreten) steht im Runbook,
 Abschnitt 7. Die teuersten: Pfeillängen-Kopplung (`ARROW_LEN=5·strokeWidth`),
-fehlende DOM-Stubs (Schritt 1 löst das), varphi-Glyph nur per MathJax zuverlässig,
-Graph-HitRect-Null-Zugriff (Weg-Zeit), Speed-Radio-/Runbar-Kollision zwischen
-Instanzen. Der vormalige „Store-Konflikt" (Singleton) ist per `createRuntime`
-gelöst.
+fehlende DOM-Stubs (Schritt 1 löst das), Graph-HitRect-Null-Zugriff (Weg-Zeit),
+Speed-Radio-/Runbar-Kollision zwischen Instanzen. Neu aus 1.41: `foreignObject`-
+Glyphe sitzt konstant zu tief (#17), ein `input`-Event pro Slider-Zwischenwert
+(#18), Vergleichskurve als Pixel statt Daten (#19), fehlender `t`-Rücksprung bei
+Parameterwechsel (#20), Syntaxfehler in einem Modul legt **alle** Figuren still
+(#21), `overflow:hidden` auf `.aspekt-figur` macht `position:sticky` wirkungslos
+(#22). Der vormalige „Store-Konflikt" (Singleton) ist per `createRuntime` gelöst.
 
 ## Abschluss
 Klein committen (pro logischer Einheit), Doku bei Architektur-Änderung anpassen,
