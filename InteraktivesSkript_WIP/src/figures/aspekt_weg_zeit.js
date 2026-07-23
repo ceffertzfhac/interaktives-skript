@@ -1,27 +1,29 @@
-// aspekt_weg_zeit.js — interaktive Aspekt-Figur zu Abbildung 1.40 (1.4.2
-// „Die Geschwindigkeit …", Weg-Zeit-Diagramm). Zeigt die beiden Komponenten-
-// Zeit-Diagramme x(t) (oben/links) und y(t) (unten/rechts) ueber anderthalb
-// Perioden sowie die Kreisbahn-Szene mit Ortsvektor r und dessen Komponenten
-// rx/ry — genau die Projektionen, deren Zeitverlauf die Diagramme zeigen.
-// Regler: Zeit t (0 … 1,5 T), Radius R, Periodendauer T (→ ω = 2π/T).
+// aspekt_weg_zeit.js — interaktive Aspekt-Figur zu Abbildung 1.39 (1.4.2
+// „Die Geschwindigkeit …", Weg-Zeit-Diagramm / x,y-Diagramm). Zeigt die beiden
+// Komponenten-Zeit-Diagramme x(t) (oben/links) und y(t) (unten/rechts) ueber
+// drei Perioden (0 … 12 s) sowie die Kreisbahn-Szene mit Ortsvektor r und
+// dessen Komponenten rx/ry — genau die Projektionen, deren Zeitverlauf die
+// Diagramme zeigen.
+// Regler: Zeit t (0 … 12 s), Radius R, Periodendauer T (→ ω = 2π/T).
 //
 // TECHNIK: kein eigener Zeichencode. Der Motor der grossen Kreisbewegungs-
 // Simulation (src/figures/kreisbewegung/) zeichnet Szene (updateScene) UND
 // Diagramme (updateGraph), feature-gated auf den Orts-Aspekt. Stacked-Modus
 // mit graphType1='xt' / graphType2='yt'. Der Motor ist zeit-/ω-getrieben
 // (angleRad(t)=φ0+ω·t); der t-Regler steuert direkt die Pseudo-Zeit, die
-// precompute()-Datenreihe wird auf feste 6 s begrenzt (Auto-Stopp; bei Vorgabe
-// T=4 s = 1,5 Perioden wie in der statischen Vorlage), updateScene()+
-// updateGraph() zeichnen daraus Punkt, Vektoren, Bahnspur, die wachsenden
-// Kurven UND die analoge Stoppuhr — die optionale Anim-Schleife faehrt die
-// Zeit von 0 bis 6 s (Slow-Mo via Tempo-Pills).
+// precompute()-Datenreihe wird auf feste 12 s begrenzt (Auto-Stopp; bei Vorgabe
+// T=4 s = 3 Perioden), updateScene()+updateGraph() zeichnen daraus Punkt,
+// Vektoren, Bahnspur, die wachsenden Kurven UND die analoge Stoppuhr — die
+// optionale Anim-Schleife faehrt die Zeit von 0 bis 12 s (Slow-Mo via Tempo-
+// Pills).
 //
 // OPTIK: Farb-Tokens und Panel-/Slider-/Legenden-Klassen VERBATIM aus der
-// portierten styles.css (ueber aspekt_kreisbahn.css fuer .aspekt-figur), dazu
-// die Graph-Klassen (graph-bg/axis-line/…) aus der Sim, gescopt auf diese
-// Figur. Die Pfeil-Geometrie ist die der Vorlage (Marker markerUnits=
-// userSpaceOnUse mit fester Laenge = ARROW_LEN), damit render.js' Verkuerzung
-// die Spitze exakt auf den Zielpunkt setzt. Strichstaerken nicht aendern.
+// portierten styles.css (ueber aspekt_kreisbahn.css fuer .aspekt-figur); die
+// Graph-Struktur (graph-bg/axis-line/…) liegt zentral in aspekt_kreisbahn.css
+// (inkl. ×1,5-Skalierung via --kb-lw/--kb-fs), hier nur die Datenlinien-FARBEN
+// (x=rx, y=ry) + die Vergleichslinie. Die Pfeil-Geometrie ist die der Vorlage
+// (Marker markerUnits=userSpaceOnUse mit fester Laenge = ARROW_LEN), damit
+// render.js' Verkuerzung die Spitze exakt auf den Zielpunkt setzt.
 //
 // LAYOUT: stackedDualGeom() des Motors stellt die beiden Diagramme UEBEREINANDER
 // dar (Portrait, 700×830) — x(t) oben, y(t) unten, passend zur statischen Druck-
@@ -31,10 +33,10 @@
 //
 // ABLAUF: neben dem Zeit-Regler Start-/Stop-/Reset-Knoepfe (Pictogramme) sowie
 // Tempo-Pills (1× … ⅛×, Slow-Mo analog zur Vorlage) fuer den automatischen
-// Ablauf. Der laeuft in Sim-Zeit, stoppt nach festen 6 s (nicht 1,5 T — bei
-// Vorgabe T=4 s sind 6 s = 1,5 Perioden) und wiederholt nicht. Pro Instanz im
-// Closure; Knoepfe/Pills haengen direkt am Container (kein data-action — sie
-// brauchen Instanz-Zustand, wie die Slider).
+// Ablauf. Der laeuft in Sim-Zeit, stoppt nach festen 12 s (3 Perioden bei T=4 s)
+// und wiederholt nicht. Pro Instanz im Closure; Knoepfe/Pills haengen direkt am
+// Container (kein data-action — sie brauchen Instanz-Zustand, wie die Slider).
+// Zusaetzlich Toggle „Letzte Kurve behalten" (Vergleichslinie, s. snapshotPrev).
 //
 // PER-INSTANZ-ISOLATION: der Motor-Store ist ein Modul-Singleton. Diese Figur
 // holt sich ueber createRuntime() einen EIGENEN Prefix (kb<n>_) + einen
@@ -366,7 +368,7 @@ export function buildWegZeitFig(fig) {
         label(ANIM_CX - 14, ANIM_CY - len - 8, 'y');
     }
 
-    // -- Zeitreihe auf 1,5 T begrenzen (anderthalb Perioden wie die Vorlage).
+    // -- Zeitreihe auf feste 12 s begrenzen (3 Perioden bei T=4 s, wie 1.41).
     //    precompute() des Motors nimmt max(4T, 10s); daher hier eine eigene,
     //    schmale Variante, die nur extendMotionData + recalculateAxisLimits nutzt.
     //    Laeuft inside withStore (operiert nur auf dem (Instanz-)store).
@@ -422,7 +424,7 @@ export function buildWegZeitFig(fig) {
             store.phi0Deg = 0;
             store.omegaDeg = 360 / T;          // ω [deg/s] = 360 / T  (T = 2π/ω)
             recomputeDerived();
-            precomputeRange(T_AUTO);          // fest 0 … 6 s (Auto-Stopp), nicht 1,5 T
+            precomputeRange(T_AUTO);          // fest 0 … 12 s (Auto-Stopp), nicht 1,5 T
             if (curT > T_AUTO) curT = T_AUTO;
             ak_t.max = T_AUTO.toFixed(3);
             ak_t.value = curT.toFixed(3);
@@ -453,7 +455,7 @@ export function buildWegZeitFig(fig) {
         }
     }
 
-    // -- Automatischer Ablauf (Sim-Zeit 0 … 6 s, Slow-Mo via Tempo-Pills, Auto-
+    // -- Automatischer Ablauf (Sim-Zeit 0 … 12 s, Slow-Mo via Tempo-Pills, Auto-
     //    Stopp am Ende — kein Umbrechen). Pro Instanz im Closure; Knoepfe/Pills
     //    haengen direkt am Container (kein data-action — sie brauchen Instanz-
     //    Zustand, wie die Slider).
@@ -468,7 +470,7 @@ export function buildWegZeitFig(fig) {
         lastTs = ts;
         rt.withStore(() => {
             curT += dt * speedFactor;        // Slow-Mo: Tempo-Pills (1× … ⅛×)
-            if (curT >= T_AUTO) curT = T_AUTO;  // Auto-Stopp nach 6 s (kein Umbrechen)
+            if (curT >= T_AUTO) curT = T_AUTO;  // Auto-Stopp nach 12 s (kein Umbrechen)
             ak_t.value = curT.toFixed(3);
             draw(curT);
             updateLabels(curT, parseFloat(ak_T.value));

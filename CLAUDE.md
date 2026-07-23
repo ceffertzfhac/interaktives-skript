@@ -35,7 +35,7 @@ Inside the WIP site folder the structure is:
   - `chapters/` — **one HTML fragment per chapter** (`ch_NN_<slug>.html`): `ch_01_kreisbewegungen.html` (v0.13 **section 1.4** "Kinematik der Drehbewegung und Kreisbahnen", 12 subsections 1.4.1–1.4.12, transcribed 1:1 from `Input/v0.13/pskript_mech_kin_dreh_und_kreis_v1.tex` — **purely static**: no `.grafik-container`/`svgN`/sliders, interactivity comes back later) and `ch_02_kinematik_starrer_koerper.html` (a scaffold). Each fragment holds the h2 chapter intro + h3 subsections + their `<section>`s, figures, sliders, highlight boxes — everything that used to be inline in `index.html`. Fetched + injected by `src/chapters.js` before `paginate()`. **Adding a chapter = one new file here + one `<div data-chapter="…">` line in `index.html` (O(1)).**
   - `MIGRATION_v0.13_nach_HTML.md` — **runbook for migrating the next chapter out of `Input/v0.13/`** (German): counter scopes, asset pipeline (PDF/TikZ → PNG), LaTeX→HTML macro mapping, MathJax config, cross-references, the three verification harnesses, a catalogue of 13 real pitfalls with how each was detected, and a checklist. **Read it before starting another chapter** — most of the listed traps are silent (wrong-but-consistent numbering, an image that is a PDF wearing a `.png` extension, a loaded-but-not-enabled MathJax package).
   - `VERIFIKATION_kapitel_1.4.md` — phase-by-phase test plan for the migrated chapter, with acceptance criteria
-  - `INTERAKTIVE_ASPEKT_FIGUREN.md` — **runbook for building an interactive "aspect figure"** (German) that reuses a stand-alone sim's engine (`figures/kreisbewegung/`) feature-gated onto one chapter aspect, two-stage (inline + magnifier overlay), optics derived from the sim. Each figure builds its own `createRuntime()` motor instance (per-instance store/DOM isolation, so multiple figures coexist), registered via `main.js::ASPEKT_FACTORIES`. Concept, step-by-step, a catalogue of 16 real pitfalls (arrow-length coupling `ARROW_LEN=5·strokeWidth`, hidden DOM stubs `updateScene` dereferences, MathJax-`foreignObject` for a font-independent varphi glyph, unnumbered `\[…\]` panel formulas, CSS-specificity vs. the overlay, section-link nav bug, graph-hit-rect null deref, speed-radio/runbar per-instance collisions, the now-solved singleton-store conflict), and a checklist. Reference impls: `src/figures/aspekt_kreisbahn.js` (fig. 1.38) and `src/figures/aspekt_weg_zeit.js` (fig. 1.40). `CHANGES_aspekt_1.38_1.40_und_grundgeruest.md` documents every change since the first (singleton) version.
+  - `INTERAKTIVE_ASPEKT_FIGUREN.md` — **runbook for building an interactive "aspect figure"** (German) that reuses a stand-alone sim's engine (`figures/kreisbewegung/`) feature-gated onto one chapter aspect, two-stage (inline + magnifier overlay), optics derived from the sim. Each figure builds its own `createRuntime()` motor instance (per-instance store/DOM isolation, so multiple figures coexist), registered via `main.js::ASPEKT_FACTORIES`. Concept, step-by-step, a catalogue of 16 real pitfalls (arrow-length coupling `ARROW_LEN=5·strokeWidth`, hidden DOM stubs `updateScene` dereferences, MathJax-`foreignObject` for a font-independent varphi glyph, unnumbered `\[…\]` panel formulas, CSS-specificity vs. the overlay, section-link nav bug, graph-hit-rect null deref, speed-radio/runbar per-instance collisions, the now-solved singleton-store conflict), and a checklist. Reference impls: `src/figures/aspekt_kreisbahn.js` (fig. 1.38), `src/figures/aspekt_weg_zeit.js` (fig. 1.39) and `src/figures/aspekt_winkel_zeit.js` (fig. 1.41). `CHANGES_aspekt_1.38_1.40_und_grundgeruest.md` documents every change since the first (singleton) version. (Figure numbers are the document's actual `Abb. 1.n` from `numbering.js` — note the gap: 1.40 is the static radial-tangential figure, not an aspekt figure, which is why the file historically called „weg-zeit 1.40" is really 1.39.)
   - `src/` — the ESM modules (`main.js` entry + `core/transform/ui/print/pages/shell/chapters.js` + `figures/*.js`); no monolithic `script.js` (that survives only in `Input/InteraktivesSkript_legacy/`)
   - `src/styles.css`, `src/darkmode.css` — styles; `darkmode.css` is loaded but `disabled` and toggled at runtime
   - `bilder/` — static figure PNGs/SVGs used in static mode and prose
@@ -108,12 +108,22 @@ src/figures/aspekt_kreisbahn.js   interactive "aspect figure" 1.38 (positions as
                           mass point, two-stage (inline + magnifier overlay). Also exports the
                           generic toggles (toggle_aspekt/close_aspekt_overlay/toggle_analyse/
                           toggle_panel_left) reused by ALL aspekt figures via main.js binding.
-src/figures/aspekt_weg_zeit.js     aspect figure 1.40 (x(t)/y(t) way-time aspect): same per-
+src/figures/aspekt_weg_zeit.js     aspect figure 1.39 (x(t)/y(t) way-time aspect): same per-
                           instance pattern, adds stacked dual graphs + auto-stop animation
-                          (0…6 s) via playback.js::resetOnPlayAfterAutoStop. Graph hover is gated
-                          to .aspekt-im-overlay only.
+                          (0…12 s) via playback.js::resetOnPlayAfterAutoStop. Graph hover is gated
+                          to .aspekt-im-overlay only. „Letzte Kurve behalten" toggle freezes the
+                          previous run as a dashed thinner ghost line (graph_prev_line_top/bottom).
+src/figures/aspekt_winkel_zeit.js   aspect figure 1.41 (φ(t) angle-time aspect): same per-instance
+                          pattern, single graph (graphType1='phit', not stacked) + auto-stop (0…12 s).
+                          Sliders only t + T (R fixed at 1.5 m — radius doesn't move the angle curve).
+                          Angle arc per revolution like 1.38; each completed revolution stays as a
+                          faded full-circle ghost (.aspekt-angle-arc-prev) — current arc most prominent.
+                          Same „Letzte Kurve behalten" ghost-line toggle in the diagram.
 src/figures/aspekt_*.css   optics derived from kreisbewegung/styles.css, scoped to .aspekt-figur
-                          (shared aspekt_kreisbahn.css for all + per-figure aspekt_<name>.css).
+                          (shared aspekt_kreisbahn.css for all + per-figure aspekt_<name>.css);
+                          --kb-lw/--kb-fs tokens on .aspekt-figur scale line widths / fonts ×1.5
+                          (kernsim + diagram only — varphi label and Bedienung/Analyse excluded;
+                          arrow tips stay fixed via ARROW_LEN + userSpaceOnUse markers).
 src/figures/playback.js   shared auto-stop playback helpers (isAtAutoStopEnd,
                           resetOnPlayAfterAutoStop) for animated aspekt figures.
 ```

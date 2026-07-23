@@ -5,9 +5,9 @@ description: Eine interaktive „Aspekt-Figur" ins interaktive Skript einbauen �
 
 # Interaktive Aspekt-Figur bauen
 
-Vollständige Begründung und Schritt-für-Schritt: **`InteraktivesSkript_WIP/INTERAKTIVE_ASPEKT_FIGUREN.md`** (Runbook mit Konzept, 16 Fallstricken, Checkliste). Diese Skill ist die Arbeitsanweisung + die ausführbaren Helfer. Begleit-Doku zu allen Änderungen seit der ersten Anlage (Singleton → Per-Instanz, 2. Figur 1.40, Grundgerüst): `InteraktivesSkript_WIP/CHANGES_aspekt_1.38_1.40_und_grundgeruest.md`.
+Vollständige Begründung und Schritt-für-Schritt: **`InteraktivesSkript_WIP/INTERAKTIVE_ASPEKT_FIGUREN.md`** (Runbook mit Konzept, Fallstricken, Checkliste). Diese Skill ist die Arbeitsanweisung + die ausführbaren Helfer. Begleit-Doku zu allen Änderungen seit der ersten Anlage (Singleton → Per-Instanz, 2. Figur 1.39, 3. Figur 1.41, Grundgerüst): `InteraktivesSkript_WIP/CHANGES_aspekt_1.38_1.40_und_grundgeruest.md`.
 
-Referenz-Implementierungen: `src/figures/aspekt_kreisbahn.js` (Abb. 1.38, Positions-Aspekt) und `src/figures/aspekt_weg_zeit.js` (Abb. 1.40, Weg-Zeit-Aspekt + Graph + Auto-Stopp).
+Referenz-Implementierungen: `src/figures/aspekt_kreisbahn.js` (Abb. 1.38, Positions-Aspekt), `src/figures/aspekt_weg_zeit.js` (Abb. 1.39, Weg-Zeit-Aspekt + gestapelte Graphen + Auto-Stopp + Vergleichslinie) und `src/figures/aspekt_winkel_zeit.js` (Abb. 1.41, Winkel-Zeit-Aspekt + einzelner Graph + Geisterbögen pro Umdrehung + Vergleichslinie). Nummern sind die echte `Abb. 1.n`-Zählung (1.40 = statische radial-tangential-Figur, keine Aspekt-Figur — deshalb ist „weg-zeit" 1.39, nicht 1.40).
 
 ## Grundsatz
 
@@ -47,8 +47,9 @@ wird pro Instanz addiert — die Template-Literale tragen `kb_`.)
 
 ## Schritt 2 — Modul bauen (Factory pro Figur)
 
-Am Referenzmodul `aspekt_weg_zeit.js` (jüngstes, vollständigstes Exemplar)
-orientieren:
+Am Referenzmodul `aspekt_weg_zeit.js` (gestapelte Graphen + Auto-Stopp +
+Vergleichslinie) bzw. `aspekt_winkel_zeit.js` (jüngstes Exemplar, einzelner
+Graph + Geisterbögen pro Umdrehung) orientieren:
 - **Runtime pro Figur:** `const rt = createRuntime(); const p = rt.prefix;`
   Skelett-Templates mit `kb_*`-IDs per `.replace(/kb_/g, p)` prefixen,
   `PANEL_*` per `.replace(/id="ak_/g, \`id="${p}ak_\`)`, dann `rt.bindDom()`.

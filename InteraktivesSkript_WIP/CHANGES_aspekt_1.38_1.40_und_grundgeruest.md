@@ -437,3 +437,67 @@ Bildschirm-Modus.
 Align + Physik-Pivot) → `470f08e` (Autostop-Reset) → `56a1133` (Greif-Hinweis) →
 `6da3e70` (Breiten) → `776c585` (Textskalierung) → `ad29b38` (Schmal-Legende) →
 `7267810`/`027bb64` (Druck entkoppelt/Toner).
+
+## E. Dritte Aspekt-Figur 1.41 (Winkel-Zeit) + Nutzer-Feedback-Runden
+
+### E.1 `aspekt_winkel_zeit.js` — Abb. 1.41 (Winkel-Zeit-Aspekt)
+Dritte Aspekt-Figur, selbes Per-Instanz-Muster (`createRuntime`/`withStore`).
+EINZELNER Graph mit `graphType1='phit'` (nicht gestapelt wie 1.39) — der Motor
+liefert φ(t) nativ als kumulierten Winkel in Grad. Regler nur t + T (R fest
+1,5 m, da der Radius die Winkelkurve nicht beeinflusst). Layout Szene |
+Diagramm in einer Zeile (wie die statische Vorlage); gestapelt nur schmal.
+Ersetzt die statische Abbildung am Bildschirm, statische bleibt Druck-Fallback
+(wie 1.38/1.39). Verdrahtung: `main.js::ASPEKT_FACTORIES['winkel-zeit']` +
+`index.html`-`<link>` auf `aspekt_winkel_zeit.css`.
+
+### E.2 Zeitbereich 0…12 s (1.39 + 1.41)
+`T_AUTO = 12` (statt 6) in beiden Figuren, Slider `max="12" value="12"`, Auto-
+Stopp nach 12 s = 3 Perioden bei Vorgabe T=4 s. Kommentare 6-s-/1,5-Perioden →
+12-s-/3-Perioden korrigiert.
+
+### E.3 φ-Bogen pro Umdrehung + verblasste Geisterbögen (1.41, `fde0b77`)
+φ(t) wächst kumuliert bis 1080° (3 Umläufe); ein SVG-Bogen kann >360° nicht
+zeichnen, und beim Laden (t=12 s, 3 volle Umläufe) war φ auf 0° gebrochen →
+Bogen + Label unsichtbar, dazu Sprung an jeder 360°-Grenze. Nutzervorgabe
+(„orientiere dich an 1.38"): der erste Umdrehungsbogen wie 1.38 (Teilbogen,
+volle Opazität, φ-Label auf der Winkelhalbierenden); jede vollendete Umdrehung
+bleibt als verblasster Vollkreis im Hintergrund stehen (`.aspekt-angle-arc-prev`,
+Opazität 0,3 — 0,3×≤3 ≈ 0,66 < 1,0, Summe der alten < aktueller). `drawAngle`
+zerlegt `phiDeg` in `revCount = floor(phiDeg/360)` Geister-Vollkreise + den
+aktuellen Teilbogen (`partial = phiDeg - revCount·360`).
+
+### E.4 Slow-Mo-Prefix-Bug (1.39 + 1.41, `d794c53`)
+Tempo-Pills liegen im `PANEL_LEFT`, nicht im `RUNBAR`; die Ersetzung
+`name="ak_speed" → name="${p}speed"` wurde aber nur aufs `RUNBAR` angewendet →
+Radios hießen überall `ak_speed`, `querySelectorAll('input[name="${p}speed"]')`
+traf auf nichts, `speedFactor` blieb stets 1,0 → Slow-Mo wirkungslos. Ersetzung
+jetzt auf `PANEL_LEFT` angewendet. **Fallstrick für die Skill:** Speed-Pills
+liegen dort, wo der Template-String sie definiert — Prefix-Ersetzung an der
+richtigen Stelle prüfen.
+
+### E.5 Linien ×1,5 + Schriften ×1,5, außer varphi (`8639715`)
+Zwei Tokens auf `.aspekt-figur` (shared `aspekt_kreisbahn.css`, wirken für
+1.38/1.39/1.41): `--kb-lw=1,5` (Linienbreiten), `--kb-fs=1,5` (Schriften).
+Szenen-Strichstärken + -Schriften und die Diagramm-Optik (Gitter, Achsen,
+Skalen, Titel, Hover, Daten-Polyline) jetzt `calc(<basis> * var(--kb-lw|fs))`.
+varphi-Label (`.aspekt-angle-fo`) nutzt `--kb-fs` bewusst NICHT; Bedienung/
+Analyse ebenfalls nicht. Pfeilspitzen bleiben lagentreu (`ARROW_LEN`-Konstante
++ `markerUnits=userSpaceOnUse` → Strichstärke geht nicht in die Spitzen-
+geometrie ein). Zuvor pro Figur duplizierte Diagramm-Struktur-Regeln (spezifischer
+als shared → hätten die Skalierung ausgehebelt) zentralisiert; pro Figur nur
+noch die Datenlinien-FARBEN.
+
+### E.6 Vergleichslinie „Letzte Kurve behalten" (1.39 + 1.41, `0feedcb`)
+Toggle im linken Panel (default aus). `start()` friert bei einem echten
+Neudurchlauf (`isAtAutoStopEnd`) die gerade fertige Kurve VOR dem Reset als
+gestrichelte + dünnere Ghost-Linie ein (`graph_prev_line` bzw. gestapelt
+`_top`/`_bottom`); `reset()` berührt den Ghost nicht, jeder Neudurchlauf
+ersetzt ihn (nur die jeweils letzte Kurve). Toggle aus → `clearPrev()`.
+Checkbox-Klasse `.aspekt-check` shared in `aspekt_kreisbahn.css` (Schrift ohne
+`--kb-fs`). Gibt keine Vorlage in den Stand-alone-Sims — neu gebaut.
+
+### E.7 Nummern-Korrektur
+`aspekt_weg_zeit.js` ist laut `numbering.js`-Zählung Abb. **1.39** (nicht 1.40):
+1.40 ist die statische radial-tangential-Figur zwischen xydiagramm (1.39) und
+dem winkel-zeit-Bild (1.41). Dateinamen bleiben aspekt-bezogen; Header-Kommentare,
+CLAUDE.md und Skill-SKILL.md auf die echte Nummer korrigiert.
