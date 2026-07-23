@@ -496,21 +496,87 @@
 <h3 class="inhaltsverzeichnis">1.5.11 Rotationsenergie</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.11 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
-    </div>
+    <p>Bewegt sich ein Massenpunkt mit der Geschwindigkeit \(v\), so hat er die kinetische Energie</p>
+
+    \begin{equation}
+    E_\text{kin} = \frac{1}{2} m v^2.
+    \end{equation}
+
+    <p>Bewegt sich ein starrer Körper, so bedeutet es, dass sich alle Massenpunkte des Körpers, die sich nicht genau auf der Rotationsachse befinden, auf Kreisbahnen um die Rotationsachse bewegen. Jeder Massenpunkt \(\dd m_i\) hat daher eine Bahngeschwindigkeit \(\vec v_i\) und somit eine kinetische Energie</p>
+
+    \begin{equation}
+    \mathrm{d} E_{\text{kin},i} = \frac{1}{2} \mathrm{d} m_i v_i^2.
+    \end{equation}
+
+    <p>Die gesamte kinetische Energie des starren Körpers ist daher die Summe der kinetischen Energien aller Massenpunkte:</p>
+
+    \begin{equation}
+    E_\text{kin} = \sum_{i=1}^n \mathrm{d} E_{\text{kin},i} = \sum_{i=1}^n \frac{1}{2} \mathrm{d} m_i v_i^2.
+    \end{equation}
+
+    <p>Setzen wir in diese Formel die Formel für die Bahngeschwindigkeit eines Körpers, der sich auf einer Kreisbahn bewegt, also \(\vec{v}_i = \vec{\omega} \times \vec{r}_i\) ein, so erhalten wir</p>
+
+    \begin{equation}
+    E_\text{kin} = \sum_{i=1}^n \frac{1}{2} \mathrm{d} m_i (\vec{\omega} \times \vec{r}_i)^2.
+    \end{equation}
+
+    <p>Wenden wir nun die Dreifach-Vektorproduktregel aus der Mathematik an (\(\vec{a} \times (\vec{b} \times \vec{c}) = \vec{b} (\vec{a} \cdot \vec{c}) - \vec{c} (\vec{a} \cdot \vec{b})\)):</p>
+
+    \begin{equation}
+    E_\text{kin} = \sum_{i=1}^n \frac{1}{2} \mathrm{d} m_i \left( \vec{\omega} (\vec{r}_i \cdot \vec{r}_i) - \vec{r}_i (\vec{r}_i \cdot \vec{\omega}) \right).
+    \end{equation}
+
+    <p>Der Ausdruck \(\vec{r}_i \cdot \vec{r}_i\) ist das Skalarprodukt des Ortsvektors mit sich selbst, also der Betrag des Ortsvektors zum Quadrat:</p>
+
+    \begin{equation}
+    \vec{r}_i \cdot \vec{r}_i = r_i^2.
+    \end{equation}
+
+    <p>Der Ausdruck \(\vec{r}_i \cdot \vec{\omega}\) ist das Skalarprodukt des Ortsvektors mit dem Winkelgeschwindigkeitsvektor. Wählen wir nun das Koordinatensystem so, dass der Ursprung der Schnittpunkt zwischen Rotationsachse und Bewegungsebene ist, so steht der Ortsvektor immer senkrecht auf dem Winkelgeschwindigkeitsvektor, daher ist das Skalarprodukt \(\vec{r}_i \cdot \vec{\omega} = 0\). Damit vereinfacht sich die Formel für die kinetische Energie zu</p>
+
+    \begin{equation}
+    E_\text{kin} = \sum_{i=1}^n \frac{1}{2} \mathrm{d} m_i \left( \vec{\omega} r_i^2 - \vec{r}_i \cdot 0 \right) = \sum_{i=1}^n \frac{1}{2} \mathrm{d} m_i r_i^2 \omega^2.
+    \end{equation}
+
+    <p>Im Übergang zu sehr kleinen Elementarwürfeln wird aus der Summe wieder ein Volumenintegral:</p>
+
+    \begin{equation}
+    E_\text{kin} = \frac{1}{2} \omega^2 \int_\text{alle Massen} r^2 \, \mathrm{d} m = \frac{1}{2} \omega^2 \int_V r^2 \rho(\vec{r}) \, \mathrm{d} V.
+    \end{equation}
+
+    <p>Der Ausdruck \(\int r^2 \, \mathrm{d} m\) ist das Massenträgheitsmoment \(J\). Also erhalten wir die Formel für die Rotationsenergie eines starren Körpers:</p>
+
+    \begin{equation}
+    E_\text{rot} = \frac{1}{2} J \omega^2.
+    \end{equation}
+
+    <p>Ein starrer Körper, der sich mit der Winkelgeschwindigkeit \(\omega\) um seine Symmetrieachse dreht, hat also die Rotationsenergie \(E_\text{rot} = \frac{1}{2} J \omega^2\), wobei \(J\) das Massenträgheitsmoment des Körpers um die Symmetrieachse ist. Rotiert der starre Körper um eine andere Achse, so muss das Massenträgheitsmoment um diese Achse verwendet werden, indem der Satz von Steiner angewendet wird.</p>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.12 Rotation und Translation</h3>
 
 <section>
-    <div class="wichtig" data-title="Dieser Unterabschnitt ist noch nicht migriert">
-        <p>Der Inhalt von Abschnitt 1.5.12 steht noch nicht im interaktiven Skript.
-        Quelle: <code>Input/v0.13/pskript_mech_dyn_drehung_und_rotation_v1.tex</code>.
-        Bis zur Migration bitte das PDF verwenden.</p>
-    </div>
+    <p>In der Praxis rotiert ein starrer Körper nicht nur um eine Achse, sondern sein Schwerpunkt bewegt sich zusätzlich im Raum auf einer Bahn. Dann kann man die Bewegung des starren Körpers auffassen als eine Überlagerung von Rotation um den Schwerpunkt und Translation des Schwerpunkts. Die gesamte kinetische Energie des starren Körpers ist dann die Summe aus der Rotationsenergie um den Schwerpunkt und der kinetischen Energie des Schwerpunkts:</p>
+
+    \begin{equation}
+    E_\text{kin} = \frac{1}{2} J \omega^2 + \frac{1}{2} m v^2,
+    \end{equation}
+
+    <p>wobei \(J\) das Massenträgheitsmoment des Körpers um die Achse durch den Schwerpunkt ist, \(m\) die Masse des Körpers und \(v\) die Geschwindigkeit des Schwerpunkts.</p>
+
+    <figure class="abbildung" id="fig-skript-rotation-rollbewegung-vgl">
+        <div class="abbildung-sub-imgs">
+            <div class="subfig" style="width:45%">
+                <img class="grafik" style="width:100%" src="bilder/skript_rotation_rollbewegung_schritt6_rotsp.png" alt="">
+                <div class="subcap">(a) Die Rollbewegung eines Körpers kann als Überlagerung von Rotation um den Schwerpunkt und Translation des Schwerpunkts aufgefasst werden.</div>
+            </div>
+            <div class="subfig" style="width:45%">
+                <img class="grafik" style="width:100%" src="bilder/skript_rotation_rollbewegung_rotauflage.png" alt="">
+                <div class="subcap">(b) Alternativ kann die Rollbewegung als Rotation um den Auflagepunkt des Körpers auf der Ebene aufgefasst werden.</div>
+            </div>
+        </div>
+        <figcaption>Zwei verschiedene Betrachtungsweisen der Rollbewegung eines Körpers. Bei konsequenter Anwendung beider Betrachtungsweisen müssen beide zum gleichen Ergebnis führen.</figcaption>
+    </figure>
 </section>
 
 <h3 class="inhaltsverzeichnis">1.5.13 Rollbewegung</h3>
