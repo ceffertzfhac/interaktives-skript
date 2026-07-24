@@ -574,22 +574,35 @@ Subsection*, nicht nur in der Summe). **Nicht pushen** ohne Freigabe.
   `1.4`, `1.5.1 …` → `1.5`, `0.2.1 …` → `0.2`); zweiter MathJax-Lauf setzt die Tags.
   Verifiziert 2026-07-24: 1.4-Seiten → `1.4.n`, 1.5-Seiten → `1.5.n`, 0.x → `0.x.n`.
   CLAUDE.md-Stelle korrigiert. *(keine Arbeit angefallen)*
-- [ ] **P12-0b Abbildungs-Zähler pro Kapitel** — `numbering.js` zählt Abbildungen
-  kapitelweit (`{chapter}` → „Abb. 1.n"). Für TK 2 startet neu „Abb. 2.n". Klären:
-  fortlaufend pro `\chapter` (TK) oder pro `\section`?_offsets (`data-figure-offset`
-  am h2) für jedes neue Kapitel korrekt setzen (1.4=1.38, 1.5=1.61…; TK 2 neu).
-  *(S)*
-- [ ] **P12-0c Box-/Zusammenfassungs-Offsets** — `data-zusammenfassung-offset` und
-  Section-Box-Counter-Start pro neuem h2. *(S)*
-- [ ] **P12-0d TK-Metadaten neuer Kapitel** — `data-tk-num`/`data-tk-title` an den
-  neuen `data-chapter`-Platzhaltern in `index.html` (P8-Mechanismus): TK 2 →
-  „2 Elektromagnetismus", TK 3 → „3 Schwingungen und Wellen". *(S)*
-- [ ] **P12-0e P4 aufräumen** — P4 (1.5 fertig migrieren) ist **veraltet**: 1.5 ist
-  vollständig migriert (s.o.). P4-Einträge abhaken / als erledigt markieren. *(S)*
-- [ ] **P12-0f Querverweis-System kapitelfest** — neue Abschnitte verweisen auf
-  frühere (z. B. 1.5→1.4, 2.3→2.1). P6 („Karte der Physik") muss kapitelübergreifend
-  robust sein (`data-ref-eq`/`data-ref-fig` auflösen über `chapters/`-Grenzen).
-  Vorab-Stichprobe, sonst Blocker pro Abschnitt. *(S)*
+- [x] **P12-0b Abbildungs-Zähler pro Kapitel** — ✅ schon implementiert.
+  `numbering.js::numberImages` zählt kapitelweit via `chapterPrefix` (v0.13:
+  figure ohne `\numberwithin` → `{chapter}` → „Abb. 1.n"); chapter 0 ohne Präfix
+  („Abb. 1"…), chapter 1 mit `data-figure-offset` (1.4=37→1.38, 1.5=60→1.61).
+  Verifiziert via DOM-Harness: gerendert „Abb. 1 bis Abb. 1.72". Für TK 2 startet
+  automatisch „Abb. 2.1" (neuer chapter, kein Offset nötig). *(keine Arbeit)*
+- [x] **P12-0c Box-/Zusammenfassungs-Offsets** — ✅ schon implementiert.
+  `offsetsFor` liest `data-zusammenfassung-offset` am h2; kapitelweiter
+  Zusammenfassungs-Zähler. Verifiziert: „Zusammenfassung 0.1 bis 1.8"
+  (ch_01 offset 3→1.4, ch_02 offset 7→1.8). Section-Box-Counter (Beispiel/Bemerkung/
+  Wichtig/Aufgabe) section-scoped via `sectionPrefix`: „Beispiel 0.1.1 bis 1.5.1".
+  *(keine Arbeit)*
+- [x] **P12-0d TK-Metadaten neuer Kapitel** — ⏳ **kein Vorab-Blocker**, sondern
+  Migrations-Schritt: pro neuem Kapitel `data-tk-num`/`data-tk-title` am
+  `data-chapter`-Platzhalter in `index.html` setzen (P8-Mechanismus, schon bei
+  ch_00/01/02 gezeigt). Fällt mit P12-A/B/C an, nicht vorher. *(keine separate Arbeit)*
+- [x] **P12-0e P4 aufräumen** — ✅ erledigt (Commit 150c79d, s. P4 oben).
+- [x] **P12-0f Querverweis-System kapitelfest** — ✅ schon implementiert.
+  `resolveSecRefs`/`resolveFigRefs` laufen über `getPages()` dokumentenweit,
+  `resolve_eq_refs` über MathJax `allLabels`. Verifiziert: ch_02 hat 13
+  kapitelübergreifende Verweise (1.5→1.4); DOM-Harness 14/14 fig + 6/6 sec
+  aufgelöst (eq-refs erst im Browser mit MathJax). *(keine Arbeit)*
+
+> **Ergebnis 2026-07-24:** Die gesamte P12-0-Vorbedingungsliste ist **kein
+> Blocker** — 0a/b/c/f waren bereits umgesetzt (teils auf veralteten
+> CLAUDE.md-Notizen basierend), 0d ist Migrations-Schritt, 0e erledigt. Die
+> Migration des nächsten Abschnitts kann direkt starten. Beim ersten neuen
+> Themenkomplex (TK 2) einmal den DOM-Harness laufen lassen, um „Abb. 2.1"/
+> „Beispiel 2.1.1"/„2.1.n"-Gleichungen live zu bestätigen.
 
 ### P12-A — TK 1 Mechanik: restliche Sections (in `ch_01` ergänzen oder eigene Dateien)
 
