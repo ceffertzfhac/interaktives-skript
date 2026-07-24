@@ -268,8 +268,8 @@ const PANEL_LEFT = `
       <span class="slider-val" id="ak_alpha_out"></span>
     </div>
   </div>
-  <div class="panel-section collapsible">
-    <button type="button" class="panel-label" aria-expanded="true">Tempo${CHEVRON}</button>
+  <div class="panel-section collapsible collapsed">
+    <button type="button" class="panel-label" aria-expanded="false">Tempo${CHEVRON}</button>
     <div class="speed-pills">
       <label class="speed-pill"><input type="radio" name="ak_speed" value="1.0" checked><span>1×</span></label>
       <label class="speed-pill"><input type="radio" name="ak_speed" value="0.5"><span>½×</span></label>
@@ -277,8 +277,8 @@ const PANEL_LEFT = `
       <label class="speed-pill"><input type="radio" name="ak_speed" value="0.125"><span>⅛×</span></label>
     </div>
   </div>
-  <div class="panel-section collapsible">
-    <button type="button" class="panel-label" aria-expanded="true">Darstellung${CHEVRON}</button>
+  <div class="panel-section collapsible collapsed">
+    <button type="button" class="panel-label" aria-expanded="false">Darstellung${CHEVRON}</button>
     <label class="aspekt-check"><input type="checkbox" id="ak_components"><span>kartesisch \\(a_x\\)/\\(a_y\\) zerlegen</span></label>
     <label class="aspekt-check"><input type="checkbox" id="ak_tr"><span>tangential/radial \\(\\vec{a}_\\text{t}\\)/\\(\\vec{a}_\\text{r}\\) zerlegen</span></label>
     <div class="accel-scale-note">Der Beschleunigungsvektor ist in der Szene auf feste Länge normiert (damit die Neigung immer sichtbar ist). Den tatsächlichen Betrag \\(|\\vec a|=\\omega(t)^2R\\) zeigen die Diagramme.</div>
