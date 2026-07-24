@@ -473,14 +473,21 @@ Paging-/Nummerierungs-/TOC-Eingriff. Drawer-Variante läuft über dieselbe
 Funktion, wird mitgeändert. **Verifikation:** DOM-Harness deckt Schiene nicht
 ab → Sicht (Stufe 5, Freigabe) oder JSDOM-Stichprobe der `renderRailInto`-Ausgabe.
 
+**Verfeinerung 2026-07-24 (TK-Grenze weich):** Ist das aktive Kapitel das letzte
+seines TK, folgt nach einer dünnen Trennlinie (`.rail-tk-sep`) das erste Kapitel
+des nächsten TK als blasse Vorschau (`.rail-tk-cross`, `--ink-3`, nicht fett) —
+statt eines harten Bruchs. Nur vorwärts (am Anfang eines TK kein voriger TK,
+bleibt bei Entscheidung a). JSDOM: 0.6 → `[0.5, 0.6, Linie, 1.4 blass]`;
+1.5 (kein Folget-TK migriert) → ohne Linie.
+
 - [x] **P9-0** Grenzfälle (a/b/c) mit Nutzer klären. *(S)* — s.o. entschieden 2026-07-24.
-- [x] **P9-1** `shell.js::renderRailInto` gefenstert (Vorgänger + aktiv + Nachfolger). *(S–M)* — Commit 48c1f910658ee1720e586134214b92b3f1eaedf2.
-- [x] **P9-2** Verifikation (JSDOM-Stichprobe + Sicht). *(S)* — JSDOM-Stichprobe
-  für 0.0/0.1/0.2/0.2.1/0.3/0.3.1/1.4/1.4.3/1.5/1.5.3 grün (je 1–3 Blöcke, TK-
-  Grenze bei 1.4 ohne Vorgänger, aktive Intro-Zeile bei 0.1). **Sicht (Stufe 5)
-  offen** — nur nach ausdrücklicher Freigabe per Tipp.
+- [x] **P9-1** `shell.js::renderRailInto` gefenstert (Vorgänger + aktiv + Nachfolger). *(S–M)* — Commit 48c1f91.
+- [x] **P9-2** Verifikation (JSDOM-Stichprobe + Sicht). *(S)* — JSDOM grün;
+  **Sicht (Stufe 5) offen** — nur nach ausdrücklicher Freigabe per Tipp.
 
 ---
+
+## Reihenfolge-Empfehlung
 
 1. Erst **P0** abarbeiten (rasch, niedriges Risiko, senkt schon das Token-Volumen spürbar).
 2. Dann **Per-Figure-Fabrik + Modularisierung + Globals einfrieden** (P1) als zusammenhängender Struktur-Refactor — das ist der zentrale Hebel für Token-Effizienz und Wartbarkeit; danach sind Animation (rAF) und DOM-Optimierung günstig in der Fabrik mitzuerledigen.
