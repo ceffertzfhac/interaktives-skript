@@ -460,14 +460,25 @@ Beispiele (Nutzervorgabe):
 - (c) Erster/letzter Kapitel-Kompakt: 0.0 hat keinen Vorgänger, 1.5 keinen
   Nachfolger — nur den einen Nachbarn zeigen (naheliegend).
 
+**Entschieden 2026-07-24:**
+- (a) **TK bleibt** — Vorgänger/Nachfolger nur innerhalb desselben Themenkomplexes.
+  In 1.4.3 zeigt die Schiene nur [1.4 (+Abschnitte), 1.5]; der 1.3-Vorgänger
+  fehlt und 0.6 liegt im anderen TK → kein Vorgänger.
+- (b) **Aktive Zeile anzeigen** — auch Intro-Seiten ohne Abschnitte (0.1) erscheinen
+  als markierte Zeile zwischen den Nachbarn: [0.0, 0.1 (aktiv, ohne Abschnitte), 0.2].
+- (c) Erster/letzter Kapitel-Kompakt: nur den einen Nachbarn zeigen.
+
 **Risiko:** gering — nur `shell.js::renderRailInto`, rein Anzeige, kein
 Paging-/Nummerierungs-/TOC-Eingriff. Drawer-Variante läuft über dieselbe
 Funktion, wird mitgeändert. **Verifikation:** DOM-Harness deckt Schiene nicht
 ab → Sicht (Stufe 5, Freigabe) oder JSDOM-Stichprobe der `renderRailInto`-Ausgabe.
 
-- [ ] **P9-0** Grenzfälle (a/b/c) mit Nutzer klären. *(S)*
-- [ ] **P9-1** `shell.js::renderRailInto` gefenstert (Vorgänger + aktiv + Nachfolger). *(S–M)*
-- [ ] **P9-2** Verifikation (JSDOM-Stichprobe + Sicht). *(S)*
+- [x] **P9-0** Grenzfälle (a/b/c) mit Nutzer klären. *(S)* — s.o. entschieden 2026-07-24.
+- [x] **P9-1** `shell.js::renderRailInto` gefenstert (Vorgänger + aktiv + Nachfolger). *(S–M)* — Commit 48c1f910658ee1720e586134214b92b3f1eaedf2.
+- [x] **P9-2** Verifikation (JSDOM-Stichprobe + Sicht). *(S)* — JSDOM-Stichprobe
+  für 0.0/0.1/0.2/0.2.1/0.3/0.3.1/1.4/1.4.3/1.5/1.5.3 grün (je 1–3 Blöcke, TK-
+  Grenze bei 1.4 ohne Vorgänger, aktive Intro-Zeile bei 0.1). **Sicht (Stufe 5)
+  offen** — nur nach ausdrücklicher Freigabe per Tipp.
 
 ---
 
