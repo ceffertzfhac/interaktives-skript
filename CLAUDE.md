@@ -77,9 +77,16 @@ src/numbering.js   init_numbering() — box, figure and image numbering off page
                      * zusammenfassung                            -> {chapter} -> "1.n"
                      * figure (no \numberwithin at all)           -> {chapter} -> "Abb. 1.n"
                    CHAPTER_SCOPED marks the chapter-wide box types; chapter-wide counters
-                   get their start value from data-figure-offset/data-zusammenfassung-offset
-                   on the chapter's h2 (sections 1.0–1.3 aren't migrated yet, so ch_01 starts
-                   at Abb. 1.38 / Zusammenfassung 1.4 — remove the offsets once they are).
+                   reset to 0 at each chapter change and are then set to an ABSOLUTE start
+                   value by ANY page (usually a section h2) that carries
+                   data-figure-offset/data-zusammenfassung-offset — applied per-section, not
+                   only at the chapter's first h2, so a gap left by not-yet-migrated sections
+                   in the MIDDLE of a chapter can be skipped without shifting the migrated
+                   sections' numbers (first figure of the section = figure-offset + 1; the
+                   value is removable once all prior sections are migrated contiguously).
+                   Currently: 1.1 (Kinematik) migrated with figs 1.1–1.20 / no offset
+                   (contiguous from chapter start); the 1.4-h2 carries 37/3 and the 1.5-h2
+                   60/7 to jump the still-missing 1.2/1.3 (Abb. 1.21–1.37).
                    Box titles are split into <span class="hb-type"> (type + number, uppercased
                    via CSS) and <span class="hb-name"> (the box's own title, normal case, so
                    formula parts aren't mangled) — core.js creates the type span, numbering.js
