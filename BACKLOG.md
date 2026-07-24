@@ -330,6 +330,18 @@ Zuweisung per Freigabe-Tipp.
   graphType1=aabs einzeln, a⃗-Farbe `--kb-acc` (explizit gescopt, da a nicht zentral
   gefärbt wird — s. Hinweis zur 1.43/betragv). Visuell noch nicht freigegeben.
 
+- [x] **P-AF-8: Interaktive Aspekt-Figur 1.49 — Periodendauer ablesen.**
+  statische `fig-skript-kreisbewegung-periodendauer` (1.4.4) interaktiv nachbauen.
+  Copy & feature-gate von `aspekt_weg_zeit.js` (1.39) — dieselben gestapelten
+  x(t)/y(t)-Diagramme + Kreisbahn-Szene. Neu: **T-Ablese-Markierung** im oberen
+  x(t)-Diagramm (zwei aufeinanderfolgende Maxima t=0/t=T als Punkte + senkrechte
+  Hilfslinien + bemaßte T-Strecke), Analyse zeigt zusätzlich f=1/T und ω=2π/T.
+  R-Regler ändert nur die Amplitude, nicht den Maxima-Abstand (T unabh. von R).
+  Umgesetzt (2026-07-24, `50f338b`+`a85a94c`): `aspekt_periodendauer.js|.css`,
+  `data-aspekt="periodendauer"`, T-Marker aus store.graphScale.top projiziert
+  (drawTMarkers), Marker orient=auto-start-reverse. Syntax/Smoke/Nummerierung
+  grün. **Visuell noch nicht freigegeben** (Screenshot-Check offen). *(S–M)*
+
 ## P8 — Inhaltsverzeichnis: 3-stufige Hierarchie (Themenkomplex → Kapitel → Abschnitt)
 
 Eingetragen 2026-07-24 nach Nutzervorgabe. Das TOC (und die Navigation) ist
