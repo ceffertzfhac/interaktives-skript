@@ -33,6 +33,20 @@ export async function loadChapters() {
             // die LaTeX-Quelle durch den gerenderten mjx-container ersetzt.
             captureEqLatex(html);
             mount.innerHTML = html;
+            // Themenkomplex (v0.13-\chapter, 3-stufiges TOC, s. BACKLOG P8)
+            // auf jede .inhaltsverzeichnis-Überschrift des Fragments stempeln,
+            // GELESEN vom data-chapter-Platzhalter (data-tk-num/-title). Vor dem
+            // Flatten nötig, weil der Platzhalter danach geloescht und nicht
+            // mehr queryable ist; die dataset-Attribute wandern mit den
+            // Überschrift-Knoten durch das Flatten und pages.js liest sie am
+            // Heading wieder ab (-> page.tk). Seiten ohne TK-Attribut bleiben
+            // tk=null (robust gegen kuenftige/themenkomplexlose Kapitel).
+            const tkNum = mount.dataset.tkNum || '';
+            const tkTitle = mount.dataset.tkTitle || '';
+            if (tkNum || tkTitle) {
+                mount.querySelectorAll('.inhaltsverzeichnis')
+                    .forEach(h => { h.dataset.tkNum = tkNum; h.dataset.tkTitle = tkTitle; });
+            }
             // Flatten: Kinder direkt unter den Parent des Platzhalters heben,
             // dann den Platzhalter entfernen. Damit sind die Fragment-Knoten
             // direkte #paper-Children -- exakt der Zustand, den paginate()

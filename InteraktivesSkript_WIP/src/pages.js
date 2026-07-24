@@ -10,7 +10,7 @@
 // gemeldet: shell.js abonniert das.
 import { ge } from './core.js';
 
-let pages = []; // [{id, level, title, el}]
+let pages = []; // [{id, level, title, el, tk}]  tk=null|{num,title}
 let currentIndex = 0;
 let printSavedIndex = null;
 
@@ -69,7 +69,13 @@ export function paginate() {
         const id = slugFor(h, i);
         el.dataset.pageId = id;
         el.dataset.pageLevel = h.tagName.toLowerCase();
-        return { id, level: h.tagName.toLowerCase(), title: titleFor(h), el };
+        // tk = Themenkomplex (v0.13-\chapter, 3-stufiges TOC, s. BACKLOG P8),
+        // von chapters.js vor dem Flatten auf die Überschrift gestempelt
+        // (data-tk-num/-title). null, wenn das Kapitel kein TK-Attribut traegt.
+        const tk = (h.dataset.tkNum || h.dataset.tkTitle)
+            ? { num: h.dataset.tkNum, title: h.dataset.tkTitle }
+            : null;
+        return { id, level: h.tagName.toLowerCase(), title: titleFor(h), el, tk };
     });
     foldStraySiblings(paper, pages.map(p => p.el));
 
