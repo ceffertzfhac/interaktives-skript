@@ -144,6 +144,27 @@
     color: var(--kb-text3);
 }
 
+/* ── Info-Fußnote in der Caption (Nutzervorgabe: ausführliche Skalierungs-Erklärung
+   für Interessierte/Experten). Ausklappbar via <details>/<summary>, kein JS. Klein,
+   gedämpft, damit sie die Haupt-Caption nicht dominiert; nur auf Aufklappen hin
+   entfaltet sie sich. MathJax setzt die \(…\)-Formeln im aufgeklappten Inhalt. */
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-caption-info {
+    margin-top: 8px;
+    font-size: calc(10.5px * var(--kb-text-scale, 1));
+    line-height: 1.4;
+    color: var(--kb-text3);
+}
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-caption-info > summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--kb-text2);
+    list-style: none;            /* eigenes ℹ statt Standard-Dreieck */
+}
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-caption-info > summary::-webkit-details-marker { display: none; }
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-caption-info[open] > summary { margin-bottom: 4px; }
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-caption-info p { margin: 0 0 4px; }
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-caption-info p:last-child { margin-bottom: 0; }
+
 /* ── Einklappbare Panel-Abschnitte (Nutzervorgabe: Leiste zu lang). Muster wie
    die Vorlagen-Sim (kreisbewegung/styles.css): der Abschnitts-Kopf ist ein
    Button (.panel-label) mit Chevron; .collapsed blendet die Geschwister nach dem
