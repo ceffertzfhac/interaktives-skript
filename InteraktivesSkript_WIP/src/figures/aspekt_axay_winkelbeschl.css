@@ -143,19 +143,32 @@
    Button (.panel-label) mit Chevron; .collapsed blendet die Geschwister nach dem
    Button aus und dreht den Chevron. Scoped auf diese Figur. ────────────────── */
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .panel-section.collapsible > .panel-label {
-    /* Nur Button-Mechanik + Chevron-Layout — die gesamte Typographie
-       (Größe/Gewicht/Spacing/Großschreibung/Farbe/Margin) kommt UNVERÄNDERT
-       aus der Basis-.panel-label (aspekt_kreisbahn.css), die auf diesen
-       <button class="panel-label"> genauso zuschlägt wie auf die plainen
-       <div class="panel-label">-Köpfe der anderen Aspekt-Figuren → Wörter
-       optisch IDENTISCH (Nutzervorgabe: keine Abweichung zu 1.38/1.39/1.41/…).
-       Daher hier KEINE font-size/font-weight/letter-spacing/text-transform/
-       color/margin duplizieren (Drift-Gefahr). Nur font-family + line-height
-       per inherit, weil <button> sonst UA-System-Schrift bzw. UA-line-height
-       (normal) nimmt und gerade so vom <div> abweichen würde. */
+    /* Button-Mechanik + Chevron-Layout. Die Typographie (Gewicht/Spacing/
+       Großschreibung/Farbe/Margin) kommt aus der Basis-.panel-label
+       (aspekt_kreisbahn.css), die auf den <button class="panel-label">
+       genauso zuschlägt wie auf die <div class="panel-label">-Köpfe der
+       anderen Figuren. font-family/line-height per inherit, weil <button>
+       sonst UA-System-Schrift bzw. UA-line-height (normal) nähme. Die
+       font-size wird SEPARAT weiter unten mit #paper-Scoping geholt — siehe
+       dort, warum das nötig ist (und warum Klassen-Scoping hier NICHT reicht). */
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
     width: 100%; padding: 0; background: transparent; border: none;
     text-align: left; cursor: pointer; font-family: inherit; line-height: inherit;
+}
+/* font-size HOLT die Basis-Größe (10.5px) zurück, die die Regel
+   `#paper button` (styles.css) jedem <button> im Paper stiehlt: jene setzt
+   font-size auf Prosa-Größe (16px) mit Spezifität (1,0,1) (ID #paper +
+   button) und schlägt damit die Basis-.panel-label (0,2,0) — ein reiner
+   Klassen-Selector (auch (0,5,0)) verliert gegen die ID. Ohne diesen
+   Override wären „Parameter"/„Tempo"/… hier 16px statt 10.5px und damit
+   massiv größer als die div-Köpfe der anderen Figuren. #paper-Scoping hebt
+   die Spezifität auf (1,5,0) > (1,0,1). Im Overlay (Figur per
+   wrap.appendChild(fig) aus #paper herausgelöst) greift #paper button
+   nicht → Basis 10.5px, dieser Selector auch nicht → bleibt korrekt 10.5px.
+   letter-spacing (.1em) und die geerbte line-height korrigieren sich mit
+   der font-size automatisch. */
+#paper .aspekt-figur[data-aspekt="axay-winkelbeschl"] .panel-section.collapsible > .panel-label {
+    font-size: calc(10.5px * var(--kb-text-scale));
 }
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .acc-chevron { display: inline-flex; color: var(--kb-text3); transition: transform .2s ease; }
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .acc-chevron svg { width: 14px; height: 14px; }
