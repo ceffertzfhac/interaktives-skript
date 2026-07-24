@@ -744,3 +744,347 @@
         <p>Hierbei wurden die Terme nach den Potenzen von \(t\) getrennt, wodurch der Startort \(\vec s(0)\) leichter zu erkennen ist.</p>
     </div>
 </section>
+
+<h3 class="inhaltsverzeichnis">1.1.11 Relativgeschwindigkeit und Überlagerung von Bewegungen</h3>
+<section>
+    <p>Bisher hatten wir immer nur die Bewegung eines Objektes betrachtet. Natürlich können sich innerhalb eines Systems auch mehrere Objekte bewegen, z.&nbsp;B. zwei Autos, die sich von zwei Seiten einer Kreuzung nähern. Es kann auch sein, dass sich ein Objekt auf oder in einem anderen bewegt, z.&nbsp;B. ein Mensch, der durch einen Zug geht oder ein Boot, das über einen strömenden Fluss fährt.</p>
+
+    <p>Angenommen, die Strecke des einen Objektes \(A\) durch den Raum wird beschrieben durch \(\vec s_A(t)\) und die Strecke eines zweiten Objektes \(B\) durch den Raum wird beschrieben durch \(\vec s_B(t)\), so kann zu jedem Zeitpunkt der Abstandsvektor zwischen den beiden Objekten bestimmt werden. Der Abstandsvektor ist dann im Allgemeinen auch zeitabhängig<span class="fussnote">Außer wenn sich beide Objekte mit derselben Geschwindigkeit in dieselbe Richtung bewegen.</span> und kann errechnet werden zu:</p>
+
+    \begin{equation}
+    \Delta \vec s_{AB}(t)= \vec s_A(t) - \vec s_B(t)
+    \end{equation}
+
+    <p>Das ist der Vektor, der von \(B\) nach \(A\) zeigt, möchten wir den Vektor von \(A\) nach \(B\) haben, so müssen wir das Vorzeichen ändern.</p>
+
+    <p>Die Geschwindigkeit, mit der sich der Abstand der beiden Objekte mit der Zeit ändert, nennen wir <strong>Relativgeschwindigkeit</strong> \(\vec v_\text{rel}\). Analog zur „normalen" Geschwindigkeit kann die Relativgeschwindigkeit durch ableiten nach \(t\) ermittelt werden:</p>
+
+    \begin{equation}
+    \vec v_\text{rel}= \frac{\mathrm{d}}{\mathrm{d}t}\,(\Delta \vec s_{AB}(t))=\frac{\mathrm{d}}{\mathrm{d}t}\,\left(\vec s_A(t) - \vec s_B(t)\right)=\frac{\mathrm{d}\vec s_A(t)}{\mathrm{d}t}-\frac{\mathrm{d}\vec s_B(t)}{\mathrm{d}t}=\vec v_A(t)- \vec v_B(t) \label{kinematik_vrel}
+    \end{equation}
+    <p>Man sieht: die Geschwindigkeit, mit der sich der Abstand ändert, ist gerade gleich der vektoriellen Differenz der Geschwindigkeit der einzelnen Objekte. Hierbei ist auf die Reihenfolge der Subtraktion zu achten: \(\vec v_A(t) - \vec v_B(t)\) liefert die Geschwindigkeit, mit der sich \(A\) relativ zu \(B\) bewegt, \(\vec v_B(t) - \vec v_A(t)\) ist die Geschwindigkeit, mit der sich \(B\) relativ zu \(A\) bewegt.</p>
+
+    <div class="beispiel" data-title="Überholvorgang - Relativgeschwindigkeit">
+        <p>Sie fahren in einem Auto mit \(130\,\mathrm{km/h}\) über die Autobahn und sehen am Horizont einen LKW, welcher mit \(90\,\mathrm{km/h}\) fährt. Mit welcher Relativgeschwindigkeit nähern Sie sich dem LKW?</p>
+
+        <p>Da Sie und der LKW sich in dieselbe Richtung bewegen sind Ihre Geschwindigkeitsvektoren also parallel; wir können das Problem also als eindimensional betrachten, die positive Richtung der Achse zeige in die Richtung der Geschwindigkeiten.</p>
+
+        <p>Nach Formel (<a class="xref" data-ref-eq="kinematik_vrel"></a>) gilt:</p>
+        \begin{equation}
+        \vec v_\text{rel}= \vec v_A(t)- \vec v_B(t)
+        \end{equation}
+        <p>Dabei ist dann \(B\) der LKW und \(A\) Sie selbst. Sie nähern sich also (entlang einer Achse, daher 1-D) mit</p>
+        \begin{equation}
+         v_\text{rel}= 130\,\mathrm{km/h}-90\,\mathrm{km/h} = + 40\,\mathrm{km/h}
+        \end{equation}
+
+        <p>Aus dem Blickwinkel des LKW passiert etwas anderes. Hierzu müssen die Indizes vertauscht werden, was ergibt, dass sich der LKW dem PKW mit</p>
+        \begin{equation}
+         v_\text{rel}= 90\,\mathrm{km/h}-130\,\mathrm{km/h} = - 40\,\mathrm{km/h}
+        \end{equation}
+        <p>nähert.</p>
+    </div>
+
+    <p>Was passiert nun, wenn sich ein Objekt auf oder in einem anderen Objekt bewegt, so wie ein Mensch in einem Zug oder ein Boot, welches über einen strömenden Fluss fährt? Bei dieser Fragestellung beschäftigen wir uns mit sogenannten <strong>überlagerten Bewegungen</strong>.</p>
+
+    <p>Bewegt sich Objekt \(B\) auf oder in einem anderen Objekt \(A\), welches sich seinerseits bewegt, so muss man die Geschwindigkeiten von \(B\) und \(A\) überlagern, d.h. addieren. Wir sprechen in der Physik dabei auch von <strong>Superposition von Bewegungen</strong>.</p>
+
+    <div class="beispiel" data-title="Schiff auf Fluss - Überlagerung von Bewegungen">
+        <p>Ein Boot möchte einen Fluss auf der kürzesten Strecke überqueren. Der Fluss fließe in \(x\)-Richtung mit</p>
+        \begin{equation}
+        \vec v_\text{Fl}=\begin{pmatrix} v_F \\ 0 \end{pmatrix}
+        \end{equation}
+        <p>Wenn das Boot den Fluss auf der kürzesten Strecke überqueren möchte, so muss es dafür sorgen, dass seine resultierende Geschwindigkeit nur eine \(y\)-Komponente hat. Also muss das Boot mit</p>
+        \begin{equation}
+        \vec v_\text{B}=\begin{pmatrix} -v_F \\ v_y \end{pmatrix}
+        \end{equation}
+        <p>über den Fluss steuern, so dass die aus der Überlagerung der Bewegungen <strong>resultierende Geschwindigkeit</strong> gerade</p>
+        \begin{equation}
+        \vec v_\text{ges}=\begin{pmatrix} 0 \\ v_y \end{pmatrix}
+        \end{equation}
+        <p>ist. Das Boot muss also mit einem Winkel von</p>
+        \begin{equation}
+        \beta= \arccos \left( \frac{\begin{pmatrix} 0 \\ 1 \end{pmatrix}  \cdot \begin{pmatrix} -v_F \\ v_y \end{pmatrix}  }{\sqrt{v_F^2+v_y^2}} \right)=\arccos \left( \frac{v_y}{\sqrt{v_F^2+v_y^2}}\right)
+        \end{equation}
+        <p>gegen die Strömung steuern, wobei wir im letzten Schritt das Skalarprodukt zum Errechnen des Winkels zwischen zwei Vektoren genutzt haben.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.12 Beschleunigung</h3>
+<section>
+    <p>Die Geschwindigkeit ist die Größe der Kinematik, die die Änderungsrate des Ortes mit der Zeit beschreibt. Nun interessiert uns noch, wie sich die Geschwindigkeit mit der Zeit ändert. Die Größe, die beschreibt, wie stark sich die Geschwindigkeit mit der Zeit ändert, nennen wir <strong>Beschleunigung</strong>.</p>
+
+    <p>Dabei bezieht sich die Beschleunigung immer auf einen bestimmten Zeitpunkt \(t\) und gibt an, wie sehr sich die Geschwindigkeit in <em>diesem</em> (kurzen) Moment ändert. Somit kann, analog zur „momentanen Geschwindigkeit" von einer <strong>momentanen Beschleunigung</strong> gesprochen werden.</p>
+
+    <p>Natürlich kann es vorkommen, dass ein Objekt die ganze Zeit dieselbe Beschleunigung hat, d.h. die momentane Beschleunigung ändert sich nicht mit der Zeit. Das ist in der Physik tatsächlich regelmäßig der Fall. Beachten Sie jedoch dennoch, dass sich die Beschleunigung im Allgemeinen mit der Zeit ändern kann und dass es in diesen Fällen nur sinnvoll ist, von einer momentanen Beschleunigung (oder von einer mittleren oder durchschnittlichen Beschleunigung) zu sprechen.</p>
+
+    <p>Angenommen, ein Objekt bewegt sich entlang einer Achse von Punkt \(A\) zu Punkt \(B\) und ändert dabei seine Geschwindigkeit. Die Beschleunigung ist dann die Rate, mit der sich die Geschwindigkeit mit der Zeit ändert. Im kleinen Zeitintervall \(\Delta t\) wird das Objekt seine Geschwindigkeit um den Wert \(\Delta v\) ändern. Dann ist die Beschleunigung:</p>
+
+    \begin{equation}
+    a=\frac{\Delta v}{\Delta t}\quad \text{mit $\Delta t$ sehr klein}
+    \end{equation}
+
+    <p>Die Bedingung, dass \(\Delta t\) sehr klein sein muss, können wir auch durch Grenzwertbildung realisieren. Die Beschleunigung ist dann:</p>
+
+    \begin{equation}
+    a=\lim_{\Delta t \rightarrow 0}\frac{\Delta v}{\Delta t}
+    \end{equation}
+
+    <p>Analog zur Geschwindigkeit sollte Sie diese Grenzwertbildung wieder an die Mathematik erinnern. Sie bedeutet: Bilde ein Steigungsdreieck mit Ordinatenabschnitt \(\Delta v\) und Abszissenabschnitt \(\Delta t\) an die Kurve \(v(t)\) und zwar so, dass \(\Delta t\) winzig klein wird. Dann entspricht \(\lim_{\Delta t \rightarrow 0}\frac{\Delta v}{\Delta t}\) gerade der Steigung der Kurve \(v(t)\) (zu einem bestimmten Zeitpunkt \(t\)). Die Definition der Beschleunigung ist also:</p>
+    \begin{equation}
+    \text{Beschleunigung:} \quad a(t)=\lim_{\Delta t\rightarrow 0}\frac{\Delta v}{\Delta t}=\frac{\text{d}v(t)}{\text{d}t}=\dot{v}(t)=\ddot{x}(t) \quad \text{Einheit:} \, [a] = \mathrm{m/s^2}
+    \end{equation}
+    <p>Anders gesagt: die Beschleunigung eines Objektes zu einem bestimmten Zeitpunkt entspricht der Steigung der \(v(t)\)-Kurve im Geschwindigkeits-Zeit-Diagramm. Daher lässt sich die Beschleunigung auf mehrere Weisen bestimmen: als Ableitung der Funktion \(v(t)\) oder als Steigung der Tangenten an die \(v(t)\)-Kurve im Geschwindigkeits-Zeit-Diagramm.</p>
+
+    <p>Da die Beschleunigung die erste Ableitung der Geschwindigkeit nach der Zeit ist und die Geschwindigkeit die erste Ableitung der Strecke nach der Zeit war, folgt auch, dass die Beschleunigung die zweite Ableitung der Strecke nach der Zeit ist.</p>
+
+    <p>Die Bedeutung des Vorzeichens der Beschleunigung ist jetzt etwas komplizierter als im Falle des Vorzeichens der Geschwindigkeit. Wir benötigen eine Fallunterscheidung.</p>
+
+    <ol>
+        <li>Fall: Die Geschwindigkeit ist positiv:
+            <ol>
+                <li>Die Beschleunigung ist positiv: Die positive Geschwindigkeit nimmt mit der Zeit im Betrag zu.</li>
+                <li>Die Beschleunigung ist negativ: Die positive Geschwindigkeit nimmt mit der Zeit im Betrag ab, im Allgemeinen wird die Geschwindigkeit also nach einer Zeit auch Null und nimmt dann negative Werte an.</li>
+            </ol>
+        </li>
+        <li>Fall: Die Geschwindigkeit ist negativ:
+            <ol>
+                <li>Die Beschleunigung ist negativ: Die negative Geschwindigkeit nimmt mit der Zeit im Betrag zu.</li>
+                <li>Die Beschleunigung ist positiv: Die negative Geschwindigkeit nimmt mit der Zeit im Betrag ab, im Allgemeinen wird die Geschwindigkeit also nach einer Zeit auch Null und nimmt dann positive Werte an.</li>
+            </ol>
+        </li>
+    </ol>
+
+    <p>Daher folgt, dass eine negative Beschleunigung nicht immer unbedingt mit „Bremsen" gleichzusetzen ist.</p>
+
+    <p>Wenn die betrachtete Bewegung nicht entlang einer Achse, sondern in einer Ebene oder im Raum verläuft, so erhalten wir eine <strong>Beschleunigung in 2-D oder 3-D</strong>. Es gilt:</p>
+
+    \begin{equation}
+    \text{Beschleunigung in 2-D:}\quad  \vec{a}(t)=\left( \begin{matrix}a_x(t)\\a_y(t)\end{matrix}\right) \quad \text{Einheit:}\, [\vec a]=\mathrm{m/s^2}
+    \end{equation}
+
+    <p>oder</p>
+
+    \begin{equation}
+    \text{Beschleunigung in 3-D:}\quad  \vec{a}(t)=\left( \begin{matrix}a_x(t)\\a_y(t)\\a_z(t)\end{matrix}\right) \quad \text{Einheit:}\, [\vec a]=\mathrm{m/s^2}
+    \end{equation}
+    <p>mit</p>
+
+    \begin{align*}
+    a_x(t)&amp;=\frac{\text{d}v_x(t)}{\text{d}t}=\dot{v}_x(t)=\ddot{x}(t) \\
+    a_y(t)&amp;=\frac{\text{d}v_y(t)}{\text{d}t}=\dot{v}_y(t)=\ddot{y}(t)\\
+    a_z(t)&amp;=\frac{\text{d}v_z(t)}{\text{d}t}=\dot{v}_z(t)=\ddot{z}(t)
+    \end{align*}
+
+    <p>Im Allgemeinen ist die Beschleunigung eine zeitabhängige Größe. Allerdings kommt es in der Natur und in technischen Anwendungen oft zu <strong>gleichmäßig beschleunigten Bewegungen</strong>, d.h. zu Bewegungen, bei denen die Beschleunigung konstant ist. Diese Klasse von Bewegungen lässt sich praktischerweise immer durch ähnliche Formeln beschreiben.</p>
+
+    <p>Da die Beschleunigung der Steigung der \(v(t)\)-Kurve im Geschwindigkeit-Zeit-Diagramm entspricht, bedeutet das auch: eine gleichmäßig beschleunigte Bewegung lässt sich im Geschwindigkeit-Zeit-Diagramm als Gerade darstellen. Da eine Gerade jedoch eine konstante Steigung hat, ist es bei einer Geraden egal, wo man ein Steigungsdreieck zeichnet und wie groß es ist: das Ergebnis wird immer dasselbe sein. Daher kann man im Spezialfall der gleichmäßig beschleunigten Bewegung die Beschleunigung errechnen durch:</p>
+    \begin{equation}
+    \text{Spezialfall: gleichmäßig beschleunigte Bewegung:}\, a=\frac{\Delta v}{\Delta t}=\text{konst.}
+    \end{equation}
+
+    <div class="beispiel" data-title="Die Beschleunigung des senkrechten Wurfes">
+        <p>Die Strecke, die ein Objekt beim senkrechten Wurf zurücklegt, konnte beschrieben werden durch</p>
+        \begin{equation} x(t)=-\frac{1}{2}\cdot g \cdot t^2 + v_0 \cdot t + h_0 \end{equation}
+        <p>mit der Anfangshöhe \(h_0\) und der Anfangsgeschwindigkeit \(v_0\), dabei war die Achse senkrecht zum Erdboden und zeigte nach oben.</p>
+
+        <p>Die Beschleunigung des senkrechten Wurfes erhalten wir nun durch zweifaches Ableiten der Strecke nach der Zeit</p>
+
+        \begin{align*}
+        \Rightarrow v(t)=\dot x(t) &amp;= - g \cdot t + v_0\\
+        \Rightarrow  a(t)= \dot v(t)= \ddot x(t) &amp;= - g
+        \end{align*}
+        <p>Man erkennt: während die Geschwindigkeit \(v(t)\) tatsächlich von der Zeit abhängt, ist die Beschleunigung \(a(t)\) zeitunabhängig, man könnte also auf das \((t)\) (sprich: „von \(t\)") verzichten und vereinfacht schreiben: \(a=-g\). Beim senkrechten Wurf handelt es sich also um eine gleichmäßig beschleunigte Bewegung. Die \(v(t)\)-Kurve im Geschwindigkeits-Zeit-Diagramm muss also eine Gerade sein.</p>
+    </div>
+
+    <div class="beispiel" data-title="Die Beschleunigung beim schrägen Wurf">
+        <p>Den (zeitabhängigen) Geschwindigkeitsvektor eines schräg geworfenen Objektes hatten wir schon im vorangegangenen Kapitel errechnet. Er ist</p>
+
+        \begin{equation}
+        \vec v(t)=\left(\begin{matrix}v_{0,x}\\v_{0,y}-gt \end{matrix}\right)
+        \end{equation}
+        <p>wobei</p>
+        \begin{equation}
+        \vec v_0=\left(\begin{matrix}v_{0,x}\\v_{0,y} \end{matrix}\right)
+        \end{equation}
+        <p>die Anfangsgeschwindigkeit des Objektes bei \(t=0\) ist.</p>
+
+        <p>Den Beschleunigungsvektor erhalten wir nun, indem wir die einzelnen Komponenten des Geschwindigkeitsvektors ableiten und dann zu einem Vektor zusammenfügen.</p>
+
+        \begin{align*}
+        a_x(t)&amp;=\dot v_x(t)=0\\
+        a_y(t)&amp;=\dot v_y(t)=-g
+        \end{align*}
+
+        \begin{equation}
+        \Rightarrow \vec a(t) =\left( \begin{matrix} 0 \\ -g  \end{matrix}\right)
+        \end{equation}
+
+        <p>An diesem Beispiel sieht man auch, dass man die Ableitung, um von \(\vec v(t)\) auf \(\vec a(t)\) zu kommen, auf zwei Weisen bilden kann. Zum einen kann man, wie bisher gemacht, den Vektor \(\vec v(t)\) in seine Komponenten \(v_x(t)\), \(v_y(t)\) und gegebenenfalls auch \(v_z(t)\) zerlegen, die Komponenten ableiten, und dann aus den Ableitungen \(\dot v_x(t)=a_x(t)\), \(\dot v_y(t)=a_y(t)\) und \(\dot v_z(t)=a_z(t)\) den Vektor \(\vec a(t)=\left(\begin{smallmatrix} a_x(t) \\ a_y(t) \end{smallmatrix}\right)\) bilden.</p>
+
+        <p>Andererseits kann man oft auch den Vektor, den man ableiten möchte, so umschreiben, dass die Variable, nach der differenziert werden soll, in unserem Fall die Zeit \(t\) bzw. ihre Potenzen \(t^2\), \(t^3\) u.s.w. als skalarer Multiplikator auftritt und die Vektoren nur konstante Größen enthalten:</p>
+        \begin{equation}
+        \vec v(t)=\left(\begin{matrix}v_{0,x}\\v_{0,y}-gt \end{matrix}\right)= \left(\begin{matrix}0 \\ -g \end{matrix}\right) \cdot t+\left(\begin{matrix}v_{0,x}\\v_{0,y} \end{matrix}\right)
+        \end{equation}
+        <p>Jetzt können die Vektoren, die vor den Potenzen von \(t\) stehen wie normale Konstanten behandelt werden, und der Vektor wie ein Polynom abgeleitet werden. Wir wissen z.&nbsp;B. aus der Mathematik, dass die Ableitung des Polynoms</p>
+        \begin{equation}
+        f(t)=a\cdot t^2+ b \cdot t +c
+        \end{equation}
+        <p>gleich dem Polynom</p>
+        \begin{equation}
+        \frac{\text{d}f(t)}{\text{d}t}= 2\cdot a \cdot t +b
+        \end{equation}
+        <p>ist.</p>
+
+        <p>In unserem Falle sind dann die Konstanten keine Skalare, sondern Vektoren; ableiten können wir trotzdem genauso.</p>
+
+        <p>Wir erhalten also:</p>
+        \begin{equation}
+        \vec v(t)= \left(\begin{matrix}0 \\ -g \end{matrix}\right) \cdot t+\left(\begin{matrix}v_{0,x}\\v_{0,y} \end{matrix}\right)\, \Rightarrow \, \frac{\text{d}\vec v(t)}{\text{d}t}= \vec a(t) = \left(\begin{matrix}0 \\ -g \end{matrix}\right)
+        \end{equation}
+        <p>Der schräge Wurf setzt sich also aus zwei Bewegungen zusammen, einer gleichförmigen Bewegung mit konstanter Geschwindigkeit in \(x\)-Richtung und einer gleichmäßig beschleunigten Bewegung in \(y\)-Richtung.</p>
+
+        <p>Dies können Sie sich wie folgt vorstellen. Stellen Sie sich vor, wir betrachten den schrägen Wurf bei senkrechtem Sonneneinfall (die Sonne steht genau über uns). Dann wird der Schatten des schrägen Wurfes auf dem Boden aussehen wie eine gleichförmige Bewegung.</p>
+
+        <p>Andererseits: Betrachten wir den Schatten des schrägen Wurfes auf einer Wand, die wir genau von der Seite beleuchten, so entspricht der Schatten einer gleichmäßig beschleunigten Bewegung. In der Physik spricht man bei solchen Überlegungen auch von der <strong>Projektion der Bewegung</strong> auf eine Achse oder auf eine Ebene.</p>
+    </div>
+
+    <div class="beispiel" data-title="Beschleunigung bei der Kreisbewegung">
+        <p>Die Strecke der Kreisbewegung hatten wir schon betrachtet:</p>
+        \begin{equation}
+        \vec{s}(t)=\left(\begin{matrix}R\cdot \cos{(\frac{2\pi}{T}t)} \\R \cdot \sin{(\frac{2\pi}{T} t)} \end{matrix} \right)
+        \end{equation}
+        <p>Durch einmaliges Ableiten der beiden Komponenten nach der Zeit kann die Geschwindigkeit ermittelt werden:</p>
+        \begin{equation}
+        \vec v(t) = \dot{\vec{ s}}(t) = \frac{2 \cdot \pi \cdot R}{T} \cdot
+        \left(\begin{matrix} -\sin{(\frac{2\pi}{T}t)} \\ \cos{(\frac{2\pi}{T} t)} \end{matrix} \right)
+        \end{equation}
+        <p>Die Beschleunigung erhalten wir durch nochmaliges Ableiten der Komponenten des Geschwindigkeitsvektors:</p>
+        \begin{align*}
+        a_x(t)&amp;=\dot v_x(t)=-\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \cos{\left(\frac{2\pi}{T}t\right)}\\
+        a_y(t)&amp;=\dot v_y(t)=-\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \sin{\left(\frac{2\pi}{T}t\right)}
+        \end{align*}
+        <p>Der Beschleunigungsvektor ist also:</p>
+        \begin{equation}
+        \vec a(t) =\left( \begin{matrix} -\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \cos{(\frac{2\pi}{T}t)} \\ -\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \sin{(\frac{2\pi}{T}t)}  \end{matrix}\right)=-\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \left( \begin{matrix} \cos{(\frac{2\pi}{T}t)} \\ \sin{(\frac{2\pi}{T}t)}  \end{matrix}\right)
+        \end{equation}
+        <p>Nun können wir noch untersuchen, wie die Vektoren \(\vec s(t)\), \(\vec v(t)\) und \(\vec a(t)\) zueinander stehen.</p>
+        <ul>
+            <li>Der Vektor der Strecke \(\vec s(t)\) zeigt vom Ursprung weg zum Ort des Objektes auf der Kreisbahn.</li>
+            <li>Der Vektor der Geschwindigkeit \(\vec v(t)\) steht senkrecht auf dem Vektor der Strecke \(\vec s(t)\), wie wir schon im vorangegangenen Kapitel gezeigt hatten.</li>
+            <li>Der Vektor der Beschleunigung \(\vec a(t)\) ist ein negatives Vielfaches des Vektors der Strecke \(\vec s(t)\), d.h. er zeigt in die entgegengesetzte Richtung wie der Vektor der Strecke \(\vec s(t)\). Die Beschleunigung zeigt also immer zum Zentrum der Kreisbahn hin.</li>
+        </ul>
+        <p>Der Betrag der Beschleunigung ist konstant und beträgt:</p>
+        \begin{equation}
+        |\vec a(t)|=\frac{(2 \cdot \pi)^2 \cdot R}{T^2}=\frac{v^2}{R}
+        \end{equation}
+        <p>Damit kann man z.&nbsp;B. der Frage nachgehen, wie stark die Erde zur Sonne hin beschleunigt wird. Die Erde bewegt sich auf einer Kreisbahn um die Sonne mit der Umlaufzeit \(T=1\,\mathrm{Jahr}\) und dem Radius \(R=1{,}50\cdot 10^{8}\,\mathrm{km}\). Damit beträgt die Beschleunigung der Erde zur Sonne hin:</p>
+        \begin{equation}
+        |\vec a(t)|=\frac{(2 \cdot \pi)^2 \cdot R}{T^2}=\frac{(2 \cdot \pi)^2 \cdot 1{,}50\cdot 10^{11}\,\mathrm{m}}{(3{,}15576\cdot 10^{7}\,\mathrm{s})^2} \approx 0{,}00595\,\mathrm{m/s^2} \approx 77{,}1\,\mathrm{km/h^2}
+        \end{equation}
+    </div>
+
+    <p>Wir wissen nun, wie wir die Beschleunigung \(\vec a(t)\) aus der Geschwindigkeit \(\vec v(t)\) errechnen können. Was aber, wenn die Beschleunigung gegeben ist und wir die Geschwindigkeit errechnen müssen. Analog zum Weg von der Geschwindigkeit zur Strecke aus dem vorangegangenen Abschnitt können wir wieder argumentieren: Wenn die Beschleunigung \(\vec a(t)\) die Ableitung der Geschwindigkeit nach der Zeit ist, \(\vec a(t)=\dot{\vec v}(t)\), dann muss sich die Geschwindigkeit aus der Beschleunigung durch Integration ermitteln lassen.</p>
+
+    <p>In der Tat gilt analog zu den Formeln (<a class="xref" data-ref-eq="kinematik_int_geschw_strecke_1D"></a>) und (<a class="xref" data-ref-eq="kinematik_int_geschw_strecke_3D"></a>):</p>
+
+    \begin{equation}
+    v(t)=\int\limits_{0}^t a(\tau)\text{d}\tau + v_0 \label{kinematik_int_beschl_geschw_1D}
+    \end{equation}
+
+    <p>bzw.</p>
+
+    \begin{equation}
+    \vec{v}(t)=\int\limits_0^t\vec{a}(\tau)\text{d}\tau+\vec{v}(0)  \label{kinematik_int_beschl_geschw_3D}
+    \end{equation}
+
+    <p>wobei gilt, dass man einen Vektor, analog zum komponentenweisen ableiten, komponentenweise integrieren kann:</p>
+
+    \begin{equation}
+    \int \vec a(\tau)\text{d} \tau=\int  \left(\begin{matrix} a_x(\tau) \\ a_y(\tau) \\a_z(\tau) \end{matrix} \right)\text{d} \tau =\left(\begin{matrix} \int  a_x(\tau)\text{d} \tau \\ \int  a_y(\tau) \text{d} \tau \\ \int a_z(\tau) \text{d} \tau\end{matrix} \right)
+    \end{equation}
+
+    <div class="beispiel" data-title="Geschwindigkeit aus Beschleunigung ermitteln beim senkrechten Wurf:">
+        <p>Die Beschleunigung auf ein Objekt beim senkrechten Wurf ist, wie wir weiter oben schon ermittelt hatten: \(a(t)=a=-g\) Hierbei hängt \(a(t)\) nicht mehr von \(t\) ab, die Beschleunigung ist also zeitlich konstant.</p>
+
+        <p>Um nun den zeitlichen Verlauf der Geschwindigkeit des Objektes zu ermitteln, muss über die Beschleunigung integriert werden.</p>
+
+        \begin{equation}
+        v(t)=\int\limits_{0}^t a(\tau)\text{d}\tau + v_0=\int\limits_{0}^t (-g) \text{d}\tau + v_0 = -g \cdot t + v_0
+        \end{equation}
+
+        <p>Dabei ist \(v_0\) die Anfangsgeschwindigkeit, also die Geschwindigkeit, mit der das Objekt abgeworfen wird. Diese Geschwindigkeit muss gegeben sein oder sich anderweitig aus der Aufgabenstellung ergeben, denn sie kann nicht aus \(a(t)\) ermittelt werden.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.13 Zusammenhänge der Kinematik</h3>
+<section>
+    <p>Wir haben in diesem Kapitel die Größen der Kinematik kennengelernt und ihre Zusammenhänge beleuchtet.</p>
+
+    <p>Die Bewegung eines Objektes wird durch seine <strong>Strecke</strong> \(\vec{s}(t)\) (auch <strong>Weg</strong> genannt) beschrieben. Diese vektorielle Funktion gibt für jeden Zeitpunkt \(t\) den <strong>Ortsvektor</strong> an, der zum <strong>Ort</strong> des Objektes im Raum zeigt. Die Kurve, die von der Spitze des Ortsvektors im Raum gezeichnet wird, ist die <strong>Bahn</strong>.</p>
+
+    <p>Leiten wir die Strecke \(\vec{s}(t)\) nach der Zeit ab, erhalten wir eindeutig die <strong>Geschwindigkeit</strong> \(\vec{v}(t)\). Leiten wir die Geschwindigkeit nach der Zeit ab, erhalten wir die <strong>Beschleunigung</strong> \(\vec{a}(t).\)</p>
+
+    <p>Andererseits führt die Integration der Beschleunigung über die Zeit zur Geschwindigkeit (bis auf eine Anfangsgeschwindigkeit). Die Integration der Geschwindigkeit über die Zeit führt zur Strecke (bis auf einen Anfangsort). Für eine eindeutige Beschreibung der Bewegung müssen also neben der Beschleunigung auch die Anfangs- oder <strong>Randbedingungen</strong> (Ort und Geschwindigkeit zu einem Startzeitpunkt) bekannt sein.</p>
+
+    <p>Die <strong>Verschiebung</strong> \(\Delta\vec{s}\) ist der Vektor zwischen zwei Orten, sein Betrag ist der <strong>Abstand</strong>. Die <strong>Weglänge</strong> als skalare Länge der tatsächlichen Bahn wird durch die Integration des Geschwindigkeitsbetrages über die Zeit ermittelt und ist nicht mit dem Abstand zu verwechseln.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.14 Zusammenfassung</h3>
+<section>
+    <div class="zusammenfassung" data-title="Kinematik">
+        <ul>
+            <li><strong>Grundlagen der Bewegung:</strong>
+                <ul>
+                    <li><strong>Kinematik:</strong> Lehre von den Bewegungen, ohne deren Ursachen (Kräfte) zu betrachten.</li>
+                    <li><strong>Massepunkt:</strong> Vereinfachte Darstellung von Objekten als Punkt mit Masse, um räumliche Ausdehnung zu ignorieren.</li>
+                    <li><strong>Koordinatensystem und Zeitnullpunkt:</strong> Frei wählbar, beeinflusst die mathematische Beschreibung, aber nicht die physikalische Bewegung selbst.</li>
+                </ul>
+            </li>
+
+            <li><strong>Kinematische Größen und ihre Zusammenhänge:</strong>
+                <ul>
+                    <li><strong>Ort (\(\vec{s}(t)\) oder \(\vec{r}(t)\)):</strong> Punkt im Raum zu einem Zeitpunkt \(t\), beschrieben durch einen Ortsvektor. Einheit: Meter (\(\mathrm{m}\)).</li>
+                    <li><strong>Zeit (\(t\)):</strong> Parameter der Bewegung. Einheit: Sekunde (\(\mathrm{s}\)).</li>
+                    <li><strong>Strecke / Weg (\(\vec{s}(t)\)):</strong> Vektorielle Funktion der Zeit, die die gesamte Bewegung beschreibt. Die graphische Darstellung der Ortsvektorspitzen ist die <strong>Bahn</strong> (oder <strong>Trajektorie</strong>).</li>
+                    <li><strong>Verschiebung (\(\Delta\vec{s}_{AB}\)):</strong> Vektor vom Ort A zu Ort B. <strong>Abstand</strong> (\(|\Delta\vec{s}_{AB}|\)) ist der Betrag der Verschiebung.</li>
+                    <li><strong>Weglänge:</strong> Skalare Länge der tatsächlich durchlaufenen Bahnkurve (oft größer als der Abstand).</li>
+                </ul>
+            </li>
+
+            <li><strong>Ableitungs- und Integralbeziehungen:</strong>
+                <ul>
+                    <li><strong>Geschwindigkeit (\(\vec{v}(t)\)):</strong> Beschreibt die Änderungsrate des Ortes.
+                        \[ \vec{v}(t) = \frac{\mathrm{d}\vec{s}(t)}{\mathrm{d}t} = \dot{\vec{s}}(t) \]
+                        Einheit: Meter pro Sekunde (\(\mathrm{m/s}\)).</li>
+                    <li><strong>Beschleunigung (\(\vec{a}(t)\)):</strong> Beschreibt die Änderungsrate der Geschwindigkeit.
+                        \[ \vec{a}(t) = \frac{\mathrm{d}\vec{v}(t)}{\mathrm{d}t} = \dot{\vec{v}}(t) = \ddot{\vec{s}}(t) \]
+                        Einheit: Meter pro Quadratsekunde (\(\mathrm{m/s^2}\)).</li>
+                    <li><strong>Integration:</strong> Umgekehrt ergeben Integrationen die vorherige Größe (plus Anfangs-/Randbedingungen):
+                        \[ \vec{v}(t) = \int\limits_0^t \vec{a}(\tau)\mathrm{d}\tau + \vec{v}(0) \]
+                        \[ \vec{s}(t) = \int\limits_0^t \vec{v}(\tau)\mathrm{d}\tau + \vec{s}(0) \]</li>
+                </ul>
+            </li>
+
+            <li><strong>Darstellungen und Konzepte:</strong>
+                <ul>
+                    <li><strong>Ort-Zeit-Diagramm (Weg-Zeit-Diagramm):</strong> Stellt den Ort als Funktion der Zeit dar. Die Steigung der Kurve entspricht der momentanen Geschwindigkeit.</li>
+                    <li><strong>Geschwindigkeits-Zeit-Diagramm:</strong> Stellt die Geschwindigkeit als Funktion der Zeit dar. Die Steigung der Kurve entspricht der momentanen Beschleunigung.</li>
+                    <li><strong>Bahnkurve:</strong> Zeigt den räumlichen Verlauf der Bewegung ohne Zeitbezug (z.&nbsp;B. \(y(x)\)). Wird durch Elimination des Zeitparameters \(t\) aus den Streckengleichungen erhalten.</li>
+                    <li><strong>Vorzeichen der Geschwindigkeit:</strong> Beschreibt die Bewegungsrichtung (positiv für steigende Koordinaten, negativ für fallende).</li>
+                    <li><strong>Vorzeichen der Beschleunigung:</strong> Beschreibt, ob der Betrag der Geschwindigkeit zunimmt (beschleunigt) oder abnimmt (verzögert), abhängig vom Vorzeichen der Geschwindigkeit.</li>
+                </ul>
+            </li>
+
+            <li><strong>Spezialfälle und erweiterte Konzepte:</strong>
+                <ul>
+                    <li><strong>Gleichförmige Bewegung:</strong> Konstante Geschwindigkeit (\(\vec{a}(t)=\vec{0}\)), linearer Ort-Zeit-Verlauf.</li>
+                    <li><strong>Gleichmäßig beschleunigte Bewegung:</strong> Konstante Beschleunigung (\(\vec{a}(t)=\text{konst.}\)), linearer Geschwindigkeits-Zeit-Verlauf, parabolischer Ort-Zeit-Verlauf.</li>
+                    <li><strong>Physikalischer Definitionsbereich:</strong> Zeitintervall, in dem die mathematische Beschreibung einer Bewegung physikalisch sinnvoll ist.</li>
+                    <li><strong>Relativgeschwindigkeit:</strong> Geschwindigkeit eines Objekts relativ zu einem anderen: \(\vec{v}_\text{rel} = \vec{v}_A - \vec{v}_B\).</li>
+                    <li><strong>Überlagerung von Bewegungen (Superposition):</strong> Die Gesamtbewegung (Geschwindigkeit) eines Objekts, das sich in oder auf einem sich bewegenden System befindet, ist die vektorielle Addition der einzelnen Geschwindigkeiten.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</section>
