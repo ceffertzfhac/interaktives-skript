@@ -509,8 +509,8 @@ schützt vor Kollaps; Media-Query blendet sie unterhalb einer Schwelle aus.
 Konkurrenz mit Breadcrumb um den Rest-Platz beachten (evtl. Breadcrumb
 mitschrumpfen lassen).
 
-- [ ] **P10-1** `styles.css`: Fortschrittsbahn flexibel (flex + min/max). *(S)*
-- [ ] **P10-2** Verifikation (Sicht, Stufe 5 — Freigabe). *(S)*
+- [x] **P10-1** `styles.css`: Fortschrittsbahn flexibel (flex + min/max). *(S)*
+- [x] **P10-2** Verifikation (Sicht, Stufe 5). *(S)* — vom Nutzer selbst vorgenommen, OK.
 
 ---
 
@@ -534,7 +534,7 @@ schmalen Header ans Licht). Ab dem Tablet-Breakpoint (**≤ 1024 px**, zuvor
 
 - [x] **P11-1** `styles.css` 1024er Query: S/M/L + Brand-Verdichtung; `core.js`
   Stufen-Label reduziert; `::before` „Text"-Präfix. *(S)*
-- [ ] **P11-2** Verifikation (Sicht, Stufe 5 — Freigabe). *(S)*
+- [x] **P11-2** Verifikation (Sicht, Stufe 5). *(S)* — vom Nutzer selbst vorgenommen, OK.
 
 ---
 
