@@ -13,6 +13,7 @@ Unterabschnitte). Geprüft nach Skill `v013-verifikation` am 2026-07-24.
 | 4 | Bilder (Format, Existenz, HTTP 200) | **0 Fehler**, alle 200 |
 | 6 | JS-Syntax (`node --check`) | **alle ok** |
 | 5 (Teil) | Formel-Tag-Format | **(1.1.n)**, nicht (n) |
+| 5 (visuell) | Sichtprüfung durch Nutzer (Farben/Layout/Darkmode/Druck) | **freigegeben 2026-07-24** („ist ok") |
 
 ### Stufe 1 = Stufe 2 — Gleichungen pro Unterabschnitt
 
@@ -57,9 +58,9 @@ Anzahl **und** Spanne stimmen je Unterabschnitt exakt überein:
    Intention gesetzt.
 4. **Quell-Artefakt „code/Code"** (Z. 1106f in der Zusammenfassung) übersprungen.
 
-## Offen: Stufe 5 (nur visuell, Nutzer/Freigabe erforderlich)
+## Stufe 5 — visuelle Sichtprüfung: freigegeben (2026-07-24)
 
-Nicht per Harness abdeckbar, benötigt Sichtprüfung im Browser (Screenshot-
-Freigabe-Pflicht): `\textcolor` farbig?, Bildschärfe (Subfigure 1.18 ist
-688×668 px, wird aber klein dargestellt), Layout-Kollisionen, Darkmode-
-Lesbarkeit, Druckfluss `?print=true`.
+Vom Nutzer im Browser gesichtet und freigegeben („ist ok"): `\textcolor`,
+Bildschärfe (Subfigure 1.18 ist 688×668 px, wird klein dargestellt),
+Layout-Kollisionen, Darkmode-Lesbarkeit, Druckfluss `?print=true`. Damit gilt
+das Kapitel nach allen Stufen des Skills `v013-verifikation` als migriert.
