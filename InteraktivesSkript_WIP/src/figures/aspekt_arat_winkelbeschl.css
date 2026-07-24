@@ -1,0 +1,321 @@
+/* aspekt_arat_winkelbeschl.css — Optik der |a_t|/a_r-Betrags-Aspekt-Figur bei
+   VERÄNDERLICHER Winkelgeschwindigkeit (Abb. 1.51, Abschnitt 1.4.5).
+   Struktur 1:1 von aspekt_axay_winkelbeschl.css (Abb. 1.50, gleicher Abschnitt,
+   gleiche lokale α-Physik), nur auf data-aspekt="arat-winkelbeschl" umgescopt.
+   Farb-Tokens, Panel-/Slider-/Legenden-/Analyse-/Lupe-/Caption-Regeln + Layout
+   je Modus + Overlay kommen unverändert aus aspekt_kreisbahn.css. EINZIGER
+   inhaltlicher Unterschied zu 1.50: das Diagramm zeigt die BETRÄGE |a_t|(t)
+   (oben, rot) und a_r(t) (unten, blau) statt der kartesischen a_x/a_y — daher
+   erhalten die Datenlinien oben/unten hier die a_t-/a_r-Farben (--kb-at/--kb-ar),
+   passend zu den (DEFAULT eingeschalteten) Tangential/Radial-Vektoren in der
+   Szene. Die Szene selbst (Beschleunigungsvektor a + optionale Zerlegungen +
+   optional v) ist IDENTISCH zu 1.50. */
+
+/* ── Figur-spezifischer Override NUR der Vektor-STRICHSTÄRKE (--kb-vec-hw).
+   Wie 1.50 bewusst DÜNNER als 1.38/1.39/1.41 (2,5 px statt 4 px -> 3,75 px statt
+   6 px nach --kb-lw): diese Figur zeigt r UND a plus (optional) bis zu vier
+   Komponenten — dünnere Vektoren halten die Szene ruhig. Die 0,8-Regel
+   (Komponenten = 0,8 der HV) bleibt erhalten, sie steckt im shared Token
+   --kb-vec-cw (s. aspekt_kreisbahn.css); nur der HV-Wert wird hier override. */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] {
+    --kb-vec-hw: 2.5px;
+}
+
+/* ── Mittel-Spalte: Szene NEBEN dem (gestapelten) Diagramm (Zeile) — normal
+   UND breit (Nutzervorgabe); nur schmal bleibt gestapelt (s. Schmal-Override
+   weiter unten, dort nicht genug Breite fuer eine Zeile). Vertikal zentriert
+   (align-items:center): Szenemitte bündig mit der Mitte des (als EINS
+   gerechneten) Diagramm-Blocks. Beide SVGs an der Viewport-HOEHE deckeln,
+   damit Szene UND beide (übereinander gestapelten) Diagramme gleichzeitig auf
+   den Bildschirm passen. Die SVGs tragen preserveAspectRatio="xMidYMid meet"
+   -> der Inhalt skaliert mit erhaltenem Seitenverhältnis in die Box und
+   zentriert sich (ggf. mit seitlichem Freiraum). ────────────────────────── */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-main {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-main-content {
+    position: relative;
+    display: flex; flex-direction: row; align-items: center; min-width: 0;
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-runbar {
+    position: sticky;
+    top: 0;
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 8px;
+    background: var(--kb-surface);
+    border-bottom: none;
+    box-shadow: none;
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-scene { padding: 8px; flex: 0 0 42%; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-main .aspekt-svg {
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none;
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 58%; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-graph-svg {
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none;
+    margin: 0 auto;
+}
+
+/* ── Graph-Struktur (Hintergrund, Gitter, Achsen, Skalen, Titel, Hover, Hit-
+   Rect, Linienbreiten/-schriften) liegt ZENTRAL in aspekt_kreisbahn.css
+   (gescopt auf .aspekt-figur, inkl. der ×1,5-Skalierung via --kb-lw/--kb-fs).
+   Hier pro Figur NUR die Datenlinien-FARBEN — |a_t|(t)=at (rot, Tangential),
+   a_r(t)=ar (blau, radial/Zentripetal), passend zu den Komponenten-Vektoren in
+   der Szene (a_t rot, a_r blau — DEFAULT eingeschaltet). Punkte entsprechend
+   eingefärbt. Der Einzel-Slot (nicht-stacked) nutzt --kb-acc (Betrag |a|, hier
+   ungenutzt da isStacked=true, nur als Fallback). IDs sind pro Instanz prefixt
+   (kb<n>_, s. runtime.js) -> Suffix-Selektoren. ──────────────────────────────── */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_line_top"]    { stroke: var(--kb-at); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_point_top"]   { fill: var(--kb-at); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_line_bottom"] { stroke: var(--kb-ar); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_point_bottom"] { fill: var(--kb-ar); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_line"]        { stroke: var(--kb-acc); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_point"]       { fill: var(--kb-acc); }
+
+/* ── Vergleichslinie (vorheriger Durchlauf): gestrichelt + dünner als die
+   aktuelle Kurve, gleiche Farbe wie deren Reihe (|a_t|=at oben, a_r=ar unten,
+   Einzel=acc). Eingeblendet vom JS, sobald ein Neudurchlauf startet. ───────── */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_prev_line_top"]    { stroke: var(--kb-at); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_prev_line_bottom"] { stroke: var(--kb-ar); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_prev_line"]        { stroke: var(--kb-acc); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_prev_line"],
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_prev_line_top"],
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] [id$="graph_prev_line_bottom"] {
+    fill: none; stroke-opacity: .5;
+    stroke-width: calc(1.5px * var(--kb-lw, 1)); stroke-dasharray: 6,4;
+    pointer-events: none;
+}
+
+/* ── Szene: Beschleunigungsvektor + (optionale) Komponenten — Farben wie die
+   Sim (kb_acceleration_vector etc.). Pfeilspitzen (arrowhead-a/-ax/-ay) passend
+   eingefärbt. Suffix-Selektoren wegen per-Instanz-Prefix. ──────────────────── */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="acceleration_vector"]    { stroke: var(--kb-acc); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="acceleration_vector_x"]   { stroke: var(--kb-ax); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="acceleration_vector_y"]   { stroke: var(--kb-ay); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="arrowhead-a"] polygon  { fill: var(--kb-acc); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="arrowhead-ax"] polygon { fill: var(--kb-ax); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="arrowhead-ay"] polygon { fill: var(--kb-ay); }
+
+/* ── Vektor-STRICHSTÄRKEN liegen zentral in aspekt_kreisbahn.css (Regel: alle
+   Hauptvektoren gleich dick, Komponenten 0,8 der HV via --kb-vec-hw/−cw). Diese
+   Figur überschreibt nur den HV-Token --kb-vec-hw auf 2,5 px (s. Figuren-Block
+   oben) — die shared Regeln greifen, Komponenten folgen automatisch zu 0,8·2,5
+   = 2 px. Farben s. oben. */
+
+/* ── Legende: Swatch-Farben für Beschleunigungsvektor + Komponenten + Bogen.
+   (r/phi/traj sind zentral in aspekt_kreisbahn.css geregelt.) ──────────────── */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .legend-swatch[data-c="a"]    { background: var(--kb-acc); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .legend-swatch[data-c="ax"]  { background: var(--kb-ax); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .legend-swatch[data-c="ay"]  { background: var(--kb-ay); }
+
+/* ── Tangential/Radial-Zerlegung von a (SELBST gezeichnet, da der Motor sie
+   nicht kennt): a_t rot, a_r blau — passend zur Farbcodierung der Formel im
+   Skript (α·R-Term rot, ω²·R-Term blau) UND zu den Diagramm-Kurven (oben rot
+   |a_t|, unten blau a_r). Eigene Tokens (--kb-at/--kb-ar) mit Fallback;
+   Mittel-Töne, die auf hellem UND dunklem Hintergrund lesbar sind. Linien-
+   Stroke, Marker-Füllung (.ah-at/.ah-ar in <defs>), Legende. DEFAULT
+   eingeschaltet (Aspekt dieser Figur ist der a_t/a_r-Vergleich). */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] { --kb-at: #d24b3e; --kb-ar: #2f74d0; --kb-v: #2e8b57; }
+/* Komponenten-Linien BEIDER Zerlegungen (a_x/a_y UND a_t/a_r) haben IDENTISCHE
+   Strichstärke + Strichmuster (nur die Farbe unterscheidet sich): Dicke über
+   das shared Komponenten-Token --kb-vec-cw (= 0,8 der HV, s. aspekt_kreisbahn.
+   css) wie a_x/a_y, gestrichelt (4,4) wie a_x/a_y (deren dasharray inline am
+   Element steht). Der Gesamt-Vektor a bleibt die HV (dicker, solid). So ist die
+   Szene beim Umschalten der Zerlegung bis auf die Farben konsistent. */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene .accel-t { stroke: var(--kb-at); stroke-width: calc(var(--kb-vec-cw) * var(--kb-lw)); stroke-dasharray: 4,4; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene .accel-r { stroke: var(--kb-ar); stroke-width: calc(var(--kb-vec-cw) * var(--kb-lw)); stroke-dasharray: 4,4; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene .ah-at   { fill: var(--kb-at); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene .ah-ar   { fill: var(--kb-ar); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .legend-swatch[data-c="at"] { background: var(--kb-at); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .legend-swatch[data-c="ar"] { background: var(--kb-ar); }
+
+/* ── Geschwindigkeitsvektor v = ωR (SELBST gezeichnet, optional, NICHT zerlegbar):
+   eigenes Farb-Token --kb-v (Gruen; CVD-distinkt zu rot/blau/cyan/orange/gold,
+   kein Konflikt mit --kb-vel des Motors, das hier nicht genutzt wird). v ist ein
+   HAUPTVEKTOR wie a (HV: dick + solid, NICHT gestrichelte Komponente) — eigene
+   log-Skala (s. JS-Konstanten). Kein Tip-Label in der Szene (Legende klärt). */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene .vel         { stroke: var(--kb-v); stroke-width: calc(var(--kb-vec-hw) * var(--kb-lw)); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene .ah-v       { fill: var(--kb-v); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .legend-swatch[data-c="v"] { background: var(--kb-v); }
+
+/* Hinweis zur Normierung der Beschleunigungslänge (kleiner, gedämpfter Text). */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .accel-scale-note {
+    margin-top: 6px;
+    font-size: calc(11px * var(--kb-text-scale, 1));
+    line-height: 1.35;
+    color: var(--kb-text3);
+}
+
+/* ── Info-Fußnote in der Caption (Nutzervorgabe: ausführliche Skalierungs-Erklärung
+   für Interessierte/Experten). Ausklappbar via <details>/<summary>, kein JS. Klein,
+   gedämpft, damit sie die Haupt-Caption nicht dominiert; nur auf Aufklappen hin
+   entfaltet sie sich. MathJax setzt die \(…\)-Formeln im aufgeklappten Inhalt. */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-caption-info {
+    margin-top: 8px;
+    font-size: calc(10.5px * var(--kb-text-scale, 1));
+    line-height: 1.4;
+    color: var(--kb-text3);
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-caption-info > summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--kb-text2);
+    list-style: none;            /* eigenes ℹ statt Standard-Dreieck */
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-caption-info > summary::-webkit-details-marker { display: none; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-caption-info[open] > summary { margin-bottom: 4px; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-caption-info p { margin: 0 0 4px; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-caption-info p:last-child { margin-bottom: 0; }
+
+/* ── Einklappbare Panel-Abschnitte (Nutzervorgabe: Leiste zu lang). Muster wie
+   die Vorlagen-Sim (kreisbewegung/styles.css): der Abschnitts-Kopf ist ein
+   Button (.panel-label) mit Chevron; .collapsed blendet die Geschwister nach dem
+   Button aus und dreht den Chevron. Scoped auf diese Figur. ────────────────── */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .panel-section.collapsible > .panel-label {
+    /* Button-Mechanik + Chevron-Layout. Die Typographie (Gewicht/Spacing/
+       Großschreibung/Farbe/Margin) kommt aus der Basis-.panel-label
+       (aspekt_kreisbahn.css), die auf den <button class="panel-label">
+       genauso zuschlägt wie auf die <div class="panel-label">-Köpfe der
+       anderen Figuren. font-family/line-height per inherit, weil <button>
+       sonst UA-System-Schrift bzw. UA-line-height (normal) nähme. Die
+       font-size wird SEPARAT weiter unten mit #paper-Scoping geholt — siehe
+       dort, warum das nötig ist (und warum Klassen-Scoping hier NICHT reicht). */
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    width: 100%; padding: 0; background: transparent; border: none;
+    text-align: left; cursor: pointer; font-family: inherit; line-height: inherit;
+}
+/* font-size HOLT die Basis-Größe (10.5px) zurück, die die Regel
+   `#paper button` (styles.css) jedem <button> im Paper stiehlt: jene setzt
+   font-size auf Prosa-Größe (16px) mit Spezifität (1,0,1) (ID #paper +
+   button) und schlägt damit die Basis-.panel-label (0,2,0) — ein reiner
+   Klassen-Selector (auch (0,5,0)) verliert gegen die ID. Ohne diesen
+   Override wären „Parameter"/„Tempo"/… hier 16px statt 10,5px und damit
+   massiv größer als die div-Köpfe der anderen Figuren. #paper-Scoping hebt
+   die Spezifität auf (1,5,0) > (1,0,1). Im Overlay (Figur per
+   wrap.appendChild(fig) aus #paper herausgelöst) greift #paper button
+   nicht → Basis 10,5px, dieser Selector auch nicht → bleibt korrekt 10,5px.
+   letter-spacing (.1em) und die geerbte line-height korrigieren sich mit
+   der font-size automatisch. */
+#paper .aspekt-figur[data-aspekt="arat-winkelbeschl"] .panel-section.collapsible > .panel-label {
+    font-size: calc(10.5px * var(--kb-text-scale));
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .acc-chevron { display: inline-flex; color: var(--kb-text3); transition: transform .2s ease; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .acc-chevron svg { width: 14px; height: 14px; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .panel-section.collapsed > .panel-label { margin-bottom: 0; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .panel-section.collapsed > .panel-label .acc-chevron { transform: rotate(-90deg); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .panel-section.collapsed > .panel-label ~ * { display: none !important; }
+
+/* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme, ca. 60 %) ─────────── */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-btn-row {
+    display: flex; gap: 6px;
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-btn.aspekt-btn-icon {
+    flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border2); border-radius: 6px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-btn.aspekt-btn-icon:hover {
+    color: var(--kb-accent); border-color: var(--kb-accent);
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-btn.aspekt-btn-icon svg {
+    width: 15px; height: 15px; display: block;
+}
+
+/* ── Tempo-Pills (Slow-Mo analog zur Vorlage: 1× … ⅛×) ──────────────────── */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .speed-pills { display: flex; gap: 5px; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: calc(11.5px * var(--kb-text-scale, 1));
+    color: var(--kb-text2); cursor: pointer; transition: all .15s;
+    position: relative; -webkit-user-select: none; user-select: none;
+}
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .speed-pill.active {
+    background: color-mix(in srgb, var(--kb-accent) 12%, transparent);
+    border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
+}
+
+/* ── Stoppuhr (analog, nach Vorlage) — gescopt unter .aspekt-scene, Suffix-
+   Selektoren wegen per-Instanz-Prefix. Digital-Display bleibt ausgeblendet. ─ */
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="stopwatch_circle"] { fill: var(--kb-surface); stroke: var(--kb-text); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="subdial_face"] { fill: var(--kb-surface); stroke: var(--kb-text3); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="stopwatch_main_hand"] { stroke: var(--kb-text); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene [id$="stopwatch_sub_hand"] { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="arat-winkelbeschl"] .aspekt-scene .sw-mark { stroke: var(--kb-text3); }
+
+/* ── Schmal-Modus: Szene und (gestapeltes) Diagramm bleiben UNTEREINANDER
+   (gestapelt) — hier ist nicht genug Breite für eine Zeile (Nutzervorgabe:
+   normal + breit stehen nebeneinander, s. Basis-Regeln oben; nur schmal
+   gestapelt). Gleiche Werte wie vor dieser Umstellung. ─────────────────────── */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="arat-winkelbeschl"] .aspekt-main-content {
+    flex-direction: column; align-items: stretch;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-scene { flex: 0 0 auto; padding: 8px; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="arat-winkelbeschl"] .aspekt-svg { height: 26vh; max-height: none; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-graph { flex: 1 1 auto; padding: 0 8px 8px; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="arat-winkelbeschl"] .aspekt-graph-svg { max-height: 44vh; }
+
+/* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
+   Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
+   aspekt_kreisbahn.css. ─────────────────────────────────────────────────── */
+.aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-main { flex-direction: column; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-main-content { flex-direction: row; align-items: center; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-svg {
+    width: 100%; height: auto; max-height: 56vh; max-width: none;
+}
+.aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-graph-svg {
+    max-width: none; width: 100%; height: auto; max-height: 56vh;
+}
+
+/* Zoom + schmal: Szene und Diagramm untereinander (nur dieser Modus). */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-main-content {
+    flex-direction: column;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 auto;
+}
+
+/* Zoom + schmal: Platz auf Bildschirm priorisieren (ohne andere Modi zu aendern).
+   Statt der generischen 3-Spalten-Overlay-Ansicht wird die Figur einspaltig,
+   die rechte Analyse-Leiste ausgeblendet und die Kernflaechen kompakter gesetzt,
+   damit Szene + Diagramm gleichzeitig sichtbar bleiben. */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-body {
+    display: block;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-panel-left {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-panel-right {
+    display: none;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-runbar {
+    padding: 6px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-scene {
+    padding: 6px 8px 4px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-main-content .aspekt-graph {
+    padding: 0 8px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-svg {
+    height: min(24vh, 220px);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="arat-winkelbeschl"] .aspekt-graph-svg {
+    height: min(42vh, 360px);
+}
+
+/* Tablet (gestapelt): Diagramm vollbreit unter der Szene — nichts extra nötig,
+   .aspekt-main ist ohnehin flex-column. */

@@ -86,11 +86,12 @@ export const graphTitles = {
     axt: 'Beschleunigung aₓ(t)', ayt: 'Beschleunigung aᵧ(t)',
     vabs: 'Betrag |v|(t)', aabs: 'Betrag |a|(t)', phit: 'Winkel φ(t)',
     omega: 'Winkelgeschwindigkeit ω(t)',
-    // Betrags-Vergleich bei veränderlichem ω (Aspekt-Figur 1.51): |a_t| oben
-    // (Tangentialbeschleunigung, konstant für konst. α), a_r unten (Zentripetal-
-    // beschleunigung, wächst mit ω(t)²). Unterstrich-Notation wie im Skript
-    // (a_\text{t}/a_\text{r}), da Unicode kein tiefgestelltes r kennt.
-    att: 'Tangentialbeschl. |a_t|(t)', art: 'Zentripetalbeschl. a_r(t)',
+    // Betrags-Vergleich bei veränderlichem ω (Aspekt-Figur 1.51): |a⃗ₜ(t)| oben
+    // (Tangentialbeschleunigung, konstant für konst. α), a⃗ᵣ unten (Zentripetal-
+    // beschleunigung, wächst mit ω(t)²). Echte Unicode-Subskripte ₜ (U+209C) /
+    // ᵣ (U+1D63) statt Unterstrich (wie vₓ/vᵧ oben); Betrags-Schreibweise
+    // |a⃗(t)| (Pfeil + (t) innen) per Nutzervorgabe.
+    att: 'Tangentialbeschl. |a⃗ₜ(t)|', art: 'Zentripetalbeschl. |a⃗ᵣ(t)|',
 };
 
 export const graphAxisLabels = {
@@ -99,7 +100,7 @@ export const graphAxisLabels = {
     axt: 'aₓ / (m/s²)', ayt: 'aᵧ / (m/s²)',
     vabs: '|v| / (m/s)', aabs: '|a| / (m/s²)', phit: 'φ / °',
     omega: 'ω / (rad/s)',
-    att: '|a_t| / (m/s²)', art: 'a_r / (m/s²)',
+    att: '|a⃗ₜ| / (m/s²)', art: '|a⃗ᵣ| / (m/s²)',
 };
 
 export const graphXAxisLabels = { yx: 'x / m', xy: 'y / m' };

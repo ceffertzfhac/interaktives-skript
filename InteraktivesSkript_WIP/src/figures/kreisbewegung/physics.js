@@ -102,8 +102,8 @@ export function recalculateAxisLimits() {
         omega: { xArr: store.tData, yArr: store.omegaData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: 'ω / (rad/s)', ...pos(omegaMag) },
         // Beträge bei veränderlichem ω (Aspekt-Figur 1.51): |a_t|=|α|R (pro Lauf
         // konstant) oben, a_r=ω²R (wachsend) unten. Beide ≥ 0 -> pos-Achse.
-        att: { xArr: store.tData, yArr: store.atData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: '|a_t| / (m/s²)', ...posArr(store.atData) },
-        art: { xArr: store.tData, yArr: store.arData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: 'a_r / (m/s²)', ...posArr(store.arData) },
+        att: { xArr: store.tData, yArr: store.atData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: '|a⃗ₜ| / (m/s²)', ...posArr(store.atData) },
+        art: { xArr: store.tData, yArr: store.arData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: '|a⃗ᵣ| / (m/s²)', ...posArr(store.arData) },
     };
     for (const key in datasets) {
         const d = datasets[key];
