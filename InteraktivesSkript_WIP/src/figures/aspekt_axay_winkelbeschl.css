@@ -116,8 +116,14 @@
    Fallback; Mittel-Töne, die auf hellem UND dunklem Hintergrund lesbar sind.
    Linien-Stroke, Marker-Füllung (.ah-at/.ah-ar in <defs>), Legende, Tip-Labels. */
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] { --kb-at: #d24b3e; --kb-ar: #2f74d0; }
-.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-scene .accel-t { stroke: var(--kb-at); }
-.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-scene .accel-r { stroke: var(--kb-ar); }
+/* Komponenten-Linien BEIDER Zerlegungen (a_x/a_y UND a_t/a_r) haben IDENTISCHE
+   Strichstärke + Strichmuster (nur die Farbe unterscheidet sich): Dicke über
+   das shared Komponenten-Token --kb-vec-cw (= 0,8 der HV, s. aspekt_kreisbahn.
+   css) wie a_x/a_y, gestrichelt (4,4) wie a_x/a_y (deren dasharray inline am
+   Element steht). Der Gesamt-Vektor a bleibt die HV (dicker, solid). So ist die
+   Szene beim Umschalten der Zerlegung bis auf die Farben konsistent. */
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-scene .accel-t { stroke: var(--kb-at); stroke-width: calc(var(--kb-vec-cw) * var(--kb-lw)); stroke-dasharray: 4,4; }
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-scene .accel-r { stroke: var(--kb-ar); stroke-width: calc(var(--kb-vec-cw) * var(--kb-lw)); stroke-dasharray: 4,4; }
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-scene .ah-at   { fill: var(--kb-at); }
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-scene .ah-ar   { fill: var(--kb-ar); }
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .legend-swatch[data-c="at"] { background: var(--kb-at); }

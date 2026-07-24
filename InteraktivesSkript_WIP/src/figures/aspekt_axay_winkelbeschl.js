@@ -77,19 +77,50 @@ const T_AUTO = 24;            // fester Auto-Stopp nach 24 s — längerer Lauf,
                               // a_x/a_y-Kurven deutlicher werden (Nutzervorgabe).
 // Anfangs-Winkelgeschwindigkeit ω₀ [rad/s] und Winkelbeschleunigung α [rad/s²].
 // α darf ± sein (beschleunigen/bremsen); α=0 → gleichförmig (Grenzfall 1.46).
-const OMEGA0_MIN = 0.3, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 0.8, OMEGA0_STEP = 0.05;
+// ω₀ darf 0 und negativ sein (Nutzervorgabe): ω₀<0 → Drehsinn kehrt sich um;
+// mit α>0 kehrt φ um bei t=-ω₀/α und wächst dann wieder. a_r=ω²R ist von der
+// Vorzeichen unberührt; a_t=αR ebenfalls. Der Winkelbogen (drawAngle) verbirgt
+// sich für φ≤0 (s. dort) — d. h. während der rückläufigen Phase, danach wieder sichtbar.
+const OMEGA0_MIN = -2.0, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 0.8, OMEGA0_STEP = 0.05;
 const ALPHA_MIN = -0.3, ALPHA_MAX = 0.3, ALPHA_DEFAULT = 0.15, ALPHA_STEP = 0.01;
 const R_DEFAULT = 1.5;
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 // Vektor-Verkürzung (= render.js: ARROW_LEN_MAIN=5·2,5, COMP=5·2) für die
 // SELBST gezeichneten Beschleunigungs-Vektoren (a, a_x/a_y, a_t/a_r; shortenLine unten).
 const ARROW_LEN_MAIN = 12.5, ARROW_LEN_COMP = 10;
-// Ziel-Länge des Beschleunigungsvektors in der Szene (Anteil des Bahnradius in
-// Pixeln). |a| wird pro Frame darauf NORMIERT, damit die Richtung/Neigung des
-// Vektors — der α-Effekt — IMMER sichtbar ist, unabhängig von ω₀/α (didaktisches
-// Kernproblem: |a|=ω²R variiert um Faktor ~30 über den Lauf und ist bei kleinem
-// ω sonst unsichtbar). Das echte Anwachsen von |a| zeigen die Diagramme.
-const A_TARGET_FRAC = 0.5;
+// Skalierung der Beschleunigungsvektoren in der Szene (Nutzervorgabe: Mittelweg,
+// der Sichtbarkeit BEIDER Komponenten UND a_r-Wachstum UND sichtbaren Wandel von
+// Richtung/Betrag zeigt). Statt EINEM gemeinsamen Skalar (alt: |a| auf feste
+// Länge normiert — ließ a_t=αR scheinbar schrumpfen, rückwärts zur Physik) und
+// statt a_t fest zu pinnen, bekommt JETZT jede Komponente eine EIGENE
+// LOGARITHMISCHE Skala (Nutzervorgabe „log für beide"):
+//   • compress(x,xMax) = log(1 + x/(KFRAC·xMax)) / log(1 + 1/KFRAC), geclampt auf 1.
+//     Log hält auch kleine Vektoren sichtbar (log(1+ε)>0) und lässt sie weiter
+//     wachsen, nur langsamer — keine sichtbare Deckelung am Lauf-Ende.
+//   • a_t = αR ist pro Lauf KONSTANT (α const) → Lt = Lmax_t·compress(|α|R, CAP_t)
+//     ist pro Lauf ebenfalls konstant (Nutzerziel 4b: nur a_r ändert sich pro
+//     Lauf), variiert aber mit dem α-Slider (kleines α → kürzerer, aber sichtbarer
+//     a_t; α=0 → 0, rein radial). Lmax_t = A_T_MAX_FRAC·R·ppm (eigener px-Deckel).
+//   • a_r = ω²R WÄCHST → Lr = Lrmax·compress(ω²R, CAP_r), Lrmax = 2·R_REF_CAP·ppm
+//     = Durchmesser eines R=2m-Kreises (Nutzervorgabe, R-unabhängig). CAP_r so
+//     gewählt, dass der Default-Lauf (a_r≈29) NICHT an die Kappe stößt (sonst
+//     gedeckelt) UND a_r schon früh sichtbar ist (> Marker-Länge).
+//   • a = a_t + a_r (Vektorsumme). Richtung kippt mit wachsendem a_r ins Radiale
+//     (Ziel 3); Betrag wächst (Ziel 4a); bei kleinem ω→0 wird |a|→Lt (Ziel 2).
+// WARUM EIGENE Skalen pro Komponente (nicht eine gemeinsame): a_t≈0,2 m/s² und
+// a_r bis ≈170 m/s² unterscheiden sich um Faktor ~300. Eine GEMEINSAME log-Skala
+// würde a_t auf wenige Pixel schrumpfen — unter die Pfeilspitzen-Länge (Marker) —
+// und a_t wäre dann unsichtbar (Gegenteil von Nutzerziel 1). Eigene px-Deckel +
+// eigene physikalische Bezugspunkte (CAP_t/CAP_r) lösen das; geteilt ist nur die
+// log-Form (KFRAC). PREIS: der WINKEL ist verstärkt, nicht exakt physikalisch
+// (echte Neigung atan(α/ω²) bei moderatem ω ~2°, unsichtbar) — doch gerade so
+// wird der Richtungswechsel sichtbar. Echte BETRÄGE |a|/|a_x|/|a_y| in den Diagrammen.
+const A_LOG_KFRAC  = 0.3;     // log-Form: compress(x,xMax)=log(1+x/(KFRAC·xMax))/log(1+1/KFRAC)
+const R_REF_CAP    = 2.0;     // px-Kappe für a_r = Durchmesser eines R=2m-Kreises (m)
+const A_R_CAP_PHYS = 50.0;   // physikalischer a_r, bei dem die a_r-Kappe greift (m/s²) — 50 dämpft a_r stärker als 38
+const A_T_MAX_FRAC = 0.45;    // a_t px-Deckel = 0,45·Bahnradius (px) — etwas gedämpft (war 0,5)
+const A_T_CAP_PHYS = 0.45;    // physikalischer |α|R, bei dem die a_t-Kappe greift (m/s²)
+const compressLog = (x, xMax) => Math.min(1, Math.log(1 + x / (A_LOG_KFRAC * xMax)) / Math.log(1 + 1 / A_LOG_KFRAC));
 
 // -- Szene: Vorlagen-Geometrie (wie aspekt_vxvy_zeit), aber der Beschleunigungs-
 //    vektor ist die gezeigte Groesse — daher bekommt er (und seine Komponenten)
@@ -165,9 +196,11 @@ const SVG_SCENE = `
 
     <!-- Tangential-/Radial-Zerlegung von a (optional, selbst berechnet+gezeichnet,
          da der Motor sie nicht kennt): a_t = α·R (tangential, rot), a_r = ω²·R
-         (radial/zentripetal, blau). Länge + Verkürzung wie der a-Vektor. -->
-    <line id="kb_accel_t" class="accel-t" stroke-width="3.75" marker-end="url(#kb_arrowhead-at)" visibility="hidden"/>
-    <line id="kb_accel_r" class="accel-r" stroke-width="3.75" marker-end="url(#kb_arrowhead-ar)" visibility="hidden"/>
+         (radial/zentripetal, blau). Strichstärke + gestrichelt liegen in CSS
+         (.accel-t/.accel-r) — IDENTISCH zu a_x/a_y (Komponenten-Token), nur die
+         Farbe unterscheidet sich. Längen-Verkürzung wie der a-Vektor. -->
+    <line id="kb_accel_t" class="accel-t" marker-end="url(#kb_arrowhead-at)" visibility="hidden"/>
+    <line id="kb_accel_r" class="accel-r" marker-end="url(#kb_arrowhead-ar)" visibility="hidden"/>
     <g id="kb_accel_tr_labels"></g>
 
     <g id="kb_stopwatch">
@@ -281,7 +314,7 @@ const PANEL_LEFT = `
     <button type="button" class="panel-label" aria-expanded="false">Darstellung${CHEVRON}</button>
     <label class="aspekt-check"><input type="checkbox" id="ak_components"><span>kartesisch \\(a_x\\)/\\(a_y\\) zerlegen</span></label>
     <label class="aspekt-check"><input type="checkbox" id="ak_tr"><span>tangential/radial \\(\\vec{a}_\\text{t}\\)/\\(\\vec{a}_\\text{r}\\) zerlegen</span></label>
-    <div class="accel-scale-note">Der Beschleunigungsvektor ist in der Szene auf feste Länge normiert (damit die Neigung immer sichtbar ist). Den tatsächlichen Betrag \\(|\\vec a|=\\omega(t)^2R\\) zeigen die Diagramme.</div>
+    <div class="accel-scale-note">Sowohl \\(\\vec{a}_\\text{t}=\\alpha R\\) als auch \\(\\vec{a}_\\text{r}=\\omega(t)^2R\\) sind logarithmisch skaliert (jede Komponente mit eigenem Maßstab), sodass auch kleine Vektoren sichtbar bleiben und a_r ohne sichtbare Deckelung wächst; \\(\\vec a\\) ist deren Summe. Die echten Beträge stehen in den Diagrammen, der gezeigte Winkel ist verstärkt dargestellt.</div>
   </div>
   <div class="panel-section collapsible collapsed">
     <button type="button" class="panel-label" aria-expanded="false">Legende${CHEVRON}</button>
@@ -648,17 +681,25 @@ export function buildAxAyWinkelbeschlFig(fig) {
 
     // -- Beschleunigungs-Vektoren SELBST zeichnen (Motor-Beschleunigung ist AUS).
     //    Grund (didaktisches Kernproblem): der Motor skaliert a mit der FESTEN
-    //    aScale (PIXELS_PER_ACCELERATION_UNIT·zoomFactor); |a|=ω²R variiert aber um
-    //    Faktor ~30 über den Lauf und ist bei kleinem ω unsichtbar — man müsste
-    //    eine bestimmte ω₀/α-Kombination suchen. Hier wird der Vektor pro Frame auf
-    //    feste Länge (A_TARGET_FRAC·R·ppm) NORMIERT: |a| -> Ziellänge. Damit ist die
-    //    Richtung/Neigung (der α-Effekt) IMMER sichtbar. a_x/a_y UND a_t/a_r nutzen
-    //    dieselbe Frame-Skala sc, sodass Projektionen und Zerlegung exakt stimmen
-    //    und sich vektoriell zu a addieren. Das echte Anwachsen von |a| zeigen die
-    //    Diagramme (updateGraph, unberührt). zoomFactor bleibt der Szenen-Zoom
-    //    (skaliert currentPixelsPerMeter) und wird NICHT angefasst. Reuse der
-    //    vorhandenen Linien-Elemente (Farben/Marker/Dash aus CSS). Läuft inside
-    //    withStore. --------------------------------------------------------------
+    //    aScale; |a|=ω²R variiert aber um Faktor ~30 über den Lauf und ist bei
+    //    kleinem ω unsichtbar. Früher wurde |a| auf eine feste Ziellänge NORMIERT —
+    //    das ließ die konstante Tangential-Komponente a_t=αR scheinbar schrumpfen
+    //    (rückwärts zur Physik) und gab didaktischen Wert auf. Jetzt bekommt jede
+    //    Komponente ihre EIGENE LOGARITHMISCHE Skala (Nutzervorgabe „log für
+    //    beide"): compress(x,xMax) clamp 1, geteilt durch KFRAC; a_t mit eigenem
+    //    px-Deckel (A_T_MAX_FRAC·R·ppm) + eigenem Bezug (A_T_CAP_PHYS), a_r mit
+    //    px-Kappe = Durchmesser eines R=2m-Kreises (R_REF_CAP) + Bezug (A_R_CAP_PHYS,
+    //    so gewählt, dass der Default-Lauf NICHT an die Kappe stößt). Eigene Skalen
+    //    nötig, weil a_t≈0,2 und a_r bis ≈170 m/s² um Faktor ~300 auseinanderliegen
+    //    — eine gemeinsame Skala würde a_t unter die Marker-Länge schrumpfen und
+    //    verbergen. a_t ist pro Lauf konstant (α const → nur a_r ändert sich, Ziel
+    //    4b), variiert aber mit α. a = a_t + a_r (Vektorsumme); a_x/a_y sind dessen
+    //    Projektionen. Der gezeigte WINKEL ist verstärkt (nicht exakt physikalisch
+    //    — echte Neigung atan(α/ω²) wäre ~2° und unsichtbar), aber so werden
+    //    a_r-Wachstum und Richtungswechsel sichtbar. Echte Beträge |a|/|a_x|/|a_y|
+    //    in den Diagrammen (updateGraph, unberührt). Konstanten s. Block oben.
+    //    Reuse der vorhandenen Linien-Elemente (Farben/Marker/Dash aus CSS).
+    //    Läuft inside withStore. ----------------------------------------------
     const lineA = ge(p + 'acceleration_vector');
     const lineAx = ge(p + 'acceleration_vector_x'), lineAy = ge(p + 'acceleration_vector_y');
     const lineT = ge(p + 'accel_t'), lineR = ge(p + 'accel_r');
@@ -686,27 +727,41 @@ export function buildAxAyWinkelbeschlFig(fig) {
         const ppm = store.currentPixelsPerMeter;
         const ph = localPhi(t), w = localOmega(t), R = store.R;
         const px = cx + R * Math.cos(ph) * ppm, py = cy - R * Math.sin(ph) * ppm;
-        const a = myAcc(t);
-        const aMag = Math.hypot(a.x, a.y) || 1;
-        const sc = (A_TARGET_FRAC * R * ppm) / aMag;    // Normierung: |a| -> feste Ziellänge
         const arrScale = store.arrowLenScale || 1;
         const mMain = ARROW_LEN_MAIN * arrScale, mComp = ARROW_LEN_COMP * arrScale;
-        // Gesamt-Beschleunigung a (immer sichtbar)
-        setLocalVec(lineA, px, py, px + a.x * sc, py - a.y * sc, mMain);
-        // Kartesische Komponenten a_x/a_y (optional) — Projektionen der (normierten) a
+        // --- Neue Skalierung: a_t und a_r mit EIGENEM Maßstab (s. Konstanten-Block) ---
+        // Math-Koordinaten (y nach oben); Bildschirm y wird unten per py - v_flip.
+        const a_t_phys = alpha * R;            // kann 0 (gleichförmig) oder <0 (bremsend) sein
+        const a_r_phys = w * w * R;            // ≥ 0
+        // a_t: eigene log-Skala (pro Lauf konstant, da α const), Vorzeichen aus α.
+        const a_t_abs = Math.abs(a_t_phys);
+        const sgn = a_t_phys >= 0 ? 1 : -1;
+        const Lt = A_T_MAX_FRAC * R * ppm * compressLog(a_t_abs, A_T_CAP_PHYS);
+        const atx = a_t_abs > 1e-9 ? sgn * (-Math.sin(ph)) * Lt : 0;   // tangential
+        const aty = a_t_abs > 1e-9 ? sgn * ( Math.cos(ph)) * Lt : 0;
+        // a_r: eigene log-Skala, px-Kappe = Durchmesser eines R_REF_CAP-Kreises.
+        const Lrmax = 2 * R_REF_CAP * ppm;
+        const Lr = Lrmax * compressLog(a_r_phys, A_R_CAP_PHYS);
+        const arx = -Math.cos(ph) * Lr;        // radial (zum Zentrum)
+        const ary = -Math.sin(ph) * Lr;
+        // a = a_t + a_r (gezeigte Vektorsumme) — die Diagonale der rechtwinkligen Zerlegung.
+        const axm = atx + arx, aym = aty + ary;
+        // Gesamt-Beschleunigung a (immer sichtbar, solange eine Komponente ≠ 0)
+        setLocalVec(lineA, px, py, px + axm, py - aym, mMain);
+        // Kartesische Komponenten a_x/a_y (optional) — Projektionen des gezeigten a
         if (showComponents) {
-            const axe = px + a.x * sc, aye = py - a.y * sc;
+            const axe = px + axm, aye = py - aym;
             setLocalVec(lineAx, px, py, axe, py, mComp);
             setLocalVec(lineAy, axe, py, axe, aye, mComp);
         } else { hide(lineAx); hide(lineAy); }
-        // Tangential/Radial a_t/a_r (optional) — gleiche Frame-Skala sc
+        // Tangential/Radial a_t/a_r (optional) — je eigenem Maßstab (Lt bzw. Lr)
         if (showTR) {
-            const atx = -alpha * R * Math.sin(ph), aty = alpha * R * Math.cos(ph);
-            const arx = -w * w * R * Math.cos(ph), ary = -w * w * R * Math.sin(ph);
-            const txe = px + atx * sc, tye = py - aty * sc;
-            const rxe = px + arx * sc, rye = py - ary * sc;
-            const tVis = setLocalVec(lineT, px, py, txe, tye, mMain);
-            const rVis = setLocalVec(lineR, px, py, rxe, rye, mMain);
+            const txe = px + atx, tye = py - aty;
+            const rxe = px + arx, rye = py - ary;
+            // mComp (nicht mMain): a_t/a_r sind Komponenten-Linien (Dicke wie a_x/a_y,
+            // Pfeilspitze 15 px) → Verkürzung muss zur Pfeilspitze passen (keine Lücke).
+            const tVis = setLocalVec(lineT, px, py, txe, tye, mComp);
+            const rVis = setLocalVec(lineR, px, py, rxe, rye, mComp);
             const NS = 'http://www.w3.org/2000/svg';
             const addLabel = (visible, ex, ey, txt, cls) => {
                 if (!visible || !trLabels) return;
@@ -779,7 +834,15 @@ export function buildAxAyWinkelbeschlFig(fig) {
                 // Vektoren ×1,5 dicker (Strich + Spitze mit­skalierend, s. CSS +
                 // strokeWidth-Marker): Pfeil-Länge mit­skalieren, sonst landet die
                 // Spitze bei dickerem Schaft auf altem, zu kurz gekürztem Platz.
-                arrowLenScale: 1.5,
+                // arrowLenScale hier NUR für die SELBST gezeichneten Beschleunigungs-
+                // Vektoren (drawAccel, ARROW_LEN_MAIN/COMP unten) — steuert die Linien-
+                // Verkürzung je Pfeilspitze (s. shortenLine). 1,1 (statt 1,5) gehaltener:
+                // nach Dämpfung von a_r/a_t (Nutzervorgabe) sollen auch KLEINE Vektoren
+                // (frühes a_r, kleines α → kleines a_t) noch über der Pfeilspitzen-Länge
+                // liegen und rendern — kürzere Verkürzung senkt diese Schwelle, ohne die
+                // sichtbare Vektorlänge zu ändern (Pfeilspitze deckt den overlaps). Die
+                // Optik der langen Vektoren ist unberührt (Spitze fest in CSS/Marker).
+                arrowLenScale: 1.1,
                 graphFontScale: 1.5,  // Graph-Schrift ×1,5 (--kb-fs) -> render.js skaliert Padding/Label-Abstand
             });
             store.R = parseFloat(ak_r.value);
@@ -901,16 +964,21 @@ export function buildAxAyWinkelbeschlFig(fig) {
     });
 
     // Komponentenzerlegung in der Szene (optional, Nutzervorgabe): schaltet
-    // store.showAccelerationComponents — der Motor zeichnet dann a_x/a_y als
-    // Projektionen auf die Achsen. draw() wertet das Flag beim Zeichnen aus.
+    // Zerlegung ist ENTWEDER/ODER (oder keine): kartesisch a_x/a_y ODER
+    // tangential/radial a_t/a_r — nicht beide zugleich. Beide Checkboxen lassen
+    // sich abwählen (= keine Zerlegung); wird eine aktiviert, wird die andere
+    // deaktiviert. Beide Zerlegungen zeichnet drawAccel() selbst (Motor-Flags
+    // store.showAcceleration* bleiben false, s. buildStore) — nur Darstellung,
+    // nicht Physik. Stil der Komponenten-Linien (Dicke + gestrichelt) ist in CSS
+    // für BEIDE Zerlegungen gleich (nur Farben unterscheiden sich, s. CSS).
     if (ak_components) ak_components.addEventListener('change', () => {
-        showComponents = ak_components.checked;   // a_x/a_y zeichnet drawAccel() selbst
+        showComponents = ak_components.checked;
+        if (showComponents && ak_tr) { ak_tr.checked = false; showTR = false; }
         rt.withStore(() => draw(curT));
     });
-
-    // Tangential/Radial-Zerlegung (a_t/a_r) — selbst gezeichnet, kein Motor-Flag.
     if (ak_tr) ak_tr.addEventListener('change', () => {
         showTR = ak_tr.checked;
+        if (showTR && ak_components) { ak_components.checked = false; showComponents = false; }
         rt.withStore(() => draw(curT));
     });
 
