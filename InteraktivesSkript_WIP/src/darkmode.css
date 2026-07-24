@@ -231,6 +231,14 @@ input[type="range"]::-moz-range-track {
     --kb-vy: #ff7777;
     --kb-ax: #56b4e9;
     --kb-ay: #f0e442;
+    --kb-at: #ff8866;  /* a_t (tangential, α·R-Term) — aufgehellt, bleibt wie im
+                          Light-Mode (a_t #d24b3e) etwas orangeroter als das
+                          Gesamt-a #ff7777, also Rot-auf-Rot distinkt; CVD-safe
+                          neben a_r blau. Nur Figur 1.50 definiert/nutzt --kb-at. */
+    --kb-ar: #66aaff;  /* a_r (radial, ω²·R-Term) — aufgehellt wie --kb-vel, und
+                          wie dort klar BLAU (nicht cyan) gehalten, damit es neben
+                          a_x #56b4e9 (cyan) distinkt bleibt, wenn beide
+                          Zerlegungen gleichzeitig an sind. Nur Figur 1.50. */
     --kb-traj: #9aa3b8;   /* Vorlage --c-traj */
     --kb-graph-bg: #161925;  /* Vorlage --graph-bg (dunkles Navy) */
     --kb-grid-line: #262c42; /* Vorlage --grid-line */
