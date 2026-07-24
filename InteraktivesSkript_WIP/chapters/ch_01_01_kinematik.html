@@ -117,3 +117,206 @@
 
     <p>In der Realität haben alle Objekte, mit denen Sie sich in Ihrem Studium und in Ihrem zukünftigen Arbeitsalltag beschäftigen werden, eine räumliche Ausdehnung. Das gilt für Atomkerne, mikromechanische Bauteile genauso wie für Autos, Schiffe, Flugzeuge, Produktionsmaschinen, die Erde, die Sonne, die Milchstraße und alles dazwischen. Vereinfachend werden wir allerdings in dieser Vorlesung weitestgehend<span class="fussnote">Es wird ein paar Ausnahmen geben, auf die ich Sie aber an geeigneter Stelle hinweisen werde (z.&nbsp;B. bei der Rotation starrer Körper).</span> davon ausgehen, dass wir alle Objekte als <strong>Massepunkte</strong> betrachten können, d.h. wir tun so, als ob die gesamte Masse eines Objektes in einem Punkt vereint wäre und sich das Objekt an einem (mathematischen) Punkt befände. Diese Näherung hilft dabei, die Gleichungen, die wir nutzen, nicht zu kompliziert werden zu lassen und ist für viele Problemstellungen völlig zulässig<span class="fussnote">Im Kapitel zur Dynamik werden wir sogar den <strong>Schwerpunktsatz</strong> kennenlernen, welcher dieses Vorgehen begründet.</span>.</p>
 </section>
+
+<h3 class="inhaltsverzeichnis">1.1.7 Die Strecke</h3>
+<section>
+    <p>Verweilt ein Objekt nicht an einem Ort, sondern nimmt es einen bestimmten, aber nicht unbedingt geraden oder kurzen, Verlauf von einem Ort \(A\) zu einem Ort \(B\) (wobei \(A\) und \(B\) auch derselbe Ort sein können, z.&nbsp;B. bei einer geschlossenen Kreisbahn), so sprechen wir von einer Strecke. Die Änderung des Ortes hängt dann von einem Parameter ab, hierbei wählt man typischer- und praktischerweise meist die Zeit. Die Strecke \(\vec s(t)\) bezeichnet dann eine Schar<span class="fussnote">Im Gegensatz zur <em>Menge</em>, die eine feste Sammlung von Elementen darstellt, ist eine <em>Schar</em> eine Familie von Objekten, die von einem Parameter abhängt.</span> von Punkten, die nacheinander von einem Objekt mit ansteigender Zeit durchlaufen werden.</p>
+
+    \begin{equation}
+    \text{Strecke:}\quad \text{Formelzeichen:}\,\vec s(t) \quad \text{Einheit der Komponenten:}\, \left[ s_i\right]= \mathrm{m}
+    \end{equation}
+
+    <p>Die Strecke ist meist ein dreidimensionaler Vektor, welcher von der Zeit \(t\) abhängt. Setzt man unterschiedliche Werte von \(t\), so erhält man verschiedene Ortsvektoren, die jeweils zu dem Punkt \(P(\vec s(t))\) zeigen, an dem sich das Objekt zum Zeitpunkt \(t\) befindet. Welche Werte für \(t\) eingesetzt werden können, hängt von der spezifischen Bewegung ab, wie wir später noch behandeln werden.</p>
+
+    <p>In einigen Spezialfällen, die wir auch in dieser Lehrveranstaltung behandeln werden, wird es so sein, dass die <strong>Bahn</strong> (oder Trajektorie) des Objektes geradlinig ist. In diesem Fall ist es sinnvoll, das Koordinatensystem so zu drehen, dass eine der Koordinatenachsen entlang der Geraden zeigt, auf der sich das Objekt bewegt. Beispiele dafür sind der freie Fall und der senkrechte Wurf, diese Beispiele werden wir später genauer betrachten. In einem solchen Fall kann die Bewegung durch eine einzige skalare Komponente der Strecke, z.&nbsp;B. \(x(t)\), beschrieben werden.</p>
+
+    \begin{align*}
+    \text{Strecke bei Bewegung in 1D:}\quad  &amp; x(t) &amp; \quad \text{Einheit:}\,  \mathrm{m} \\
+    \text{oder:} \quad &amp; y(t) &amp; \quad \text{Einheit:}\,  \mathrm{m} \\
+    \text{oder:}\quad  &amp; z(t) &amp; \quad \text{Einheit:}\,  \mathrm{m}
+    \end{align*}
+
+    <p>In anderen Spezialfällen kann es sein, dass sich die Bewegung ausschließlich in einer Ebene abspielt, so wie z.&nbsp;B. bei den von uns weiter unten behandelten Beispielen wie dem schiefen Wurf oder der Kreisbewegung. In diesen Fällen müssen wir die Strecke als Vektor schreiben \(\vec s(t)\), allerdings können wir das Koordinatensystem so drehen, dass wir nur zwei Koordinaten zur Beschreibung der Strecke benötigen, z.&nbsp;B. nur noch \(x\) und \(y\).</p>
+
+    <p>In der Physik nutzt man typischerweise sogenannte <strong>Ort-Zeit-Diagramme</strong>, um sich den Verlauf einer Bewegung entlang einer Achse zu veranschaulichen. Hierbei wird die Ortsvariable \(x(t)\) (oder \(y(t)\) oder \(z(t)\)) auf die Ordinate (die vertikale Achse) und die Zeit \(t\) auf die Abszisse (die horizontale Achse) aufgetragen. Da Weg und Strecke synonym verwendet werden, spricht man bei diesen Diagrammen auch von <strong>Weg-Zeit-Diagrammen</strong>. Sie stellen eine Koordinate des Ortes als Funktion der Zeit dar.</p>
+
+    <p>Die Abbildung <a class="xref" data-ref-fig="fig-weg_zeit_diagramm_perfekt"></a> visualisiert den fundamentalen Zusammenhang zwischen einer realen Bewegung (links) und ihrer abstrakten, mathematischen Darstellung im Weg-Zeit-Diagramm (rechts). In einem solchen Diagramm wird der Ort des Objektes, hier \(x(t)\), auf der Ordinate (vertikale Achse) gegen die Zeit \(t\) auf der Abszisse (horizontale Achse) aufgetragen. Die rote Kurve stellt dabei den Graphen der Funktion \(x(t)\) dar.</p>
+
+    <p>Mithilfe dieses Diagramms lassen sich zwei grundlegende Fragestellungen der Kinematik beantworten:</p>
+    <ul>
+        <li><strong>Welchen Ort hat das Objekt zu einem bestimmten Zeitpunkt?</strong> Um den Ort des Busses zu einem gegebenen Zeitpunkt, z.&nbsp;B. \(t=75\,\mathrm{s}\), zu bestimmen, sucht man diesen Wert auf der Zeitachse und liest den zugehörigen Funktionswert der Kurve auf der Ortsachse ab.</li>
+
+        <li><strong>Wann erreicht das Objekt einen bestimmten Ort?</strong> Umgekehrt lässt sich ermitteln, zu welchem Zeitpunkt (oder welchen Zeitpunkten) sich der Bus an einem bestimmten Ort, z.&nbsp;B. \(x=250\,\mathrm{m}\), befunden hat. Dazu sucht man den Ort auf der vertikalen Achse und bestimmt die zugehörigen Zeitwerte auf der horizontalen Achse, an denen die Kurve diese Höhe schneidet. Dieser Fall ist Beispielhaft in der Abbildung <a class="xref" data-ref-fig="fig-weg_zeit_diagramm_perfekt"></a> dargestellt, der Bus befindet sich nach ca. \(75\,\mathrm{s}\) bei \(250\,\mathrm{m}\).</li>
+    </ul>
+
+    <figure class="abbildung" id="fig-weg_zeit_diagramm_perfekt">
+        <img class="grafik" style="width:99%" src="bilder/weg_zeit_diagramm_perfekt.png" alt="">
+        <figcaption>Busfahrt der Linie 42 entlang einer langen geraden Straße als Beispiel für ein Weg-Zeit-Diagramm. Gegenüberstellung einer realen Bewegungsszene (links) und des dazugehörigen Weg-Zeit-Diagramms (rechts). Die vertikale Achse (Ordinate) repräsentiert den Ort, an dem sich der Bus zu einem bestimmten Zeitpunkt befindet, die horizontale Achse repräsentiert die Zeit. Die rote Kurve zeigt den Ort \(x(t)\) als Funktion der Zeit \(t\). Der „Fahrtverlauf" wird ersichtlich: <strong>Halt:</strong> Während der Bus an einer Haltestelle steht, vergeht Zeit (\(t\) nimmt zu), aber der Ort \(x(t)\) bleibt konstant. Dies entspricht den flachen, horizontalen Abschnitten der roten Kurve. <strong>Fahrt:</strong> Wenn der Bus fährt, ändert sich sein Ort mit der Zeit. Dies entspricht den ansteigenden Abschnitten der Kurve.</figcaption>
+    </figure>
+
+    <p>Dabei ist zu beachten, dass die einzelnen Komponenten dieses Vektors unabhängig voneinander Funktionen der Zeit \(t\) sind. Was bedeutet das? \(x(t)\) ist eine Funktion, welche als Variable nur \(t\) hat, nicht jedoch \(y\) und \(z\). Man kann also \(x(t)\) ausrechnen, ohne \(y(t)\) bzw. \(z(t)\) kennen zu müssen. Daher kann man bei späteren Fragestellungen und Aufgaben jede Komponente des Vektors für sich behandeln und untersuchen, ohne notwendigerweise auf die anderen Komponenten Rücksicht zu nehmen. Bedeutet das, dass sich ein Objekt, das sich bei einem bestimmten \(x(t)\) aufhält, gleichzeitig beliebige Werte von \(y\) oder \(z\) annehmen kann? Nein: Zu einem Zeitpunkt \(t\) ist das Objekt an genau einem Punkt im Raum \(P(\vec s(t))\) zu finden und nirgendwo anders. Es bedeutet nur: wenn mich nicht interessiert, wo das Objekt in Bezug auf die y- und z-Achse sich aufhält, so kann ich diese Komponenten ignorieren, weil ich sie nicht für die Berechnung von \(x\) brauche.</p>
+
+    <div class="beispiel" data-title="Freier Fall und senkrechter Wurf">
+        <p><span class="fussnote">Eine interaktive Animation zum freien Fall und senkrechten Wurf finden Sie im ILIAS Lernraum unter <em>Zusatzmaterialieren - Interaktive Animationen zur Physik am FB 8</em></span>Typische Beispiele für eine Bewegung in nur einer Raumdimension sind der freie Fall und der senkrechte Wurf. Der <strong>freie Fall</strong> beschreibt die Bewegung eines Objektes, welches aus der Ruhe (d.h. ohne dass es nach oben oder unten geworfen worden wäre) zum Zeitpunkt \(t=0\) aus der Höhe \(h_0\) über dem Boden fallengelassen (losgelassen) wird. Hierbei kann man das Koordinatensystem auf mehrere Weisen wählen. Zum einen haben wir zunächst freie Hand, ob wir die Achse, welche senkrecht zum Erdboden verläuft, \(x\), \(y\) oder \(z\) nennen. Wir wählen willkürlich \(x\), hätten aber auch jede beliebige andere Wahl treffen können. Nun können wir auswählen, ob die Achse nach oben oder nach unten zeigen soll, wir wählen willkürlich, dass die Achse nach oben zeigen soll, also vom Erdboden Richtung Himmel. Zuletzt können wir noch wählen, wo der Nullpunkt unserer Achse liegen soll. Wir wählen den Erdboden als Nullpunkt der Achse. In dieser speziellen Wahl lässt sich der freie Fall beschreiben durch die Formel<span class="fussnote">Wir nehmen die Formel zunächst als gegeben hin, warum diese Formel richtig ist, werden wir später sehen. In dieser Formel tritt der Vorfaktor \(g\) auf. \(g\) ist eine Konstante, nämlich \(g= 9{,}81\,\mathrm{m/s^2}\). Über die Bedeutung dieses Vorfaktors werden wir auch erst später sprechen.</span>:</p>
+
+        \begin{equation}
+        x(t)=- \frac{1}{2}\cdot g \cdot t^2 +h_0 \label{formel_freierfall1}
+        \end{equation}
+
+        <p>Hätten wir die Achse \(z\) genannt und so gelegt, dass die Achse vom Himmel in Richtung Erdboden zeigt und hätten wir den Nullpunkt dieser Achse weiterhin auf den Erdboden gelegt, so hätten wir eine andere Formel nutzen müssen, um die <em>dieselbe</em> Bewegung zu beschreiben:</p>
+
+        \begin{equation}
+        z(t)= \frac{1}{2}\cdot g \cdot t^2- h_0\label{formel_freierfall2}
+        \end{equation}
+
+        <p>Hätten wir die Achse \(y\) genannt, weiterhin so gelegt, dass die Achse vom Himmel in Richtung Erdboden zeigt und hätten wir den Nullpunkt der Achse an den Ort gelegt, an dem sich das Objekt zum Zeitpunkt \(t=0\) befindet, so würden wir die folgende Formel erhalten:</p>
+
+        \begin{equation}
+        y(t)= \frac{1}{2}\cdot g \cdot t^2\label{formel_freierfall3}
+        \end{equation}
+
+        <p>Sie sehen, dass ein und dieselbe Bewegung mathematisch durch ähnliche, jedoch im Detail unterschiedliche Formeln beschreibbar ist. Das führt auch dazu, dass die Weg-Zeit-Diagramme für die gleiche Bewegung in unterschiedlichen Koordinatensystemen unterschiedlich aussehen können. Beispielhaft ist das weiter unten für den senkrechten Wurf demonstriert, siehe Abbildungen <a class="xref" data-ref-fig="fig-senkrechter_wurf_1"></a>, <a class="xref" data-ref-fig="fig-senkrechter_wurf_2"></a>, <a class="xref" data-ref-fig="fig-senkrechter_wurf_3"></a> und <a class="xref" data-ref-fig="fig-senkrechter_wurf_4"></a>.</p>
+
+        <p>Im weiteren Verlauf dieses Beispiels werden wir bevorzugt das Koordinatensystem nutzen, bei dem die \(y\)-Achse senkrecht zum Erdboden orientiert ist, der Nullpunkt dieser Achse auf dem Erdboden liegt und diese Achse nach oben zeigt.</p>
+
+        <p>Der freie Fall wird dann über die Formel</p>
+        \begin{equation}y(t)= -\frac{1}{2}\cdot g \cdot t^2 + h_0 \label{formel_freierfall4}\end{equation}
+        <p>beschrieben und das zugehörige Weg-Zeit-Diagramm ist in Abbildung <a class="xref" data-ref-fig="fig-freierfall_1"></a> dargestellt.</p>
+
+        <figure class="abbildung" id="fig-freierfall_1">
+            <img class="grafik" style="width:85%" src="bilder/freierfall_1.png" alt="">
+            <figcaption>Weg-Zeit-Diagramm des freien Falls. Das Objekt wird aus der Höhe \(h_0=10\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt auf dem Erdboden.</figcaption>
+        </figure>
+
+        <p>Im Verlaufe des Skriptes und der Vorlesung werden wir aber immer wieder die Ausrichtung und Lage des Koordinatensystems ändern, um verschiedene Bewegungen zu beschreiben.</p>
+
+        <p>In allen Fällen ist das Ort-Zeit-Diagramm eine Parabel, bzw. ein Ausschnitt aus einer Parabel. Ob die Parabel nach oben oder nach unten geöffnet ist und welche Schnittpunkte sie mit der Zeitachse hat, hängt von der konkreten Wahl des Koordinatensystems ab.</p>
+
+        <p>Den Streckengleichungen (Formel (<a class="xref" data-ref-eq="formel_freierfall1"></a>) bis (<a class="xref" data-ref-eq="formel_freierfall4"></a>)) kann man nun schon ein paar Tatsachen über die Bewegung entlocken.</p>
+
+        <p>Wir können uns z.&nbsp;B. anhand von (<a class="xref" data-ref-eq="formel_freierfall4"></a>) versuchen zu erfahren, wie lange das Objekt braucht, um aus der Höhe \(h_0\) den Erdboden zu erreichen.</p>
+
+        <p>Wir hatten in diesem Fall die Achse so gelegt, dass der Erdboden bei \(y=0\) liegt. Somit können wir die Frage „Wann erreicht das Objekt den Erdboden" ins <strong>Mathematische</strong> übersetzen zu: wann ist \(y(t)=0\)?</p>
+
+        \begin{align}
+        y(t) \overset{!}{=} 0 \\ \Leftrightarrow \,  -\frac{1}{2}\cdot g \cdot t^2+ h_0 \overset{!}{=} 0 \\  \Leftrightarrow \, -\frac{1}{2}\cdot g \cdot t^2 = -h_0 \\ \Leftrightarrow \, \label{formel_freierfall4a} t^2 = \frac{2\cdot h_0}{g}\\ \Rightarrow \, t= \sqrt{\frac{2\cdot h_0}{g}} \label{formel_freierfall_fallzeit}
+        \end{align}
+
+        <p>Hierbei haben wir die Schreibweise eingeführt, dass \(y(t) \overset{!}{=} 0\) bedeutet: \(y(t)\) sei gleich Null.</p>
+
+        <p>Mit Formel (<a class="xref" data-ref-eq="formel_freierfall_fallzeit"></a>) können wir nun z.&nbsp;B. abschätzen, dass ein aus einer Höhe von \(20\,\mathrm{m}\) fallen gelassener Stein eine Fallzeit von ungefähr \(2\,\mathrm{s}\) hat.</p>
+
+        \begin{equation}
+        t= \sqrt{\frac{2\cdot h_0}{g}} = \sqrt{\frac{2\cdot 20\,\mathrm{m}}{9{,}81\,\mathrm{m/s^2}}} \approx \sqrt{\frac{40\,\mathrm{m}}{10\,\mathrm{m/s^2}}} = \sqrt{4{,}0\,\mathrm{s^2}} =2{,}0\,\mathrm{s}
+        \end{equation}
+
+        <p>Warum haben wir beim Auflösen der quadratischen Gleichung (<a class="xref" data-ref-eq="formel_freierfall4a"></a>) nur die positive Lösung genommen? Mathematisch gesehen wäre auch \(-\sqrt{\frac{2\cdot h_0}{g}}\) eine korrekte Lösung der Gleichung gewesen. Da das Objekt jedoch erst bei \(t=0\) seine Bewegung beginnt und wir uns in der Physik darauf geeinigt haben, dass die Zeit in positive Richtung läuft, kann nur \(+\sqrt{\frac{2\cdot h_0}{g}}\) die richtige Antwort auf unsere Fragestellung sein.</p>
+
+        <p>Was passiert nun, wenn das Objekt (das kann ein Stein, eine Kugel oder ein Ball sein<span class="fussnote">Also Objekte, bei denen wir die Luftreibung weitestgehend vernachlässigen können, also z.&nbsp;B. keine Hühnerfeder oder kein Staubkorn.</span>) senkrecht nach oben geworfen wird? Die Bewegung findet dann immer noch in einer Raumrichtung statt, sie kann also weiterhin mit nur einer Koordinate beschrieben werden, allerdings erhält jetzt das Objekt mit dem Verlassen der Hand des Werfers eine <strong>Anfangsgeschwindigkeit/Startgeschwindigkeit</strong> \(v_0\)<span class="fussnote">Was genau eine <em>Geschwindigkeit</em> ist, schauen wir uns später an.</span>. Wählen wir wieder das Koordinatensystem wie oben festgelegt (\(y\)-Achse senkrecht auf dem Erdboden nach oben, Nullpunkt auf dem Erboden), so müssen wir die Bewegungsgleichung modifizieren:</p>
+
+        \begin{equation}
+        y(t)=- \frac{1}{2}\cdot g \cdot t^2 +v_0 \cdot t + h_0 \label{formel_senkrechterwurf1}
+        \end{equation}
+
+        <figure class="abbildung" id="fig-senkrechter_wurf_1">
+            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_1.png" alt="">
+            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt auf dem Erdboden.</figcaption>
+        </figure>
+
+        <figure class="abbildung" id="fig-senkrechter_wurf_2">
+            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_2.png" alt="">
+            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt auf der Höhe des Abwurfpunktes.</figcaption>
+        </figure>
+
+        <figure class="abbildung" id="fig-senkrechter_wurf_3">
+            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_3.png" alt="">
+            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach unten und hat ihren Nullpunkt auf der Höhe des Erdbodens.</figcaption>
+        </figure>
+
+        <figure class="abbildung" id="fig-senkrechter_wurf_4">
+            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_4.png" alt="">
+            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach unten und hat ihren Nullpunkt auf der Höhe des Abwurfpunktes.</figcaption>
+        </figure>
+
+        <p>Das Ort-Zeit-Diagramm wird wieder die Form einer Parabel annehmen, siehe Abbildungen <a class="xref" data-ref-fig="fig-senkrechter_wurf_1"></a> bis <a class="xref" data-ref-fig="fig-senkrechter_wurf_4"></a>, allerdings liegt das Maximum (oder Minimum, bei einer anderen Wahl der Richtung der Achse) nun nicht mehr bei \(t=0\), sondern ist zu einem anderen Zeitpunkt zu finden. Das ist logisch, denn das Objekt wird sich durch die Anfangsgeschwindigkeit (die wir zunächst mal als in unserem Koordinatensystem positiv annehmen, d.h. das Objekt wird nach oben geworfen) zunächst nach oben bewegen, dann das Maximum seiner Flugkurve erreichen und dann <strong>nach unten</strong> fallen. Mit Formel (<a class="xref" data-ref-eq="formel_senkrechterwurf1"></a>) können wir also verschiedene Dinge über die Bewegung des Objektes erfahren, z.&nbsp;B. wann das Objekt seinen höchsten Punkt erreicht (hierzu müssen Sie das Maximum bestimmen), wann das Objekt auf dem Boden aufkommt (hierzu müssen Sie die Nullstelle bei \(t>0\) finden), und so weiter.</p>
+
+        <p>Einige Erkenntnisse können wir sogar gewinnen, indem wir nicht rechnen, sondern uns nur die Form der Gleichung ansehen. Da die Gleichung (<a class="xref" data-ref-eq="formel_senkrechterwurf1"></a>) mathematisch gesehen eine Parabel ist, können wir z.&nbsp;B. auf Basis unseres Wissens über Parabeln aus der Mathematik direkt folgern, dass die Zeit, die vergeht vom Start der Bewegung (Abwurf) bis zum höchsten Punkt der Flugkurve immer genau so lange ist, wie die Zeit vom höchsten Punkt der Flugkurve bis zu dem Punkt, an dem das Objekt wieder auf seiner Anfangshöhe angekommen ist.</p>
+    </div>
+
+    <div class="beispiel" id="bsp-feder-masse-pendel" data-title="Feder-Masse-Pendel">
+        <p><span class="fussnote">Eine interaktive Animation hierzu finden Sie im ILIAS Lernraum unter <em>Zusatzmaterialieren - Interaktive Animationen zur Physik am FB 8</em></span>Ein weiteres Beispiel für eine eindimensionale Bewegung ist das Feder-Masse-Pendel. Ein Feder-Masse-Pendel besteht - wie der Name schon suggeriert - aus einer Feder, die an der einen Seite fest aufgehängt ist, z.&nbsp;B. an einer Wand oder an einer Decke, und an deren anderen Seite ein Körper (eine Masse) befestigt ist. Dabei ist es zunächst in der Kinematik, die sich ja nicht mit der Ursache von Bewegungen befasst, sondern die Bewegungen nur beschreibt, unerheblich, ob es sich um ein (reibungsfreies) horizontales Feder-Masse-Pendel handelt oder ein vertikales Feder-Masse-Pendel. In beiden Fällen kann die Bewegung der Masse durch eine einzige Koordinate beschrieben werden, wenn wir das Koordinatensystem so wählen, dass die Achse entlang der Bewegungsrichtung der Masse zeigt. Dabei ist die Benennung der Achse egal, wir können die Achse \(x\), \(y\) oder \(z\) nennen. Wir wählen willkürlich die Bezeichnung \(y\). Dann wird die Bewegung der Masse beschrieben durch:</p>
+
+        \begin{equation}
+        y(t)= y_0 \cdot \cos{\left(\frac{2\pi}{T} t\right)}
+        \label{formel_feder_masse_pendel}
+        \end{equation}
+
+        <p>Dabei ist \(y_0\) die maximale Auslenkung der Masse aus ihrer Ruhelage, \(T\) die Zeit, die die Masse für eine komplette Hin- und Herbewegung braucht (die sogenannte Periodendauer).</p>
+
+        <figure class="abbildung" id="fig-feder_masse_pendel_kinematik">
+            <img class="grafik" style="width:99%" src="bilder/feder_masse_pendel_kinematik.png" alt="">
+            <figcaption>Weg-Zeit-Diagramm eines Feder-Masse-Pendels. Die Masse wird aus der Ruhelage um \(y_0=1\,\mathrm{m}\) ausgelenkt und dann losgelassen. Die Achse entlang der Bewegungsrichtung der Masse haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt in der Ruhelage der Masse. Die Periodendauer der Bewegung ist \(T\approx 1{,}7\,\mathrm{s}\).</figcaption>
+        </figure>
+    </div>
+
+    <div class="beispiel" data-title="Schräger Wurf und Kreisbewegung">
+        <p><span class="fussnote">Interaktive Animationen hierzu finden Sie im ILIAS Lernraum unter <em>Zusatzmaterialieren - Interaktive Animationen zur Physik am FB 8</em></span>Typische Beispiele für Bewegungen, die in zwei Raumdimensionen stattfinden, sind der schräge Wurf und die Kreisbewegung. Ein <strong>schräger Wurf</strong> ist ein Wurf, bei dem der Abwurf nicht senkrecht zum Erdboden stattfindet (Abwurfwinkel zum Erdboden wäre in dem Fall \(90^\circ\)), sondern es einen von \(90^\circ\) unterschiedlichen Abwurfwinkel gibt. Ansonsten ist die Richtung, in der der Wurf stattfindet beliebig. Dann findet die Bewegung, die das Objekt vollführt, in einer Ebene statt. Das ist vor allem dann realistisch, wenn das geworfene Objekt keinen „Effet" bekommt<span class="fussnote">Wie z.&nbsp;B. bei der berühmten Bananenflanke oder beim Abschlag im Golf.</span>. Wir drehen dann das Koordinatensystem (willkürlich) so, dass die Ebene, in der die Bewegung stattfindet, gerade von zwei Koordinatenachsen aufgespannt wird. Welche Achsen das sind sowie die Definition einer positiven oder einer negativen Richtung ist wieder uns überlassen.</p>
+
+        <p>Willkürlich wählen wir also die \(x\)-Achse als die Achse, die parallel zum Erdboden verläuft, und als \(y\)-Achse die Achse senkrecht zum Erdboden. Der Koordinatenursprung liegt auf dem Erdboden, genau senkrecht unter dem Startpunkt der Masse<span class="fussnote">Bitte machen Sie sich klar: es gibt wieder viele andere Möglichkeiten wie das Koordinatensystem definiert werden kann</span>.</p>
+
+        <p>Dann kann der schräge Wurf beschrieben werden durch:</p>
+        \begin{equation}
+        \vec s(t) = \left(\begin{matrix}x(t)\\y(t) \end{matrix}\right)=\left(\begin{matrix} v_{0,x} \cdot t \\ -\frac{1}{2}\cdot g t^2 + v_{0,y} \cdot t + h_0\end{matrix}\right)
+        \end{equation}
+        <p>mit \(v_{0,x}=v_0\cdot \cos{(\alpha)}\) und \(v_{0,y}=v_0\cdot \sin{(\alpha)}\).</p>
+
+        <p>Dabei ist \(\alpha\) der Abwurfswinkel (gemessen zum Erdboden) und \(v_0\) die Abwurfsgeschwindigkeit (mehr zum Begriff der Geschwindigkeit später).</p>
+
+        <p>Die Bewegung wird nun durch zwei Gleichungen mit demselben Parameter \(t\) beschrieben, nämlich \(x(t)\) und \(y(t)\). Wollen wir nun die Bewegung visualisieren, so braucht es zwei Ort-Zeit-Diagramme, eines für \(x(t)\) und eines für \(y(t)\).</p>
+
+        <figure class="abbildung" id="fig-schraeger_wurf">
+            <img class="grafik" style="width:99%" src="bilder/schraeger_wurf.png" alt="">
+            <figcaption>Beispiel für einen schrägen Wurf. Ein Objekt wird aus einer Höhe von \(10\,\mathrm{m}\) mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) in einem Winkel von \(70^\circ\) zum Erdboden abgeworfen. Zu sehen ist links die Flugbahn des Objektes (was eine Bahn genau ist, wird später im Detail diskutiert), und links die beiden Weg-Zeit-Diagramme für die \(y\)-Komponente und die \(x\)-Komponente der Bewegung</figcaption>
+        </figure>
+
+        <p>Für bestimmte Fragestellungen reicht es jedoch aus, eine der Formeln zu betrachten, z.&nbsp;B. die Frage: „Wann kommt das Objekt auf dem Boden auf?". Diese Frage kann mathematisch wieder (siehe das Beispiel „freier Fall") geschrieben werden als \(y(t)\overset{!}{=} 0\) und ganz ohne die Betrachtung von \(x(t)\) beantwortet werden. Die Frage: „Wie weit fliegt der Stein?" kann jedoch nur unter Berücksichtigung beider Formeln beantwortet werden.</p>
+
+        <p>Da in beiden Formeln \(x(t)\) und \(y(t)\) mit demselben Parameter vorkommt, kann man jedoch auch beide Formeln zu einer Formel verschmelzen. Dazu löst man eine Formel, z.&nbsp;B. \(x(t)\) nach \(t\) auf und erhält somit \(t(x)\). Dieses setzt man dann in \(y(t)\) ein und eliminiert damit \(t\) aus der Formel \(y(t)\). Aus \(y(t)\) wird dann \(y(x)\), eine Formel, mit der man auch einiges über die Bewegung lernen kann. Beispiele dafür sehen wir uns im Abschnitt <em>Die Bahn</em> an.</p>
+
+        <p>Ein anderes Beispiel für eine Bewegung, die in einer Ebene verläuft und somit durch einen zweidimensionalen Vektor \(\vec s(t)\) beschrieben werden kann, ist die <strong>Kreisbewegung</strong> in der \(x,y\)-Ebene. Bei Kreisbewegungen wählt man das Koordinatensystem typischerweise so, dass der Ursprung im Mittelpunkt der Bewegung liegt.</p>
+
+        <p>Eine Kreisbewegung wird beschrieben durch:</p>
+        \begin{equation}
+        \vec s(t) = \left(\begin{matrix}x(t)\\y(t) \end{matrix}\right)=\left(\begin{matrix}R\cdot \cos{(\frac{2\pi}{T}t)} \\R \cdot \sin{(\frac{2\pi}{T}t)} \end{matrix} \right)
+        \end{equation}
+
+        <figure class="abbildung" id="fig-kreisbewegung_1">
+            <img class="grafik" style="width:85%" src="bilder/kreisbewegung_1.png" alt="">
+            <figcaption>Weg-Zeit-Diagramme der Kreisbewegung mit \(R=1{,}5\,\mathrm{m}\) und \(T=6{,}0\,\mathrm{s}\).</figcaption>
+        </figure>
+
+        <p>Da es nicht so einfach ist, zu sehen, dass die oben stehenden Gleichungen für \(x(t)\) und \(y(t)\) eine Kreisbahn beschreiben, schauen wir uns im nächsten Abschnitt das Konzept der „Bahn" genauer an.</p>
+    </div>
+
+    <div class="beispiel" data-title="Die Schraubenbewegung">
+        <figure class="abbildung" id="fig-rutsche">
+            <img class="grafik" style="width:40%" src="bilder/rutsche.png" alt="">
+            <figcaption>Den Weg, den eine Person auf einer Wendeltreppe oder auf einer schraubenförmigen Rutsche zurücklegt, kann (näherungsweise) durch eine Schraubenbahn beschrieben werden. Bildquelle: „Rutsche am Pyramidenkogel, Woerthersee, Kaernten" by ChristianeWien is licensed with CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/</figcaption>
+        </figure>
+
+        <p>Eine <strong>Schraubenbewegung</strong>, d.h. eine Bewegung, die ein Mensch auf einer Wendeltreppe oder ein Kind auf einer schräubenförmigen Rutsche zurücklegt (siehe Abbildung <a class="xref" data-ref-fig="fig-rutsche"></a>), ist ein Beispiel für eine dreidimensionale Bewegung. Die Bewegung findet nun nicht mehr entlang einer Geraden (eindimensional) oder in einer Ebene (zweidimensional) statt, sondern es werden, egal wie klug wir das Koordinatensystem auch drehen, drei Raumdimensionen benötigt.</p>
+
+        <p>Eine solche Bewegung wird beschrieben durch die folgende Gleichung:</p>
+        \begin{equation}
+        \vec{s}(t)=\left(\begin{matrix}x(t)\\y(t) \\ z(t)\end{matrix}\right)=\left(\begin{matrix}R\cdot \cos\left(\frac{2\cdot \pi}{T} t\right) \\R\cdot\sin\left(\frac{2\cdot \pi}{T} t\right) \\\pm v_z \cdot t \end{matrix}\right)
+        \end{equation}
+        <p>Eine Visualisierung einer solchen Bewegung ist in Abbildung <a class="xref" data-ref-fig="fig-schraubenbahn"></a> zu sehen.</p>
+
+        <figure class="abbildung" id="fig-schraubenbahn">
+            <img class="grafik" style="width:99%" src="bilder/schraubenbahn.png" alt="">
+            <figcaption>Beispiel für eine Schraubenbewegung. Ein Objekt bewegt sich auf einer spiralförmigen Bahn mit einem Radius von \(R=1\,\mathrm{m}\), einer Umlaufzeit \(T=1\,\mathrm{s}\) einer Vertikalgeschwindigkeit von \(v_z=1\,\mathrm{m/s}\) in einem Zeitraum von \(T=4\,\mathrm{s}\). Zu sehen sind die Ort-Zeit-Diagramme für die drei Komponenten der Bewegung sowie die Bahn des Objektes (mehr zum Begriff Bahn später).</figcaption>
+        </figure>
+    </div>
+
+    <p>Auf den vorangegangenen Seiten haben wir uns verschiedene Beispiele für Formeln angesehen, die ein-, zwei- oder dreidimensionale Bewegungen beschreiben. Die Formeln selbst haben wir dabei nicht hergeleitet, sondern sie kamen mehr oder weniger aus dem Nichts. Wie diese Formeln zustandekommen, werden wir uns zu einem späteren Zeitpunkt ansehen. Zum jetzigen Zeitpunkt ist nur wichtig, dass Sie wissen, wie Sie, wenn Sie eine solche Formel gegeben bekommen aus diesen Formeln verschiedene Aspekte der Bewegung herleiten können, so wie wir es in den Beispielen besprochen haben.</p>
+</section>
