@@ -483,3 +483,264 @@
 
     <p>Jede Bewegung hat ihren eigenen individuellen physikalischen Definitionsbereich, auf den beim Beantworten von Fragestellungen geachtet werden muss.</p>
 </section>
+
+<h3 class="inhaltsverzeichnis">1.1.10 Geschwindigkeit</h3>
+<section>
+    <p>Bisher haben wir uns angesehen, zu welchen Zeitpunkten ein Objekt sich an welchem Punkt im Raum befindet (Strecke) bzw. welche zeitunabhängige Bahn es durch den Raum nimmt.</p>
+
+    <p>Objekten, die sich im Raum bewegen (die also nicht statisch irgendwo ruhen), kann man eine Größe zuweisen, die wir <strong>Geschwindigkeit</strong> nennen, und die uns aus unserem Alltag bekannt sein dürfte.</p>
+
+    <p>Schauen wir uns zunächst die Geschwindigkeit eines Objektes an, das sich nur entlang einer Achse bewegt, z.&nbsp;B. eines Objektes beim senkrechten Wurf, also eine <strong>Geschwindigkeit in 1-D</strong> (einer Dimension).</p>
+
+    <p>Wenn ein Objekt, dessen Strecke mit \(x(t)\) beschrieben werden kann, mit der Zeit seinen Ort ändert, so kann man ihm zu jedem Zeitpunkt eine <strong>Geschwindigkeit</strong> zuweisen. Die Geschwindigkeit ist eine wichtige Größe der Kinematik und gibt an, wie schnell ein Objekt seinen Ort mit der Zeit ändert. Dabei meint der Begriff der Geschwindigkeit in der Kinematik im Allgemeinen die <strong>momentane Geschwindigkeit</strong>, also die Geschwindigkeit, die das Objekt zu einem bestimmten, winzig kurzen Zeitpunkt hat. Natürlich kann es vorkommen, dass das Objekt die ganze Zeit dieselbe Geschwindigkeit hat, in diesem Fall ändert sich die momentane Geschwindigkeit nicht mit der Zeit. Es kommt aber in der Physik sehr oft vor, dass ein Objekt seine Geschwindigkeit mit der Zeit permanent ändert.</p>
+
+    <p>Angenommen, ein Objekt bewegt sich von einem Punkt \(A\) zu einem anderen Punkt \(B\) entlang einer Achse in \(x\)-Richtung. Die Geschwindigkeit ist dann die Rate, mit der sich der Ort mit der Zeit ändert. Ändert das Objekt seinen Ort um eine kleine Verschiebung \(\Delta x\) in einer kleinen Zeit \(\Delta t\)<span class="fussnote">Mit \(\Delta\) meinen wir in der Physik typischerweise einen Unterschied, also \(\Delta t=t_2-t_1\).</span>, so ist die Geschwindigkeit:</p>
+
+    \begin{equation}
+    v= \frac{\Delta x}{\Delta t} \quad \text{mit $\Delta t$ sehr klein.}
+    \end{equation}
+
+    <p>Die Bedingung, dass \(\Delta t\) sehr klein sein muss, können wir auch durch Grenzwertbildung realisieren. Die Geschwindigkeit ist dann:</p>
+
+    \begin{equation}
+    v(t)=\lim_{\Delta t\rightarrow 0}\frac{\Delta x}{\Delta t}
+    \end{equation}
+    <p>Eine solche Grenzwertbildung sollte Sie an die Mathematik erinnern. Sie bedeutet nichts anderes als: Bilde ein Steigungsdreieck (\(\frac{\Delta x}{\Delta t}\)) an der Kurve \(x(t)\), und zwar so, dass du den Abschnitt \(\Delta t\) winzig klein werden lässt. Dann entspricht \(\lim_{\Delta t\rightarrow 0}\frac{\Delta x}{\Delta t}\) gerade der Steigung der Tangente an die Kurve \(x(t)\) in diesem Punkt oder besser: der Steigung der Kurve \(x(t)\) (zu einem bestimmten \(t\)).</p>
+
+    <p>Die allgemeine Definition der Geschwindigkeit ist also:</p>
+    \begin{equation}
+    \text{Geschwindigkeit:} \quad v(t)=\lim_{\Delta t\rightarrow 0}\frac{\Delta x}{\Delta t}=\frac{\text{d}x(t)}{\text{d}t}=\dot{x}(t) \quad \text{Einheit:} \, [v] = \mathrm{m/s}
+    \end{equation}
+
+    <p>Anders gesagt: Die Geschwindigkeit eines Objektes zu einem bestimmten Zeitpunkt entspricht der Steigung der Kurve, die die Bewegung im Orts-Zeit-Diagramm beschreibt, zu diesem Zeitpunkt. Die Geschwindigkeit lässt sich also rechnerisch bestimmen aus der Ableitung der Strecke nach der Zeit; oder aber zeichnerisch, indem man in dem Punkt im Ort-Zeit-Diagramm, zu dem man die Geschwindigkeit bestimmen möchte, eine Tangente an die Kurve legt und die Steigung der Tangente bestimmt.</p>
+
+    <p>Einen Spezialfall stellt die <strong>gleichförmige Bewegung</strong> dar. Eine Bewegung heißt gleichförmig, wenn sie mit konstanter Geschwindigkeit abläuft, d.h. die Geschwindigkeit ändert sich nicht mit der Zeit. Das wiederum bedeutet, dass die Steigung der Kurve im Ort-Zeit-Diagramm sich nicht mit der Zeit ändert, also die Kurve eine Gerade ist. Somit ist der Zusammenhang zwischen Ort und Zeit linear und die Änderung des Orts pro Zeiteinheit ist immer gleich.</p>
+
+    <p>Daher ist es in diesem Spezialfall unerheblich, an welcher Stelle und mit welcher Größe das Steigungsdreieck zur Bestimmung der Geschwindigkeit angesetzt wird. Die Geschwindigkeit wird immer dieselbe sein.</p>
+
+    <p>Also gilt im Spezialfall der gleichförmigen Bewegung:</p>
+    \begin{equation}
+    \text{Geschwindigkeit der gleichförmigen Bewegung:} \quad v(t)=\frac{\Delta x}{\Delta t}
+    \end{equation}
+
+    <p>Aus der Schlussfolgerung, dass bei einer gleichförmigen Bewegung der Zusammenhang zwischen Ort und Zeit linear sein muss und die Steigung der Kurve gleich der Geschwindigkeit \(v\) ist, können wir direkt Rückschlüsse auf die mathematische Form der Formel für die Strecke \(x(t)\) der gleichförmigen Bewegung machen: alle gleichförmigen Bewegungen können mit einer Formel der Form</p>
+    \begin{equation}
+    x(t)=v\cdot t + x_0
+    \end{equation}
+    <p>beschrieben werden.</p>
+
+    <p>Ist die Bewegung hingegen nicht gleichförmig, so kann man mit \(\frac{\Delta x}{\Delta t}\) ausschließlich die <strong>Durchschnittsgeschwindigkeit</strong> \(\bar{v}\) errechnen, welche das Objekt im Intervall \(\Delta t\) hatte:</p>
+
+    \begin{equation}
+    \text{Durchschnittsgeschwindigkeit:} \quad \bar{v}=\frac{\Delta x}{\Delta t}
+    \end{equation}
+
+    <p>Das bedeutet: wenn Sie die Geschwindigkeit eines Objektes in Abhängigkeit der Zeit oder die Geschwindigkeit zu einem bestimmten Zeitpunkt bestimmen möchten, so müssen Sie die Ableitung der Strecke nach der Zeit bilden. Wenn Sie hingegen die Durchschnittsgeschwindigkeit in einem Zeitintervall bestimmen möchten, so können Sie \(\frac{\Delta x}{\Delta t}\) verwenden, siehe auch Abbildung <a class="xref" data-ref-fig="fig-kinematik_geschwindigkeit_unterschied_durchschnitt_momentan"></a>.</p>
+
+    <figure class="abbildung" id="fig-kinematik_geschwindigkeit_unterschied_durchschnitt_momentan">
+        <img class="grafik" style="width:80%" src="bilder/kinematik_geschwindigkeit_unterschied_durchschnitt_momentan.png" alt="">
+        <figcaption>Visualisierung zur Durchschnitts- und Momentangeschwindigkeit anhand eines Ort/Weg-Zeit-Diagramms. Die Durchschnittsgeschwindigkeit im Intervall \(\left[8\,\mathrm{s};16\,\mathrm{s}\right]\) ist die Steigung der Sekante (gepunktete Linie), die offensichtilch positiv ist. Die Momentangeschwindigkeit zum Zeitpunkt \(t=12\,\mathrm{s}\) ist die Steigung der Tangente (gestrichelte Linie) an die Kurve roten Punkt, die negativ ist. Hieran sieht man die Wichtigkeit der Unterscheidung zwischen Durchschnitts- und Momentangeschwindigkeit sowie die Notwendigkeit, die Momentangeschwindigkeit über die Ableitung zu bestimmen. Nutzen Sie \(\Delta x/\Delta t\), so erhalten Sie im Allgemeinen nicht die Momentangeschwindigkeit, sondern die Durchschnittsgeschwindigkeit. Eine interaktive Animation hierzu finden Sie im ILIAS Lernraum unter <em>Zusatzmaterialieren - Interaktive Animationen zur Physik am FB 8</em></figcaption>
+    </figure>
+
+    <p>Die Geschwindigkeit hat immer ein bestimmtes Vorzeichen. Während der Tachometer eines Autos immer den Betrag der Geschwindigkeit anzeigt, kommt diesem Vorzeichen in der Physik eine besondere Bedeutung zu. Ein positives Vorzeichen bedeutet eine Bewegung in Richtung steigender Koordinatenwerte (z.&nbsp;B. von 2 nach 3, oder von -2 nach -1). Ein negatives Vorzeichen bedeutet eine Bewegung in Richtung fallender Koordinatenwerte (z.&nbsp;B. von 3 nach 2, oder von -1 nach -2), siehe Abbildung <a class="xref" data-ref-fig="fig-kinematik_geschwindigkeit_vorwaerts_rueckwaerts"></a>.</p>
+
+    <figure class="abbildung" id="fig-kinematik_geschwindigkeit_tachometer">
+        <img class="grafik" style="width:60%" src="bilder/kinematik_geschwindigkeit_tachometer.jpg" alt="">
+        <figcaption>Ein Tachometer zeigt immer nur den Betrag der Geschwindigkeit an. In der Physik ist die Geschwindigkeit jedoch ein Vektor mit Betrag und Richtung. Im eindimensionalen wird die Richtung durch das Vorzeichen der Geschwindigkeit bestimmt. Bildquelle: „speedometer" von Sean MacEntee, Flickr, lizenziert unter <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>, via Openverse <a href="https://openverse.org/image/51c37475-e5fb-4a10-af5a-13f20f48aa2d">(Link)</a>.</figcaption>
+    </figure>
+
+    <figure class="abbildung" id="fig-kinematik_geschwindigkeit_vorwaerts_rueckwaerts">
+        <img class="grafik" style="width:50%" src="bilder/kinematik_geschwindigkeit_vorwaerts_rueckwaerts.png" alt="">
+        <figcaption>Visualisierung zur Bedeutung des Vorzeichens der Geschwindigkeit. Bewegt sich das Auto im Rückwärtsgang in Richtung steigender Koordinatenwerte (in der Abbildung steigende \(x\)-Werte), so ist die Geschwindigkeit <strong>positiv</strong>. Bewegt sich das Auto im Vorwärtsgang in Richtung fallender Koordinatenwerte (in der Abbildung fallende \(x\)-Werte), so ist die Geschwindigkeit <strong>negativ</strong>.</figcaption>
+    </figure>
+
+    <p>Wenn die betrachtete Bewegung nicht in einer Raumdimension, also entlang einer Achse, abläuft, sondern in einer Ebene oder im Raum, so erhalten wir auch eine <strong>Geschwindigkeit in 2-D oder 3-D</strong>. Läuft die Bewegung, so wie z.&nbsp;B. die Kreisbewegung aus Abschnitt <a class="xref" data-ref-sec="p-1-1-7"></a>, in einer Ebene, also in zwei Raumdimensionen ab, so ist sowohl die Strecke \(\vec s(t)\) als auch die Geschwindigkeit \(\vec v(t)\) ein zweidimensionaler Vektor. Läuft die Bewegung, so wie z.&nbsp;B. die Bewegung auf der Wendeltreppe, in drei Raumdimensionen ab, so sind Strecke und Geschwindigkeit dreidimensionale Vektoren.</p>
+
+    <p>Es gilt:</p>
+
+    \begin{equation}
+    \text{Geschwindigkeit in 2-D:}\quad  \vec{v}(t)=\left( \begin{matrix}v_x(t)\\v_y(t)\end{matrix}\right) \quad \text{Einheit:}\, [\vec v]=\mathrm{m/s}
+    \end{equation}
+
+    <p>oder</p>
+
+    \begin{equation}
+    \text{Geschwindigkeit in 3-D:}\quad  \vec{v}(t)=\left( \begin{matrix}v_x(t)\\v_y(t)\\v_z(t)\end{matrix}\right) \quad \text{Einheit:}\, [\vec v]=\mathrm{m/s}
+    \end{equation}
+    <p>mit</p>
+
+    \begin{equation}
+    v_x(t)=\frac{\text{d}x(t)}{\text{d}t}=\dot{x}(t)\quad v_y(t)=\frac{\text{d}y(t)}{\text{d}t}=\dot{y}(t)\quad v_z(t)=\frac{\text{d}z(t)}{\text{d}t}=\dot{z}(t)
+    \end{equation}
+
+    <p>Das bedeutet: bei Bewegungen, die nicht entlang einer Achse verlaufen und bei denen die Stecke \(\vec s(t)\) ein mehrdimensionaler Vektor ist, ist auch die Geschwindigkeit ein Vektor. Die Komponenten des Vektors sind dabei die Ableitungen der Komponenten der Strecke nach der Zeit.</p>
+
+    <p>Welche Bedeutung hat es, dass die Geschwindigkeit ein Vektor ist? Ein Vektor hat eine Richtung und eine Länge. Die Länge des Vektors, also der Betrag \(\vert \vec v(t) \vert\)<span class="fussnote">Wir verzichten in der Physik auf die Doppelstriche, die Mathematiker:innen für die Norm verwenden würden, meinen aber in Wahrheit die Norm.</span> der Geschwindigkeit, gibt an, wie schnell sich der Ort mit der Zeit ändert. Der Betrag entspricht somit dem Wert, den auch ein Tachometer in einem Auto anzeigen würde. Und die Richtung? Der Vektor der <em>Strecke</em> zeigt zu einem bestimmten Zeitpunkt \(t\) vom Ursprung des Koordinatensystems zu dem Ort, an dem sich das betrachtete Objekt zu eben diesem Zeitpunkt befindet. \(\vec s(t)\) beginnt also immer im Koordinatenursprung und endet am Objekt selbst. Der Geschwindigkeitsvektor zeigt hingegen immer in die Richtung, in die sich das Objekt als Nächstes bewegen wird. Daher zeichnet man den Geschwindigkeitsvektor immer als Tangente an die Bahn des Objektes. Der Geschwindigkeitsvektor wird dabei immer ausgehend von dem Ort gezeichnet, an dem sich das Objekt zum betrachteten Zeitpunkt befindet, siehe Abbildung <a class="xref" data-ref-fig="fig-kinetmatik_geschwindigkeit_tangentiale_geschwindigkeit_schraeger_wurf"></a>.</p>
+
+    <figure class="abbildung" id="fig-kinetmatik_geschwindigkeit_tangentiale_geschwindigkeit_schraeger_wurf">
+        <div class="abbildung-sub-imgs">
+            <div class="subfig" style="width:45%">
+                <img class="grafik" style="width:90%" src="bilder/kinetmatik_geschwindigkeit_tangentiale_geschwindigkeit_schraeger_wurf.png" alt="">
+                <div class="subcap">(a) Schräger Wurf, Koordinatensystem mit Ursprung am Boden</div>
+            </div>
+            <div class="subfig" style="width:45%">
+                <img class="grafik" style="width:90%" src="bilder/kinetmatik_geschwindigkeit_tangentiale_geschwindigkeit_schraeger_wurf_2.png" alt="">
+                <div class="subcap">(b) Schräger Wurf, Koordinatensystem mit Ursprung im Abwurfpunkt</div>
+            </div>
+        </div>
+        <figcaption>Visualisierung der Geschwindigkeit als Tangente an die Bahnkurve am Beispiel des schrägen Wurfs. Der Ortsvektor (blau) zeigt vom Ursprung des Koordinatensystems zum Ort des Objektes (roter Kreis). Der Geschwindigkeitsvektor (orange) zeigt in die Richtung, in die sich das Objekt als Nächstes bewegen wird. Der Geschwindigkeitsvektor ist immer eine Tangente an die Bahnkurve Im Vergleich der beiden Bilder sieht man auch, dass der Ortsvektor vom Wahl des Koordinatensystems abhänt, während der Geschwindigkeitsvektor in beiden Koordinatensystemen gleich ist. Wenn die Richtung einer der beiden Koordinatenachsen umgekehrt wird, so wechselt das Vorzeichen der entsprechenden Komponente der Geschwindigkeit.</figcaption>
+    </figure>
+
+    <p>Zur Visualisierung der Geschwindigkeit eines Objektes dienen auch <strong>Geschwindigkeits-Zeit-Diagramme</strong>. Hierbei werden die Komponenten der Geschwindigkeit in jeweils getrennten Diagrammen auf die Ordinate, die Zeit auf die Abszisse aufgetragen. Auch möglich ist die Auftragung des Betrags der Geschwindigkeit gegen die Zeit.</p>
+
+    <p>Schauen wir uns ein paar Beispiele an.</p>
+
+    <div class="beispiel" data-title="Geschwindigkeit des senkrechten Wurfes:">
+        <p>Die Strecke des senkrechten Wurfes aus einer Höhe \(h_0\) mit Anfangsgeschwindigkeit \(v_0\) konnte geschrieben werden als:</p>
+        \begin{equation}
+        x(t)=-\frac{1}{2}\cdot g \cdot t^2 + v_0\cdot t + h_0
+        \end{equation}
+        <p>Gesucht ist nun die Geschwindigkeit. Die Geschwindigkeit ist die Ableitung der Strecke \(x(t)\) nach der Zeit, also \(\dot x(t)\):</p>
+
+        \begin{equation}
+        v(t)=\dot{x}(t)=\frac{\text{d}x(t)}{\text{d}t}= -g \cdot t + v_0 \label{kin_senkr_wurf_geschw}
+        \end{equation}
+        <p>Das Geschwindigkeit-Zeit-Diagramm wird also eine Gerade mit Steigung \(-g\) und Ordinatenabschnitt \(v_0\) zeigen. Wo liegt die Nullstelle der Geschwindigkeit?</p>
+        \begin{equation}
+        v(t)\overset{!}{=} 0 \quad \Leftrightarrow \quad -g \cdot t + v_0 \overset{!}{=} 0 \quad \Leftrightarrow \quad  t=\frac{v_0}{g}
+        \end{equation}
+
+        <p>Die Geschwindigkeit wird also bei \( t=\frac{v_0}{g}\) gleich null. Was bedeutet das für die Strecke? Aus der Mathematik wissen wir: eine Funktion hat eine Extremstelle, wenn die erste Ableitung gleich null und die zweite Ableitung ungleich null ist.</p>
+
+        <p>Ist die zweite Ableitung ungleich null? Ja<span class="fussnote">Denn \(\ddot x(t)=-g\)</span>. Daraus folgt: Die Strecke \(x(t)\) hat an der Stelle \( t=\frac{v_0}{g}\) ein Maximum<span class="fussnote">Denn die zweite Ableitung ist nicht nur ungleich null, sie ist auch noch negativ.</span>. Daraus können wir schon mal folgende interessante und wissenswerte Schlussfolgerung ziehen: bei einem senkrechten Wurf erreicht das Objekt genau dann sein Maximum (seine maximale Höhe), wenn die Geschwindigkeit gleich Null ist.</p>
+
+        <figure class="abbildung" id="fig-kinematik_geschwindigkeit_zeit_diagramm_senkr_wurf">
+            <img class="grafik" style="width:95%" src="bilder/kinematik_geschwindigkeit_zeit_diagramm_senkr_wurf.png" alt="">
+            <figcaption>Beispiel für ein Geschwindigkeits-Zeit-Diagramm eines senkrechten Wurfes mit positiver Abwurfgeschwindigkeit \(v_0=10{,}0\,\mathrm{m/s}\) (nach oben) und \(h_0=10{,}0\,\mathrm{m}\). Die Geschwindigkeit wird bei \(t_\mathrm{max}=\frac{v_0}{g}=1{,}02\,\mathrm{s}\) gleich Null, was der Zeit entspricht, die das Objekt benötigt, um seine maximale Höhe zu erreichen. Danach wird die Geschwindigkeit negativ, was bedeutet, dass sich das Objekt in Richtung fallender Koordinatenwerte bewegt, also nach unten fällt. Lösen wir \(x(t)=-\frac{1}{2}\cdot g \cdot t^2 + v_0\cdot t+h_0\overset{!}{=} 0\) nach \(t\) auf, so erhalten wir die Zeit, die das Objekt benötigt, um den Boden zu erreichen, \(t_\textrm{Wurf}=\frac{v_0}{g}+\sqrt{\left(\frac{v_0}{g}^2 \right)+\frac{2\cdot h_0}{g}}\), in diesem Beispiel \(t_\textrm{Wurf}=2{,}77\,\mathrm{s}\). Die beiden errechneten Werte für \(t_\mathrm{max}\) und \(t_\textrm{Wurf}\) können auch dem Geschwindigkeits-Zeit-Diagramm entnommen werden.</figcaption>
+        </figure>
+    </div>
+
+    <div class="beispiel" data-title="Geschwindigkeit des schrägen Wurfes:">
+        <p>Die Strecke des schrägen Wurfes ist ein Vektor:</p>
+        \begin{equation}
+        \vec{s}(t)=\left(\begin{matrix} v_{0,x} \cdot t \\ -\frac{1}{2}\cdot g t^2 + v_{0,y} \cdot t + h_0\end{matrix}\right)
+        \end{equation}
+
+        <p>Gesucht ist nun die Geschwindigkeit des Objektes, dessen Strecke mit oben stehender Formel beschrieben worden ist.</p>
+
+        <p>Diese erhalten wir, indem wir den Vektor \(\vec s(t)\) komponentenweise ableiten. Das bedeutet: wir nehmen die einzelnen Komponenten des Vektors, also \(x(t)\) und \(y(t)\), leiten jede für sich nach \(t\) ab und fügen dann das Ergebnis zum Vektor \(\vec v(t)\) zusammen.</p>
+
+        \begin{align}
+        x(t) = v_{0,x}\cdot t \quad \Rightarrow \dot x(t) = v_{0,x} \\
+        y(t)=-\frac{1}{2}\cdot g t^2 + v_{0,y} \cdot t + h_0 \quad \Rightarrow \dot y(t) = - g \cdot t + v_{0,y} \\
+        \Rightarrow  \dot{\vec{ s}}(t) = \vec v(t) =\left(\begin{matrix} v_{0,x} \\ - g \cdot t + v_{0,y} \end{matrix}\right)
+        \end{align}
+
+        <p>Vergleichen wir den Geschwindigkeitsvektor des schrägen Wurfes mit der Geschwindigkeit des senkrechten Wurfes, so erkennen wir, dass die \(v_y(t)\)-Komponente des schrägen Wurfes und \(v(t)\) des senkrechten Wurfes sich sehr ähnlich sehen. Lediglich die Benennung des konstanten Summanden \(v_0\) bzw. \(v_{0,y}\) ist unterschiedlich. Daraus können wir schlussfolgern: bei einem schrägen Wurf erreicht das Objekt genau dann seinen höchsten Punkt (die größte Höhe über dem Erdboden), wenn die \(y\)-Komponente der Geschwindigkeit gleich Null ist. Wir können etwas weiteres erkennen: Die \(y\)-Komponente der Geschwindigkeit des schrägen Wurfes hängt von \(t\) ab, wird sich also mit der Zeit ändern. Dahingegen ist die \(x\)-Komponente der Geschwindigkeit für alle \(t\) aus dem physikalischen Definitionsbereich konstant. Die Bewegung in \(y\)-Richtung entspricht also einer beschleunigten Bewegung während die Bewegung in \(x\)-Richtung einer gleichförmigen Bewegung entspricht.</p>
+
+        <figure class="abbildung" id="fig-kinematik_geschwindigkeit_zeit_diagramm_schraeger_wurf">
+            <img class="grafik" style="width:95%" src="bilder/kinematik_geschwindigkeit_zeit_diagramm_schraeger_wurf.png" alt="">
+            <figcaption>Beispiel für Geschwindigkeits-Zeit-Diagramme eines schrägen Wurfes mit \(\vert v_{0}\vert=10{,}0\,\mathrm{m/s}\), Abwurfwinkel \(\alpha=70^\circ\) und \(h_0=10{,}0\,\mathrm{m}\). Statt nur einem Geschwindigkeits-Zeit Diagramm, wie wir es z.&nbsp;B. beim senkrechten Wurf hatten, gibt es bei einer zweidimensionalen Bewegung wie dem schrägen Wurf zwei Diagramme, eines für die \(x\)-, eines für die \(y\)-Komponente. Analog zum senkrechten Wurf kann man aus dem Schnittpunkt der \(v_y\)-\(t\)-Kurve mit der \(t\)-Achse die Zeit \(t_\mathrm{max}\) ablesen, die das Objekt benötigt, um seine maximale Höhe zu erreichen.</figcaption>
+        </figure>
+
+        <p>Andererseits können wir den Geschwindigkeitsvektor in zwei Summanden zerlegen, einen Summanden, der von der Zeit abhängt und einen Summanden, der von der Zeit unabhängig ist:</p>
+        \begin{equation}
+        \vec v(t) =\left(\begin{matrix} v_{0,x} \\ - g \cdot t + v_{0,y} \end{matrix}\right) =\left(\begin{matrix} 0\\ - g \cdot t  \end{matrix}\right)+\left(\begin{matrix} v_{0,x} \\  v_{0,y} \end{matrix}\right)
+        \end{equation}
+
+        <p>Setzen wir \(t=0\) in \(\vec v(t)\) ein, erkennen wir: der Vektor</p>
+
+        \begin{equation}
+        \vec v(t=0)=\vec v(0)=\left(\begin{matrix} v_{0,x} \\  v_{0,y} \end{matrix}\right)
+        \end{equation}
+
+        <p>entspricht der Anfangsgeschwindigkeit des Objektes. \(v_{0,x}\) und \(v_{0,y}\) sind also die Anfangsgeschwindigkeiten des schrägen Wurfes in \(x\)- bzw. in \(y\)-Richtung. Oftmals gibt man beim schrägen Wurf nicht die beiden Komponenten der Anfangsgeschwindigkeit \(v_{0,x}\) und \(v_{0,y}\) an, sondern den Betrag der Anfangsgeschwindigkeit \(\vert \vec v_0 \vert\) und den Abwurfwinkel \(\alpha\). Diese Größen hängen (für Abwurfwinkel \(\alpha\in\left[-90^\circ,90^\circ\right]\)) zusammen mit den Komponenten der Anfangsgeschwindigkeit durch die Gleichungen:</p>
+        \begin{equation}
+        v_{0,x}=\vert \vec v_0 \vert \cdot \cos(\alpha) \quad\text{und}\quad v_{0,y}=\vert \vec v_0 \vert \cdot \sin(\alpha)
+        \end{equation}
+        <p>bzw.</p>
+        \begin{equation}
+        \vert \vec v_0 \vert =\sqrt{v_{0,x}^2 + v_{0,y}^2} \quad\text{und}\quad \alpha=\arctan\left(\frac{v_{0,y}}{v_{0,x}}\right)
+        \end{equation}
+    </div>
+
+    <div class="beispiel" data-title="Geschwindigkeit der Kreisbewegung:">
+        <p>Für die Strecke der Kreisbewegung hatten wir folgende Gleichung betrachtet:</p>
+        \begin{equation}
+        \vec{s}(t)=\left(\begin{matrix}R\cdot \cos{(\frac{2\pi}{T}t)} \\R \cdot \sin{(\frac{2\pi}{T} t)} \end{matrix} \right)
+        \end{equation}
+
+        <p>Gesucht ist wieder die Geschwindigkeit. Wir leiten wieder die Komponenten des Streckenvektors \(\vec s(t)\) separat nach \(t\) ab und fügen die Komponenten dann zum Vektor \(\vec v(t)\) zusammen.</p>
+
+        <p>Das ergibt:</p>
+
+        \begin{equation}
+        \vec v(t) = \dot{\vec{ s}}(t) = \frac{2 \cdot \pi \cdot R}{T} \cdot
+        \left(\begin{matrix} -\sin{(\frac{2\pi}{T}t)} \\ \cos{(\frac{2\pi}{T} t)} \end{matrix} \right)
+        \end{equation}
+        <p>Wir hatten oben stehend schon besprochen, dass der Geschwindigkeitsvektor tangential zu Bahn steht. Das können wir am Beispiel der Kreisbahn besonders gut überprüfen: Der Vektor \(\vec s(t)\) zeigt immer vom Ursprung zum Ort des Objektes, also zu einem Punkt der Kreisbahn. Die Mathematik sagt uns: die Tangente an den Kreis steht immer senkrecht zu diesem Vektor. Wir müssen also nun überprüfen, ob die Vektoren \(\vec s(t)\) und \(\vec v(t)\) senkrecht zueinander stehen. Das können wir mit Hilfe des Skalarproduktes überprüfen, denn zwei Vektoren<span class="fussnote">...wobei keiner von beiden der Nullvektor ist.</span> stehen gerade dann senkrecht (orthogonal) zueinander, wenn das Skalarprodukt null ist.</p>
+        \begin{multline}
+        \vec s(t) \cdot \vec v(t) = \left(\begin{matrix}R\cdot \cos{(\frac{2\pi}{T}t)} \\R \cdot \sin{(\frac{2\pi}{T} t)} \end{matrix} \right) \cdot \frac{2 \cdot \pi \cdot R}{T} \cdot
+        \left(\begin{matrix} -\sin{(\frac{2\pi}{T}t)} \\ \cos{(\frac{2\pi}{T} t)} \end{matrix} \right)\\ =\frac{2 \cdot \pi \cdot R}{T} \cdot \left( -\sin(...)\cos(...) + \sin(...) \cos(...) \right) =0  \quad\text{✓}
+        \end{multline}
+        <p>Wie vermutet steht also der Vektor der Geschwindigkeit tangential zur Bahnkurve.</p>
+    </div>
+
+    <p>Wir haben nun untersucht, wie man aus den Formeln für die Strecke die Geschwindigkeit ermittelt. In vielen Fällen möchte man jedoch umgekehrt vorgehen. Man möchte die Formel der Strecke aus der Geschwindigkeit ermitteln.</p>
+
+    <p>Da die Geschwindigkeit die Ableitung der Strecke ist, muss die Strecke die Stammfunktion der Geschwindigkeit sein. Bei der Integration ist jedoch ein formales Detail zu beachten. Schauen wir uns das zunächst mal in einer Raumdimension an, z.&nbsp;B. für eine Bewegung, die nur entlang der \(x\)-Achse verläuft.</p>
+
+    \begin{equation}
+    x(t)=\int\limits_{0}^t v(\tau)\text{d}\tau + x_0 \label{kinematik_int_geschw_strecke_1D}
+    \end{equation}
+
+    <p>Wie kommt man hierbei auf das \(\tau\) (Gesprochen: „tau") und auf das \(x_0\)? Das \(\tau\) ist mathematisch formal notwendig, da die Integrationsgrenze und die Integrationsvariable nicht denselben Buchstaben haben dürfen. Da wir \(x(t)\), also die Strecke in Abhängigkeit von \(t\) bestimmen möchten, müssen wir uns also bei der Integrationsvariablen für irgendeinen anderen Buchstaben entscheiden. Da wir aber immer im Hinterkopf behalten möchten, dass die Integrationsvariable die Zeit repräsentiert, wählen wir einen Buchstaben, der so ähnlich aussieht wie \(t\), nämlich den kleinen griechischen Buchstaben \(\tau\). Das bedeutet: um die Integration formal durchzuführen, muss man sich die Formel für die Geschwindigkeit einer Bewegung \(v(t)\) nehmen, in dieser Formel alle \(t\) durch \(\tau\) ersetzen und dann über \(\tau\) integrieren. Das \(+x_0\) ist vonnöten, da ein unbestimmtes Integral immer nur bis auf eine Konstante bestimmt ist. Wir errechnen jedoch das bestimmte Integral von \(0\) bis \(t\). Damit bei \(x(0)\) der korrekte Anfangsort errechnet wird, muss also dem Integral noch der Summand \(x_0\) hinzugefügt werden.</p>
+
+    <p>Analog ist das Vorgehen in zwei- oder dreidimensionalen Fällen:</p>
+
+    \begin{equation}
+    \vec{s}(t)=\int\limits_0^t\vec{v}(\tau)\text{d}\tau+\vec{s}(0)  \label{kinematik_int_geschw_strecke_3D}
+    \end{equation}
+
+    <p>wobei man beachten muss, dass man einen Vektor, analog zum komponentenweisen ableiten, komponentenweise integrieren kann:</p>
+    \begin{equation}
+    \int \vec v(\tau)\text{d} \tau=\int  \left(\begin{matrix} v_x(\tau) \\ v_y(\tau) \\v_z(\tau) \end{matrix} \right)\text{d} \tau =\left(\begin{matrix} \int  v_x(\tau)\text{d} \tau \\ \int  v_y(\tau) \text{d} \tau \\ \int  v_z(\tau) \text{d} \tau\end{matrix} \right)
+    \end{equation}
+    <p>Das bedeutet: einen Vektor integriert man, indem man die einzelnen Komponenten (Zeilen) nimmt, für sich integriert, und zum Schluss die einzeln integrierten Komponenten wieder zu einem Vektor zusammenfügt.</p>
+
+    <div class="beispiel" data-title="Strecke aus Geschwindigkeit ermitteln beim schrägen Wurf">
+        <p>Nehmen wir an, wir hätten den Geschwindigkeitsvektor des schrägen Wurfes gegeben und sollen die Formel für die Strecke \(\vec s(t)\) ermitteln.</p>
+
+        <p>Die Geschwindigkeit des schrägen Wurfes ist:</p>
+        \begin{equation}
+        \vec v(t) =\left(\begin{matrix} 0 \\ - g \cdot t  \end{matrix}\right)+ \vec v_0
+        \end{equation}
+        <p>mit der Anfangsgeschwindigkeit</p>
+        \begin{equation}
+        \vec v_0=\left(\begin{matrix} v_{0,x} \\  v_{0,y} \end{matrix}\right)
+        \end{equation}
+        <p>Die Strecke ermitteln wir, indem wir Komponentenweise integrieren:</p>
+        \begin{multline}
+        v_x(t)=v_{0,x} \quad \Rightarrow \\  x(t)= \int\limits^t_0 v_x(\tau) \,\text{d}\tau+x_0 =\int\limits^t_0 v_{0,x} \,\text{d}\tau+x_0 = \left[ v_{0,x}\cdot \tau \right]^t_0+x_0=v_{0,x}\cdot t+x_0
+        \end{multline}
+        <p>und</p>
+        \begin{multline}
+        v_y(t)=-g \cdot t+v_{0,y}\quad \Rightarrow \\ y(t)= \int\limits^t_0 (-g \cdot \tau + v_{0,y}) \,\text{d}\tau+y_0 = \left[ -\frac{g}{2} \cdot \tau^2 + v_{0,y}\cdot \tau \right]^t_0+y_0\\=-\frac{1}{2}\cdot g \cdot t^2 + v_{0,y}\cdot t+y_0
+        \end{multline}
+        <p>Fügen wir nun die Komponenten zusammen, um den Vektor der Strecke zu erhalten:</p>
+        \begin{equation}
+        \vec{s}(t)=\left(\begin{matrix} v_{0,x} \cdot t +x_0 \\ -\frac{1}{2}\cdot g t^2 + v_{0,y} \cdot t + y_0\end{matrix}\right)
+        \end{equation}
+        <p>Was sind \(x_0\) und \(y_0\)? Die Konstanten geben den Startort des Objektes \(\vec s_0\) an. In unserem Fall startet das Objekt aus einer Höhe \(h_0\) an der Stelle \(x_0=0\). Wir erhalten also wieder die schon aus dem vorangegangenen Abschnitt bekannte Formel für den schrägen Wurf:</p>
+        \begin{equation}
+        \vec{s}(t)=\left(\begin{matrix} v_{0,x} \cdot t \\ -\frac{1}{2}\cdot g t^2 + v_{0,y} \cdot t + h_0\end{matrix}\right)
+        \end{equation}
+
+        <p>Diesen Ausdruck kann man, wenn man möchte, noch etwas anders schreiben, nämlich:</p>
+        \begin{equation}
+        \vec{s}(t)=\left(\begin{matrix} 0\\ -\frac{1}{2}\cdot g \end{matrix}\right) \cdot t^2 + \left(\begin{matrix} v_{0,x}  \\  v_{0,y}\end{matrix}\right)  \cdot t+ \left(\begin{matrix} 0\\ h_0\end{matrix}\right)
+        \end{equation}
+
+        <p>Hierbei wurden die Terme nach den Potenzen von \(t\) getrennt, wodurch der Startort \(\vec s(0)\) leichter zu erkennen ist.</p>
+    </div>
+</section>
