@@ -7,13 +7,14 @@
      nummeriert. -->
 
 <section>
-    <!-- Startwerte fuer die kapitelweit laufenden Zaehler (v0.13: figure ohne
-         \numberwithin, zusammenfassungcounter \numberwithin{chapter}): die
-         Abschnitte 1.0-1.3 sind noch nicht migriert, haben im PDF aber schon
-         37 Abbildungen und 3 Zusammenfassungen verbraucht -- daher startet
-         1.4 bei Abbildung 1.38 bzw. Zusammenfassung 1.4. Beide Offsets
-         entfallen, sobald die vorherigen Abschnitte im WIP stehen. -->
-    <h2 class="inhaltsverzeichnis" data-figure-offset="37" data-zusammenfassung-offset="3">1.4 Kinematik der Drehbewegung und Kreisbahnen</h2>
+    <!-- Die kapitelweit laufenden Zaehler (Abbildungen, Zusammenfassung) werden
+         beim Kapitelwechsel zurueckgesetzt; die Startwerte (37 Abbildungen,
+         3 Zusammenfassungen, die die noch offenen Abschnitte 1.0-1.3 im PDF
+         verbrauchen) hängen seit 2026-07-24 am h2 von ch_01_00_einleitung (1.0)
+         — der ersten migrierten Section von Kapitel 1 —, nicht mehr hier. 1.4
+         startet daher weiterhin bei Abbildung 1.38 bzw. Zusammenfassung 1.4.
+         Sobald 1.1-1.3 migriert sind, fallen die Offsets ganz weg. -->
+    <h2 class="inhaltsverzeichnis">1.4 Kinematik der Drehbewegung und Kreisbahnen</h2>
 
     <p>Im Abschnitt zur Kinematik haben wir uns mit den Grundgleichungen der Kinematik beschäftigt, mit deren Hilfe wir eindeutig beschreiben konnten, wie sich ein Massenpunkt im Raum bewegt. Wir haben gesehen, dass wir die Bewegung des Massenpunktes durch die Angabe seiner Position \(\vec{r}(t)\) (die wir damals noch als \(\vec{s}(t)\) bezeichnet haben, wobei wir allerdings schon angemerkt hatten, dass man auch andere Buchstaben verwenden kann) als Funktion der Zeit \(t\) vollständig beschreiben können. Alternativ war eine Beschreibung der Bewegung auch durch die Angabe der Geschwindigkeit \(\vec{v}(t)\) und der Beschleunigung \(\vec{a}(t)\) möglich. In diesen Fällen musste jedoch auch ein Anfangsort \(\vec{r}_0\) und eine Anfangsgeschwindigkeit \(\vec{v}_0\) angegeben werden, um die Bewegung eindeutig zu beschreiben.</p>
 
