@@ -675,12 +675,16 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 .darkmode_icon:hover{
     opacity: 100%;
 }
-/* Der Fortschrittsbalken sitzt MITTIG zwischen der Abschnittsuebersicht (Krume,
-   links) und den Zurueck/Weiter-Chevrons (rechts): zwei auto-Margins teilen den
-   freien Platz zwischen beiden gleichmaessig auf. Deshalb darf #header_pagenav
-   KEIN margin-left:auto mehr tragen — sonst gaebe es drei auto-Margins und der
-   Balken landete bei einem Drittel statt in der Mitte. */
-#header .chapter-progress { flex-shrink: 0; margin-left: auto; margin-right: auto; }
+/* Der Fortschrittsbalken nimmt den Restplatz zwischen Krume (links) und den
+   Zurueck/Weiter-Chevrons (rechts) ein (flex:1) und ist darin mittig
+   (justify-content:center) — so wächst/schrumpft die Bahn je nach verfügbarem
+   Platz (P10), statt wie früher starr 130 px zu bleiben. #header_pagenav darf
+   KEIN margin-left:auto tragen (sonst konkurriert ein weiteres auto-Margin mit
+   flex:1 und verschiebt die Mitte). */
+#header .chapter-progress { flex: 1 1 auto; justify-content: center; min-width: 0; }
+/* Das "Seite x/y"-Label darf nicht mitwachsen/-schrumpfen — nur die Bahn ist
+   flexibel (P10). */
+#header .chapter-progress > #chapter_progress_label { flex-shrink: 0; white-space: nowrap; }
 /* Waehrend der TOC-Vollbild-Screen offen ist, uebernimmt dessen eigene
    Kopfleiste (#toc_screen_bar) die Rolle von #header (Mockup-Prinzip: eine
    Kopfleiste je Ansicht, keine gestapelten Balken). */
@@ -1609,7 +1613,9 @@ input[type="range"]::-moz-range-track {
     flex-shrink: 0;
 }
 .chapter-progress-track {
-    width: 130px;
+    flex: 1 1 80px;
+    max-width: 260px;
+    min-width: 60px;
     height: 5px;
     background: var(--border);
     border-radius: 3px;
