@@ -568,12 +568,12 @@ Subsection*, nicht nur in der Summe). **Nicht pushen** ohne Freigabe.
 
 ### P12-0 — Vorbedingungen / Blocker (vor erstem neuen Abschnitt)
 
-- [ ] **P12-0a Gleichungs-Präfix dynamisch** — heute Konstante `"1.4"` in
-  `index.html` (tagformat) bzw. `numbering.js::renumber_equations`. Für 1.1/1.2/2.1/3.1
-  muss der Section-Präfix pro Seite ermittelt werden (z. B. aus der aktiven
-  `.chapter-page` / ihrem h2-`data-section`-Index). *Ohne das: falsche Gl.-Nummern
-  in jedem neuen Abschnitt.* *(M)* — CLAUDE.md: „revisit when a second section
-  enters the WIP" — dieser Punkt ist jetzt fällig.
+- [x] **P12-0a Gleichungs-Präfix dynamisch** — ✅ bereits umgesetzt (war nie eine
+  Konstante, CLAUDE.md-Notiz war veraltet). `numbering.js::renumber_equations`
+  ermittelt den Präfix pro Seite aus dem Titel via `sectionPrefix` (`1.4.3 …` →
+  `1.4`, `1.5.1 …` → `1.5`, `0.2.1 …` → `0.2`); zweiter MathJax-Lauf setzt die Tags.
+  Verifiziert 2026-07-24: 1.4-Seiten → `1.4.n`, 1.5-Seiten → `1.5.n`, 0.x → `0.x.n`.
+  CLAUDE.md-Stelle korrigiert. *(keine Arbeit angefallen)*
 - [ ] **P12-0b Abbildungs-Zähler pro Kapitel** — `numbering.js` zählt Abbildungen
   kapitelweit (`{chapter}` → „Abb. 1.n"). Für TK 2 startet neu „Abb. 2.n". Klären:
   fortlaufend pro `\chapter` (TK) oder pro `\section`?_offsets (`data-figure-offset`
