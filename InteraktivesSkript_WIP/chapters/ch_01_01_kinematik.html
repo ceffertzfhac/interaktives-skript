@@ -1,0 +1,119 @@
+<!-- ch_01_01_kinematik.html — v0.13-Abschnitt 1.1 "Kinematik"
+     (1:1-Transkription aus Input/v0.13/pskript_mech_kinematik_gmni_v4.tex).
+     TK 1 "Mechanik", Section 1.1. Rein statisch (keine interaktiven gcN-Container).
+     Abbildungen Abb. 1.1-1.20, Gleichungen 1.1.1-1.1.99, Beispiele 1.1.x,
+     eine Zusammenfassung (1.1). Kein data-figure-offset am h2: 1.1 ist der erste
+     Abschnitt mit Abbildungen/Zusammenfassung (startet lueckenlos bei Abb. 1.1 /
+     Zusammenfassung 1.1). Die Luecke 1.2/1.3 ueberspringt das 1.4-h2 (37/3).
+     Abb. 1.2: Quelle weg_zeit_diagramm_perfekt.pdf (tex referenziert veralteten
+     Namen bus-strasse-weg-zeit.png; Inhalt = Busfahrt-Weg-Zeit-Diagramm). -->
+
+<section>
+    <h2 class="inhaltsverzeichnis">1.1 Kinematik</h2>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.1 Einleitung und Motivation</h3>
+<section>
+    <p>Die <strong>Kinematik</strong> ist die Lehre von den Bewegungen. Sie bildet die Grundlage der Mechanik. In der Kinematik werden wir uns damit befassen, wie man Bewegungen physikalisch beschreiben kann und wie die einzelnen Größen der Kinematik zusammenhängen. Dabei werden wir feststellen, dass einige interessante und allgemeingültige Vorhersagen allein durch die Zusammenhänge zwischen den Größen der Kinematik getroffen werden können. Die Kinematik interessiert sich nur für die Bewegung selbst und fragt nicht nach den Ursachen der Bewegungen. Diese Ursachen, die Kräfte, werden wir erst im nächsten Kapitel behandeln.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.2 Die Größen der Kinematik</h3>
+<section>
+    <p>Um Bewegungen vollumfänglich zu beschreiben, werden wir im Laufe des Kapitels einige Größen definieren müssen und die Zusammenhänge zwischen ihnen beleuchten. Die Größen der Kinematik, die wir in diesem Kapitel untersuchen werden sind:</p>
+
+    <ul>
+        <li>Der Ort</li>
+        <li>Die Zeit</li>
+        <li>Die Strecke</li>
+        <li>Die Bahn</li>
+        <li>Die Geschwindigkeit</li>
+        <li>Die Beschleunigung</li>
+    </ul>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.3 Definition der grundlegenden Größen</h3>
+<section>
+    <p>Bevor wir die einzelnen Größen im Detail betrachten, definieren wir die wichtigsten Begriffe und ihre Zusammenhänge, wie wir sie in diesem Skript verwenden werden. Eine präzise Sprache ist in der Physik entscheidend.</p>
+
+    <ul>
+        <li><strong>Ort:</strong> Ein <strong>Ort</strong> ist ein Punkt im Raum, an dem sich ein Objekt zu einem bestimmten Zeitpunkt \(t\) befindet. Er wird durch einen <strong>Ortsvektor</strong> \(\vec{s}(t)\) (oder auch \(\vec{r}(t)\)) beschrieben, der vom Ursprung des Koordinatensystems zum Ort des Objektes zeigt.</li>
+
+        <li><strong>Strecke / Weg:</strong> Die Funktion \(\vec{s}(t)\), die für jeden zulässigen Zeitpunkt \(t\) den dazugehörigen Ortsvektor liefert, nennen wir die <strong>Strecke</strong> oder synonym den Weg. Die Strecke ist also eine vektorielle Funktion der Zeit, welche die gesamte Bewegung beschreibt. Die graphische Darstellung der Ortsvektorspitzen im Raum nennen wir die <strong>Bahn</strong> oder <strong>Trajektorie</strong>.</li>
+
+        <li><strong>Verschiebung:</strong> Die <strong>Verschiebung</strong> \(\Delta\vec{s}_{AB} = \vec{s}_B - \vec{s}_A\) ist der Vektor, der direkt vom Ort A zum Ort B zeigt. Er beschreibt die geradlinige Änderung des Ortes.</li>
+
+        <li><strong>Abstand:</strong> Der <strong>Abstand</strong> \(\Delta s_{AB} = |\Delta\vec{s}_{AB}|\) ist der Betrag (die Länge) des Verschiebungsvektors. Er ist ein Skalar und gibt die kürzeste Distanz zwischen zwei Orten an.</li>
+
+        <li><strong>Weglänge:</strong> Die <strong>Weglänge</strong> ist die skalare Länge der tatsächlich durchlaufenen Bahnkurve von einem Ort A zu einem Ort B. Sie ist oft größer als der Abstand und wird durch die Integration des Geschwindigkeitsbetrages über die Zeit ermittelt<span class="fussnote">Um das tatsächlich machen zu können, brauchen Sie Inhalte der Vorlesung Mathematik 2 - daher ist die Ermittlung einer Weglänge im Rahmen der Physik im 1. Semester nur in Einzelfällen möglich.</span>.</li>
+    </ul>
+
+    <p>Diese Unterscheidung, insbesondere zwischen Verschiebung, Abstand und Weglänge, ist fundamental für das Verständnis der Kinematik.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.4 Der Ort</h3>
+<section>
+    <p>Der Ort meint in der Physik einen genügend genau bezeichneten Punkt in einem Raum. Mögliche Orte könnten z.&nbsp;B. sein:</p>
+
+    <ul>
+        <li>Großer Hörsaal in der Goethestraße 1, Reihe 7, Platz 9</li>
+        <li>Der Gipfel des Matterhorns</li>
+        <li>das Feld G7 auf einem Schachbrett</li>
+    </ul>
+
+    <p>Das Problem ist, dass sich solche Ortsangaben nur schwer mathematisch handhaben lassen.</p>
+
+    <p>Daher nutzt man in der Physik für Ortsangaben im Allgemeinen <strong>Ortsvektoren</strong> oder Koordinaten. Diese haben die Einheit Meter und als Formelzeichen z.&nbsp;B. \(s, x, y, z, \vec s, \vec x, \vec r\).</p>
+
+    \begin{equation}
+    \text{Ort:}\quad \text{Formelzeichen:}\,s, x, y, z, \vec s, \vec x,  \vec r \quad \text{Einheit der Komponenten:}\, \left[ s_i\right]=\mathrm{m}
+    \end{equation}
+
+    <p>Welchen Buchstaben genau wir für den Ortsvektor verwenden, ist Geschmackssache und hängt oft vom persönlichen Geschmack ab.</p>
+
+    <p>Exakter formuliert ist der Ort der Punkt, zu dem der Ortsvektor \(\vec s\) zeigt, also \(P(\vec s)\). Haben wir mehr als einen Ort, so versehen wir den Ortsvektor mit einem Index, z.&nbsp;B. \(\vec s_1\), \(\vec s_2\), \(\vec s_A\) oder \(\vec s_B\).</p>
+
+    <p>Der Abstandsvektor zwischen zwei Orten ist definiert als der Differenzvektor der beiden Ortsvektoren. Wir einigen uns in der Physik am Fachbereich 8 der FH Aachen auf die Konvention: den Abstandsvektor von einem Ort A zu einem Ort B bezeichnen wir als \(\Delta \vec s_{BA}\), jenen von Ort B zu einem Ort A als \(\Delta \vec s_{AB}\).</p>
+
+    <p>Dabei ist der <strong>Abstandsvektor</strong> wie folgt definiert:</p>
+
+    \begin{equation}
+    \text{Abstandsvektor:}\quad \Delta \vec s_{BA}=\vec s_B - \vec s_A=-\Delta \vec s_{AB} \quad \text{Einheit:}\,\left[\Delta \vec s_{BA}\right]=\mathrm{m}
+    \end{equation}
+
+    \begin{equation}
+    \text{Abstand:}\quad \Delta s_{AB}= \vert \Delta \vec s_{BA} \vert \quad \text{Einheit:}\,\left[\Delta s_{AB}\right]=\mathrm{m}
+    \end{equation}
+
+    <p>Den Abstandsvektor bezeichnet man in der Physik präzise als <strong>Verschiebung</strong>. Wie in Abschnitt <a class="xref" data-ref-sec="p-1-1-3"></a> definiert, ist sein Betrag der <strong>Abstand</strong>, während die <strong>Weglänge</strong> die Länge der tatsächlichen Bewegungskurve beschreibt. Dass diese beiden Größen oftmals unterschiedlich sein können, können Sie sich klarmachen, indem Sie sich eine Wanderung von einem Berggipfel zu einem anderen Berggipfel vorstellen. Der Abstand zwischen den beiden Gipfeln mag kurz sein, Bergsteiger müssen aber einen langen und kurvigen Weg zurücklegen, um von dem einen Gipfel zum anderen zu gelangen. Der Abstand ist also die kürzeste Verbindung zwischen zwei Orten, die Weglänge hingegen die Länge des tatsächlich zurückgelegten Weges.</p>
+
+    <p>Der Ortsvektor kann ein-, zwei- oder dreidimensional sein, wenn der Ortsvektor eindimensional ist, können wir auf den Vektorpfeil über der Größe verzichten. Ist nicht klar, ob ein Problem ein-, zwei- oder dreidimensional behandelt werden sollte, so sollte man immer zunächst dreidimensionale Vektoren verwenden. Sind dann eine oder zwei Koordinaten immer gleich null, so können diese weggelassen werden.</p>
+
+    <p>In der Physik am FB 8 verwenden wir immer sogenannte <strong>kartesische</strong> Koordinatensysteme mit x-, y- und z-Achse, die senkrecht aufeinander stehen und der rechten Hand-Regel folgen (siehe z.&nbsp;B. Abbildung <a class="xref" data-ref-fig="fig-schraubenbahn"></a>). Wie das Koordinatensystem orientiert ist, hängt von der Aufgabenstellung ab und ist ein Stück weit Geschmackssache.</p>
+
+    <p>Außer der Orientierung im Raum ist es sehr wichtig für die korrekte Beschreibung von Bewegungen, dass man den Nullpunkt des Koordinatensystems festlegt. Auch hier ist die konkrete Festlegung Geschmackssache und hängt von der Aufgabenstellung ab, allerdings geht man häufig so vor, dass man den Anfangspunkt oder den Endpunkt einer Bewegung als Koordinatenursprung wählt. Bei Kreisbewegungen hingegen wählt man oft den Kreismittelpunkt als Koordinatenursprung. Genau wie bei der Orientierung gilt auch für den Koordinatenursprung: Es gibt keine richtige oder falsche Wahl, sondern nur eine praktischere und unpraktischere.</p>
+
+    <figure class="abbildung" id="fig-pskript_mech_kinematik_grundbegriff">
+        <img class="grafik" style="width:99%" src="bilder/pskript_mech_kinematik_grundbegriff.png" alt="">
+        <figcaption>Illustration der grundlegenden Größen Strecke, Verschiebung, Abstand. Die gesamte Kurve, die die Bewegung des Objektes durch den Raum über die Zeit beschreibt, wird als <strong>Strecke</strong> (\(\vec{s}(t)\)) bezeichnet. Die Vektoren \(\vec{s}_A\) und \(\vec{s}_B\) sind die <strong>Ortsvektoren</strong>, die vom Ursprung des Koordinatensystems zu den Orten A bzw. B zeigen, an denen sich das Objekt zu den Zeitpunkten \(t_A\) und \(t_B\) befindet. Das blau hervorgehobene Segment der Bahn von Punkt A nach Punkt B repräsentiert die tatsächlich zurückgelegte <strong>Weglänge</strong> \(s_{AB}\) von A nach B des Objektes. Der rot gestrichelte Vektor ist die <strong>Verschiebung</strong> \(\Delta\vec{s}_{AB}\), der direkt von Ort A zu Ort B zeigt und die geradlinige Änderung des Ortes beschreibt. Sein Betrag ist der <strong>Abstand</strong> \(|\Delta\vec{s}_{AB}|\), welcher die kürzeste Distanz zwischen den beiden Orten darstellt. Diese Darstellung verdeutlicht die fundamentalen Unterschiede zwischen den vektoriellen und skalaren Größen der Kinematik sowie zwischen dem gesamten Bewegungsverlauf, dem tatsächlich zurückgelegten Weg und der direkten Änderung des Ortes.</figcaption>
+    </figure>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.5 Die Zeit</h3>
+<section>
+    <p>Um bewegte Objekte zu beschreiben, braucht es einen Parameter, von dem der momentane Bewegungszustand abhängt. Im Allgemeinen ist dieser Parameter die Zeit. Das Formelzeichen der Zeit ist \(t\), die SI-Basiseinheit der Zeit ist die Sekunde.</p>
+
+    \begin{equation}
+    \text{Zeit:}\quad \text{Formelzeichen:}\,t\quad \text{Einheit:}\, \left[ t\right]= \mathrm{s}
+    \end{equation}
+
+    <p>Außer der Sekunde nutzt man im Alltag oft auch andere Zeiteinheiten, z.&nbsp;B. Minute, Stunde, Tag, Jahr. Diese Einheiten kann man in der Physik, wo es sinnvoll ist, auch nutzen. Möchte man z.&nbsp;B. die Umlaufzeit des Jupiter um die Sonne angeben, so ist es sinnvoller und greifbarer, wenn man diese in Tagen oder Jahren angibt. Beschreibt man die Fahrtdauer eines Autos von Hamburg nach München, so können Stunden eine gute Einheit sein. In sehr vielen Fällen hat sich jedoch die Sekunde als gute Einheit für die Zeit bewährt.</p>
+
+    <p>Auch die Zeit braucht einen Nullpunkt, welchen wir, analog zum Ursprung des Koordinatensystems frei wählen können.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.6 Das Konzept des Massepunktes</h3>
+<section>
+    <p>An dieser Stelle müssen wir uns zunächst klar machen, was wir genau meinen, wenn wir von bewegten Objekten, Massen, Steinen, Bällen, Kugeln u.s.w. sprechen.</p>
+
+    <p>In der Realität haben alle Objekte, mit denen Sie sich in Ihrem Studium und in Ihrem zukünftigen Arbeitsalltag beschäftigen werden, eine räumliche Ausdehnung. Das gilt für Atomkerne, mikromechanische Bauteile genauso wie für Autos, Schiffe, Flugzeuge, Produktionsmaschinen, die Erde, die Sonne, die Milchstraße und alles dazwischen. Vereinfachend werden wir allerdings in dieser Vorlesung weitestgehend<span class="fussnote">Es wird ein paar Ausnahmen geben, auf die ich Sie aber an geeigneter Stelle hinweisen werde (z.&nbsp;B. bei der Rotation starrer Körper).</span> davon ausgehen, dass wir alle Objekte als <strong>Massepunkte</strong> betrachten können, d.h. wir tun so, als ob die gesamte Masse eines Objektes in einem Punkt vereint wäre und sich das Objekt an einem (mathematischen) Punkt befände. Diese Näherung hilft dabei, die Gleichungen, die wir nutzen, nicht zu kompliziert werden zu lassen und ist für viele Problemstellungen völlig zulässig<span class="fussnote">Im Kapitel zur Dynamik werden wir sogar den <strong>Schwerpunktsatz</strong> kennenlernen, welcher dieses Vorgehen begründet.</span>.</p>
+</section>
