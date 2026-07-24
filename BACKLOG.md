@@ -611,9 +611,11 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   (`pskript_mech_dyn_energie_arbeit_gmni_v3.tex`, 53 KB). Kandidat: `atwood_energy_simulation`.
   *(L)*
 - [ ] **P12-A4 1.6 Bezugsysteme und Scheinkräfte** — 3 Subsections, 1 Abb.
-  (`pskript_mech_bezugsysteme_und_scheinkraefte.tex`, 41 KB). **Achtung:**
-  `_v2gmni`-Variante existiert (38 KB, 0 Abb.) — richtige/finalere Version klären.
-  *(M)*
+  (`pskript_mech_bezugsysteme_und_scheinkraefte.tex`, 41 KB). **Maßgeblich ist das
+  Original** (`pskript_mech_bezugsysteme_und_scheinkraefte.tex`, 1 Abb.) — es ist
+  die im PDF integrierte Version (`Physik_pskript_v0.13.tex` Z. 83). Die
+  `_v2gmni`-Variante (38 KB, 0 Abb.) wird vom Hauptdokument **nicht** geladen und
+  ist nicht maßgeblich (verifiziert 2026-07-24). *(M)*
 - [ ] **P12-A5 1.7 Elastische und inelastische Stöße** — 2 Subsections, 0 Abb.
   (`pskript_mech_dyn_stoesse.tex`, 17 KB). Kandidat: `stoss_simulation`. *(M)*
 - [ ] **P12-A6 1.8 Gravitation** — 5 Subsections, 0 Abb.
@@ -641,8 +643,11 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
 - [ ] **P12-C1 3.1 Schwingungen** — 9 Subsections, 0 Abb.
   (`pskript_sw_schwingungen.tex`, 42 KB). Kandidat: `federpendel_simulation`. *(L)*
 - [ ] **P12-C2 3.2 Wellen** — `pskript_sw_wellen.tex` = **207 Byte Stub** — in v0.13
-  *selbst* kein Inhalt. **Nutzervorgabe nötig:** leer/Platzhalter lassen, extern
-  ergänzen oder zurückstellen? `wellen_simulation` liegt bereit. *(Block — klären)*
+  *selbst* kein Inhalt. **Nutzervorgabe (2026-07-24): Platzhalter erstellen.** Bei
+  der TK-3-Migration wird 3.2 als sichtbarer Platzhalter-Standort angelegt (Section-
+  Heading + Hinweis „Inhalt folgt / in v0.13 nicht enthalten"), nicht leer gelassen.
+  `wellen_simulation` liegt bereit — später als interaktive Figur (P12-E7)
+  einbinden, sobald der Inhalt steht. *(M)*
 
 ### P12-D — Quasi-Content
 
