@@ -164,17 +164,12 @@ function renderRailInto(container, page) {
 }
 
 function renderAppbar(page) {
-    const crumbThemenkomplex = ge('chapter_crumb_themenkomplex');
     const crumbChapter = ge('chapter_crumb_chapter');
     const crumbCurrent = ge('chapter_crumb_current');
     const progress = ge('chapter_progress_label');
     const progressBar = ge('chapter_progress_bar');
     const pages = getPages();
     if (!pages.length) return;
-    // Themenkomplex-Krume (oberste Ebene, P8): page.tk der aktiven Seite
-    // (v0.13-\chapter, z. B. „0 Grundlagen"). Bleibt leer, wenn das Kapitel
-    // kein TK-Attribut traegt (tk === null).
-    if (crumbThemenkomplex) crumbThemenkomplex.textContent = (page && page.tk) ? page.tk.title : '';
     // Kapitel-Krume = die naechste h2-Seite oberhalb der aktiven, nicht
     // pauschal pages[0] -- sonst zeigt sie ab dem zweiten Kapitel weiterhin
     // den Titel des ersten an.

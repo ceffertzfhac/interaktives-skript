@@ -111,7 +111,6 @@ export function generate_toc(){
 
     const pages = getPages();
     const current = getCurrentPage();
-    // Kapitel-Gruppen (h2 + ihre h3-Subs) — unverändert wie vor P8.
     const groups = [];
     let cur = null;
     pages.forEach(p => {
@@ -120,107 +119,55 @@ export function generate_toc(){
         else { cur = { chapter: p, subs: [] }; groups.push(cur); }
     });
 
-    // Kapitel-Gruppen nach Themenkomplex (v0.13-\chapter, page.tk) bündeln —
-    // die äussere Ebene des 3-stufigen TOC. Aufeinanderfolgende Kapitel
-    // desselben TK werden zusammengefasst (Erstauftreten-Reihenfolge bleibt
-    // erhalten); Kapitel ohne tk (===null) werden ohne TK-Hülle direkt
-    // gerendert (robust, Verhalten wie vor P8).
-    const tkGroups = [];
-    groups.forEach(g => {
-        const tk = g.chapter.tk;
-        const last = tkGroups[tkGroups.length - 1];
-        if (last && last.tk && tk && last.tk.num === tk.num && last.tk.title === tk.title) {
-            last.kapitel.push(g);
-        } else {
-            tkGroups.push({ tk, kapitel: [g] });
-        }
-    });
+    groups.forEach((g) => {
+        const isCurrentGroup = g.chapter === current || g.subs.includes(current);
+        const groupEl = document.createElement("div");
+        groupEl.className = "toc_group" + (isCurrentGroup ? " toc_group_current" : "");
+        groupEl.dataset.tocSearch = (g.chapter.title + " " + g.subs.map(s => s.title).join(" ")).toLowerCase();
 
-    tkGroups.forEach(entry => {
-        if (!entry.tk) {
-            entry.kapitel.forEach(g => renderTocKapitel(g, inner, current));
-            return;
+        const numMatch = g.chapter.title.match(/^[0-9]+(?:\.[0-9]+)*/);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "toc_group_header";
+        btn.innerHTML =
+            "<span class='toc_group_number'>" + (numMatch ? "Kap. " + numMatch[0] : "") + "</span>" +
+            "<span class='toc_group_title'>" + g.chapter.title.replace(/^[0-9.]+\s*/, "") + "</span>" +
+            "<span class='toc_group_chevron'>▾</span>";
+        groupEl.appendChild(btn);
+
+        const body = document.createElement("div");
+        body.className = "toc_group_body";
+        g.subs.forEach(sub => {
+            const isCurrentSub = sub === current;
+            const a = document.createElement("a");
+            a.href = "#" + sub.id;
+            a.className = "toc_sub_link" + (isCurrentSub ? " toc_sub_current" : "");
+            a.innerHTML = "<span class='toc_sub_marker'>" + (isCurrentSub ? "●" : "○") + "</span>" + sub.title;
+            a.dataset.action = "goto_page";
+            a.dataset.arg = sub.id;
+            a.addEventListener("click", () => toc());
+            body.appendChild(a);
+        });
+        if (g.subs.length === 0) {
+            // Kapitel ohne Unterabschnitte (z.B. reine Intro-Seite): Klick auf
+            // die Kopfzeile selbst navigiert.
+            btn.dataset.action = "goto_page";
+            btn.dataset.arg = g.chapter.id;
+            btn.addEventListener("click", () => toc());
         }
-        const tkEl = document.createElement("div");
-        tkEl.className = "toc_tk_group";
-        tkEl.dataset.tocSearch = (entry.tk.title + " " +
-            entry.kapitel.map(k => k.chapter.title + " " + k.subs.map(s => s.title).join(" ")).join(" ")
-        ).toLowerCase();
-        const tkBtn = document.createElement("button");
-        tkBtn.type = "button";
-        tkBtn.className = "toc_tk_header";
-        tkBtn.innerHTML =
-            "<span class='toc_tk_number'>" + entry.tk.num + "</span>" +
-            "<span class='toc_tk_title'>" + entry.tk.title + "</span>" +
-            "<span class='toc_tk_chevron'>▾</span>";
-        tkEl.appendChild(tkBtn);
-        const tkBody = document.createElement("div");
-        tkBody.className = "toc_tk_body";
-        entry.kapitel.forEach(g => renderTocKapitel(g, tkBody, current));
-        tkEl.appendChild(tkBody);
-        inner.appendChild(tkEl);
-        // Auto-Collapse: nur der TK, der die aktuelle Seite enthaelt, steht
-        // offen (analog toc_group_collapsed bei den Kapiteln). Klick auf den
-        // TK-Header schaltet nur auf/zu — er navigiert NICHT (Nutzervorgabe).
-        const isCurrentTk = entry.kapitel.some(g => g.chapter === current || g.subs.includes(current));
-        if (!isCurrentTk) tkEl.classList.add("toc_tk_collapsed");
-        tkBtn.addEventListener("click", () => tkEl.classList.toggle("toc_tk_collapsed"));
+        groupEl.appendChild(body);
+        inner.appendChild(groupEl);
+
+        if (!isCurrentGroup) groupEl.classList.add("toc_group_collapsed");
+        btn.addEventListener("click", () => {
+            if (g.subs.length === 0) return; // navigiert bereits, s.o.
+            groupEl.classList.toggle("toc_group_collapsed");
+        });
     });
 
     syncTocState();
     return pages;
-}
-
-// Rendert eine Kapitel-Gruppe (h2-Karte + ihre h3-Abschnitts-Links) in
-// `container` — der ehemalige Rumpf von generate_toc, nun gemeinsam fuer
-// TK-gebündelte und TK-lose Kapitel. Logik identisch zu vor P8: Header mit
-// "Kap. <n>"-Nummer + Titel; mit Abschnitten = reiner Toggle, ohne
-// Abschnitte (Intro-Seite) = goto_page; Abschnitte = goto_page-Blätter.
-function renderTocKapitel(g, container, current) {
-    const isCurrentGroup = g.chapter === current || g.subs.includes(current);
-    const groupEl = document.createElement("div");
-    groupEl.className = "toc_group" + (isCurrentGroup ? " toc_group_current" : "");
-    groupEl.dataset.tocSearch = (g.chapter.title + " " + g.subs.map(s => s.title).join(" ")).toLowerCase();
-
-    const numMatch = g.chapter.title.match(/^[0-9]+(?:\.[0-9]+)*/);
-
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "toc_group_header";
-    btn.innerHTML =
-        "<span class='toc_group_number'>" + (numMatch ? "Kap. " + numMatch[0] : "") + "</span>" +
-        "<span class='toc_group_title'>" + g.chapter.title.replace(/^[0-9.]+\s*/, "") + "</span>" +
-        "<span class='toc_group_chevron'>▾</span>";
-    groupEl.appendChild(btn);
-
-    const body = document.createElement("div");
-    body.className = "toc_group_body";
-    g.subs.forEach(sub => {
-        const isCurrentSub = sub === current;
-        const a = document.createElement("a");
-        a.href = "#" + sub.id;
-        a.className = "toc_sub_link" + (isCurrentSub ? " toc_sub_current" : "");
-        a.innerHTML = "<span class='toc_sub_marker'>" + (isCurrentSub ? "●" : "○") + "</span>" + sub.title;
-        a.dataset.action = "goto_page";
-        a.dataset.arg = sub.id;
-        a.addEventListener("click", () => toc());
-        body.appendChild(a);
-    });
-    if (g.subs.length === 0) {
-        // Kapitel ohne Unterabschnitte (z.B. reine Intro-Seite): Klick auf
-        // die Kopfzeile selbst navigiert.
-        btn.dataset.action = "goto_page";
-        btn.dataset.arg = g.chapter.id;
-        btn.addEventListener("click", () => toc());
-    }
-    groupEl.appendChild(body);
-    container.appendChild(groupEl);
-
-    if (!isCurrentGroup) groupEl.classList.add("toc_group_collapsed");
-    btn.addEventListener("click", () => {
-        if (g.subs.length === 0) return; // navigiert bereits, s.o.
-        groupEl.classList.toggle("toc_group_collapsed");
-    });
 }
 
 // Position-Anzeige in der TOC-Leiste: die aktuelle Seite, keine erfundene
@@ -250,18 +197,6 @@ export function toc_filter(query) {
         g.style.display = matches ? "" : "none";
         if (matches) anyVisible = true;
         if (q !== "" && matches) g.classList.remove("toc_group_collapsed");
-    });
-    // Themenkomplex-Ebene (P8): ein TK wird gezeigt + aufgeklappt, sobald
-    // eines seiner Kapitel getroffen ist; ohne Treffer ausgeblendet. TK-lose
-    // Kapitel (kein .toc_tk_group-Elter) werden oben schon direkt behandelt.
-    const tkGroups = Array.from(inner.querySelectorAll(".toc_tk_group"));
-    tkGroups.forEach(tk => {
-        const childShown = tk.querySelector(".toc_group:not([style*='display: none'])") !== null;
-        // querySelector findet .toc_group auch in nicht-direkten Kindern, aber
-        // hier sind die Kapitel direkte .toc_tk_body-Kinder — sicher genug.
-        const shown = q === "" ? true : childShown;
-        tk.style.display = shown ? "" : "none";
-        if (shown && q !== "") tk.classList.remove("toc_tk_collapsed");
     });
     let empty = inner.querySelector(".toc_empty_state");
     if (!anyVisible) {

@@ -37,15 +37,6 @@ global.requestAnimationFrame = () => 0;
 // chapters.js-Aequivalent: Fragment einhaengen und in #paper flachziehen
 for (const ph of document.querySelectorAll('#paper [data-chapter]')) {
     ph.innerHTML = fs.readFileSync(base + 'chapters/' + ph.dataset.chapter + '.html', 'utf8');
-    // chapters.js-P8: data-tk-num/-title (v0.13-\chapter) vor dem Flatten auf
-    // jede .inhaltsverzeichnis-Überschrift stempeln, damit pages.js page.tk
-    // bauen kann (der Platzhalter ist nach dem Flatten weg).
-    const tkNum = ph.dataset.tkNum || '';
-    const tkTitle = ph.dataset.tkTitle || '';
-    if (tkNum || tkTitle) {
-        ph.querySelectorAll('.inhaltsverzeichnis')
-            .forEach(h => { h.dataset.tkNum = tkNum; h.dataset.tkTitle = tkTitle; });
-    }
     while (ph.firstChild) ph.parentNode.insertBefore(ph.firstChild, ph);
     ph.remove();
 }
