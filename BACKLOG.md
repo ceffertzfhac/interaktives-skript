@@ -383,19 +383,41 @@ Subsections bleiben h3-Abschnitt-Seiten. `numbering.js` braucht **keine**
 **Abhängigkeit:** nach der Umstellung ist P4 (Abschnitt 1.5) konsistent
 weiterzu migrieren (ch_02 gehört zu Themenkomplex 1, nicht 2).
 
-**Offene Entscheidungen (vor Umsetzung klären):**
-- (a) Klick auf „Themenkomplex" im TOC → Sprung zur ersten Kapitel-Seite des
-  Komplexes (0.0 bzw. erste migrierte Section)? *(empfohlen)*
-- (b) Schiene: Mini-Nav auf Kapitel-Ebene (Geschwister-Kapitel im Komplex) oder
-  bleibt Abschnitt-Ebene (aktuelle Seite + Geschwister-Abschnitte)?
-- (c) Breadcrumb um Themenkomplex-Ebene ergänzen („TK › Kap › Abschnitt")?
+**Entscheidungen (2026-07-24 mit Nutzer geklärt):**
+- (a) Klick auf „Themenkomplex" im TOC → **nur auf-/zuklappen** (kein Sprung);
+  aktueller TK ausgeklappt, andere eingeklappt (automatisch).
+- (b) Schiene (Rail): **unverändert** — alle Kapitel (h2) flach dokumentenweit,
+  aktuelles Kapitel ausgeklappt. TK nur in TOC + Breadcrumb sichtbar.
+- (c) Breadcrumb: **3-stufig** — TK › Kapitel(h2) › Abschnitt(aktuelle Seite).
+- Zurück/Weiter: **unverändert** (dokumentenweit flach).
 
-- [ ] **P8-0** Entwurf finalisieren + Entscheidungen (a/b/c) mit Nutzer. *(S)*
-- [ ] **P8-1** Themenkomplex-Metadaten an `index.html`-Platzhalter. *(S)*
-- [ ] **P8-2** `pages.js`: TK an Seiten-Register anhängen. *(S)*
-- [ ] **P8-3** `ui.js::generate_toc`: 3-stufig (TK → Kapitel → Abschnitt). *(S–M)*
-- [ ] **P8-4** `shell.js`: Krume/Schiene anpassen (nach P8-0 b/c). *(S–M)*
-- [ ] **P8-5** Verifikation (DOM-Harness + Sicht). *(M)*
+**Umgesetzt 2026-07-24** (Commits ce1bae2 → ca81faa → 5787305 → 07d44c9):
+`index.html` (TK-Attribute + Breadcrumb-Slot), `chapters.js` (TK vor Flatten
+stempeln — der Platzhalter wird beim Flatten gelöscht), `pages.js` (`tk`-Feld
+am Page-Objekt), `ui.js` (`generate_toc` 3-stufig + `toc_filter` TK-Ebene),
+`shell.js` (`renderAppbar` TK-Krume; Schiene/Pager unberührt), `styles.css`
+(`.toc_tk_*` + `#chapter_crumb_themenkomplex`).
+
+**Verifikation 2026-07-24 (Stufe 3 + 6, ohne Browser):**
+- `node --check` auf chapters/pages/ui/shell → OK; styles.css-Klammern 310/310.
+- DOM-Harness: 40 Seiten unverändert, keine losen Kinder, Abb. 1–1.72
+  (Lücken [38,68] präexistent), Boxen/Zusammenfassung/Fussnoten/Refs unverändert.
+- TK-TOC-Stichprobe (JSDOM, `generate_toc`): **2 TK-Gruppen** — „0 Grundlagen"
+  (7 Kapitel 0.0–0.6) und „1 Mechanik" (Kap. 1.4 mit 12 + Kap. 1.5 mit 14
+  Abschnitten); TK-Header **ohne** `goto_page` (nur Toggle ✓); Kapitel ohne
+  Abschnitte mit `goto_page`, mit Abschnitten reiner Toggle; Auto-Collapse
+  korrekt (aktueller TK offen, anderer eingeklappt).
+- Breadcrumb 3-stufig: auf 0.2.1 „Grundlagen › 0.2 Größen … › 0.2.1 …", auf 1.4.3
+  „Mechanik › 1.4 … › 1.4.3 …" (TK wechselt korrekt). Auf h2-Seiten erscheint der
+  Abschnitt-Slot = Kapiteltitel (bewusst, keine Lücke — entschieden als Option B).
+- **Sicht (Stufe 5) offen** — nur nach ausdrücklicher Freigabe per Tipp.
+
+- [x] **P8-0** Entwurf finalisieren + Entscheidungen (a/b/c) mit Nutzer. *(S)*
+- [x] **P8-1** Themenkomplex-Metadaten an `index.html`-Platzhalter. *(S)*
+- [x] **P8-2** `pages.js`: TK an Seiten-Register anhängen. *(S)*
+- [x] **P8-3** `ui.js::generate_toc`: 3-stufig (TK → Kapitel → Abschnitt). *(S–M)*
+- [x] **P8-4** `shell.js`: Krume/Schiene anpassen (nach P8-0 b/c). *(S–M)*
+- [x] **P8-5** Verifikation (DOM-Harness + Sicht). *(M)* — Stufe 3+6 grün; Stufe 5 offen.
 
 ---
 
