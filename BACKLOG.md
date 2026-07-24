@@ -362,8 +362,15 @@ Zuweisung per Freigabe-Tipp.
   (selbst gezeichnet, a_t rot / a_r blau wie \textcolor im Skript). store.T=∞.
   Umgesetzt (2026-07-24, `50f338b`… vgl. Log): `aspekt_axay_winkelbeschl.js|.css`,
   `data-aspekt="axay-winkelbeschl"`. Syntax/Smoke/Nummerierung grün.
-  **Visuell noch nicht freigegeben** (Screenshot-Check offen; a_t/a_r-Farben und
-  Darkmode-Tauglichkeit der lokalen --kb-at/--kb-ar-Tokens prüfen). *(M)*
+  **Darkmode-Tauglichkeit erledigt** (`80cb31c`): --kb-at/--kb-ar waren die
+  einzigen Vektor-Tokens ohne Darkmode-Override → jetzt aufgehellt (--kb-at
+  #ff8866, --kb-ar #66aaff), parallel zur Palette, CVD-distinkt zu a_x/a_y.
+  a_t/a_r-Farben-Prüfung (Code-Ebene): Tokens sind CVD-distinkt (rot/blau neben
+  cyan/orange); Rot-auf-Rot (Gesamt-a vs a_t) entspricht bewusst der \textcolor
+  im Skript (α·R rot) — keine Änderung. Panel-Verfeinerung (`e2f780a`):
+  Tempo/Darstellung per Default eingeklappt (Leiste zu lang), Label-CSS auf
+  Basis-.panel-label normalisiert. **Visuell noch nicht freigegeben**
+  (Screenshot-Check bleibt offen — per Nutzervorgabe aktuell KEIN Image-Input). *(M)*
 
 ## P8 — Inhaltsverzeichnis: 3-stufige Hierarchie (Themenkomplex → Kapitel → Abschnitt)
 
