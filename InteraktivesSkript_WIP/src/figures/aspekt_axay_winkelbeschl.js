@@ -89,7 +89,7 @@ const ARROW_LEN_MAIN = 12.5, ARROW_LEN_COMP = 10;
 // Vektors — der α-Effekt — IMMER sichtbar ist, unabhängig von ω₀/α (didaktisches
 // Kernproblem: |a|=ω²R variiert um Faktor ~30 über den Lauf und ist bei kleinem
 // ω sonst unsichtbar). Das echte Anwachsen von |a| zeigen die Diagramme.
-const A_TARGET_FRAC = 0.7;
+const A_TARGET_FRAC = 0.5;
 
 // -- Szene: Vorlagen-Geometrie (wie aspekt_vxvy_zeit), aber der Beschleunigungs-
 //    vektor ist die gezeigte Groesse — daher bekommt er (und seine Komponenten)
@@ -237,11 +237,16 @@ const SVG_GRAPH = `
   </g>
 </svg>`;
 
-// -- Linkes Bedien-Panel (Parameter + Legende) -- Klassen wie die Stand-alone.
+// -- Linkes Bedien-Panel — Abschnitte EINKLAPPBAR (Nutzervorgabe: die Leiste wird
+//    zu lang). Muster wie die Vorlagen-Sim (kreisbewegung/ui.js): jede
+//    `.panel-section.collapsible` hat als Kopf einen <button class="panel-label">
+//    mit .acc-chevron; ein Klick schaltet `.collapsed` (CSS blendet die
+//    Geschwister nach dem Button aus). Legende + Vergleich starten eingeklappt.
+const CHEVRON = '<span class="acc-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></span>';
 const PANEL_LEFT = `
 <div class="aspekt-panel aspekt-panel-left">
-  <div class="panel-section">
-    <div class="panel-label">Parameter</div>
+  <div class="panel-section collapsible">
+    <button type="button" class="panel-label" aria-expanded="true">Parameter${CHEVRON}</button>
     <div class="slider-label">Zeit \\(t\\)</div>
     <div class="slider-row">
       <input id="ak_t" type="range" min="0" max="24" step="0.05" value="24">
@@ -263,8 +268,8 @@ const PANEL_LEFT = `
       <span class="slider-val" id="ak_alpha_out"></span>
     </div>
   </div>
-  <div class="panel-section">
-    <div class="panel-label">Tempo</div>
+  <div class="panel-section collapsible">
+    <button type="button" class="panel-label" aria-expanded="true">Tempo${CHEVRON}</button>
     <div class="speed-pills">
       <label class="speed-pill"><input type="radio" name="ak_speed" value="1.0" checked><span>1×</span></label>
       <label class="speed-pill"><input type="radio" name="ak_speed" value="0.5"><span>½×</span></label>
@@ -272,8 +277,14 @@ const PANEL_LEFT = `
       <label class="speed-pill"><input type="radio" name="ak_speed" value="0.125"><span>⅛×</span></label>
     </div>
   </div>
-  <div class="panel-section">
-    <div class="panel-label">Legende</div>
+  <div class="panel-section collapsible">
+    <button type="button" class="panel-label" aria-expanded="true">Darstellung${CHEVRON}</button>
+    <label class="aspekt-check"><input type="checkbox" id="ak_components"><span>kartesisch \\(a_x\\)/\\(a_y\\) zerlegen</span></label>
+    <label class="aspekt-check"><input type="checkbox" id="ak_tr"><span>tangential/radial \\(\\vec{a}_\\text{t}\\)/\\(\\vec{a}_\\text{r}\\) zerlegen</span></label>
+    <div class="accel-scale-note">Der Beschleunigungsvektor ist in der Szene auf feste Länge normiert (damit die Neigung immer sichtbar ist). Den tatsächlichen Betrag \\(|\\vec a|=\\omega(t)^2R\\) zeigen die Diagramme.</div>
+  </div>
+  <div class="panel-section collapsible collapsed">
+    <button type="button" class="panel-label" aria-expanded="false">Legende${CHEVRON}</button>
     <div class="legend-grid">
       <div class="legend-swatch" data-c="r"></div>   <div class="legend-label">Ortsvektor \\(\\vec{r}\\)</div>
       <div class="legend-swatch" data-c="a"></div>   <div class="legend-label">Beschleunigungsvektor \\(\\vec{a}\\)</div>
@@ -285,14 +296,8 @@ const PANEL_LEFT = `
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
   </div>
-  <div class="panel-section">
-    <div class="panel-label">Darstellung</div>
-    <label class="aspekt-check"><input type="checkbox" id="ak_components"><span>kartesisch \\(a_x\\)/\\(a_y\\) zerlegen</span></label>
-    <label class="aspekt-check"><input type="checkbox" id="ak_tr"><span>tangential/radial \\(\\vec{a}_\\text{t}\\)/\\(\\vec{a}_\\text{r}\\) zerlegen</span></label>
-    <div class="accel-scale-note">Der Beschleunigungsvektor ist in der Szene auf feste Länge normiert (damit die Neigung immer sichtbar ist). Den tatsächlichen Betrag \\(|\\vec a|=\\omega(t)^2R\\) zeigen die Diagramme.</div>
-  </div>
-  <div class="panel-section">
-    <div class="panel-label">Vergleich</div>
+  <div class="panel-section collapsible collapsed">
+    <button type="button" class="panel-label" aria-expanded="false">Vergleich${CHEVRON}</button>
     <label class="aspekt-check"><input type="checkbox" id="ak_keep"><span>Letzte Kurve behalten</span></label>
   </div>
 </div>`;
@@ -907,6 +912,16 @@ export function buildAxAyWinkelbeschlFig(fig) {
     if (ak_tr) ak_tr.addEventListener('change', () => {
         showTR = ak_tr.checked;
         rt.withStore(() => draw(curT));
+    });
+
+    // Einklappbare Panel-Abschnitte (Nutzervorgabe: die Leiste wird zu lang). Wie
+    // die Vorlagen-Sim (kreisbewegung/ui.js): Klick auf den Abschnitts-Kopf
+    // schaltet .collapsed; das CSS blendet die Geschwister nach dem Button aus.
+    scene.querySelectorAll('.aspekt-panel-left .panel-section.collapsible > .panel-label').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const collapsed = btn.parentElement.classList.toggle('collapsed');
+            btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        });
     });
 
     [ak_t, ak_r, ak_omega0, ak_alpha].forEach(inp => inp.addEventListener('input', onInput));
