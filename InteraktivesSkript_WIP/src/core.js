@@ -264,7 +264,10 @@ function sync_text_size_ui() {
     const status = ge("text_size_status");
     const minus = ge("text_size_minus");
     const plus = ge("text_size_plus");
-    if (status) status.textContent = "Text " + text_level + "/5";
+    // Nur "n/5" — das Wort "Text" steckt in CSS (::before, s. styles.css), damit
+    // es am schmalen Breakpoint platzsparend wegfallen kann, ohne die Zahl zu
+    // beruehren.
+    if (status) status.textContent = text_level + "/5";
     if (minus) minus.disabled = text_level <= TEXT_LEVEL_MIN;
     if (plus) plus.disabled = text_level >= TEXT_LEVEL_MAX;
 }

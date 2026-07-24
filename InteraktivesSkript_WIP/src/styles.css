@@ -593,6 +593,10 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     text-align: center;
     user-select: none;
 }
+/* Wort "Text" vor der Stufe (z. B. "2/5") als CSS-Präfix — core.js schreibt
+   nur die Zahl. So kann das Wort am schmalen Breakpoint platzsparend wegfallen
+   (s. @media 1024), ohne JS-Logik (P11). */
+#text_size_status::before { content: "Text "; }
 #width_mode_controls {
     display: flex;
     align-items: center;
@@ -1389,21 +1393,6 @@ input[type="range"]::-moz-range-track {
     #toc_screen_bar { padding: 0 16px; gap: 10px; }
     .toc_screen_eyebrow { display: none; }
     #toc_content { padding: 20px 16px; }
-
-    /* Sehr schmale Anzeige (P11): Header verdichten. Brand-Eyebrow und
-       Prototyp-Badge ausblenden (Author ist bei ≤ 1024 px schon weg), Titel
-       zweizeilig "Interaktives / Skript v1.8". Width-Mode-Buttons verkürzen
-       auf S/M/L — Volltext bleibt im DOM (font-size:0) fuer Screenreader, der
-       Buchstabe per ::after aus [data-mode]; title-Tooltip erhalten. */
-    #header_eyebrow { display: none; }
-    #header_prototyp { display: none; }
-    #span_title { white-space: normal; line-height: 1.05; }
-    .title-narrow-br { display: block; }
-    .width_mode_button { font-size: 0; min-width: 30px; padding: 0 7px; }
-    .width_mode_button::after { font-size: 13px; font-weight: 600; }
-    .width_mode_button[data-mode="schmal"]::after { content: "S"; }
-    .width_mode_button[data-mode="normal"]::after { content: "M"; }
-    .width_mode_button[data-mode="breit"]::after  { content: "L"; }
 }
 
 /* TOC-Akkordeon (v2.0): eine Gruppe pro Kapitel (h2), Unterabschnitte (h3)
@@ -1813,6 +1802,23 @@ input[type="range"]::-moz-range-track {
     #header_author,
     #header-author { display: none; }
     .chapter-crumb #chapter_crumb_chapter { display: none; }
+    /* Header-Kompaktifizierung (P11,frueher ab 1024 statt 760): Brand
+       verdichten — Eyebrow "FH Aachen · FB 8 · Physik" und Prototyp-Badge
+       ausblenden, Titel zweizeilig "Interaktives / Skript v1.8" (Version
+       bleibt). Width-Mode-Buttons "Schmal/Normal/Breit" -> "S/M/L" (CSS-only:
+       font-size:0 + ::after aus [data-mode]; Volltext bleibt im DOM fuer
+       Screenreader, title-Tooltip erhalten). "Text"-Wort vor der Stufe
+       platzsparend wegfallen. */
+    #header_eyebrow { display: none; }
+    #header_prototyp { display: none; }
+    #span_title { white-space: normal; line-height: 1.05; }
+    .title-narrow-br { display: block; }
+    .width_mode_button { font-size: 0; min-width: 30px; padding: 0 7px; }
+    .width_mode_button::after { font-size: 13px; font-weight: 600; }
+    .width_mode_button[data-mode="schmal"]::after { content: "S"; }
+    .width_mode_button[data-mode="normal"]::after { content: "M"; }
+    .width_mode_button[data-mode="breit"]::after  { content: "L"; }
+    #text_size_status::before { content: ""; }
     .chapter-body {
         grid-template-columns: 1fr;
         padding: 0 16px;
