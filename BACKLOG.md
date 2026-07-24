@@ -159,29 +159,33 @@ Hintergrund in `MIGRATION_v0.13_nach_HTML.md`.
 v0.13 `\setcounter{chapter}{-1}` → Kapitel 0 = „Grundlagen", Quelle
 `Input/v0.13/pskript_grundlagen_gmni_v2.tex` (724 Zeilen). 7 Abschnitte
 (0.0 Einleitung … 0.6 Zusammenfassung), 4 Raster-Abbildungen (PNG/JPG/JPEG,
-Breiten 1.0/0.9/0.7/0.6 — kein PDF/TikZ-Rendering nötig), 4 Gleichungen,
-10 Fußnoten, 11 Labels, 7 Querverweise, 12 Box-Makros. `numbering.js`
-unterstützt Kapitel 0 **ohne Code-Änderung** (`sectionPrefix`/`chapterPrefix`
-sind generisch → `(0.2.n)`, `Abb. 0.n`, `Zusammenfassung 0.n`); die
-kapitelweiten Offsets am h2 entfallen hier (kein vorangehender Inhalt in
-Kapitel 0 → `data-figure-offset="0"`, `data-zusammenfassung-offset="0"`).
+Breiten 1.0/0.9/0.7/0.6 — kein PDF/TikZ-Rendering nötig), **37 nummerierte
+Gleichungen** (0.1: 12, 0.2: 13, 0.3: 6, 0.4: 6), 7 `align*`, 7 Tabellen,
+10 Fußnoten, 12 Box-Makros (3 `\bbspe` in 0.1, 7 `\bbsp`+1 `\bbspe` in 0.2,
+1 `\bzusafa` in 0.6), 7 getippte Tabellenverweise. `numbering.js` braucht
+für Kapitel 0 **eine** Code-Änderung: `\thefigure = \ifnum\value{chapter}>0
+\thechapter.\fi\arabic{figure}` lässt den Kapitelpräfix entfallen → Abbildungen
+heissen „Abb. 1"…„Abb. 4" (nicht „Abb. 0.1"); Gleichungen/Boxen/Zusammenfassung
+behalten ihr „0." (`sectionPrefix`/`chapterPrefix` sind generisch). Die
+kapitelweiten Offsets am ersten h2 sind `data-figure-offset="0"`,
+`data-zusammenfassung-offset="0"` (kein vorangehender Inhalt in Kapitel 0).
 Vorgehen: Skill **v013-kapitel-migration**, Hintergrund `MIGRATION_v0.13_nach_HTML.md`.
 
-**Offen — Datei-Granularität.** Bisher entspricht eine `ch_NN`-Datei einem
-v0.13-`\section` (ch_01 = 1.4, ch_02 = 1.5). „Grundlagen" ist aber ein ganzes
-`\chapter` mit 7 `\section`s. Option A: 7 Dateien (eine pro Section — kollidiert
-mit den vergebenen Namen ch_01/ch_02, braucht neues Schema). Option B: **eine**
-Datei `ch_00_grundlagen.html` mit h2 = „0 Grundlagen" (Intro-Seite) + h3 =
-0.0 … 0.6 (die Sections), `\subsection` → `<h4>` nicht-seitengebend. Passt zum
-„Kapitel 0"-Begriff, vermeidet die Namenskollision und braucht keine
-`numbering.js`-Änderung — *empfohlen*.
+**Entschieden — Datei-Granularität (Variante B).** Eine Datei
+`ch_00_grundlagen.html`, aber h2 = die 7 `\section`s (0.0–0.6) und h3 = die 5
+`\subsection`s (0.2.1–0.2.3, 0.3.1, 0.3.2) — konsistent mit ch_01 (h2 = Section,
+h3 = Subsection). `\subsubsection*`/`\subsection*` → `<h4>` nicht-seitengebend.
+`numbering.js::sectionPrefix` kollabiert „0.2.1"→„0.2", sodass Gleichungen/Boxen
+pro Section fortlaufend zählen wie v0.13s `\numberwithin{…}{section}`. Die 0.2-h2
+-Seite ist ein leerer Section-Trenner (0.2 hat keinen Einleitungstext vor 0.2.1);
+0.3s h2 hat Einleitungstext. 12 Seiten insgesamt.
 
-- [ ] **P7-0 Granularität klären** (Option A vs B, s. oben) — Nutzervorgabe ausstehend. *(S)*
-- [ ] **P7-1 Zähler-Sollwerte aus dem PDF** (`referenznummern.py` mit Präfix `0`). *(S)*
-- [ ] **P7-2 4 Abbildungen nach `bilder/`** — Raster liegt in `PSkriptBilder/`, nur kopieren + Magic-Byte-Prüfung + Breiten übernehmen. *(S)*
-- [ ] **P7-3 `ch_00_grundlagen.html` transkribieren** — 7 Abschnitte, Makro-Tabelle, siunitx, `\be`/`\ee`, Fußnoten, Boxen, Querverweise als Anker. *(L)*
-- [ ] **P7-4 Verifikation** (Skill v013-verifikation: Soll/Ist pro Unterabschnitt deckungsgleich). *(M)*
-- [ ] **P7-5 `index.html`**: `<div data-chapter="ch_00_grundlagen">` VOR ch_01 einfügen; `#header_version` hochziehen. *(S)*
+- [x] **P7-0 Granularität geklärt** — Variante B (eine Datei, h2=Sections, h3=Subsections). *(S)*
+- [x] **P7-1 Zähler-Sollwerte aus dem PDF** (`referenznummern.py` pro Section 0.1–0.4). *(S)*
+- [x] **P7-2 4 Abbildungen nach `bilder/`** — kopiert + Magic-Byte-geprüft + Breiten 100/90/70/60 %. *(S)*
+- [x] **P7-3 `ch_00_grundlagen.html` transkribieren** — 7 Sections, Makro-Tabelle, siunitx manuell, `\be`/`\ee`→`\begin{equation}`, Fußnoten, Boxen, Tabellen getippt, Quell-Typos 1:1. *(L)*
+- [x] **P7-4 Verifikation** — Stufe 1 (PDF) vs. Stufe 2 (MathJax offline) deckungsgleich: 37 Gl., Spannen 0.1.1–0.1.12 / 0.2.1–0.2.13 / 0.3.1–0.3.6 / 0.4.1–0.4.6, Boxen 0.2.1–0.2.8; 0 TeX-Fehler, 0 unaufgelöste Refs. Stufe 3 (DOM): 12 Seiten, Abb. 1–4, Box-Reset, 10 Fußnoten. Stufe 4: 4 Bilder 200. Stufe 6: JS/CSS ok. **Stufe 5 (Browser-Sicht) offen — Nutzer freigeben.** *(M)*
+- [x] **P7-5 `index.html`**: `<div data-chapter="ch_00_grundlagen">` VOR ch_01 eingefügt; `#header_version` v1.7→v1.8. *(S)*
 
 ---
 
