@@ -892,6 +892,186 @@ bewusst noch roh — Ausarbeitung folgt später (Klärung mit Nutzer).
 
 ---
 
+## P14 — Formel-Überstand je Width-Modus prüfen & beheben (schmal/normal/breit)
+
+Eingetragen 2026-07-24 nach Nutzervorgabe (Feature-Wunsch, **nur aufgenommen,
+noch nicht umgesetzt**). Das Dokument soll in **allen Width-Modi**
+(schmal/normal/breit, s. `core.js::set_width_mode`) nach **Kandidaten-
+Formeln** durchsucht werden, die über den Rand des **Schreibbereichs**
+(`#paper` / `#content`) **herausragen** — **insbesondere, wenn die
+Gleichungsnummerierung (Tag) übersteht, aber nicht ausschließlich** (also
+auch Formelkörper selbst, lange `\frac`/Brüche, `\underbrace`-Texte etc.).
+Die Darstellung dieser Formeln muss **modussensitiv überarbeitet** werden,
+damit **kein Herausragen** mehr auftritt.
+
+**Anforderungen (Nutzervorgabe):**
+- **Automatische Suche** nach Kandidaten-Formeln im ganzen Dokument
+  (alle Kapitel, nicht nur 1.4/1.5).
+- **Alle drei Width-Modi** prüfen: schmal (schmalste Spalte → höchste
+  Überstands-Wahrscheinlichkeit), normal, breit.
+- **Kriterien:** (a) Tag/Nummerierung ragt über den Schreibbereich-Rand,
+  (b) Formelkörper selbst ragt über (auch ohne Tag-Problem), (c) ggf.
+  weitere (z. B. inline-Formel in zu schmaler Zeile).
+- **Modussensitive Behebung:** pro problematischer Formel eine Lösung,
+  die im jeweiligen Modus greift — keine globale Verbredung, die im breit-
+  Modus dann zu viel Luft lässt.
+
+**Offene Klärungsfragen (vor Umsetzung mit Nutzer klären — nicht jetzt):**
+1. **Schreibbereich-Rand = was genau?** `#content` inline-width (set per
+   `set_width_mode`) oder `#paper` (`--paper-max-width`)? Tag-Ragt-über
+   bezieht sich vermutlich auf die sichtbare Textspalte (`#content` width
+   abzüglich Padding). Klären, welchen Kasten messen.
+2. **Behebungs-Strategien (welche bevorzugt der Nutzer?):**
+   - Tag umbrechen/zweizeilig? (MathJax macht Tags normalerweise rechts;
+     bei Überstand ggf. Tag nach unten oder `tagstyle` ändern).
+   - Formel verkleinern (`\small`/`\scriptstyle` per MathJax-CSS im Modus)?
+   - Formel umbrechen (`\\` in align, oder automatischer Zeilenumbruch)?
+   - horizontal scrollbar im Container (unschön, eher nicht)?
+   - Schreibbereich im Modus minimal verbreitern (verändert aber die
+     Mode-Semantik — eher nicht)?
+   Pro Formel wahrscheinlich Einzelfall-Entscheidung; ist eine globale
+   Heuristik gewünscht (z. B. „über 95 % Spaltenbreite → automatisch
+   `\small`") oder manuelle Einzelfall-Korrektur pro Formel?
+3. **Kandidaten-Suche — automatisiert?** Ein Skript (z. B. im Screenshot/
+   DOM-Harness, headless Chromium pro Width-Modus) misst jede
+   `mjx-container[display="true"]`-`getBoundingClientRect().right` gegen
+   `#content.getBoundingClientRect().right` und listet Übersteher. Soll
+   dieses Werkzeug dauerhaft ins Repo (Verifikations-Skill) oder nur
+   einmalig zur Inventur?
+4. **Gilt auch für inline-Formeln** `\(...\)` (nicht nur Display)?
+   Vermutlich ja, aber Fokus lag auf nummerierten Display-Gleichungen.
+5. **Darkmode:** Überstand ist modus-, nicht farbabhängig — aber Behebung
+   darf nicht die Neon-/Tag-Lesbarkeit (P13-Konflikt?) stören.
+6. **Druck:** Druckspalte ist fix 700 px (print.js) — separat prüfen oder
+   wird Druck aus dem breit-Modus-Klon ohnehin eng genug?
+
+**Ansatz-Ideen (zur Planung, NICHT umgesetzt):**
+- **Inventur-Werkzeug:** Erweiterung des bestehenden Screenshot-Skills
+  (`.claude/skills/.../figur_screenshot.mjs`, playwright-core) oder des
+  DOM-Harness (`.claude/skills/v013-verifikation/scripts/dom_harness.mjs`):
+  pro Width-Modus Seite laden, alle `mjx-container[display=true]` +
+  deren `.mjx-mtr`/Tag-Elemente vermessen, Übersteher (`right > rand +
+  Toleranz`) auflisten mit Formel-Text/Tag/Seite. Output = Tabelle.
+- **Modussensitive CSS-Regeln** (s. CLAUDE.md Width-Mode-Decoupling):
+  `:root[data-width-mode="schmal"] …` gezielt problematische Formeln via
+  data-Attribut/`\label`-Marker ansprechen (z. B. `data-formel-
+  overflow`), dort `\small`-Äquivalent (MathJax-CSS-Skalierung) oder
+  Zeilenumbruch. **Nie** globale `.mjx-container{font-size:…}` (skaliert
+  alle, auch harmlose).
+- **Pro-Formel-Markierung:** problematischen Formeln im Quell-HTML ein
+  `data-…`-Merkmal geben, damit die modussensitive Regel sie greift —
+  O(1) pro Formel, skalierbar (CLAUDE.md hard constraint).
+- **Tag-Überstand separat:** MathJax-Tag liegt in `.mjx-mtext`/`.mjx-tlist`;
+   wenn nur der Tag übersteht, ist die sauberste Lösung oft die Formel
+   selbst (Box) so zu verengen, dass der Tag in die Spalte passt — oder
+   das Tag-Layout anzupassen. Vorab klären, ob Tags überhaupt umbrechen
+   dürfen.
+
+**Sub-Tasks (Aufwand Schätzung — erst nach Klärung verlässlich):**
+- [ ] **P14-0 Klärung** — die 6 offenen Fragen mit Nutzer klären
+  (insb. Behebungs-Strategie & Inventur-Werkzeug-Dauerhaftigkeit),
+  Ergebnis hier festhalten. *(M)*
+- [ ] **P14-1 Inventur-Werkzeug** — headless-Chromium-Messung pro
+  Width-Modus, listet Übersteher (Formel + Tag). *(M)*
+- [ ] **P14-2 Inventur** — alle Kapitel/Modi durchmessen, Kandidaten-
+  Liste erstellen (Markdown-Tabelle), mit Nutzer abstimmen. *(M)*
+- [ ] **P14-3 Behebung** — pro Kandidat modussensitive Regel
+  (data-Merkmal + `:root[data-width-mode=…]`-CSS); Einzelfall n. P14-0. *(L)*
+- [ ] **P14-4 Verifikation** — Inventur-Werkzeug wiederholt: 0
+  Übersteher in allen Modi; DOM-Harness (keine Seiten-/Nummern-
+  Regression); Sicht (Stufe 5, Freigabe „JA"). *(M)*
+
+---
+
+## P15 — Weiße Hintergründe aus Nicht-Foto-Abbildungen entfernen
+
+Eingetragen 2026-07-24 nach Nutzervorgabe (Feature-Wunsch, **nur aufgenommen,
+noch nicht umgesetzt**). Alle **Abbildungen, die keine Fotos sind** (also
+Diagramme, TikZ-Plots, Schemazeichnungen, gerenderte Grafiken), sollen ihren
+**weißen Hintergrund entfernt bekommen**, wenn sie einen solchen haben.
+Ziel: auf nicht-weißen Untergründen (Darkmode, farbige Boxen) keine weißen
+Kacheln; Linien/Punkte bleiben sichtbar, der Hintergrund wird transparent.
+
+**Anforderungen (Nutzervorgabe):**
+- **Nur Nicht-Foto-Abbildungen** — Fotos behalten ihren Hintergrund (sie
+  sind reale Bilder, kein zeichenbares Diagramm). Unterscheidung
+  Foto vs. Diagramm nötig (s. Klärung).
+- **Bedingung:** „wenn sie einen weißen Hintergrund haben" — nur dann
+  entfernen; Grafiken mit schon transparentem Hintergrund unangetastet.
+- **Ergebnis:** weißer Hintergrund → transparent; Vordergrund (Linien,
+  Achsen, Schrift, Flächenfarben) bleibt.
+
+**Offene Klärungsfragen (vor Umsetzung mit Nutzer klären — nicht jetzt):**
+1. **Foto vs. Nicht-Foto — Kriterium?** Manuelle Liste/Markierung (z. B.
+   `data-photograph="true"` auf den `<img class="grafik">`/`<figure>`),
+   Dateinamenskonvention, automatische Erkennung (Histogramm: viele
+   Farbtöne + kein weißer Rand = Foto)? Vermutlich manuelle Markierung
+   am robustesten (CLAUDE.md: Figuren kommen aus `bilder/`, Anzahl
+   überschaubar). Klären, welche Abbildungen Fotos sind.
+2. **„Weiße" Definition:** exakt `#FFFFFF`? Oder near-white (Helligkeit
+   > Schwellwert, geringe Sättigung)? Schwellwert robust gegen Anti-
+   Aliasing-Kanten wählen.
+3. **Verfahren — pro Bild:**
+   - **PNG-Transparenz:** Weiß → alpha=0 (Bildverarbeitung, einmalig:
+     `convert input.png -fuzz X% -transparent white output.png` o. Ä.).
+     Neue Dateien ins `bilder/`-Verzeichnis (CLAUDE.md: TikZ-Figuren
+     ohnehin PNG aus `pdftocairo`).
+   - **Oder CSS-Mischung:** `mix-blend-mode:multiply` (weiß → transparent
+     gegen Hintergrund, aber *alle* Farben werden multipliziert —
+     riskant in farbigen Boxen/Darkmode). Vermutlich echte PNG-Transparenz
+     sauberer.
+   - **Oder SVG:** wenn Quelle SVG (nicht TikZ→PNG), `background`-Rect
+     entfernen.
+4. **Darkmode-Verträglichkeit:** mit transparentem Hintergrund zeigt die
+   Grafik im Darkmode auf dunklem Untergrund — sind die Linien dann noch
+   sichtbar (schwarz auf dunkel)? Ggf. muss für Darkmode eine invertierte
+   Variante oder CSS-Filter (`filter: invert(1)`) auf Diagramme —
+   Klären, ob das im Wunsch enthalten ist oder nur die Hintergrund-
+   Entfernung gewollt ist (Linienproblematik als eigener Punkt).
+5. **Bestehende Figuren vs. künftige:** gilt für alle heutigen `bilder/`-
+   PNGs und auch für künftige (P12-Migration bringt viele neue)?
+   Pipeline-Regel (ähnlich MIGRATION_v0.13) festhalten.
+6. **`make_static`-Pfad:** die statischen Abbildungen kommen via
+   `core.js::make_static` als `<img class="grafik">`. Stelle sicher, dass
+   die transparenten Varianten auch dort geladen werden.
+
+**Ansatz-Ideen (zur Planung, NICHT umgesetzt):**
+- **Inventur:** alle `bilder/*.{png,svg}` + alle `<img class="grafik">`
+  (und `figure.abbildung > img`) auflisten; Foto/Diagramm klassifizieren
+  (P15-0); für Diagramme prüfen, ob weißer Hintergrund vorhanden.
+- **Bildverarbeitung** (einmalig, lokal): PNG-Transparenz via ImageMagick
+  (`-transparent white` mit `-fuzz`) oder Python/Pillow (near-white →
+  alpha); Original behalten (Suffix `_orig` oder Unterordner) bis
+  Verifikation. Keine Datei ohne Backup überschreiben.
+- **Markierung:** Fotos bekommen `data-photograph="true"` im Quell-HTML
+  (oder eine CSS-Klasse), damit klar ist, welche unangetastet bleiben.
+- **Pipeline-Regel:** in `MIGRATION_v0.13_nach_HTML.md`/Asset-Pipeline
+  (P12-F) festhalten: Nicht-Foto-PNGs mit transparentem Hintergrund
+  abliefern.
+- **Darkmode-Follow-up** (eigener Punkt nach P15-0): wenn Linien im
+  Darkmode unsichtbar werden, `:root[data-darkmode] img.grafik` (nur
+  Diagramme) per CSS-Filter invertieren oder separate Dark-Variante.
+
+**Sub-Tasks (Aufwand Schätzung — erst nach Klärung verlässlich):**
+- [ ] **P15-0 Klärung** — die 6 offenen Fragen mit Nutzer klären
+  (insb. Foto-Liste & Verfahren PNG-Transparenz vs. CSS), Ergebnis hier
+  festhalten. *(M)*
+- [ ] **P15-1 Inventur** — alle `bilder/`-Abbildungen + Klassifikation
+  (Foto/Diagramm) + hat-weiß-Bg? *(S–M)*
+- [ ] **P15-2 Foto-Markierung** — `data-photograph`/Klasse auf Fotos
+  im Quell-HTML (alle Kapitel). *(S)*
+- [ ] **P15-3 Transparenz** — pro Diagramm mit weißem Bg PNG-Transparenz
+  erzeugen (Backup, ImageMagick/Pillow), `bilder/` ersetzen. *(M)*
+- [ ] **P15-4 Darkmode-Follow-up** — ggf. CSS-Filter/Invert-Variante für
+  Diagramme im Darkmode (nur falls P15-0 als nötig erachtet). *(S–M)*
+- [ ] **P15-5 Pipeline-Regel** — in MIGRATION_v0.13 / P12-F aufnehmen:
+   Nicht-Foto-PNGs transparent abliefern. *(S)*
+- [ ] **P15-6 Verifikation** — Sicht in hell + dunkel auf mehreren
+  betroffenen Abbildungen (Stufe 5, Freigabe „JA"); keine weißen Kacheln
+  mehr auf farbigen Boxen/Darkmode. *(M)*
+
+---
+
 1. Erst **P0** abarbeiten (rasch, niedriges Risiko, senkt schon das Token-Volumen spürbar).
 2. Dann **Per-Figure-Fabrik + Modularisierung + Globals einfrieden** (P1) als zusammenhängender Struktur-Refactor — das ist der zentrale Hebel für Token-Effizienz und Wartbarkeit; danach sind Animation (rAF) und DOM-Optimierung günstig in der Fabrik mitzuerledigen.
 3. **P2** anschließend/parallel je nach Bedarf (Mobile/A11y).
