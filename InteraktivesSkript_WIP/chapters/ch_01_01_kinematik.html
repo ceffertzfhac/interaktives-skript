@@ -320,3 +320,166 @@
 
     <p>Auf den vorangegangenen Seiten haben wir uns verschiedene Beispiele für Formeln angesehen, die ein-, zwei- oder dreidimensionale Bewegungen beschreiben. Die Formeln selbst haben wir dabei nicht hergeleitet, sondern sie kamen mehr oder weniger aus dem Nichts. Wie diese Formeln zustandekommen, werden wir uns zu einem späteren Zeitpunkt ansehen. Zum jetzigen Zeitpunkt ist nur wichtig, dass Sie wissen, wie Sie, wenn Sie eine solche Formel gegeben bekommen aus diesen Formeln verschiedene Aspekte der Bewegung herleiten können, so wie wir es in den Beispielen besprochen haben.</p>
 </section>
+
+<h3 class="inhaltsverzeichnis">1.1.8 Die Bahn</h3>
+<section>
+    <p>Im Zusammenhang mit Beispielen für Bewegungen in zwei Dimensionen ist uns die Kreisbewegung begegnet.</p>
+
+    <p>Die Formel für die Strecke der Kreisbewegung war:</p>
+
+    \begin{equation}
+    \vec{s}(t)=\left(\begin{matrix}x(t)\\y(t) \end{matrix}\right)=\left(\begin{matrix}R\cdot \cos\left(\frac{2\cdot \pi}{T} t\right) \\R\cdot\sin\left(\frac{2\cdot \pi}{T} t\right)  \end{matrix}\right)
+    \end{equation}
+
+    <p>Hierbei hatten wir die Herausforderung formuliert, dass es schwer war, auf den ersten Blick zu sehen, dass die Bewegung eine Kreisbewegung darstellt. Auch die Visualisierung der einzelnen Komponenten brachte nicht deutlich mehr Klarheit, da die Komponenten \(x(t)\) und \(y(t)\) in zwei separaten Ort-Zeit-Diagrammen dargestellt werden mussten. Wenn es doch nur einen Weg gäbe, zu sehen, wie die Bewegung in der Ebene (oder in drei Dimensionen im Raum) verliefe. Diese Möglichkeit bietet die <strong>Bahn</strong>. Eine Bahn ist eine Darstellung der Bewegung, die nicht mehr von der Zeit abhängt, sondern bei der aufgetragen wird, an welcher Stelle \(x\) sich das Objekt befindet, wenn es sich gleichzeitig bei einem bestimmten \(y\) befindet. Eine solche Darstellung kann man sich im übertragenen Sinne vorstellen wie eine Spur im Schnee: man sieht wo (also bei welchen \(x,y\)-Koordinaten) eine Person durch den Schnee gelaufen ist, man weiß jedoch nicht wann, also zu welchem \(t\) die Person an einem bestimmten Punkt \(P(x,y)\) war, siehe Abbildung <a class="xref" data-ref-fig="fig-spur_im_schnee"></a>.</p>
+
+    <figure class="abbildung" id="fig-spur_im_schnee">
+        <img class="grafik" style="width:60%" src="bilder/spur_im_schnee.jpg" alt="">
+        <figcaption>Die (physikalische) Bahn eines Objektes können Sie sich wie eine Spur im Schnee vorstellen: Sie wissen, wo eine Person gegangen ist, aber nicht, zu welchem Zeitpunkt sie an einem bestimmten Ort war.</figcaption>
+    </figure>
+
+    <p>Um aus der Formel für die Strecke die Bahn zu ermitteln, muss man wie folgt vorgehen: Zunächst muss man eine der beiden Komponenten \(x(t)\) oder \(y(t)\) nach \(t\) auflösen. Wir entscheiden uns beispielhaft für \(x(t)\), welches wir durch die Umstellung nach \(t\) umformen in eine Funktion \(t(x)\). Dieses \(t(x)\) setzen wir nun in \(y(t)\) ein, wir ersetzen also alle in \(y(t)\) auftretenden \(t\) durch den Ausdruck \(t(x)\). Dann ist in der ursprünglichen Formel \(y(t)\) kein \(t\) mehr enthalten, wohl aber vermutlich einige \(x\). Daher muss \(y(t)\) nun als \(y(x)\) bezeichnet werden.</p>
+
+    \begin{align*}
+    \textbf{Die Bahn:}\quad \text{Formelzeichen:}\, &amp;y(x)&amp; \quad \text{Einheit:}\,\mathrm{m}\\
+    \textbf{}\quad \text{oder:}\, &amp;x(y)&amp; \quad \text{Einheit:}\,\mathrm{m}
+    \end{align*}
+
+    <div class="beispiel" data-title="Die Flugbahn des schrägen Wurfes">
+        <p>Beispielhaft ermitteln wir zunächst die Flugbahn des schrägen Wurfes. Die Formel für die Strecke des schrägen Wurfes war:</p>
+        \begin{equation}
+        \vec s(t) = \left(\begin{matrix}x(t)\\y(t) \end{matrix}\right)=\left(\begin{matrix} v_0\cdot \cos{(\alpha)} \cdot t \\ -\frac{1}{2}\cdot g t^2 + v_0\cdot \sin{(\alpha)} \cdot t + h_0\end{matrix}\right)
+        \end{equation}
+        <p>Die Strecke des schrägen Wurfes wird also beschrieben durch zwei Funktionen mit derselben Variablen \(t\), nämlich:</p>
+        \begin{equation}
+        x(t)=v_0\cdot \cos{(\alpha)} \cdot t
+        \end{equation}
+        <p>und</p>
+        \begin{equation}
+        y(t)=-\frac{1}{2}\cdot g t^2 + v_0\cdot \sin{(\alpha)} \cdot t + h_0
+        \end{equation}
+        <p>Um die Bahnkurve zu ermitteln müssen wir nun eine der beiden Gleichungen nach \(t\) auflösen und dann das Resultat in die andere Gleichung einsetzen.</p>
+
+        <p>Im vorliegenden Beispiel ist es deutlich einfacher, die Gleichung \(x(t)\) nach \(t\) aufzulösen als die Gleichung \(y(t)\)<span class="fussnote">Dennoch würden wir auf eine identische Bahn kommen, wenn wir \(y(t)\) nach \(t\) auflösen würden.</span>.</p>
+
+        <p>Wir erhalten also:</p>
+        \begin{equation}
+        t(x)=\frac{x}{v_0\cdot \cos{(\alpha)}}
+        \end{equation}
+
+        <p>Das setzen wir in die Gleichung \(y(t)\) ein und erhalten:</p>
+        \begin{multline}
+        y(x)=-\frac{1}{2}\cdot g \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right)^2 + v_0\cdot \sin{(\alpha)} \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right) + h_0 \\
+        =  -\frac{1}{2}\cdot\left( \frac{g}{v_0^2\cdot \cos^2{(\alpha)}}\right)\cdot x^2 + \tan{(\alpha)}\cdot x+ h_0
+        \end{multline}
+
+        <p>Wir sehen: Die Flug<strong>bahn</strong> eines Objektes, das schräg geworfen wurde, ist auch eine Parabel! Machen Sie sich klar: diese Parabel ist eine andere Parabel als die Parabel der Komponente \(y(t)\). Das eine (die Bahn) beschreibt den zeitunabhängigen Verlauf der Flugkurve (vergl. Spur im Schnee) durch den Raum, das andere (die y-Komponente) beschreibt den zeitlichen Verlauf der Höhe über dem Boden.</p>
+
+        <figure class="abbildung" id="fig-bahnkurve_schraeger_wurf">
+            <img class="grafik" style="width:99%" src="bilder/bahnkurve_schraeger_wurf.png" alt="">
+            <figcaption>Beispiel für eine Bahnkurve: die Flugbahn eines Objektes, das schräg geworfen wurde. Im Diagramm wurde die y-Komponente der Bewegung gegen die x-Komponente der Bewegung aufgetragen, so dass eine Bahnkurve \(y(x)\) entsteht. Wo das Objekt zu einem bestimmten Zeitpunkt \(t\) ist, ist in dieser Darstellung nicht mehr erkennbar. Links zu sehen die schematische Darstellung der Bewegung, rechts die Bahnkurve. Man erkennt (in beiden Darstellungen) die Parabelform der Flugbahn.</figcaption>
+        </figure>
+    </div>
+
+    <div class="beispiel" data-title="Kreisbewegung">
+        <p>Unsere eigentliche Motivation, uns mit der Bahn zu beschäftigen, war, dass wir wissen wollten, welche Bahn die Bewegungsgleichung</p>
+        \begin{equation}
+        \vec{s}(t)=\left(\begin{matrix}x(t)\\y(t) \end{matrix}\right)=\left(\begin{matrix}R\cdot \cos\left(\frac{2\cdot \pi}{T} t\right) \\R\cdot\sin\left(\frac{2\cdot \pi}{T} t\right)  \end{matrix}\right)
+        \label{formel_kreisbahnbewegungsgleichungbsp}
+        \end{equation}
+        <p>beschreibt.</p>
+
+        <p>Zunächst zerlegen wir die vektorielle (zweidimensionale) Strecke \(\vec s(t)\) wieder in ihre Komponenten:</p>
+
+        \begin{align*}
+        x(t)&amp;=R\cdot \cos\left(\frac{2\cdot \pi}{T} t\right)\\
+        y(t)&amp;=R\cdot\sin\left(\frac{2\cdot \pi}{T} t\right)
+        \end{align*}
+
+        <p>In diesem Falle sehen beide Komponenten der Strecke \(x(t)\) und \(y(t)\) ähnlich komplex aus, so dass wir uns willkürlich entscheiden können, welche wir nun nach \(t\) auflösen möchten. Nehmen wir zum Beispiel \(x(t)\):</p>
+        \begin{align*}
+        &amp;\,&amp;x(t)=R\cdot \cos\left(\frac{2\cdot \pi}{T} t\right)\\
+        &amp;\Rightarrow &amp;\arccos{\left(\frac{x(t)}{R}\right)} =\frac{2\cdot \pi}{T}\cdot t\\
+        &amp;\Rightarrow&amp; t(x)=\frac{T}{2\cdot \pi}\cdot \arccos{\left(\frac{x}{R}\right)}
+        \end{align*}
+        <p>Dieses \(t(x)\) setzen wir nun in \(y(t)\) ein, um alle \(t\) zu ersetzen:</p>
+        \begin{align*}
+        &amp;\,&amp; y(t)=R\cdot\sin\left(\frac{2\cdot \pi}{T} t\right)  \\
+        &amp;\Rightarrow &amp; y(x)=R\cdot \sin \left(\frac{2\cdot \pi}{T}  \cdot  \frac{T}{2\cdot \pi} \cdot\arccos{\left(\frac{x}{R}\right)}\right) \\
+        &amp;\Rightarrow &amp; y(x)=R\cdot \sin \left(\arccos{\left(\frac{x}{R}\right)}\right)
+        \end{align*}
+        <p>Das hilft uns noch nicht so wirklich weiter. Allerdings sagt uns die Mathematik, dass gilt:</p>
+        \begin{equation}
+        \sin\left( \arccos(x)\right)= \sqrt{1-x^2}
+        \end{equation}
+        <p>Mit diesem Hinweis, können wir Formel (<a class="xref" data-ref-eq="formel_kreisbahnbewegungsgleichungbsp"></a>) weiter bearbeiten:</p>
+        \begin{align*}
+         y(x)&amp;=R\cdot \sin \left(\arccos{\left(\frac{x}{R}\right)}\right) \\
+        &amp;= R \cdot \sqrt{1-\left(\frac{x}{R}\right)^2}\\
+        \Leftrightarrow y^2&amp;=R^2-x^2 \\
+        \Leftrightarrow x^2+y^2&amp;=R^2
+        \end{align*}
+
+        <p>Das ist tatsächlich die Formel für einen Kreis. Die Bahn der Strecke aus Formel (<a class="xref" data-ref-eq="formel_kreisbahnbewegungsgleichungbsp"></a>) ist tatsächlich eine Kreisbahn.</p>
+    </div>
+
+    <p>Bahnkurven können auch für dreidimensionale Bewegungen errechnet werden. Während allerdings bei Bewegungen in zwei Dimensionen es eine eindeutige Zuordnung \(x(y)\) oder \(y(x)\) gibt, so kann es z.&nbsp;B. sein, dass, wie bei der Wendeltreppe, einem Wertepaar \((x,y)\) mehrere \(z\)-Werte zugeordnet werden müssen. Daher muss man bei der Berechnung der Bahn darauf achten, dass die Umformung so durchgeführt wird, dass eine eindeutige Abbildung (Funktion) entsteht. Schauen wir uns das am Beispiel der Wendeltreppe an.</p>
+
+    <div class="beispiel" data-title="Wendeltreppe">
+        <p>Die Strecke der Wendeltreppe kann beschrieben werden durch folgende Gleichung, die wir schon weiter oben kennengelernt hatten:</p>
+        \begin{equation}
+        \vec{s}(t)=\left(\begin{matrix}x(t)\\y(t) \\ z(t)\end{matrix}\right)=\left(\begin{matrix}R\cdot \cos\left(\frac{2\cdot \pi}{T} t\right) \\R\cdot\sin\left(\frac{2\cdot \pi}{T} t\right) \\\pm v_z \cdot t \end{matrix}\right)
+        \end{equation}
+
+        <p>Hierin ist \(v_z\) die vertikale Geschwindigkeit, gibt also an, wie schnell mit der Wendeltreppe eine Höhe überwunden wird. Ist die vertikale Geschwindigkeit positiv, so bewegt sich die Person auf der Wendeltreppe nach oben, ist sie negativ, so bewegt sich die Person nach unten. \(R\) ist der Radius der Wendeltreppe und \(T\) die Zeit, die für eine komplette Umdrehung benötigt wird. Das bedeutet: an zwei Zeitpunkten, die \(n\cdot T\) mit \(n\in\mathbb{N}\) auseinander liegen, hat die Person die selben \(x,y\)-Koordinaten, jedoch eine andere z-Koordinate.</p>
+
+        <p>Wir können die Strecke nun in drei Gleichungen aufteilen:</p>
+        \begin{align*}
+        x(t)&amp;=R\cdot \cos\left(\frac{2\cdot \pi}{T} t\right) \\
+        y(t)&amp;=R\cdot\sin\left(\frac{2\cdot \pi}{T} t\right) \\
+        z(t)&amp;=v_z \cdot t
+        \end{align*}
+
+        <p>Wie oben besprochen: wenn wir uns einen Punkt in der \(xy\)-Ebene ansehen (also z.&nbsp;B. dem Erdboden), so können über diesem Punkt entweder gar keine Punkte der Strecke liegen oder eben mehrere bei verschiedenen \(z\)-Werten. Andererseits: wenn wir uns eine bestimmte Höhe \(z(t)=h\) ansehen, so gibt es auf dieser Höhe \(h\) nur ein Wertepaar \(x,y\), welches zur Bahn gehört.</p>
+
+        <p>Daher ist \(z\) ein geeigneter Parameter, um die Bahn eindeutig zu beschreiben, wir sollten uns also bemühen, die oben stehenden Formeln so umzuformen, das \(x(z)\) und \(y(z)\) entsteht, so dass \(P(x(z), y(z), z)\) alle Punkte der Bahn beschreibt.</p>
+
+        <p>Dazu lösen wir die Gleichung für \(z(t)\) nach \(t\) auf:</p>
+        \begin{equation}
+        z(t)=v_z \cdot t \quad \Leftrightarrow \quad t(z)=\frac{z}{v_z}
+        \end{equation}
+
+        <p>Das so gefundene \(t(z)\) setzen wir nun in die Gleichungen für \(x(t)\) und \(y(t)\) ein.</p>
+
+        \begin{align*}
+        x(z)&amp;=R\cdot \cos\left(\frac{2\cdot \pi}{T} \frac{z}{v_z}\right) \\
+        y(z)&amp;=R\cdot\sin\left(\frac{2\cdot \pi}{T} \frac{z}{v_z}\right)
+        \end{align*}
+
+        <p>Die Bahn einer Person, die eine Wendeltreppe hinauf (oder hinab) läuft, kann also beschrieben werden als alle Punkte \(P(x(z), y(z), z)\).</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.1.9 Der physikalische Definitionsbereich</h3>
+<section>
+    <p>Im Beispiel zum freien Fall haben wir die Fallzeit eines Objektes ermittelt. Dazu haben wir die Bewegungsgleichung \(y(t)=- \frac{1}{2}\cdot g \cdot t^2 +h_0\) gleich Null gesetzt und sind auf die Lösung \(t=+\sqrt{\frac{2\cdot h_0}{g}}\) gekommen. Da die Bewegungsgleichung eine quadratische Gleichung ist, wäre jedoch mathematisch die Lösung \(t=-\sqrt{\frac{2\cdot h_0}{g}}\) genauso gültig.</p>
+
+    <p>Jedoch war diese Lösung physikalisch nicht sinnvoll. Warum? Jede Funktion, mit der wir Bewegungen beschreiben, hat einen <strong>mathematischen Definitionsbereich</strong>. Der Definitionsbereich \(D\) ist die Menge der Zahlen, welche wir in die Funktion einsetzen können. Beispielsweise hat die Funktion</p>
+    \begin{equation} f(x)=\frac{1}{\sqrt{x}} \end{equation}
+    <p>den Definitionsbereich:</p>
+    \begin{equation} D=\mathbb{R}^{+} \end{equation}
+    <p>da in die Funktion nur positive Zahlen echt größer Null eingesetzt werden dürfen.</p>
+
+    <p>Dahingegen hat die Funktion</p>
+    \begin{equation}
+    y(t)=- \frac{1}{2}\cdot g \cdot t^2 +h_0
+    \end{equation}
+    <p>als mathematischen Definitionsbereich alle reellen Zahlen. Physikalisch ist jedoch nur eine Teilmenge dieser Zahlen sinnvoll. Die Gleichung beschreibt den freien Fall eines Objektes, welches zum Zeitpunkt \(t=0\) aus einer Höhe \(h_0\) über dem Boden fallen gelassen wird. Das bedeutet, dass es nicht sinnvoll ist, irgendein \(t<0\) einzusetzen, da zu diesen Zeitpunkten das Objekt ja noch gar nicht losgelassen wurde. Sind dann aber alle Zahlen \(t\geq0\) zulässig? Nein! Irgendwann kommt das Objekt auf dem Boden auf. Nehmen wir an, dass das Objekt eine schwere Kugel ist und der Boden aus lockerem Sand, dann wird das Objekt einfach an dem Punkt liegen bleiben, wo es auf den Boden auftrifft (es wird zumindest nicht wie ein Flummy hochspringen oder wegrollen, höchstens ein wenig einsinken). Die oben stehende Gleichung beschreibt also die Bewegung des Objektes nur bis zu dem Zeitpunkt, an dem die Kugel den Boden erreicht, aber nicht mehr danach.</p>
+
+    <p>Somit ist der physikalische Definitionsbereich das Intervall</p>
+    \begin{equation} D_\text{phys} = \left[ 0, \sqrt{\frac{2\cdot h_0}{g}} \right] \end{equation}
+
+    <p>Dieser mathematische Ausdruck bedeutet: Zulässige Werte für \(t\) sind alle reellen Zahlen, welche die Bedingung erfüllen, dass sie zwischen \(0\) und \( \sqrt{\frac{2\cdot h_0}{g}} \) liegen, wobei die Grenzen eingeschlossen sind.</p>
+
+    <p>Jede Bewegung hat ihren eigenen individuellen physikalischen Definitionsbereich, auf den beim Beantworten von Fragestellungen geachtet werden muss.</p>
+</section>
