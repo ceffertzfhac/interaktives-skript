@@ -217,5 +217,13 @@
     font-style: italic;
     font-weight: 700;
     font-size: calc(15px * var(--kb-fs, 1));
-    dominant-baseline: hanging;
 }
+
+/* Geister-Intervalle des vorherigen Laufs („letzte Kurve behalten"): verblasst
+   und ausgegraut, bleiben aber stehen. Elementtyp-spezifische Selektoren, damit
+   sie die Grundfarben (Punkt/Linie/Label) überschreiben; höhere Spezifität als
+   die Basisklasse -> gewinnt. */
+.aspekt-figur[data-aspekt="periodendauer"] .tmark-ghost { opacity: .4; }
+.aspekt-figur[data-aspekt="periodendauer"] circle.tmark-ghost { fill: var(--kb-text3); }
+.aspekt-figur[data-aspekt="periodendauer"] line.tmark-ghost   { stroke: var(--kb-text3); }
+.aspekt-figur[data-aspekt="periodendauer"] text.tmark-ghost   { fill: var(--kb-text3); }

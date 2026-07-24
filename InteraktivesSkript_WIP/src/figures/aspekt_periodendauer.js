@@ -182,6 +182,8 @@ const SVG_GRAPH = `
     <polyline id="kb_graph_prev_line_bottom" fill="none" stroke-width="2" points="" visibility="hidden"/>
     <polyline id="kb_graph_line_bottom" fill="none" stroke-width="2" points=""/>
     <circle id="kb_graph_point_bottom" r="3" visibility="hidden"/>
+    <!-- T-Ablese-Markierung im unteren y(t)-Diagramm (analog zum oberen). -->
+    <g id="kb_tmark_bottom"></g>
     <text id="kb_graph_title_bottom" x="350" y="14" text-anchor="middle" class="graph-title-text small"></text>
     <line id="kb_graph_hover_line_bottom" class="graph-hover-line" visibility="hidden"/>
     <circle id="kb_graph_hover_point_bottom" class="graph-hover-point" r="6" visibility="hidden"/>
@@ -392,13 +394,21 @@ export function buildPeriodendauerFig(fig) {
         bottom: ge(p + 'graph_prev_line_bottom'),
     };
     let prevSeries = null;                // {t:[…], x:[…], y:[…]} — komplette Kurven
+    let prevMark = null;                  // {T, R} des vorigen Laufs — für die verblassten
+                                          // Geister-T-Intervalle (Feature „letzte Kurve behalten").
+                                          // T aus store.omega (nicht ak_T!), damit es zur
+                                          // eingefrorenen Kurve passt (ak_T ist beim Ziehen schon neu).
     function snapshotPrev() {             // inside withStore aufrufen
         prevSeries = store.tData.length
             ? { t: store.tData.slice(), x: store.xData.slice(), y: store.yData.slice() }
             : null;
+        prevMark = store.tData.length
+            ? { T: 2 * Math.PI / store.omega, R: store.R }
+            : null;
     }
     function clearPrev() {
         prevSeries = null;
+        prevMark = null;
         Object.values(prevLines).forEach(pl => {
             if (pl) { pl.setAttribute('points', ''); pl.setAttribute('visibility', 'hidden'); }
         });
@@ -563,52 +573,76 @@ export function buildPeriodendauerFig(fig) {
         }
     }
 
-    // -- T-Ablese-Markierung im oberen x(t)-Diagramm: zwei aufeinanderfolgende
-    //    Maxima von x(t)=R·cos(ωt) liegen bei t=0 und t=T (cos=+1 -> x=+R). Beide
-    //    Maxima passen immer ins Diagramm (T ≤ T_MAX = 8 s < 12 s Achsenende). Wie
-    //    renderPrev() werden die Marker pro Zeichnen aus store.graphScale.top auf
-    //    die AKTUELLE Achse projiziert (die y-Achse skaliert mit R, die x-Achse
-    //    ist fest 0…12 s), nie als eingefrorene Pixel. Läuft inside withStore.
-    function drawTMarkers() {
-        const g = ge(p + 'tmark_top');
-        if (!g) return;
-        g.textContent = '';
-        const gs = store.graphScale && store.graphScale.top;
-        if (!gs || gs.type !== 'xt') return;
+    // -- Eine bemaßte T-Strecke zwischen zwei aufeinanderfolgenden Extrema
+    //    zeichnen: zwei Punkte, senkrechte Hilfslinien zur Nulllinie, Doppelpfeil-
+    //    Strecke und „T"-Label. `sign` = +1 (Maxima, x=+R, Strecke OBEN) oder −1
+    //    (Minima, x=−R, Strecke UNTEN). Wie renderPrev() aus dem gs-Rechteck auf
+    //    die AKTUELLE Achse projiziert (y skaliert mit R, x fest 0…12 s), nie als
+    //    eingefrorene Pixel. `ghost` = verblasster Marker eines vorherigen Laufs
+    //    (ohne Pfeilspitzen; Optik via .tmark-ghost). Läuft inside withStore.
+    function drawInterval(g, gs, t1, t2, sign, R, ghost) {
         const { plotL, plotT, plotW, plotH, xMin, xMax, yMin, yMax } = gs;
-        const T = parseFloat(ak_T.value);
-        const R = store.R;
-        const tA = 0, tB = T;                       // zwei aufeinanderfolgende Maxima
-        if (tB > xMax) return;                       // Sicherheitsnetz (sollte nie greifen)
+        if (t2 > xMax) return;                       // passt nicht mehr ins Diagramm
         const xR = (xMax - xMin) || 1, yR = (yMax - yMin) || 1;
         const px = t => plotL + ((t - xMin) / xR) * plotW;
         const py = v => plotT + plotH - ((v - yMin) / yR) * plotH;
         const NS = 'http://www.w3.org/2000/svg';
-        const mk = (tag, attrs, cls) => {
+        const cls = base => ghost ? base + ' tmark-ghost' : base;
+        const mk = (tag, attrs, base) => {
             const el = document.createElementNS(NS, tag);
             for (const k in attrs) el.setAttribute(k, attrs[k]);
-            if (cls) el.setAttribute('class', cls);
+            el.setAttribute('class', cls(base));
             g.appendChild(el);
             return el;
         };
-        const pxA = px(tA), pxB = px(tB);
-        const pyPeak = py(R), pyZero = py(0);
-        // Senkrechte Hilfslinien vom Maximum bis zur Nulllinie (visualisiert das
-        // Ablesen auf der Zeitachse).
-        mk('line', { x1: pxA, y1: pyPeak, x2: pxA, y2: pyZero }, 'tmark-vline');
-        mk('line', { x1: pxB, y1: pyPeak, x2: pxB, y2: pyZero }, 'tmark-vline');
-        // Maxima-Punkte.
-        mk('circle', { cx: pxA, cy: pyPeak, r: 4 }, 'tmark-dot');
-        mk('circle', { cx: pxB, cy: pyPeak, r: 4 }, 'tmark-dot');
-        // Bemaßte T-Strecke zwischen den Maxima (Doppelpfeil nach außen).
-        mk('line', {
-            x1: pxA, y1: pyPeak, x2: pxB, y2: pyPeak,
-            'marker-start': `url(#${p}tmark_arrow)`, 'marker-end': `url(#${p}tmark_arrow)`,
-        }, 'tmark-bracket');
-        // Label „T" als nativer <svg:text> (Einzelglyphe, Fallstrick #17), knapp
-        // unter der Strecke zentriert.
-        mk('text', { x: (pxA + pxB) / 2, y: pyPeak + 18, 'text-anchor': 'middle' }, 'tmark-label')
-            .textContent = 'T';
+        const pxA = px(t1), pxB = px(t2);
+        const pyPk = py(sign * R), pyZero = py(0);
+        mk('line', { x1: pxA, y1: pyPk, x2: pxA, y2: pyZero }, 'tmark-vline');
+        mk('line', { x1: pxB, y1: pyPk, x2: pxB, y2: pyZero }, 'tmark-vline');
+        mk('circle', { cx: pxA, cy: pyPk, r: 4 }, 'tmark-dot');
+        mk('circle', { cx: pxB, cy: pyPk, r: 4 }, 'tmark-dot');
+        const br = { x1: pxA, y1: pyPk, x2: pxB, y2: pyPk };
+        if (!ghost) { br['marker-start'] = `url(#${p}tmark_arrow)`; br['marker-end'] = `url(#${p}tmark_arrow)`; }
+        mk('line', br, 'tmark-bracket');
+        // Label „T" als nativer <svg:text> (Einzelglyphe, Fallstrick #17), auf der
+        // Nulllinien-SEITE der Strecke (oben: darunter; unten: darüber).
+        const lbl = mk('text', {
+            x: (pxA + pxB) / 2, y: pyPk + (sign > 0 ? 18 : -8), 'text-anchor': 'middle',
+        }, 'tmark-label');
+        lbl.setAttribute('dominant-baseline', sign > 0 ? 'hanging' : 'auto');
+        lbl.textContent = 'T';
+    }
+
+    // -- Alle T-Ablese-Markierungen zeichnen. Je Diagramm (x(t) oben, y(t) unten)
+    //    ein Intervall zwischen den ersten beiden Maxima (oben) UND eines zwischen
+    //    den ersten beiden Minima (unten). Extrema-Zeiten:
+    //      x(t)=R·cos(ωt): Max bei k·T, Min bei T/2+k·T
+    //      y(t)=R·sin(ωt): Max bei T/4+k·T, Min bei 3T/4+k·T
+    //    Ein Intervall erscheint erst, wenn seine zweite Extremstelle DURCHLAUFEN
+    //    ist (curT ≥ t2) — so wird die Periode erst nach ihrem Ablauf bemaßt.
+    //    Geister-Intervalle (voriger Lauf) werden mit prevMark.T/R voll gezeichnet
+    //    (verblasst), unabhängig von curT. Läuft inside withStore.
+    function drawTMarkers() {
+        const T = parseFloat(ak_T.value);
+        const R = store.R;
+        const slots = [
+            { g: ge(p + 'tmark_top'),    gs: store.graphScale && store.graphScale.top,    type: 'xt' },
+            { g: ge(p + 'tmark_bottom'), gs: store.graphScale && store.graphScale.bottom, type: 'yt' },
+        ];
+        const ivts = (Tv, type) => type === 'xt'
+            ? [{ t1: 0, t2: Tv, sign: 1 }, { t1: Tv / 2, t2: 3 * Tv / 2, sign: -1 }]
+            : [{ t1: Tv / 4, t2: 5 * Tv / 4, sign: 1 }, { t1: 3 * Tv / 4, t2: 7 * Tv / 4, sign: -1 }];
+        for (const s of slots) {
+            if (!s.g) continue;
+            s.g.textContent = '';
+            if (!s.gs || s.gs.type !== s.type) continue;
+            if (prevMark) for (const iv of ivts(prevMark.T, s.type))
+                drawInterval(s.g, s.gs, iv.t1, iv.t2, iv.sign, prevMark.R, true);
+            for (const iv of ivts(T, s.type)) {
+                if (curT < iv.t2) continue;          // Feature 1: erst nach Durchlaufen
+                drawInterval(s.g, s.gs, iv.t1, iv.t2, iv.sign, R, false);
+            }
+        }
     }
 
     // -- Zeichnen an der aktuellen Zeit (kein Rebuild der Daten). ---------------
