@@ -455,6 +455,9 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     color: var(--ink);
     white-space: nowrap;
 }
+/* Bedingter Zeilenumbruch im Titel zwischen „Interaktives" und „Skript" —
+   default unsichtbar (Einzeiler), erst bei ≤ 760 px aktiv (P11). */
+.title-narrow-br { display: none; }
 #header_author,
 #header-author {
     font-size: 10.5px;
@@ -1386,6 +1389,21 @@ input[type="range"]::-moz-range-track {
     #toc_screen_bar { padding: 0 16px; gap: 10px; }
     .toc_screen_eyebrow { display: none; }
     #toc_content { padding: 20px 16px; }
+
+    /* Sehr schmale Anzeige (P11): Header verdichten. Brand-Eyebrow und
+       Prototyp-Badge ausblenden (Author ist bei ≤ 1024 px schon weg), Titel
+       zweizeilig "Interaktives / Skript v1.8". Width-Mode-Buttons verkürzen
+       auf S/M/L — Volltext bleibt im DOM (font-size:0) fuer Screenreader, der
+       Buchstabe per ::after aus [data-mode]; title-Tooltip erhalten. */
+    #header_eyebrow { display: none; }
+    #header_prototyp { display: none; }
+    #span_title { white-space: normal; line-height: 1.05; }
+    .title-narrow-br { display: block; }
+    .width_mode_button { font-size: 0; min-width: 30px; padding: 0 7px; }
+    .width_mode_button::after { font-size: 13px; font-weight: 600; }
+    .width_mode_button[data-mode="schmal"]::after { content: "S"; }
+    .width_mode_button[data-mode="normal"]::after { content: "M"; }
+    .width_mode_button[data-mode="breit"]::after  { content: "L"; }
 }
 
 /* TOC-Akkordeon (v2.0): eine Gruppe pro Kapitel (h2), Unterabschnitte (h3)
