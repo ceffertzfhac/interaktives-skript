@@ -1,0 +1,720 @@
+<!-- ch_00_grundlagen.html — v0.13-Kapitel 0 „Grundlagen" (1:1-Transkription
+     aus Input/v0.13/pskript_grundlagen_gmni_v2.tex). Rein statisch: keine
+     interaktiven gcN-Container. Formeln als MathJax-AMS-Umgebungen
+     (\begin{equation}/\begin{align} nummeriert, align*/\[\] unnummeriert) —
+     Nummerierung (0.x.n) via tagformat in index.html. Boxen pro Section,
+     Abbildungen kapitelweit, Zusammenfassung kapitelweit per numbering.js.
+
+     Struktur (eine Datei = ein v0.13-\input, konsistent mit ch_01): h2 = die
+     sieben \section (0.0–0.6), h3 = die fünf \subsection (0.2.1–0.2.3, 0.3.1,
+     0.3.2). numbering.js::sectionPrefix kollabiert „0.2.1" auf „0.2", sodass
+     Gleichungen/Boxen pro Section fortlaufend zaehlen wie v0.13s
+     \numberwithin{…}{section}. \subsubsection*/\subsection* werden zu <h4>
+     OHNE inhaltsverzeichnis (keine eigene Seite).
+
+     Kapitel-0-Nummerierungsbesonderheit (v0.13: \thefigure = \ifnum
+     \value{chapter}>0 \thechapter.\fi\arabic{figure}): Abbildungen heissen
+     „Abb. 1"–„Abb. 4" (kein „0."-Praefix), Tabellen „Tabelle 1"–„Tabelle 7"
+     (getippt, s. ch_01-Konvention); Zusammenfassung/Beispiele/Gleichungen
+     behalten ihr „0." (0.1, 0.1.1, (0.1.1) usw.). siunitx (\SI/\si/\num) ist
+     nicht geladen → manuell aufgeloest; Inline-Math immer \(…\), nie $…$
+     (MathJax inlineMath ist nur \(…\)). -->
+
+<section>
+    <!-- Startwerte fuer die kapitelweit laufenden Zaehler (v0.13: figure ohne
+         \numberwithin, zusammenfassungcounter \numberwithin{chapter}). Kapitel
+         0 ist das ERSTE Kapitel — keine vorherigen Abschnitte verbrauchen
+         Nummern, daher startet es bei 0 (Abb. 1, Zusammenfassung 0.1). Diese
+         Offsets sind dauerhaft (anders als ch_01s data-figure-offset="37"). -->
+    <h2 class="inhaltsverzeichnis" data-figure-offset="0" data-zusammenfassung-offset="0">0.0 Einleitung</h2>
+
+    <p>In diesem Kapitel beschäftigen wir uns mit wichtigen Grundlagen, die in allen weiteren Kapiteln relevant sein werden. Wir werden uns damit beschäftigen, wie wir mit sehr kleinen oder sehr großen Zahlen umgehen, wir werden untersuchen, wie man physikalische Größen korrekt angibt und im Zuge dessen Einheiten kennenlernen. Außerdem werden wir uns damit beschäftigen, wie man physikalische Größen korrekt quantitativ angibt und im Zusammenhang damit den Begriff der signifikanten Stellen untersuchen.</p>
+</section>
+
+<section>
+    <h2 class="inhaltsverzeichnis">0.1 Rechnen mit Zehnerpotenzen</h2>
+
+    <p>In der Physik beschäftigen wir uns unter anderem damit, Dinge in verschiedenen Größenordnungen zu untersuchen. Das bedeutet, dass wir manchmal mit sehr kleinen und manchmal mit sehr großen Zahlen arbeiten müssen. Zum Beispiel hat ein Elektron nur eine winzige Masse, etwa</p>
+
+    \begin{equation}
+    9{,}109\cdot 10^{-31}\,\mathrm{kg}
+    \end{equation}
+
+    <p>während die Masse der Sonne extrem groß ist, etwa</p>
+
+    \begin{equation}
+    1{,}989\cdot 10^{30}\,\mathrm{kg}
+    \end{equation}
+
+    <p>Diese Zahlen haben viele Nullen, und es ist leicht, den Überblick zu verlieren. Um sie handhabbarer zu machen, verwenden wir die Exponentialschreibweise. Dabei teilen wir die Zahl in zwei Teile auf: einen Vorfaktor und einen Multiplikator in Form von \(10^x\).</p>
+
+    <figure class="abbildung" id="fig-cosmic-cliffs-powers-of-ten">
+        <img class="grafik" style="width:100%" src="bilder/STScI-01HRD1Z19WZYMNB8J1BNVSS1HE-inset-hw.png" alt="">
+        <figcaption>Beispiel für die Notwendigkeit der Schreibweise mit Zehnerpotenzen bei großen Zahlen. Die als „Cosmic Cliffs" bekannte Sternentstehungsregion im Carina-Nebel, aufgenommen vom James Webb Space Telescope (JWST) im Vergleich zu einer Aufnahme mit dem Hubble-Teleskop. Der Nebel ist von uns etwa 7.600 Lichtjahre entfernt, was einer Distanz von ca. \(7{,}2\cdot 10^{19}\,\mathrm{m}\) entspricht. Die abgebildeten Gas- und Staubstrukturen allein erreichen Höhen von bis zu 7 Lichtjahren (\(6{,}6\cdot 10^{16}\,\mathrm{m}\)). Beide Beispiele verdeutlichen, wie die wissenschaftliche Notation mit Zehnerpotenzen notwendig ist, um solch große Zahlen handhabbar und vergleichbar zu machen. Die Aufnahme illustriert zudem den technischen Fortschritt, der durch die Zusammenarbeit von Physik und Ingenieurwissenschaften erreicht wurde: Während das Hubble-Teleskop primär im sichtbaren Licht arbeitet und von dichten Staubwolken blockiert wird, beobachtet das JWST im Infrarotbereich. Diese Strahlung kann den Staub durchdringen und macht so hunderte zuvor unsichtbare, neugeborene Sterne sichtbar. Auch die Auflösung der Sensoren erfordert den Umgang mit großen Zahlen: Diese Aufnahme besteht aus ca. \(1{,}23\cdot 10^{8}\) Pixeln (123 Megapixel), während die vergleichbare Weitfeldkamera des Hubble-Teleskops eine Auflösung von ca. \(1{,}6\cdot 10^{7}\) Pixeln (16 Megapixel) besaß.<br><small>Bildquelle: NASA, ESA, CSA, and STScI, Public Domain.</small></figcaption>
+    </figure>
+
+    <p>Statt \(24\,000\) schreiben wir also \(2{,}4\cdot 10^{4}\).</p>
+
+    <p>Wie verwandeln wir eine Zahl von der normalen Schreibweise in die <strong>Exponentialschreibweise</strong>?</p>
+
+    <p>Um das zu verstehen, ist es wichtig zu wissen, dass die führenden Ziffern einer Zahl in der Exponentialschreibweise normalerweise eine Stelle vor dem Dezimalkomma und beliebig viele Stellen danach haben. Wenn wir zum Beispiel die Zahl \(24\,000\) betrachten, teilen wir sie zuerst in zwei Teile: einen Vorfaktor und einen Multiplikator (der immer eine Potenz von 10 ist).</p>
+
+    \begin{equation}
+    24\,000 = \underbrace{2{,}4}_\text{Vorfaktor} \cdot \underbrace{10\,000}_{\text{Potenz von 10}}
+    \end{equation}
+
+    <p>Dann drücken wir den Multiplikator als Potenz von \(10\) aus, also:</p>
+
+    \begin{equation}
+    10\,000 = 10^4
+    \end{equation}
+
+    <p>Daraus ergibt sich für die Zahl in der Exponentialschreibweise:</p>
+
+    \begin{equation}
+    24\,000 = 2{,}4 \cdot 10\,000 = 2{,}4 \cdot 10^4
+    \end{equation}
+
+    <p>Allgemein kann man sich merken: \(10^n\) ergibt eine Zahl mit einer führenden \(1\) und \(n\) Nullen, also</p>
+
+    \begin{equation}
+    10^7=1\,\underbrace{0000000}_{7 \text{ Nullen}}
+    \end{equation}
+
+    <p>Daher ergibt eine Zahl, die mit \(x\) anfängt und bei der dann \(n\) Nullen folgen:</p>
+
+    \begin{equation}
+    x\cdot 10^n
+    \end{equation}
+
+    <p>Beginnt eine Zahl mit \(xy\) und folgen dann \(m\) Nullen, so ergibt sich:</p>
+
+    \begin{equation}
+    x{,}y\cdot 10^{m+1}
+    \end{equation}
+
+    <p>Beginnt eine Zahl mit \(xyz\) und folgen dann \(p\) Nullen, so ergibt sich:</p>
+
+    \begin{equation}
+    x{,}yz\cdot 10^{p+2}
+    \end{equation}
+
+    <div class="beispiel" data-title="Große Zahlen in Exponentialschreibweise">
+        \begin{align*}
+        1\,000\,000\,000 &= 10^9 \\
+        2\,400\,000\,000 &= 2{,}4 \cdot 10^9 \\
+        2\,450\,000\,000 &= 2{,}45 \cdot 10^9
+        \end{align*}
+    </div>
+
+    <p>Bei sehr großen Zahlen nutzt man typischerweise den Punkt als Lese- und Schreibhilfe, um Zahlen lesbarer zu machen; dabei teilt man die Zahl, von der Einerstelle aus gelesen, in „Pakete" von drei Ziffern ein.</p>
+
+    <p>So viel zu großen Zahlen in der Exponentialschreibweise. Etwas Ähnliches braucht es jedoch auch für die ganz kleinen Zahlen.</p>
+
+    <figure class="abbildung" id="fig-nist-nanostructures">
+        <img class="grafik" style="width:90%" src="bilder/atom_manipulation_figures-fig3.jpg" alt="">
+        <figcaption>Beispiel für die Notwendigkeit der Exponentialschreibweise bei sehr kleinen Zahlen. Die Abbildung zeigt Beispiele für die gezielte Manipulation einzelner Atome mittels eines autonomen Atom-Assemblers (einem System, das mit der Spitze eines Rastertunnelmikroskops Atome nach einem vorgegebenen Muster anordnet). Links ist das Logo des NIST zu sehen, rechts eine elliptische Anordnung „Quantum Corral", beides aus Kobaltatomen auf einer Kupferoberfläche. Die sichtbaren Wellenmuster sind ein direkter Nachweis für die Wellennatur der Elektronen. Die Kobaltatome wirken wie ein „Pferch", der die Elektronenwellen der Kupferoberfläche einsperrt. Ähnlich wie bei einer schwingenden Saite können die eingesperrten Elektronen nur in bestimmten Mustern, sogenannten <strong>stehenden Wellen</strong>, existieren. Das Mikroskop bildet dabei nicht die Elektronen selbst ab, sondern deren <strong>Aufenthaltswahrscheinlichkeitsdichte</strong>: Helle Bereiche markieren Orte hoher, dunkle Bereiche Orte niedriger Wahrscheinlichkeit. Die Strukturen haben Abmessungen im Nanometer-Bereich (\(\approx 1\cdot 10^{-9}\,\mathrm{m}\)) und verdeutlichen die Notwendigkeit von Zehnerpotenzen, um die Physik auf atomarer Ebene zu beschreiben.<br><small>Bildquelle: J. A. Stroscio, R. J. Celotta, et al. / NIST, Public Domain.</small></figcaption>
+    </figure>
+
+    <p>Hier helfen uns negative Exponenten. Zum Beispiel ist \(10^{-3}=\frac{1}{10^3}=\frac{1}{1000}=0{,}001\), allgemein kann man sich merken: \(10^{-(n+1)}\) ergibt eine Zahl mit einer führenden \(0\) vor dem Komma, \(n\) Nullen nach dem Komma und einer \(1\) am Ende.</p>
+
+    <p>Das Vorgehen ist dann sehr ähnlich zum Vorgehen bei großen Zahlen. Hat man eine sehr kleine Zahl, z. B. \(0{,}0024\), so ermittelt man zunächst wieder den Vorfaktor so, dass er eine Stelle vor dem Komma hat und beliebig viele Stellen nach dem Komma, in unserem Beispiel also \(2{,}4\). Dann teilt man die Zahl auf in den Vorfaktor und einen Multiplikator, der wiederum eine Potenz von 10 ist, in unserem Beispiel</p>
+
+    \begin{equation}
+    0{,}0024=2{,}4\cdot 0{,}001
+    \end{equation}
+
+    <p>Dann schreibt man den Multiplikator um in eine Potenz von \(10\), in unserem Bespiel also</p>
+
+    \begin{equation}
+    0{,}001=10^{-3}
+    \end{equation}
+
+    <p>Wodurch sich für die Zahl in Exponentialschreibweise ergibt:</p>
+
+    \begin{equation}
+    0{,}0024=2{,}4 \cdot 0{,}001 = 2{,}4 \cdot 10^{-3}
+    \end{equation}
+
+    <p>Verallgemeinert ergibt eine Zahl, die mit \(0{,}\) anfängt und bei der dann \(n\) Nullen folgen und die mit \(xyz\) aufhört, \(x{,}yz\cdot 10^{-(n+1)}\).</p>
+
+    <div class="beispiel" data-title="Kleine Zahlen in Exponentialschreibweise">
+        \begin{align*}
+        0{,}000123       &= 1{,}23\cdot 10^{-4} \\
+        0{,}00000056     &= 5{,}6\cdot 10^{-7} \\
+        0{,}01000000789  &= 1{,}000000789\cdot 10^{-2}
+        \end{align*}
+    </div>
+
+    <p>Die Exponentialschreibweise ermöglicht es nicht nur, sehr große und sehr kleine Zahlen „handhabbar" zu machen, sondern erleichtert auch das Rechnen. So gelten die folgenden Regeln:</p>
+
+    \begin{align*}
+    \text{Multiplikation:} & \quad & x\cdot 10^m \cdot y \cdot 10^n &= x \cdot y \cdot 10^{m+n}\\
+    \text{Division:} & \quad & \frac{x\cdot 10^m}{y \cdot 10^n} &= \frac{x}{y} \cdot 10^{m-n}\\
+    \text{Wurzel:} & \quad & \sqrt{x\cdot 10^m} &= \sqrt{x}\cdot 10^{\frac{m}{2}}
+    \end{align*}
+
+    <div class="beispiel" data-title="Rechenoperationen">
+        \begin{align*}
+        2{,}2\cdot 10^{7} \cdot 5{,}0\cdot 10^{13} = 11\cdot 10^{20} &= 1{,}1\cdot 10^{21} \\
+        \frac{6{,}6\cdot 10^{-9}}{3{,}3\cdot 10^{8}} &= 2{,}0\cdot 10^{-17}\\
+        \sqrt{4{,}0\cdot 10^{12}} &= 2{,}0\cdot 10^{6}
+        \end{align*}
+    </div>
+</section>
+
+<section>
+    <h2 class="inhaltsverzeichnis">0.2 Größen und Einheiten</h2>
+</section>
+
+<h3 class="inhaltsverzeichnis">0.2.1 Physikalische Größen</h3>
+<section>
+    <p>Schon früh in der Geschichte der Menschheit wurde die Notwendigkeit erkannt, Maßeinheiten zu benutzen, um Handel zu treiben, Gebäude zu errichten und Wissen weiterzugeben. Typische frühe Maßeinheiten beschäftigten sich mit Strecken, Flächen, Volumina, Masse oder Zeiteinheiten, deren Benutzung bis in die frühen Gesellschaften der Menschheit zurückreicht. Hierbei kam es dennoch nicht selten zu Missverständnissen, da die Maßeinheiten in Bezeichnung und Definition variierten.</p>
+
+    <p>In der Physik und in den Ingenieurwissenschaften möchten wir quantitative Angaben so machen, dass sie genau, allgemeinverständlich und nachvollziehbar sind. Daher besteht eine quantitative Angabe in diesen und vielen anderen Gebieten der Wissenschaft und Technik aus zwei Teilen, nämlich Maßzahl und Maßeinheit.</p>
+
+    \begin{equation}
+    \text{Physikalische Größe}\quad = \quad \text{Maßzahl} \, \cdot \, \text{Einheit}
+    \end{equation}
+
+    <p>Die Maßzahl ist dabei eine Zahl, wie wir sie aus der Mathematik kennen, z. B. \(1\), \(0{,}00423\) oder \(1272\), in der Physik in manchen Fällen in Exponentialschreibweise dargestellt, also z. B. \(4{,}23\cdot 10^{-3}\) oder \(1{,}272\cdot 10^3\).</p>
+
+    <p>Die Einheit gibt der Maßzahl ihren Sinninhalt. So ergibt die Angabe \(4{,}23\cdot 10^{-3}\) in Wissenschaft und Technik für sich allein genommen wenig Sinn. Erst mit der Einheit wird die Angabe zu einer greifbaren und verständlichen Größe: \(4{,}23\cdot 10^{-3}\,\mathrm{g}\) ist eine Masse, \(4{,}23\cdot 10^{-3}\,\mathrm{km}\) ist eine Länge.</p>
+
+    <div class="beispiel" data-title="Physikalische Größen">
+        \begin{align*}
+        \text{Masse}\quad &= \quad 4{,}23\cdot 10^{-3}\,\mathrm{g}\\
+        \text{Länge}\quad &= \quad 4{,}23\cdot 10^{-3}\,\mathrm{km}
+        \end{align*}
+    </div>
+
+    <p>Nun ist es, vor allem bei längeren Rechnungen, mühsam, immer die Bezeichnung der physikalischen Größe sowie den Namen der Einheit auszuschreiben. Daher hat man sich darauf verständigt, diese mit (typischerweise lateinischen und griechischen) Buchstaben abzukürzen. Die verwendeten Abkürzungen für die physikalischen Größen sind dabei bis auf einige Ausnahmen international per Norm<span class="fussnote">Die ISO-Norm 80000-1 legt die Grundsätze für die Verwendung von Einheiten, die Darstellung von Einheitensymbolen und die Benennung von Einheiten im Internationalen Einheitensystem (SI) fest.</span> festgelegt.</p>
+
+    <p>So ist es also gängiger im Falle des vorherigen Beispiels zu schreiben:</p>
+
+    <div class="beispiel" data-title="Formelzeichen">
+        \begin{align*}
+        m &= 4{,}23\cdot 10^{-3}\,\mathrm{g}\\
+        l &= 4{,}23\cdot 10^{-3}\,\mathrm{km}
+        \end{align*}
+    </div>
+
+    <p>Beachten Sie: schreiben Sie einen wissenschaftlichen oder technischen Bericht mit dem Computer, so werden die Formelzeichen für die physikalischen Größen, also \(m\) und \(l\) im Beispiel, <em>kursiv</em> geschrieben, während für die Einheiten der „normale" Schriftsatz verwendet wird. So kann also das Formelzeichen für die physikalische Einheit Masse \(m\) von der Einheit Meter \(\mathrm{m}\) unterschieden werden. In handschriftlichen Berichten und in der Klausur ist diese optische Unterscheidung in der Physik am Fachbereich 8 nicht gefordert.</p>
+
+    <p>Weitere physikalische Größen sind z. B. Strecke, Zeit, Kraft, Stromstärke in den Einheiten Meter, Sekunde, Newton, Ampere. Manche physikalischen Größen sind immer Skalare (d. h. eindimensionale Größen, so wie z. B. die Masse \(m\)), während andere im Allgemeinen Vektoren (d. h. mehrdimensionale gerichtete Größen, so wie z. B. die Kraft \(\vec F\)) sind, welche nur in Spezialfällen als Skalare behandelt werden können<span class="fussnote">Welche Spezialfälle das sind, wird in den jeweiligen Kapiteln behandelt, in denen die physikalischen Größen eingeführt werden.</span>.</p>
+
+    <p>Maßzahlen sind entweder reelle Zahlen<span class="fussnote">Meist sogar rationale Zahlen. Ausnahme ist z. B. \(2\pi\), der Winkel eines ganzen Kreises in Bogenmaß.</span> oder Vektoren, deren Komponenten reelle Zahlen sind.</p>
+
+    <p>Ist eine physikalische Größe, wie z. B. die Kraft \(\vec F\) ein Vektor, so ist die Maßzahl auch ein Vektor. Die Einheit hat immer einen skalaren Charakter, z. B.</p>
+
+    \begin{equation}
+    \underbrace{\vec F}_\text{Vektor}\quad =\quad  \underbrace{\begin{pmatrix}
+    3 \\
+    2 \\
+    4
+    \end{pmatrix}}_\text{Vektor} \quad
+    \cdot \quad \underbrace{ \mathrm{N}}_\text{Skalar}
+    \end{equation}
+
+    <p>Werden sehr kleine oder sehr große Größen angegeben, so kann die Maßzahl in Exponentialschreibweise geschrieben werden. Alternativ dazu kann aber auch die Einheit durch einen passenden Präfix an die Gegebenheiten angepasst werden.</p>
+
+    <p>Zum Beispiel: Sollen die Maße eines mikromechanischen Bauteils angegeben werden, so ist die Angabe in Kilometern nicht sinnvoll, sondern man nutzt Millimeter (Präfix Milli, Einheit Meter) oder sogar Mikrometer (Präfix Mikro, Einheit Meter).</p>
+
+    <p>Eine Übersicht über die gängigen Präfixe finden Sie in der Tabelle 1.</p>
+
+    <table>
+        <caption>Tabelle 1: Übersicht über gebräuchliche Präfixe für Maßeinheiten.</caption>
+        <thead>
+            <tr><th>Vielfaches</th><th>Zehnerpotenz</th><th>Vorsatz</th><th>Abkürzung</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>\(10^{-12}\)</td><td>\(10^{-12}\)</td><td>Piko</td><td>p</td></tr>
+            <tr><td>\(10^{-9}\)</td><td>\(10^{-9}\)</td><td>Nano</td><td>n</td></tr>
+            <tr><td>\(10^{-6}\)</td><td>\(10^{-6}\)</td><td>Mikro</td><td>µ</td></tr>
+            <tr><td>\(10^{-3}\)</td><td>\(10^{-3}\)</td><td>Milli</td><td>m</td></tr>
+            <tr><td>\(10^{-2}\)</td><td>\(10^{-2}\)</td><td>Centi</td><td>c</td></tr>
+            <tr><td>\(10^{-1}\)</td><td>\(10^{-1}\)</td><td>Dezi</td><td>d</td></tr>
+            <tr><td>\(10^{3}\)</td><td>\(10^{3}\)</td><td>Kilo</td><td>k</td></tr>
+            <tr><td>\(10^{6}\)</td><td>\(10^{6}\)</td><td>Mega</td><td>M</td></tr>
+            <tr><td>\(10^{9}\)</td><td>\(10^{9}\)</td><td>Giga</td><td>G</td></tr>
+            <tr><td>\(10^{12}\)</td><td>\(10^{12}\)</td><td>Tera</td><td>T</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<h3 class="inhaltsverzeichnis">0.2.2 Einheiten</h3>
+<section>
+    <p>In der Physik werden uns zwei Arten von Einheiten begegnen. Zum einen gibt es die sieben sogenannten <strong>SI-Basiseinheiten</strong><span class="fussnote">Système international d'unités</span>, zum anderen die daraus <strong>abgeleiteten Einheiten</strong>.</p>
+
+    <h4>SI-Basiseinheiten</h4>
+
+    <p>Es gibt insgesamt sieben SI-Basiseinheiten. Das Besondere an den SI-Basiseinheiten ist, dass alle anderen Einheiten aus diesen sieben Einheiten zusammengesetzt werden können. Außerdem ist es unmöglich, eine SI-Basiseinheit durch die jeweils anderen auszudrücken. Das bedeutet: Man kann alle Größen, die wir uns so vorstellen können, mit nur sieben Maßeinheiten ausdrücken, aber wenn man eine beliebige dieser Basiseinheiten wegnehmen würde, ließen sich nicht mehr alle Größen beschreiben.</p>
+
+    <p>Eine vollständige Übersicht der SI-Basiseinheiten mit den für diese benutzen Abkürzungen findet sich in Tabelle 2. Die in dieser Vorlesung benötigten SI-Basiseinheiten sind der Meter, das Kilogramm<span class="fussnote">Tatsächlich ist das Kilogramm, nicht das Gramm, die SI-Basiseinheit.</span>, die Sekunde, das Ampere und das Kelvin. Das Mol wird Ihnen z. B. in der technischen Thermodynamik begegnen.</p>
+
+    <table>
+        <caption>Tabelle 2: SI-Basiseinheiten</caption>
+        <thead>
+            <tr><th>Einheit</th><th>Abkürzung</th><th>Physikalische Größe</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Meter</td><td>m</td><td>Strecke</td></tr>
+            <tr><td>Kilogramm</td><td>kg</td><td>Masse</td></tr>
+            <tr><td>Sekunde</td><td>s</td><td>Zeit</td></tr>
+            <tr><td>Ampere</td><td>A</td><td>Stromstärke</td></tr>
+            <tr><td>Kelvin</td><td>K</td><td>Temperatur</td></tr>
+            <tr><td>Mol</td><td>mol</td><td>Stoffmenge</td></tr>
+            <tr><td>Candela</td><td>cd</td><td>Lichtstärke</td></tr>
+        </tbody>
+    </table>
+
+    <p>Wie weiter oben besprochen, dienen Einheiten der Vergleichbarkeit und der Nachvollziehbarkeit. Daher muss sichergestellt werden, dass, wenn ich von einem „Kilogramm" spreche, ich damit die gleiche Masse meine wie Sie, wenn Sie von einem „Kilogramm" sprechen. Historisch wurden die Einheiten „Meter" und „Kilogramm" durch ein Urmeter und ein Urkilogramm festgelegt. Diese waren Werkstücke, die unter kontrollierten Bedingungen gelagert und von denen Kopien hergestellt wurden, die als Referenzen für Messungen und weitere Kopien dienten. Dies hatte den Nachteil, dass selbst bei sorgfältiger Lagerung die Referenzen Schwankungen unterlagen, die zu Abweichungen führten und dass Kopien niemals absolut perfekt sind, sondern bei jeder Vervielfältigung ein Fehler auftreten konnte. Wäre außerdem der Lagerort der Originale zerstört worden, wären diese unwiederbringlich verloren. Daher entschied man sich, die Einheiten so zu definieren, dass sie auf Messungen basieren, die immer wieder und überall im Universum durchführbar sind und immer zum selben Ergebnis führen würden.</p>
+
+    <h4>Die Definition des Meters</h4>
+    <p>Zur Längen- und Streckenmessung wurden in der Vergangenheit zunächst als Referenz Körperteile genutzt, was zu Einheiten wie Elle, Schritt und Fuß führte. Eine solche Angabe erwies sich als naturgemäß ziemlich ungenau, da zwei Personen im Allgemeinen nicht gleich groß sind. Im Folgenden versuchte man, eine genauere Festlegung durch Referenzmaße zu erreichen, welche z. B. an zentralen Plätzen von Städten zu finden waren, z. B. Markierungen an Hauswänden in der Nähe der Marktplätze. Dabei kam es jedoch zu Abweichungen von einer Stadt zur anderen. Um eine einheitliche Definition zu erreichen, wurde der Meter während der Französischen Revolution festgelegt als das \(\frac{1}{10\,000\,000}\) des Meridians vom Äquator zum Nordpol, der durch Paris läuft. Nachdem die Vermessung erfolgt war, versuchte man, diese Referenz als Weiterentwicklung der vorherigen Referenzmaße durch das sogenannte Urmeter festzuhalten. Das war ein Platin-Iridium-Stab mit zwei Markierungen im Abstand der neuen Definition des Meters, welcher in Paris gelagert wurde und von dem Kopien erst national, dann international, verteilt wurden. Oft war es so, dass Länder ihre eigene Referenzkopie bekamen, von denen dann wiederum innerhalb der Länder Kopien angefertigt wurden. In diesem Zusammenhang gewannen die Eichämter an Bedeutung. Mit dem Fortschreiten der Technik, insbesondere der Optik, wurde Ende des 19. Jahrhunderts eine Definition des Meters über die Wellenlänge spezieller Lichtfarben vorgenommen. Die moderne Definition des Meters wurde dann im Jahr 1983 festgelegt auf: „Ein Meter ist die Länge der Strecke, die das Licht im Vakuum während der Dauer von \(1/299\,792\,458\) Sekunde zurücklegt."</p>
+
+    <p>Diese Definition ist, wenn auch technisch nicht vollkommen simpel, generell überall im Universum nachvollziehbar. Allerdings ergibt sich daraus eine Folgefrage, nämlich: wie lange dauert eine Sekunde?</p>
+
+    <figure class="abbildung" id="fig-us-urmeter">
+        <img class="grafik" style="width:70%" src="bilder/US_National_Length_Meter.jpeg" alt="">
+        <figcaption>Der nationale Urmeter-Prototyp der USA, der 1890 aus Frankreich geliefert wurde. Der Stab aus einer Platin-Iridium-Legierung besitzt einen charakteristischen, verwindungssteifen X-Querschnitt, um Längenänderungen durch Biegung zu minimieren. Die eigentliche Definition des Meters war der Abstand zwischen zwei feinen Kerben auf dem Stab. Diese auf einem physischen Artefakt basierende Definition ist inzwischen veraltet. Heute wird die Definition des Meters über die Lichtgeschwindigkeit realisiert.<br><small>Bildquelle: National Institute of Standards and Technology (NIST), Public Domain.</small></figcaption>
+    </figure>
+
+    <h4>Die Definition der Sekunde</h4>
+    <p>Auch für die Sekunde wurden in der Vergangenheit verschiedene Definitionen herangezogen. Eine frühe Definition der Sekunde bezog sich auf die Länge eines Tages; eine Sekunde war dann das \(\frac{1}{24}\cdot \frac{1}{60}\cdot \frac{1}{60}\)-fache der Länge eines Tages. Diese Definition hatte den Vorteil, dass sie unabhängig von der Definition anderer Größen wie dem Meter war. Allerdings war die Definition ungenau, da sich die genaue Definition eines Tages als schwierig erwies. Die Methode, den genauen Zeitabstand zwischen zwei Zeitpunkten, an denen die Sonne an derselben Position am Himmel zu finden war, zu bestimmen, bezog z. B. Unregelmäßigkeiten in der Erdrotation nicht mit ein. Eine Weiterentwicklung der Definition war möglich, nachdem der Meter festgelegt wurde. Nun konnte man eine Sekunde als die Pendeldauer eines Pendels der Länge \(0{,}994\,\mathrm{m}\) definieren. Diese Definition ist allerdings ungenau, da sie<span class="fussnote">Wie wir im Kapitel „Schwingungen und Wellen" feststellen werden.</span> vom Ort auf der Erde abhängt, an der die Messung durchgeführt wird. So wird ein Pendel exakt gleicher Länge am Nordpol eine andere Periodendauer haben als am Äquator und am Nordseestrand eine andere Periodendauer als auf dem Mount Everest. Von einer „universellen" Definition war man somit weit entfernt.</p>
+
+    <p>Ähnlich wie zwischenzeitlich der Meter wurde die Sekunde 1967 mithilfe von Licht definiert, genauer, der Strahlung, die ein bestimmtes Cäsium-Isotop aussendet. Die Sekunde wurde dabei definiert als die Dauer von \(9\,192\,631\,770\) Perioden der Strahlung, die dem Übergang zwischen den beiden Hyperfeinstrukturniveaus des Cäsium-133-Atoms entspricht<span class="fussnote">Diese Details sollen uns aber im Weiteren nicht belasten.</span>. Diese Definition gilt heute noch.</p>
+
+    <p>Da nun die Sekunde unabhängig von einer Streckenmessung universell festgelegt worden war, konnte nun eine Definition des Meters über die Sekunde erfolgen.</p>
+
+    <h4>Die Definition des Kilogramms</h4>
+
+    <figure class="abbildung" id="fig-ptb-urkilogramm">
+        <img class="grafik" style="width:60%" src="bilder/kilo.jpg" alt="">
+        <figcaption>Der nationale Kilogrammprototyp Nr. 52, der im Tresor der Physikalisch-Technischen Bundesanstalt (PTB) in Braunschweig aufbewahrt wurde. Dieser Zylinder aus einer Platin-Iridium-Legierung diente als offizielle deutsche Referenz für die Masse von einem Kilogramm und ist eine Kopie des internationalen Urkilogramms. Die Lagerung unter drei Glasglocken sollte Verunreinigungen und somit Massenänderungen verhindern. Seit 2019 basiert die Definition des Kilogramms nicht mehr auf diesem Artefakt, sondern auf fundamentalen Naturkonstanten.<br><small>Bildquelle: Physikalisch-Technische Bundesanstalt (PTB), CC-BY 4.0.</small></figcaption>
+    </figure>
+
+    <p>Die Definition des Kilogramms wurde erst möglich, nachdem der Meter festgelegt worden war. Dann legte man zunächst das Kilogramm als die Masse fest, die ein Liter (Kubikdezimeter) Wasser bei \(4\,^{\circ}\mathrm{C}\) hat<span class="fussnote">Sie bemerken wahrscheinlich die Problematik: man musste also noch festlegen, was genau \(4\,^{\circ}\mathrm{C}\) sind.</span>. Später wurde, analog zu Urmeter, ein Urkilogramm angefertigt, der sogenannte „Kilogrammprototyp" und in Paris gelagert; wiederum wurden Kopien angefertigt und in die jeweiligen Länder verteilt. Wie das Urmeter so unterlag auch das Urkilogramm leider Schwankungen durch Verunreinigungen und Umwelteinflüsse. So kam es im Jahr 2019 zur neuen Definition des Kilogramms über zwei universelle, überall im Universum prinzipiell messbare Konstanten, nämlich der in der Quantenphysik relevanten „Planckkonstante" und der „Lichtgeschwindigkeit" (welche Ihrerseits nur deswegen messbar ist, weil Meter und Sekunde definiert wurden).</p>
+
+    <h4>Die Defintion von Ampere</h4>
+    <p>Die Defintion des Ampere wurde ursprünglich als die Stärke eines konstanten elektrischen Stroms definiert, der in zwei parallelen, unendlich langen Leitern im Abstand von einem Meter eine Kraft von \(2\cdot 10^{-7}\,\mathrm{N}\) pro Meter Länge erzeugt. Diese Definition ist allerdings nicht universell anwendbar, da sie auf der Kraftwirkung zwischen zwei Leitern basiert, die wiederum von der Geometrie und dem Material der Leiter abhängt. Daher wurde 2019 die Definition des Ampere auf die Elementarladung umgestellt, wobei ein Ampere nun als der elektrische Strom definiert ist, bei dem \(1{,}602176634\cdot 10^{-19}\) Coulomb pro Sekunde durch einen Leiter fließt. Wir wefrden uns die Defintion des Ampere im Kapitel „Elektrizitätslehre" genauer ansehen.</p>
+
+    <h4>Die Definition von Mol, Candela und Kelvin</h4>
+    <p>Auf die Beschäftigung mit den Definitionen von Mol, Candela und Kelvin verzichten wir in dieser Vorlesungsreihe. Im ersten großen Abschnitt der Vorlesung, der <em>Mechanik</em>, werden uns die Einheiten Meter, Kilogramm und Sekunde genügen, da aus diesen alle für das Kapitel Mechanik relevanten Größen zusammengesetzt werden können.</p>
+
+    <h4>Zusammengesetzte Einheiten</h4>
+    <p>Alle anderen physikalischen Größen, so wie z. B. Bar (für Druck), Newton (für Kraft), Volt (für Spannung), Hertz (für eine Frequenz) können nun aus den SI-Basiseinheiten zusammengesetzt werden, indem SI-Basiseinheiten miteinander multipliziert oder dividiert werden. So gilt z. B. für die Einheit der Kraft (das Newton):</p>
+
+    \begin{equation}
+    \text{Newton:}\quad \mathrm{N}=\mathrm{kg\,m/s^2}
+    \end{equation}
+
+    <p>Ganz allgemein lässt sich schreiben:</p>
+
+    \begin{equation}
+    \text{Jede beliebige Einheit:}\quad \mathrm{X}=\mathrm{kg^a\,m^b\,s^c\,A^d\,K^e\,mol^f\,cd^g}
+    \end{equation}
+
+    <p>Hierbei sind a, b, c, d, e, f und g im Allgemeinen ganze Zahlen (also positive oder negative natürliche Zahlen).</p>
+
+    <table>
+        <caption>Tabelle 3: Beispiele von Einheiten abgeleitet von SI-Basiseinheiten</caption>
+        <thead>
+            <tr><th>Abgeleitete Einheit</th><th>Definition</th><th>Beispiel</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Newton</td><td>\(\mathrm{kg\,m/s^2}\)</td><td>Kraft</td></tr>
+            <tr><td>Joule</td><td>\(\mathrm{kg\,m^2/s^2}\)</td><td>Energie</td></tr>
+            <tr><td>Watt</td><td>\(\mathrm{kg\,m^2/s^3}\)</td><td>Leistung</td></tr>
+            <tr><td>Pascal</td><td>\(\mathrm{kg/(m\,s^2)}\)</td><td>Druck</td></tr>
+            <tr><td>Coulomb</td><td>\(\mathrm{A\,s}\)</td><td>Elektrische Ladung</td></tr>
+            <tr><td>Volt</td><td>\(\mathrm{kg\,m^2/(s^3\,A)}\)</td><td>Elektrische Spannung</td></tr>
+            <tr><td>Ohm</td><td>\(\mathrm{kg\,m^2/(s^3\,A^2)}\)</td><td>Elektrischer Widerstand</td></tr>
+        </tbody>
+    </table>
+
+    <p>Einige Beispiele für zusammengesetzte (abgeleitete) Einheiten finden sich in Tabelle 3.</p>
+
+    <p>Bei allen Beispielen sehen Sie, was ich schon weiter oben erwähnt hatte: Einheiten werden immer nur durch Multiplikation oder Division verknüpft. Die Konsequenz ist, dass man in der Physik zwar physikalische Größen mit unterschiedlichen Einheiten multiplizieren kann (wie z. B. im 2. Newton'schen Gesetz: \(F=m\cdot a\)), jedoch eine Addition oder Subtraktion von zwei physikalischen Größen nur dann sinnhaft ist, wenn beide Größen dieselbe Einheit haben.</p>
+
+    <div class="beispiel" data-title="Gültigkeit von Rechenoperationen">
+        \begin{align*}
+        17\,\mathrm{kg} \cdot 3{,}0\,\mathrm{km/h} = 51\,\mathrm{kg\,km/h} &\quad \text{✓} \\
+        17\,\mathrm{kg} + 3{,}0\,\mathrm{km/h} = ? &\quad \text{✗}
+        \end{align*}
+    </div>
+
+    <p>Möchte man in der Physik mit Formelzeichen ausdrücken, welche Einheit eine bestimmte Größe hat, so nutzt man eckige Klammern:</p>
+
+    \begin{equation}
+    \left[\text{physikalische Größe}\right]= \text{Einheit}
+    \end{equation}
+
+    <p>Als Beispiel: Die Aussage „Die Kraft (Formelzeichen \(F\)) hat die Einheit Newton (Formelzeichen \(\mathrm{N}\))" schreibt man kurz:</p>
+
+    \begin{equation}
+    \left[F \right]=\mathrm{N}
+    \end{equation}
+
+    <h4>Die physikalische Dimension</h4>
+    <p>Manchmal spricht man in der Physik auch von „Dimensionen"<span class="fussnote">Hierbei hat die Dimension in der Physik eine etwas andere Bedeutung als in der Mathematik.</span>. So hat z. B. eine beliebige Größe, deren Einheit „Meter" ist, die Dimension einer Länge, eine beliebige Größe, deren Einheit „Sekunde" ist die Dimension Zeit. Jeder SI-Basiseinheit entspricht eine Grunddimension, die Dimension einer zusammengesetzten Größe setzt sich analog aus den Grunddimensionen zusammen. Die Tabelle 4 enthält die Dimension der SI-Basiseinheiten.</p>
+
+    <table>
+        <caption>Tabelle 4: SI-Basiseinheiten und ihre Dimensionen</caption>
+        <thead>
+            <tr><th>Größe</th><th>Basiseinheit</th><th>Dimension</th><th>ausgeschrieben</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Länge</td><td>Meter (m)</td><td>L</td><td>Länge</td></tr>
+            <tr><td>Masse</td><td>Kilogramm (kg)</td><td>M</td><td>Masse</td></tr>
+            <tr><td>Zeit</td><td>Sekunde (s)</td><td>T</td><td>Zeit</td></tr>
+            <tr><td>Elektrische Stromstärke</td><td>Ampere (A)</td><td>I</td><td>Stromstärke</td></tr>
+            <tr><td>Temperatur</td><td>Kelvin (K)</td><td>\(\Theta\)</td><td>Temperatur</td></tr>
+            <tr><td>Stoffmenge</td><td>Mol (mol)</td><td>N</td><td>Stoffmenge</td></tr>
+            <tr><td>Lichtstärke</td><td>Candela (cd)</td><td>J</td><td>Lichtstärke</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Dichten</h4>
+    <p>Eine Dichte ist eine physikalische Größe, bei der im Allgemeinen eine Menge von etwas (Masse, Ladung, Anzahl von Teilchen, …) auf eine geometrische Größe (Länge, Fläche, Volumen) bezogen wird. Die im Alltag gängigste Klasse von Dichten sind wohl die Massendichten, welche beim Kochen, Heimwerken, Basteln und ähnlichem eine Rolle spielen.</p>
+
+    <p>Bei der Massendichte wird die Masse \(m\) eines Objektes auf eine geometrische Größe bezogen. Im Falle der <strong>Volumenmassendichte</strong> bezieht man die Masse eines Körpers auf sein Volumen \(V\).</p>
+
+    \begin{equation}
+    \text{Volumenmassedichte}\quad \rho = \frac{m}{V} \quad \text{Einheit:} \quad \left[ \rho \right]= \mathrm{kg/m^3}
+    \end{equation}
+
+    <p>Hierbei verwenden wir als Formelzeichen der Volumenmassendichte den kleinen griechischen Buchstaben \(\rho\) („rho").</p>
+
+    <p>Was ist der Vorteil einer Dichte? Die konkrete Masse und das konkrete Volumen eines Körpers hängen meist vom jeweiligen spezifischen Körper und seiner Beschaffenheit ab. Die Dichte jedoch, z. B. die Volumenmassendichte, ist meist eine Materialeigenschaft. Tabelle 5 listet einige Volumenmassendichten bekannter Stoffe auf. Man sieht an dieser Tabelle, dass reine (elementare) Stoffe, z. B. reine Metalle, eine bestimmte Dichte haben (bei Raumtemperatur), während Stoffe, die aus verschiedenen Elementen zusammengesetzt werden und durch (industrielle, natürliche) Prozesse entstehen, unterschiedliche Dichten aufweisen können.</p>
+
+    <table>
+        <caption>Tabelle 5: Volumenmassendichten bekannter Stoffe bei Raumtemperatur</caption>
+        <thead>
+            <tr><th>Stoff</th><th>Volumenmassendichte (\(\mathrm{kg/m^3}\))</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Wasser (bei \(4\,^{\circ}\mathrm{C}\))</td><td>\(1000\)</td></tr>
+            <tr><td>Eisen</td><td>\(7850\)</td></tr>
+            <tr><td>Aluminium</td><td>\(2700\)</td></tr>
+            <tr><td>Blei</td><td>\(11\,340\)</td></tr>
+            <tr><td>Kupfer</td><td>\(8960\)</td></tr>
+            <tr><td>Gold</td><td>\(19\,320\)</td></tr>
+            <tr><td>Fichtenholz</td><td>\(450\) – \(700\)</td></tr>
+            <tr><td>Beton</td><td>\(2300\) – \(2500\)</td></tr>
+            <tr><td>Werkzeugstahl</td><td>\(7800\) – \(8100\)</td></tr>
+        </tbody>
+    </table>
+
+    <p>Dichten ermöglichen es, zwischen Volumen und Masse umzurechnen, z. B. wenn das Volumen eines Körpers und seine Dichte gegeben ist, können Sie die Masse errechnen.</p>
+
+    <p>Während die Volumenmassendichte eine universelle Materialeigenschaft darstellt, gibt es noch weitere praktische Dichteeinheiten. Stellen Sie sich vor, Sie bekommen eine Stahlplatte geliefert, aus der ein Werkstück gestanzt werden soll. Sie wissen, welche Masse und welche Fläche \(A\) die Ausgangsplatte hat sowie welche Fläche Ihr gestanztes Werkstück haben soll und möchten die Masse des Werkstückes berechnen. Dies ist mit der <strong>Flächenmassendichte</strong> möglich. Die Flächenmassendichte (manchmal auch Oberflächendichte bzw. Flächendichte) berechnet sich wie folgt:</p>
+
+    \begin{equation}
+    \text{Flächenmassendichte}\quad  \sigma =\frac{m}{A} \quad \text{Einheit:}  \left[ \sigma \right]=\mathrm{kg/m^2}
+    \end{equation}
+
+    <p>Hierbei verwenden wir als Formelzeichen der Flächenmassendichte den kleinen griechischen Buchstaben \(\sigma\) („sigma").</p>
+
+    <p>Die Flächenmassendichte ist keine Materialeigenschaft, sondern hängt im Allgemeinen von der Dicke des betrachteten Materials ab. Zwei Platten aus dem selben Stahl mit unterschiedlichen Dicken haben die gleiche Volumenmassedichte, jedoch unterschiedliche Flächenmassendichten.</p>
+
+    <p>In manchen Fällen ist es auch sinnvoll, eine Dichte auf eine Länge zu beziehen. Wenn Sie z. B. wissen möchten, wie groß die Masse eines langen Kupferdrahtes ist, so können Sie diese Angabe errechnen, wenn Sie die <strong>Längenmassendichte</strong> und die Länge des Drahtes kennen.</p>
+
+    <p>Die Längenmassendichte ist definiert als:</p>
+
+    \begin{equation}
+    \text{Längenmassendichte}\quad  \lambda = \frac{m}{l}\quad \text{Einheit:} \quad  \left[ \lambda \right]=\mathrm{kg/m}
+    \end{equation}
+
+    <p>Hierbei verwenden wir als Formelzeichen der Längenmassendichte den kleinen griechischen Buchstaben \(\lambda\) („lambda").</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">0.2.3 Signifikante Stellen</h3>
+<section>
+    <p>Generell kann man zwei Arten von physikalischen Größen unterscheiden. Zum einen gibt es einige exakt festgelegte Naturkonstanten. Das sind insbesondere die Konstanten, die man benötigte, um die SI-Einheiten festzulegen, z. B. die sogenannte <em>Planck-Konstante</em> und die <em>Lichtgeschwindigkeit</em>. Wären diese Naturkonstanten nicht exakt festgelegt, so wäre z. B. die Masseneinheit Kilogramm nicht exakt definiert. Zum anderen gibt es gemessene Größen. Das können Größen sein, die wir gemeinhin auch als <em>Naturkonstanten</em> ansehen, wie z. B. die Masse der Erde oder die Ladung eines Elektrons, aber auch Größen, die wirklich in einem Experiment bestimmt werden können<span class="fussnote">… oder aber in einer Übungsaufgabe berechnet …</span> wie z. B. die Stromstärke, die durch einen bestimmten Kupferdraht bei einer Spannung fließt, die Fallzeit eines Steins von einem Hochhaus oder ähnliches.</p>
+
+    <table>
+        <caption>Tabelle 6: Wichtige genau festgelegte physikalische Konstanten</caption>
+        <thead>
+            <tr><th>Konstante</th><th>Symbol</th><th>Wert</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Elementarladung</td><td>\(e\)</td><td>\(1{,}602176634\cdot 10^{-19}\,\mathrm{C}\)</td></tr>
+            <tr><td>Plancksches Wirkungsquantum</td><td>\(h\)</td><td>\(6{,}62607015\cdot 10^{-34}\,\mathrm{J\,s}\)</td></tr>
+            <tr><td>Lichtgeschwindigkeit</td><td>\(c\)</td><td>\(299\,792\,458\,\mathrm{m/s}\)</td></tr>
+            <tr><td>Avogadro-Konstante</td><td>\(N_\mathrm{A}\)</td><td>\(6{,}02214076\cdot 10^{23}\,\mathrm{mol^{-1}}\)</td></tr>
+            <tr><td>Boltzmann-Konstante</td><td>\(k_\mathrm{B}\)</td><td>\(1{,}380649\cdot 10^{-23}\,\mathrm{J/K}\)</td></tr>
+        </tbody>
+    </table>
+
+    <p>Tabelle 6 listet einige Beispiele für physikalische Konstanten auf, die als exakt definiert worden sind. Diese Konstanten unterliegen keinen Unsicherheiten. Hätten diese Konstanten Unsicherheiten, so wären die auf diesen Konstanten basierenden SI-Einheiten nicht exakt definiert.</p>
+
+    <p>Tabelle 7 listet einige Beispiele für physikalische Konstanten auf, die nicht exakt definiert worden sind, sondern welche gemessen werden müssen. Da jede Messung eine Unsicherheit enthält, welche z. B. auf der Unsicherheit des Messmittels, der Messmethode, auf Schwankungen der Messbedingungen oder auf anderen unvermeidbaren Fehlern basiert, sind diese Konstanten auch mit Fehlern oder Unsicherheiten behaftet.</p>
+
+    <table>
+        <caption>Tabelle 7: Beispiele für physikalische Konstanten mit Unsicherheiten</caption>
+        <thead>
+            <tr><th>Konstante</th><th>Sym.</th><th>Wert</th><th>Unsicherheit</th><th>Einh.</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Gravitationskonst.</td><td>\(G\)</td><td>\(6{,}67430\cdot 10^{-11}\)</td><td>\(\pm 0{,}00015\cdot 10^{-11}\)</td><td>\(\mathrm{m^3/(kg\,s^2)}\)</td></tr>
+            <tr><td>Elektronenmasse</td><td>\(m_\mathrm{e}\)</td><td>\(9{,}10938356\cdot 10^{-31}\)</td><td>\(\pm 0{,}00000011\cdot 10^{-31}\)</td><td>\(\mathrm{kg}\)</td></tr>
+            <tr><td>Protonenmasse</td><td>\(m_\mathrm{p}\)</td><td>\(1{,}67262192369\cdot 10^{-27}\)</td><td>\(\pm 0{,}00000000051\cdot 10^{-27}\)</td><td>\(\mathrm{kg}\)</td></tr>
+            <tr><td>Feinstrukturkonst.</td><td>\(\alpha\)</td><td>\(0{,}0072973525664\)</td><td>\(\pm 0{,}00000000017\)</td><td></td></tr>
+        </tbody>
+    </table>
+
+    <p>In der Mathematik haben die beiden Zahlen 2,0 und 2,000 die gleiche Bedeutung. In der Physik und in anderen Feldern der Wissenschaft und Technik ist das nicht so (ähnlich wie oft bei Bemaßungen an technischen Zeichnungen). Da man beim Messen immer Fehler macht, haben die meisten physikalischen Größen niemals absolute Genauigkeit. Daher sollte man eigentlich jede physikalische Größe so schreiben:</p>
+
+    \begin{equation}
+    \text{Physikalische Größe} = \left( \text{Maßzahl} \, \pm \, \text{absolute Unsicherheit}\right) \, \cdot \,\text{Einheit}
+    \end{equation}
+
+    <p>Alternativ kann man auch die Stelle, die die Unsicherheit angibt, in Klammern hinter die Maßzahl schreiben. So schreibt man z. B. für eine gemessene Länge</p>
+
+    \begin{equation}
+    l = \left( 2{,}00 \, \pm \, 0{,}05 \right) \, \cdot \, \mathrm{m} = 2{,}00(5)\,\mathrm{m}
+    \end{equation}
+
+    <p>und zeigt damit an, dass einerseits die letzte Ziffer der Maßzahl (also die 0) mit einem Fehler behaftet ist, andererseits, dass der wahre Messwert irgendwo im Bereich zwischen \(1{,}95\,\mathrm{m}\) und \(2{,}05\,\mathrm{m}\) liegt.</p>
+
+    <p>Tatsächlich wird eine solche Schreibweise in sehr vielen wissenschaftlichen Berichten genutzt. Eine schnellere und kürzere Schreibweise bietet die Schreibweise mit <strong>signifikanten Stellen</strong>, welche wir in der Physik am FB 8 nutzen werden.</p>
+
+    <p>Statt also z. B. bei der Messung einer Länge zu schreiben</p>
+
+    \begin{equation}
+    l = 2{,}00(5)\,\mathrm{m}
+    \end{equation}
+
+    <p>um damit anzuzeigen, dass der wahre Messwert irgendwo im Bereich zwischen \(1{,}995\,\mathrm{m}\) und \(2{,}005\,\mathrm{m}\) liegt, schreibt man nach der Konvention der signifikanten Stellen nur noch</p>
+
+    \begin{equation}
+    l = 2{,}00\,\mathrm{m}
+    \end{equation}
+
+    <p>Die Konvention besagt: man schreibt eine Maßzahl so auf, dass die letzte, also genau eine, noch ausgeschriebene Stelle mit einem Fehler behaftet sein kann, alle anderen Stellen sind sicher. Die letzte bei einer Zahl geschriebene Ziffer ist dann also durch Rundung entstanden. Die Schwäche dieses Verfahrens ist, dass man nicht genau angeben kann, wie groß der Fehler der letzten Ziffer ist. In der Praxis kann dieser Punkt aber vernachlässigt werden und die Vorteile überwiegen.</p>
+
+    <p>Gibt man also den Messwert 2 an, so bedeutet dies, dass der tatsächliche Wert zwischen 1,5 und 2,5 liegt. Gibt man hingegen den Wert 2,0 an, so bedeutet das, dass der tatsächliche Wert zwischen 1,95 und 2,05 liegt, gibt man den Wert 2,00 an, so bedeutet das, dass der tatsächliche Wert zwischen 1,995 und 2,005 liegt.</p>
+
+    <p>Die Ziffern, die etwas über den Messwert und seine Genauigkeit aussagen, nennt man die signifikanten Stellen der Zahl. Führende Nullen sind keine signifikanten Stellen.</p>
+
+    <div class="beispiel" data-title="Signifikante Stellen">
+        <ul>
+            <li>2: eine signifikante Stelle</li>
+            <li>2,00: drei signifikante Stellen</li>
+            <li>\(3{,}4\,\mathrm{cm} = 0{,}034\,\mathrm{m} = 0{,}000034\,\mathrm{km}\): zwei signifikante Stellen</li>
+        </ul>
+    </div>
+
+    <p>Etwas problematisch ist es, wenn am Ende einer Zahl ohne Komma nicht-signifikante Nullen stehen. Sind beispielsweise bei dem Messwert \(1200\,\mathrm{N}\) nur die 1 und die 2 signifikant, nicht aber die beiden 00 (d. h. der physikalische Wert kann nur auf eine Genauigkeit von \(100\,\mathrm{N}\) bestimmt werden), so kann man das dem Wert nicht ansehen. Man könnte meinen, dass der physikalische Wert mit einer Genauigkeit von \(1\,\mathrm{N}\) bestimmt werden kann (so wie man es z. B. richtig bei einer Angabe von \(1199\,\mathrm{N}\) annehmen würde). In diesem Fall sollte man eine andere Darstellung der Zahl wählen und z. B. \(1{,}2\,\mathrm{kN}\) oder \(1{,}2\cdot 10^{3}\,\mathrm{N}\) schreiben. Schreiben Sie \(1200\,\mathrm{N}\), so ist davon auszugehen, dass Sie 4 signifikante Stellen meinen.</p>
+
+    <p>Wichtig ist auch: die Genauigkeit von Werten wird durch mathematische Operationen verändert. Die Zahl ihrer signifikanten Stellen bleibt dennoch (in etwa) gleich. Dies gilt insbesondere, wenn mit der gemessenen Zahl multipliziert oder addiert wird. Bei einigen anderen mathematischen Operation, z. B. wenn die Zahl quadriert oder logarithmiert wird, ändert sich die Zahl der signifikanten Stellen. Diesen Umstand können Sie in dieser Veranstaltung der Einfachheit halber vernachlässigen. Bitte beachten Sie jedoch statt dessen: Durch Umrechnungen wird sich die Zahl der signifikanten Stellen <strong>nicht</strong> vergrößern. Etwas lapidar gesagt: Eine Zahl kann nicht genauer werden, dadurch, dass ich sie in den Taschenrechner eingebe.</p>
+
+    <div class="beispiel" data-title="Durchmesser eines Kreises">
+        <p>Sie messen den Durchmesser eines Kreises und möchten den Umfang bestimmen. Der Durchmesser ist \(d = 15\,\mathrm{cm}\). Die Formel für den Kreisumfang ist \(U=\pi \cdot d\). Geben Sie dies in Ihren Taschenrechner ein (und nutzen Sie den eingespeicherten Wert von \(\pi\), wie ihn viele Taschenrechner haben), so zeigt der Taschenrechner (je nach Größe des Displays), wahrscheinlich etwas wie \(47{,}1238898\) an. Wenn Sie jedoch nun als Antwort \(U=47{,}1238898\,\mathrm{cm}\) schreiben würden, würde dies eine unrealistisch hohe Genauigkeit vortäuschen. Da Sie \(d\) mit 2 signifikanten Stellen bestimmt haben, sollen Sie U auch mit 2 signifikanten Stellen angeben. \(U=47\,\mathrm{cm}\). Dies können Sie sich wie folgt plausibel machen. Sie haben \(d\) zu \(15\,\mathrm{cm}\) bestimmt. Die zwei signifikanten Stellen geben an, dass der physikalische Wert von \(d\) auch \(14{,}5\,\mathrm{cm}\) oder \(15{,}4\,\mathrm{cm}\) sein könnte, Ihre Messmethode jedoch nicht in der Lage war, den Wert genauer zu bestimmen. Berechnen Sie nun den Umfang \(U\) mit Ihrem Taschenrechner, indem Sie \(14{,}5\,\mathrm{cm}\) oder \(15{,}4\,\mathrm{cm}\) einsetzen, so zeigt dieser den Zahlenwert \(45{,}55309348\) sowie \(48{,}38052687\). Sie sehen: mit dem von Ihnen bestimmten Durchmesser \(d\), den Sie mit zwei signifikanten Stellen bestimmen konnten, kann der Umfang auch \(U = 45{,}55\dots\,\mathrm{cm}\) oder \(U = 48{,}38\dots\,\mathrm{cm}\) sein - wie groß er genau ist, können Sie nicht wissen. Eine genauere Angabe als \(U=47\,\mathrm{cm}\) ist also sinnlos. Genau genommen ist schon die Angabe von \(U=47\,\mathrm{cm}\) zu genau.</p>
+    </div>
+
+    <p>In der Physik können Sie folgende Regel anwenden: Multipliziert oder dividiert man zwei Messwerte, so hat das Ergebnis so viele signifikante Stellen, wie die Zahl der beiden Ausgangszahlen, die die wenigsten signifikante Stellen hat.</p>
+
+    <div class="beispiel" data-title="Multiplikation">
+        <p>\(12{,}5 \cdot 42{,}156 = 527\)</p>
+        <table>
+            <tr><td>Test:</td><td>kleinstmöglicher Wert</td><td>\(12{,}45 \cdot 42{,}1555 = 524{,}836\)</td></tr>
+            <tr><td></td><td>größtmöglicher Wert</td><td>\(12{,}55 \cdot 42{,}1565 = 529{,}064\)</td></tr>
+        </table>
+        <p>Man sieht: Das Ergebnis ist mit 527 schon übertrieben genau. Die Angabe der nächsten Nachkommastelle, also \(527{,}0\) oder gar zwei Nachkommastellen \(526{,}95\) täuscht eine viel zu hohe Genauigkeit vor und ist nicht zulässig!</p>
+    </div>
+
+    <p>Addiert (oder subtrahiert) man zwei Messwerte, so wird das Ergebnis auf die letzte Dezimalstelle gerundet, die bei allen Summanden signifikant ist.</p>
+
+    <div class="beispiel" data-title="Addition">
+        <p>\(12{,}5 + 42{,}156 = 54{,}7\)</p>
+        <table>
+            <tr><td>Test:</td><td>kleinstmöglicher Wert</td><td>\(12{,}45 + 42{,}1555 = 54{,}6055\)</td></tr>
+            <tr><td></td><td>größtmöglicher Wert</td><td>\(12{,}55 + 42{,}1565 = 54{,}7055\)</td></tr>
+        </table>
+        <p>Schauen wir uns das oben stehende Beispiel genau an. Die erste Zahl \(12{,}5\) hat drei signifikante Stellen und ist auf die erste Nachkommastelle genau. Die zweite Zahl \(42{,}156\) hat fünf signifikante Stellen und ist auf die dritte Nachkommastelle genau. Der ungenauere Wert ist also der erste. Das Ergebnis wird daher auf die erste Nachkommastelle gerundet.</p>
+    </div>
+
+    <div class="beispiel" data-title="Addition von Längen">
+        <p>\(1{,}0\,\mathrm{km} + 10\,\mathrm{m}  = 1{,}0\,\mathrm{km}\)</p>
+        <p>In diesem Beispiel müssen wir zunächst beachten, dass wir zwei Zahlen nur addieren dürfen, wenn sie dieselbe Einheit haben. Wir rechnen daher \(10\,\mathrm{m}\) in Kilometer um: \(10\,\mathrm{m} = 0{,}010\,\mathrm{km}\). Beide Angaben haben zwei signifikante Stellen. Die Addition lautet also \(1{,}0\,\mathrm{km} + 0{,}010\,\mathrm{km} = 1{,}010\,\mathrm{km}\). Da der erste Summand (\(1{,}0\,\mathrm{km}\)) nur auf die erste Nachkommastelle genau ist, müssen wir das Ergebnis auf diese Stelle runden. Das Ergebnis ist somit \(1{,}0\,\mathrm{km}\).</p>
+        <p>Analog geht man vor bei \(1{,}0\,\mathrm{km} + 90\,\mathrm{m}  = 1{,}1\,\mathrm{km}\). Die Rechnung lautet: \(1{,}0\,\mathrm{km} + 0{,}090\,\mathrm{km} = 1{,}090\,\mathrm{km}\). Gerundet auf die erste Nachkommastelle ergibt sich \(1{,}1\,\mathrm{km}\). Man rundet nach der kaufmännischen Rundungsregel, das heißt: Ab einer Ziffer von 5 wird aufgerundet.</p>
+    </div>
+
+    <p>Vereinzelt tendieren Studierende dazu, bei errechneten Werten generell zwei Nachkommastellen anzugeben! Dies ist nur im Einzelfall zulässig, z. B. wenn man zwei Zahlen addiert, deren signifikante Stellen gerade zwei Nachkommastellen zulassen.</p>
+</section>
+
+<section>
+    <h2 class="inhaltsverzeichnis">0.3 Proportionalität und Antiproportionalität</h2>
+    <p>Die Begriffe <strong>Proportionalität</strong> und <strong>Antiproportionalität</strong> werden in diesem Skript sehr häufig verwendet, daher wollen wir diese zunächst definieren.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">0.3.1 Proportionalität</h3>
+<section>
+    <p>Stehen zwei Größen in einem linearen Zusammenhang, so spricht man von Proportionalität. Das bedeutet, dass, wenn sich eine Größe um einen Faktor ändert, sich die andere Größe um den gleichen Faktor ändert. Mathematisch ausgedrückt, wenn wir zwei Größen \(x\) und \(y\) haben, dann sind sie proportional zueinander, wenn gilt:</p>
+
+    \begin{equation}
+    y = kx
+    \end{equation}
+
+    <p>Dabei ist \(k\) eine Konstante, die als Proportionalitätskonstante bezeichnet wird. Sie gibt an, um welchen Faktor sich \(y\) ändert, wenn sich \(x\) ändert. Für \(k>0\) haben \(x\) und \(y\) stets das gleiche Vorzeichen. Für \(k<0\) haben sie stets entgegengesetzte Vorzeichen. In beiden Fällen ist der Betrag von \(y\) proportional zum Betrag von \(x\). Liegt eine Proportionalität vor, so ist der Quotient der beiden Größen immer konstant:</p>
+
+    \begin{equation}
+    \frac{y_1}{x_1} =\frac{y_2}{x_2} = k
+    \end{equation}
+
+    <p>Man spricht auch von „Quotientengleichheit".</p>
+
+    <p>Ein klassisches Beispiel für Proportionalität ist das Hooke'sche Gesetz in der Elastizitätslehre. Die Verlängerung \(x\) einer Feder ist proportional zur auf sie wirkenden Kraft \(F\).</p>
+
+    <p>Man schreibt:</p>
+
+    \begin{equation}
+    F \propto x
+    \end{equation}
+
+    <p>oder auch:</p>
+
+    \begin{equation}
+    F \sim x
+    \end{equation}
+</section>
+
+<h3 class="inhaltsverzeichnis">0.3.2 Antiproportionalität</h3>
+<section>
+    <p>Im Gegensatz dazu stehen Größen in einem antiproportionalen Zusammenhang, wenn sich der Betrag der einen Größe erhöht, während der Betrag der anderen abnimmt, und umgekehrt. Mathematisch ausgedrückt, wenn wir zwei Größen \(x\) und \(y\) haben, dann sind sie antiproportional zueinander, wenn gilt:</p>
+
+    \begin{equation}
+    xy = k
+    \end{equation}
+
+    <p>Auch hier ist \(k\) eine Konstante. In diesem Fall zeigt sie an, wie die Größen \(x\) und \(y\) zusammenhängen. Wenn der Betrag von \(x\) zunimmt, nimmt der Betrag von \(y\) ab, und umgekehrt.</p>
+
+    <p>Wenn zwei Größen antiproportional zueinander sind, dann ist das Produkt der beiden Größen immer konstant:</p>
+
+    \begin{equation}
+    x_1\cdot y_1 = x_2 \cdot y_2 = k
+    \end{equation}
+
+    <p>Man spricht auch von „Produktgleichheit".</p>
+
+    <p>Ein Beispiel für Antiproportionalität ist das Hebelgesetz. Es besagt, dass wenn Sie eine Kraft auf einen Hebelarm ausüben und den Abstand zur Drehachse erhöhen (z. B. indem Sie den Hebelarm verlängern), die benötigte Kraft abnimmt, um das Gleichgewicht aufrechtzuerhalten. Mit anderen Worten, die Kraft und der Abstand sind antiproportional zueinander, da das Produkt aus Kraft und Abstand konstant bleibt. Dieses Prinzip ist wichtig in der Mechanik und wird beispielsweise in Wagenhebern oder Hebelwerkzeugen angewendet, um schwere Lasten mit geringerem Kraftaufwand zu bewegen.</p>
+
+    <p>In der physikalischen Praxis ermöglichen Proportionalitäts- und Antiproportionalitätsbeziehungen eine präzise mathematische Beschreibung von Phänomenen und sind grundlegend für das Verständnis der Beziehungen zwischen verschiedenen Größen in der Naturwissenschaft.</p>
+</section>
+
+<section>
+    <h2 class="inhaltsverzeichnis">0.4 Anmerkungen zu mathematischen Schreibweisen in der Physik</h2>
+    <p>Im folgenden werden wir einige Schreibweisen in mathematischen Ausdrücken verwenden, die Sie vielleicht nicht kennen. Diese werden hier kurz erläutert.</p>
+
+    <h4>Das Gleichzeitszeichen mit Ausrufezeichen</h4>
+    <p>Angenommen, wir haben eine Funktion \(f(x)\) und möchten den Wert von \(x\) bestimmen, für den \(f(x)\) einen bestimmten Wert \(b\) annimmt. Wir schreiben dies als Gleichung:</p>
+
+    \[
+    f(x) \mathrel{\stackrel{!}{=}} b
+    \]
+
+    <p>Diese Gleichung liest sich als „f(x) sei gleich" b". Das Ausrufezeichen über dem Gleichheitszeichen signalisiert, dass dies eine Bedingung ist, die erfüllt sein muss. Es ist eine Aufforderung, die Gleichung zu lösen, um den Wert von \(x\) zu finden, der diese Bedingung erfüllt.</p>
+
+    <h4>Betrag und Norm</h4>
+    <p>In der Mathematik schreibt man üblicherweise, wenn man die Länge eines Vektors \(\vec{a}\) angeben möchte, dies als Norm des Vektors:</p>
+
+    \begin{equation}
+    \lVert \vec a \rVert = \sqrt{a_x^2 + a_y^2 + a_z^2}
+    \end{equation}
+
+    <p>In der Physik wird oft auf die doppelten Striche verzichtet und stattdessen nur ein einfaches Betragszeichen verwendet:</p>
+
+    \begin{equation}
+    \vert \vec a \vert = \sqrt{a_x^2 + a_y^2 + a_z^2}
+    \end{equation}
+
+    <p>Beides meint jedoch dasselbe.</p>
+
+    <h4>Ein oder zwei Punkte über einer zeitabhängigen Funktion</h4>
+    <p>In der Physik wird oft die Notation mit Punkten über einer zeitabhängigen Funktion verwendet, z. B. \(x(t)\), um die Ableitungen dieser Funktion nach der Zeit darzustellen. Ein Punkt über der Funktion steht für die erste Ableitung, zwei Punkte für die zweite Ableitung:</p>
+
+    \begin{equation}
+    \dot{x}(t) = \frac{\mathrm{d}x(t)}{\mathrm{d}t} \quad \text{(erste Ableitung)}
+    \end{equation}
+
+    \begin{equation}
+    \ddot{x}(t) = \frac{\mathrm{d}^2x(t)}{\mathrm{d}t^2} \quad \text{(zweite Ableitung)}
+    \end{equation}
+
+    <p>Nutzt man die Notation, die in der Mathematik üblich ist, also ein Strich an der Funktion, so meint man in der Physik üblicherweise die Ableitung nach einer Ortsvariablen, z. B. \(x\):</p>
+
+    \begin{equation}
+    f'(x) = \frac{\mathrm{d}f(x)}{\mathrm{d}x} \quad \text{(Ableitung nach der Ortsvariablen } x\text{)}
+    \end{equation}
+
+    <p>Möchte man irgendeine Funktion \(g(u,v,w,\ldots)\) nach einer anderen Variablen \(u\) ableiten, so nutzt man den differentiellen Quotienten:</p>
+
+    \begin{equation}
+    \frac{\mathrm{d}g}{\mathrm{d}u}
+    \end{equation}
+</section>
+
+<section>
+    <h2 class="inhaltsverzeichnis">0.5 Weitere mathematische Grundlagen</h2>
+    <p>Die Beschäftigung mit der Physik auf Fachhochschulniveau erfordert einige mathematische Grundlagen. Diese werden jedoch nicht im Rahmen der Vorlesung „Physik", sondern im Vorkurs Mathematik sowie im Modul „Grundlagen der Mathematik" vermittelt. Die in diesen Kursen vermittelten mathematischen Grundlagen werden in der Vorlesung sowie in diesem Skript vorausgesetzt.</p>
+
+    <p>Dazu gehören insbesondere:</p>
+    <ul>
+        <li>Die Differenzialrechnung (Ableitungen) in einer Variablen</li>
+        <li>Die Integralrechnung in einer Variablen</li>
+        <li>Lineare Gleichungssysteme</li>
+        <li>Vektorrechnung im dreidimensionalen Raum, einschließlich Skalarprodukt und Vektorprodukt</li>
+        <li>Trignonometrische Funktionen und ihre Eigenschaften</li>
+        <li>Exponential- und Logarithmusfunktionen</li>
+        <li>Flächen- und Volumenberechnungen geometrischer Körper, insbesondere Rechteck, Dreieck, Kreis, Zylinder, Kugel</li>
+    </ul>
+
+    <p>Nicht vorausgesetzt werden Kenntnisse in der:</p>
+    <ul>
+        <li>Differenzial- und Integralrechnung in mehreren Variablen</li>
+        <li>Differentialgleichungen</li>
+        <li>(höheren) linearen Algebra: Matrizen, Eigenwerte, Eigenvektoren</li>
+    </ul>
+</section>
+
+<section>
+    <h2 class="inhaltsverzeichnis">0.6 Zusammenfassung</h2>
+    <div class="zusammenfassung" data-title="Physikalische Grundlagen">
+        <ul>
+            <li><strong>Zehnerpotenzen (Wissenschaftliche Notation):</strong> Dienen der handhabbaren Darstellung sehr großer und sehr kleiner Zahlen.
+                <ul>
+                    <li><strong>Struktur:</strong> Jede Zahl wird in einen <strong>Vorfaktor</strong> (üblicherweise mit einer Ziffer vor dem Komma) und eine <strong>Zehnerpotenz</strong> (\(10^n\)) zerlegt. Beispiel: \(24\,500 = 2{,}45 \cdot 10^4\).</li>
+                    <li><strong>Rechenregeln:</strong> Die Exponenten werden bei Multiplikation addiert (\(10^m \cdot 10^n = 10^{m+n}\)) und bei Division subtrahiert (\(10^m / 10^n = 10^{m-n}\)).</li>
+                </ul>
+            </li>
+            <li><strong>Physikalische Größen und Einheiten:</strong> Eine quantitative Angabe besteht immer aus zwei Teilen.
+                <ul>
+                    <li><strong>Grundstruktur:</strong> <em>Physikalische Größe = Maßzahl \(\cdot\) Einheit</em>.</li>
+                    <li><strong>SI-System:</strong> Basiert auf <strong>sieben Basiseinheiten</strong> (Meter, Kilogramm, Sekunde, Ampere, Kelvin, Mol, Candela), aus denen alle anderen Einheiten <strong>abgeleitet</strong> werden können.</li>
+                    <li><strong>Präfixe:</strong> Dienen der Skalierung von Einheiten (z. B. Kilo (k, \(10^3\)), Milli (m, \(10^{-3}\)), Mikro (µ, \(10^{-6}\))).</li>
+                    <li><strong>Rechenregel:</strong> Addition und Subtraktion sind nur bei Größen mit <strong>identischer Einheit</strong> physikalisch sinnvoll.</li>
+                    <li><strong>Dimension:</strong> Beschreibt die fundamentale Natur einer Größe (z. B. Länge [L], Masse [M], Zeit [T]).</li>
+                </ul>
+            </li>
+            <li><strong>Signifikante Stellen:</strong> Dienen der Angabe der Genauigkeit von Messwerten.
+                <ul>
+                    <li><strong>Konvention:</strong> Die letzte angegebene Ziffer einer Maßzahl ist die erste unsichere Stelle. Führende Nullen sind nicht signifikant.</li>
+                    <li><strong>Multiplikation/Division:</strong> Das Ergebnis hat so viele signifikante Stellen wie der ungenaueste Ausgangswert (der mit den wenigsten signifikanten Stellen).</li>
+                    <li><strong>Addition/Subtraktion:</strong> Das Ergebnis wird auf die letzte Dezimalstelle gerundet, die bei allen Summanden signifikant ist.</li>
+                </ul>
+            </li>
+            <li><strong>Proportionalität und Antiproportionalität:</strong> Beschreiben grundlegende Zusammenhänge zwischen zwei Größen \(x\) und \(y\).
+                <ul>
+                    <li><strong>Proportionalität:</strong> Ändert sich \(x\) um einen Faktor, ändert sich \(y\) um denselben Faktor.
+                        \[ y = k \cdot x \quad \text{(oder: } y \propto x \text{)} \]
+                    </li>
+                    <li><strong>Antiproportionalität:</strong> Vergrößert sich \(x\), verkleinert sich \(y\) so, dass ihr Produkt konstant bleibt.
+                        \[ x \cdot y = k \]
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</section>
