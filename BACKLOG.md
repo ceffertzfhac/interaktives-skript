@@ -407,6 +407,33 @@ Zuweisung per Freigabe-Tipp.
   Verifiziert per Text-Dump: v ⊥ Radius (Δ=0°), monoton 27→119 px, HV 3,75 px
   solid, Labels weg, |v|=6,60 m/s @ t=24, v+Zerlegung gleichzeitig, ω₀<0 o. NaN.
 
+- [x] **P-AF-10: Interaktive Aspekt-Figur 1.51 — Betragsvergleich |a⃗ₜ|/|a⃗ᵣ|.**
+  statische `fig-skript-kreisbewegungen-aratdiagramm-winkelbeschl` (1.4.6)
+  interaktiv nachbauen. Copy & feature-gate von `aspekt_axay_winkelbeschl.js`
+  (1.50): dieselbe lokale α-Physik (variables ω bei konst. α, `fillLocal`), aber
+  statt der kartesischen Komponenten aₓ/aᵧ die **Beträge** |a⃗ₜ|=|α|R (oben,
+  pro Lauf konstant) und |a⃗ᵣ|=ω(t)²R (unten, wachsend) gestapelt (neue Motor-
+  Diagrammtypen `att`/`art`, Commit 32aa189). `aspekt_arat_winkelbeschl.js|.css`,
+  `data-aspekt="arat-winkelbeschl"`, registriert in `main.js`. Static-Figur auf
+  `nur-druck` gesetzt, interaktive auf `nur-bildschirm`; Caption/Nummer (Abb. 1.51)
+  per `data-figref` übertragen. Umgesetzt 2026-07-24. **Visuell freigegeben**
+  2026-07-24 („passt"). Verifiziert per Text-Dump (kein Bild-Input): baut
+  fehlerfrei (`built:1`), keine Konsolenfehler, Werte konsistent (ω=2,40, at=0,15,
+  ar=8,64 @ t=24), Caption „Abb. 1.51".
+  **Default-Angleichung an 1.51:** 1.50 (`aspekt_axay_winkelbeschl.js`) startet
+  jetzt mit ω₀=0/α=0,1 (wie 1.51), damit beide Figuren mit demselben Startbild
+  öffnen (a_r wächst aus 0, |a_t| konstant).
+  **Betrags-Notation (Nutzervorgabe, s. Memory):** globale Präferenz
+  `|\vec a_r(t)|` (Pfeil + (t) innerhalb der Betragsstriche) statt `|a_r|(t)`.
+  Umgesetzt in MathJax (Caption, Panel-Formel, Skalierungs-Notiz — auch die
+  geteilte Fußnote in 1.50) und in den Plain-Text-Diagramm-/Achsenbeschriftungen.
+  **Fallstrick:** die Ordinaten-`yLabel` kommt NICHT aus
+  `constants.js::graphAxisLabels`, sondern hartkodiert aus
+  `physics.js` (Serien-Def. `att`/`art`, Z. 105/106) — beide Stellen mussten
+  geändert werden. Echte Unicode-Subskripte ₜ (U+209C) / ᵣ (U+1D63) statt
+  Unterstrich (wie vₓ/vᵧ); der Vektorpfeil ist das kombinierende Zeichen U+20D7
+  (auf Nutzerwunsch belassen). *(M)*
+
 ## P8 — Inhaltsverzeichnis: 3-stufige Hierarchie (Themenkomplex → Kapitel → Abschnitt)
 
 Eingetragen 2026-07-24 nach Nutzervorgabe. Das TOC (und die Navigation) ist
