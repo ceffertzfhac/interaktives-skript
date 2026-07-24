@@ -1452,6 +1452,50 @@ input[type="range"]::-moz-range-track {
 .toc_sub_link.toc_sub_current:hover { background: var(--teal); }
 .toc_sub_marker { color: var(--ink-4); flex-shrink: 0; }
 .toc_sub_link.toc_sub_current .toc_sub_marker { color: inherit; }
+
+/* ── Themenkomplex-Ebene (3-stufiges TOC, BACKLOG P8) ────────────────────────
+   Oberste Gruppe ueber den .toc_group-Kapiteln: ein Sektions-Trenner mit
+   Nummern-Badge + Titel, schaltet nur auf/zu (navigiert nicht). Die Kapitel-
+   Karten (.toc_group) liegen leicht eingerueckt im .toc_tk_body. */
+.toc_tk_group { margin-bottom: 18px; }
+.toc_tk_header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 4px 10px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    font: inherit;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--ink);
+    cursor: pointer;
+}
+.toc_tk_header:hover { color: var(--teal-dark); }
+.toc_tk_number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 8px;
+    background: var(--teal-tint);
+    color: var(--teal-dark);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.toc_tk_title { flex: 1 1 auto; }
+.toc_tk_chevron { color: var(--ink-3); font-size: 0.85em; flex-shrink: 0; transition: transform .2s ease; }
+.toc_tk_group.toc_tk_collapsed .toc_tk_chevron { transform: rotate(-90deg); }
+.toc_tk_group.toc_tk_collapsed .toc_tk_body { display: none; }
+.toc_tk_body { padding: 6px 0 0 14px; }
 #toc_content .toc_empty_state {
     text-align: center;
     padding: 40px 20px;
@@ -1596,6 +1640,21 @@ input[type="range"]::-moz-range-track {
 .rail-sectionlink:hover { background: var(--surface-3); text-decoration: none; }
 .rail-sectionlink.open { color: var(--teal-darker); }
 .rail-sectionlink.current { background: var(--teal-tint); color: var(--teal-darker); }
+/* TK-Grenze in der gefensterten Schiene (P9): ist das aktive Kapitel das letzte
+   seines Themenkomplexes, wird das erste Kapitel des naechsten TK als dezente
+   Vorschau unter einer duennen Trennlinie gezeigt — blasser, nicht fett — statt
+   eines harten Bruchs. Siehe shell.js::renderRailInto (crossNext). */
+.rail-tk-sep {
+    height: 1px;
+    margin: 8px 10px 4px;
+    border: 0;
+    background: var(--surface-3);
+}
+.rail-sectionlink.rail-tk-cross {
+    color: var(--ink-3);
+    font-weight: 500;
+    margin-top: 0;
+}
 .rail-chapternav .rail-chapterlink { padding-left: 22px; }
 .rail-block { margin-bottom: 22px; }
 .rail-heading {

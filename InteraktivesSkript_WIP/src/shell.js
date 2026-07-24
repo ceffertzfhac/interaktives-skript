@@ -165,6 +165,12 @@ function renderRailInto(container, page) {
     const nextSec = activeIdx < sections.length - 1 ? sections[activeIdx + 1] : null;
     const pred = prevSec && tkOf(prevSec) === activeTk ? prevSec : null;
     const next = nextSec && tkOf(nextSec) === activeTk ? nextSec : null;
+    // TK-Grenze weich andeuten (P9): ist das aktive Kapitel das letzte seines TK
+    // (kein gleich-TK-Nachfolger), folgt nach einer duennen Trennlinie das erste
+    // Kapitel des naechsten TK als blasse Vorschau — statt eines harten Bruchs.
+    // Nur vorwaerts: am Anfang eines TK wird kein voriger TK gezeigt (P9-
+    // Entscheidung a, s. Backlog).
+    const crossNext = (!next && nextSec && tkOf(nextSec) !== activeTk) ? nextSec : null;
 
     // Vorgänger (zu) · aktives Kapitel (offen, mit allen Abschnitten) ·
     // Nachfolger (zu). Aktive Zeile erscheint stets, auch als reine Intro-Seite
@@ -176,6 +182,12 @@ function renderRailInto(container, page) {
     if (pred) renderSection(pred, false);
     renderSection(active, true);
     if (next) renderSection(next, false);
+    if (crossNext) {
+        const sep = document.createElement('hr');
+        sep.className = 'rail-tk-sep';
+        chNav.appendChild(sep);
+        chNav.appendChild(link(crossNext.page, 'rail-sectionlink rail-tk-cross', false));
+    }
 
     chBlock.appendChild(chNav);
     container.appendChild(chBlock);
