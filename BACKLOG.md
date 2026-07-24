@@ -371,6 +371,29 @@ Zuweisung per Freigabe-Tipp.
   Tempo/Darstellung per Default eingeklappt (Leiste zu lang), Label-CSS auf
   Basis-.panel-label normalisiert. **Visuell noch nicht freigegeben**
   (Screenshot-Check bleibt offen — per Nutzervorgabe aktuell KEIN Image-Input). *(M)*
+  **Skalierungs-Redesign (`7d57892`):** statt |a| auf feste Länge zu normieren
+  (ließ die konstante Tangential-Komponente a_t=αR scheinbar schrumpfen —
+  rückwärts zur Physik — und deckelte a_r am Lauf-Ende) jetzt JE Komponente
+  EIGEN logarithmisch skaliert (Nutzervorgabe „log für beide"):
+  compress(x,xMax)=log(1+x/(k·xMax))/log(1+1/k), k=0,3. Eigene Maßstäbe nötig
+  (a_t≈0,2, a_r bis ≈170 m/s² — Faktor ~300), sonst würde a_t unter die
+  Pfeilspitze schrumpfen. a_t: px-Deckel 0,45·Bahnradius, Bezug 0,45 m/s²
+  (pro Lauf konstant, da α const). a_r: px-Kappe = Durchmesser R=2m-Kreis,
+  Bezug 50 m/s² (stärker gedämpft, Default-Lauf stößt nicht an die Kappe →
+  kein sichtbares Deckel-Plateau). a = Vektorsumme; Winkel in der Szene bewusst
+  verstärkt (echtes atan(α/ω²)~2° unsichtbar), echte Beträge in den Diagrammen.
+  arrowLenScale 1,5→1,1 (kürzere Pfeil-Verkürzung → kleine Vektoren rendern).
+  ω₀-Bereich [-2,2] (war [0,3,2]): ω₀ darf 0/negativ sein; a_r/a_t
+  vorzeichenunabhängig, Winkelbogen verbirgt sich für φ≤0. Zerlegung jetzt
+  ENTWEDER/ODER (oder keine): kartesisch ODER tangential/radial, gegenseitig
+  deaktivierbar; Komponenten-Linien beider Zerlegungen identisch (Dicke +
+  gestrichelt via CSS-Komponenten-Token), nur Farben unterschiedlich. Verifiziert
+  per Text-Dump-Probe (kein Bild): a_t konstant 33,4 px, a_r monoton 5,7→278 px,
+  Either/Oder-Schaltung korrekt, ω₀<0 ohne NaN/a_r≥0. **Info-Fußnote
+  (`a32a466`):** ausklappbare <details> in der data-caption erklären die Skalierung
+  ausführlich für Interessierte/Experten (Formel, Kappen, Bezugspunkte,
+  Winkel-Übertribung); innere `"` als &quot; maskiert (sonst schließt class="..."
+  das data-caption-Attribat vorzeitig — einmal so gewesen, per Probe gefunden).
 
 ## P8 — Inhaltsverzeichnis: 3-stufige Hierarchie (Themenkomplex → Kapitel → Abschnitt)
 
