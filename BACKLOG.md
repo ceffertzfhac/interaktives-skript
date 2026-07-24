@@ -514,6 +514,26 @@ mitschrumpfen lassen).
 
 ---
 
+## P11 — Sehr schmaler Header (≤ 760 px): Brand verdichten + Width-Buttons S/M/L
+
+Eingetragen 2026-07-24 nach Nutzervorgabe (P10 brachte optische Kollisionen im
+schmalen Header ans Licht). Bei sehr schmaler Anzeige (≤ 760 px, gleiche
+Schwelle wie der TOC-Screen) wird der Header verdichtet:
+
+- **Width-Mode-Buttons** „Schmal/Normal/Breit" → „S/M/L" (CSS-only: Text
+  `font-size:0`, Buchstabe per `::after` + `[data-mode]`; Volltext bleibt im
+  DOM für Screenreader, `title`-Tooltip erhalten).
+- **Eyebrow** „FH Aachen · FB 8 · Physik" ausblenden.
+- **Titel** zweizeilig „Interaktives / Skript v1.8" — bedingter `<br>` zwischen
+  „Interaktives" und „Skript" (default `display:none`, bei ≤ 760 px sichtbar).
+- **Prototyp-Badge** ausblenden; **Version v1.8 bleibt** (Nutzerwahl).
+  Author ist bei ≤ 1024 px bereits ausgeblendet.
+
+- [x] **P11-1** `styles.css` 760er Query: S/M/L + Brand-Verdichtung. *(S)*
+- [ ] **P11-2** Verifikation (Sicht, Stufe 5 — Freigabe). *(S)*
+
+---
+
 1. Erst **P0** abarbeiten (rasch, niedriges Risiko, senkt schon das Token-Volumen spürbar).
 2. Dann **Per-Figure-Fabrik + Modularisierung + Globals einfrieden** (P1) als zusammenhängender Struktur-Refactor — das ist der zentrale Hebel für Token-Effizienz und Wartbarkeit; danach sind Animation (rAF) und DOM-Optimierung günstig in der Fabrik mitzuerledigen.
 3. **P2** anschließend/parallel je nach Bedarf (Mobile/A11y).
