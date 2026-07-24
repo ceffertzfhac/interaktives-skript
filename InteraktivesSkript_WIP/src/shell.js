@@ -118,10 +118,16 @@ function renderRailInto(container, page) {
     onPage.appendChild(nav);
     container.appendChild(onPage);
 
-    // Abschnittsnavigation: alle Abschnitte (h2) in Dokumentreihenfolge als je
-    // eine Zeile; nur der aktive Abschnitt klappt seine Unterabschnitte (h3)
-    // aus. So bleibt die Schiene bei 15+ Kapiteln lesbar, und die Nachbarn
-    // ("1.3 …", "1.5 …") sind einen Klick entfernt, ohne die Liste zu fluten.
+    // Abschnittsnavigation gefenstert (P9): nur drei Blöcke um das aktive
+    // Kapitel — Vorgänger-Kapitel (zu, nur die Zeile), aktives Kapitel (mit
+    // allen h3-Abschnitten offen) und Nachfolger-Kapitel (zu). Vorgänger/
+    // Nachfolger nur innerhalb desselben Themenkomplexes (P9-Entscheidung a):
+    // TK-Gruppen liegen im Seitenregister zusammenhängend, also ist der
+    // unmittelbar vorangehende/nachfolgende Abschnitt der Kandidat — gehört
+    // er einem anderen TK (oder hat kein tk), entfällt er (das aktive Kapitel
+    // ist das erste bzw. letzte seines TK). So bleibt die Schiene bei 15+
+    // Kapiteln kurz, und die Nachbarn ("1.3 …", "1.5 …") sind einen Klick
+    // entfernt, ohne die Liste zu fluten.
     const sections = sectionsOf();
     if (sections.length === 0) return;
     const current = getCurrentPage();
@@ -152,24 +158,41 @@ function renderRailInto(container, page) {
         return a;
     };
 
-    sections.forEach(s => {
-        const istAktiv = s === active;
+    const tkOf = s => s.page.tk ? s.page.tk.num + '|' + s.page.tk.title : null;
+    const activeTk = tkOf(active);
+    const activeIdx = sections.indexOf(active);
+    const prevSec = activeIdx > 0 ? sections[activeIdx - 1] : null;
+    const nextSec = activeIdx < sections.length - 1 ? sections[activeIdx + 1] : null;
+    const pred = prevSec && tkOf(prevSec) === activeTk ? prevSec : null;
+    const next = nextSec && tkOf(nextSec) === activeTk ? nextSec : null;
+
+    // Vorgänger (zu) · aktives Kapitel (offen, mit allen Abschnitten) ·
+    // Nachfolger (zu). Aktive Zeile erscheint stets, auch als reine Intro-Seite
+    // ohne Abschnitte (P9-Entscheidung b).
+    const renderSection = (s, istAktiv) => {
         chNav.appendChild(link(s.page, 'rail-sectionlink' + (istAktiv ? ' open' : ''), false));
-        if (!istAktiv) return;
-        s.children.forEach(p => chNav.appendChild(link(p, 'rail-chapterlink', true)));
-    });
+        if (istAktiv) s.children.forEach(p => chNav.appendChild(link(p, 'rail-chapterlink', true)));
+    };
+    if (pred) renderSection(pred, false);
+    renderSection(active, true);
+    if (next) renderSection(next, false);
 
     chBlock.appendChild(chNav);
     container.appendChild(chBlock);
 }
 
 function renderAppbar(page) {
+    const crumbThemenkomplex = ge('chapter_crumb_themenkomplex');
     const crumbChapter = ge('chapter_crumb_chapter');
     const crumbCurrent = ge('chapter_crumb_current');
     const progress = ge('chapter_progress_label');
     const progressBar = ge('chapter_progress_bar');
     const pages = getPages();
     if (!pages.length) return;
+    // Themenkomplex-Krume (oberste Ebene, P8): page.tk der aktiven Seite
+    // (v0.13-\chapter, z. B. „0 Grundlagen"). Bleibt leer, wenn das Kapitel
+    // kein TK-Attribut traegt (tk === null).
+    if (crumbThemenkomplex) crumbThemenkomplex.textContent = (page && page.tk) ? page.tk.title : '';
     // Kapitel-Krume = die naechste h2-Seite oberhalb der aktiven, nicht
     // pauschal pages[0] -- sonst zeigt sie ab dem zweiten Kapitel weiterhin
     // den Titel des ersten an.
