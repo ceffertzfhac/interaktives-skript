@@ -610,8 +610,12 @@ Subsection*, nicht nur in der Summe). **Nicht pushen** ohne Freigabe.
 Subsections als h3. Da ch_01 heute nur 1.4 hält, 1.0–1.3/1.6–1.8 entweder ch_01
 ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
 
-- [ ] **P12-A0 1.0 Einleitung und Motivation** — 0 Subsections, 0 Abb.
-  (`pskript_mech_einleitung_und_motivation_gmni.tex`, 676 B). *(S)*
+- [x] **P12-A0 1.0 Einleitung und Motivation** — 0 Subsections, 0 Abb.
+  (`pskript_mech_einleitung_und_motivation_gmni.tex`, 676 B). *(S)* — migriert
+  2026-07-24 (Commit 908555c): `chapters/ch_01_00_einleitung.html`, Platzhalter
+  in `index.html`, Offset-Startwerte vom 1.4-h2 an den 1.0-h2 verschoben.
+  DOM-Harness: Seiten 40→41, keine Regression (Abb 1.72, Zusammenfassung 1.8,
+  Boxen 1.4–1.5 unverändert). Stufe 5 (Sicht) offen — Freigabe „JA".
 - [ ] **P12-A1 1.1 Kinematik** — 14 Subsections, **21 Abbildungen**
   (`pskript_mech_kinematik_gmni_v4.tex`, 104 KB). *Größter Brocken nach 1.5.13 —
   eigene Sitzung(en).* Interaktiv-Kandidaten: `geschwindigkeit_simulation`,
