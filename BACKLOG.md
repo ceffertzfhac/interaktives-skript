@@ -154,6 +154,37 @@ Hintergrund in `MIGRATION_v0.13_nach_HTML.md`.
 
 ---
 
+## P7 — Kapitel 0 („Grundlagen") migrieren (v0.13)
+
+v0.13 `\setcounter{chapter}{-1}` → Kapitel 0 = „Grundlagen", Quelle
+`Input/v0.13/pskript_grundlagen_gmni_v2.tex` (724 Zeilen). 7 Abschnitte
+(0.0 Einleitung … 0.6 Zusammenfassung), 4 Raster-Abbildungen (PNG/JPG/JPEG,
+Breiten 1.0/0.9/0.7/0.6 — kein PDF/TikZ-Rendering nötig), 4 Gleichungen,
+10 Fußnoten, 11 Labels, 7 Querverweise, 12 Box-Makros. `numbering.js`
+unterstützt Kapitel 0 **ohne Code-Änderung** (`sectionPrefix`/`chapterPrefix`
+sind generisch → `(0.2.n)`, `Abb. 0.n`, `Zusammenfassung 0.n`); die
+kapitelweiten Offsets am h2 entfallen hier (kein vorangehender Inhalt in
+Kapitel 0 → `data-figure-offset="0"`, `data-zusammenfassung-offset="0"`).
+Vorgehen: Skill **v013-kapitel-migration**, Hintergrund `MIGRATION_v0.13_nach_HTML.md`.
+
+**Offen — Datei-Granularität.** Bisher entspricht eine `ch_NN`-Datei einem
+v0.13-`\section` (ch_01 = 1.4, ch_02 = 1.5). „Grundlagen" ist aber ein ganzes
+`\chapter` mit 7 `\section`s. Option A: 7 Dateien (eine pro Section — kollidiert
+mit den vergebenen Namen ch_01/ch_02, braucht neues Schema). Option B: **eine**
+Datei `ch_00_grundlagen.html` mit h2 = „0 Grundlagen" (Intro-Seite) + h3 =
+0.0 … 0.6 (die Sections), `\subsection` → `<h4>` nicht-seitengebend. Passt zum
+„Kapitel 0"-Begriff, vermeidet die Namenskollision und braucht keine
+`numbering.js`-Änderung — *empfohlen*.
+
+- [ ] **P7-0 Granularität klären** (Option A vs B, s. oben) — Nutzervorgabe ausstehend. *(S)*
+- [ ] **P7-1 Zähler-Sollwerte aus dem PDF** (`referenznummern.py` mit Präfix `0`). *(S)*
+- [ ] **P7-2 4 Abbildungen nach `bilder/`** — Raster liegt in `PSkriptBilder/`, nur kopieren + Magic-Byte-Prüfung + Breiten übernehmen. *(S)*
+- [ ] **P7-3 `ch_00_grundlagen.html` transkribieren** — 7 Abschnitte, Makro-Tabelle, siunitx, `\be`/`\ee`, Fußnoten, Boxen, Querverweise als Anker. *(L)*
+- [ ] **P7-4 Verifikation** (Skill v013-verifikation: Soll/Ist pro Unterabschnitt deckungsgleich). *(M)*
+- [ ] **P7-5 `index.html`**: `<div data-chapter="ch_00_grundlagen">` VOR ch_01 einfügen; `#header_version` hochziehen. *(S)*
+
+---
+
 - [x] **Druck: durchgehend eingefaerbter Hintergrund vermeiden (Toner!).** Im Druck darf es keinen flaechigen, durchgehend eingefaerbten Hintergrund geben (verbraucht unnoetig Toner/Farbe). `#content` (und `#paper`) tragen `background-color: var(--paper)` (#f6f4ef, cremefarben), das im Druck nicht zurueckgesetzt wurde. Box-Hintergruende sind ok (kleine Flaechen). *Fix (v1.7): `#print_container #content`/`#paper` auf `background:#fff`; zusaetzlich `@media print { body, #content, #paper { background:#fff !important } }`.* *(S)*
 
 - [ ] **QR-Codes im Druck verweisen auf die interaktiven Aspekt-Figuren (Variante A).** Im Legacy trug jede gedruckte Grafik einen QR-Code, der zurueck auf die interaktive Version zeigte. Im WIP fehlt das: `print.js` hat `create_qr()`/`from_qr()` noch (aus Legacy), qrjs2 ist geladen, die CSS (`.qr_container`/`.qr_title`) existiert -- aber `print_page()` ruft `create_qr` nur fuer `.grafik-container` auf, die es im migrierten (statischen) Kapitel nicht mehr gibt. Der interaktive Teil sind jetzt die **Aspekt-Figuren** (`.aspekt-figur`, z. B. Abb. 1.38), im Druck erscheint ihr statisches `.nur-druck`-Gegenstueck.
