@@ -369,8 +369,9 @@ Zuweisung per Freigabe-Tipp.
   cyan/orange); Rot-auf-Rot (Gesamt-a vs a_t) entspricht bewusst der \textcolor
   im Skript (α·R rot) — keine Änderung. Panel-Verfeinerung (`e2f780a`):
   Tempo/Darstellung per Default eingeklappt (Leiste zu lang), Label-CSS auf
-  Basis-.panel-label normalisiert. **Visuell noch nicht freigegeben**
-  (Screenshot-Check bleibt offen — per Nutzervorgabe aktuell KEIN Image-Input). *(M)*
+  Basis-.panel-label normalisiert. **Visuell freigegeben 2026-07-24** (Nutzer
+  hat die visuelle Prüfung vorgenommen — „alles ok"; Code-Ebene zuvor per Text-
+  Dump-Probe verifiziert, kein Image-Input auf Nutzervorgabe). *(M)*
   **Skalierungs-Redesign (`7d57892`):** statt |a| auf feste Länge zu normieren
   (ließ die konstante Tangential-Komponente a_t=αR scheinbar schrumpfen —
   rückwärts zur Physik — und deckelte a_r am Lauf-Ende) jetzt JE Komponente
