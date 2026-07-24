@@ -121,6 +121,14 @@ const A_R_CAP_PHYS = 50.0;   // physikalischer a_r, bei dem die a_r-Kappe greift
 const A_T_MAX_FRAC = 0.45;    // a_t px-Deckel = 0,45·Bahnradius (px) — etwas gedämpft (war 0,5)
 const A_T_CAP_PHYS = 0.45;    // physikalischer |α|R, bei dem die a_t-Kappe greift (m/s²)
 const compressLog = (x, xMax) => Math.min(1, Math.log(1 + x / (A_LOG_KFRAC * xMax)) / Math.log(1 + 1 / A_LOG_KFRAC));
+// -- Geschwindigkeitsvektor v = ωR (tangential, NICHT zerlegbar — nur ein/aus).
+//    Eigene log-Skala (gleiche Form wie a_t/a_r): hält auch kleines |v| (kleines ω,
+//    ω₀=0 + kleines t) sichtbar und lässt |v| mit ω(t) wachsen. px-Kappe = Bahnradius
+//    (V_MAX_FRAC·R·ppm) — kürzer als a_r (Durchmesser), da v ein eigenständiger
+//    Vektor ist und die Szene nicht dominieren soll. V_CAP_PHYS so, dass der
+//    Default-Lauf (|v|max ≈ 6,6 m/s) NICHT an die Kappe stößt (≈ 0,8·Kappe).
+const V_MAX_FRAC  = 1.0;     // v px-Deckel = 1,0·Bahnradius (px) — eigenständig, kürzer als a_r
+const V_CAP_PHYS  = 8.0;     // physikalisches |v|, bei dem die v-Kappe greift (m/s)
 
 // -- Szene: Vorlagen-Geometrie (wie aspekt_vxvy_zeit), aber der Beschleunigungs-
 //    vektor ist die gezeigte Groesse — daher bekommt er (und seine Komponenten)
@@ -156,6 +164,7 @@ const SVG_SCENE = `
          (Farbcodierung des Skripts). Polygon-Klasse steuert die Füllung (CSS). -->
     <marker id="kb_arrowhead-at" markerUnits="strokeWidth" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon class="ah-at" points="0 0, 5 1.75, 0 3.5"/></marker>
     <marker id="kb_arrowhead-ar" markerUnits="strokeWidth" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon class="ah-ar" points="0 0, 5 1.75, 0 3.5"/></marker>
+    <marker id="kb_arrowhead-v"  markerUnits="strokeWidth" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon class="ah-v"  points="0 0, 5 1.75, 0 3.5"/></marker>
     <!-- Pfeilspitze am Winkelbogen (zeigt die positive Drehrichtung, P-Wunsch;
          Bogen selbst fuer Konsistenz innerhalb Abschnitt 1.4.2 ergaenzt -- alle
          Aspekt-Figuren dort zeigen jetzt denselben durchlaufenen Winkelbogen
@@ -201,7 +210,13 @@ const SVG_SCENE = `
          Farbe unterscheidet sich. Längen-Verkürzung wie der a-Vektor. -->
     <line id="kb_accel_t" class="accel-t" marker-end="url(#kb_arrowhead-at)" visibility="hidden"/>
     <line id="kb_accel_r" class="accel-r" marker-end="url(#kb_arrowhead-ar)" visibility="hidden"/>
-    <g id="kb_accel_tr_labels"></g>
+
+    <!-- Geschwindigkeitsvektor v = ωR (optional, selbst berechnet+gezeichnet,
+         NICHT zerlegbar — nur ein/aus). Tangential wie a_t, aber getrieben von ω.
+         Strichstärke wie der Hauptvektor a (HV, solid) in CSS (.vel); Farbe eigenes
+         Token --kb-v (grün, CVD-distinkt zu rot/blau/cyan/orange/gold). Kein Tip-Label
+         in der Szene — die Legende klärt die Zuordnung (Nutzervorgabe). -->
+    <line id="kb_velocity" class="vel" marker-end="url(#kb_arrowhead-v)" visibility="hidden"/>
 
     <g id="kb_stopwatch">
       <circle id="kb_stopwatch_circle" cx="280" cy="120" r="72" stroke-width="2"/>
@@ -314,7 +329,8 @@ const PANEL_LEFT = `
     <button type="button" class="panel-label" aria-expanded="false">Darstellung${CHEVRON}</button>
     <label class="aspekt-check"><input type="checkbox" id="ak_components"><span>kartesisch \\(a_x\\)/\\(a_y\\) zerlegen</span></label>
     <label class="aspekt-check"><input type="checkbox" id="ak_tr"><span>tangential/radial \\(\\vec{a}_\\text{t}\\)/\\(\\vec{a}_\\text{r}\\) zerlegen</span></label>
-    <div class="accel-scale-note">Sowohl \\(\\vec{a}_\\text{t}=\\alpha R\\) als auch \\(\\vec{a}_\\text{r}=\\omega(t)^2R\\) sind logarithmisch skaliert (jede Komponente mit eigenem Maßstab), sodass auch kleine Vektoren sichtbar bleiben und a_r ohne sichtbare Deckelung wächst; \\(\\vec a\\) ist deren Summe. Die echten Beträge stehen in den Diagrammen, der gezeigte Winkel ist verstärkt dargestellt.</div>
+    <label class="aspekt-check"><input type="checkbox" id="ak_vel"><span>Geschwindigkeit \\(\\vec v=\\omega R\\) einblenden</span></label>
+    <div class="accel-scale-note">\\(\\vec{a}_\\text{t}=\\alpha R\\), \\(\\vec{a}_\\text{r}=\\omega(t)^2R\\) und (optional) \\(\\vec v=\\omega R\\) sind logarithmisch skaliert (jede mit eigenem Maßstab), sodass auch kleine Vektoren sichtbar bleiben und a_r ohne sichtbare Deckelung wächst; \\(\\vec a\\) ist die Summe aus a_t und a_r. Die echten Beträge stehen in den Diagrammen, der gezeigte Winkel ist verstärkt dargestellt.</div>
   </div>
   <div class="panel-section collapsible collapsed">
     <button type="button" class="panel-label" aria-expanded="false">Legende${CHEVRON}</button>
@@ -325,6 +341,7 @@ const PANEL_LEFT = `
       <div class="legend-swatch" data-c="ay"></div> <div class="legend-label">Komponente \\(a_y\\)</div>
       <div class="legend-swatch" data-c="at"></div> <div class="legend-label">tangential \\(\\vec{a}_\\text{t}=\\alpha R\\)</div>
       <div class="legend-swatch" data-c="ar"></div> <div class="legend-label">radial \\(\\vec{a}_\\text{r}=\\omega^2 R\\)</div>
+      <div class="legend-swatch" data-c="v"></div>  <div class="legend-label">Geschwindigkeit \\(\\vec v=\\omega R\\)</div>
       <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\varphi\\)</div>
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
@@ -366,6 +383,7 @@ const PANEL_RIGHT = `
         <div class="analysis-cell key">Radius \\(R\\)</div>          <div class="analysis-cell val" id="ak_val_r"></div>
         <div class="analysis-cell key">Winkelgeschw. \\(\\omega(t)\\)</div> <div class="analysis-cell val" id="ak_val_omega"></div>
         <div class="analysis-cell key">Winkelbeschl. \\(\\alpha\\)</div> <div class="analysis-cell val" id="ak_val_alpha"></div>
+        <div class="analysis-cell key">Geschw. \\(|\\vec v|\\)</div>   <div class="analysis-cell val" id="ak_val_v"></div>
         <div class="analysis-cell key">Beschleun. \\(a_x\\)</div>    <div class="analysis-cell val" id="ak_val_ax"></div>
         <div class="analysis-cell key">Beschleun. \\(a_y\\)</div>    <div class="analysis-cell val" id="ak_val_ay"></div>
         <div class="analysis-cell key">Betrag \\(|\\vec{a}|\\)</div>  <div class="analysis-cell val" id="ak_val_aabs"></div>
@@ -450,6 +468,7 @@ export function buildAxAyWinkelbeschlFig(fig) {
     const ak_keep = ge(p + 'ak_keep');
     const ak_components = ge(p + 'ak_components');
     const ak_tr = ge(p + 'ak_tr');
+    const ak_vel = ge(p + 'ak_vel');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let sceneCenters = null;
     let curT = T_AUTO;                    // Initial: volle 12 s
@@ -457,6 +476,7 @@ export function buildAxAyWinkelbeschlFig(fig) {
     let keepPrev = false;                 // Vergleichslinie: letzte Kurve bei Neudurchlauf behalten
     let showComponents = false;           // Szene: kartesische a_x/a_y-Zerlegung (optional)
     let showTR = false;                   // Szene: tangential/radial a_t/a_r-Zerlegung (optional)
+    let showVel = false;                  // Szene: Geschwindigkeitsvektor v einblenden (optional, nicht zerlegbar)
 
     // -- Lokale α-Physik (der geteilte Motor kann nur konstantes ω, s. Kopf). ω0/α
     //    kommen aus den Reglern; φ0 = 0. Winkel in rad. Diese Funktionen liefern die
@@ -703,7 +723,7 @@ export function buildAxAyWinkelbeschlFig(fig) {
     const lineA = ge(p + 'acceleration_vector');
     const lineAx = ge(p + 'acceleration_vector_x'), lineAy = ge(p + 'acceleration_vector_y');
     const lineT = ge(p + 'accel_t'), lineR = ge(p + 'accel_r');
-    const trLabels = ge(p + 'accel_tr_labels');
+    const lineV = ge(p + 'velocity');             // selbst gezeichneter Geschwindigkeitsvektor (nicht zerlegbar)
     function shortenLine(x1, y1, x2, y2, markerLen) {
         const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy);
         if (L <= markerLen || L === 0) return null;
@@ -721,8 +741,7 @@ export function buildAxAyWinkelbeschlFig(fig) {
         return true;
     }
     function drawAccel(t) {
-        if (trLabels) trLabels.textContent = '';
-        if (!sceneCenters) { [lineA, lineAx, lineAy, lineT, lineR].forEach(hide); return; }
+        if (!sceneCenters) { [lineA, lineAx, lineAy, lineT, lineR, lineV].forEach(hide); return; }
         const { cx, cy } = sceneCenters;
         const ppm = store.currentPixelsPerMeter;
         const ph = localPhi(t), w = localOmega(t), R = store.R;
@@ -754,26 +773,29 @@ export function buildAxAyWinkelbeschlFig(fig) {
             setLocalVec(lineAx, px, py, axe, py, mComp);
             setLocalVec(lineAy, axe, py, axe, aye, mComp);
         } else { hide(lineAx); hide(lineAy); }
-        // Tangential/Radial a_t/a_r (optional) — je eigenem Maßstab (Lt bzw. Lr)
+        // Tangential/Radial a_t/a_r (optional) — je eigenem Maßstab (Lt bzw. Lr).
+        // KEINE Tip-Labels in der Szene: die Legende klärt die Zuordnung (Nutzervorgabe).
         if (showTR) {
             const txe = px + atx, tye = py - aty;
             const rxe = px + arx, rye = py - ary;
             // mComp (nicht mMain): a_t/a_r sind Komponenten-Linien (Dicke wie a_x/a_y,
             // Pfeilspitze 15 px) → Verkürzung muss zur Pfeilspitze passen (keine Lücke).
-            const tVis = setLocalVec(lineT, px, py, txe, tye, mComp);
-            const rVis = setLocalVec(lineR, px, py, rxe, rye, mComp);
-            const NS = 'http://www.w3.org/2000/svg';
-            const addLabel = (visible, ex, ey, txt, cls) => {
-                if (!visible || !trLabels) return;
-                const el = document.createElementNS(NS, 'text');
-                el.setAttribute('x', (ex + 6).toFixed(1)); el.setAttribute('y', ey.toFixed(1));
-                el.setAttribute('class', 'accel-tr-label ' + cls);
-                el.textContent = txt;
-                trLabels.appendChild(el);
-            };
-            addLabel(tVis, txe, tye, 'aₜ', 'lbl-at');
-            addLabel(rVis, rxe, rye, 'aᵣ', 'lbl-ar');
+            setLocalVec(lineT, px, py, txe, tye, mComp);
+            setLocalVec(lineR, px, py, rxe, rye, mComp);
         } else { hide(lineT); hide(lineR); }
+        // Geschwindigkeit v = ωR (optional, nicht zerlegbar) — tangential wie a_t,
+        // getrieben von ω; eigene log-Skala (s. Konstanten-Block). HV (mMain): v ist ein
+        // eigenständiger Hauptvektor, solid + dick wie a (nicht gestrichelte Komponente).
+        if (showVel) {
+            const v_phys = w * R;               // kann 0 (ω=0) oder <0 (Drehsinn umgekehrt) sein
+            const v_abs = Math.abs(v_phys);
+            const vsgn = v_phys >= 0 ? 1 : -1;
+            const Lvmax = V_MAX_FRAC * R * ppm;
+            const Lv = Lvmax * compressLog(v_abs, V_CAP_PHYS);
+            const vvx = v_abs > 1e-9 ? vsgn * (-Math.sin(ph)) * Lv : 0;
+            const vvy = v_abs > 1e-9 ? vsgn * ( Math.cos(ph)) * Lv : 0;
+            setLocalVec(lineV, px, py, px + vvx, py - vvy, mMain);
+        } else hide(lineV);
     }
 
     // -- Zeichnen an der aktuellen Zeit (kein Rebuild der Daten). ---------------
@@ -809,6 +831,7 @@ export function buildAxAyWinkelbeschlFig(fig) {
             ge(p + 'ak_val_aabs').textContent = n(Math.hypot(a.x, a.y), 2) + ' m/s²';
             ge(p + 'ak_val_at').textContent = n(alpha * R, 2) + ' m/s²';        // a_t = α·R
             ge(p + 'ak_val_ar').textContent = n(w * w * R, 2) + ' m/s²';        // a_r = ω²·R
+            ge(p + 'ak_val_v').textContent  = n(Math.abs(w) * R, 2) + ' m/s';   // |v| = |ω|·R
         }
     }
 
@@ -979,6 +1002,15 @@ export function buildAxAyWinkelbeschlFig(fig) {
     if (ak_tr) ak_tr.addEventListener('change', () => {
         showTR = ak_tr.checked;
         if (showTR && ak_components) { ak_components.checked = false; showComponents = false; }
+        rt.withStore(() => draw(curT));
+    });
+
+    // Geschwindigkeitsvektor v einblenden (optional, Nutzervorgabe): UNABHÄNGIG
+    // von der Zerlegung (v ist nicht zerlegbar) — schaltet nur showVel. drawAccel()
+    // zeichnet v selbst (Motor-Flag store.showVelocityVector bleibt false, s. SVG-
+    // Stub), eigene log-Skala, HV-Strichstärke. Legende klärt die Zuordnung.
+    if (ak_vel) ak_vel.addEventListener('change', () => {
+        showVel = ak_vel.checked;
         rt.withStore(() => draw(curT));
     });
 

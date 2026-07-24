@@ -115,7 +115,7 @@
    Skript (α·R-Term rot, ω²·R-Term blau). Eigene Tokens (--kb-at/--kb-ar) mit
    Fallback; Mittel-Töne, die auf hellem UND dunklem Hintergrund lesbar sind.
    Linien-Stroke, Marker-Füllung (.ah-at/.ah-ar in <defs>), Legende, Tip-Labels. */
-.aspekt-figur[data-aspekt="axay-winkelbeschl"] { --kb-at: #d24b3e; --kb-ar: #2f74d0; }
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] { --kb-at: #d24b3e; --kb-ar: #2f74d0; --kb-v: #2e8b57; }
 /* Komponenten-Linien BEIDER Zerlegungen (a_x/a_y UND a_t/a_r) haben IDENTISCHE
    Strichstärke + Strichmuster (nur die Farbe unterscheidet sich): Dicke über
    das shared Komponenten-Token --kb-vec-cw (= 0,8 der HV, s. aspekt_kreisbahn.
@@ -128,13 +128,15 @@
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-scene .ah-ar   { fill: var(--kb-ar); }
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .legend-swatch[data-c="at"] { background: var(--kb-at); }
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .legend-swatch[data-c="ar"] { background: var(--kb-ar); }
-.aspekt-figur[data-aspekt="axay-winkelbeschl"] .accel-tr-label {
-    font-style: italic; font-weight: 700;
-    font-size: calc(15px * var(--kb-fs, 1));
-    dominant-baseline: middle;
-}
-.aspekt-figur[data-aspekt="axay-winkelbeschl"] .accel-tr-label.lbl-at { fill: var(--kb-at); }
-.aspekt-figur[data-aspekt="axay-winkelbeschl"] .accel-tr-label.lbl-ar { fill: var(--kb-ar); }
+
+/* ── Geschwindigkeitsvektor v = ωR (SELBST gezeichnet, optional, NICHT zerlegbar):
+   eigenes Farb-Token --kb-v (Gruen; CVD-distinkt zu rot/blau/cyan/orange/gold,
+   kein Konflikt mit --kb-vel des Motors, das hier nicht genutzt wird). v ist ein
+   HAUPTVEKTOR wie a (HV: dick + solid, NICHT gestrichelte Komponente) — eigene
+   log-Skala (s. JS-Konstanten). Kein Tip-Label in der Szene (Legende klärt). */
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-scene .vel         { stroke: var(--kb-v); stroke-width: calc(var(--kb-vec-hw) * var(--kb-lw)); }
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-scene .ah-v       { fill: var(--kb-v); }
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .legend-swatch[data-c="v"] { background: var(--kb-v); }
 
 /* Hinweis zur Normierung der Beschleunigungslänge (kleiner, gedämpfter Text). */
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .accel-scale-note {

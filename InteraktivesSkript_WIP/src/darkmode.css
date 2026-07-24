@@ -239,6 +239,9 @@ input[type="range"]::-moz-range-track {
                           wie dort klar BLAU (nicht cyan) gehalten, damit es neben
                           a_x #56b4e9 (cyan) distinkt bleibt, wenn beide
                           Zerlegungen gleichzeitig an sind. Nur Figur 1.50. */
+    --kb-v: #5fd49d;   /* Geschwindigkeitsvektor v=ωR (Figur 1.50) — Gruen wie im
+                          Light-Mode (#2e8b57), nur aufgehellt fuer dunklen Grund.
+                          CVD-distinkt zu rot/blau/cyan/orange; nur Figur 1.50. */
     --kb-traj: #9aa3b8;   /* Vorlage --c-traj */
     --kb-graph-bg: #161925;  /* Vorlage --graph-bg (dunkles Navy) */
     --kb-grid-line: #262c42; /* Vorlage --grid-line */
