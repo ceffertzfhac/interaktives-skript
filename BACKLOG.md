@@ -538,6 +538,164 @@ schmalen Header ans Licht). Ab dem Tablet-Breakpoint (**≤ 1024 px**, zuvor
 
 ---
 
+## P12 — Komplett-Integration aller noch fehlenden v0.13-Inhalte (Rest-Skript)
+
+Eingetragen 2026-07-24 nach Nutzervorgabe: *„plane im backlog kleinschrittig die
+komplette integration aller noch fehlender inhalte aus dem pdf."* Ziel ist das
+volle ~400-Seiten-Skript (v0.13, `Input/v0.13/Physik_pskript_v0.13.pdf`), nicht
+nur die heutigen ~3 migrierten Abschnitte. Struktur des PDFs (aus
+`Physik_pskript_v0.13.toc`): **4 Themenkomplexe** (`\chapter` 0–3) ·
+**23 Sections** (`\section`) · **114 Subsections** (`\subsection`).
+
+**Ist-Stand WIP (verifiziert 2026-07-24):**
+- **TK 0 Grundlagen** — ✅ komplett migriert (`ch_00_grundlagen.html`, 0.0–0.6, s. P7).
+- **TK 1 Mechanik** — 1.4 ✅ (`ch_01`), **1.5 ✅** (`ch_02`, 1.5.1–1.5.14 **vollständig**
+  incl. 1.5.13 Rollbewegung mit 73 Gl. — *P4 ist veraltet, s. P12-0e*).
+  **Fehlt:** 1.0, 1.1, 1.2, 1.3, 1.6, 1.7, 1.8.
+- **TK 2 Elektromagnetismus** — ❌ komplett fehlt (2.0–2.3).
+- **TK 3 Schwingungen und Wellen** — ❌ komplett fehlt (3.1 Schwingungen; 3.2 Wellen
+  ist in v0.13 *selbst* nur ein **207-Byte-Stub** — `pskript_sw_wellen.tex` ist
+  praktisch leer, s. P12-Wellen).
+- **Quasi-Content** — ❌ Vorwort (`pskript_preface_v1_gmni`), Stichwort-Index
+  (S.399, generiert), „Abbildungen und interaktive Animationen"-Übersicht (S.ii).
+
+**Runbooks:** Prosa-Migration pro Abschnitt nach `MIGRATION_v0.13_nach_HTML.md`
+bzw. Skill **v013-kapitel-migration**; interaktive Aspekt-Figuren nach
+`INTERAKTIVE_ASPEKT_FIGUREN.md` (S. 0a: bestehende Figur kopieren + feature-gate,
+nicht neu schreiben). **Jeder Abschnitt = eigene kleine Commit-Schritte**, Verifikation
+pro Abschnitt nach Skill **v013-verifikation** (Soll/Ist deckungsgleich *pro
+Subsection*, nicht nur in der Summe). **Nicht pushen** ohne Freigabe.
+
+### P12-0 — Vorbedingungen / Blocker (vor erstem neuen Abschnitt)
+
+- [ ] **P12-0a Gleichungs-Präfix dynamisch** — heute Konstante `"1.4"` in
+  `index.html` (tagformat) bzw. `numbering.js::renumber_equations`. Für 1.1/1.2/2.1/3.1
+  muss der Section-Präfix pro Seite ermittelt werden (z. B. aus der aktiven
+  `.chapter-page` / ihrem h2-`data-section`-Index). *Ohne das: falsche Gl.-Nummern
+  in jedem neuen Abschnitt.* *(M)* — CLAUDE.md: „revisit when a second section
+  enters the WIP" — dieser Punkt ist jetzt fällig.
+- [ ] **P12-0b Abbildungs-Zähler pro Kapitel** — `numbering.js` zählt Abbildungen
+  kapitelweit (`{chapter}` → „Abb. 1.n"). Für TK 2 startet neu „Abb. 2.n". Klären:
+  fortlaufend pro `\chapter` (TK) oder pro `\section`?_offsets (`data-figure-offset`
+  am h2) für jedes neue Kapitel korrekt setzen (1.4=1.38, 1.5=1.61…; TK 2 neu).
+  *(S)*
+- [ ] **P12-0c Box-/Zusammenfassungs-Offsets** — `data-zusammenfassung-offset` und
+  Section-Box-Counter-Start pro neuem h2. *(S)*
+- [ ] **P12-0d TK-Metadaten neuer Kapitel** — `data-tk-num`/`data-tk-title` an den
+  neuen `data-chapter`-Platzhaltern in `index.html` (P8-Mechanismus): TK 2 →
+  „2 Elektromagnetismus", TK 3 → „3 Schwingungen und Wellen". *(S)*
+- [ ] **P12-0e P4 aufräumen** — P4 (1.5 fertig migrieren) ist **veraltet**: 1.5 ist
+  vollständig migriert (s.o.). P4-Einträge abhaken / als erledigt markieren. *(S)*
+- [ ] **P12-0f Querverweis-System kapitelfest** — neue Abschnitte verweisen auf
+  frühere (z. B. 1.5→1.4, 2.3→2.1). P6 („Karte der Physik") muss kapitelübergreifend
+  robust sein (`data-ref-eq`/`data-ref-fig` auflösen über `chapters/`-Grenzen).
+  Vorab-Stichprobe, sonst Blocker pro Abschnitt. *(S)*
+
+### P12-A — TK 1 Mechanik: restliche Sections (in `ch_01` ergänzen oder eigene Dateien)
+
+*Granularität wie ch_00/ch_01: ein `ch_NN`-File pro Themenkomplex; Sections als h2,
+Subsections als h3. Da ch_01 heute nur 1.4 hält, 1.0–1.3/1.6–1.8 entweder ch_01
+ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
+
+- [ ] **P12-A0 1.0 Einleitung und Motivation** — 0 Subsections, 0 Abb.
+  (`pskript_mech_einleitung_und_motivation_gmni.tex`, 676 B). *(S)*
+- [ ] **P12-A1 1.1 Kinematik** — 14 Subsections, **21 Abbildungen**
+  (`pskript_mech_kinematik_gmni_v4.tex`, 104 KB). *Größter Brocken nach 1.5.13 —
+  eigene Sitzung(en).* Interaktiv-Kandidaten: `geschwindigkeit_simulation`,
+  `grundbegriffe_kinematik_simulation`, `freier_fall_simulation`,
+  `schraeger_wurf_simulation`. *(XL)*
+- [ ] **P12-A2 1.2 Dynamik – Impuls und Kraft** — 12 Subsections, 10 Abb.
+  (`pskript_mech_dyn_kraft_impuls_gmni_v3.tex`, 74 KB). Kandidaten: `atwood_simulation`,
+  `3massen_umlenkrollen_simulation`. *(L)*
+- [ ] **P12-A3 1.3 Dynamik – Arbeit, Leistung und Energie** — 7 Subsections, 7 Abb.
+  (`pskript_mech_dyn_energie_arbeit_gmni_v3.tex`, 53 KB). Kandidat: `atwood_energy_simulation`.
+  *(L)*
+- [ ] **P12-A4 1.6 Bezugsysteme und Scheinkräfte** — 3 Subsections, 1 Abb.
+  (`pskript_mech_bezugsysteme_und_scheinkraefte.tex`, 41 KB). **Achtung:**
+  `_v2gmni`-Variante existiert (38 KB, 0 Abb.) — richtige/finalere Version klären.
+  *(M)*
+- [ ] **P12-A5 1.7 Elastische und inelastische Stöße** — 2 Subsections, 0 Abb.
+  (`pskript_mech_dyn_stoesse.tex`, 17 KB). Kandidat: `stoss_simulation`. *(M)*
+- [ ] **P12-A6 1.8 Gravitation** — 5 Subsections, 0 Abb.
+  (`pskript_mech_gravitation_v1.tex`, 22 KB). *(M)*
+
+### P12-B — TK 2 Elektromagnetismus (neu, `ch_03_*.html`, `data-tk-num="2"`)
+
+- [ ] **P12-B0 2.0 Einleitung und Motivation** — 0 Subsections, 0 Abb.
+  (`pskript_em_einleitung_und_motivation.tex`, 2.3 KB). *(S)*
+- [ ] **P12-B1 2.1 Grundlagen der Elektrizitätslehre** — 14 Subsections, 0 Abb.
+  (`pskript_em_grundlagen_der_elektrizitaetslehre.tex`, 39 KB). Viele
+  Schaltpläne/Symbole — prüfen ob als SVG-Icons oder PNG. *(L)*
+- [ ] **P12-B2 2.2 Elektrostatik** — 10 Subsections, 0 Abb.
+  (`pskript_em_elektrostatik.tex`, 52 KB). Felder/Dipole — Vektorfeld-Plot-Kandidat?
+  *(L)*
+- [ ] **P12-B3 2.3 Elektrodynamik und Magnetismus** — 7 Subsections, 3 Abb.
+  (`pskript_em_elektrodynamik_und_magnetismus.tex`, 71 KB). Kandidat:
+  `lorentz_force_simulation`. *(L)*
+
+### P12-C — TK 3 Schwingungen und Wellen (neu, `ch_04_*.html`, `data-tk-num="3"`)
+
+- [ ] **P12-C0 3.0/3.1 Einleitung und Motivation** — (`pskript_sw_einleitung_und_motivation.tex`,
+  3.2 KB). **TOC-Bug in v0.13:** „Einleitung" und „Schwingungen" sind *beide* als
+  „3.1" nummeriert — Nummerierung beim Migrieren korrigieren (3.0 vs 3.1). *(S)*
+- [ ] **P12-C1 3.1 Schwingungen** — 9 Subsections, 0 Abb.
+  (`pskript_sw_schwingungen.tex`, 42 KB). Kandidat: `federpendel_simulation`. *(L)*
+- [ ] **P12-C2 3.2 Wellen** — `pskript_sw_wellen.tex` = **207 Byte Stub** — in v0.13
+  *selbst* kein Inhalt. **Nutzervorgabe nötig:** leer/Platzhalter lassen, extern
+  ergänzen oder zurückstellen? `wellen_simulation` liegt bereit. *(Block — klären)*
+
+### P12-D — Quasi-Content
+
+- [ ] **P12-D1 Vorwort/Preface** — (`pskript_preface_v1_gmni.tex`, 4.6 KB). Vor
+  TK 0 einbinden? *(S)*
+- [ ] **P12-D2 „Abbildungen und interaktive Animationen"-Übersicht** (S.ii) —
+  Index der Abb./Animationen. Generieren aus Figuren-Registry. *(S)*
+- [ ] **P12-D3 Stichwortverzeichnis/Index** (S.399) — `makeindex`-Output aus v0.13;
+  im WIP statisch nachtippen oder generieren. *(M)*
+
+### P12-E — Interaktive Figuren aus `Input/Simulationen/` (gekoppelt, pro Abschnitt)
+
+*Pro Figur: Stand-alone-Sim portieren (wie `kreisbewegung/` → gc10) ODER als
+Aspekt-Figur feature-geated (s. `INTERAKTIVE_ASPEKT_FIGUREN.md`). Entscheidung
+pro Figur anhand Runbook-Vorlagenhierarchie [[feedback-vorlagen-hierarchie]].*
+
+- [ ] **P12-E1** 1.1: `geschwindigkeit` / `grundbegriffe_kinematik` / `freier_fall` /
+  `schraeger_wurf`. *(L)*
+- [ ] **P12-E2** 1.2/1.3: `atwood` / `atwood_energy` / `3massen_umlenkrollen`. *(L)*
+- [ ] **P12-E3** 1.5.13 Rollbewegung: `rolling_bodies` (in ch_02 nachrüsten). *(M)*
+- [ ] **P12-E4** 1.7: `stoss`. *(M)*
+- [ ] **P12-E5** 2.3: `lorentz_force`. *(M)*
+- [ ] **P12-E6** 3.1: `federpendel`. *(M)*
+- [ ] **P12-E7** 3.2: `wellen` (nach P12-C2-Klärung). *(M)*
+- [ ] **P12-E8** Hilfs-Sims: `ableitung`, `lineal`, `kreis_spiralbewegung` —
+  Zuordnung prüfen. *(S)*
+
+### P12-F — Asset-Pipeline (Bilder)
+
+`PSkriptBilder/` hat 126 Dateien (28 PDF · 31 SVG · 53 PNG). Für die fehlenden
+Mechanik-/EM-Abschnitte ca. **42 `\includegraphics`** (1.1=21, 1.2=10, 1.3=7,
+1.6=1, 2.3=3).
+
+- [ ] **P12-F1** PDF-Figuren → PNG (`pdftocairo -png -r 300`, s. MIGRATION-Runbook)
+  pro Abschnitt vor der Transkription.
+- [ ] **P12-F2** SVG-Figuren direkt übernehmen oder nach PNG? (Vektor vs. Bitmap —
+  einmalig entscheiden, konsistent halten).
+- [ ] **P12-F3** Magic-Byte-Prüfung jeder kopierten Bilddatei („PDF in .png" ist
+  ein echter Fallstrick, s. MIGRATION-Katalog).
+
+### P12-G — Pro-Abschnitt-Verifikation & Abschluss
+
+- [ ] **P12-G1** Pro Abschnitt: Stufe 1 (PDF) vs. Stufe 2 (MathJax offline)
+  deckungsgleich — Gl./Box/Abb-Zahlen via `referenznummern.py` pro Section.
+- [ ] **P12-G2** Stufe 3 (DOM-Harness): Seitenzahl, Abbildungsnummerierung,
+  Box-Reset, Fußnoten.
+- [ ] **P12-G3** Stufe 5 (Browser-Sicht) — **nur nach Freigabe mit dem Wort „JA"**
+  ([[feedback-screenshot-freigabe]]); oft vom Nutzer selbst vorgenommen.
+- [ ] **P12-G4** Gesamtabschluss: TOC 3-stufig vollständig (TK 0–3), Breadcrumb,
+  Schiene, Querverweise kapitelfest; Druckpfad (alle Seiten); Index.
+
+---
+
 1. Erst **P0** abarbeiten (rasch, niedriges Risiko, senkt schon das Token-Volumen spürbar).
 2. Dann **Per-Figure-Fabrik + Modularisierung + Globals einfrieden** (P1) als zusammenhängender Struktur-Refactor — das ist der zentrale Hebel für Token-Effizienz und Wartbarkeit; danach sind Animation (rAF) und DOM-Optimierung günstig in der Fabrik mitzuerledigen.
 3. **P2** anschließend/parallel je nach Bedarf (Mobile/A11y).
