@@ -573,16 +573,23 @@ export function buildPeriodendauerFig(fig) {
         }
     }
 
-    // -- Eine bemaßte T-Strecke zwischen zwei aufeinanderfolgenden Extrema
-    //    zeichnen: zwei Punkte, senkrechte Hilfslinien zur Nulllinie, Doppelpfeil-
-    //    Strecke und „T"-Label. `sign` = +1 (Maxima, x=+R, Strecke OBEN) oder −1
-    //    (Minima, x=−R, Strecke UNTEN). Wie renderPrev() aus dem gs-Rechteck auf
-    //    die AKTUELLE Achse projiziert (y skaliert mit R, x fest 0…12 s), nie als
-    //    eingefrorene Pixel. `ghost` = verblasster Marker eines vorherigen Laufs
-    //    (ohne Pfeilspitzen; Optik via .tmark-ghost). Läuft inside withStore.
-    function drawInterval(g, gs, t1, t2, sign, R, ghost) {
+    // -- Eine (dynamisch wachsende) bemaßte T-Strecke zwischen zwei aufeinander-
+    //    folgenden Extrema zeichnen. `sign` = +1 (Maxima, +R, Strecke OBEN) oder
+    //    −1 (Minima, −R, Strecke UNTEN). `tCur` = aktueller Zeitpunkt: die Strecke
+    //    startet am 1. Extremum (t1) und wächst mit tCur PARALLEL zur t-Achse (auf
+    //    Extremum-Höhe) nach rechts; die Pfeilspitze am rechten Ende läuft also mit
+    //    der Animation mit. Ist das 2. Extremum (t2) erreicht (tCur ≥ t2), verankert
+    //    die Strecke dort: rechter Punkt + Hilfslinie + „T"-Label erscheinen und die
+    //    linke (auswärtige) Pfeilspitze kommt dazu -> vollständige Bemaßung ◄──T──►.
+    //    Wie renderPrev() aus dem gs-Rechteck auf die AKTUELLE Achse projiziert
+    //    (y skaliert mit R, x fest 0…12 s), nie als eingefrorene Pixel. `ghost` =
+    //    verblasster Marker eines vorherigen Laufs (voll verankert, ohne Pfeil-
+    //    spitzen; Optik via .tmark-ghost). Läuft inside withStore.
+    function drawInterval(g, gs, t1, t2, sign, R, ghost, tCur) {
         const { plotL, plotT, plotW, plotH, xMin, xMax, yMin, yMax } = gs;
-        if (t2 > xMax) return;                       // passt nicht mehr ins Diagramm
+        if (t1 > xMax) return;                       // 1. Extremum noch nicht im Fenster
+        const tR = Math.min(tCur, t2, xMax);         // rechtes, wachsendes Streckenende
+        const anchored = tCur >= t2 && t2 <= xMax;   // 2. Extremum erreicht & im Fenster
         const xR = (xMax - xMin) || 1, yR = (yMax - yMin) || 1;
         const px = t => plotL + ((t - xMin) / xR) * plotW;
         const py = v => plotT + plotH - ((v - yMin) / yR) * plotH;
@@ -595,22 +602,32 @@ export function buildPeriodendauerFig(fig) {
             g.appendChild(el);
             return el;
         };
-        const pxA = px(t1), pxB = px(t2);
         const pyPk = py(sign * R), pyZero = py(0);
+        const pxA = px(t1), pxR = px(tR);
+        // Linker Anker (1. Extremum): Punkt + senkrechte Hilfslinie zur Nulllinie.
         mk('line', { x1: pxA, y1: pyPk, x2: pxA, y2: pyZero }, 'tmark-vline');
-        mk('line', { x1: pxB, y1: pyPk, x2: pxB, y2: pyZero }, 'tmark-vline');
         mk('circle', { cx: pxA, cy: pyPk, r: 4 }, 'tmark-dot');
-        mk('circle', { cx: pxB, cy: pyPk, r: 4 }, 'tmark-dot');
-        const br = { x1: pxA, y1: pyPk, x2: pxB, y2: pyPk };
-        if (!ghost) { br['marker-start'] = `url(#${p}tmark_arrow)`; br['marker-end'] = `url(#${p}tmark_arrow)`; }
+        // Wachsende Strecke t1 -> tR (mitlaufende Spitze rechts; auswärtige Spitze
+        // links erst beim Verankern).
+        const br = { x1: pxA, y1: pyPk, x2: pxR, y2: pyPk };
+        if (!ghost) {
+            br['marker-end'] = `url(#${p}tmark_arrow)`;
+            if (anchored) br['marker-start'] = `url(#${p}tmark_arrow)`;
+        }
         mk('line', br, 'tmark-bracket');
-        // Label „T" als nativer <svg:text> (Einzelglyphe, Fallstrick #17), auf der
-        // Nulllinien-SEITE der Strecke (oben: darunter; unten: darüber).
-        const lbl = mk('text', {
-            x: (pxA + pxB) / 2, y: pyPk + (sign > 0 ? 18 : -8), 'text-anchor': 'middle',
-        }, 'tmark-label');
-        lbl.setAttribute('dominant-baseline', sign > 0 ? 'hanging' : 'auto');
-        lbl.textContent = 'T';
+        // Rechter Anker + „T"-Label erst nach Durchlaufen des 2. Extremums.
+        if (anchored) {
+            const pxB = px(t2);
+            mk('line', { x1: pxB, y1: pyPk, x2: pxB, y2: pyZero }, 'tmark-vline');
+            mk('circle', { cx: pxB, cy: pyPk, r: 4 }, 'tmark-dot');
+            // Label „T" als nativer <svg:text> (Einzelglyphe, Fallstrick #17), auf der
+            // Nulllinien-SEITE der Strecke (oben: darunter; unten: darüber).
+            const lbl = mk('text', {
+                x: (pxA + pxB) / 2, y: pyPk + (sign > 0 ? 18 : -8), 'text-anchor': 'middle',
+            }, 'tmark-label');
+            lbl.setAttribute('dominant-baseline', sign > 0 ? 'hanging' : 'auto');
+            lbl.textContent = 'T';
+        }
     }
 
     // -- Alle T-Ablese-Markierungen zeichnen. Je Diagramm (x(t) oben, y(t) unten)
@@ -618,9 +635,9 @@ export function buildPeriodendauerFig(fig) {
     //    den ersten beiden Minima (unten). Extrema-Zeiten:
     //      x(t)=R·cos(ωt): Max bei k·T, Min bei T/2+k·T
     //      y(t)=R·sin(ωt): Max bei T/4+k·T, Min bei 3T/4+k·T
-    //    Ein Intervall erscheint erst, wenn seine zweite Extremstelle DURCHLAUFEN
-    //    ist (curT ≥ t2) — so wird die Periode erst nach ihrem Ablauf bemaßt.
-    //    Geister-Intervalle (voriger Lauf) werden mit prevMark.T/R voll gezeichnet
+    //    Die Strecke startet am 1. Extremum (curT ≥ t1) und wächst mit curT bis zum
+    //    2. Extremum, wo sie verankert (Details s. drawInterval). Geister-Intervalle
+    //    (voriger Lauf) werden mit prevMark.T/R voll verankert gezeichnet
     //    (verblasst), unabhängig von curT. Läuft inside withStore.
     function drawTMarkers() {
         const T = parseFloat(ak_T.value);
@@ -637,10 +654,10 @@ export function buildPeriodendauerFig(fig) {
             s.g.textContent = '';
             if (!s.gs || s.gs.type !== s.type) continue;
             if (prevMark) for (const iv of ivts(prevMark.T, s.type))
-                drawInterval(s.g, s.gs, iv.t1, iv.t2, iv.sign, prevMark.R, true);
+                drawInterval(s.g, s.gs, iv.t1, iv.t2, iv.sign, prevMark.R, true, iv.t2);
             for (const iv of ivts(T, s.type)) {
-                if (curT < iv.t2) continue;          // Feature 1: erst nach Durchlaufen
-                drawInterval(s.g, s.gs, iv.t1, iv.t2, iv.sign, R, false);
+                if (curT < iv.t1) continue;          // Pfeil startet am 1. Extremum …
+                drawInterval(s.g, s.gs, iv.t1, iv.t2, iv.sign, R, false, curT); // … und wächst mit curT
             }
         }
     }
