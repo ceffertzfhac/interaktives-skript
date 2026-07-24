@@ -330,6 +330,75 @@ Zuweisung per Freigabe-Tipp.
   graphType1=aabs einzeln, a⃗-Farbe `--kb-acc` (explizit gescopt, da a nicht zentral
   gefärbt wird — s. Hinweis zur 1.43/betragv). Visuell noch nicht freigegeben.
 
+## P8 — Inhaltsverzeichnis: 3-stufige Hierarchie (Themenkomplex → Kapitel → Abschnitt)
+
+Eingetragen 2026-07-24 nach Nutzervorgabe. Das TOC (und die Navigation) ist
+heute **2-stufig**: `pages.js` paginiert h2 + h3, `ui.js::generate_toc` gruppiert
+**pro h2** (eine Gruppe je h2 = eine je Section). Das macht Kapitel 0 (7 h2-
+Sections 0.0–0.6) zu **7 scheinbar eigenständigen „Kap. 0.0"…„Kap. 0.6"**-Gruppen
+im TOC — die Hierarchie wirkt gebrochen, weil die v0.13-`\chapter`-Ebene
+(„Grundlagen"/„Mechanik"/…) im WIP **gar nicht existiert** (die `data-chapter`
+-Platzhalter in `index.html` sind reine Lade-Marker, keine TOC-/Seiten-Entität).
+
+**Ziel (Nutzervorgabe):** 3-stufige Hierarchie mit dieser Benennung:
+
+| Ebene | Name | v0.13-Entsprechung | Seiten? | Beispiele |
+|-------|------|--------------------|---------|-----------|
+| 1 | **Themenkomplex** | `\chapter` | **nein** (nur TOC-Gruppe) | Grundlagen(0), Mechanik(1), Elektromagnetismus(2), Schwingungen und Wellen(3) |
+| 2 | **Kapitel** | `\section` | **ja** (h2, Intro-Seite) | 0.1, 0.2 …, 1.4 |
+| 3 | **Abschnitt** | `\subsection` | **ja** (h3) | 0.2.1, 1.4.1 … 1.4.12 |
+
+v0.13-Hauptdatei (`Input/v0.13/Physik_pskript_v0.13.tex`): 4 `\chapter`
+(Grundlagen / Mechanik / Elektromagnetismus / Schwingungen und Wellen). Jede
+WIP-`ch_NN`-Datei entspricht **einer** `\input`-Section-Datei, also einer oder
+mehreren `\section`s innerhalb **eines** Themenkomplexes — die Themenkomplex-
+Zugehörigkeit ist also **pro `ch_NN`-Datei** konstant (ch_01 UND ch_02 gehören
+beide zu „1 Mechanik").
+
+**Wichtig — Kapitel-0-Struktur:** Diese Hierarchie **rettet die ursprüngliche
+ch_00-Struktur** (h2 = Sections 0.0–0.6, h3 = Subsections 0.2.1/0.2.2/0.2.3/
+0.3.1/0.3.2). Die früher erwogene „Option A"-Herabstufung (h2 = „0 Grundlagen",
+Sections zu h3, Subsections zu nicht-seitendem h4) ist **vom Tisch** — 0.0–0.6
+bleiben h2-Kapitel-Seiten, gruppiert unter dem Themenkomplex „0 Grundlagen"; die
+Subsections bleiben h3-Abschnitt-Seiten. `numbering.js` braucht **keine**
+Änderung (`sectionPrefix` kollabiert „0.2.1"→„0.2" wie gehabt).
+
+**Entwurf (Skizze):**
+1. **Themenkomplex-Metadaten** deklarativ am `data-chapter`-Platzhalter in
+   `index.html`, z. B. `<div data-chapter="ch_00_grundlagen" data-tk-num="0"
+   data-tk-title="Grundlagen">` (analog `ch_01` → num 1 / „Mechanik", `ch_02` →
+   num 1 / „Mechanik"). *(S, deklarativ)*
+2. **`pages.js`**: Themenkomplex an jede Seite anhängen (gelesen vom
+   `data-chapter`-Elter), ohne neues Paging-Level — Paging bleibt h2/h3. *(S)*
+3. **`ui.js::generate_toc`**: 3-stufig statt 2-stufig — gruppiere nach
+   Themenkomplex → darin nach h2 (Kapitel) → darin h3 (Abschnitt). *(S–M)*
+4. **`shell.js`** (Schiene/Krume/Fortschritt): Themenkomplex im Breadcrumb
+   („0 Grundlagen › 0.2 › 0.2.1 …"); Schienen-Mini-Nav ggf. kapitel- statt
+   abschnittszentriert. Prüfen, nicht zwingend ändern. *(S–M)*
+5. **Verifikation**: DOM-Harness + Sicht (Stufe 5, Freigabe) — ein
+   Themenkomplex-Knoten pro `\chapter`, ch_00 = eine Gruppe. *(M)*
+
+**Risiko:** mittel — berührt `index.html` (Metadaten), `pages.js`, `ui.js`,
+`shell.js`; aber rein deklarativ + Anzeige, kein Paging-/Nummerierungs-Eingriff.
+**Abhängigkeit:** nach der Umstellung ist P4 (Abschnitt 1.5) konsistent
+weiterzu migrieren (ch_02 gehört zu Themenkomplex 1, nicht 2).
+
+**Offene Entscheidungen (vor Umsetzung klären):**
+- (a) Klick auf „Themenkomplex" im TOC → Sprung zur ersten Kapitel-Seite des
+  Komplexes (0.0 bzw. erste migrierte Section)? *(empfohlen)*
+- (b) Schiene: Mini-Nav auf Kapitel-Ebene (Geschwister-Kapitel im Komplex) oder
+  bleibt Abschnitt-Ebene (aktuelle Seite + Geschwister-Abschnitte)?
+- (c) Breadcrumb um Themenkomplex-Ebene ergänzen („TK › Kap › Abschnitt")?
+
+- [ ] **P8-0** Entwurf finalisieren + Entscheidungen (a/b/c) mit Nutzer. *(S)*
+- [ ] **P8-1** Themenkomplex-Metadaten an `index.html`-Platzhalter. *(S)*
+- [ ] **P8-2** `pages.js`: TK an Seiten-Register anhängen. *(S)*
+- [ ] **P8-3** `ui.js::generate_toc`: 3-stufig (TK → Kapitel → Abschnitt). *(S–M)*
+- [ ] **P8-4** `shell.js`: Krume/Schiene anpassen (nach P8-0 b/c). *(S–M)*
+- [ ] **P8-5** Verifikation (DOM-Harness + Sicht). *(M)*
+
+---
+
 ## Reihenfolge-Empfehlung
 
 1. Erst **P0** abarbeiten (rasch, niedriges Risiko, senkt schon das Token-Volumen spürbar).
