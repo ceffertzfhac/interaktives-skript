@@ -1533,8 +1533,13 @@ input[type="range"]::-moz-range-track {
     min-width: 0;
     line-height: 1.25;
 }
+.chapter-crumb #chapter_crumb_themenkomplex,
 .chapter-crumb #chapter_crumb_chapter,
 .chapter-crumb #chapter_crumb_current { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 3-stufige Krume (BACKLOG P8): Themenkomplex (oben, kleinste/most muted)
+   > Kapitel/Section (h2) > Abschnitt (aktuelle Seite). Das Listen-Icon
+   (.crumb-toc-icon, 1.95em) zentriert vertikal gegen den 3-Zeilen-Block. */
+.chapter-crumb #chapter_crumb_themenkomplex { font-size: 0.6em; color: var(--ink-3); letter-spacing: .02em; }
 .chapter-crumb #chapter_crumb_chapter { font-size: 0.72em; color: var(--ink-3); }
 .chapter-crumb #chapter_crumb_current { font-size: 0.85em; color: var(--ink); font-weight: 600; }
 .chapter-crumb .crumb-toc-icon {
