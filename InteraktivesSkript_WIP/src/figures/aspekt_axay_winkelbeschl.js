@@ -66,13 +66,15 @@ import { store } from './kreisbewegung/state.js';
 import { recalculateAxisLimits } from './kreisbewegung/physics.js';
 import { setupScene, updateScene, updateGraph, updateGraphHover,
          drawStopwatchMarks, drawSubdialMarks } from './kreisbewegung/render.js';
-import { R_MIN, R_MAX, PIXELS_PER_ACCELERATION_UNIT, TIME_STEP } from './kreisbewegung/constants.js';
+import { R_MIN, R_MAX, TIME_STEP } from './kreisbewegung/constants.js';
 import { createRuntime } from './kreisbewegung/runtime.js';
 import { attachGraphHover } from './kreisbewegung/lib/hover.js';
 import { resetOnPlayAfterAutoStop, isAtAutoStopEnd } from './playback.js';
 import { ge } from '../core.js';
 
-const T_AUTO = 12;            // fester Auto-Stopp nach 12 s (Bereich 0…12 s, wie 1.39/1.41/1.46)
+const T_AUTO = 24;            // fester Auto-Stopp nach 24 s — längerer Lauf, damit das
+                              // Anwachsen von |a| ∝ ω(t)² und die Nicht-Periodizität der
+                              // a_x/a_y-Kurven deutlicher werden (Nutzervorgabe).
 // Anfangs-Winkelgeschwindigkeit ω₀ [rad/s] und Winkelbeschleunigung α [rad/s²].
 // α darf ± sein (beschleunigen/bremsen); α=0 → gleichförmig (Grenzfall 1.46).
 const OMEGA0_MIN = 0.3, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 0.8, OMEGA0_STEP = 0.05;
@@ -80,8 +82,14 @@ const ALPHA_MIN = -0.3, ALPHA_MAX = 0.3, ALPHA_DEFAULT = 0.15, ALPHA_STEP = 0.01
 const R_DEFAULT = 1.5;
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 // Vektor-Verkürzung (= render.js: ARROW_LEN_MAIN=5·2,5, COMP=5·2) für die
-// SELBST gezeichneten a_t/a_r-Vektoren (shortenLine unten).
-const ARROW_LEN_MAIN = 12.5;
+// SELBST gezeichneten Beschleunigungs-Vektoren (a, a_x/a_y, a_t/a_r; shortenLine unten).
+const ARROW_LEN_MAIN = 12.5, ARROW_LEN_COMP = 10;
+// Ziel-Länge des Beschleunigungsvektors in der Szene (Anteil des Bahnradius in
+// Pixeln). |a| wird pro Frame darauf NORMIERT, damit die Richtung/Neigung des
+// Vektors — der α-Effekt — IMMER sichtbar ist, unabhängig von ω₀/α (didaktisches
+// Kernproblem: |a|=ω²R variiert um Faktor ~30 über den Lauf und ist bei kleinem
+// ω sonst unsichtbar). Das echte Anwachsen von |a| zeigen die Diagramme.
+const A_TARGET_FRAC = 0.7;
 
 // -- Szene: Vorlagen-Geometrie (wie aspekt_vxvy_zeit), aber der Beschleunigungs-
 //    vektor ist die gezeigte Groesse — daher bekommt er (und seine Komponenten)
@@ -236,7 +244,7 @@ const PANEL_LEFT = `
     <div class="panel-label">Parameter</div>
     <div class="slider-label">Zeit \\(t\\)</div>
     <div class="slider-row">
-      <input id="ak_t" type="range" min="0" max="12" step="0.05" value="12">
+      <input id="ak_t" type="range" min="0" max="24" step="0.05" value="24">
       <span class="slider-val" id="ak_t_out"></span>
     </div>
     <div class="slider-label">Radius \\(R\\)</div>
@@ -281,6 +289,7 @@ const PANEL_LEFT = `
     <div class="panel-label">Darstellung</div>
     <label class="aspekt-check"><input type="checkbox" id="ak_components"><span>kartesisch \\(a_x\\)/\\(a_y\\) zerlegen</span></label>
     <label class="aspekt-check"><input type="checkbox" id="ak_tr"><span>tangential/radial \\(\\vec{a}_\\text{t}\\)/\\(\\vec{a}_\\text{r}\\) zerlegen</span></label>
+    <div class="accel-scale-note">Der Beschleunigungsvektor ist in der Szene auf feste Länge normiert (damit die Neigung immer sichtbar ist). Den tatsächlichen Betrag \\(|\\vec a|=\\omega(t)^2R\\) zeigen die Diagramme.</div>
   </div>
   <div class="panel-section">
     <div class="panel-label">Vergleich</div>
@@ -632,11 +641,21 @@ export function buildAxAyWinkelbeschlFig(fig) {
         }
     }
 
-    // -- Tangential/Radial-Zerlegung von a SELBST zeichnen (der Motor kennt nur
-    //    kartesisch). a_t = α·R·(−sinφ,cosφ), a_r = ω²·R·(−cosφ,−sinφ), beide vom
-    //    Massenpunkt aus, gleiche Pixel-Skalierung (aScale) und Verkürzung
-    //    (ARROW_LEN_MAIN·arrowLenScale) wie der a-Vektor in updateScene. Läuft
-    //    inside withStore. -------------------------------------------------------
+    // -- Beschleunigungs-Vektoren SELBST zeichnen (Motor-Beschleunigung ist AUS).
+    //    Grund (didaktisches Kernproblem): der Motor skaliert a mit der FESTEN
+    //    aScale (PIXELS_PER_ACCELERATION_UNIT·zoomFactor); |a|=ω²R variiert aber um
+    //    Faktor ~30 über den Lauf und ist bei kleinem ω unsichtbar — man müsste
+    //    eine bestimmte ω₀/α-Kombination suchen. Hier wird der Vektor pro Frame auf
+    //    feste Länge (A_TARGET_FRAC·R·ppm) NORMIERT: |a| -> Ziellänge. Damit ist die
+    //    Richtung/Neigung (der α-Effekt) IMMER sichtbar. a_x/a_y UND a_t/a_r nutzen
+    //    dieselbe Frame-Skala sc, sodass Projektionen und Zerlegung exakt stimmen
+    //    und sich vektoriell zu a addieren. Das echte Anwachsen von |a| zeigen die
+    //    Diagramme (updateGraph, unberührt). zoomFactor bleibt der Szenen-Zoom
+    //    (skaliert currentPixelsPerMeter) und wird NICHT angefasst. Reuse der
+    //    vorhandenen Linien-Elemente (Farben/Marker/Dash aus CSS). Läuft inside
+    //    withStore. --------------------------------------------------------------
+    const lineA = ge(p + 'acceleration_vector');
+    const lineAx = ge(p + 'acceleration_vector_x'), lineAy = ge(p + 'acceleration_vector_y');
     const lineT = ge(p + 'accel_t'), lineR = ge(p + 'accel_r');
     const trLabels = ge(p + 'accel_tr_labels');
     function shortenLine(x1, y1, x2, y2, markerLen) {
@@ -645,7 +664,9 @@ export function buildAxAyWinkelbeschlFig(fig) {
         const s = (L - markerLen) / L;
         return { x2: x1 + dx * s, y2: y1 + dy * s };
     }
+    const hide = el => { if (el) el.style.visibility = 'hidden'; };
     function setLocalVec(el, x1, y1, x2, y2, markerLen) {
+        if (!el) return false;
         const end = shortenLine(x1, y1, x2, y2, markerLen);
         if (!end) { el.style.visibility = 'hidden'; return false; }
         el.setAttribute('x1', x1); el.setAttribute('y1', y1);
@@ -653,34 +674,46 @@ export function buildAxAyWinkelbeschlFig(fig) {
         el.style.visibility = 'visible';
         return true;
     }
-    function drawAccelTR(t) {
+    function drawAccel(t) {
         if (trLabels) trLabels.textContent = '';
-        if (!lineT || !lineR) return;
-        if (!showTR || !sceneCenters) { lineT.style.visibility = 'hidden'; lineR.style.visibility = 'hidden'; return; }
+        if (!sceneCenters) { [lineA, lineAx, lineAy, lineT, lineR].forEach(hide); return; }
         const { cx, cy } = sceneCenters;
         const ppm = store.currentPixelsPerMeter;
         const ph = localPhi(t), w = localOmega(t), R = store.R;
         const px = cx + R * Math.cos(ph) * ppm, py = cy - R * Math.sin(ph) * ppm;
-        const aScale = PIXELS_PER_ACCELERATION_UNIT * store.zoomFactor;
-        const markerLen = ARROW_LEN_MAIN * (store.arrowLenScale || 1);
-        // a_t (tangential), a_r (radial) in Physik-Koordinaten -> Bildschirm (y-Flip).
-        const atx = -alpha * R * Math.sin(ph), aty = alpha * R * Math.cos(ph);
-        const arx = -w * w * R * Math.cos(ph), ary = -w * w * R * Math.sin(ph);
-        const txe = px + atx * aScale, tye = py - aty * aScale;
-        const rxe = px + arx * aScale, rye = py - ary * aScale;
-        const tVis = setLocalVec(lineT, px, py, txe, tye, markerLen);
-        const rVis = setLocalVec(lineR, px, py, rxe, rye, markerLen);
-        const NS = 'http://www.w3.org/2000/svg';
-        const addLabel = (visible, ex, ey, txt, cls) => {
-            if (!visible) return;
-            const el = document.createElementNS(NS, 'text');
-            el.setAttribute('x', (ex + 6).toFixed(1)); el.setAttribute('y', ey.toFixed(1));
-            el.setAttribute('class', 'accel-tr-label ' + cls);
-            el.textContent = txt;
-            trLabels.appendChild(el);
-        };
-        addLabel(tVis, txe, tye, 'aₜ', 'lbl-at');
-        addLabel(rVis, rxe, rye, 'aᵣ', 'lbl-ar');
+        const a = myAcc(t);
+        const aMag = Math.hypot(a.x, a.y) || 1;
+        const sc = (A_TARGET_FRAC * R * ppm) / aMag;    // Normierung: |a| -> feste Ziellänge
+        const arrScale = store.arrowLenScale || 1;
+        const mMain = ARROW_LEN_MAIN * arrScale, mComp = ARROW_LEN_COMP * arrScale;
+        // Gesamt-Beschleunigung a (immer sichtbar)
+        setLocalVec(lineA, px, py, px + a.x * sc, py - a.y * sc, mMain);
+        // Kartesische Komponenten a_x/a_y (optional) — Projektionen der (normierten) a
+        if (showComponents) {
+            const axe = px + a.x * sc, aye = py - a.y * sc;
+            setLocalVec(lineAx, px, py, axe, py, mComp);
+            setLocalVec(lineAy, axe, py, axe, aye, mComp);
+        } else { hide(lineAx); hide(lineAy); }
+        // Tangential/Radial a_t/a_r (optional) — gleiche Frame-Skala sc
+        if (showTR) {
+            const atx = -alpha * R * Math.sin(ph), aty = alpha * R * Math.cos(ph);
+            const arx = -w * w * R * Math.cos(ph), ary = -w * w * R * Math.sin(ph);
+            const txe = px + atx * sc, tye = py - aty * sc;
+            const rxe = px + arx * sc, rye = py - ary * sc;
+            const tVis = setLocalVec(lineT, px, py, txe, tye, mMain);
+            const rVis = setLocalVec(lineR, px, py, rxe, rye, mMain);
+            const NS = 'http://www.w3.org/2000/svg';
+            const addLabel = (visible, ex, ey, txt, cls) => {
+                if (!visible || !trLabels) return;
+                const el = document.createElementNS(NS, 'text');
+                el.setAttribute('x', (ex + 6).toFixed(1)); el.setAttribute('y', ey.toFixed(1));
+                el.setAttribute('class', 'accel-tr-label ' + cls);
+                el.textContent = txt;
+                trLabels.appendChild(el);
+            };
+            addLabel(tVis, txe, tye, 'aₜ', 'lbl-at');
+            addLabel(rVis, rxe, rye, 'aᵣ', 'lbl-ar');
+        } else { hide(lineT); hide(lineR); }
     }
 
     // -- Zeichnen an der aktuellen Zeit (kein Rebuild der Daten). ---------------
@@ -689,7 +722,7 @@ export function buildAxAyWinkelbeschlFig(fig) {
         updateScene(t, myPos(t), myVel(t), myAcc(t), sceneCenters);
         updateGraph(t);
         renderPrev();     // nach updateGraph: store.graphScale ist dann aktuell
-        drawAccelTR(t);   // eigene a_t/a_r-Zerlegung (optional)
+        drawAccel(t);     // eigene, normierte Beschleunigungs-Vektoren (Motor-a ist aus)
         drawAngle(localPhi(t) * 180 / Math.PI);   // wächst mit φ(t) (inkl. α)
     }
 
@@ -733,7 +766,10 @@ export function buildAxAyWinkelbeschlFig(fig) {
                 isStacked: true, graphType1: 'axt', graphType2: 'ayt',
                 showPositionVector: true, showPositionComponents: false, showTrajectory: true,
                 showVelocityVector: false, showVelocityComponents: false,
-                showAccelerationVector: true, showAccelerationComponents: showComponents,
+                // Motor-Beschleunigung AUS — a/a_x/a_y/a_t/a_r zeichnet drawAccel()
+                // selbst mit adaptiver Skala (s. dort). Sonst wäre a bei kleinem ω
+                // unsichtbar (didaktisches Kernproblem).
+                showAccelerationVector: false, showAccelerationComponents: false,
                 isDigitalDisplay: false,
                 // Vektoren ×1,5 dicker (Strich + Spitze mit­skalierend, s. CSS +
                 // strokeWidth-Marker): Pfeil-Länge mit­skalieren, sonst landet die
@@ -863,11 +899,8 @@ export function buildAxAyWinkelbeschlFig(fig) {
     // store.showAccelerationComponents — der Motor zeichnet dann a_x/a_y als
     // Projektionen auf die Achsen. draw() wertet das Flag beim Zeichnen aus.
     if (ak_components) ak_components.addEventListener('change', () => {
-        showComponents = ak_components.checked;
-        rt.withStore(() => {
-            store.showAccelerationComponents = showComponents;
-            draw(curT);
-        });
+        showComponents = ak_components.checked;   // a_x/a_y zeichnet drawAccel() selbst
+        rt.withStore(() => draw(curT));
     });
 
     // Tangential/Radial-Zerlegung (a_t/a_r) — selbst gezeichnet, kein Motor-Flag.

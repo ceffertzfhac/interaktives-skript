@@ -130,6 +130,14 @@
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .accel-tr-label.lbl-at { fill: var(--kb-at); }
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .accel-tr-label.lbl-ar { fill: var(--kb-ar); }
 
+/* Hinweis zur Normierung der Beschleunigungslänge (kleiner, gedämpfter Text). */
+.aspekt-figur[data-aspekt="axay-winkelbeschl"] .accel-scale-note {
+    margin-top: 6px;
+    font-size: calc(11px * var(--kb-text-scale, 1));
+    line-height: 1.35;
+    color: var(--kb-text3);
+}
+
 /* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme, ca. 60 %) ─────────── */
 .aspekt-figur[data-aspekt="axay-winkelbeschl"] .aspekt-btn-row {
     display: flex; gap: 6px;
