@@ -86,6 +86,11 @@ export const graphTitles = {
     axt: 'Beschleunigung aₓ(t)', ayt: 'Beschleunigung aᵧ(t)',
     vabs: 'Betrag |v|(t)', aabs: 'Betrag |a|(t)', phit: 'Winkel φ(t)',
     omega: 'Winkelgeschwindigkeit ω(t)',
+    // Betrags-Vergleich bei veränderlichem ω (Aspekt-Figur 1.51): |a_t| oben
+    // (Tangentialbeschleunigung, konstant für konst. α), a_r unten (Zentripetal-
+    // beschleunigung, wächst mit ω(t)²). Unterstrich-Notation wie im Skript
+    // (a_\text{t}/a_\text{r}), da Unicode kein tiefgestelltes r kennt.
+    att: 'Tangentialbeschl. |a_t|(t)', art: 'Zentripetalbeschl. a_r(t)',
 };
 
 export const graphAxisLabels = {
@@ -94,9 +99,10 @@ export const graphAxisLabels = {
     axt: 'aₓ / (m/s²)', ayt: 'aᵧ / (m/s²)',
     vabs: '|v| / (m/s)', aabs: '|a| / (m/s²)', phit: 'φ / °',
     omega: 'ω / (rad/s)',
+    att: '|a_t| / (m/s²)', art: 'a_r / (m/s²)',
 };
 
 export const graphXAxisLabels = { yx: 'x / m', xy: 'y / m' };
 
-export const timeSeriesTypes = ['xt', 'yt', 'vxt', 'vyt', 'axt', 'ayt', 'vabs', 'aabs', 'phit', 'omega'];
+export const timeSeriesTypes = ['xt', 'yt', 'vxt', 'vyt', 'axt', 'ayt', 'vabs', 'aabs', 'phit', 'omega', 'att', 'art'];
 export const trajectoryTypes = ['yx', 'xy'];

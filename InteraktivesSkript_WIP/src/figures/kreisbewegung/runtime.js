@@ -45,6 +45,7 @@ export function createRuntime() {
         ...DEFAULT_STORE,
         tData: [], xData: [], yData: [], vxData: [], vyData: [], axData: [], ayData: [],
         vabsData: [], aabsData: [], phitData: [], omegaData: [],
+        atData: [], arData: [],
         graphScale: { single: null, top: null, bottom: null },
         axisLimits: {},
         idPrefix: prefix,

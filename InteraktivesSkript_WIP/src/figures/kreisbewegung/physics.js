@@ -83,6 +83,10 @@ export function recalculateAxisLimits() {
         return { yMin: -m * 1.1, yMax: m * 1.1 };
     };
     const pos = mx => ({ yMin: 0, yMax: (mx > 0 ? mx * 1.1 : 1) });
+    // Betrag ≥ 0 aus einem Daten-Array (für |a_t|/a_r, die nur die Aspekt-Figuren
+    // zu veränderlichem ω füllen). pos() erwartet einen Skalar -> hier das Array-
+    // Maximum liefern; leeres Array (gc10) ergibt 0 -> yMax=1 (unbenutzt).
+    const posArr = arr => pos(arr.length ? Math.max(...arr) : 0);
     const datasets = {
         yx: { xArr: store.xData, yArr: store.yData, xMin: -Rpad, xMax: Rpad, yMin: -Rpad, yMax: Rpad, xIsTime: false, xLabel: 'x / m', yLabel: 'y / m' },
         xy: { xArr: store.yData, yArr: store.xData, xMin: -Rpad, xMax: Rpad, yMin: -Rpad, yMax: Rpad, xIsTime: false, xLabel: 'y / m', yLabel: 'x / m' },
@@ -96,6 +100,10 @@ export function recalculateAxisLimits() {
         aabs: { xArr: store.tData, yArr: store.aabsData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: '|a| / (m/s²)', ...pos(aMag) },
         phit: { xArr: store.tData, yArr: store.phitData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: 'φ / °', ...pos(maxPhi) },
         omega: { xArr: store.tData, yArr: store.omegaData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: 'ω / (rad/s)', ...pos(omegaMag) },
+        // Beträge bei veränderlichem ω (Aspekt-Figur 1.51): |a_t|=|α|R (pro Lauf
+        // konstant) oben, a_r=ω²R (wachsend) unten. Beide ≥ 0 -> pos-Achse.
+        att: { xArr: store.tData, yArr: store.atData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: '|a_t| / (m/s²)', ...posArr(store.atData) },
+        art: { xArr: store.tData, yArr: store.arData, xMin: 0, xMax: tMax, xIsTime: true, xLabel: 't / s', yLabel: 'a_r / (m/s²)', ...posArr(store.arData) },
     };
     for (const key in datasets) {
         const d = datasets[key];

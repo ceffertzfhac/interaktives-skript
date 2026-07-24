@@ -62,6 +62,11 @@ export const store = {
     tData: [], xData: [], yData: [],
     vxData: [], vyData: [], axData: [], ayData: [],
     vabsData: [], aabsData: [], phitData: [], omegaData: [],
+    // Beträge der Tangential-/Zentripetalbeschleunigung (|a_t|=|α|R, a_r=ω²R).
+    // Nur die Aspekt-Figuren zu veränderlichem ω füllen diese (lokale α-Physik);
+    // die gc10-Sim (konstantes ω) lässt sie leer. Rein additiv eingeführt für
+    // die Diagrammtypen 'att'/'art' (s. constants.js/render.js/physics.js).
+    atData: [], arData: [],
     axisLimits: {},
 };
 
