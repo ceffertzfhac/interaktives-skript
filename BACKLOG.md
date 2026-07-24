@@ -350,6 +350,21 @@ Zuweisung per Freigabe-Tipp.
   (drawTMarkers), Marker orient=auto-start-reverse. Syntax/Smoke/Nummerierung
   grün. **Visuell noch nicht freigegeben** (Screenshot-Check offen). *(S–M)*
 
+- [x] **P-AF-9: Interaktive Aspekt-Figur 1.50 — a_x/a_y bei veränderlichem ω.**
+  statische `fig-skript-kreisbewegungen-axaydiagramm-winkelbeschl` (1.4.5)
+  interaktiv nachbauen. Copy & feature-gate von `aspekt_axay_zeit.js` (1.46).
+  **Kernabweichung:** der geteilte Motor (physics.js) rechnet nur konstantes ω;
+  1.50 braucht variables ω (konstante Winkelbeschleunigung α). Deshalb rechnet die
+  Figur die α-Physik LOKAL (φ=φ₀+ω₀t+½αt², a=αR·(−sinφ,cosφ)+ω²R·(−cosφ,−sinφ)) und
+  füllt die store-Arrays selbst (fillLocal) — Motor bleibt unverändert (isoliert).
+  Regler R/ω₀/α/t (Nutzerwahl); a_x/a_y-Kurven wachsen mit ω(t)². Zwei optionale
+  Szenen-Zerlegungen: kartesisch a_x/a_y (Motor) + tangential/radial a_t/a_r
+  (selbst gezeichnet, a_t rot / a_r blau wie \textcolor im Skript). store.T=∞.
+  Umgesetzt (2026-07-24, `50f338b`… vgl. Log): `aspekt_axay_winkelbeschl.js|.css`,
+  `data-aspekt="axay-winkelbeschl"`. Syntax/Smoke/Nummerierung grün.
+  **Visuell noch nicht freigegeben** (Screenshot-Check offen; a_t/a_r-Farben und
+  Darkmode-Tauglichkeit der lokalen --kb-at/--kb-ar-Tokens prüfen). *(M)*
+
 ## P8 — Inhaltsverzeichnis: 3-stufige Hierarchie (Themenkomplex → Kapitel → Abschnitt)
 
 Eingetragen 2026-07-24 nach Nutzervorgabe. Das TOC (und die Navigation) ist
