@@ -81,8 +81,8 @@ const T_AUTO = 24;            // fester Auto-Stopp nach 24 s — längerer Lauf,
 // mit α>0 kehrt φ um bei t=-ω₀/α und wächst dann wieder. a_r=ω²R ist von der
 // Vorzeichen unberührt; a_t=αR ebenfalls. Der Winkelbogen (drawAngle) verbirgt
 // sich für φ≤0 (s. dort) — d. h. während der rückläufigen Phase, danach wieder sichtbar.
-const OMEGA0_MIN = -2.0, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 0.8, OMEGA0_STEP = 0.05;
-const ALPHA_MIN = -0.3, ALPHA_MAX = 0.3, ALPHA_DEFAULT = 0.15, ALPHA_STEP = 0.01;
+const OMEGA0_MIN = -2.0, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 0.0, OMEGA0_STEP = 0.05;
+const ALPHA_MIN = -0.3, ALPHA_MAX = 0.3, ALPHA_DEFAULT = 0.1, ALPHA_STEP = 0.01;
 const R_DEFAULT = 1.5;
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 // Vektor-Verkürzung (= render.js: ARROW_LEN_MAIN=5·2,5, COMP=5·2) für die
