@@ -61,15 +61,6 @@ function chapterPrefix(page, index) {
     return m ? m[1] : String(index + 1);
 }
 
-// Startwerte fuer die kapitelweiten Zaehler, deklariert am h2 des Kapitels.
-function offsetsFor(page) {
-    const el = page.el.querySelector('[data-figure-offset], [data-zusammenfassung-offset]');
-    return {
-        figure: el ? parseInt(el.dataset.figureOffset, 10) || 0 : 0,
-        zusammenfassung: el ? parseInt(el.dataset.zusammenfassungOffset, 10) || 0 : 0,
-    };
-}
-
 function numberBoxes(page, prefix, chapter, counters) {
     page.el.querySelectorAll(BOX_SELECTOR).forEach(box => {
         const type = Object.keys(BOX_LABELS).find(k => box.classList.contains(k));
@@ -260,13 +251,14 @@ export function init_numbering() {
         const prefix = sectionPrefix(page, i);
         const chap = chapterPrefix(page, i);
         if (chap !== chapter) {
-            // Kapitelwechsel: kapitelweite Zaehler zuruecksetzen (Abbildungen,
-            // Zusammenfassung) und die deklarierten Startwerte uebernehmen.
+            // Kapitelwechsel: kapitelweite Zaehler (Abbildungen, Zusammenfassung)
+            // auf 0 zuruecksetzen. Die konkreten Startwerte setzt die erste
+            // offset-tragende Seite des Kapitels (s. u.) -- nicht mehr hier, damit
+            // auch Abschnitte MITTEN im Kapitel einen Startwert deklarieren koennen.
             chapter = chap;
-            const off = offsetsFor(page);
             for (const k in state) delete state[k];
-            state.img = off.figure;
-            boxCounters.zusammenfassung = off.zusammenfassung;
+            state.img = 0;
+            boxCounters.zusammenfassung = 0;
         }
         if (prefix !== section) {
             // Sectionswechsel: nur die Section-Zaehler zuruecksetzen.
@@ -274,6 +266,21 @@ export function init_numbering() {
             for (const k in boxCounters) {
                 if (!CHAPTER_SCOPED.has(k)) delete boxCounters[k];
             }
+        }
+        // Deklarierte Offsets (i. d. R. am Abschnitts-h2): eine Seite darf die
+        // kapitelweiten Zaehler auf einen ABSOLUTEN Startwert setzen -- so laesst
+        // sich die Luecke noch nicht migrierter Abschnitte ueberspringen, OHNE die
+        // Nummern bereits migrierter Abschnitte zu verschieben (erste Abbildung des
+        // Abschnitts = figure-offset + 1). Der Wert ist entfernbar, sobald alle
+        // vorherigen Abschnitte lueckenlos migriert sind. Pro Attribut getrennt
+        // gepueft, damit eine Seite mit NUR zusammenfassung-offset nicht den
+        // Abbildungszaehler auf 0 klobbert.
+        const offEl = page.el.querySelector('[data-figure-offset], [data-zusammenfassung-offset]');
+        if (offEl) {
+            if (offEl.dataset.figureOffset != null)
+                state.img = parseInt(offEl.dataset.figureOffset, 10) || 0;
+            if (offEl.dataset.zusammenfassungOffset != null)
+                boxCounters.zusammenfassung = parseInt(offEl.dataset.zusammenfassungOffset, 10) || 0;
         }
         numberBoxes(page, prefix, chapter, boxCounters);
         numberFigures(page, prefix, state);
