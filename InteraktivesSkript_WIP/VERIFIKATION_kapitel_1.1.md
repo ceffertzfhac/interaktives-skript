@@ -45,10 +45,11 @@ Anzahl **und** Spanne stimmen je Unterabschnitt exakt überein:
 
 ## Bewusste Abweichungen von v0.13 (dokumentiert)
 
-1. **Abb. 1.2:** tex referenziert das nicht existente `bus-strasse-weg-zeit.png`;
-   verwendet wird `weg_zeit_diagramm_perfekt.pdf` (aus
-   `..._bushaltestellen.ipynb`, Inhalt = Busfahrt-Weg-Zeit-Diagramm). **Optische
-   Bestätigung durch Nutzer ausstehend.**
+1. **Abb. 1.2:** `bus-strasse-weg-zeit.png` fehlte anfangs in PSkriptBilder
+   (`weg_zeit_diagramm_perfekt.pdf`/`_final.svg` sind nur die Diagrammhälfte ohne
+   die Bus-Szene). Nutzer hat das Original-Kompositbild (Bus links + Diagramm
+   rechts) am 2026-07-24 in den Quellen-Repo nachgetragen; von dort übernommen —
+   **erledigt**.
 2. **`\bbspe` (Plural „Beispiele") → `beispiel`-Box** („Beispiel 1.1.n"): der WIP
    kennt nur einen `beispiel`-Typ. Betrifft die Titel von 1.1.1 und 1.1.3.
 3. **Doppel-Label `formel_freierfall4`** (Quell-Bug, Z. 180 + 201): die zweite
