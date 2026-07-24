@@ -490,7 +490,29 @@ P9-Entscheidung a „am TK-Anfang kein Vorgänger" zugunsten der Symmetrie.) JSD
 
 ---
 
-## Reihenfolge-Empfehlung
+## P10 — Fortschrittsleiste in der Top-Bar je nach Platz kürzen/strecken
+
+Eingetragen 2026-07-24 nach Nutzervorgabe. Die Fortschrittsleiste
+(`.chapter-progress-track`) ist heute **starr 130 px** (styles.css ~1612);
+`.chapter-progress` hat `flex-shrink:0` (~683) und holt sich keinen Platz — der
+Füllbalken (span) skaliert zwar prozentual, aber die Bahn bleibt immer 130 px
+egal, wie viel Platz im `#header` (Flex-Zeile: Brand · Divider · Breadcrumb ·
+Fortschritt · Pager · Toolbar) frei ist.
+
+**Ziel:** Bahn je nach verfügbarem Platz strecken/kürzen (breit bei viel Platz,
+schmal bei wenig, ggf. ausblenden im schmalen Tablet-Header).
+
+**Ansatz (rein CSS, kein JS):** `.chapter-progress-track` von festem `width`
+auf `flex: 1 1 auto` + `min-width`/`max-width`; `.chapter-progress` wachsen
+lassen (`flex: 1 1 auto`, `flex-shrink` aufheben). Mindestbreite (~80 px)
+schützt vor Kollaps; Media-Query blendet sie unterhalb einer Schwelle aus.
+Konkurrenz mit Breadcrumb um den Rest-Platz beachten (evtl. Breadcrumb
+mitschrumpfen lassen).
+
+- [ ] **P10-1** `styles.css`: Fortschrittsbahn flexibel (flex + min/max). *(S)*
+- [ ] **P10-2** Verifikation (Sicht, Stufe 5 — Freigabe). *(S)*
+
+---
 
 1. Erst **P0** abarbeiten (rasch, niedriges Risiko, senkt schon das Token-Volumen spürbar).
 2. Dann **Per-Figure-Fabrik + Modularisierung + Globals einfrieden** (P1) als zusammenhängender Struktur-Refactor — das ist der zentrale Hebel für Token-Effizienz und Wartbarkeit; danach sind Animation (rAF) und DOM-Optimierung günstig in der Fabrik mitzuerledigen.
