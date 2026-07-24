@@ -1,0 +1,221 @@
+/* aspekt_periodendauer.css — Optik der Periodendauer-Aspekt-Figur (Abb. 1.49).
+   Struktur 1:1 von aspekt_weg_zeit.css (Abb. 1.39) übernommen (gleiches Layout:
+   gestapelte x(t)/y(t)-Diagramme neben der Kreisbahn-Szene), nur auf
+   data-aspekt="periodendauer" umgescopt. Farb-Tokens, Panel-/Slider-/Legenden-/
+   Analyse-/Lupe-/Caption-Regeln und das Layout je Breiten-Modus + das Overlay
+   kommen unverändert aus aspekt_kreisbahn.css (geladen), weil diese Figur
+   ebenfalls .aspekt-figur ist. Hier zusätzlich zur Weg-Zeit-Optik: die
+   T-Ablese-Markierung (.tmark-*) im oberen x(t)-Diagramm (s. Block am Ende). */
+
+/* ── Mittel-Spalte: Szene NEBEN dem (gestapelten) Diagramm (Zeile) — normal
+   UND breit (Nutzervorgabe); nur schmal bleibt gestapelt (s. Schmal-Override
+   weiter unten, dort nicht genug Breite fuer eine Zeile). Vertikal zentriert
+   (align-items:center): Szenemitte bündig mit der Mitte des (als EINS
+   gerechneten) Diagramm-Blocks. Beide SVGs an der Viewport-HOEHE deckeln,
+   damit Szene UND beide (übereinander gestapelten) Diagramme gleichzeitig auf
+   den Bildschirm passen. Die SVGs tragen preserveAspectRatio="xMidYMid meet"
+   -> der Inhalt skaliert mit erhaltenem Seitenverhältnis in die Box und
+   zentriert sich (ggf. mit seitlichem Freiraum). ────────────────────────── */
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-main {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-main-content {
+    position: relative;
+    display: flex; flex-direction: row; align-items: center; min-width: 0;
+}
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-runbar {
+    position: sticky;
+    top: 0;
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 8px;
+    background: var(--kb-surface);
+    border-bottom: none;
+    box-shadow: none;
+}
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-scene { padding: 8px; flex: 0 0 42%; }
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-main .aspekt-svg {
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none;
+}
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 58%; }
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-graph-svg {
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none;
+    margin: 0 auto;
+}
+
+/* ── Graph-Struktur (Hintergrund, Gitter, Achsen, Skalen, Titel, Hover, Hit-
+   Rect, Linienbreiten/-schriften) liegt ZENTRAL in aspekt_kreisbahn.css
+   (gescopt auf .aspekt-figur, inkl. der ×1,5-Skalierung via --kb-lw/--kb-fs).
+   Hier pro Figur NUR die Datenlinien-FARBEN — x(t)=rx (blau), y(t)=ry (grün),
+   passend zu den Komponenten-Vektoren in der Szene. IDs sind pro Instanz
+   prefixt (kb<n>_, s. runtime.js) -> Suffix-Selektoren. ─────────────────── */
+
+/* ── Linienfarben: x(t) in Blau (rx), y(t) in Grün (ry) — passend zu den
+   Komponenten-Vektoren in der Szene. Punkte entsprechend eingefärbt. IDs sind
+   pro Instanz prefixt (kb<n>_, s. runtime.js) -> Suffix-Selektoren. ───────── */
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_line_top"]    { stroke: var(--kb-rx); }
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_point_top"]   { fill: var(--kb-rx); }
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_line_bottom"] { stroke: var(--kb-ry); }
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_point_bottom"] { fill: var(--kb-ry); }
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_line"]        { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_point"]       { fill: var(--kb-accent); }
+
+/* ── Vergleichslinie (vorheriger Durchlauf): gestrichelt + dünner als die
+   aktuelle Kurve, gleiche Farbe wie deren Komponente (x(t)=rx, y(t)=ry,
+   Einzel=akzent). Eingeblendet vom JS, sobald ein Neudurchlauf startet
+   (Feature-Vorgabe: letzte Kurve zum Vergleichen stehen lassen). ──────────── */
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_prev_line_top"]    { stroke: var(--kb-rx); }
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_prev_line_bottom"] { stroke: var(--kb-ry); }
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_prev_line"]        { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_prev_line"],
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_prev_line_top"],
+.aspekt-figur[data-aspekt="periodendauer"] [id$="graph_prev_line_bottom"] {
+    fill: none; stroke-opacity: .5;
+    stroke-width: calc(1.5px * var(--kb-lw, 1)); stroke-dasharray: 6,4;
+    pointer-events: none;
+}
+
+/* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme, ca. 60 %) ─────────── */
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-btn-row {
+    display: flex; gap: 6px;
+}
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-btn.aspekt-btn-icon {
+    flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border2); border-radius: 6px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-btn.aspekt-btn-icon:hover {
+    color: var(--kb-accent); border-color: var(--kb-accent);
+}
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-btn.aspekt-btn-icon svg {
+    width: 15px; height: 15px; display: block;
+}
+
+/* ── Tempo-Pills (Slow-Mo analog zur Vorlage: 1× … ⅛×) ──────────────────── */
+.aspekt-figur[data-aspekt="periodendauer"] .speed-pills { display: flex; gap: 5px; }
+.aspekt-figur[data-aspekt="periodendauer"] .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: calc(11.5px * var(--kb-text-scale, 1));
+    color: var(--kb-text2); cursor: pointer; transition: all .15s;
+    position: relative; -webkit-user-select: none; user-select: none;
+}
+.aspekt-figur[data-aspekt="periodendauer"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+.aspekt-figur[data-aspekt="periodendauer"] .speed-pill.active {
+    background: color-mix(in srgb, var(--kb-accent) 12%, transparent);
+    border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
+}
+
+/* ── Stoppuhr (analog, nach Vorlage) — gescopt unter .aspekt-scene, Suffix-
+   Selektoren wegen per-Instanz-Prefix. Digital-Display bleibt ausgeblendet. ─ */
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-scene [id$="stopwatch_circle"] { fill: var(--kb-surface); stroke: var(--kb-text); }
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-scene [id$="subdial_face"] { fill: var(--kb-surface); stroke: var(--kb-text3); }
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-scene [id$="stopwatch_main_hand"] { stroke: var(--kb-text); }
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-scene [id$="stopwatch_sub_hand"] { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="periodendauer"] .aspekt-scene .sw-mark { stroke: var(--kb-text3); }
+
+/* ── Schmal-Modus: Szene und (gestapeltes) Diagramm bleiben UNTEREINANDER
+   (gestapelt) — hier ist nicht genug Breite für eine Zeile (Nutzervorgabe:
+   normal + breit stehen nebeneinander, s. Basis-Regeln oben; nur schmal
+   gestapelt). Gleiche Werte wie vor dieser Umstellung. ─────────────────────── */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="periodendauer"] .aspekt-main-content {
+    flex-direction: column; align-items: stretch;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-scene { flex: 0 0 auto; padding: 8px; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="periodendauer"] .aspekt-svg { height: 26vh; max-height: none; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-graph { flex: 1 1 auto; padding: 0 8px 8px; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="periodendauer"] .aspekt-graph-svg { max-height: 44vh; }
+
+/* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
+   Hoehe deckeln. Spezifischer als die allgemeine Overlay-Regel in
+   aspekt_kreisbahn.css. ─────────────────────────────────────────────────── */
+.aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-main { flex-direction: column; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-main-content { flex-direction: row; align-items: center; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-svg {
+    width: 100%; height: auto; max-height: 56vh; max-width: none;
+}
+.aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-graph-svg {
+    max-width: none; width: 100%; height: auto; max-height: 56vh;
+}
+
+/* Zoom + schmal: Szene und Diagramm untereinander (nur dieser Modus). */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-main-content {
+    flex-direction: column;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 auto;
+}
+
+/* Zoom + schmal: Platz auf Bildschirm priorisieren (ohne andere Modi zu aendern).
+   Statt der generischen 3-Spalten-Overlay-Ansicht wird die Figur einspaltig,
+   die rechte Analyse-Leiste ausgeblendet und die Kernflaechen kompakter gesetzt,
+   damit Szene + Diagramm gleichzeitig sichtbar bleiben. */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-body {
+    display: block;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-panel-left {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-panel-right {
+    display: none;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-runbar {
+    padding: 6px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-scene {
+    padding: 6px 8px 4px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-main-content .aspekt-graph {
+    padding: 0 8px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-svg {
+    height: min(24vh, 220px);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="periodendauer"] .aspekt-graph-svg {
+    height: min(42vh, 360px);
+}
+
+/* Tablet (gestapelt): Diagramm vollbreit unter der Szene — nichts extra nötig,
+   .aspekt-main ist ohnehin flex-column. */
+
+/* ── T-Ablese-Markierung (nur in dieser Figur): zwei Maxima-Punkte, senkrechte
+   Hilfslinien und die bemaßte T-Strecke im oberen x(t)-Diagramm. Alles vom JS
+   (drawTMarkers) pro Zeichnen neu projiziert; hier nur die Optik. Der Marker
+   liegt in <defs> (Suffix-Selektor wegen Instanz-Prefix). Linienbreiten mit
+   ×1,5-Skalierung (--kb-lw) konsistent zur übrigen Graph-Optik. ───────────── */
+.aspekt-figur[data-aspekt="periodendauer"] .tmark-vline {
+    stroke: var(--kb-text3);
+    stroke-width: calc(1px * var(--kb-lw, 1));
+    stroke-dasharray: 4,3;
+    opacity: .7;
+}
+.aspekt-figur[data-aspekt="periodendauer"] .tmark-dot {
+    fill: var(--kb-rx);            /* gleiche Farbe wie die x(t)-Kurve */
+    stroke: var(--kb-surface);
+    stroke-width: 1;
+}
+.aspekt-figur[data-aspekt="periodendauer"] .tmark-bracket {
+    stroke: var(--kb-text);
+    stroke-width: calc(1.5px * var(--kb-lw, 1));
+}
+.aspekt-figur[data-aspekt="periodendauer"] .tmark-arrowhead {
+    fill: var(--kb-text);
+}
+.aspekt-figur[data-aspekt="periodendauer"] .tmark-label {
+    fill: var(--kb-text);
+    font-style: italic;
+    font-weight: 700;
+    font-size: calc(15px * var(--kb-fs, 1));
+    dominant-baseline: hanging;
+}
