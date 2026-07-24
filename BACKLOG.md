@@ -473,12 +473,15 @@ Paging-/Nummerierungs-/TOC-Eingriff. Drawer-Variante läuft über dieselbe
 Funktion, wird mitgeändert. **Verifikation:** DOM-Harness deckt Schiene nicht
 ab → Sicht (Stufe 5, Freigabe) oder JSDOM-Stichprobe der `renderRailInto`-Ausgabe.
 
-**Verfeinerung 2026-07-24 (TK-Grenze weich):** Ist das aktive Kapitel das letzte
-seines TK, folgt nach einer dünnen Trennlinie (`.rail-tk-sep`) das erste Kapitel
-des nächsten TK als blasse Vorschau (`.rail-tk-cross`, `--ink-3`, nicht fett) —
-statt eines harten Bruchs. Nur vorwärts (am Anfang eines TK kein voriger TK,
-bleibt bei Entscheidung a). JSDOM: 0.6 → `[0.5, 0.6, Linie, 1.4 blass]`;
-1.5 (kein Folget-TK migriert) → ohne Linie.
+**Verfeinerung 2026-07-24 (TK-Grenze weich, symmetrisch):** Ist das aktive
+Kapitel das letzte seines TK, folgt nach einer dünnen Trennlinie (`.rail-tk-sep`,
+Farbe `--border`) das erste Kapitel des nächsten TK als blasse Vorschau
+(`.rail-tk-cross`, `--ink-3`, nicht fett); ist es das **erste** seines TK und es
+gibt einen vorigen TK, steht das letzte Kapitel jenes TK blass **über** einer
+Trennlinie — jeweils statt eines harten Bruchs. (Damit entfällt die
+P9-Entscheidung a „am TK-Anfang kein Vorgänger" zugunsten der Symmetrie.) JSDOM:
+1.4 → `[0.6 blass, Linie, 1.4 offen, 1.5]`; 0.6 → `[0.5, 0.6, Linie, 1.4 blass]`;
+0.0 (ganz erster) / 1.5 (kein Folget-TK) → ohne Linie.
 
 - [x] **P9-0** Grenzfälle (a/b/c) mit Nutzer klären. *(S)* — s.o. entschieden 2026-07-24.
 - [x] **P9-1** `shell.js::renderRailInto` gefenstert (Vorgänger + aktiv + Nachfolger). *(S–M)* — Commit 48c1f91.
