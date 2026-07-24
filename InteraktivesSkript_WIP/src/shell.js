@@ -167,27 +167,31 @@ function renderRailInto(container, page) {
     const next = nextSec && tkOf(nextSec) === activeTk ? nextSec : null;
     // TK-Grenze weich andeuten (P9): ist das aktive Kapitel das letzte seines TK
     // (kein gleich-TK-Nachfolger), folgt nach einer duennen Trennlinie das erste
-    // Kapitel des naechsten TK als blasse Vorschau — statt eines harten Bruchs.
-    // Nur vorwaerts: am Anfang eines TK wird kein voriger TK gezeigt (P9-
-    // Entscheidung a, s. Backlog).
+    // Kapitel des naechsten TK als blasse Vorschau; ist es das ERSTE seines TK
+    // (kein gleich-TK-Vorgaenger) und es gibt einen vorigen TK, steht das letzte
+    // Kapitel jenes TK blass ueber einer Trennlinie — statt eines harten Bruchs.
     const crossNext = (!next && nextSec && tkOf(nextSec) !== activeTk) ? nextSec : null;
+    const crossPrev = (!pred && prevSec && tkOf(prevSec) !== activeTk) ? prevSec : null;
 
     // Vorgänger (zu) · aktives Kapitel (offen, mit allen Abschnitten) ·
     // Nachfolger (zu). Aktive Zeile erscheint stets, auch als reine Intro-Seite
-    // ohne Abschnitte (P9-Entscheidung b).
+    // ohne Abschnitte (P9-Entscheidung b). Cross-TK-Vorschau (blass) sitzt
+    // jeweils ausserhalb einer Trennlinie, die sie vom gleich-TK-Fenster trennt.
     const renderSection = (s, istAktiv) => {
         chNav.appendChild(link(s.page, 'rail-sectionlink' + (istAktiv ? ' open' : ''), false));
         if (istAktiv) s.children.forEach(p => chNav.appendChild(link(p, 'rail-chapterlink', true)));
     };
-    if (pred) renderSection(pred, false);
-    renderSection(active, true);
-    if (next) renderSection(next, false);
-    if (crossNext) {
+    const renderCross = s => chNav.appendChild(link(s.page, 'rail-sectionlink rail-tk-cross', false));
+    const renderSep = () => {
         const sep = document.createElement('hr');
         sep.className = 'rail-tk-sep';
         chNav.appendChild(sep);
-        chNav.appendChild(link(crossNext.page, 'rail-sectionlink rail-tk-cross', false));
-    }
+    };
+    if (crossPrev) { renderCross(crossPrev); renderSep(); }
+    if (pred) renderSection(pred, false);
+    renderSection(active, true);
+    if (next) renderSection(next, false);
+    if (crossNext) { renderSep(); renderCross(crossNext); }
 
     chBlock.appendChild(chNav);
     container.appendChild(chBlock);
