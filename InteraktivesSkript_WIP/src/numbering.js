@@ -127,10 +127,21 @@ function numberFigures(page, prefix, state) {
 // nicht (kein innerHTML-Capture/Ersetzen). Idempotent via :scope > .fig-label.
 // Legacy standalone-<img> (ohne figure/Container/Box-Icon) bekommen wie
 // bisher ein kleines "Abb. x.y"-Label als .fig-number hinter dem Bild.
+//
+// KAPITEL 0 ohne Praefix: v0.13 definiert
+//   \thefigure = \ifnum\value{chapter}>0 \thechapter.\fi\arabic{figure}
+// d. h. fuer Kapitel 0 („Grundlagen") entfaellt der Kapitel-Praefix -- die
+// Abbildungen heissen „Abb. 1" … „Abb. 4", nicht „Abb. 0.1" … „Abb. 0.4".
+// Analog \thetable (Tabellen sind im WIP aber getippt, s. Migration-Runbook).
+// Zusammenfassung/Beispiele/Gleichungen behalten ihr „0." (deren \the…
+// nutzen \thechapter bzw. \thesection unverdaendert). `prefix` ist hier die
+// Kapitelnummer (aus init_numbering als `chapter` uebergeben).
 function numberImages(page, prefix, state, figNumbers) {
+    const figPrefix = (prefix === '0') ? '' : (prefix + '.');
     page.el.querySelectorAll('figure.abbildung').forEach(fig => {
         state.img = (state.img || 0) + 1;
-        if (figNumbers && fig.id) figNumbers[fig.id] = prefix + '.' + state.img;
+        const num = figPrefix + state.img;
+        if (figNumbers && fig.id) figNumbers[fig.id] = num;
         const cap = fig.querySelector('figcaption');
         if (!cap) return;
         let label = cap.querySelector(':scope > .fig-label');
@@ -140,7 +151,7 @@ function numberImages(page, prefix, state, figNumbers) {
             cap.insertBefore(label, cap.firstChild);
             cap.insertBefore(document.createTextNode(' '), label.nextSibling);
         }
-        label.textContent = 'Abb. ' + prefix + '.' + state.img;
+        label.textContent = 'Abb. ' + num;
     });
     // Legacy: standalone-<img> ohne figure/Container/Box-Icon
     page.el.querySelectorAll('img').forEach(img => {
@@ -151,7 +162,7 @@ function numberImages(page, prefix, state, figNumbers) {
         state.legacyImg = (state.legacyImg || 0) + 1;
         const label = document.createElement('div');
         label.className = 'fig-number';
-        label.textContent = 'Abb. ' + prefix + '.' + state.legacyImg;
+        label.textContent = 'Abb. ' + figPrefix + state.legacyImg;
         img.insertAdjacentElement('afterend', label);
     });
 }
