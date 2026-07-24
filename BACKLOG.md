@@ -394,6 +394,17 @@ Zuweisung per Freigabe-Tipp.
   ausführlich für Interessierte/Experten (Formel, Kappen, Bezugspunkte,
   Winkel-Übertribung); innere `"` als &quot; maskiert (sonst schließt class="..."
   das data-caption-Attribat vorzeitig — einmal so gewesen, per Probe gefunden).
+  **Geschwindigkeitsvektor v einblenden (`d45511a`):** optionale, UNABHÄNGIGE
+  Einblendung von v=ωR (Nutzervorgabe; nicht zerlegbar — nur ein/aus, kombinierbar
+  mit jeder Zerlegung). Tangential wie a_t, getrieben von ω; eigene log-Skala
+  (V_MAX_FRAC·R·ppm = Bahnradius-Kappe, V_CAP_PHYS=8 m/s; Default-Lauf stößt
+  nicht an). HV (solid+dick wie Gesamt-a), eigenes Token --kb-v (grün #2e8b57 /
+  Darkmode #5fd49d — bewusst nicht Motor-/--kb-vel blau, kollidiert mit a_r);
+  negatives ω₀ kehrt v um. Live-Analyse |v|-Zelle + Legendenreihe + Caption-
+  Erwähnung. Zugleich (Nutzervorgabe) a_t/a_r-Tip-Labels aus der Kernsim
+  entfernt (Legende klärt) inkl. Tot-Code-Beseitigung (trLabels/<g>/CSS).
+  Verifiziert per Text-Dump: v ⊥ Radius (Δ=0°), monoton 27→119 px, HV 3,75 px
+  solid, Labels weg, |v|=6,60 m/s @ t=24, v+Zerlegung gleichzeitig, ω₀<0 o. NaN.
 
 ## P8 — Inhaltsverzeichnis: 3-stufige Hierarchie (Themenkomplex → Kapitel → Abschnitt)
 
