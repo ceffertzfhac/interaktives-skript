@@ -1,0 +1,780 @@
+<!-- ch_01_03_dynamik_arbeit_energie.html — v0.13-Abschnitt 1.3 "Dynamik –
+     Arbeit, Leistung und Energie" (1:1-Transkription aus
+     Input/v0.13/pskript_mech_dyn_energie_arbeit_gmni_v3.tex).
+     TK 1 "Mechanik", Section 1.3. Rein statisch (keine interaktiven gcN-Container).
+     Abbildungen Abb. 1.31–1.37, Gleichungen 1.3.1–1.3.78, Beispiele 1.3.1–1.3.12,
+     eine Zusammenfassung (1.3). KEIN Offset am h2: 1.3 folgt lueckenlos auf 1.2
+     (Abb. 1.30 -> 1.31, Zusammenfassung 1.2 -> 1.3); damit sind 1.1–1.3
+     contiguous und die kapitelweiten Zaehler laufen durch. 1.4-h2 behaelt 37/3.
+     Bewusste Abweichung: die v0.13-Bildunterschriften "Abbildung zum Beispiel
+     [Verweis auf die Beispiel-Nummer]" nutzen einen Box-Verweis; die
+     HTML-Nummerierung kennt aber keine
+     Box-Referenz (nur fig/sec/eq). Da die Abbildung hier INNERHALB der Beispiel-Box
+     inline steht, ist der Verweis eindeutig -> Unterschrift ohne Nummer
+     ("Abbildung zum Beispiel"), wie schon in 1.2. -->
+
+
+<section>
+    <h2 class="inhaltsverzeichnis">1.3 Dynamik - Arbeit, Leistung und Energie</h2>
+    <p>In diesem Abschnitt beschäftigen wir uns mit drei zentralen Begriffen der Mechanik: Arbeit, Leistung und Energie. Zudem wird mit der Energieerhaltung ein weiterer wichtiger Erhaltungssatz eingeführt.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.3.1 Die Arbeit</h3>
+<section>
+    <p>Während in unserer Alltags- und Umgangssprache der Begriff der Arbeit etwas diffus definiert erscheint, hat der Begriff in der Physik eine klare Definition, der wir uns hier nähern möchten.</p>
+
+    <p>Schauen wir uns zunächst beispielhaft ein Objekt an, welches sich in der Nähe der Erdoberfläche befindet und welches durch eine auf das Objekt wirkende Kraft bewegt wird. Im Prinzip gibt es dann nur zwei Möglichkeiten, welche in der Realität jedoch oft nicht in Reinform, sondern gemischt vorliegen.</p>
+
+    <p>Die Kraft kann entweder dazu führen, dass das Objekt beschleunigt oder abgebremst wird, sich also die Geschwindigkeit des Objektes ändert. Alternativ kann die Kraft bewirken, dass sich das Objekt mit konstanter Geschwindigkeit vom Erdboden weg bewegt. Meist liegen bei echten Bewegungen Mischformen dieser beiden Möglichkeiten vor, z.&nbsp;B. beim schrägen Wurf.</p>
+
+    <p>Die erste Möglichkeit wird durch das zweite Newton'sche Axiom beschrieben, die zweite Möglichkeit gilt dann, wenn die angreifende Kraft gerade die Gewichtskraft kompensiert, nach dem ersten Newton'schen Gesetz also die Geschwindigkeit konstant bleibt.</p>
+
+    <p>Wenn das Objekt als Massepunkt betrachtet werden kann, dessen Masse unveränderlich ist, gibt es keine andere Möglichkeit, was mit dem Objekt geschehen kann.</p>
+
+    <p>In beiden Fällen ändert das Objekt seinen „Zustand", im ersten wird es schneller oder langsamer (sein Impuls wird also größer oder kleiner), im anderen Fall ändert das Objekt seine Höhe über dem Erdboden.</p>
+
+    <p>Wie kann nun diese Zustandsänderung erklärt werden? Hier kommt nun der Begriff der <strong>physikalischen Arbeit</strong> ins Spiel. Zur Änderung des Zustandes des Objektes in einer der beiden oben beschriebenen Weisen muss Arbeit verrichtet werden.</p>
+
+    <p>In der Physik verrichten Kräfte Arbeit. Um also Arbeit zu verrichten, braucht es (mindestens) eine Kraft.</p>
+
+    <p>Wir sagen:</p>
+
+    <blockquote>
+        <p>Eine Kraft \(\vec F\) verrichtet immer eine Arbeit \(W\). Dabei kann \(W\) größer Null, kleiner Null oder Null sein.</p>
+    </blockquote>
+
+    \begin{equation}
+    \text{Arbeit:}\quad \text{Formelzeichen:}\, W \quad \text{Einheit:}\,[W]=\mathrm{kg\,m^2/s^2}=\mathrm{J}\quad\text{(Joule)}
+    \end{equation}
+
+    <p>Spricht man von einer Arbeit, so sollte man immer auch die Kraft erwähnen, welche die Arbeit verrichtet; daher ist die Angabe einer Arbeit ohne die zugehörige Kraft physikalisch nicht sinnvoll.</p>
+
+    <p>Wie kann die Arbeit berechnet werden? Eine spezielle Definition der Arbeit lautet<span class="fussnote">Die allgemeine Definition werden wir weiter unten kennenlernen.</span>:</p>
+
+    <figure class="abbildung" id="fig-skript_arbeit_konstante_kraft">
+        <img class="grafik" style="width:50%" src="bilder/skript_arbeit_konstante_kraft.png" alt="">
+        <figcaption>Abbildung zur ersten (vereinfachten) Definition der Arbeit: Durch eine konstant wirkende Kraft \(\vec F\) wird ein Objekt um \(\Delta \vec s\) verschoben. Die Kraft wirkt dabei parallel zum Weg, also \(\vec F \parallel \Delta \vec s\). Die dabei verrichtete Arbeit ist das Produkt aus dem Betrag der Kraft und dem Betrag des Weges: \(W=\vert \vec F \vert \cdot \vert \Delta \vec s \vert\).</figcaption>
+    </figure>
+
+    <blockquote>
+        <p>Bewegt eine Kraft \(\vec F\) ein Objekt um \(\Delta \vec s\) von einem Ort A zum Ort B, siehe Abbildung <a class="xref" data-ref-fig="fig-skript_arbeit_konstante_kraft"></a>, dann ist die von dieser Kraft verrichtete Arbeit \(W\) das Produkt aus dem Betrag der Kraft \(\vert \vec F \vert\) und dem zurückgelegten Weg \(\vert \Delta \vec  s \vert = \vert \vec s_B - \vec s_A \vert\) genau dann, wenn die zurückgelegte Strecke geradlinig ist und die Kraft und der Weg parallel zueinander stehen.</p>
+        \begin{equation}
+        W=\vert \vec F \vert  \cdot \vert \vec \Delta s \vert
+        \end{equation}
+        <p>Stehen Weg und Kraft antiparallel zueinander, gilt:</p>
+        \begin{equation}
+        W=-\vert \vec F \vert  \cdot \vert \vec \Delta s \vert
+        \end{equation}
+    </blockquote>
+
+    <p>Außerdem gilt:</p>
+
+    <blockquote>
+        <p>Bewegt eine Kraft \(\vec F\) ein Objekt von einem Ort A zum Ort B und verläuft die zurückgelegte Strecke entlang einer Geraden, welche senkrecht zur Kraft steht, dann wird keine Arbeit verrichtet.</p>
+        \begin{equation}
+        \vec F \perp \Delta \vec s \quad \Rightarrow W=0
+        \end{equation}
+    </blockquote>
+
+    <p>Wir wissen aus der Mathematik, dass wir einen Vektor \(\vec x\) in Bezug auf eine Gerade \(g\) immer in zwei Komponenten (neue Vektoren) zerlegen können: einen Vektor senkrecht zur Geraden \(\vec x_\perp\) und einen Vektor parallel zur Geraden \(\vec x_\parallel\). Damit können wir schlussfolgern:</p>
+
+    <blockquote>
+        <p>Bewegt eine Kraft \(\vec F\) ein Objekt von einem Ort A zum Ort B und verläuft die zurückgelegte Strecke entlang einer Geraden, welche weder senkrecht noch parallel zur Kraft steht, so verrichtet nur die Komponente der Kraft Arbeit, die parallel zur Geraden verläuft.</p>
+        \begin{equation}
+        \vec F= \vec F_\perp + \vec F_\parallel
+        \end{equation}
+        \begin{equation}
+        \Rightarrow W= \vert \vec F_\parallel \vert \cdot \vert \vec \Delta s \vert
+        \end{equation}
+    </blockquote>
+
+    <p>Das scheinen ziemlich viele Spezialfälle zu sein, die man sich merken muss. Deutlich weniger muss man sich merken, wenn man sich die Definition der Arbeit über das Skalarprodukt merkt, welche wir uns nun anschauen werden. Auch diese Definition stellt noch einen Spezialfall dar, wir müssen weiterhin annehmen, dass die Strecke, entlang der die Bewegung verläuft, immer noch geradlinig ist.</p>
+
+    <p>Dann gilt:</p>
+
+    <blockquote>
+        <p>Bewegt eine Kraft \(\vec F\) ein Objekt von einem Ort A zum Ort B, dann ist die von dieser Kraft verrichtete Arbeit \(W\) das Skalarprodukt aus dem Kraftvektor \(\vec F\) und dem zurückgelegten Weg \(\Delta \vec  s\), genau dann, wenn die zurückgelegte Strecke entlang einer Geraden verläuft:</p>
+        \begin{equation}
+        W= \vec F   \cdot  \vec \Delta s
+        \end{equation}
+    </blockquote>
+
+    <p>Diese Definition enthält wegen der Definition des Skalarproduktes aus der Mathematik alle oben erwähnten Sonderfälle.</p>
+
+    <p>Ist die Kraft und der Weg parallel, ist das Skalarprodukt gerade das Produkt der Beträge. Stehen Kraft und Weg antiparallel, ergibt das Skalarprodukt gerade das negative des ersten Falls. Gibt es einen Winkel zwischen Kraft und Wegvektor, so trägt nur der Anteil des Kraftvektors zum Skalarprodukt bei, der parallel zum Weg steht.</p>
+
+    <div class="beispiel" data-title="Arbeit beim Ziehen eines Schlittens">
+        <figure class="abbildung" id="fig-skript_schlitten">
+            <img class="grafik" style="width:40%" src="bilder/skript_schlitten.png" alt="">
+            <figcaption>Abbildung zum Beispiel.</figcaption>
+        </figure>
+        <p>Ein Schlitten wird geradlinig über eine ebene, horizontale Fläche gezogen. Der zurückgelegte Weg beträgt \(5{,}0\,\mathrm{m}\). Die ziehende Kraft ist nicht parallel zur Ebene, sondern wirkt in einem Winkel. Die Vektoren lauten:</p>
+
+        <p>Der Kraftvektor ist:</p>
+        \begin{equation}
+        \vec F= \begin{pmatrix} 40\,\mathrm{N} \\ 30\,\mathrm{N} \end{pmatrix}
+        \end{equation}
+
+        <p>Der Wegvektor ist:</p>
+        \begin{equation}
+        \Delta \vec s = \begin{pmatrix} 5{,}0\,\mathrm{m} \\ 0 \end{pmatrix}
+        \end{equation}
+
+        <p>Die Arbeit soll berechnet werden. Die eleganteste Methode ist die direkte Anwendung der Skalarprodukt-Definition:</p>
+
+        \begin{equation}
+        W = \vec F \cdot \Delta \vec s = \begin{pmatrix} 40\,\mathrm{N} \\ 30\,\mathrm{N} \end{pmatrix}\cdot  \begin{pmatrix} 5{,}0\,\mathrm{m}  \\ 0 \end{pmatrix} = (40\,\mathrm{N} \cdot 5{,}0\,\mathrm{m}) + (30\,\mathrm{N} \cdot 0) = 200\,\mathrm{J}
+        \end{equation}
+
+        <p>Alternativ können wir auch mit den Kraftkomponenten argumentieren. Für die Arbeit ist nur die Kraftkomponente relevant, die parallel zum Weg wirkt. Da der Weg rein horizontal (in x-Richtung) verläuft, ist dies die x-Komponente der Kraft:</p>
+        \begin{equation}
+        F_\parallel = F_x = 40\,\mathrm{N}
+        \end{equation}
+        <p>Die Arbeit ist dann das Produkt aus dieser parallelen Kraftkomponente und dem Betrag des Weges:</p>
+        \begin{equation}
+        W = F_\parallel \cdot \vert \Delta \vec s \vert = 40\,\mathrm{N} \cdot 5{,}0\,\mathrm{m} = 200\,\mathrm{J}
+        \end{equation}
+        <p>Beide Methoden führen, wie erwartet, zum selben Ergebnis, wobei die Skalarproduktmethode in der Regel schneller ist.</p>
+    </div>
+
+    <div class="beispiel" data-title="Ziehen eine Schlittens über eine schräge Ebene">
+        <figure class="abbildung" id="fig-skript_schlitten_schiefe_ebene">
+            <img class="grafik" style="width:40%" src="bilder/skript_schlitten_schiefe_ebene.png" alt="">
+            <figcaption>Abbildung zum Beispiel.</figcaption>
+        </figure>
+        <p>In diesem Beispiel wird der Schlitten entlang einer schiefen Ebene gezogen. Das Koordinatensystem ist so ausgerichtet, dass die \(x\)-Achse parallel zum Erdboden, die \(y\)-Achse senkrecht zum Erdboden nach oben zeigt. Die Kraft, mit der am Schlitten gezogen wird, ist:</p>
+        \begin{equation}
+        \vec F= \begin{pmatrix} 40\,\mathrm{N} \\ 30\,\mathrm{N} \end{pmatrix}
+        \end{equation}
+        <p>Die Verschiebung des Schlittens ist entlang der schiefen Ebene, im oben gegeben Koordinatensystem:</p>
+        \begin{equation}
+        \vec s = \begin{pmatrix} 3{,}0\,\mathrm{m} \\ 4{,}0\,\mathrm{m} \end{pmatrix}
+        \end{equation}
+        <p>Zur Berechnung der Arbeit verwenden wir zunächst die Methode der Zerlegung des Kraftvektors in eine parallele und eine senkrechte Komponente zur Verschiebung. Dazu müssen wir wissen, in welchem Winkel die Kraft zur Verschiebung steht. Den Winkel können wir mit Hilfe des Skalarproduktes herausfinden:</p>
+        \begin{equation}
+        \vec F \cdot \vec s = \vert \vec F \vert \cdot \vert \vec s \vert \cdot \cos(\alpha)
+        \end{equation}
+        <p>Es gilt also:</p>
+        \begin{equation}
+        \cos(\alpha) = \frac{\vec F \cdot \vec s}{\vert \vec F \vert \cdot \vert \vec s \vert}  = \frac{40 \cdot 3 + 30 \cdot 4}{\sqrt{40^2 + 30^2} \cdot \sqrt{3{,}0^2 + 4{,}0^2}} = \frac{240}{50 \cdot 5{,}0} = \frac{24}{25} = 0{,}96
+        \end{equation}
+        \begin{equation}
+        \Rightarrow \alpha = \arccos(0{,}96) = 0{,}28 = 16^\circ
+        \end{equation}
+        <p>Die parallele Komponente der Kraft ist dann</p>
+        \begin{equation}
+        F_\parallel = \vert \vec F \vert \cdot \cos(\alpha) = 50 \cdot 0{,}96 = 48\,\mathrm{N}
+        \end{equation}
+        <p>und die senkrechte Komponente der Kraft ist</p>
+        \begin{equation}
+        F_\perp = \vert \vec F \vert \cdot \sin(\alpha) = 50 \cdot 0{,}28 = 14\,\mathrm{N}
+        \end{equation}
+        <p>Wir können die Richtigkeit der Zerlegung überprüfen, in dem wir den Betrag des ursprünglichen Kraftvektors mit dem Betrag des zerlegten Kraftvektors vergleichen:</p>
+        \begin{align}
+        \sqrt{F_\parallel^2 + F_\perp^2} = \sqrt{48^2 + 14^2} = \sqrt{2304 + 196} = \sqrt{2500} = 50 \\[6pt]= \sqrt{1600+900}=\sqrt{40^2 + 30^2} = \vert \vec F \vert
+        \end{align}
+        <p>Nun brauchen wir noch den Betrag der Verschiebung:</p>
+        \begin{equation}
+        \vert \vec s \vert = \sqrt{3{,}0^2 + 4{,}0^2} = \sqrt{9 + 16} = \sqrt{25} = 5{,}0
+        \end{equation}
+        <p>Die verrichtete Arbeit ist nun das Produkt aus der parallelen Kraftkomponente und dem Betrag der Verschiebung:</p>
+        \begin{equation}
+        W = F_\parallel \cdot \vert \vec s \vert = 48 \cdot 5{,}0 = 0{,}24\,\mathrm{kJ}
+        \end{equation}
+        <p>Einfacher geht es wieder mit dem Skalarprodukt:</p>
+        \begin{equation}
+        W = \vec F \cdot \vec s = \vert \vec F \vert \cdot \vert \vec s \vert \cdot \cos(\alpha) = 50 \cdot 5{,}0 \cdot 0{,}96 = 0{,}24\,\mathrm{kJ}
+        \end{equation}
+    </div>
+
+    <p>Oft wird gefragt, wie es denn sein kann, dass Arbeit nur verrichtet wird, wenn die Kraft und der Weg parallel sind? Das würde ja bedeuten, dass keine Arbeit verrichtet wird, wenn eine Person eine schwere Bierkiste quer über den (annähernd) ebenen Aachener Markt trägt.</p>
+
+    <p>Diese Fragestellung wirft ein interessantes Licht auf das Konzept der Arbeit in der Physik. Die Anstrengung beim Tragen der Kiste ist real, doch aus physikalischer Sicht wird an der Kiste keine Arbeit verrichtet, da die tragende Kraft (vertikal) und der Weg (horizontal) senkrecht zueinander stehen. Das Paradoxon löst sich auf, wenn wir den menschlichen Körper betrachten: Um die Kiste in konstanter Höhe zu halten, müssen unsere Muskeln ständig kontrahieren und entspannen (isometrische Kontraktion). Bei diesen unzähligen Mikrobewegungen wird auf zellulärer Ebene Arbeit verrichtet und chemische Energie in Wärme umgewandelt. Die Anstrengung ist also ein biologischer Prozess, während die physikalische Arbeit am Gesamtobjekt Kiste null ist.</p>
+
+    <p>Die Definition der Arbeit über das Skalarprodukt aus Kraftvektor und Wegvektor stellt allerdings immer noch nicht die allgemeinste Definition der Arbeit dar, da wir ja davon ausgegangen sind, dass die Bewegung geradlinig ablaufen muss. Außerdem hatten wir immer nur von <u>der Kraft</u> \(\vec F\) gesprochen, welche wir implizit als konstant angenommen hatten. Das ist in der Realität jedoch nicht immer der Fall.</p>
+
+    <p>Wir betrachten nun den Fall, dass sich das Objekt, an dem die Kraft Arbeit verrichten soll, weiterhin entlang einer Geraden bewegt, sagen wir: auf der \(x\)-Achse von \(x_1\) nach \(x_2\). Die Kraft soll allerdings vom Ort \(x\) abhängen, also \(\vec F(x)\). Wir nennen die Komponente von \(\vec F(x)\), die parallel zur \(x\)-Achse verläuft \(F_x(x)\).</p>
+
+    <p>Nehmen wir zunächst an, dass sich \(F_x(x)\) zwar entlang des Weges ändert, aber immer für ein Stück \(\Delta x_i\) konstant bleibt. Dann verrichtet die Kraft auf diesem kurzen Stück die Arbeit \(\Delta W_i = F_x(x_i) \cdot \Delta x_i\). Die gesamte Arbeit erhält man, wenn man die Summe bildet:</p>
+
+    \begin{equation}
+    W=\sum_{i=1}^n \Delta W_i = \sum_{i=1}^n  \left( F_x(x_i) \cdot \Delta x_i \right)
+    \end{equation}
+
+    <p>Dabei sind wir davon ausgegangen, dass wir die gesamte Strecke von \(x_1\) bis \(x_2\) in \(n\) Stücke zerlegt haben.</p>
+
+    <p>Nun haben wir nicht immer das Glück, dass die Kraft über ein Stück der Strecke konstant bleibt. Daher müssen wir diese Stücke, über die die Kraft konstant bleiben soll, so lange verkleinern, bis sie infinitesimal werden; wir können dann annehmen, dass die Kraft \(F_x(x_i)\) über dem infinitesimal kurzen Stück \(\text{d}x_i\) konstant bleibt.</p>
+
+    <p>Wollen wir dann die gesamte Arbeit ermitteln, die die variable Kraft über der gesamten Strecke, die sich aus den kleinen \(\text{d}x_i\) zusammensetzt, verrichtet, müssen wir wieder aufsummieren.</p>
+
+    <p>Die Summe über sehr kleine Stücke ist ein Integral, daher gilt:</p>
+
+    \begin{equation}
+    W= \int_{x_1}^{x_2} \text{d}W
+    \end{equation}
+
+    <p>Daraus folgt die Definition der Arbeit für eine Bewegung entlang einer Achse:</p>
+    \begin{equation}
+    W= \int \limits_{x_1}^{x_2}F_x(x)\text{d}x
+    \end{equation}
+
+    <div class="beispiel" data-title="Von der Federkraft verrichtete Arbeit">
+        <figure class="abbildung" id="fig-skript_feder_arbeit">
+            <img class="grafik" style="width:60%" src="bilder/skript_feder_arbeit.png" alt="">
+            <figcaption>Abbildung zum Beispiel.</figcaption>
+        </figure>
+        <p>Ein Klotz liegt auf einer reibungsfreien Oberfläche, zwischen ihm und der Wand ist eine Feder um \(x_1\) im Vergleich zur Ruhelage gespannt (d.h. gedehnt). Nun entspannt sich die Feder und zieht den Klotz in Richtung der Wand zum Punkt \(0\), der Ruhelage der Feder. Welche Arbeit hat die Federkraft verrichtet?</p>
+
+        <p>Für die Federkraft in Abhängigkeit von \(x\) gilt:</p>
+
+        \begin{equation}
+        F(x) = -k \cdot x
+        \end{equation}
+
+        <p>Die Arbeit ist also:</p>
+
+        \begin{equation}
+        W= \int \limits_{x_1}^{0}\left(-k \cdot x \right) \text{d}x= \left[ - \frac{1}{2}\cdot k \cdot x^2 \right]_{x_1}^{0}=0 - \left( - \frac{1}{2}\cdot k \cdot x_1^2\right)= \frac{1}{2}\cdot k\cdot  x_1^2
+        \end{equation}
+
+        <p>Beachten Sie: bei diesem Vorgang wird die Masse beschleunigt, während sich die Höhe der Masse über dem Erdboden nicht ändert.</p>
+    </div>
+
+    <div class="beispiel" data-title="Arbeit gegen die Schwerkraft">
+        <figure class="abbildung" id="fig-arbeit_gegen_schwerkraft">
+            <img class="grafik" style="width:50%" src="bilder/arbeit_gegen_schwerkraft.png" alt="">
+            <figcaption>Abbildung zum Beispiel.</figcaption>
+        </figure>
+
+        <p>Eine Masse \(m\) wird im Schwerkraftfeld der Erde mit konstanter Geschwindigkeit vom Boden auf eine Höhe \(h\) gebracht, indem eine Person die Masse an einem Seil hochzieht<span class="fussnote">Hierbei ist tatsächlich unerheblich, ob die Masse direkt nach oben gezogen wird, oder ob das Seil über eine Umlenkrolle geführt wird</span>. Welche Arbeit leistet die Kraft, die die Person auf die Masse ausübt?</p>
+
+        <p>Legen wir das Koordinatensystem so, dass die Achse \(z\) senkrecht zum Erdboden steht und nach oben zeigt. Der Boden liege bei \(z=0\). Damit die Masse sich mit einer konstanten Geschwindigkeit bewegen kann, obwohl an der Masse die Schwerkraft nach unten zieht, muss nach dem ersten Newton'schen Gesetz die Kraft, die die Person auf die Masse ausübt, nach oben zeigen und im Betrag \(m\cdot g\) sein, also:</p>
+
+        \begin{equation}
+        F_z=m \cdot g
+        \end{equation}
+
+        <p>Die Arbeit, die dann verrichtet wird, ist also:</p>
+        \begin{equation}
+        W= \int \limits_{0}^{h}\left( m \cdot g \right) \text{d}z=\left[ m \cdot g \cdot z \right]_0^h =m \cdot g \cdot h
+        \end{equation}
+
+        <p>Das ist die Arbeit, die die Kraft, die der Mensch auf die Masse ausübt, leistet.</p>
+
+        <p>Welche Arbeit leistet die Schwerkraft in diesem Beispiel?</p>
+
+        <p>In dem oben definierten Koordinatensystem ist die Schwerkraft:</p>
+        \begin{equation}
+        F_G = - m \cdot g
+        \end{equation}
+
+        <p>Die von der Schwerkraft verrichtete Arbeit ist also:</p>
+        \begin{equation}
+        W= \int \limits_{0}^{h}\left( - m \cdot g \right) \text{d}z=\left[- m \cdot g \cdot z \right]_0^h =-m \cdot g \cdot h
+        \end{equation}
+    </div>
+
+    <p>Was passiert nun, wenn die Strecke nicht mehr geradlinig verläuft, sondern auf einem krummlinigen Weg im dreidimensionalen Raum verläuft?</p>
+
+    <p>Dann ist unser Vorgehen eine Kombination aus den Erkenntnissen der vorangegangenen Abschnitte.</p>
+
+    <p>Zunächst hatten wir verstanden, dass die Arbeit, die eine Kraft \(\vec F\) entlang eines Wegstücks \(\Delta \vec s\), welches nicht notwendigerweise parallel zu \(\vec F\) im Raum orientiert ist, sich mit Hilfe des Skalarproduktes</p>
+
+    \begin{equation}
+    W= \vec F \cdot \Delta \vec s
+    \end{equation}
+
+    <p>errechnen lässt.</p>
+
+    <p>Dann hatten wir gesehen, dass, wenn die Kraft sich über dem Weg ändert, man die Integralrechnung zum Errechnen der gesamten Arbeit heranziehen muss:</p>
+
+    \begin{equation}
+    W= \int \limits_{x_1}^{x_2}F_x(x)\text{d}x
+    \end{equation}
+
+    <figure class="abbildung" id="fig-wegabhaengigekraft">
+        <img class="grafik" style="width:100%" src="bilder/wegabhaengigekraft.png" alt="">
+        <figcaption>Im Allgemeinen hängt sowohl Richtung als auch Betrag einer Kraft \(\vec F\) vom Ort \(\vec s\) im Raum ab, also \(\vec F(\vec s)\). Möchte ich die Arbeit errechnen, die die Kraft entlang eines allgemeinen, nicht geraden, Weges von \(A\) nach \(B\) verrichtet, so muss ich den Weg in viele kleine Stücke zerlegen. Diese Stücke müssen infinitesimal klein sein, damit die Kraft auf diesen kleinen Stücken als konstant angenommen werden kann. Die gesamte Arbeit ist Summe der Arbeiten, die die Kraft auf den kleinen Wegstücken verrichtet. Da die Wegstücke infinitesimal klein sind, wird aus der Summe ein Integral.</figcaption>
+    </figure>
+
+    <p>Nun müssen wir diese beiden Erkenntnisse kombinieren: wir zerlegen den Weg im Raum in winzige kleine vektorielle Wegstücke \(\text{d}\vec s_i\). Wenn man alle Wegstücke aneinander legt, erhält man die gesamte Strecke im Raum \(\vec s(t)\). Jedes kleine Wegstück \(\text{d}\vec s_i\) befindet sich im Raum am Punkt \(\vec s_i\). Die Kraft, die ja ortsabhängig sein soll, ist an diesem Ort dann \(\vec F_i=\vec F(\vec s_i)\), siehe auch Abbildung <a class="xref" data-ref-fig="fig-wegabhaengigekraft"></a>.</p>
+
+    <p>Da die Kraft und das Wegstück nicht notwendigerweise parallel zueinander stehen, muss wiederum das Skalarprodukt angewendet werden, um die Arbeit zu errechnen:</p>
+
+    \begin{equation}
+    d W_i = \vec F(\vec s_i) \cdot \text{d}\vec s_i
+    \end{equation}
+
+    <p>Die gesamte entlang des Weges von \(A\) nach \(B\) von der variablen Kraft verrichtete Arbeit ist dann</p>
+
+    \begin{equation}
+    W= \int\limits_A^B  \vec F(\vec s) \cdot \text{d}\vec s
+    \end{equation}
+
+    <p>Hierbei kann es absolut entscheidend sein, welchen Weg man nimmt. Beispiele dazu werden wir erst später behandeln, da die Berechnungen zum Teil mathematisch sehr aufwendig, zumindest aber kompliziert sind.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.3.2 Leistung</h3>
+<section>
+    <p>Die physikalische Arbeit hängt nur von der Kraft und dem Weg bzw. von der Strecke ab, nicht jedoch von der Zeit. Es ist also für die Arbeit z.&nbsp;B. unerheblich, wie schnell eine Masse auf eine bestimmte Höhe gebracht wird.</p>
+
+    <p>Die physikalische Größe, die beschreibt, welche Arbeit pro Zeit verrichtet wird, nennt man <strong>Leistung</strong>.</p>
+
+    \begin{equation}
+    \text{Leistung:}\quad \text{Formelzeichen:}\, P \quad \text{Einheit:}\, [P]=\mathrm{W} \quad \text{(Watt)}
+    \end{equation}
+
+    <p>Leistung ist definiert als:</p>
+
+    \begin{equation}
+    \text{Leistung}=\frac{\text{verrichtete Arbeit}}{\text{benötigte Zeit}}
+    \end{equation}
+
+    <p>Da die verrichtete Arbeit von der Zeit abhängen kann, schreibt man allgemeiner:</p>
+
+    \begin{equation}
+    P(t) =\frac{\mathrm{d}}{\mathrm{d}t}\,W(t)
+    \end{equation}
+
+    <p>Wie die Arbeit, so bezieht sich die Leistung immer auf eine Kraft, die sie verrichtet.</p>
+
+    <div class="beispiel" data-title="Schlitten an Leine">
+        <p>Eine Person zieht auf einer Ebene mit einer Kraft von \(60\,\mathrm{N}\) einen Schlitten an einem Seil hinter sich, dabei hat der Schlitten eine konstante Geschwindigkeit von \(1\,\mathrm{m/s}\). Die Kraft ist dabei notwendig, um die Reibung zu kompensieren. Das Seil schließt mit dem Boden einen Winkel von \(60^\circ\) ein. Wie groß ist die Arbeit, die die Kraft verrichtet? Wie groß ist die Leistung, die die Kraft verrichtet?</p>
+
+        <p>Wir definieren die \(x\)-Achse parallel zum Boden (entlang der Bewegungsrichtung des Schlittens), \(y\)-Achse senkrecht dazu nach oben zeigend.</p>
+
+        <p>Da das Seil einen Winkel von \(60^\circ\) mit dem Boden einschließt, müssen wir zunächst die zum Weg parallele Komponente der Kraft errechnen.</p>
+
+        <p>Das ist:</p>
+        \begin{equation}
+        F_\parallel=60\,\mathrm{N}\cdot \cos(60^\circ)
+        \end{equation}
+
+        <p>Die Strecke, die der Schlitten zurücklegt, ergibt sich aus der Geschwindigkeit:</p>
+        \begin{equation}
+        x(t) = v \cdot t = 1\,\mathrm{m/s}\cdot t
+        \end{equation}
+
+        <p>Die Arbeit ergibt sich aus der Integration über die Kraft entlang des Weges. Da die Kraft nicht vom Weg abhängt, gilt:</p>
+
+        \begin{equation}
+        W(t)= \int F_\parallel \text{d}x=F_\parallel \cdot x=60\,\mathrm{N}\cdot \cos(60^\circ)\cdot 1\,\mathrm{m/s}\cdot t
+        \end{equation}
+
+        <p>Die Arbeit hängt also von der Zeit ab: je länger die Person den Schlitten zieht, desto mehr Arbeit muss sie verrichten.</p>
+
+        <p>Die Leistung erhalten wir nun, indem wir die zeitabhängige Arbeit nach der Zeit ableiten:</p>
+
+        \begin{align}
+        P(t) &amp;=\frac{\mathrm{d}}{\mathrm{d}t}\,W(t)=\frac{\mathrm{d}}{\mathrm{d}t}\,\left(60\,\mathrm{N}\cdot \cos(60^\circ)\cdot 1{,}0\,\mathrm{m/s}\cdot t\right)\\[6pt]
+        &amp;=60\,\mathrm{N}\cdot \cos(60^\circ)\cdot 1{,}0\,\mathrm{m/s}\\[6pt]
+        &amp;= 30\,\mathrm{W}
+        \end{align}
+    </div>
+
+    <p>An die Leistung bei konstanter Kraft und Geschwindigkeit hätten wir auch anders gelangen können.</p>
+
+    <p>Schauen wir uns die Definition der Leistung nochmals an:</p>
+
+    \begin{equation}
+    P(t) =\frac{\mathrm{d}}{\mathrm{d}t}\,W=\frac{\mathrm{d}}{\mathrm{d}t}\,\left(\vec F \cdot \vec s\right)
+    \end{equation}
+
+    <p>Die Ersetzung \(W\) durch \(\vec F \cdot \vec s\) ist genau dann erlaubt, wenn die Kraft und die Geschwindigkeit konstant sind. Ist nämlich die Geschwindigkeit konstant, dann muss die Strecke gradlinig sein, und genau das war die Bedingung, damit wir die Definition der Arbeit über das Skalarprodukt anwenden dürfen. Ist die Kraft konstant und der Weg gradlinig, muss nicht das Integral gebildet werden.</p>
+
+    <p>Ist die Kraft über die Zeit konstant, so kann man die Ableitung in \(P(t)\) ohne Anwendung der Produktregel durchführen.</p>
+
+    \begin{equation}
+    P=\vec F \cdot \frac{\mathrm{d}\vec s(t)}{\mathrm{d}t}= \vec F \cdot \vec v
+    \end{equation}
+
+    <p>Betrachten wir das vorangegangene Beispiel nochmals, sehen wir, dass wir mit dieser Formel deutlich schneller ans Ziel kommen.</p>
+
+    <div class="beispiel" data-title="Schlitten an Leine">
+        <p>Eine Person zieht auf einer Ebene mit einer Kraft von \(60\,\mathrm{N}\) einen Schlitten an einem Seil hinter sich, dabei hat der Schlitten eine konstante Geschwindigkeit von \(1{,}0\,\mathrm{m/s}\). Die Kraft ist dabei notwendig, um die Reibung zu kompensieren. Das Seil schließt mit dem Boden einen Winkel von \(60^\circ\) ein. Wie groß ist die Leistung, die die Kraft verrichtet?</p>
+
+        <p>Wir definieren die \(x\)-Achse parallel zum Boden (entlang der Bewegungsrichtung des Schlittens), \(y\)-Achse senkrecht dazu nach oben zeigend.</p>
+
+        <p>Die Kraft ist:</p>
+        \begin{equation}
+        \vec F= 60\,\mathrm{N}\cdot \begin{pmatrix}\cos(60^\circ)\\ \sin(60^\circ) \end{pmatrix}
+        \end{equation}
+
+        <p>Die Geschwindigkeit als Vektor ausgedrückt ist:</p>
+
+        \begin{equation}
+        \vec v= \begin{pmatrix} 1{,}0\,\mathrm{m/s}\\0 \end{pmatrix}
+        \end{equation}
+
+        <p>Damit wird die Leistung (wir dürfen die Formel anwenden, da Geschwindigkeit und Kraft konstant sind):</p>
+
+        \begin{equation}
+        P=60\,\mathrm{N}\cdot \begin{pmatrix}\cos(60^\circ)\\ \sin(60^\circ) \end{pmatrix}\cdot  \begin{pmatrix} 1{,}0\,\mathrm{m/s}\\0 \end{pmatrix}= 60\,\mathrm{N}\cdot \cos(60^\circ)\cdot 1{,}0\,\mathrm{m/s}= 30\,\mathrm{W}
+        \end{equation}
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.3.3 Energie</h3>
+<section>
+    <p>Wir hatten zu Beginn des Kapitels überlegt, dass eine an einem Objekt angreifende Kraft in der Nähe der Erdoberfläche zwei Effekte haben kann: zum einen kann das Objekt durch die Kraft beschleunigt oder abgebremst werden, sein Impuls ändert sich also; zum anderen kann das Objekt durch die Kraft gegen die Erdanziehung angehoben werden. Diese Zustandsänderung möchten wir nun gerne praktischerweise durch eine physikalische Größe ausdrücken. Diese Größe nennen wir „Energie".</p>
+
+    <p>Um uns dem Begriff zu nähern, schauen wir uns zunächst noch ein Beispiel an.</p>
+
+    <div class="beispiel" data-title="Gespeicherte Arbeit?">
+        <p>Stellen Sie sich folgenden Aufbau vor: In einem Labor hängt von der Decke eine (in diesem Gedankenexperiment vollkommen reibungsfreie) Umlenkrolle. Über die Rolle ist ein Seil geführt, an dem an beiden Seiten zwei gleiche Massen befestigt sind. Die rechte Masse befindet sich auf dem Laborboden, die linke in der Höhe \(h\) über dem Boden in der Nähe der Decke. Das Seil sei gespannt.</p>
+
+        <figure class="abbildung" id="fig-arbeit_der_schwerkraft">
+            <img class="grafik" style="width:50%" src="bilder/arbeit_der_schwerkraft.png" alt="">
+            <figcaption>Abbildung zum Beispiel.</figcaption>
+        </figure>
+
+        <p>Wir wählen als Koordinatensystem die z-Achse senkrecht zum Boden, z=0 sei auf Höhe des Schwerpunkts der Masse, die auf dem Boden ruht.</p>
+
+        <p>Nun ist die linke Masse nicht „von alleine" auf die Höhe \(h\) gekommen, jemand oder etwas muss sie hochgehoben oder gezogen haben. Wie dem auch sei: Wir haben im Beispiel „Arbeit gegen die Schwerkraft" aus Abschnitt <a class="xref" data-ref-sec="p-1-3-1"></a> gesehen, dass, um die Masse auf die Höhe \(h\) zu bekommen, eine Kraft auf die Masse gewirkt haben muss und diese Kraft hat die Arbeit</p>
+
+        \begin{equation}
+        W=m\cdot g \cdot h
+        \end{equation}
+
+        <p>verrichtet.</p>
+
+        <p>Dadurch hat sich der Zustand der Masse geändert; in diesem Fall: die Höhe über dem Erdboden hat sich geändert. Diese Änderung des Zustandes der Masse bewirkt, dass die Arbeit nun in der linken Masse „gespeichert" ist, die Masse kann diese Arbeit aber auch wieder „abgeben".</p>
+
+        <p>Wird der linken Masse ein kleiner Schubs nach unten gegeben, so setzt sich das System in Bewegung. Die linke Masse sinkt zu Boden und <u>zieht</u> die rechte Masse in die Höhe. Dabei verrichtet die von der linken Masse über Seil und Umlenkrolle auf die rechte Masse wirkende Kraft Hubarbeit; dazu verwendet die linke Masse die in ihr gespeicherte Arbeit.</p>
+    </div>
+
+    <p>Die in einem Objekt gespeicherte Arbeit nennen wir in der Physik Energie.</p>
+
+    \begin{equation}
+    \text{Energie:} \quad \text{Formelzeichen:}\, E \quad \text{Einheit:}[E]=\mathrm{J} \quad \text{Joule}
+    \end{equation}
+
+    <p>Energie und Arbeit haben dieselbe Einheit, was logisch ist, wenn Energie nichts anderes ist als gespeicherte Arbeit. Das Formelzeichen \(E\) für Energie wird oft mit einem Index versehen, um die Art der Energie zu kennzeichnen. So werden wir im Folgenden z.&nbsp;B. die sogenannte <strong>kinetische Energie</strong> \(E_\text{kin}\) und die <strong>potentielle Energie</strong> \(E_\text{pot}\) kennenlernen.</p>
+
+    <p>Da Energie gespeicherte Arbeit ist, gilt auch: besitzt ein Objekt Energie, so kann es Arbeit verrichten.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.3.4 Kinetische Energie</h3>
+<section>
+    <p>Nehmen wir an, ein Objekt sei zunächst in Ruhe und wird dann auf die Geschwindigkeit \(\vec v\) gebracht.</p>
+
+    <p>Physikalisch kann dieser Vorgang mit den Gesetzen der Kinematik und Dynamik so beschrieben werden:</p>
+
+    <ul>
+        <li>Das Objekt ändert seine Geschwindigkeit von \(0\) auf \(\vec v\).</li>
+        <li>Also wurde das Objekt beschleunigt, mit der Beschleunigung \(\vec a\).</li>
+        <li>Dadurch ändert sich der Impuls mit der Zeit \(\frac{\mathrm{d}\vec p(t)}{\mathrm{d}t}\).</li>
+        <li>Es muss also eine Kraft auf das Objekt gewirkt haben (2. Newton).</li>
+        <li>Diese Kraft hat Arbeit verrichtet.</li>
+        <li>Hat das Objekt die Geschwindigkeit \(\vec v\) erreicht, ist diese Arbeit in ihm gespeichert.</li>
+    </ul>
+
+    <p>Dieser Argumentationskette folgend, können wir nun berechnen, wie viel Arbeit in dem Objekt gespeichert worden ist, also, wie groß die Energie des Objektes ist. Wir betrachten die Leistung \(P\), die von der Kraft \(\vec F\) verrichtet wird, um die Geschwindigkeit des Objektes zu ändern:</p>
+    \begin{equation}
+    P = \frac{dW}{dt} = \vec{F} \cdot \vec{v}
+    \end{equation}
+    <p>Mit \(\vec F = m \vec a = m \frac{d\vec v}{dt}\) für eine konstante Masse \(m\) ergibt das:</p>
+    \begin{equation}
+    P = \left(m \frac{d\vec v}{dt}\right) \cdot \vec v = m \vec v \cdot \frac{d\vec v}{dt}
+    \end{equation}
+    <p>Aus der Mathematik wissen wir, dass nach Anwendung der Produkt oder der Kettenregel (in diesen Fall führen beide Wege zum Ziel) gilt: \(\frac{d}{dt}(v^2) = \frac{d}{dt}(\vec v \cdot \vec v) = 2 \left(\vec v \cdot \frac{d\vec v}{dt}\right)\). Damit können wir den Ausdruck umschreiben:</p>
+    \begin{equation}
+    P = m \cdot \frac{1}{2} \frac{d(v^2)}{dt} = \frac{d}{dt}\left(\frac{1}{2} m v^2\right)
+    \end{equation}
+    <p>Die verrichtete Arbeit \(W\) ist das Zeitintegral der Leistung. Um die Arbeit zu finden, die benötigt wird, um das Objekt von Ruhe (\(v=0\)) auf die Endgeschwindigkeit \(v\) zu beschleunigen, integrieren wir über die Zeit des Vorgangs:</p>
+    \begin{equation}
+    W = \int P(t) \, dt = \int \frac{d}{dt}\left(\frac{1}{2} m v^2\right) dt = \frac{1}{2} m v^2 - \frac{1}{2} m (0)^2 = \frac{1}{2} m v^2
+    \end{equation}
+    <p>Die durch einen Beschleunigungsvorgang von \(0\) auf \(\vec v\) im Objekt gespeicherte Energie ist also:</p>
+    \begin{equation}
+    E_\text{kin}=\frac{1}{2}m \vert \vec v \vert^2
+    \end{equation}
+
+    <p>Diese Energie nennen wir „kinetische Energie", daher wird das Formelzeichen \(E\) auch mit dem Index „kin" versehen.</p>
+
+    <p>Die kinetische Energie ist im Objekt gespeichert, und zwar unabhängig davon, welche Kraft dafür verantwortlich war, das Objekt zu beschleunigen.</p>
+
+    <p>Wir hatten zunächst die Beschleunigung von \(0\) auf \(\vec v\) betrachtet.</p>
+
+    <p>Allgemeiner gilt: Verrichtet eine Kraft Arbeit an einem Objekt auf einem Weg von \(A\) nach \(B\) und wird diese Kraft ausschließlich zur Beschleunigung des Objektes aufgewendet<span class="fussnote">Wird z.&nbsp;B. nicht auch gleichzeitig Hubarbeit verrichtet.</span>, so ändert sich die kinetische Energie des Objektes:</p>
+
+    \begin{equation}
+    W_{BA}=\int \limits_{A}^{B} \vec F \cdot \text{d}\vec s = E_{\text{kin},B}-E_{\text{kin},A}
+    \end{equation}
+</section>
+
+<h3 class="inhaltsverzeichnis">1.3.5 Die potentielle Energie</h3>
+<section>
+    <p>Wir hatten schon im Abschnitt <a class="xref" data-ref-sec="p-1-3-3"></a> überlegt, dass eine Kraft nicht nur zu einer Beschleunigung eines Objektes führen kann, sondern auch zu einer Änderung seiner Lage, z.&nbsp;B. seiner Höhe über dem Erdboden.</p>
+
+    <p>Im Alltag wissen wir: Beim Wandern, Laufen oder Fahrradfahren ist der Kalorienverbrauch wegabhängig. In der Physik ist für uns aber ein bestimmter Spezialfall wichtig: Wenn die Arbeit, die verrichtet werden muss, um ein Objekt von einem Ort \(A\) zu einem Ort \(B\) zu bringen, nicht davon abhängt, welchen konkreten Weg man genommen hat, dann können wir die im Objekt durch diesen Vorgang gespeicherte Energie <strong>potentielle Energie</strong> nennen.</p>
+
+    <p>Schauen wir uns zunächst mal ein Beispiel an, bei dem diese Wegunabhängigkeit nicht gegeben ist:</p>
+
+    <div class="beispiel" data-title="Potentielle Energie der Reibungskraft?">
+        <p>Die Reibungskraft und die Geschwindigkeit eines Objektes schließen immer einen Winkel von \(180^\circ\) ein, d.h. die Arbeit, die die Reibungskraft verrichtet, ist <u>immer</u> negativ.</p>
+
+        <p>Daher gilt: wenn ich zwei verschiedene Wege von \(A\) nach \(B\) nehme, und dabei z.&nbsp;B. eine Kiste über den Aachener Marktplatz schiebe, hängt die von der Reibungskraft verrichtete Arbeit davon ab, welchen Weg ich genommen habe. Insbesondere wird das klar im Vergleich des direkten, geradlinigen Weges und einem längeren, kurvigen Weg. Im zweiten Fall wird die Reibung wahrscheinlich mehr (negative) Arbeit verrichtet haben.</p>
+
+        <p>Die Arbeit ist also nicht wegunabhängig, die Reibungskraft erfüllt also nicht die oben gestellte Bedingung und daher gibt es keine potentielle Energie der Reibungskraft.</p>
+
+        <p>Bedeutet das auch, dass die von der Reibung verrichtete Arbeit nicht als Energie gespeichert wurde? Nein: die von der Reibung verrichtete Arbeit wurde als Energie gespeichert. Leider nur als sehr schwer nutzbare Energie, nämlich in Form von thermischer Energie<span class="fussnote">Thermische Energie können wir uns zunächst als eine ungeordnete Form von Energie auf mikroskopischer Ebene vorstellen. Die Umwandlung von geordneter mechanischer Energie in Wärme ist nach dem zweiten Hauptsatz der Thermodynamik ein irreversibler Prozess. Eine vollständige Rückumwandlung ist nicht möglich.</span>. Vereinfacht kann man sagen: durch die Reibung steigt die Temperatur des Pflasters des Marktplatzes und somit auch der Luft über dem Marktplatz leicht an. Die Energie ist also irgendwo „gespeichert". Nutzbar ist sie aber nicht wirklich.</p>
+    </div>
+
+    <p>Die Reibungskraft erfüllt also die oben genannte Bedingung der Wegunabhängigkeit nicht. Gibt es denn überhaupt Kräfte, auf die diese Forderung zutrifft?</p>
+
+    <p>Die Antwort ist „ja!", es gibt sogar eine ganze Klasse von Kräften, auf die das zutrifft; daher wurde für diese Kräfte ein neuer Begriff eingeführt: <strong>Konservative Kräfte</strong>.</p>
+
+    <p>Konservativ heisst so viel wie „erhaltend"<span class="fussnote">Warum das für Kräfte eine passende Bezeichnung ist, werden wir etwas später sehen</span>.</p>
+
+    <p>An dieser Stelle brauchen wir einen Begriff, den wir im Zusammenhang mit der Gravitation und der Coulombkraft später genauer beleuchten werden. Den Begriff des <strong>Kraftfeldes</strong>.</p>
+
+    <p>Als Kraftfeld bezeichnen wir in der Physik eine Art „unsichtbare Kraftkarte", die jedem Punkt im Raum einen bestimmten Kraftvektor zuweist. Dieses Feld zeigt Ihnen, wie stark eine Kraft an jedem Ort wirkt und in welche Richtung sie zeigt. Stellen Sie es sich vor wie eine Landkarte, auf der Sie sehen können, wie steil oder flach die Berge an verschiedenen Orten sind, nur in drei Dimensionen.</p>
+
+    <p>So zeigt innerhalb des großen Hörsaals Goethestraße, die Erdanziehungskraft an jedem Ort senkrecht zum Boden. Alle Vektoren sind parallel und gleich lang, da die Stärke der Erdanziehungskraft nicht davon abhängt, ob Sie in Reihe 1 des Hörsaals sitzen oder in Reihe 12. Wenn wir etwas rauszoomen und uns das Kraftfeld der Erdanziehungskraft vom Weltall aus ansehen, bemerken wir allerdings: alle Vektoren zeigen zum Erdmittelpunkt. Es ist also keineswegs mehr so, dass die Vektoren alle parallel sind. Dazu kommt, dass die Länge der Vektoren, wie wir im Abschnitt zur Gravitation sehen werden, davon abhängt, wie nah wir uns am Erdmittelpunkt befinden.</p>
+
+    <p>Wenn wir nun eine Kraft betrachten, bei der die Arbeit nicht vom konkreten Weg von \(A\) nach \(B\) abhängt, dann bezeichnet man das Kraftfeld dieser Kraft als <strong>konservatives Kraftfeld</strong>.</p>
+
+    <p>In einem konservativen Kraftfeld gilt: egal welchen Weg man nimmt, die Arbeit, die die Kraft an einem Objekt verrichtet, ist immer gleich:</p>
+
+    \begin{equation}
+    \int \limits_{A,\text{Weg } i}^{B}\vec F \cdot \text{d}\vec s = \int \limits_{A,\text{Weg } j}^{B}\vec F \cdot \text{d}\vec s
+    \end{equation}
+
+    <p>Diese Arbeit wird dann als potentielle Energie gespeichert.</p>
+
+    <p>Beispiele für Kräfte, deren Kraftfelder konservativ sind:</p>
+    <ul>
+        <li>Schwerkraft \(\rightarrow\) potentielle Energie der Gravitation</li>
+        <li>Federkraft \(\rightarrow\) potentielle Energie der Federkraft</li>
+        <li>Elektrostatische Kraft \(\rightarrow\) potentielle Energie der Elektrostatik</li>
+    </ul>
+
+    <p>Keine konservativen Kräfte sind z.&nbsp;B. die Reibung oder der Luftwiderstand.</p>
+
+    <p>Wenn ein Objekt in einem konservativen Kraftfeld \(F_\text{konservativ}(\vec s)\) durch eine äußere Kraft \(\vec F\) von \(A\) nach \(B\) gebracht wird, so hat das Objekt die Möglichkeit, die in ihm gespeicherte Arbeit (oder wie wir ab jetzt sagen: Energie) wieder abzugeben und auf <u>beliebigem</u> Weg von \(B\) nach \(A\) zurückzugelangen, so wie es im Beispiel mit den beiden Massen und der Umlenkrolle der Fall war.</p>
+
+    <p>Diese Energie, die das Objekt beim Weg von \(A\) nach \(B\) speichert und <u>potentiell</u> wieder abgeben kann, nennen wir potentielle Energie:</p>
+
+    \begin{equation}
+    \text{Potentielle Energie:}\quad E_\text{pot}=-W_{BA}=-\int\limits_A^B \vec F_\text{konservativ} \cdot \text{d}\vec s\quad\text{(Weg von A nach B)}\label{formel_dyn_epot1}
+    \end{equation}
+
+    <p>Man kann einen <u>beliebigen</u> Ort im Raum willkürlich zum Nullpunkt der potentiellen Energie bestimmen. Die potentielle Energie an allen anderen Punkten, z.&nbsp;B. \(B\), wird dann angegeben als der Unterschied zwischen der potentiellen Energie am Punkt \(B\) und dem Referenzpunkt. Nennen wir den Referenzpunkt \(0\), so gilt:</p>
+
+    \begin{equation}
+    E_{\text{pot},BA}=E_{\text{pot},B0}-E_{\text{pot},A0}=E_\text{{pot},B}-E_{\text{pot},A}
+    \end{equation}
+
+    <p>\(E_{\text{pot},B}\) ist dann die potentielle Energie im Punkt \(B\) in Bezug auf den willkürlich gewählten Nullpunkt.</p>
+
+    <p>Eines ist sehr wichtig zu verstehen: Die Kraft, die in Formel (<a class="xref" data-ref-eq="formel_dyn_epot1"></a>) eingesetzt wird, ist <u>nicht</u> die Kraft, die aufgewendet werden muss, um die Masse zu verschieben, sondern die konservative Kraft, die gegen die Verschiebung der Masse wirkt.</p>
+
+    <p>Das schauen wir uns noch mal ausführlich in einem Beispiel an.</p>
+
+    <div class="beispiel" data-title="Kiste in der Erdanziehungskraft">
+        <p>Eine Kiste der Masse \(m\) wird von einem Ort \(A\), der sich auf der Höhe \(h_A\) über dem Erdboden befindet, an einen Punkt \(B\), der sich auf der Höhe \(h_B\) über dem Erdboden befindet, gebracht. Wie ist die potentielle Energie der Kiste?</p>
+
+        <p>Zunächst einmal schauen wir uns an, welche Kräfte wirken. Es muss zwei Kräfte geben: Zum einen die Erdanziehungskraft, nach unten zeigend, zum anderen eine Kraft, die gegen die Erdanziehung wirkt und mindestens genauso groß ist wie die Erdanziehungskraft und die nach oben zeigt.</p>
+
+        <p>Sollte die Kraft, mit der die Kiste angehoben wird, genauso groß sein, wie die Erdanziehungskraft, so wird die Kiste mit einer konstanten Geschwindigkeit angehoben (1. Newton), sollte die Kraft, mit der angehoben wird, größer sein als die Erdanziehungskraft, so wird die Kiste beschleunigt (2. Newton). Wir nehmen an, dass der erste Fall (Kräftegleichheit, konstante Geschwindigkeit) zutrifft. Dann bewegt sich die Kiste in einem konservativen Kraftfeld, nämlich dem Kraftfeld der Erdanziehungskraft.</p>
+
+        \begin{equation}
+        F_G=-m \cdot g \quad \text{und}\quad F=+m\cdot g
+        \end{equation}
+
+        <p>Welche Arbeit wird verrichtet?</p>
+
+        <p>Angenommen, ein Mensch bringt (wie auch immer) die nach oben zeigende Kraft auf, die die Kiste im Feld der Erdanziehungskraft anhebt. Dann bringt der Mensch die Kraft \(F=m\cdot g\) auf und verrichtet die Arbeit:</p>
+
+        \begin{equation}
+        W_{BA}=\int\limits_{h_A}^{h_B} m\cdot g\text{d}s=m\cdot g \cdot (h_B - h_A)=m\cdot g \cdot \Delta h
+        \end{equation}
+
+        <p>Die Erdanziehungskraft verrichtet die Arbeit:</p>
+
+        \begin{equation}
+        W_{BA}=\int\limits_{h_A}^{h_B}( -m\cdot g)\text{d}s=-m\cdot g \cdot (h_B - h_A)=-m\cdot g \cdot \Delta h
+        \end{equation}
+
+        <p>Daher erhält das Objekt durch diesen Vorgang die potentielle Energie:</p>
+        \begin{equation}
+        E_{\text{pot},BA}=-W_{BA}=-\int\limits_{h_A}^{h_B}( -m\cdot g)\text{d}s=m\cdot g \cdot (h_B - h_A)=m\cdot g \cdot \Delta h
+        \end{equation}
+
+        <p>Allerdings ist zu beachten: das Objekt befand sich ja schon auf einer Höhe \(h_A\) über dem Erdboden. Da muss es ja auch irgendwie hingekommen sein. Wie das passiert ist, wissen wir nicht, wir wissen aber, dass die Bewegung gegen die Erdanziehungskraft passiert ist, somit das Objekt schon durch diesen Vorgang potentielle Energie erhalten hat, nämlich:</p>
+
+        \begin{equation}
+        E_{\text{pot},A0}=-W_{A0}=-\int\limits_{0}^{h_A}( -m\cdot g)\text{d}s=m\cdot g \cdot (h_A - 0)=m\cdot g \cdot h_A
+        \end{equation}
+
+        <p>\(E_{\text{pot},BA}\) gibt mir nur die Energie, die die Kiste potentiell wieder abgeben (umwandeln) kann, wenn Sie sich zurück von \(B\) nach \(A\) bewegt. Bewegt sich die Kiste dann von \(A\) zurück zum Erdboden \(0\), kann sie zusätzlich noch \(E_{\text{pot},A0}\) abgeben. Insgesamt kann die Kiste somit auf dem Weg von \(B\) zum Erdboden \(0\) die folgende potentielle Energie wieder abgeben:</p>
+
+        \begin{equation}
+        E_{\text{pot},B}=E_{\text{pot},BA}+E_{\text{pot},A0}=m \cdot g \cdot h_B
+        \end{equation}
+
+        <p>Nehmen wir nun an, die Kiste ruhe auf einer Höhe \(h_B\) und wird dann losgelassen und fällt zu Boden. Wie groß ist dann die potentielle Energie der Kiste?</p>
+
+        <p>Dann müssen wir für den Weg von \(B\) nach \(0\) rechnen:</p>
+        \begin{equation}
+        \Delta E_{\text{pot},0B}=-W_{0B}=-\int\limits_{h_B}^{0}( -m\cdot g)\text{d}s=m\cdot g \cdot (0 - h_B)=- m\cdot g \cdot h_B
+        \end{equation}
+
+        <p>Die Änderung der potentiellen Energie für diesen Weg ist also negativ. Das bedeutet, dass potentielle Energie in eine andere Form (z.&nbsp;B. kinetische Energie) umgewandelt wurde. Ist die Änderung der potentiellen Energie positiv, so bedeutet das, dass von außen (durch eine äußere Kraft) erst wieder Energie „reingesteckt", also Arbeit verrichtet werden muss, um den Vorgang umzukehren.</p>
+    </div>
+
+    <p>Auch im vorangegangenen Beispiel ist zu beachten: die Wahl des „Erdbodens" als Nullpunkt der potentiellen Energie ist vollkommen willkürlich. Der Nullpunkt kann, je nach Aufgabe, frei gewählt werden. Mal ist der Boden eines Labors der Nullpunkt, mal der Erdboden, mal der Erdmittelpunkt und manchmal irgendein Ort, der sehr weit weg ist. Auch die Anfangs- und Endpunkte von Bewegungen, deren Bewegungsgleichungen man z.&nbsp;B. in Aufgaben bestimmen soll, eignen sich als Nullpunkt.</p>
+
+    <div class="beispiel" data-title="Die potentielle Energie der Feder">
+        <p>Eine Feder ist parallel zum Erdboden an der einen Seite an einer Wand befestigt, am beweglichen Ende der Feder ist eine Masse \(m\) befestigt. Die x-Achse zeige von der Wand weg. Die Masse \(m\) wird nun von der Ruhelage der Feder (\(x=0\)) zur Stelle \(-d\) bewegt, dabei wird die Feder also gestaucht. Welche Arbeit muss (von außen) verrichtet werden, um die Masse von \(0\) nach \(-d\) zu bringen? Welche Arbeit verrichtet die Feder dabei? Wie ist die potentielle Energie des Feder-Masse-Systems an der Stelle \(-d\)?</p>
+
+        <p>Errechnen wir zunächst die Arbeit, die von außen verrichtet werden muss \(W_a\)<span class="fussnote">a für außen</span>. Die äußere Kraft \(F_a\) muss der Federkraft \(F_F=-kx\) entgegenwirken, also \(F_a = -F_F = kx\).</p>
+        \begin{equation}
+        W_{a,-d0}=\int\limits_0^{-d}F_a(x) \text{d}x=\int\limits_0^{-d} kx \text{d}x = \left[ \frac{1}{2} kx^2 \right]_0^{-d} = \frac{1}{2}k(-d)^2 - 0 = \frac{1}{2}kd^2
+        \end{equation}
+
+        <p>Die Arbeit, die die Federkraft verrichtet, ist:</p>
+        \begin{equation}
+        W_{-d0}=\int\limits_0^{-d}F_F(x) \text{d}x=\int\limits_0^{-d} -kx \text{d}x=-\frac{1}{2}kd^2
+        \end{equation}
+
+        <p>Die potentielle Energie der Feder an der Stelle \(-d\) ist also:</p>
+        \begin{equation}
+        E_{\text{pot},-d}=E_{\text{pot},-d0}=-W_{-d0}=\frac{1}{2}kd^2
+        \end{equation}
+
+        <p>Die potentielle Energie einer gestauchten Feder ist also positiv. Das bedeutet nach oben stehender Argumentation: das System kann (so es dann losgelassen wird) „von alleine" wieder in den Ausgangszustand (entspannte Feder) zurückkehren.</p>
+
+        <p>Im ersten Schritt sind wir davon ausgegangen, dass der Nullpunkt der potentiellen Energie der Feder in der Ruhelage der entspannten Feder liegen soll. Dieser Ansatz ist willkürlich.</p>
+    </div>
+
+    <p>In den letzten Beispielen hat man gesehen, dass die Arbeit, die die äußere Kraft verrichtet und die potentielle Energie immer gleich waren. Ist das immer so? Nein: die äußere Kraft kann auch nur zum Teil in die potentielle Energie fließen und zum anderen zu einer Beschleunigung (Impulsänderung) des Objektes führen. In diesem Fall ist die Arbeit, die die äußere Kraft verrichtet und die potentielle Energie nicht gleich.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.3.6 Energieerhaltung - Erhaltung der mechanischen Energie</h3>
+<section>
+    <p>Im Abschnitt zum Impuls hatten wir gesehen, dass in einem abgeschlossenen System, in dem keine äußeren Kräfte wirken, die Impulserhaltung gilt, der Gesamtimpuls also, d.h. die Summe aller Impulse der Objekte innerhalb des Systems, für alle Zeiten gleich bleibt.</p>
+
+    <p>Ein ähnliches Prinzip leiten wir nun auch für die Energie her.</p>
+
+    <p>Nehmen wir an, wir haben ein Objekt in einem abgeschlossenen System (d.h. von außen werden keine Massen hinzugefügt oder weggenommen), und die einzige Kraft, die an diesem Objekt Arbeit verrichtet, ist eine konservative Kraft. Dann kann diese Kraft - das hatten wir schon in der Einleitung zum Abschnitt über Energie gesehen - nur zwei Dinge bewirken: sie verändert den Ort und/oder die Geschwindigkeit des Objektes.</p>
+
+    <p>Angenommen die Kraft ändert die Geschwindigkeit, dann gilt:</p>
+    \begin{equation}
+    W_{BA}=\int\limits_A^{B} \vec F \cdot \text{d}\vec s=E_{\text{kin,}B}-E_{\text{kin,}A}\label{formel_dyn_energieerh1}
+    \end{equation}
+
+    <p>Ausgesprochen: die am Objekt verrichtete Arbeit verursacht eine Änderung an der kinetischen Energie. Wird positive Arbeit verrichtet, zeigt also Kraft und Weg in dieselbe Richtung, so erhöht sich die kinetische Energie, ansonsten verringert sich die kinetische Energie.</p>
+
+    <p>Andererseits: wenn die von der <em>konservativen Kraft</em> verrichtete Arbeit den Ort des Objektes ändert, so gilt:</p>
+    \begin{equation}
+    W_{BA}=\int_A^B\vec{F}\cdot \text{d}\vec{s}=-E_{\text{pot},BA}=-\left(E_{\text{pot},B}-E_{\text{pot},A}\right)\label{formel_dyn_energieerh2}
+    \end{equation}
+
+    <p>Die am Objekt verrichtete Arbeit erhöht die potentielle Energie (wenn Weg und Kraft entgegengesetzt sind) oder verringert sie.</p>
+
+    <p>Typischerweise treten beide Effekte gleichzeitig auf. Die Kraft verrichtet die Arbeit jedoch nur einmal, daher können die Formeln (<a class="xref" data-ref-eq="formel_dyn_energieerh1"></a>) und (<a class="xref" data-ref-eq="formel_dyn_energieerh2"></a>) gleichgesetzt werden und man erhält:</p>
+    \begin{align*}
+    -(E_{\text{pot},B}-E_{\text{pot},A})&amp;=E_{\text{kin,}B}-E_{\text{kin,}A} \\[6pt]
+    E_{\text{kin,}A}+E_{\text{pot},A}&amp;=E_{\text{kin,}B}+E_{\text{pot},B}
+    \end{align*}
+
+    <p>Das bedeutet: Die mechanische Energie in einem System bleibt erhalten, wenn es sich um ein abgeschlossenes System handelt (d.h. es wird weder Masse noch Energie über die Systemgrenze transferiert), an dem ausschließlich konservative Kräfte effektive Arbeit verrichten (d.h. insbesondere keine Reibung und kein Luftwiderstand).</p>
+
+    <p>Das gilt auch für Systeme, die mehr als ein Objekt enthalten.</p>
+
+    <div class="beispiel" data-title="Energieerhaltung beim Fadenpendel">
+        <p>Eine Masse hängt an einem Faden auf der Höhe \(h\) und ist zunächst in Ruhe. Nun wird die Masse losgelassen. Wie groß ist die Geschwindigkeit der Masse, wenn sie auf der Höhe \(0\) ist? Wie groß ist die Geschwindigkeit, wenn die Masse nach einer halben Schwingung das erste Mal wieder auf der Höhe \(h\) angekommen ist?</p>
+
+        <p>Die potentielle Energie der Gewichtskraft auf Höhe \(h\) relativ zum Punkt \(0\), den wir als Referenzpunkt der potentiellen Energie wählen, ist:</p>
+        \begin{equation}
+        E_{\text{pot}}(h) = - W_{0h}=- \int\limits_{0}^h(-m g)\text{d}z=m g h
+        \end{equation}
+
+        <p>Dabei haben wir die \(z\)-Achse als senkrecht zum Erdboden gewählt.</p>
+
+        <p>Da die Masse zunächst in Ruhe sein soll, gilt für die Gesamtenergie:</p>
+        \begin{equation}
+        E_\text{ges}=E_\text{kin}+E_\text{pot}= 0 + m g h
+        \end{equation}
+
+        <p>Wenn die Masse auf der Höhe \(0\) ist, ist die potentielle Energie, dank unserer Wahl dieses Punktes als Nullpunkt der potentiellen Energie, eben Null.</p>
+
+        <p>Das bedeutet aufgrund der Erhaltung der mechanischen Energie: die gesamte Energie muss in kinetische Energie übergegangen sein.</p>
+        \begin{equation}
+        E_\text{ges}=\tilde{E}_\text{kin}+\tilde{E}_\text{pot}= \frac{1}{2}m v^2 +0
+        \end{equation}
+
+        <p>Da \(E_\text{ges}\) in beiden Szenarien dieselbe Gesamtenergie sein muss (denn genau das bedeutet Energieerhaltung), gilt:</p>
+        \begin{equation}
+        m g h=\frac{1}{2} m v^2 \, \Leftrightarrow \, v=\sqrt{2 g h}
+        \end{equation}
+
+        <p>Nach einer halben Schwingung ist die Masse wieder auf Höhe \(h\). Die potentielle Energie ist wieder \(mgh\), daher muss die kinetische Energie wieder 0 sein, die Geschwindigkeit ist also Null.</p>
+    </div>
+
+    <p>Was passiert, wenn jetzt doch Kräfte wirken, die nicht konservativ sind, z.&nbsp;B. die Reibungskraft? Ist die Gesamtenergie dann nicht konstant? Doch, die Energieerhaltung gilt immer. Sie ist einer der fundamentalen Erhaltungssätze unseres Universums. Aber: nicht jede Energieform ist so leicht in eine andere überführbar.</p>
+
+    <p>Die beiden mechanischen Energieformen <u>potentielle</u> Energie und <u>kinetische</u> Energie sind beliebig oft ineinander umwandelbar. Wenn aber die Arbeit, die eine Reibungskraft verrichtet, kinetische Energie in Wärme umwandelt, so ist diese Energie nicht so einfach rückführbar.</p>
+
+    <p>Die Energieerhaltung der Mechanik bezieht sich auf nutzbare, geordnete Energie.</p>
+
+    <p>Generell gilt aber: in einem abgeschlossenen System wird weder Energie gewonnen, noch verloren. Es wird nur Energie umgewandelt. Dabei sind manche Umwandlungsprozesse umkehrbar und können unendlich oft in beide Richtungen durchlaufen werden. Andere Prozesse sind nicht (vollständig) umkehrbar und laufen ohne äußeren Einfluss primär in eine Richtung ab.</p>
+
+    <div class="beispiel" data-title="Atwood'sche Fallmaschine">
+        <p>Analysieren wir die oben stehenden Erkenntnisse zur Energieerhaltung am Beispiel der Atwood'schen Fallmaschine. Wir schon im Abschnitt zur Kraft besprochen, ist die Atwood'sche Fallmaschine ein System aus zwei typischerweise unterschiedlichen Massen, die über eine Umlenkrolle durch ein massenloses Seil verbunden sind. Nennen wir die linke Masse \(m_1\) und die rechte Masse \(m_2\), wobei \(m_2>m_1\) gilt.</p>
+
+        <p>Zunächst setzen wir die Systemgrenze so, dass sowohl die beiden Massen als auch die Umlenkrolle und das Seil zum System gehören. In diesem System wirken als Kräfte die Seilkräfte der beiden Seile links und rechts sowie die Gewichtskraft und gegebenfalls eine Reibungskraft an der Umlenkrolle. Ist die Umlenkrolle reibungsfrei, so sind die Seilkräfte links und rechts gleich groß. Da die größere Masse \(m_2\) sich genauso weit nach unten bewegt wie die kleinere \(m_1\) Masse nach oben, verrichten die Seilkräfte effektiv (also in Summe bzw. netto) keine Arbeit. Die einzige Kraft, die Arbeit verrichtet, ist die Gewichtskraft. Diese ist eine konservative Kraft. Daher gilt in diesem Fall die Erhaltung der mechanischen Energie, da auch weder Massen noch Energie über die Systemgrenze transferiert werden.</p>
+
+        <p>Betrachten wir nun das System, in dem nur eine der beiden Massen zum System gehört, so ändert sich die Situation. Auf die eine Masse wirkt die Gewichtskraft und die Seilkraft, welche nun effektiv Arbeit verrichtet bzw. Energie über die Systemgrenze transferiert. Enthält das System z.&nbsp;B. die leichtere Masse \(m_1\), so verrichtet die Seilkraft Arbeit an der Masse, indem sie sie nach oben zieht. Diese Arbeit war vorher außerhalb des Systems als Energie gespeichert und wird nun über die Systemgrenze transferiert, da die Seilkraft durch die schwerere Masse \(m_2\) erzeugt wird, die sich nach unten bewegt. In diesem Fall gilt also nicht mehr die Erhaltung der mechanischen Energie innerhalb des Systems, da Energie über die Systemgrenze transferiert wird.</p>
+
+        <p>Wirkt nun zusätzlich noch Reibung an der Umlenkrolle, so wird ein Teil der mechanischen Energie in thermische Energie umgewandelt. In diesem Fall gilt ebenfalls nicht mehr die Erhaltung der mechanischen Energie, da mechanische Energie in eine andere, nicht-mechanische Energieform umgewandelt wird.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.3.7 Zusammenfassung</h3>
+<section>
+    <div class="zusammenfassung" data-title="Arbeit, Leistung, Energie">
+        <ul>
+            <li><strong>Physikalische Arbeit (\(W\)):</strong>
+                <ul>
+                    <li><strong>Definition:</strong> Arbeit wird von einer Kraft verrichtet, die einen Körper entlang eines Weges bewegt. Sie ist eine Prozessgröße, die eine Energieübertragung beschreibt. Einheit: Joule (\(\mathrm{J}\)).</li>
+                    <li><strong>Arbeit einer konstanten Kraft:</strong> Entlang eines geraden Weges ist die Arbeit das Skalarprodukt aus Kraft- und Wegvektor. Nur die zum Weg parallele Kraftkomponente verrichtet Arbeit.
+                        \[ W = \vec{F} \cdot \Delta\vec{s} \]</li>
+                    <li><strong>Arbeit einer variablen Kraft:</strong> Die Gesamtarbeit entlang eines beliebigen Weges wird durch ein Wegintegral berechnet.
+                        \[ W = \int_A^B \vec{F}(\vec{s}) \cdot \mathrm{d}\vec{s} \]</li>
+                </ul>
+            </li>
+
+            <li><strong>Leistung (\(P\)):</strong>
+                <ul>
+                    <li><strong>Definition:</strong> Die Leistung ist die pro Zeit verrichtete Arbeit und beschreibt, wie schnell Energie umgewandelt wird. Einheit: Watt (\(\mathrm{W}\)).</li>
+                    <li><strong>Allgemeine Definition:</strong> Die Leistung ist die zeitliche Ableitung der Arbeit.
+                        \[ P(t) = \frac{\mathrm{d}W(t)}{\mathrm{d}t} \]</li>
+                    <li><strong>Spezialfall:</strong> Für eine konstante Kraft, die einen Körper mit konstanter Geschwindigkeit bewegt, gilt:
+                        \[ P = \vec{F} \cdot \vec{v} \]</li>
+                </ul>
+            </li>
+
+            <li><strong>Energie (\(E\)):</strong>
+                <ul>
+                    <li><strong>Definition:</strong> Energie ist die Fähigkeit eines Systems, Arbeit zu verrichten. Sie ist eine Zustandsgröße und kann als gespeicherte Arbeit verstanden werden. Einheit: Joule (\(\mathrm{J}\)).</li>
+                    <li><strong>Kinetische Energie (\(E_\text{kin}\)):</strong> Die Energie, die ein Körper aufgrund seiner Bewegung besitzt.
+                        \[ E_\text{kin} = \frac{1}{2}mv^2 \]</li>
+                    <li><strong>Potentielle Energie (\(E_\text{pot}\)):</strong> Die Energie, die ein Körper aufgrund seiner Lage in einem Kraftfeld besitzt. Sie kann nur für <strong>konservative Kräfte</strong> (z.&nbsp;B. Gravitationskraft, Federkraft) definiert werden, bei denen die verrichtete Arbeit wegunabhängig ist.
+                        \[ \Delta E_\text{pot} = -W_\text{konservativ} = -\int_A^B \vec{F}_\text{konservativ} \cdot \mathrm{d}\vec{s} \]</li>
+                </ul>
+            </li>
+
+            <li><strong>Energieerhaltungssatz:</strong>
+                <ul>
+                    <li><strong>Grundprinzip:</strong> In einem abgeschlossenen System bleibt die Gesamtenergie erhalten. Energie wird nur umgewandelt, nicht erzeugt oder vernichtet.</li>
+                    <li><strong>Erhaltung der mechanischen Energie:</strong> Wirken in einem System ausschließlich konservative Kräfte, so ist die Summe aus kinetischer und potentieller Energie konstant.
+                        \[ E_\text{ges} = E_\text{kin} + E_\text{pot} = \text{konstant} \]</li>
+                    <li><strong>Nicht-konservative Kräfte:</strong> Kräfte wie Reibung wandeln mechanische Energie in andere Energieformen (z.&nbsp;B. Wärme) um. Die rein mechanische Energie ist dann nicht mehr erhalten.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</section>
