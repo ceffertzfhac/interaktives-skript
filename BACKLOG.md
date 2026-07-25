@@ -725,9 +725,19 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   eigene Sitzung(en).* Interaktiv-Kandidaten: `geschwindigkeit_simulation`,
   `grundbegriffe_kinematik_simulation`, `freier_fall_simulation`,
   `schraeger_wurf_simulation`. *(XL)*
-- [ ] **P12-A2 1.2 Dynamik – Impuls und Kraft** — 12 Subsections, 10 Abb.
+- [x] **P12-A2 1.2 Dynamik – Impuls und Kraft** — 12 Subsections, 10 Abb.
   (`pskript_mech_dyn_kraft_impuls_gmni_v3.tex`, 74 KB). Kandidaten: `atwood_simulation`,
-  `3massen_umlenkrollen_simulation`. *(L)*
+  `3massen_umlenkrollen_simulation`. *(L)* — migriert 2026-07-25 (Branch
+  `migration/kapitel-1.2`, Commits eef9ba9/517d729/e148a77):
+  `chapters/ch_01_02_dynamik_impuls_kraft.html`, 107 Gl. (1.2.1–1.2.107),
+  Abb. 1.21–1.30, Beispiele 1.2.1–1.2.11, Zusammenfassung 1.2. **Kein Offset am
+  h2** (contiguous zu 1.1: 1.1 endet bei Abb. 1.20 → 1.2 startet 1.21;
+  Zusammenfassung 1.1 → 1.2). 1.4-h2 behält 37/3 (1.3 fehlt weiterhin).
+  Bilder: 6 PDF→PNG, 3 PNG kopiert, `attwood.eps` ohne Ghostscript via
+  `dvisvgm --eps` → `mutool draw` (Glyphen als Pfade). Quelldateien fehlten
+  zunächst, per `git pull` im v0.13-Checkout nachgeladen. Neu: `#paper
+  blockquote`-Stil für v0.13-`\begin{quotation}`. Verifikation Stufe 1–4/6
+  deckungsgleich mit PDF; **Stufe 5 (Browser-Sicht) offen — Freigabe ausstehend**.
 - [ ] **P12-A3 1.3 Dynamik – Arbeit, Leistung und Energie** — 7 Subsections, 7 Abb.
   (`pskript_mech_dyn_energie_arbeit_gmni_v3.tex`, 53 KB). Kandidat: `atwood_energy_simulation`.
   *(L)*

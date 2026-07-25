@@ -84,9 +84,10 @@ src/numbering.js   init_numbering() — box, figure and image numbering off page
                    in the MIDDLE of a chapter can be skipped without shifting the migrated
                    sections' numbers (first figure of the section = figure-offset + 1; the
                    value is removable once all prior sections are migrated contiguously).
-                   Currently: 1.1 (Kinematik) migrated with figs 1.1–1.20 / no offset
-                   (contiguous from chapter start); the 1.4-h2 carries 37/3 and the 1.5-h2
-                   60/7 to jump the still-missing 1.2/1.3 (Abb. 1.21–1.37).
+                   Currently: 1.1 (Kinematik, figs 1.1–1.20) and 1.2 (Dynamik – Impuls
+                   und Kraft, figs 1.21–1.30) migrated, both with no offset (contiguous
+                   from chapter start; 1.2 continues 1.1's counters); the 1.4-h2 carries
+                   37/3 and the 1.5-h2 60/7 to jump the still-missing 1.3 (Abb. 1.31–1.37).
                    Box titles are split into <span class="hb-type"> (type + number, uppercased
                    via CSS) and <span class="hb-name"> (the box's own title, normal case, so
                    formula parts aren't mangled) — core.js creates the type span, numbering.js
