@@ -750,12 +750,19 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   Bilder schrittweise per git-pull nachgeliefert (ccdb246/3de8dd1). Verifikation
   Stufe 1–4/6 deckungsgleich mit PDF; **Stufe 5 (Browser-Sicht) offen — Freigabe
   ausstehend**. (Interaktiv-Kandidat `atwood_energy` bleibt P12-E2.)
-- [ ] **P12-A4 1.6 Bezugsysteme und Scheinkräfte** — 3 Subsections, 1 Abb.
+- [x] **P12-A4 1.6 Bezugsysteme und Scheinkräfte** — 3 Subsections, 1 Abb.
   (`pskript_mech_bezugsysteme_und_scheinkraefte.tex`, 41 KB). **Maßgeblich ist das
   Original** (`pskript_mech_bezugsysteme_und_scheinkraefte.tex`, 1 Abb.) — es ist
   die im PDF integrierte Version (`Physik_pskript_v0.13.tex` Z. 83). Die
   `_v2gmni`-Variante (38 KB, 0 Abb.) wird vom Hauptdokument **nicht** geladen und
-  ist nicht maßgeblich (verifiziert 2026-07-24). *(M)*
+  ist nicht maßgeblich (verifiziert 2026-07-24). *(M)* — migriert 2026-07-25
+  (Branch `migration/kapitel-1.6`, Commits 1b10547/f19ad7d):
+  `chapters/ch_01_06_bezugsysteme_scheinkraefte.html`, 41 Gl. (1.6.1–1.6.41),
+  Abb. 1.73, Beispiele 1.6.1–1.6.12, Zusammenfassung 1.9. Kein Offset (contiguous
+  zu 1.5, sitzt nach ch_02 in der Lesereihenfolge). Bild = JPEG-Foto (Hurrikan
+  Irma). Viele Inline-`\be` -> display equations; `\nicefrac`->`/`, `\url`-><a>,
+  `\SI`-Zehnerpotenzen aufgeloest. Verifikation Stufe 1–4/6 deckungsgleich mit PDF;
+  **Stufe 5 (Browser-Sicht) offen — Freigabe ausstehend**.
 - [ ] **P12-A5 1.7 Elastische und inelastische Stöße** — 2 Subsections, 0 Abb.
   (`pskript_mech_dyn_stoesse.tex`, 17 KB). Kandidat: `stoss_simulation`. *(M)*
 - [ ] **P12-A6 1.8 Gravitation** — 5 Subsections, 0 Abb.
