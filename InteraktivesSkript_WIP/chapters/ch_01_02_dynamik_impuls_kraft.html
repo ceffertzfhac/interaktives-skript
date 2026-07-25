@@ -1,0 +1,943 @@
+<!-- ch_01_02_dynamik_impuls_kraft.html — v0.13-Abschnitt 1.2 "Dynamik - Impuls und Kraft"
+     (1:1-Transkription aus Input/v0.13/pskript_mech_dyn_kraft_impuls_gmni_v3.tex).
+     TK 1 "Mechanik", Section 1.2. Rein statisch (keine interaktiven gcN-Container).
+     Abbildungen Abb. 1.21-1.30, Gleichungen 1.2.1-1.2.107, Beispiele 1.2.1-1.2.11,
+     eine Zusammenfassung (1.2). KEIN data-figure-/zusammenfassung-offset am h2:
+     1.2 folgt luekenlos auf das migrierte 1.1 (Abb. 1.1-1.20, Zusammenfassung 1.1),
+     die kapitelweiten Zaehler laufen kontinuierlich weiter (Abb. -> 1.21,
+     Zusammenfassung -> 1.2). Die Luecke 1.3 ueberspringt weiterhin das 1.4-h2 (37/3).
+     Bilder: 6 PDF->PNG @300dpi, 3 PNG 1:1, attwood.eps via dvisvgm->mutool. -->
+
+
+<section>
+    <h2 class="inhaltsverzeichnis">1.2 Dynamik - Impuls und Kraft</h2>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.1 Einleitung und Motivation</h3>
+<section>
+    <p>Im vorangegangenen Abschnitt zur Kinematik (Abschnitt <a class="xref" data-ref-sec="p-1-1"></a>) haben wir uns damit beschäftigt, wie wir verschiedene Bewegungen qualitativ und quantitativ so genau wie möglich beschreiben können. Dabei haben wir Begriffe wie Strecke, Geschwindigkeit und Beschleunigung eingeführt und die Zusammenhänge zwischen den Größen beleuchtet. Wurde uns also z.&nbsp;B. irgendeine Formel für die Strecke eines Objektes vorgegeben, so konnten wir aus dieser Vorgabe Geschwindigkeit und Beschleunigung errechnen. In der <strong>Dynamik</strong> (abgeleitet aus dem Griechischen „Lehre von der Kraft") beschäftigen wir uns mit den Ursachen von Bewegungen. Wir klären, warum sich manche Objekte bewegen und manche nicht, wir klären, warum manche Objekte gleichförmige Bewegungen und andere gleichmäßig beschleunigte Bewegungen vollziehen und wie man die im vorherigen Kapitel angenommenen Bewegungsgleichungen von Grund auf herleitet.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.2 Die träge Masse und der Impuls</h3>
+<section>
+    <p>Während es in der Kinematik egal war, ob wir die Kreisbahn eines Satelliten um die Erde, der Erde um die Sonne oder eines Elektrons in einem magnetischen Feld betrachtet haben, spielt in der Dynamik die Masse eines Objektes, genauer die sogenannte <strong>träge Masse</strong> eines Objektes eine Rolle.</p>
+
+    <p>Jedes Objekt im Universum hat eine Eigenschaft, die wir träge Masse nennen. Warum <strong>träge</strong> Masse? Das hängt damit zusammen, dass diese Eigenschaft beeinflusst, wie sehr sich ein Objekt einer Änderung seines Bewegungszustandes widersetzt. Sehr vereinfacht gesprochen: Die träge Masse ist die Eigenschaft eines Objektes, die angibt, wie sehr sich die Masse dagegen „wehrt", in Bewegung versetzt zu werden. Wir werden später noch eine andere Art von Masse, die sogenannte <strong>schwere Masse</strong>, kennenlernen. Diese Unterscheidung rührt daher, dass (historisch) von der Existenz zweier verschiedener Massenarten ausgegangen wurde. Einstein postulierte allerdings in seiner „Allgemeinen Relativitätstheorie", dass diese beiden „Arten" von Massen für jeden Körper gleich seien. Bis jetzt wurde dieses Postulat durch alle Experimente bestätigt. Daher sprechen wir im Folgenden nur noch von „Masse"<span class="fussnote">Diese Feinheiten interessieren uns bei der Betrachtung von alltäglichen Vorgängen sowieso nicht.</span>.</p>
+
+    \begin{equation}
+    \text{Masse:}\quad \text{Formelzeichen:}\, m \quad \text{Einheit:}\, [m]=\mathrm{kg}
+    \end{equation}
+
+    <p>Die Masse kann nur positive Werte annehmen oder den Wert Null.</p>
+
+    <p>Die Kombination aus träger Masse \(m\) und der Geschwindigkeit \(\vec v\) ergibt den <strong>Impuls</strong>. Da jedes Objekt sowohl eine Masse als auch eine Geschwindigkeit hat<span class="fussnote">Wobei eine von beiden Größen oder beide auch Null sein können.</span>, so kann also jedem Objekt zu jeder Zeit ein bestimmter Impuls zugewiesen werden, der eine physikalische Eigenschaft des Objektes darstellt.</p>
+
+    \begin{equation}
+    \text{Impuls:}\quad \text{Formelzeichen:}\, \vec p= m \cdot \vec v \quad \text{Einheit:}\, [\vec p]=\mathrm{kg\,m/s}
+    \end{equation}
+
+    <p>Da die Geschwindigkeit eines Objektes im Allgemeinen zeitabhängig ist<span class="fussnote">Ausnahme: gleichförmige Bewegung</span>, ist auch der Impuls im Allgemeinen zeitabhängig. Damit kann man die oben stehende Definition allgemeiner fassen:</p>
+
+    \begin{equation}
+    \text{Impuls:}\quad \text{Formelzeichen:}\, \vec p(t)= m \cdot \vec v(t) \quad \text{Einheit:}\, [\vec p]=\mathrm{kg\,m/s}
+    \end{equation}
+
+    <p>Manchmal kommt es vor, dass auch das betrachtete Objekt seine Masse mit der Zeit ändert (z.&nbsp;B. eine Rakete). Dann muss die Definition des Impulses noch allgemeiner gefasst werden. Die allgemeinste Definition des Impulses ist daher:</p>
+
+    \begin{equation}
+    \text{Impuls:}\quad \text{Formelzeichen:}\, \vec p(t)= m(t) \cdot \vec v(t) \quad \text{Einheit:}\, [\vec p]=\mathrm{kg\,m/s}
+    \end{equation}
+
+    <p>Beachten Sie: da die Geschwindigkeit im Allgemeinen ein Vektor ist, ist auch der Impuls im Allgemeinen ein Vektor. Wenn allerdings das betrachtete Objekt eine Bewegung nur entlang einer Achse vollführt, so kann die Geschwindigkeit als Skalar geschrieben werden; in diesem Spezialfall ist es auch erlaubt, den Impuls als Skalar zu schreiben.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.3 Die Kraft</h3>
+<section>
+    <p>Wie oben gesehen, muss der Impuls eines Objektes nicht für alle Zeiten konstant bleiben. Der Impuls ist eine zeitabhängige Größe und kann sich somit mit der Zeit ändern. Die Ursache für eine Impulsänderung ist dabei immer eine Kraft.</p>
+
+    <p>Es gilt</p>
+
+    \begin{equation}
+    \text{Kraft}= \frac{\text{Impulsänderung}}{\text{benötigte Zeit}}
+    \end{equation}
+
+    <p>mit</p>
+
+    \begin{equation}
+    \text{Kraft:}\quad \text{Formelzeichen:}\, \vec F \quad \text{Einheit:}\, [\vec F]=\mathrm{kg\,m/s^2}=\mathrm{N}
+    \end{equation}
+
+    <p>Die Einheit der Kraft ist also eine aus SI-Basiseinheiten zusammengesetzte Einheit, die wir verkürzt mit \(\mathrm{N}\) für <strong>Newton</strong> bezeichnen. Die Einheit der Kraft ist nach dem englischen Physiker, Astronom und Mathematiker Sir Isaac Newton (1643-1727)\(^{\text{greg.}}\) benannt.</p>
+
+    <p>Handelt es sich um eine konstante Kraft, so kann man die mittlere Kraft über ein Zeitintervall \(\Delta t\) betrachten:</p>
+
+    \begin{equation}
+    \langle\vec F\rangle = \frac{\Delta \vec p}{\Delta t}\quad \text{Mittlere Kraft über das Zeitintervall } \Delta t
+    \end{equation}
+
+    <p>In sehr vielen Fällen ist die Änderung des Impulses nicht zeitlich konstant, sondern abhängig von der Zeit \(t\). In diesen Fällen gilt die oben stehende Formel nur für die mittlere Kraft oder für infinitesimal kleine Zeitintervalle.</p>
+
+    <p>Somit gilt allgemeingültig für die momentane Kraft:</p>
+
+    \begin{equation}
+    \vec F(t) = \lim_{\Delta t \to 0}\frac{\Delta \vec p(t)}{\Delta t}=\frac{\mathrm{d}}{\mathrm{d}t}\,\vec p(t) \label{dyn_kraft_aus_impuls}
+    \end{equation}
+
+    <p>Ist also der zeitliche Verlauf des Impulses eines Objektes \(\vec p(t)\) bekannt, so lässt sich nach oben stehender Formel errechnen, welche Kraft gewirkt haben muss, um die Impulsänderung zu bewirken.</p>
+
+    <p>Da der Impuls ein Vektor, also eine gerichtete Größe, ist, muss auch die Kraft ein Vektor sein. In der Tat haben Kräfte immer einen Betrag und eine Richtung.</p>
+
+    <p>Es ist sehr wichtig, sich den <strong>Unterschied zwischen Impuls und Kraft</strong> klar zu machen. Beide Begriffe beschreiben Konzepte aus der Dynamik. Während jedoch der Impuls eine Eigenschaft eines bewegten Objektes ist, d.h. jedem Objekt kann man sozusagen ein Etikett anheften, auf dem der Impuls des Objektes steht, ist die Kraft etwas, was auf das Objekt wirkt. Die Wirkung der Kraft ist die Änderung des Impulses. Eine an einem Objekt angreifende Kraft \(\vec F\) bewirkt eine Änderung des Impulses \(\vec p\).</p>
+
+    <p>Diese Betrachtung von Impuls und Kraft wird umso klarer, wenn man die Formel (<a class="xref" data-ref-eq="dyn_kraft_aus_impuls"></a>) mathematisch umformt und nach dem Impuls auflöst.</p>
+
+    \begin{align*}
+    &amp;&amp;\vec{F}(t)&amp;=\frac{\text{d}\vec{p}(t)}{\text{d}t}\, \vert \cdot \text{d}t \\[6pt]
+    &amp;\Leftrightarrow&amp;\vec{F}(t)\text{d}t&amp;=\text{d}\vec{p}(t)\\[6pt]
+    &amp;\Leftrightarrow&amp;\int_0^t\vec{F}(\tau)\text{d}\tau&amp;=\int_{\vec{p}(0)}^{\vec{p}(t)}\text{d}\vec{p}'\\[6pt]
+    &amp;\Leftrightarrow&amp;\vec{p}(t)&amp;=\vec{p}_0+\int_0^t\vec{F}(\tau)\text{d}\tau
+    \end{align*}
+
+    <p>Die letzte Formel kann dann wie folgt gelesen werden: Wirkt über eine Zeit \(t\) eine zeitlich veränderliche Kraft \(\vec F(t)\), so verursacht die Kraft eine Änderung des Impulses. Der bei \(t=0\) vorhandene Anfangsimpuls \(\vec p_0\) ändert sich auf \(\vec p(t)\). Die zeitabhängige Kraft kann mathematisch gesehen eine Funktion der Zeit \(t\) sein, in diesem Fall wird auch \(\vec p(t)\) eine Funktion der Zeit \(t\).</p>
+
+    <div class="beispiel" data-title="Kraft auf ein fahrendes Auto:">
+        <p>Ein Auto hat eine träge Masse von \(1\,\mathrm{t}\) und eine Geschwindigkeit von \(100\,\mathrm{km/h}\). Welche Kraft wirkt auf das Auto?</p>
+
+        <p>Diese Frage ist nicht ohne weiteres zu beantworten. Gehen wir vereinfachend davon aus, dass das Auto seine Geschwindigkeit von \(100\,\mathrm{km/h}\) entlang einer geraden Linie beibehält. Da sich die Geschwindigkeit weder im Betrag noch in der Richtung ändert, können wir wie folgt argumentieren:</p>
+
+        <p>Der Impuls des Autos ist zeitlich konstant. Daher ist die zeitliche Ableitung des Impulses:</p>
+        \begin{equation}
+        \dot{p} = 0
+        \end{equation}
+        <p>Da die Kraft, die auf das Auto gewirkt haben muss, gleich der zeitlichen Ableitung des Impulses ist, folgt also:</p>
+        \begin{equation}
+        F=0
+        \end{equation}
+        <p>Es musste also keine Kraft wirken, damit das Auto seine Geschwindigkeit beibehält<span class="fussnote">Das gilt natürlich nur für den wenig realistischen Fall, dass es keine Reibungsverluste gibt.</span>. Das Auto ist also kräftefrei.</p>
+
+        <p>Was bedeutet denn eigentlich „kräftefrei" in diesem Zusammenhang? Diese Behauptung bezieht sich immer nur auf die Gesamtkraft auf das Auto, nicht jedoch auf Einzelkräfte. Innerhalb und außerhalb des Autos kann es jede Menge Kräfte geben, diese heben sich jedoch in diesem idealisierten Fall gegenseitig auf.</p>
+
+        <p>In der Realität kommen bei der Bewegung des Autos noch Reibungskräfte hinzu, insbesondere die Luftreibung.</p>
+    </div>
+
+    <div class="beispiel" data-title="Der Impuls eines fallenden Steins">
+        <p>Im Abschnitt <a class="xref" data-ref-sec="p-1-1-10"></a> hatten wir in Formel (<a class="xref" data-ref-eq="kin_senkr_wurf_geschw"></a>) herausgefunden, dass für die Geschwindigkeit eines Objektes, welches senkrecht mit einer Startgeschwindigkeit \(v_0\) nach oben geworfen wird, gilt:</p>
+        \begin{equation}
+        v(t)=-g \cdot t + v_0
+        \end{equation}
+
+        <p>Da sich die Bewegung nur entlang einer Achse abspielt, können wir das Problem als eindimensional behandeln. Diese Achse war als senkrecht zum Erdboden definiert und zeigte vom Erdboden in Richtung Himmel.</p>
+
+        <p>Nehmen wir vernünftigerweise an, dass sich die Masse des geworfenen Objektes (z.&nbsp;B. eine Kugel, ein Ball, ein Stein) während des Fluges nicht ändert, so ist sein Impuls:</p>
+        \begin{equation}
+        p(t)=m \cdot v(t) = m \cdot \left( v_0 - g \cdot t \right)
+        \end{equation}
+
+        <p>Wenden wir das Gesetz (<a class="xref" data-ref-eq="dyn_kraft_aus_impuls"></a>) auf dieses Beispiel an, um die Kraft zu ermitteln, die auf ein senkrecht geworfenes Objekt wirkt, erhalten wir:</p>
+
+        \begin{align}
+        F = \frac{\mathrm{d}}{\mathrm{d}t}\,p(t)=\frac{\mathrm{d}}{\mathrm{d}t}\,\left(m \cdot \left( v_0 - g \cdot t \right) \right)=m \frac{\mathrm{d}}{\mathrm{d}t}\,\left( v_0 - g \cdot t \right)=-m \cdot g
+        \end{align}
+
+        <p>Wie wir später sehen werden, ist diese Kraft die <strong>Gewichtskraft</strong>, die in der Nähe der Erdoberfläche auf ein Objekt der Masse \(m\) wirkt.</p>
+
+        <p>Das negative Vorzeichen der Kraft bedeutet, dass die Kraft die Masse zum Erdboden hin zieht.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.4 Kräftebilanz</h3>
+<section>
+    <p>Auf ein Objekt wirkt oftmals mehr als nur eine Kraft. Insbesondere in komplexen Maschinen wirken auf die verschiedenen Bauteile z. T. eine Vielzahl von Kräften \(\vec F_1, \vec F_2, ..., \vec F_n\).</p>
+
+    <p>Wie ist damit umzugehen?</p>
+
+    <p>Wollen wir die Gesamtkraft errechnen, die auf ein Objekt wirkt, so sind die Einzelkräfte <strong>vektoriell</strong> zu addieren:</p>
+
+    <p>Wirken also auf ein Objekt \(n\) verschiedene Kräfte, die im Allgemeinen in verschiedene Richtungen zeigen, gilt:</p>
+
+    \begin{equation}
+    \vec F_\text{ges}=\sum_{i=1}^n \vec F_i = \vec F_1 + \vec F_2 + ... + \vec F_n
+    \end{equation}
+
+    <p>Die vektorielle Addition wird an dieser Stelle so sehr betont, da Sie sich sicher vorstellen können, dass es eine komplett andere Auswirkung hat, wenn alle Kräfte in dieselbe Richtung ziehen als wenn die Kräfte alle in unterschiedliche Richtungen ziehen würden.</p>
+
+    <p>Will man also wissen, welche Gesamtkraft auf einen Körper wirkt, so stellt man eine Kräftebilanz auf, d.h. man listet zunächst die Einzelkräfte auf und summiert sie dann vektoriell.</p>
+
+    <div class="beispiel" data-title="Gesamtkraft auf einen Koffer">
+        <p>Zum Zeitpunkt \(t=0\) ruht ein Koffer im Ursprung eines zweidimensionalen Koordinatensystems. Vier Personen beginnen nun mit konstanten Kräften an ihm zu zerren. Wie groß ist die Gesamtkraft und die Impulsänderung? Die Kräfte sind:</p>
+
+        \begin{equation}
+        \vec{F}_1=\left(\begin{matrix} 10 \\20\end{matrix} \right) \mathrm{N};\quad \vec{F}_2=\left(\begin{matrix} 20 \\-30\end{matrix} \right) \mathrm{N};\quad \vec{F}_3=\left(\begin{matrix} 0 \\40\end{matrix} \right) \mathrm{N}; \quad \vec{F}_4=\left(\begin{matrix} -30 \\-30 \end{matrix} \right) \mathrm{N}
+        \end{equation}
+
+        <p>Zunächst muss die Gesamtkraft errechnet werden, indem die Vektorsumme gebildet wird:</p>
+        \begin{align*}
+        \vec F_\text{ges}&amp;= \left(\begin{matrix} 10 \\20\end{matrix} \right) \mathrm{N}+\left(\begin{matrix} 20 \\-30\end{matrix} \right) \mathrm{N}+\left(\begin{matrix} 0 \\40\end{matrix} \right) \mathrm{N}+\left(\begin{matrix} -30 \\-30 \end{matrix} \right) \mathrm{N}\\[6pt]
+        &amp;= \begin{pmatrix}10+20+0-30\\20-30+40-30 \end{pmatrix}\mathrm{N}=\begin{pmatrix} 0 \\ 0\end{pmatrix} \mathrm{N}
+        \end{align*}
+
+        <p>Die Gesamtkraft ist also Null, daher bleibt der Impuls konstant (ändert sich nicht). Die Kräfte heben sich also gegenseitig auf.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.5 Kräftezerlegung</h3>
+<section>
+    <p>So wie man verschiedene Kräfte, die auf ein Objekt (mit gemeinsamen Angriffspunkt der Kraft, z. B. dem Schwerpunkt) wirken, vektoriell addieren kann, so kann man auch eine einzelne Kraft in verschiedene Komponenten zerlegen.</p>
+
+    <div class="beispiel" data-title="Kräftezerlegung 1">
+        <p>Auf eine Masse wirkt die Gesamtkraft</p>
+        \begin{equation} F_\mathrm{ges}=\begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} \mathrm{N}.\end{equation}
+        <p>In einem bestimmten Problem ist es jedoch sinnvoll, die Kraft in eine Komponente zu zerlegen, die in Richtung der \(x\)-Achse zeigt und eine Komponente, die in der \(y\)-\(z\)-Ebene liegt. Wie groß sind diese Komponenten? Die Komponente in Richtung der \(x\)-Achse ist einfach die Projektion des Kraftvektors auf die \(x\)-Achse:</p>
+        \begin{equation} \vec F_x = \begin{pmatrix} 30 \\ 0 \\ 0 \end{pmatrix} \mathrm{N}.\end{equation}
+        <p>Die Komponente in der \(y\)-\(z\)-Ebene ist die Projektion des Kraftvektors auf die \(y\)-\(z\)-Ebene:</p>
+        \begin{equation} \vec F_{yz} = \begin{pmatrix} 0 \\ 50 \\ -25 \end{pmatrix} \mathrm{N}.\end{equation}
+        <p>Umgekehrt gilt:</p>
+        \begin{equation} \vec F_\mathrm{ges} = \vec F_x + \vec F_{yz}\end{equation}
+    </div>
+
+    <div class="beispiel" data-title="Kräftezerlegung 2 (Für Fortgeschrittene)">
+        <p>Angenommen, wir möchten den Kraftvektor</p>
+        \begin{equation} F_\mathrm{ges}=\begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} \mathrm{N}\end{equation}
+        <p>zerlegen in eine Komponente, die in Richtung eines Vektors</p>
+        \begin{equation} \vec a = \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}\end{equation}
+        <p>zeigt und eine Komponente, die in Richtung</p>
+        \begin{equation}\vec b=\begin{pmatrix}-1 \\ 1 \\ 0 \end{pmatrix}\end{equation}
+        <p>sowie eines Vektors</p>
+        \begin{equation} \vec c = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}.\end{equation}
+        <p>Wie groß sind diese Komponenten? Die Komponente in Richtung des Vektors \(\vec a\) ist die Projektion des Kraftvektors auf den Vektor \(\vec a\). Diese Projektion kann mit Hilfe des Skalarprodukts berechnet werden:</p>
+        \begin{equation}
+        \vec F_a = \frac{\vec F_\mathrm{ges} \cdot \vec a}{\vec a \cdot \vec a} \cdot \vec a = \frac{\begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}}{\begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} = \frac{80}{2} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} = \begin{pmatrix} 40 \\ 40 \\ 0 \end{pmatrix} \mathrm{N}
+        \end{equation}
+        <p>Der Vektor senkrecht zu \(\vec b\) lässt sich analog berechnen:</p>
+        \begin{equation}
+        \vec F_b = \frac{\vec F_\mathrm{ges} \cdot \vec b}{\vec b \cdot \vec b} \cdot \vec b = \frac{\begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix}}{\begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix}} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} = \frac{20}{2} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} = \begin{pmatrix} -10 \\ 10 \\ 0 \end{pmatrix} \mathrm{N}
+        \end{equation}
+        <p>Da die Vektoren \(\vec a\), \(\vec b\) und \(\vec c\) eine Basis des dreidimensionalen Raumes bilden, ist die Komponente in Richtung \(\vec c\):</p>
+        \begin{equation}
+        \vec F_c = \vec F_\mathrm{ges} - \vec F_a - \vec F_b = \begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} - \begin{pmatrix} 40 \\ 40 \\ 0 \end{pmatrix} - \begin{pmatrix} -10 \\ 10 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \\ -25 \end{pmatrix} \mathrm{N}.
+        \end{equation}
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.6 Das erste und zweite Newton'sche Gesetz</h3>
+<section>
+    <p>Wir hatten im Abschnitt zur Kinematik gesehen, dass sich Verläufe von Bewegungen vorhersagen lassen, wenn man die Beschleunigung eines Objektes sowie die Anfangsbedingungen Anfangsort und Anfangsgeschwindigkeit kennt. Daher ist es nun unser Bestreben, herauszufinden, wie die (Gesamt-)kraft auf ein Objekt mit der Beschleunigung zusammenhängt. Diese Zusammenhänge, die wir finden werden, bezeichnet man als das erste und zweite Newton'sche Gesetz.</p>
+
+    <p>Wir wissen über den Zusammenhang zwischen Impuls und Kraft:</p>
+    \begin{equation}
+    \vec F(t)= \frac{\mathrm{d}}{\mathrm{d}t}\,\vec p(t)\quad \text{mit}\quad \vec p(t)=m(t) \cdot \vec v(t)
+    \end{equation}
+
+    <p>Daraus folgt durch Anwendung der Produktregel der Differentialrechnung aus der Mathematik:</p>
+    \begin{equation}
+    \Rightarrow \vec{F}(t)=\frac{\text{d}}{\text{d}t}\left(m(t)\cdot \vec{v}(t) \right)=m(t)\dot{\vec{v}}(t)+\dot{m}(t)\vec{v}(t)
+    \end{equation}
+
+    <p>Aus der Kinematik wissen wir:</p>
+    \begin{equation}
+    \dot{\vec{v}}(t) = \vec a(t)
+    \end{equation}
+
+    <p>Daraus folgt das allgemeine <strong>zweite Newton'sche Gesetz</strong>:</p>
+    \begin{equation}
+    \text{2. Newton allgemein:}\quad \Rightarrow \vec{F}(t)=m(t)\vec{a}(t)+\dot{m}(t)\vec{v}(t)
+    \end{equation}
+
+    <p>Da bei vielen technischen Problemstellungen die Masse eines Objektes sich nicht mit der Zeit verändert, also \(m(t)=\text{konstant}\, \Rightarrow \, \dot{m}(t)=0\), nutzt man sehr oft nur die kürzere, spezielle Form des zweiten Newton'schen Gesetzes:</p>
+    \begin{equation}
+    \text{2. Newton speziell:}\quad\vec F(t)= m \cdot \vec a(t) \label{dyn_2newspez}
+    \end{equation}
+
+    <p>Beachtet man Ursache und Wirkung, so ist die beste Lesart des Gesetzes die folgende:</p>
+    <blockquote>
+        <p>„Wirkt auf ein Objekt der Masse \(m\) eine resultierende Gesamtkraft ungleich null, so wird das Objekt beschleunigt und zwar mit einer Beschleunigung \(\vec a\), deren Richtung der Kraft folgt und deren Betrag proportional zum Betrag der Kraft und antiproportional zur Masse ist."</p>
+    </blockquote>
+
+    <p>Diese Formulierung unterstreicht: die Kraft ist die Ursache der Beschleunigung.</p>
+
+    <p>Warum haben wir nun das zweite Newton'sche Gesetz vor dem ersten betrachtet? Das <strong>erste Newton'sche Gesetz</strong> ist, streng genommen, nur ein Spezialfall des zweiten Newton'schen Gesetzes.</p>
+
+    <p>Betrachten wir zunächst ein statisches, also ruhendes, Objekt, dann gilt:</p>
+    \begin{equation}
+    \textbf{Statisches Objekt:}\quad \vec v(t)\equiv \vec 0
+    \end{equation}
+
+    <p>Dabei bedeutet das Zeichen \(\equiv\) (sprich: identisch), dass die Geschwindigkeit des Objektes nicht nur bei einem bestimmten Zeitpunkt \(t\), den wir zufällig herausgegriffen haben, gleich Null sein soll, sondern, dass \(v(t)\) für alle Zeiten \(t\) gleich null sein soll.</p>
+
+    <p>Da die Geschwindigkeit für alle Zeiten unveränderlich gleich Null sein soll, folgt also auch:</p>
+    \begin{equation}
+    \vec v(t) \equiv \vec 0 \quad \Rightarrow \quad \vec a(t) \equiv \vec 0 \label{dyn_1newton_gesch_besch}
+    \end{equation}
+
+    <p>Und daher, nach Formel (<a class="xref" data-ref-eq="dyn_2newspez"></a>) auch:</p>
+    \begin{equation}
+    \vec a(t) \equiv \vec 0  \quad \Leftrightarrow \quad \vec F(t) \equiv \vec 0 \label{dyn_1newton_beschlkraft}
+    \end{equation}
+
+    <p>Das bedeutet: auf ein statisches Objekt kann keine resultierende Gesamtkraft wirken. Daher ist ein statisches Objekt entweder vollkommen kräftefrei oder (das ist der Normalfall:) alle Kräfte, die an dem Objekt angreifen, heben sich gegenseitig auf.</p>
+
+    <p>Diese Formel bezeichnen wir als <strong>Schlüsselformel der Statik</strong>:</p>
+
+    \begin{equation}
+    \vec v(t) \equiv \vec 0 \, \Rightarrow\, \vec F_\text{ges}\equiv \vec 0
+    \end{equation}
+
+    <p>Das ist aber noch nicht das erste Newton'sche Gesetz. Vielleicht ist Ihnen schon aufgefallen: Während wir in Formel (<a class="xref" data-ref-eq="dyn_1newton_beschlkraft"></a>) ein Äquivalenzzeichen schreiben durften, enthält Formel (<a class="xref" data-ref-eq="dyn_1newton_gesch_besch"></a>) nur einen Folgerungspfeil.</p>
+
+    <p>Warum ist das so? Aus dem Tatsachenbestand, dass ein Objekt eine Geschwindigkeit gleich Null für alle Zeiten hat und beibehält, folgt natürlich, dass das Objekt nicht beschleunigt wird. Andererseits folgt aus einer Beschleunigung gleich Null nur, dass sich die Geschwindigkeit nicht ändert.</p>
+
+    <p>Daher ist die korrekte Folgerungskette des ersten Newton'schen Gesetzes:</p>
+    \begin{equation}
+    \textbf{1. Newton:}\quad \vec{F}(t)=0 \Leftrightarrow \vec{a}(t)=0 \Leftrightarrow v(t)=\text{const}
+    \end{equation}
+
+    <p>Sprich: Ist ein Körper in Summe kräftefrei, so wird er nicht beschleunigt, sondern behält seine Geschwindigkeit bei.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.7 Wichtige Kräfte</h3>
+<section>
+    <p>Einige Arten von Kräften werden uns immer wieder begegnen. Die wichtigsten davon wollen wir in diesem Abschnitt auflisten.</p>
+
+    <h4>Die Gewichtskraft</h4>
+    <p>Durch die Erdanziehung wird auf jedes Objekt, das sich in der Nähe der Erdoberfläche befindet, eine Kraft ausgeübt, die das Objekt in Richtung des Erdmittelpunktes zieht. Diese Kraft nennt man <strong>Gewichtskraft</strong>.</p>
+
+    <p>Von der Gewichtskraft stammt auch der umgangssprachlich gerne falsch verwendete Begriff des Gewichtes. Umgangssprachlich wird oft die Masse als Gewicht bezeichnet, zum Beispiel: „Mein Gewicht ist \(75\,\mathrm{kg}\)." Das ist jedoch falsch, korrekt müsste es heißen: „Meine Masse beträgt \(75\,\mathrm{kg}\)."</p>
+
+    <p>Das <strong>Gewicht</strong> einer Masse ist jedoch eine Kraft, die z.&nbsp;B. davon abhängt, auf welchem Planeten sich die Masse befindet. Die Gewichtskraft oder das Gewicht, beide Begriffe können synonym verwendet werden, errechnet sich aus der Masse eines Objektes multipliziert mit einem Faktor, der davon abhängt, wie stark die jeweilige Masse an einem bestimmten Ort in Richtung Erd-/Planetenmittelpunkt gezogen wird. Im Allgemeinen nennt man daher den Faktor <strong>Ortsfaktor</strong>, auf der Erde sprechen wir jedoch von der <strong>Erdbeschleunigung</strong>. Diesen Faktor bezeichnen wir in der Physik mit \(g\):</p>
+
+    \begin{equation}
+    \textbf{Ortsfaktor/ Erdbeschleunigung:}\quad \text{Formelzeichen:}\, g\quad \text{Einheit:} [g]=\mathrm{m/s^2}
+    \end{equation}
+
+    <p>Die Erdbeschleunigung hat also, wie schon der Name andeutet, die Dimension einer Beschleunigung.</p>
+
+    <p>Der Vektor der Gewichtskraft zeigt immer zum Erdmittelpunkt. Da die Kraft allerdings nur in der Nähe der Erdoberfläche die unten stehende Form hat, können wir also vereinfacht sagen: Die Kraft zeigt immer zum Erdboden.</p>
+
+    <p>Wie bekommt der Vektor seine Richtung? Eine Masse ist immer ein Skalar, hat also keine Richtung. Daher muss der Faktor \(g\) die Information der Richtung tragen, was auch sinnvoll ist, da eine Beschleunigung – wie im Abschnitt zur Kinematik besprochen – ein Vektor ist. Die korrekte Schreibweise für den Ortsfaktor ist daher als Vektor \(\vec g\).</p>
+
+    <p>Welche Richtung bekommt nun \(\vec g\)? \(\vec g\) zeigt immer zum Erd-/Planetenmittelpunkt.</p>
+
+    <p>Der Betrag der Gewichtskraft hängt also von der Masse des Objektes \(m\) und dem Faktor \(g\) ab, die Richtung des Vektors zeigt zum Erdmittelpunkt.</p>
+
+    <p>Damit haben wir die Definition der Gewichtskraft:</p>
+
+    \begin{equation}
+    \textbf{Gewichtskraft:}\quad \text{Formelzeichen:}\, \vec F_G=m \cdot \vec g  \quad \text{Einheit:} [F_G]=\mathrm{N}
+    \end{equation}
+
+    <h4>Die Federkraft</h4>
+    <p>Eine weitere in sehr vielen technischen Problemstellungen relevante Kraft ist die <strong>Federkraft</strong>. Die Federkraft ist die Kraft, die eine gespannte (also gedehnte oder gestauchte) Feder auf ein Objekt ausübt. Achtung: die Federkraft ist <u>nicht</u> die Kraft, die man benötigt, um die Feder zu spannen. Diese Kraft hat zwar den gleichen Betrag wie die Federkraft, jedoch ein umgekehrtes Vorzeichen, siehe Abbildung <a class="xref" data-ref-fig="fig-federkraft_skript"></a>.</p>
+
+    <p>Die Kraft, die eine gestauchte Feder auf ein Objekt ausübt, kann mit Hilfe des <strong>Hooke'schen Gesetz</strong><span class="fussnote">Nach Robert Hooke, Universalgelehrter, Stadtvermesser und Architekt, 1635-1703</span> errechnet werden:</p>
+
+    \begin{equation}
+    \textbf{Federkraft:}\quad \text{Formelzeichen:}\,  F_F=-k \cdot \Delta s \quad \text{Einheit:} [F_F]=\mathrm{N}
+    \end{equation}
+
+    <p>In diesem Gesetz ist \(k\) die <strong>Federkonstante</strong>, welche von der Beschaffenheit der Feder abhängt, und \(\Delta s\) die Dehnung der Feder gegenüber der Ruhelage, also der Weg zwischen der Ruhelage der Feder und der Position, an der sich das Ende der Feder zu einem bestimmten Zeitpunkt befindet.</p>
+
+    <p>Die Einheit der Federkonstanten ergibt sich aus dem Hooke'schen Gesetz und ist</p>
+    \begin{equation}
+    \text{Einheit der Federkonstanten:}\, [k]=\mathrm{N/m}
+    \end{equation}
+
+    <p>In technischen Anwendungen wird manchmal auch die Einheit \(\mathrm{N/mm}\) verwendet.</p>
+
+    <figure class="abbildung" id="fig-federkraft_skript">
+        <img class="grafik" style="width:60%" src="bilder/federkraft_skript.png" alt="">
+        <figcaption>Federkraft: (Links:) entspannte Feder. Ist eine Feder unbelastet, d.h. wirkt keine äußere Kraft auf die Feder, so ist die Feder entspannt. Diesen Punkt kann man als Nullpunkt für die Berechnung der Federkraft nutzen. (Mitte:) zieht eine äußere Kraft \(\vec F_A\) (z. B. ein Mensch mit seiner Muskelkraft) an einer Feder, so dehnt sich die Feder. Ist das Federende in Ruhe, so ist die Federkraft \(\vec F_F\) betragsmäßig gleich der äußeren Kraft, jedoch entgegengesetzt gerichtet. Die Position \(s_1\) liegt im negativen Bereich der \(x\)-Achse, daher wird die Federkraft \(F_F=-k\cdot \Delta s=-k \cdot (s_1-0)=-k\cdot s_1\) positiv. (Rechts:) drückt eine äußere Kraft auf die Feder, so staucht sich die Feder. Ist das Federende in Ruhe, so ist die Federkraft betragsmäßig gleich der äußeren Kraft, jedoch entgegengesetzt gerichtet. Die Position \(s_2\) liegt im positiven Bereich der \(x\)-Achse. Daher wird die Federkraft \(F_F=-k\cdot s_2\) negativ. Beide Zustände, Dehnung und Stauchung, nennt man auch „Spannung der Feder".</figcaption>
+    </figure>
+
+    <p>Was ist die <strong>Ruhelage</strong> der Feder? Zunächst würde man sagen: das ist die Position, an der sich das Ende der Feder befindet, wenn die Feder entspannt ist. Das ist zwar nicht vollkommen falsch, aber nicht allgemein genug. Das Hooke'sche Gesetz gilt nämlich auch, wenn eine Feder schon gedehnt ist. Dann kann wiederum die <u>zusätzliche</u> Kraft, die durch eine <u>zusätzliche</u> Dehnung entsteht, durch das Hooke'sche Gesetz errechnet werden.</p>
+
+    <p>Da eine Kraft im Allgemeinen ein Vektor ist, kann man die Federkraft auch als Vektor schreiben. Das erreicht man, indem man die Dehnung der Feder gegenüber der Ruhelage als Vektor \(\vec \Delta s\) ausdrückt, womit wir das Hooke'schen Gesetz schreiben können als:</p>
+
+    \begin{equation}
+    \textbf{Federkraft:}\quad \text{Formelzeichen:}\,  \vec F_F=-k \cdot \Delta \vec s \quad \text{Einheit:} [F_F]=\mathrm{N}
+    \end{equation}
+
+    <p>Bei vielen Aufgaben, bei denen Federn eine Rolle spielen<span class="fussnote">Jedoch nicht bei allen</span>, müssen wir nur eine Achse betrachten, in diesen Fällen genügt es, die skalare Version des Hooke'schen Gesetzes zu nutzen.</p>
+
+    <div class="beispiel" data-title="Ermittlung der Federkonstanten">
+        <p>An einer Feder, die von der Decke eines Labors hängt, hängt eine unbekannte Masse. Dadurch ist die Feder gedehnt, die Masse ist in Ruhe. Nun wird eine zusätzliche Masse von \(100\,\mathrm{g}\) an die Feder gehängt, dadurch dehnt sich die Feder um \(2{,}0\,\mathrm{mm}\). Weiterhin soll die Masse in Ruhe sein. Wie groß ist die Federkonstante?</p>
+
+        <p>Wir definieren zunächst das Koordinatensystem. Parallel zum Laborboden verläuft die \(x,y\)-Ebene, die \(z\)-Achse steht senkrecht auf dem Boden. Wir legen \(z=0\) auf die Höhe, bei der sich die Ruhelage der unbelasteten Feder befindet, die \(z\)-Achse zeigt nach oben. Da sich alles entlang der \(z\)-Achse abspielt können wir \(x\) und \(y\) vergessen und wir betrachten die Aufgabe als eindimensional.</p>
+
+        <p>Dann gilt zunächst für die durch die unbekannte Masse \(m_0\) um einen unbekannten Weg \(\Delta z_0=h_0-0\) gedehnte Feder:</p>
+
+        \begin{equation}
+        F_{F,0}=-k \cdot \Delta z_0
+        \end{equation}
+        <p>Da \(h_0 < 0\) ist, folgt \(\Delta z_0 < 0\) und somit \(F_{F,0} > 0\), die Kraft zeigt also in positive Richtung und zieht an der Masse nach oben. Wenn es also jetzt eine Kraft auf die Masse gibt, warum wird diese nicht beschleunigt? Es muss nach dem ersten Newton'schen Gesetz mindestens eine weitere Kraft geben, damit die Gesamtkraft auf die Masse zu Null wird.</p>
+
+        <p>Diese weitere Kraft ist natürlich die Gewichtskraft, welche die Masse nach unten zieht:</p>
+
+        \begin{equation}
+        F_{G,0}=- m_0\cdot g  \label{dyn_bsp_federkraft_mg}
+        \end{equation}
+        <p>mit \(g=9{,}81\,\mathrm{m/s^2}\). Da \(g > 0\) bewirkt das Minus in der Formel (<a class="xref" data-ref-eq="dyn_bsp_federkraft_mg"></a>), dass die Kraft nach unten zeigt.</p>
+
+        <p>Nun sagt uns die Aufgabenstellung, dass die Masse in Ruhe ist, daher können wir das erste Newton'sche Gesetz anwenden:</p>
+
+        \begin{equation}
+        v\equiv 0 \, \Rightarrow F_\text{ges}\equiv 0 \, \Leftrightarrow \, -k \Delta z_0-m_0\cdot g=0 \label{dyn_bsp_federkraft1}
+        \end{equation}
+
+        <p>Mit der gleichen Argumentationskette kommen wir für die zweite Masse auf:</p>
+        \begin{equation}
+        -k \left(\Delta z_0 + \Delta z_1\right) - (m_0+m_1)\cdot g = 0 \label{dyn_bsp_federkraft2}
+        \end{equation}
+
+        <p>Mit \(\Delta z_1=h_1-h_0\), wobei \(h_0 < 0\), \(h_1 < 0\) und \(h_1 < h_0\), wodurch:</p>
+
+        \begin{equation}
+        \underbrace{\left(-k \left(\Delta z_0 + \Delta z_1\right)\right)}_\text{positiv}+ \underbrace{\left( - (m_0+m_1)\cdot g \right)}_{negativ}= 0
+        \end{equation}
+
+        <p>Wir sehen nun: zum direkten Ermitteln der Federkraft haben wir zu viele nicht bekannte Größen, nämlich \(k\), \(m_0\) und \(\Delta z_0\).</p>
+
+        <p>Wir subtrahieren nun die Gleichung (<a class="xref" data-ref-eq="dyn_bsp_federkraft1"></a>) von Gleichung (<a class="xref" data-ref-eq="dyn_bsp_federkraft2"></a>):</p>
+        \begin{align}
+        (-k (\Delta z_0 + \Delta z_1) - (m_0+m_1)\cdot g) - (-k \Delta z_0-m_0\cdot g) &amp;= 0 \\[6pt]
+        \Leftrightarrow -k \cdot \Delta z_1-m_1 \cdot g &amp;= 0 \nonumber
+        \end{align}
+        <p>Diese Formel besagt, was wir schon im Abschnitt zum Hooke'schen Gesetz diskutiert haben: Dehnt man eine schon gedehnte Feder weiter, so erhält man eine zusätzliche Kraft, die man nach dem Hooke'schen Gesetz errechnen kann.</p>
+
+        <p>In unserem Beispiel muss nur noch nach \(k\) aufgelöst werden:</p>
+
+        \begin{equation}
+        k= -\frac{m_1\cdot g}{\Delta z_1}=-\frac{0{,}100\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}}{-2{,}0\,\mathrm{mm}}=0{,}49\,\mathrm{N/mm}
+        \end{equation}
+    </div>
+
+    <h4>Die Normalkraft</h4>
+    <p>Wir wissen aus dem ersten Newton'schen Gesetz, dass, wenn ein Objekt in Ruhe ist, die auf das Objekt wirkende Gesamtkraft gleich Null sein muss. Auf ein Buch auf einem Tisch oder auf eine Lampe, die an der Decke hängt, wirkt, so sich die beiden Gegenstände in der Nähe der Erdoberfläche befinden, die Erdanziehungskraft \(m\cdot \vec g\). Warum werden die Objekte nicht beschleunigt? Weil sowohl die Decke auf die Lampe (hierbei genauer: die Befestigung der Lampe an der Decke, also z.&nbsp;B. Schrauben, Dübel, ...) als auch der Tisch auf das Buch eine <strong>Normalkraft</strong> ausübt, die sich automatisch so einstellt, dass die Normalkraft der Erdanziehungskraft im Betrag gleicht und in der Richtung genau entgegengesetzt wirkt, siehe Abbildung <a class="xref" data-ref-fig="fig-normalkraft_skript"></a>.</p>
+
+    <figure class="abbildung" id="fig-normalkraft_skript">
+        <img class="grafik" style="width:50%" src="bilder/normalkraft_skript.png" alt="">
+        <figcaption>Normalkraft: Zwei Massen \(m_1\) und \(m_2\) liegen auf dem selben Tisch. Beide Massen werden durch die Erdanziehungskraft \(m_i \cdot \vec g\) nach unten gezogen. Der Tisch übt auf beide Massen eine Normalkraft \(\vec F_{N,i}\) aus, die genau so groß ist wie die Gewichtskraft, jedoch in die entgegengesetzte Richtung zeigt. Dadurch sind beide Massen in Ruhe.</figcaption>
+    </figure>
+
+    <p>Das klingt ein wenig nach Magie? Ist es das auch? Natürlich nicht! Schaut man sich das Beispiel des Buches auf dem Tisch genau an, so wirkt der Tisch auf das Buch wie eine sehr steife Feder. Das Buch, genauer: die Gewichtskraft des Buches, staucht die „Tischfeder" ein wenig (je nach Tisch vielleicht den Bruchteil eines Mikrometers), wodurch die „Tischfeder" eine nach oben wirkende Federkraft auf das Buch auswirkt, welche genau der Gewichtskraft entgegenwirkt, somit ist das Buch in Ruhe<span class="fussnote">Wahrscheinlich werden auch gleichzeitig „Federn" im Buch gestaucht.</span>. Dadurch, dass die Federkraft immer der Auslenkung entgegenwirkt, stellt sich der Prozess „automatisch" so ein, dass Federkraft und Gewichtskraft sich kompensieren. Da wir uns aber nicht bei jedem Gegenstand über „Federn" Gedanken machen wollen, nennen wir diese Kraft vereinfachend Normalkraft.</p>
+
+    <p>Gleiches gilt auch für die Befestigung der Lampe an der Decke, hier ziehen die Schrauben die Lampe so nach oben, dass gerade die Gewichtskraft kompensiert wird.</p>
+
+    <p>Die Normalkraft heißt Normalkraft, da ihre Wirkrichtung immer senkrecht zu der Fläche zeigt, die die Normalkraft verursacht, im Falle des Tisches also senkrecht nach oben, im Falle der Decke auch senkrecht nach oben.</p>
+
+    <p>Auf mikroskopischer Ebene, also auf der Skala der Atome, passiert in beiden Fällen dasselbe: Elektromagnetische Kräfte, die wir im späteren Verlauf der Vorlesung kennen lernen werden, sind dafür verantwortlich, dass das Buch durch den Tisch und die Lampe durch die Schrauben in der Decke gehalten werden.</p>
+
+    <h4>Die Seilkraft</h4>
+    <p>Eine analoge Modellvorstellung können wir auch bei der <strong>Seilkraft</strong> anwenden. Auch ein auf den ersten Blick schwer dehnbares Stahlseil können wir uns modellhaft als Feder mit sehr großer Federkonstante vorstellen. Hängen wir nun eine Masse an das Seil, so wird das Seil etwas, in vielen Fällen kaum bis gar nicht wahrnehmbar, gedehnt. Es entsteht eine Federkraft, die gegen die Gewichtskraft wirkt, wodurch die Masse in Ruhe verbleibt.</p>
+
+    <p>Seilkräfte können sich den Job, die Masse gegen die Gewichtskraft in Ruhe zu halten, auch teilen. Hängt man eine Masse an zwei Seile, die beide an der Decke befestigt sind, so teilt sich die Gegenkraft zur Gewichtskraft auf die beiden Seile auf. Hierbei ist es dann entscheidend, ob die Seile zur Masse symmetrisch angeordnet sind oder nicht.</p>
+
+    <figure class="abbildung" id="fig-normalkraft_seilkraft_skript">
+        <img class="grafik" style="width:40%" src="bilder/normalkraft_seilkraft_skript.png" alt="">
+        <figcaption>Seilkraft: Eine Lampe hängt an einem Seil (da wir im Kapitel <em>Mechanik</em> unterwegs sind, vernachlässigen wird, dass das „Seil" in Wirklichkeit ein Kabel ist) von der Decke. Die Lampe wird durch die Gewichtskraft \(\vec F_G=m \cdot \vec g\) nach unten gezogen. Das Seil übt auf die Lampe eine Seilkraft \(\vec F_S\) aus, die genauso groß ist wie die Gewichtskraft, jedoch in die entgegengesetzte Richtung zeigt. Dadurch ist die Lampe in Ruhe. Das andere Ende des Seils ist an der Decke befestigt. Wenn wir das Seil als masselos und nicht dehnbar annehmen, so ist die Seilkraft im Betrag überall im Seil gleich groß. Das heisst, dass das Seil mit \(-\vec F_S\) an der Decke zieht. Die Decke muss also mit einer Normalkraft \(\vec F_N\) auf das Seil wirken, die genauso groß ist wie die an der Decke ziehende Seilkraft, jedoch in die entgegengesetzte Richtung zeigt. Dadurch ist das Seil in Ruhe. Es gilt: \(\vec F_G=-\vec F_S\) und \(\vec F_N=-(-\vec F_S)=-\vec F_G.\)</figcaption>
+    </figure>
+
+    <h4>Zugkraft</h4>
+    <p>Nutzt man ein Seil, um eine Masse in Bewegung zu versetzen, so spricht man auch von einer <strong>Zugkraft</strong>. Zugkräfte nutzt man, um eine Masse zu bewegen, ohne direkt an der Masse anzugreifen. Außerdem kann man auch Zugkräfte umlenken, z.&nbsp;B. durch Umlenkrollen.</p>
+
+    <h4>Umlenkrollen</h4>
+    <p>Umlenkrollen werden genutzt, um Zugkräfte umzuleiten. Dadurch wird die Richtung der Kraft verändert aber nicht - sofern die Umlenkrolle in Ruhe ist - nicht der Betrag der Kraft.</p>
+
+    <div class="beispiel" data-title="Die Atwood'sche Fallmaschine">
+        <p>Die Atwood'sche Fallmaschine besteht aus zwei Massen, die über eine Umlenkrolle miteinander verbunden sind. Die Umlenkrolle wird zunächst idealisiert als reibungsfrei und masselos angenommen, von der Idealisierung der Masselosigkeit werden wir uns im Abschnitt zur Rotation starrer Körper wieder trennen. Die Massen \(m_1\) und \(m_2\) sind unterschiedlich groß, sodass die größere Masse \(m_2\) die kleinere Masse \(m_1\) nach unten zieht. Dadurch wird die kleinere Masse \(m_1\) nach oben gezogen. Die Bewegung der beiden Massen ist durch die zweite Newton'sche Gesetz zu beschreiben, dabei wirkt auf jede Masse die Gewichtskraft nach unten und die Seilkraft nach oben. Da auch das Seil als masselos und nicht dehnbar angenommen wird, ist die Seilkraft auf beiden Seiten der Umlenkrolle gleich groß. Außerdem ist die Beschleunigung beider Massen betragsmäßig gleich groß. Die Atwood'sche Fallmaschine kann als Experiment zur Bestimmung von \(g\) genutzt werden. Sind die beiden Massen ähnlich, aber unterschiedlich, groß, so ist die Beschleunigung der Massen relativ klein, sodass die Bewegung gut beobachtet werden kann. Allerdings ist die Idealbedingung, dass die Umlenkrolle reibungsfrei ist, in der Praxis nur schwer zu erreichen, sodass das gemessene \(g\) meist etwas kleiner als der tatsächliche Wert ist.</p>
+        <figure class="abbildung" id="fig-attwood">
+            <img class="grafik" style="width:30%" src="bilder/attwood.png" alt="">
+            <figcaption>Atwood'sche Fallmaschine: Zwei Massen \(m_1\) und \(m_2\) sind über eine Umlenkrolle miteinander verbunden. Angenommen, \(m_2\) sei größer als \(m_1\), dann gilt: Die größere Masse \(m_2\) zieht die kleinere Masse \(m_1\) nach oben.</figcaption>
+        </figure>
+    </div>
+
+    <div class="beispiel" data-title="Zwei Umlenkrollen und drei Massen">
+        <p>Eine interessante Situation entsteht, wenn man zwei Umlenkrollen und drei Massen miteinander verbindet, siehe Abbildung <a class="xref" data-ref-fig="fig-kraftverteilung"></a>. Hierbei sind die Massen \(m_1\) und \(m_3\) außen an den Seilen befestigt, die Masse \(m_2\) hängt in der Mitte zwischen den beiden Umlenkrollen. Wird das Verhältnis der Massen in einem bestimmten Bereich gewählt, so sind alle drei Massen in Ruhe. Im Bild gezeigt ist die Situation mit zwei gleichen Maßen außen und einer größeren Masse in der Mitte. Die Gewichtskraft der mittleren Masse wird durch zwei Seilkräfte kompensiert. Im gezeigten Bild ist die Seilkraft auf der linken Seite des Aufbaus und auf der rechten Seite des Aufbaus gleich groß, da die Massen \(m_1\) und \(m_3\) gleich groß sind. Die Seilkraft auf der linken Seite des Aufbaus ist genauso groß wie die Gewichtskraft der Masse \(m_1\), die Seilkraft auf der rechten Seite des Aufbaus ist genauso groß wie die Gewichtskraft der Masse \(m_3\). Da die Seile in der Mitte von der Masse \(m_2\) schräg zu den Umlenkrollen verlaufen, kann nur die \(y\)-Komponente der Seilkraft die Gewichtskraft der Masse \(m_2\) kompensieren.</p>
+        <figure class="abbildung" id="fig-kraftverteilung">
+            <img class="grafik" style="width:80%" src="bilder/kraftverteilung.png" alt="">
+            <figcaption>Zwei Umlenkrollen und drei Massen: Drei Massen \(m_1\), \(m_2\) und \(m_3\) sind über zwei Umlenkrollen miteinander verbunden. Wird das Verhältnis der Massen in einem bestimmten Bereich gewählt, so sind alle drei Massen in Ruhe. Im Bild gezeigt ist die Situation mit zwei gleichen Maßen außen und einer größeren Masse in der Mitte. Siehe dazu auch die passende Interaktive Simulation im ILIAS Lernraum unter „Zusatzmaterialien" – „Interaktive Simulationen".</figcaption>
+        </figure>
+    </div>
+
+    <h4>Die Hangabtriebskraft</h4>
+    <p>Die Hangabtriebskraft ist die Kraft, die ein auf einer schiefen Ebene gleitendes Objekt entlang der schiefen Ebene beschleunigt. Die Hangabtriebskraft ist eine Konsequenz aus Gewichtskraft und Normalkraft.</p>
+
+    <figure class="abbildung" id="fig-hangabtriebskraft_skript">
+        <img class="grafik" style="width:60%" src="bilder/hangabtriebskraft_skript.png" alt="">
+        <figcaption>Hangabtriebskraft: Eine Masse \(m\) liegt auf einer schiefen Ebene, die einen Neigungswinkel \(\alpha\) gegenüber der Horizontalen hat. Die Gewichtskraft \(m \cdot \vec g\) zieht die Masse in Richtung Erdmittelpunkt. Die schiefe Ebene übt eine Normalkraft \(\vec F_N\) auf die Masse aus, die senkrecht auf der Ebene steht. Die Normalkraft kompensiert den Anteil der Gewichtskraft, der in die Ebene hinein zeigt \(\vec F_{G,y}=\vec F_\perp\). Der andere Anteil der Gewichtskraft, die Hangabtriebskraft \(\vec F_{G,x}=\vec F_H\), beschleunigt die Masse entlang der schiefen Ebene.</figcaption>
+    </figure>
+
+    <p>Wir können uns das wie folgt vorstellen, siehe Abbildung <a class="xref" data-ref-fig="fig-hangabtriebskraft_skript"></a>:</p>
+
+    <p>Die Gewichtskraft zieht die Masse wie immer in Richtung Erdmittelpunkt. Die Masse kann nicht in die schiefe Ebene (gehen wir davon aus, dass die schiefe Ebene aus einem massiven Material wie Stahl oder Holz gefertigt worden ist) einsinken. Daher wirkt die schiefe Ebene eine Normalkraft \(\vec F_N\) auf die Masse, welche senkrecht auf der Ebene steht. Wie groß ist die Normalkraft? Die Normalkraft muss gerade den Anteil der Gewichtskraft \(\vec F_G\) kompensieren, der in die Ebene hinein zeigt. Der Anteil der Gewichtskraft \(\vec F_G\), der parallel zur Ebene steht, kann durch die Normalkraft nicht kompensiert werden. Andererseits darf der Betrag der Normalkraft nicht größer sein als der Betrag der Komponente der Gewichtskraft, die in die Ebene hineinzeigt, denn sonst würde die Masse senkrecht zur Ebene beschleunigt, also von der Ebene abheben.</p>
+
+    <p>Wenn aber ein Teil der Gewichtskraft durch die Normalkraft der schiefen Ebene kompensiert wird, so wird der andere Teil der Gewichtskraft die Masse entlang der Ebene beschleunigen. Diesen Teil nennen wir <strong>Hangabtriebskraft</strong> \(\vec F_H\), den Teil, der in die Ebene hineinzeigt, nennen wir \(F_\perp\).</p>
+
+    <p>Nehmen wir an, die Ebene habe einen Neigungswinkel, den wir \(\alpha\) nennen. Wir legen die \(x\)-Achse parallel zur Ebene, die \(y\)-Achse steht senkrecht auf der \(x\)-Achse und zeigt in die Ebene hinein. Dann lässt sich in diesem Koordinatensystem der Vektor der Gewichtskraft \(F_G\) zerlegen in eine Komponente entlang der Ebene und eine Komponente senkrecht zur Ebene.</p>
+
+    <p>Es gilt:</p>
+
+    \begin{equation}
+    \vert \vec F_H \vert = \vert \vec F_G \vert \cdot \sin \alpha
+    \end{equation}
+    <p>und</p>
+    \begin{equation}
+    \vert \vec F_\perp \vert = \vert \vec F_G \vert \cdot \cos \alpha
+    \end{equation}
+
+    <p>Die Summe der beiden Vektoren \(\vec F_H\) und \(\vec F_\perp\) ergibt dann wieder die Gewichtskraft.</p>
+
+    <p>Im gewählten Koordinatensystem gilt:</p>
+
+    \begin{equation}
+    \vec F_H= \vert \vec F_G \vert \cdot \sin \alpha \cdot \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+    \end{equation}
+    <p>und</p>
+
+    \begin{equation}
+    \vec F_\perp= \vert \vec F_G \vert \cdot \cos \alpha \cdot \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+    \end{equation}
+    <p>und damit</p>
+
+    \begin{equation}
+    \vec F_G = \begin{pmatrix}  \vert \vec F_G \vert \cdot \sin \alpha \\ \vert \vec F_G \vert \cdot \cos \alpha  \end{pmatrix}
+    \end{equation}
+
+    <p>Die Bewegung des Objektes auf der schiefen Ebene kann man nun vorhersagen, indem man die Kräftebilanz bildet und dann aus dem zweiten Newton'schen Gesetz die Beschleunigung errechnet, über die man dann an Geschwindigkeit und Strecke kommt.</p>
+
+    <p>Die Kräftebilanz sieht wie folgt aus:</p>
+
+    <p>Es wirken zwei Kräfte, Normalkraft und Gewichtskraft</p>
+    \begin{equation}
+    \vec F_\text{ges}=\vec F_N + \vec F_G
+    \end{equation}
+
+    <p>Dabei kann man die Gewichtskraft wie oben besprochen in zwei Komponenten zerlegen:</p>
+    \begin{equation}
+    \vec F_\text{ges}=\vec F_N + \vec F_H + \vec F_\perp
+    \end{equation}
+
+    <p>Da sich das Objekt nicht senkrecht zur Ebene bewegt, muss die Vektorsumme aus Normalkraft \(\vec F_N\) und dem senkrechten Anteil der Gewichtskraft \(\vec F_\perp\) null ergeben: \(\vec F_N + \vec F_\perp = \vec 0\). Die resultierende Gesamtkraft ist daher gleich der Hangabtriebskraft:</p>
+    \begin{equation}
+    \vec F_\text{ges}=(\vec F_N + \vec F_\perp) + \vec F_H = \vec 0 + \vec F_H = \vec F_H
+    \end{equation}
+
+    <p>Nach dem zweiten Newtonschen Gesetz gilt also:</p>
+
+    \begin{equation}
+    \vec F_\text{ges}= \vec F_H =  \vert \vec F_G \vert \cdot \sin \alpha \cdot \begin{pmatrix} 1 \\ 0 \end{pmatrix}=  m \cdot \vec a = m \cdot \begin{pmatrix} a_x \\ a_y \end{pmatrix}
+    \end{equation}
+
+    <p>Da diese Vektorgleichung zeilenweise erfüllt sein muss, sehen wir direkt: in unserem gewählten Koordinatensystem (zur Erinnerung: das liegt so, dass die \(x\)-Achse parallel zur schiefen Ebene liegt), ist \(a_y=0\).</p>
+
+    <p>Das Objekt wird also nur entlang der schiefen Ebene beschleunigt.</p>
+
+    <p>Wir können also die Bewegung im Folgenden als eindimensional entlang der \(x\)-Achse betrachten.</p>
+
+    <p>Die Beschleunigung ist:</p>
+
+    \begin{equation}
+    a_x=\frac{\vert \vec F_G \vert}{m}\cdot \sin \alpha = g \cdot \sin \alpha
+    \end{equation}
+
+    <p>Die Geschwindigkeit erhalten wir durch Integration:</p>
+
+    \begin{equation}
+    v_x(t)=\int\limits_{0}^t a_x(\tau)\text{d}\tau + v_{x,0} = \int\limits_{0}^t (g\cdot \sin \alpha )\text{d}\tau + v_{x,0} = g\cdot \sin \alpha \cdot t + v_{x,0}
+    \end{equation}
+
+    <p>Die Strecke erhalten wir dann durch erneute Integration</p>
+
+    \begin{equation}
+    x(t)=\int\limits_{0}^t v_x(\tau)\text{d}\tau + x_{x,0} = \int\limits_{0}^t (g \cdot \sin \alpha  \cdot \tau + v_{x,0}) \text{d}\tau + x_{0} = \frac{1}{2}g \cdot \sin \alpha \cdot t^2 + v_{x,0} \cdot t + x_0
+    \end{equation}
+
+    <p>Die Bewegung eines Objektes, welches auf einer schiefen Ebene rutscht, ist also eine gleichförmig beschleunigte Bewegung, wobei die Beschleunigung und damit auch die Endgeschwindigkeit vom Neigungswinkel abhängt. Hierbei ist interessant zu sehen, dass die beiden Grenzfälle \(\alpha=0^\circ\) und \(\alpha=90^\circ\) zu einer unbeschleunigten Bewegung bzw. zum freien Fall führen. Im ersten Fall verschwindet durch \(\sin(0^\circ)=0\) der Beschleunigungsterm und das Objekt behält seine Anfangsgeschwindigkeit bei. Im zweiten Fall erhält man wegen \(\sin(90^\circ)=1\) eine Formel, die zu der des freien Falls identisch ist.</p>
+
+    <h4>Die Reibungskraft</h4>
+    <p>Ein ganzer Forschungszweig, die Tribologie, beschäftigt sich mit dem Phänomen der Reibung. Das Phänomen ist so komplex, dass es eine eigene Lehrveranstaltung zu dem Thema gibt. Daher kann das Thema in der Physik am FB 8 nur oberflächlich behandelt werden.</p>
+
+    <p>Wir betrachten daher nur eine spezielle Form der Reibung, die die <strong>Coulombreibung</strong> genannt wird. Die Coulombreibung beschreibt die trockene<span class="fussnote">...also ohne Schmiermittel.</span> Reibung zwischen zwei festen Gegenständen, welche im Betrag nicht von der Geschwindigkeit abhängt. Das Formelzeichen der Reibungskraft ist \(F_R\), wobei wir später noch die Spezialfälle der Gleitreibung \(F_{R,G}\) und \(F_{R,H}\) kennen lernen werden. Gängig ist auch die Bezeichnung \(F_H\) für die Haftreibung und \(F_G\) für die Gleitreibung, hierbei muss aber auf die eindeutige Verwendung geachtet werden, da diese Formelzeichen auch für die Hangabtriebskraft und die Gewichtskraft in Verwendung sind.</p>
+
+    <p>Die Coulombreibung wirkt der Bewegung entgegen und ihr Betrag ist (in erster Näherung) unabhängig von der Relativgeschwindigkeit der Objekte.</p>
+
+    <p>Daher gilt:</p>
+
+    \begin{equation}
+    \text{Coulombreibung:}\quad \vec F_R=- \mu \cdot \vert \vec F_N \vert \frac{\vec v}{\vert \vec v \vert} \label{dyn_reib_coul}
+    \end{equation}
+
+    <p>Hierbei ist der Vektor \(\frac{\vec v}{\vert \vec v \vert}\) ein Einheitsvektor<span class="fussnote">Vektor mit Länge 1</span>, der in die Richtung der Geschwindigkeit zeigt und \(\mu\)<span class="fussnote">Kleiner griechischer Buchstabe \(\mu\)=„mü".</span> ist der <strong>Reibungskoeffizient</strong>.</p>
+
+    <p>Der Reibungskoeffizient hängt davon ab, welche beiden Materialien miteinander reiben sowie welche Oberflächenbeschaffenheit die Materialien haben, ist eine dimensionslose Zahl, die für die meisten alltäglichen Materialkombinationen Werte zwischen 0 und 1 annimmt, aber in speziellen Fällen auch größer als 1 sein kann.</p>
+
+    <p>Wir betrachten in dieser Vorlesung zwei verschiedene Fälle: Reibung zwischen zwei unbewegten Objekten und Reibung zwischen zwei Objekten, die sich relativ zueinander bewegen.</p>
+
+    <p>Im ersten Fall sprechen wir von <strong>Haftreibung</strong> und im zweiten von <strong>Gleitreibung</strong>.</p>
+
+    <p>Im Prinzip können beide Fälle mit derselben Gleichung der Form (<a class="xref" data-ref-eq="dyn_reib_coul"></a>) beschrieben werden, allerdings unterscheidet sich im Allgemeinen der Reibungskoeffizient \(\mu\), bei Haftreibung ist er meist etwas höher als bei Gleitreibung. Im Falle der Haftreibung versehen wir \(\mu\) mit dem Index \(H\), also \(\mu_H\), im Falle der Gleitreibung versehen wir \(\mu\) mit dem Index \(G\), also \(\mu_G\).</p>
+
+    <p>Ihnen fällt vielleicht noch ein anderes Problem im Falle der Haftreibung auf: Der Vektor \(\frac{\vec v}{\vert \vec v \vert}\) ist nicht definiert, wenn \(v=0\). In diesem Fall ersetzen wir den Vektor durch einen Einheitsvektor, der der treibenden Kraft entgegen zeigt.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.8 Aufgaben lösen mit Hilfe von Kräften</h3>
+<section>
+    <p>Das Ermitteln von Bewegungsabläufen anhand von gegebenen Kräften, das Ermitteln von für bestimmte Bewegungen notwendigen Kräften oder das Berechnen von Kräften, die zum Aufrechterhalten statischer Situationen oder gleichförmiger Bewegungen notwendig sind, gehören in der Physik zum Standardrepertoire. Dabei ist das Vorgehen immer sehr ähnlich, weswegen es im Folgenden noch mal zusammengefasst wird.</p>
+
+    <ol>
+        <li>Skizze des Problems oder der Situation</li>
+        <li>Definition eines Koordinatensystems</li>
+        <li>Einzeichnen aller Kräfte</li>
+        <li>Zerlegen der Kräfte in einzelne Komponenten bezüglich des gewählten Koordinatensystems</li>
+        <li>Anwenden des ersten (gleichförmige Bewegung, statische Fälle) <u>oder</u> zweiten Newton'schen Gesetzes (beschleunigte Bewegung)</li>
+        <li>Errechnen der gesuchten Größen, ggf. mit Hilfe der Zusammenhänge der Kinematik</li>
+    </ol>
+
+    <div class="beispiel" data-title="Schlitten auf schiefer Ebene">
+        <p>Angenommen, eine Person ziehe einen Schlitten eine schiefe Ebene mit Neigungswinkel \(\alpha\) hinauf. Dabei nutzt diese Person ein Seil, der Neigungswinkel des Seils sei \(\beta\) zum Hang, um den Schlitten zu ziehen. Zwischen Hang (Schnee) und Kufen des Schlittens herrscht Reibung mit Gleitreibungskoeffizient \(\mu_G\). Mit welcher Kraft muss die Person ziehen, damit der Schlitten eine konstante Geschwindigkeit hat?</p>
+
+        <figure class="abbildung" id="fig-pskript_dyn_schlitten">
+            <img class="grafik" style="width:60%" src="bilder/pskript_dyn_schlitten.png" alt="">
+            <figcaption>Abbildung zum Beispiel: Schlitten auf einer schiefen Ebene</figcaption>
+        </figure>
+
+        <p>Zur Lösung dieser Aufgabe müssen wir viele der in diesem Abschnitt erlernten Kompetenzen anwenden. Zunächst müssen wir eine Kräftebilanz aufstellen und dabei die verschiedenen in diesem Kapitel kennengelernten Kräfte nutzen. Dann müssen wir das erste Newton'sche Gesetz anwenden.</p>
+
+        <p>Eine Skizze zum Beispiel ist in Abbildung <a class="xref" data-ref-fig="fig-pskript_dyn_schlitten"></a> zu sehen. Hierin erkennt man die einzelnen Kräfte sowie ihre Wirkrichtung. Die Gewichtskraft \(\vec F_G\) zeigt wie immer in Richtung Erdmittelpunkt. Die Normalkraft \(\vec F_N\), die der Hang auf den Schlitten ausübt, zeigt senkrecht zum Hang. Die Reibungskraft \(\vec F_R\) zeigt entgegen der Bewegung, somit also parallel zum Hang bergab, die Zugkraft \(\vec F_K\) zeigt im Winkel \(\beta\) zum Hang stehend bergan.</p>
+
+        <p>Wir legen das Koordinatensystem so, dass am Ende die Bewegung nur in der \(x\)-Richtung stattfindet, also die \(x\)-Achse parallel zur Ebene mit der positiven Richtung bergan, \(y\)-Achse senkrecht dazu, mit der positiven Richtung gen Himmel.</p>
+
+        <p>Nun müssen wir, damit wir die Kräftebilanz aufstellen können, die Vektoren im Koordinatensystem ausdrücken.</p>
+
+        <p>Wir erhalten:</p>
+
+        <p>Die Gewichtskraft kann zerlegt werden in eine Komponente entlang des Hangs und eine senkrecht zum Hang, hierbei zeigen beide Vektoren in negative Richtung.</p>
+        \begin{equation}
+        \vec F_G= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha \end{pmatrix}
+        \end{equation}
+
+        <p>Die Zugkraft \(F_K\) zeigt sowohl in positive \(y\)-Richtung als auch in positive \(x\)-Richtung und kann wieder in zwei Komponenten zerlegt werden, entlang des Hangs und senkrecht dazu.</p>
+
+        \begin{equation}
+        \vec F_K = \vert \vec F_K \vert \cdot \begin{pmatrix} \cos \beta \\ \sin \beta \end{pmatrix}
+        \end{equation}
+
+        <p>Die Normalkraft wirkt senkrecht aus dem Hang heraus und hat die Form \(\vec F_N = |\vec F_N|\begin{pmatrix}0\\1\end{pmatrix}\). Ihr Betrag \(|\vec F_N|\) ergibt sich aus der Bedingung, dass in y-Richtung keine Beschleunigung stattfindet. Gäbe es keine Zugkraft, so müsste die Normalkraft die y-Komponente der Gewichtskraft vollständig kompensieren. Allerdings zieht die Person mit Hilfe des Seils den Schlitten ein wenig nach oben, daher muss die Normalkraft die Gewichtskraft nicht mehr vollständig kompensieren.</p>
+
+        \begin{equation}
+        \vec F_N = \vert\vec F_N\vert \begin{pmatrix}0\\1\end{pmatrix} \label{dyn_bsp_schlitten1}
+        \end{equation}
+
+        <p>Die Reibungskraft wirkt nur entlang des Hanges der Bewegung entgegen, also</p>
+
+        \begin{equation}
+        \vec F_R= - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \end{equation}
+
+        <p>Die Kräftebilanz ist also:</p>
+
+        \begin{equation}
+        \vec F_\text{ges}= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_K \vert \cdot \begin{pmatrix} \cos \beta \\ \sin \beta  \end{pmatrix}+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix}  - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \end{equation}
+        <p>mit unbekanntem \(\vert \vec F_K \vert\) und \(\vert \vec F_N \vert\).</p>
+
+        <p>Gesucht ist die Kraft, mit der gezogen werden muss, damit die Geschwindigkeit konstant ist und bleibt.</p>
+
+        <p>Daher muss das erste Newton'sche Gesetz angewendet werden:</p>
+
+        \begin{equation}
+        \vec a(t)=0 \, \Leftrightarrow \vec F_\text{ges}=\begin{pmatrix} 0 \\ 0 \end{pmatrix}
+        \end{equation}
+
+        <p>Diese Gleichung muss komponentenweise erfüllt werden, also:</p>
+
+        \begin{align}
+        - m \cdot g \cdot \sin \alpha + \vert \vec F_K \vert \cos \beta - \mu_G \vert \vec F_N \vert &amp;= 0 \\[6pt]
+        - m \cdot g \cdot \cos \alpha + \vert \vec F_K \vert \sin \beta + \vert \vec F_N \vert &amp;= 0
+        \end{align}
+
+        <p>Dieses Gleichungssystem liefert uns zwei Informationen. Umstellen der zweiten Gleichung nach \(\vert F_N \vert\) liefert:</p>
+
+        \begin{equation}
+        \vert \vec F_N \vert = m \cdot g \cdot \cos \alpha - \vert \vec F_K \vert \sin \beta
+        \end{equation}
+
+        <p>Setzen wir dieses Ergebnis in die erste Gleichung ein, erhalten wir:</p>
+        \begin{align}
+        - m \cdot g \cdot \sin \alpha + \vert \vec F_K \vert \cos \beta - \mu_G \cdot (m \cdot g \cdot \cos \alpha - \vert \vec F_K \vert \sin \beta)  =  0 \\[6pt]
+        \Leftrightarrow \vert \vec F_K \vert = m \cdot g \frac{\sin \alpha + \mu_G \cdot \cos \alpha }{\cos \beta + \mu_G \sin \beta}
+        \end{align}
+
+        <p>Wir können eine kurze Plausibilitätsüberprüfung machen: Je steiler der Hang ist, desto größer muss die Kraft sein, mit der ich ziehe. Je flacher das Seil gehalten wird (\(\beta \to 0\)), desto kleiner wird die benötigte Zugkraft, da der Nenner maximal wird (\(\cos\beta \to 1\)).</p>
+    </div>
+
+    <div class="beispiel" data-title="Kiste auf schiefer Ebene mit Reibung">
+        <p>Eine Kiste der Masse \(m=0{,}1\,\mathrm{kg}\) wird auf einer schiefen Ebene mit einem Neigungswinkel von \(\alpha=20^\circ\) zur Horizontalen mit Hilfe einer Seilkraft, welche mit \(F_K=10\,\mathrm{N}\) parallel zur schiefen Ebene wirkt, nach oben gezogen. Der Gleitreibungskoeffizient zwischen Kiste und Untergrund beträgt \(\mu_G=0{,}33\). Berechnen Sie die Beschleunigung der Kiste sowie die Geschwindigkeit und die Strecke in Abhängigkeit der Zeit.</p>
+        <figure class="abbildung" id="fig-beispielaufgabe_kräftebilanz">
+            <img class="grafik" style="width:90%" src="bilder/beispielaufgabe_kräftebilanz.png" alt="">
+            <figcaption>Abbildung zum Beispiel: Kiste auf einer schiefen Ebene mit Reibung</figcaption>
+        </figure>
+        <p>Zur Lösung der Aufgabe muss wieder eine Kräftebilanz aufgestellt werden. Die Gewichtskraft zieht die Kiste in Richtung Erdmittelpunkt, die Normalkraft der schiefen Ebene steht senkrecht auf der Ebene, die Reibungskraft wirkt entgegen der Bewegung entlang der schiefen Ebene und die Zugkraft wirkt parallel zur schiefen Ebene nach oben, siehe Abbildung <a class="xref" data-ref-fig="fig-beispielaufgabe_kräftebilanz_lsg"></a>.</p>
+        <figure class="abbildung" id="fig-beispielaufgabe_kräftebilanz_lsg">
+            <img class="grafik" style="width:90%" src="bilder/beispielaufgabe_kräftebilanz_lsg.png" alt="">
+            <figcaption>Abbildung zum Lösung des Beispiels: Kiste auf einer schiefen Ebene mit Reibung, mit eingezeichneten Kräften und Koordinatensystem. Die Normalkraft zeigt senkrecht zur schiefen Ebene, die Reibungkraft zeigt parallel zur schiefen Ebene, die Seilkraft zeigt (in diesem Fall) parallel zur schiefen Ebene.</figcaption>
+        </figure>
+        <p>Wir wählen das Koordinatensystem so, dass die \(x\)-Achse parallel zur schiefen Ebene mit der positiven Richtung bergan und die \(y\)-Achse senkrecht dazu mit der positiven Richtung gen Himmel zeigt. In diesem Koordinatensystem haben die Seilkraft und die Reibungskraft nur eine Komponente entlang der schiefen Ebene, also in der positive bzw. negative \(x\)-Richtung. Die Gewichtskraft kann in eine Komponente entlang der schiefen Ebene und eine senkrecht zur schiefen Ebene zerlegt werden. Die Normalkraft wirkt nur senkrecht zur schiefen Ebene, also in \(y\)-Richtung.</p>
+        <p>Die Kräftebilanz ist also:</p>
+        \begin{equation}
+        \vec F_\text{ges}= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_S \vert \cdot \begin{pmatrix} 1 \\ 0  \end{pmatrix}+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix}  - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \end{equation}
+        <p>mit unbekanntem \(\vert \vec F_N \vert\).</p>
+        <p>Die Kiste kann sich nur entlang der schiefen Ebene bewegen, hat also eine Beschleunigung nur in \(x\)-Richtung. In \(y\)-Richtung muss die Summe der Kräfte null sein, da die Kiste nicht in die schiefe Ebene einsinken kann. Daraus folgt:</p>
+        \begin{equation}
+        \begin{pmatrix}  m\cdot a_x \\ 0 \end{pmatrix} = \vec F_\text{ges}= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_S \vert \cdot \begin{pmatrix} 1 \\ 0  \end{pmatrix}+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix}  - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \end{equation}
+
+        <p>Aus der \(y\)-Komponente folgt:</p>
+        \begin{equation}
+        0 = - m \cdot g \cdot \cos \alpha + \vert \vec F_N \vert
+        \end{equation}
+        <p>und damit</p>
+        \begin{equation}
+        \vert \vec F_N \vert = m \cdot g \cdot \cos \alpha
+        \label{dyn_bsp_kiste2y}
+        \end{equation}
+        <p>Aus der \(x\)-Komponente folgt:</p>
+        \begin{equation}
+        m\cdot a_x = - m \cdot g \cdot \sin \alpha + \vert \vec F_S \vert - \mu_G \vert \vec F_N \vert
+        \end{equation}
+        <p>mit Formel <a class="xref" data-ref-eq="dyn_bsp_kiste2y"></a> folgt:</p>
+        \begin{align}
+        m\cdot a_x &amp;= - m \cdot g \cdot \sin \alpha + \vert \vec F_S \vert - \mu_G \cdot m \cdot g \cdot \cos \alpha\\[6pt]
+        \Leftrightarrow a_x &amp;= - g \cdot \left( \sin \alpha + \mu_G \cdot \cos \alpha \right) + \frac{\vert \vec F_S \vert}{m}
+        \end{align}
+        <p>Wir erhalten also eine konstante Beschleunigung in \(x\)-Richtung. Die Bewegung ist also eine gleichmäßig beschleunigte Bewegung, die wir mit den Formeln der Kinematik beschreiben können.</p>
+        <p>Wir erhalten</p>
+        \begin{align}
+        a_x &amp;= - g \cdot \left( \sin \alpha + \mu_G \cdot \cos \alpha \right) + \frac{\vert \vec F_S \vert}{m} \\[6pt]
+        v_x(t) &amp;= -g \cdot \left( \sin \alpha + \mu_G \cdot \cos \alpha \right) \cdot t + \frac{\vert \vec F_S \vert}{m} \cdot t + v_{x,0} \\[6pt]
+        x(t) &amp;= -\frac{1}{2} g \cdot \left( \sin \alpha + \mu_G \cdot \cos \alpha \right) \cdot t^2 + \frac{\vert \vec F_S \vert}{m} \cdot t^2 + v_{x,0} \cdot t + x_0
+        \end{align}
+        <p>sowie \(y(t)=0\), \(v_y(t)=0\) und \(a_y=0\).</p>
+        <p>Um nun Zahlenwerte einsetzen zu können, müssen wir Annahmen zu den Anfangsbedingungen machen. Wir nehmen an, dass die Kiste aus dem Ruhezustand losgelassen wird, also \(v_{x,0}=0\) und \(x_0=0\) gilt. Dann erhalten wir:</p>
+        \begin{align}
+        a_x &amp;= - 9{,}81\,\mathrm{m/s^2} \cdot \left( \sin 20^\circ + 0{,}33 \cdot \cos 20^\circ \right) + \frac{10\,\mathrm{N}}{0{,}1\,\mathrm{kg}} = 88\,\mathrm{m/s^2} \\[6pt]
+        v_x(t) &amp;=  88\,\mathrm{m/s^2} \cdot t \\[6pt]
+        x(t) &amp;=  \frac{1}{2} \cdot 88\,\mathrm{m/s^2} \cdot t^2 = 44\,\mathrm{m/s^2} \cdot t^2
+        \end{align}
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.9 Das dritte Newton'sche Gesetz</h3>
+<section>
+    <p>Das dritte Newton'sche Gesetz, welches auch als <strong>Actio=Reactio</strong> bekannt ist, beschäftigt sich mit den Kräften, die zwei Körper wechselseitig aufeinander ausüben.</p>
+
+    <p>Es kann aufgeschrieben werden als:</p>
+    \begin{equation}
+    \vec F_{BA}= - \vec F_{AB}
+    \end{equation}
+
+    <p>Dabei ist \(F_{BA}\) die Kraft, die ein Körper \(A\) auf einen Körper \(B\) ausübt, \(F_{AB}\) ist die Kraft, die ein Körper \(B\) auf einen Körper \(A\) ausübt.</p>
+
+    <p>Das dritte Newton'sche Gesetz besagt nun, dass, wenn ein Körper \(A\) eine Kraft auf einen Körper \(B\) ausübt, der Körper \(B\) automatisch auch eine Kraft auf Körper \(A\) ausübt, und dass diese Kraft im Betrag gleich groß und in der Richtung entgegengesetzt ist, auf Latein ausgedrückt: Actio=Reactio.</p>
+
+    <p>Ein Beispiel sind zwei Personen die, ohne dass ihre Füße den Boden berühren, auf zwei Bobby-Cars sitzen. Wenn beide Personen ein Ende desselben Seils halten und nur <u>eine</u> der Personen am Seil zieht, so werden sich doch beide Personen aufeinander zubewegen. Während die eine Person, durch das Ziehen des Seils eine Kraft auf die andere Person ausübt, übt die andere Person nur durch das Festhalten des Seils eine gleich große, aber in der Richtung entgegengesetzte Kraft auf die andere Person aus.</p>
+
+    <p>Dieses Gesetz gilt universell. Übt ein Elektron eine Kraft auf ein Proton aus, so übt das Proton eine gleich große und entgegengesetzte Kraft auf das Elektron aus. Übt die Sonne eine Kraft auf die Erde aus, so übt die Erde eine gleich große und entgegengesetzte Kraft auf die Sonne aus. Das gilt auch für die Erde und jede Person, die sich in Erdnähe befindet. Allerdings muss man beachten: die Kräfte sind im Betrag gleich, d.h. die Erde zieht mich mit der gleichen Kraft an wie ich sie. Allerdings ist meine Masse viel kleiner als die Masse der Erde, daher erfahre ich eine ungleich größere Beschleunigung (zum Erdboden hin) als die Erde.</p>
+
+    <p>Man darf jedoch „Actio=Reactio" nicht mit dem ersten Newton'schen Gesetz verwechseln. Der Grund, warum eine Masse auf einem Tisch ruht, ist nicht Actio=Reactio, sondern das erste Newton'sche Gesetz: die nach unten wirkende Gewichtskraft wird durch eine nach oben wirkende Federkraft (basierend auf elektromagnetischer Wechselwirkung zwischen den Molekülen des Tisches und den Atomen der Masse) kompensiert.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.10 Impulserhaltung und Rückstoß</h3>
+<section>
+    <p>Actio=Reactio hat weitreichende Konsequenzen, als die ziemlich kurze Formel \(\vec F_{BA}= - \vec F_{AB}\) vermuten lässt. Eine der Konsequenzen ist die Impulserhaltung in einem abgeschlossenen System.</p>
+
+    <p>Was ist ein abgeschlossenes System? Ein <strong>abgeschlossenes System</strong> in der Physik hat nichts mit verschlossenen Türen und Schlüsseln zu tun. Ein abgeschlossenes System ist ein System, in welchem die Gesamtmasse erhalten ist und auf das keine Kraft von außen <strong>wirkt</strong>. Das Wort wirkt ist hierbei absichtlich dick gedruckt: es darf äußere Kräfte geben, diese dürfen aber keine <strong>Wirkung</strong> haben. Ein Beispiel ist z.&nbsp;B. ein <em>Airhockey</em>-Tisch, auf dem eine Plastikscheibe auf einem Luftkissen (fast) reibungsfrei gleiten kann. Dann greift zwar die Gewichtskraft an der Plastikscheibe an, diese wird aber durch das Luftkissen kompensiert. Airhockey würde in einer Raumstation auf dem Mars genauso funktionieren wie auf der Erde, der Unterschied in der Stärke der Anziehungskräfte auf den beiden Planeten spielt keine Rolle.</p>
+
+    <figure class="abbildung" id="fig-abgeschlossenes_system_skript">
+        <img class="grafik" style="width:60%" src="bilder/abgeschlossenes_system_skript.png" alt="">
+        <figcaption>Ein abgeschlossenes System. Es kommen von außen keine Massen hinzu und es gehen auch keine Massen verloren. Von außer wirkende Kräfte haben keine Wirkung auf die Massen. Alle Kräfte innerhalb des Systems entstehen alleine durch die Wechselwirkung der Massen, es gilt somit für alle Kräfte innerhalb des Systems das 3. Newton'sche Gesetz, „Actio=Reactio".</figcaption>
+    </figure>
+
+    <p>Laden Sie den Tisch jedoch auf einen LKW und lassen den LKW mit konstanter Geschwindigkeit eine ebene Straße entlang fahren, so sollten Sie immer noch problemlos Airhockey spielen können. Fährt der LKW nun jedoch einen Alpenpass hoch, so hat die Erdanziehungskraft (in ihrer Erscheinungsform als Hangabtriebskraft) einen Einfluss auf die Airhockeyscheibe, sie wird sich bevorzugt in der unteren Ecke aufhalten. Daher hat die Erdanziehung nun eine <strong>Wirkung</strong>.</p>
+
+    <p>In einem abgeschlossenen System wirken keine äußeren Kräfte, d.h. alle Kräfte, die es geben kann, wirken <u>zwischen</u> den Objekten des abgeschlossenen Systems, siehe Abbildung <a class="xref" data-ref-fig="fig-abgeschlossenes_system_skript"></a>.</p>
+
+    <p>Nehmen wir an, dass sich in unserem System nur zwei Objekte \(A\) und \(B\) mit einer Masse \(m> 0\,\mathrm{kg}\) befinden. Beide Objekte haben eine Geschwindigkeit \(\vert \vec v \vert > 0\,\mathrm{m/s}\) und somit einen Impuls:</p>
+    \begin{align*}
+    \vec p_A(t) &amp;= m_A \cdot \vec v_A \\[6pt]
+    \vec p_B(t) &amp;= m_B \cdot \vec v_B
+    \end{align*}
+
+    <p><u>Falls</u> auf die beiden Kräfte wirken, so können diese, da keine äußeren Kräfte wirken sollen und es im System keine weiteren Objekte mehr gibt, nur von der jeweils anderen Masse stammen, d.h. die Gesamtkraft \(\vec F_A\) auf die Masse \(A\) ist</p>
+    \begin{equation}
+    \vec F_A= \vec F_{AB}
+    \end{equation}
+    <p>und \(\vec F_B\) auf \(B\) ist:</p>
+    \begin{equation}
+    \vec F_B= \vec F_{BA}
+    \end{equation}
+
+    <p>Nach dem dritten Newton'schen Gesetz gilt jedoch:</p>
+    \begin{equation}
+    \vec F_{BA}= - \vec F_{AB} \label{dyn_impulserh_1}
+    \end{equation}
+
+    <p>Nach dem zweiten Newton'schen Gesetz gilt, dass eine resultierende Gesamtkraft auf ein Objekt eine Änderung dessen Impulses verursacht:</p>
+    \begin{equation}
+    \frac{\text{d}}{\text{d}t}\vec{p}_A(t)=\vec F_{A}=\vec F_{AB} \quad \text{bzw.} \quad\frac{\text{d}}{\text{d}t}\vec{p}_B(t)=\vec F_{B} =  \vec F_{BA}  \label{dyn_impulserh_2}
+    \end{equation}
+
+    <p>Setzen wir die Formeln (<a class="xref" data-ref-eq="dyn_impulserh_2"></a>) in (<a class="xref" data-ref-eq="dyn_impulserh_1"></a>) ein, erhalten wir:</p>
+
+    \begin{align}
+    \frac{\text{d}}{\text{d}t}\vec{p}_A(t)=-\frac{\text{d}}{\text{d}t}\vec{p}_B(t) \Leftrightarrow \frac{\text{d}}{\text{d}t}\vec{p}_A(t)+\frac{\text{d}}{\text{d}t}\vec{p}_B(t) =0 \\[6pt]
+    \Leftrightarrow\,\frac{\text{d}}{\text{d}t}\left(\vec{p}_A(t)+\vec{p}_B(t)\right) =0 \Rightarrow  \left(\vec{p}_A(t)+\vec{p}_B(t)\right)=\text{const}\\[6pt]
+    \Leftrightarrow\,\vec p_{ges}=\text{const}
+    \end{align}
+
+    <p>Dieser Satz, den man auch ganz allgemein für mehr als zwei Objekte herleiten kann, ist der <strong>Impulserhaltungssatz</strong>. Er besagt:</p>
+    <blockquote>
+        <p>In einem abgeschlossenen System ist der Gesamtimpuls zeitlich konstant.</p>
+        \begin{equation}
+        \sum_i \vec p_i = \text{const} = \sum_i \tilde{\vec { p} }_i
+        \end{equation}
+    </blockquote>
+    <p>Die Tilde \(\tilde{\,}\) über dem Impulsvektor steht hierbei für „nachher", da man in Aufgaben zur Impulserhaltung oftmals zwei Situationen betrachtet, eine „vorher" (vor irgendeinem Ereignis) und eine Situation „nachher".</p>
+
+    <div class="beispiel" data-title="Rückstoß beim Biathlon">
+        <p>Angenommen, ein Gewehr wird beim Schießen zu locker in die Hände genommen und nicht fest in die Schulter gedrückt. Das Gewehr habe eine Masse von \(m_G=5{,}0\,\mathrm{kg}\) und das Projektil eine Masse von \(m_P=0{,}010\,\mathrm{kg}\), das Projektil verlässt das Gewehr mit \(v_P=500\,\mathrm{m/s}\). Wie groß ist der Rückstoß, d.h. mit welcher Geschwindigkeit schlägt das Gewehr gegen die Schulter des Schützen?</p>
+
+        <p>Da keine weiteren Annahmen gemacht worden sind, gehen wir (realistisch) davon aus, dass der Schütze und das Gewehr zunächst in Ruhe sind. Wir gehen davon aus, dass die Richtung des Gewehrlaufs genau in \(x\)-Richtung zeigt, daher kann das Problem als eindimensional betrachtet werden. Daher ist also der Gesamtimpuls vor dem Abschuss:</p>
+        \begin{equation}
+        p_\text{vorher}=p=0
+        \end{equation}
+
+        <p>Da für den Vorgang des Abschusses äußere Kräfte keine Rolle spielen (die Erdanziehungskraft wird erst nach Verlassen des Laufes einen Einfluss auf das Projektil haben), gilt der Impulserhaltungssatz. Daher muss der Gesamtimpuls erhalten sein, der Gesamtimpuls nachher ist also auch:</p>
+        \begin{equation}
+        p_\text{nachher}=\tilde{p}=0
+        \end{equation}
+
+        <p>Allerdings hat die Kugel jetzt eine Geschwindigkeit, daher auch einen Impuls. Daher kann die Impulserhaltung nur gelten, wenn derselbe Impuls, allerdings mit umgekehrtem Vorzeichen, als <strong>Rückstoß</strong> auf das Gewehr übertragen wurde. Dies ist eine direkte Konsequenz von Actio=Reactio.</p>
+
+        <p>Es gilt also:</p>
+        \begin{align}
+        \tilde{p}=0 = m_G\cdot v_G + m_P \cdot v_P \, \Leftrightarrow \, m_P \cdot v_P = - m_G \cdot v_G \\[6pt]
+        \Leftrightarrow \, v_G = -\frac{m_P \cdot v_P}{m_G} = -\frac{0{,}010\,\mathrm{kg} \cdot 500\,\mathrm{m/s}}{5{,}0\,\mathrm{kg}} = -1{,}0\,\mathrm{m/s}
+        \end{align}
+
+        <p>Das Gewehr bewegt sich also, wenn es locker gehalten wird, mit \(1{,}0\,\mathrm{m/s}\) in Richtung Schulter des Biathleten. Daher drücken Sportschützen die Gewehre fest in die Schulter.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.11 Der Schwerpunktsatz</h3>
+<section>
+    <p>Eine weitere Konsequenz von Actio=Reactio ist der Schwerpunktsatz. Dieser Satz ist von fundamentaler Bedeutung, da er uns erlaubt, die Bewegung komplexer Systeme aus vielen Einzelmassen so zu behandeln, als wären sie ein einziges Objekt.</p>
+
+    <h4>Herleitung des Schwerpunktsatzes</h4>
+    <p>Wir betrachten ein System aus \(n\) Massenpunkten \(m_i\), von denen sich jeder am Ort \(\vec{r}_i\) befindet. Der <strong>Schwerpunkt</strong> \(\vec r_S\) des Systems ist definiert als der mit den Massen gewichtete Mittelwert der Positionen aller Massenpunkte:</p>
+    \begin{equation}
+    \vec{r}_S = \frac{1}{M_\text{ges}} \sum_{i=1}^n m_i \vec{r}_i \quad \text{mit} \quad M_\text{ges} = \sum_{i=1}^n m_i
+    \end{equation}
+    <p>Dabei ist \(M_\text{ges}\) die Gesamtmasse des Systems.</p>
+
+    <p>Um die Bewegung des Schwerpunkts zu beschreiben, leiten wir diesen Ausdruck zweimal nach der Zeit ab. Die erste Ableitung ergibt die <strong>Schwerpunktsgeschwindigkeit</strong> \(\vec v_S\):</p>
+    \begin{equation}
+    \vec{v}_S = \frac{\mathrm{d}\vec{r}_S}{\mathrm{d}t} = \frac{1}{M_\text{ges}} \sum_{i=1}^n m_i \frac{\mathrm{d}\vec{r}_i}{\mathrm{d}t} = \frac{1}{M_\text{ges}} \sum_{i=1}^n m_i \vec{v}_i
+    \end{equation}
+    <p>Hierbei ist \(m_i \vec{v}_i = \vec{p}_i\) der Impuls des i-ten Massenpunktes. Die Summe \(\sum \vec{p}_i\) ist der <strong>Gesamtimpuls</strong> \(\vec p_\text{ges}\) des Systems. Damit finden wir einen wichtigen Zusammenhang:</p>
+    \begin{equation}
+    M_\text{ges} \cdot \vec{v}_S = \sum_{i=1}^n \vec{p}_i = \vec{p}_\text{ges}
+    \end{equation}
+    <p>Der Gesamtimpuls des Systems ist also gleich dem Impuls eines fiktiven Teilchens mit der Gesamtmasse, das sich mit der Schwerpunktsgeschwindigkeit bewegt.</p>
+
+    <p>Die zweite Ableitung des Ortsvektors führt zur <strong>Schwerpunktbeschleunigung</strong> \(\vec a_S\):</p>
+    \begin{equation}
+    \vec{a}_S = \frac{\mathrm{d}^2\vec{r}_S}{\mathrm{d}t^2} = \frac{1}{M_\text{ges}} \sum_{i=1}^n m_i \frac{\mathrm{d}^2\vec{r}_i}{\mathrm{d}t^2} = \frac{1}{M_\text{ges}} \sum_{i=1}^n m_i \vec{a}_i
+    \end{equation}
+    <p>Nach dem zweiten Newton'schen Gesetz ist \(m_i \vec{a}_i\) gleich der resultierenden Kraft \(\vec F_i\), die auf den i-ten Massenpunkt wirkt. Also:</p>
+    \begin{equation}
+    M_\text{ges} \cdot \vec{a}_S = \sum_{i=1}^n \vec{F}_i
+    \end{equation}
+    <p>Jetzt kommt der entscheidende Schritt: Die Kraft \(\vec F_i\) auf einen einzelnen Massenpunkt setzt sich zusammen aus <strong>äußeren Kräften</strong> \(\vec F_{i, \text{ext}}\) (z.&nbsp;B. Gravitation eines externen Körpers) und der Summe aller <strong>inneren Kräften</strong> \(\vec F_{ij}\), die von den anderen Massenpunkten \(j\) des Systems auf den Massenpunkt \(i\) ausgeübt werden:</p>
+    \begin{equation}
+    \vec{F}_i = \vec{F}_{i, \text{ext}} + \sum_{j=1, j\neq i}^n \vec{F}_{ij}
+    \end{equation}
+    <p>Setzen wir dies in die Gleichung für die Schwerpunktbeschleunigung ein, erhalten wir:</p>
+    \begin{equation}
+    M_\text{ges} \cdot \vec{a}_S = \sum_{i=1}^n \left( \vec{F}_{i, \text{ext}} + \sum_{j=1, j\neq i}^n \vec{F}_{ij} \right) = \sum_{i=1}^n \vec{F}_{i, \text{ext}} + \sum_{i=1}^n \sum_{j=1, j\neq i}^n \vec{F}_{ij}
+    \end{equation}
+    <p>Die Summe über alle äußeren Kräfte ist einfach die resultierende äußere Gesamtkraft \(\vec F_\text{ges, ext}\). Betrachten wir nun die Doppelsumme über die inneren Kräfte. Nach dem dritten Newton'schen Gesetz (Actio=Reactio) gilt für jedes Paar von Teilchen \((i,j)\): \(\vec F_{ij} = -\vec F_{ji}\). In der Doppelsumme kommt jede dieser Paarwechselwirkungen zweimal vor, einmal als \(\vec F_{ij}\) und einmal als \(\vec F_{ji}\). Ihre Summe ist daher immer null: \(\vec F_{ij} + \vec F_{ji} = \vec 0\). Die Summe über <em>alle</em> inneren Kräfte ist somit ebenfalls null:</p>
+    \begin{equation}
+    \sum_{i=1}^n \sum_{j=1, j\neq i}^n \vec{F}_{ij} = \vec 0
+    \end{equation}
+    <p>Damit vereinfacht sich unsere Gleichung zum finalen Ergebnis, dem Schwerpunktsatz:</p>
+    \begin{equation}
+    \vec{F}_\text{ges, ext} = M_\text{ges} \cdot \vec{a}_S
+    \end{equation}
+
+    <p>Der Schwerpunktsatz besagt also:</p>
+    <blockquote>
+        <p>Liegt ein System von Massen vor, so verhält sich der Schwerpunkt des Systems so, als ob die komplette Masse des Systems in ihm vereinigt wäre, und als ob die Summe aller <u>äußeren</u> Kräfte direkt auf ihn wirken würde.</p>
+    </blockquote>
+
+    <p>Damit kann man z.&nbsp;B. die Bewegung des Systems Erde-Mond um die Sonne vereinfacht als elliptische Bahn des Schwerpunktes aus Erde und Mond beschreiben. Die inneren Kräfte zwischen Erde und Mond beeinflussen die Bewegung des gemeinsamen Schwerpunkts nicht.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.2.12 Zusammenfassung</h3>
+<section>
+    <div class="zusammenfassung" data-title="Dynamik">
+        <ul>
+            <li><strong>Grundlagen der Dynamik:</strong>
+                <ul>
+                    <li><strong>Dynamik:</strong> Lehre von den Ursachen der Bewegungen (Kräfte), erklärt <em>warum</em> sich Objekte bewegen.</li>
+                    <li><strong>Masse (\(m\)):</strong> Grundlegende Eigenschaft der Materie, die sich als <strong>träge Masse</strong> (Widerstand gegen Beschleunigung) und <strong>schwere Masse</strong> (Ursache der Gravitation) äußert. Einheit: \(\mathrm{kg}\).</li>
+                </ul>
+            </li>
+
+            <li><strong>Grundgrößen der Dynamik und ihre Zusammenhänge:</strong>
+                <ul>
+                    <li><strong>Impuls (\(\vec{p}\)):</strong> Produkt aus Masse und Geschwindigkeit.
+                        \[ \vec{p}(t) = m(t) \cdot \vec{v}(t) \]
+                        Einheit: \(\mathrm{kg\,m/s}\).</li>
+
+                    <li><strong>Kraft (\(\vec{F}\)):</strong> Ursache für eine Impulsänderung; beschreibt eine Wechselwirkung.
+                        \[ \vec{F}(t) = \frac{\mathrm{d}\vec{p}(t)}{\mathrm{d}t} = \dot{\vec{p}}(t) \]
+                        Einheit: Newton (\(\mathrm{N}\)).</li>
+                </ul>
+            </li>
+
+            <li><strong>Die Newton'schen Gesetze:</strong>
+                <ul>
+                    <li><strong>1. Newtonsches Gesetz (Trägheitsprinzip):</strong> Ein kräftefreier Körper behält seinen Bewegungszustand bei.
+                        \[ \vec{F}_\text{ges} = \vec{0} \Leftrightarrow \vec{a} = \vec{0} \Leftrightarrow \vec{v} = \text{konst.} \]</li>
+
+                    <li><strong>2. Newtonsches Gesetz (Aktionsprinzip):</strong> Die Beschleunigung eines Körpers ist proportional zur resultierenden Kraft und umgekehrt proportional zur Masse.
+                        \[ \vec{F}_\text{ges} = m \cdot \vec{a} \]</li>
+
+                    <li><strong>3. Newtonsches Gesetz (Wechselwirkungsprinzip, Actio = Reactio):</strong> Kräfte treten immer paarweise auf. Die Kraft von Körper A auf B ist entgegengesetzt gleich der Kraft von B auf A.
+                        \[ \vec{F}_{AB} = -\vec{F}_{BA} \]</li>
+                </ul>
+            </li>
+
+            <li><strong>Anwendungen und Konzepte:</strong>
+                <ul>
+                    <li><strong>Kräftebilanz:</strong> Die Gesamtkraft ist die vektorielle Summe aller Einzelkräfte.
+                        \[ \vec{F}_\text{ges} = \sum_{i} \vec{F}_i \]</li>
+                    <li><strong>Kräftezerlegung:</strong> Eine Kraft kann in Komponenten zerlegt werden, um ihre Wirkung in verschiedene Richtungen zu analysieren.</li>
+                    <li><strong>Impulserhaltungssatz:</strong> In einem abgeschlossenen System (ohne äußere Kräfte) bleibt der Gesamtimpuls konstant.</li>
+                    <li><strong>Schwerpunktsatz:</strong> Der Schwerpunkt eines Systems bewegt sich so, als ob die Gesamtmasse in ihm vereinigt wäre und alle äußeren Kräfte auf ihn wirken würden.</li>
+                </ul>
+            </li>
+
+            <li><strong>Wichtige Kräftearten:</strong>
+                <ul>
+                    <li><strong>Gewichtskraft (\(\vec{F}_G\)):</strong> Anziehungskraft durch Gravitation. \[\vec{F}_G = m \cdot \vec{g}\]</li>
+                    <li><strong>Federkraft (\(\vec{F}_F\)):</strong> Rückstellkraft einer Feder (Hooke'sches Gesetz). \[\vec{F}_F = -k \cdot \Delta\vec{s}\]</li>
+                    <li><strong>Normalkraft (\(\vec{F}_N\)):</strong> Senkrecht von einer Oberfläche ausgeübte Gegenkraft.</li>
+                    <li><strong>Reibungskraft (\(\vec{F}_R\)):</strong> Wirkt der Bewegung entgegen (Haft- und Gleitreibung).</li>
+                    <li><strong>Zugkraft/Seilkraft (\(\vec{F}_Z\)/\(\vec{F}_S\)):</strong> Kraft, die durch Ziehen an einem Seil oder ähnlichem übertragen wird.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</section>
