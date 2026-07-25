@@ -1,0 +1,190 @@
+<!-- ch_01_07_stoesse.html — v0.13-Abschnitt 1.7 "Elastische und inelastische
+     Stöße" (1:1-Transkription aus Input/v0.13/pskript_mech_dyn_stoesse.tex).
+     TK 1 "Mechanik", Section 1.7. Rein statisch. 2 Unterabschnitte 1.7.1–1.7.2,
+     Gleichungen 1.7.1–1.7.47 (alle in 1.7.1; 1.7.2 hat keine), 3 Beispiele
+     (1.7.1–1.7.3), KEINE Abbildung, KEINE Zusammenfassung. KEIN Offset am h2:
+     1.7 folgt lueckenlos auf 1.6, bringt aber weder Abbildung noch
+     Zusammenfassung ein, laesst die kapitelweiten Zaehler also unveraendert
+     (Abb. bleibt bei 1.73, Zusammenfassung bei 1.9). -->
+
+
+<section>
+    <h2 class="inhaltsverzeichnis">1.7 Elastische und inelastische Stöße</h2>
+    <p>In den vorangegangenen Abschnitten haben wir zwei wichtige Grundprinzipien der Physik kennengelernt: die Impulserhaltung und die Erhaltung der mechanischen Energie. Die Impulserhaltung gilt nur, wenn wir ein abgeschlossenes System betrachten, in dem keine äußeren Kräfte wirken. Die Erhaltung der mechanischen Energie gilt ebenfalls nur für abgeschlossene Systeme, in denen keine nicht-konservativen Kräfte (wie z.&nbsp;B. Reibung) wirken.</p>
+
+    <p>In diesem Abschnitt wollen wir uns mit dem Thema Stöße beschäftigen. Stöße sind Wechselwirkungen zwischen zwei oder mehr Körpern, bei denen Kräfte über sehr kurze Zeiträume wirken. Dabei können sowohl Impuls als auch mechanische Energie übertragen werden. Je nach Art des Stoßes kann die mechanische Energie jedoch erhalten bleiben oder nicht.</p>
+
+    <p>Das Verständnis von Stößen ist in vielen Bereichen der Physik und Technik von großer Bedeutung, z.&nbsp;B. in der Theorie der Fahrzeugkollisioenn, der Materialwissenschaft, der Teilchenphysik und der Astrophysik. Wir werden uns zunächst mit den Grundlagen von elastischen und inelastischen Stößen beschäftigen und dann einige Beispiele und Anwendungen betrachten.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.7.1 Elastische Stöße</h3>
+<section>
+    <p>Angenommen, wir haben ein abgeschlossenes System mit zwei Massen, in dem keine äußeren Kräfte wirken. Wenn diese beiden Massen miteinander kollidieren und nach dem Stoß wieder auseinandergehen, ohne dass sie dauerhaft verformt werden oder Energie in andere Formen (wie Wärme oder Schall) umgewandelt wird, sprechen wir von einem elastischen Stoß.</p>
+
+    <div class="beispiel" data-title="Newton Pendel">
+        <p>Ein sehr prominentes Beispiel für einen elastischen Stoß ist das Newtonsche Pendel, bei dem eine Reihe von identischen Kugeln an Fäden aufgehängt ist. Wenn man eine Kugel aus ihrer Ruheposition anhebt und loslässt, kollidiert sie mit der nächsten Kugel. Diese bewegt sich jedoch nicht, sondern überträgt ihre Energie und ihren Impuls auf die letzte Kugel in der Reihe, die dann ausschwingt. Kehrt diese letzte Kugel zurück, wiederholt sich der Vorgang in umgekehrter Richtung. In diesem idealisierten Fall bleiben sowohl der Impuls als auch die mechanische Energie des Systems erhalten.</p>
+
+        <p>Lenkt man aus der Reihe von Kugeln zwei oder mehr Kugeln aus, so wird die gleiche Anzahl von Kugeln auf der gegenüberliegenden Seite ausgeschleudert.</p>
+
+        <p>Würde nur die Impulserhaltung gelten, jedoch nicht die Energieerhaltung, so könnten z.&nbsp;B. zwei Kugeln auf der einen Seite eine Kugel auf der anderen Seite mit doppelter Geschwindigkeit in Bewegung setzen, was offensichtlich nicht der Fall ist.</p>
+
+        <p>Da können wir uns so erklären. Wir lenken zwei Kugeln mit der Masse \(m\) auf die Höhe \(h\) aus. Dort lassen wir die Kugel los, die dann die in ihr gespeicherte potentielle Energie in kinetische Energie umsetzt. Die Geschwindigkeit der Kugel ganz kurz vor dem Auftreffen auf die nächste Kugel ist dann also \(\sqrt{2 \cdot g \cdot h}\). Der Impuls des Systems vor dem Stoß ist somit</p>
+        \begin{align}
+        p=2\cdot m \cdot \sqrt{2\cdot g \cdot h}
+        \end{align}
+        <p>Nehmen wir mal an, nach dem Stoß würde nur eine Kugel mit der Masse \(m\) auf der anderen Seite ausgeschleudert werden. Damit der Impuls erhalten bleibt, also \(p=\tilde p\), müsste diese Kugel dann die doppelte Geschwindigkeit haben, also</p>
+        \begin{equation} \tilde p= m \cdot \underbrace{\left( 2 \cdot \sqrt{2 \cdot g \cdot h}\right)}_{=\tilde v}. \end{equation}
+        <p>Die kinetische Energie dieser Kugel wäre dann</p>
+        \begin{align}
+        \tilde E_{kin}=\frac{1}{2} \cdot m \cdot \left(2 \cdot \sqrt{2 \cdot g \cdot h}\right)^2 = 4 \cdot m \cdot g \cdot h.
+        \end{align}
+        <p>Dies ist jedoch doppelt so viel wie die potentielle Energie, die wir zu Beginn in das System eingebracht haben:</p>
+        \begin{align}
+        \tilde E_{pot}=2 \cdot m \cdot g \cdot h
+        \end{align}
+        <p>Da jedoch keine äußerden Kräfte wirken (die Gewichtskraft wird durch die Seilkräfte der aufgehängten Kugeln kompensiert) und keine Energie in andere Formen umgewandelt wird, kann die mechanische Energie nicht zunehmen. Somit ist unser Anfangsannahme, dass nur eine Kugel auf der anderen Seite ausgeschleudert wird, falsch. Es müssen also zwei Kugeln auf der anderen Seite ausgeschleudert werden, um sowohl Impuls- als auch Energieerhaltung zu gewährleisten.</p>
+
+        <p>Das gilt für das Newton'sche Pendel allgemein. Lenke ich \(n\) Kugeln aus, so werden auf der anderen Seite ebenfalls \(n\) Kugeln ausgeschleudert.</p>
+    </div>
+
+    <p>Was passiert allgemein, wenn zwei Körper aufeinanderstoßen, z. B. zwei Billardkugeln oder eine Billardkugel und die Bande oder auch ein Flummy mit dem Fußboden? Wenn die Körper in Kontakt treten, so wirken sie Kräfte aufeinander aus nach dem dritten Newtonschen Axiom (Wechselwirkungsgesetz). Diese Kräfte sind sehr groß, wirken aber nur über einen sehr kurzen Zeitraum. Während dieses kurzen Zeitraums werden Impuls und kinetische Energie zwischen den Körpern ausgetauscht. Die Zeitabhängigkeit dieser Kräfte ist in der Regel sehr komplex und hängt unter anderem von den Materialeigenschaften der Körper ab. Das bedeutet, dass es uns mit den uns derzeit zur Verfüggung stehenden Mitteln nicht möglich ist, die genaue Zeitabhängigkeit der Stoßkräfte und damit Details des Stoßverlaufs zu berechnen.</p>
+
+    <p>Allerdings gilt für elastische Stöße sowohl die Energie- als auch die Impulserhaltung. Diese beiden Erhaltungssätze reichen aus, um aus den Bedingungen, die kurz vor dem Stoß herrschen (bekannt als Anfangsbedingungen), die Bedingungen kurz nach dem Stoß (bekannt als Endbedingungen) zu berechnen.</p>
+
+    <p>Was zwischendrin passiert, bleibt für uns eine „Black Box".</p>
+
+    <h4>Zentraler elastischer Stoß in einer Dimension</h4>
+    <p>Betrachten wir zwei Körper mit den Massen \(m_1\) und \(m_2\), die sich aufeinander zubewegen mit den Geschwindigkeiten \(v_{1}\) und \(v_{2}\). Nach dem elastischen Stoß bewegen sich die Körper mit den Geschwindigkeiten \(\tilde v_{1}\) und \(\tilde v_{2}\) weiter. Dabei kann jede dieser Geschwindigkeiten ohne Beschränkung der Allgemeinheit positiv, negativ oder null sein.</p>
+
+    <p>Die Impulserhaltung für diesen Stoß lautet:</p>
+    \begin{align}
+    m_1 \cdot v_{1} + m_2 \cdot v_{2} = m_1 \cdot \tilde v_{1} + m_2 \cdot \tilde v_{2} \label{eq_impulserhaltung_stoss}
+    \end{align}
+    <p>Die Energieerhaltung lautet:</p>
+    \begin{align}
+    \frac{1}{2} \cdot m_1 \cdot v_{1}^2 + \frac{1}{2} \cdot m_2 \cdot v_{2}^2 = \frac{1}{2} \cdot m_1 \cdot \tilde v_{1}^2 + \frac{1}{2} \cdot m_2 \cdot \tilde v_{2}^2 \label{eq_energieerhaltung_stoss}
+    \end{align}
+    <p>Damit keine Kräfte wirken (also die Impulserhaltung gilt), stellen wir uns vor, dass sich unsere beiden Körper auf einer Ebene ohne Reibung bewegen, z.&nbsp;B. auf einem Luftkissenbahnhof oder auf einem glatten Eisfeld, somit bleibt die potentielle Energie während des gesamten Vorgangs unverändert. Da der Nullpunkt der potentiellen Energie willkürlich gewählt werden kann, können wir die potentielle Energie gleich Null setzen und in Gleichung (<a class="xref" data-ref-eq="eq_energieerhaltung_stoss"></a>) vernachlässigen.</p>
+
+    <p>Wir haben also nun zwei Gleichungen ((<a class="xref" data-ref-eq="eq_impulserhaltung_stoss"></a>) und (<a class="xref" data-ref-eq="eq_energieerhaltung_stoss"></a>)) mit zwei Unbekannten (\(\tilde v_{1}\) und \(\tilde v_{2}\)). Diese Gleichungen können wir nun lösen, um die Endgeschwindigkeiten nach dem Stoß zu bestimmen. Wir suchen also jeweils für \(\tilde v_{1}\) und \(\tilde v_{2}\) eine Funktion der Anfangsgrößen \(m_1\), \(m_2\), \(v_{1}\) und \(v_{2}\), also:</p>
+    \begin{align}
+    \tilde v_{1} = f_1(m_1, m_2, v_{1}, v_{2}) \quad \text{und} \quad \tilde v_{2} = f_2(m_1, m_2, v_{1}, v_{2})
+    \end{align}
+
+    <p>Die Lösung dieses Gleichungssystems ist sehr aufwendig, liefert aber keine weiteren physikalischen Einblick. Daher kommen wir an dieser Stelle ausnahmsweise ohne Herleitung direkt zur Lösung:</p>
+    \begin{align}
+    \tilde v_{1} &amp;= \frac{(m_1 - m_2) \cdot v_{1} + 2 \cdot m_2 \cdot v_{2}}{m_1 + m_2} \label{eq_stoss_loesung_v1} \\[6pt]
+    \tilde v_{2} &amp;= \frac{(m_2 - m_1) \cdot v_{2} + 2 \cdot m_1 \cdot v_{1}}{m_1 + m_2} \label{eq_stoss_loesung_v2}
+    \end{align}
+
+    <p>Mit diesen Formeln kann nun, bei bekannten Anfangsbedingungen, die Endgeschwindigkeiten nach dem elastischen Stoß berechnet werden.</p>
+
+    <p>Schauen wir uns einige wichtige Spezialfälle an:</p>
+
+    <h4>Stoß mit ruhendem Partner</h4>
+    <p>Betrachten wir den Fall, dass der zweite Körper ruht, also \(v_{2}=0\). Die Gleichungen (<a class="xref" data-ref-eq="eq_stoss_loesung_v1"></a>) und (<a class="xref" data-ref-eq="eq_stoss_loesung_v2"></a>) vereinfachen sich zu:</p>
+    \begin{align}
+    \tilde v_{1} &amp;= \frac{(m_1 - m_2)}{m_1 + m_2} \cdot v_{1} \label{eq_stoss_loesung_v1_spezial} \\[6pt]
+    \tilde v_{2} &amp;= \frac{2 \cdot m_1}{m_1 + m_2} \cdot v_{1} \label{eq_stoss_loesung_v2_spezial}
+    \end{align}
+
+    <p>Aus diesen Gleichungen können wir einige interessante Erkenntnisse gewinnen:</p>
+    <ul>
+        <li>Der zweite Körper bewegt sich nach dem Stoß immer in die gleiche Richtung wie der erste Körper, aber mit einer Geschwindigkeit, die kleiner als die ursprüngliche Geschwindigkeit des ersten Körpers ist.</li>
+        <li>Wenn die Massen gleich sind (\(m_1 = m_2\)), so wird \(\tilde v_{1} = 0\) und \(\tilde v_{2} = v_{1}\). Das bedeutet, dass der erste Körper nach dem Stoß ruht und der zweite Körper mit der ursprünglichen Geschwindigkeit des ersten Körpers weiterbewegt.</li>
+        <li>Wenn die Masse des ersten Körpers größer ist als die des zweiten Körpers (\(m_1 > m_2\)), so behält der erste Körper nach dem Stoß eine positive Geschwindigkeit, aber sie ist kleiner als seine ursprüngliche Geschwindigkeit.</li>
+        <li>Wenn die Masse des ersten Körpers kleiner ist als die des zweiten Körpers (\(m_1 < m_2\)), so bewegt sich der erste Körper nach dem Stoß in die entgegengesetzte Richtung zu seiner ursprünglichen Bewegung.</li>
+    </ul>
+
+    <h4>Stoß mit Wand/Boden</h4>
+    <p>Betrachten wir den Fall, dass der zweite Körper eine sehr große Masse hat im Vergleich zum ersten Körper, also \(m_2 \gg m_1\) und ruht, also \(v_2=0\) In diesem Fall müssen wir eine Grenzwertbildung durchführen:</p>
+    \begin{align}
+        \tilde v_1 = \lim_{m_2 \to \infty} \frac{(m_1 - m_2) \cdot v_{1} + 2 \cdot m_2 \cdot v_{2}}{m_1 + m_2}\quad\text{mit } v_2=0\\[6pt]=\lim_{m_2 \to \infty} \frac{m_2 \cdot \left(\frac{m_1}{m_2} - 1\right) \cdot v_{1}}{m_2 \cdot \left(\frac{m_1}{m_2} + 1\right)}\\[6pt]= \lim_{m_2 \to \infty} \frac{\left(\frac{m_1}{m_2} - 1\right) \cdot v_{1}}{\left(\frac{m_1}{m_2} + 1\right)}= \frac{- v_{1}}{1} = - v_{1}
+    \end{align}
+
+    <p>Das bedeutet, dass der erste Körper nach dem Stoß mit der gleichen Geschwindigkeit, aber in die entgegengesetzte Richtung weiterbewegt. Dies entspricht dem Verhalten eines Balls, der auf den Boden prallt und wieder nach oben springt.</p>
+
+    <h4>Stoß gleicher Massen</h4>
+    <p>Betrachten wir den Fall, dass die beiden Körper die gleiche Masse haben, also \(m_1 = m_2 = m\). Die Gleichungen (<a class="xref" data-ref-eq="eq_stoss_loesung_v1"></a>) und (<a class="xref" data-ref-eq="eq_stoss_loesung_v2"></a>) vereinfachen sich zu:</p>
+    \begin{align}
+    \tilde v_{1} &amp;= \frac{(m - m) \cdot v_{1} + 2 \cdot m \cdot v_{2}}{m + m} =\frac{2\cdot m\cdot v_2}{2 \cdot m}= v_{2} \\[6pt]
+    \tilde v_{2} &amp;= \frac{(m - m) \cdot v_{2} + 2 \cdot m \cdot v_{1}}{m + m} = \frac{2\cdot m\cdot v_1}{2 \cdot m}= v_{1}
+    \end{align}
+    <p>Das bedeutet, dass die beiden Körper nach dem Stoß ihre Geschwindigkeiten austauschen. Der erste Körper bewegt sich mit der ursprünglichen Geschwindigkeit des zweiten Körpers weiter, und der zweite Körper bewegt sich mit der ursprünglichen Geschwindigkeit des ersten Körpers weiter.</p>
+
+    <div class="beispiel" data-title="Zusammenstoß">
+        <p>Ein LKW \(20\,\mathrm{t}\) und ein PKW \(1{,}0\,\mathrm{t}\) fahren mit gleicher Geschwindigkeit frontal aufeinadner. Wir nehmen - unrealistisch - an, dass der Stoß elastisch ist, wie es z. B. beim Autoscooter der Fall ist. Wie verändern sich die Geschwindigkeiten der beiden Fahrzeuge nach dem Stoß?</p>
+        \begin{align}
+        m_{L} &amp;= 20\,\mathrm{t}\\[6pt]
+        m_{P} &amp;= 1{,}0\,\mathrm{t} \\[6pt]
+        v_{L} &amp;= -v_{P}\\[6pt]
+        \tilde v_{L} &amp;= \frac{(m_{L} - m_{P}) \cdot v_{L} + 2 \cdot m_{P} \cdot v_{P}}{m_{L} + m_{P}} \\[6pt]&amp;= \frac{(20\,\mathrm{t} - 1{,}0\,\mathrm{t}) \cdot v_{L} + 2 \cdot 1{,}0\,\mathrm{t} \cdot (-v_{L})}{20\,\mathrm{t} + 1{,}0\,\mathrm{t}} \\[6pt]&amp;= \frac{17 \cdot v_{L}}{21} = 0{,}81 \cdot v_{L} \\[6pt]
+        \tilde v_{P} &amp;= \frac{(m_{P} - m_{L}) \cdot v_{P} + 2 \cdot m_{L} \cdot v_{L}}{m_{L} + m_{P}} \\[6pt]&amp;= \frac{(1{,}0\,\mathrm{t} - 20\,\mathrm{t}) \cdot (-v_{L}) + 2 \cdot 20\,\mathrm{t} \cdot v_{L}}{20\,\mathrm{t} + 1{,}0\,\mathrm{t}} \\[6pt]&amp;= \frac{59 \cdot v_{L}}{21} = 2{,}81 \cdot v_{L}
+        \end{align}
+
+        <p>Wir können überprüfen, ob sowohl der Impuls als auch die kinetische Energie vor und nach dem Stoß erhalten geblieben sind.</p>
+        \begin{align}
+        p &amp;= m_L\,v_L + m_P\,v_P \\[6pt]
+          &amp;= 20\,\mathrm{t}\,v_L + 1{,}0\,\mathrm{t}\,(-v_L)
+          = 19\,\mathrm{t}\,v_L \\[6pt]
+        \tilde p &amp;= m_L\,\tilde v_L + m_P\,\tilde v_P \\[6pt]
+          &amp;= 20\,\mathrm{t}\,\Big(\tfrac{17}{21}v_L\Big)
+           + 1{,}0\,\mathrm{t}\,\Big(\tfrac{59}{21}v_L\Big) \\[6pt]
+          &amp;= \Big(\tfrac{20\cdot 17}{21} + \tfrac{1\cdot 59}{21}\Big)\mathrm{t}\,v_L
+           = \tfrac{399}{21}\mathrm{t}\,v_L = 19\,\mathrm{t}\,v_L \\[6pt]
+        E_{\mathrm{kin}} &amp;= \tfrac{1}{2}m_L v_L^2 + \tfrac{1}{2}m_P v_P^2 \\[6pt]
+          &amp;= \tfrac{1}{2}\,20\,\mathrm{t}\,v_L^2 + \tfrac{1}{2}\,1{,}0\,\mathrm{t}\,(-v_L)^2
+           = \tfrac{21}{2}\,\mathrm{t}\,v_L^2 \\[6pt]
+        \tilde E_{\mathrm{kin}} &amp;= \tfrac{1}{2}m_L\tilde v_L^2 + \tfrac{1}{2}m_P\tilde v_P^2 \\[6pt]
+          &amp;= \tfrac{1}{2}\,20\,\mathrm{t}\,\Big(\tfrac{17}{21}v_L\Big)^{\!2}
+           + \tfrac{1}{2}\,1{,}0\,\mathrm{t}\,\Big(\tfrac{59}{21}v_L\Big)^{\!2} \\[6pt]
+          &amp;= \tfrac{1}{2}\,\mathrm{t}\,v_L^2\,
+             \tfrac{20\cdot 17^2 + 1\cdot 59^2}{21^2}
+           = \tfrac{1}{2}\,\mathrm{t}\,v_L^2\,\tfrac{9261}{441}
+           = \tfrac{21}{2}\,\mathrm{t}\,v_L^2
+        \end{align}
+        <p>Beide Größen sind also vor und nach dem Stoß gleich groß, wie es für einen elastischen Stoß erforderlich ist.</p>
+    </div>
+
+    <div class="beispiel" data-title="Astro-Blaster">
+        <p>Der Astro-Blaster ist ein Spielzeug, bei dem drei oder vier Kugeln, welche jeweils ein Loch in der Mitte haben, auf einem Stab gelagert sind. Die Kugeln können sich frei entlang des Stabes bewegen und stoßen elastisch miteinander. Meist ist die untere Kugel die schwerste und die oberste Kugel die leichteste. Wird der Astro-Blaster senkrecht gehalten und aus einer Höhe \(h\) auf den Boden fallen gelassen, so prallt die unterste Kugel auf den Boden und stößt dabei elastisch mit der darüber liegenden Kugel zusammen. Diese wiederum stößt elastisch mit der darüber liegenden Kugel zusammen, usw. Am Ende wird die leichteste Kugel mit einer sehr hohen Geschwindigkeit nach oben geschleudert.</p>
+
+        <p>Angenommen, die Anfangshöhe ist \(h_0\) und für die vier Massen gilt \(m_1=2 \cdot m_2=4 \cdot m_3=8 \cdot m_4\). Wie hoch wird die oberste Kugel nach dem Stoß fliegen? Zunächst berechnen wir die Geschwindigkeit der untersten Kugel kurz vor dem Aufprall auf den Boden:</p>
+        \begin{align}
+        v_1 = \sqrt{2 \cdot g \cdot h_0}
+        \end{align}
+        <p>Wenn die unterste Kugel auf den unendlich schweren Boden prallt, so kehrt sich ihre Geschwindigkeit um:</p>
+        \begin{align}\tilde v_1 = - v_1
+        \end{align}
+        <p>Die zweite Kugel hat jedoch noch die Geschwindigkeit \(v_2=v_1\) nach unten. Der Stoß zwischen der ersten und der zweiten Kugel kann nun mit den Gleichungen für elastische Stöße berechnet werden. Für die zweite Kugel erhalten wir:</p>
+        \begin{align}
+        \tilde v_2 &amp;= \frac{(m_2 - m_1) \cdot v_2 + 2 \cdot m_1 \cdot \tilde v_1}{m_1 + m_2}\\[6pt] &amp;=
+        \frac{(m_2-2\cdot m_2)\cdot v_1+2\cdot 2 \cdot m_2 \cdot (-v_1)}{2\cdot m_2 + m_2} \\[6pt] &amp;=
+        \frac{-v_1 -4 \cdot v_1}{3} = -\frac{5}{3} \cdot v_1 \approx -1{,}67 \cdot v_1
+        \end{align}
+        <p>Die zweite Kugel bewegt sich also mit der Geschwindigkeit \(\frac{5}{3} \cdot v_1\) nach oben. Die dritte Kugel hat jedoch noch die Geschwindigkeit \(v_3=v_1\) nach unten. Der Stoß zwischen der zweiten und der dritten Kugel liefert für die dritte Kugel:</p>
+        \begin{align}
+        \tilde v_3 &amp;= \frac{(m_3 - m_2) \cdot v_3 + 2 \cdot m_2 \cdot \tilde v_2}{m_2 + m_3}\\[6pt] &amp;=
+        \frac{(m_3- 2 \cdot m_3)\cdot v_1+2\cdot 2 \cdot m_3 \cdot \left(-\frac{5}{3} \cdot v_1\right)}{2\cdot m_3 + m_3} \\[6pt] &amp;=
+        \frac{-v_1 -\frac{20}{3} \cdot v_1}{3} = -\frac{23}{9} \cdot v_1 \approx -2{,}56 \cdot v_1
+        \end{align}
+        <p>Die dritte Kugel bewegt sich also mit der Geschwindigkeit \(\frac{23}{9} \cdot v_1\) nach oben. Die vierte Kugel hat jedoch noch die Geschwindigkeit \(v_4=v_1\) nach unten. Der Stoß zwischen der dritten und der vierten Kugel liefert für die vierte Kugel:</p>
+        \begin{align}
+        \tilde v_4 &amp;= \frac{(m_4 - m_3) \cdot v_4 + 2 \cdot m_3 \cdot \tilde v_3}{m_3 + m_4}\\[6pt] &amp;=
+        \frac{(m_4-2 \cdot m_4)\cdot v_1+2\cdot 2 \cdot m_4 \cdot \left(-\frac{23}{9} \cdot v_1\right)}{2\cdot m_4 + m_4} \\[6pt] &amp;=
+        \frac{-v_1 -\frac{92}{9} \cdot v_1}{3} = -\frac{101}{27} \cdot v_1  \approx -3{,}74 \cdot v_1
+        \end{align}
+        <p>Die oberste (leichteste) Kugel wird also mit fast der vierfachen Geschwindigkeit der untersten Kugel nach oben geschleudert. Die maximale Höhe, die diese Kugel erreicht, ist somit:</p>
+        \begin{align}
+        h_{max} = \frac{\tilde v_4^2}{2 \cdot g} = \frac{\left(\frac{101}{27} \cdot v_1\right)^2}{2 \cdot g} = \frac{10201}{729} \cdot h_0 \approx 14 \cdot h_0
+        \end{align}
+        <p>Die oberste Kugel erreicht also eine Höhe, die etwa 14-mal so hoch ist wie die Anfangshöhe des Astro-Blasters.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.7.2 Inelastische Stöße</h3>
+<section>
+    <p>Im Gegensatz zu elastischen Stößen, bei denen sowohl der Impuls als auch die mechanische Energie erhalten bleiben, sind inelastische Stöße dadurch gekennzeichnet, dass nur der Impuls erhalten bleibt, während ein Teil der mechanischen Energie in andere Energieformen umgewandelt wird, wie z.&nbsp;B. Wärme, Schall oder Verformungsenergie. Dann wird die Summe der kinetischen Energien der Körper nach dem Stoß geringer sein als vor dem Stoß. Daher kann das genau Verhalten der Körper nach dem Stoß nicht durch unsere Gleichungen für elastische Stöße vorhergesagt werden.</p>
+
+    <p>Um zu prüfen, ob ein Stoß elastisch oder inelastisch ist, können wir die kinetische Energie vor und nach dem Stoß vergleichen. Wenn die kinetische Energie nach dem Stoß geringer ist als vor dem Stoß, handelt es sich um einen inelastischen Stoß.</p>
+</section>
