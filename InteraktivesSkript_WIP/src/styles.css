@@ -370,6 +370,21 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     margin: 0 0.5em 0 0;
     flex-shrink: 0;
 }
+/* Zitierte Lehrsatz-Aussagen (v0.13 \begin{quotation}, z. B. die Lesart des
+   2. Newton'schen Gesetzes, Impulserhaltungs- und Schwerpunktsatz). Teal-Akzent
+   wie .fussnote-panel, --teal/--surface sind auch im Darkmode definiert. */
+#paper blockquote {
+    margin: 12px 0;
+    padding: 10px 16px;
+    border-left: 3px solid var(--teal);
+    background-color: color-mix(in srgb, var(--teal) 6%, var(--surface));
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--ink);
+}
+#paper blockquote > :first-child { margin-top: 0; }
+#paper blockquote > :last-child { margin-bottom: 0; }
+
 /* Nur fuer Screenreader: die laufende Nummer, die visuell durch das
    Pictogramm ersetzt ist. */
 .sr-only {
