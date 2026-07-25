@@ -738,9 +738,18 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   zunächst, per `git pull` im v0.13-Checkout nachgeladen. Neu: `#paper
   blockquote`-Stil für v0.13-`\begin{quotation}`. Verifikation Stufe 1–4/6
   deckungsgleich mit PDF; **Stufe 5 (Browser-Sicht) offen — Freigabe ausstehend**.
-- [ ] **P12-A3 1.3 Dynamik – Arbeit, Leistung und Energie** — 7 Subsections, 7 Abb.
+- [x] **P12-A3 1.3 Dynamik – Arbeit, Leistung und Energie** — 7 Subsections, 7 Abb.
   (`pskript_mech_dyn_energie_arbeit_gmni_v3.tex`, 53 KB). Kandidat: `atwood_energy_simulation`.
-  *(L)*
+  *(L)* — migriert 2026-07-25 (Branch `migration/kapitel-1.3`, Commits
+  e43e3f0/aeb8bb7): `chapters/ch_01_03_dynamik_arbeit_energie.html`, 78 Gl.
+  (1.3.1–1.3.78), Abb. 1.31–1.37, Beispiele 1.3.1–1.3.12, Zusammenfassung 1.3.
+  **Kein Offset am h2** (contiguous zu 1.2). Damit sind 1.1–1.3 lueckenlos — die
+  DOM-Harness-Gap-Liste fiel von `[1,38,68]` auf `[1,68]` (1.3 fuellt die letzte
+  Mechanik-Luecke). Bewusste Abweichung: Bildunterschriften mit v0.13-Box-Verweis
+  ("Abbildung zum Beispiel N") ohne Nummer, da inline in der Beispiel-Box (wie 1.2).
+  Bilder schrittweise per git-pull nachgeliefert (ccdb246/3de8dd1). Verifikation
+  Stufe 1–4/6 deckungsgleich mit PDF; **Stufe 5 (Browser-Sicht) offen — Freigabe
+  ausstehend**. (Interaktiv-Kandidat `atwood_energy` bleibt P12-E2.)
 - [ ] **P12-A4 1.6 Bezugsysteme und Scheinkräfte** — 3 Subsections, 1 Abb.
   (`pskript_mech_bezugsysteme_und_scheinkraefte.tex`, 41 KB). **Maßgeblich ist das
   Original** (`pskript_mech_bezugsysteme_und_scheinkraefte.tex`, 1 Abb.) — es ist
