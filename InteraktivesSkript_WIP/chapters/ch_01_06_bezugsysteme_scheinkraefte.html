@@ -1,0 +1,348 @@
+<!-- ch_01_06_bezugsysteme_scheinkraefte.html — v0.13-Abschnitt 1.6 "Bezugsysteme
+     und Scheinkräfte" (1:1-Transkription aus
+     Input/v0.13/pskript_mech_bezugsysteme_und_scheinkraefte.tex — das im
+     Hauptdokument via \input geladene ORIGINAL, nicht die _v2gmni-Variante).
+     TK 1 "Mechanik", Section 1.6. Rein statisch. 3 Unterabschnitte 1.6.1–1.6.3,
+     Gleichungen 1.6.1–1.6.41, Beispiele 1.6.1–1.6.12, eine Zusammenfassung.
+     KEIN Offset am h2: 1.6 folgt lueckenlos auf das migrierte 1.5 — die
+     kapitelweiten Zaehler laufen durch (Abb. 1.72 -> 1.73, Zusammenfassung
+     1.8 -> 1.9). Das eine Bild ist ein JPEG-Foto (Hurrikan Irma), 1:1 kopiert. -->
+
+
+<section>
+    <h2 class="inhaltsverzeichnis">1.6 Bezugsysteme und Scheinkräfte</h2>
+    <p>Nicht selten kommt es bei der Diskussion der Kreisbewegung und der Rotation vor, dass Studierende den Begriff der Zentrifugalkraft anwenden, um zu beschreiben, was mit einer Masse in einem rotierenden Bezugssystem geschieht. Dabei wird die Zentrifugalkraft als eine nach außen gerichtete Kraft beschrieben, die auf die Masse wirkt und sie von der Rotationsachse wegdrückt. Bisher hatten wir abgelehnt, diesen Begriff zu verwenden, oft mit dem Hinweis, dass es sich um eine sogenannte Scheinkraft handelt. In diesem Abschnitt wollen wir uns nun genauer mit dem Konzept der Bezugsysteme und Scheinkräfte auseinandersetzen, um zu verstehen, warum die Zentrifugalkraft als solche betrachtet wird und wie sie in rotierenden Bezugssystemen auftritt.</p>
+
+    <p>Effekte, welche wir mit Scheinkräften beschreiben, kennen wir auch aus dem Alltag. Liegen in einem Auto einige Gegenstände locker im Kofferraum, so werden diese bei einer scharfen Kurvenfahrt nach außen gedrückt. Bremst das Auto plötzlich ab, so werden die Gegenstände nach vorne geschleudert. In beiden Fällen scheint es, als ob eine Kraft auf die Gegenstände wirkt, die sie in eine bestimmte Richtung drückt. Tatsächlich handelt es sich hierbei jedoch um Effekte, die durch die Beschleunigung des Bezugssystems (des Autos) verursacht werden. Auch solche Phänomene wollen wir in diesem Abschnitt mit Hilfe von Scheinkräften beschreiben und verstehen lernen.</p>
+
+    <p>Zuletzt werden wir uns der Scheinkraft <strong>Corioliskraft</strong> widmen, die in rotierenden Bezugssystemen auftritt und eine wichtige Rolle in der Meteorologie und Ozeanographie spielt. Die Corioliskraft beeinflusst die Bewegungen von Luftmassen und Meeresströmungen auf der Erde und ist somit von großer Bedeutung für das Verständnis von Wetterphänomenen und Klimamustern und klären, ob in Australien eine Toilettenspülung andersherum funktioniert als in Europa.</p>
+
+    <figure class="abbildung" id="fig-Geocolor_Image_of_Hurricane_Irma">
+        <img class="grafik" style="width:95%" src="bilder/Geocolor_Image_of_Hurricane_Irma.jpg" alt="">
+        <figcaption>Hurrikan Irma, aufgenommen am 8.&nbsp;September&nbsp;2017 mit dem NOAA-Satelliten GOES-16 im Geocolor-Modus. Die Corioliskraft in rotierenden Bezugssystemen bewirkt eine Ablenkung bewegter Luftmassen und prägt dadurch großräumige atmosphärische Strömungen. Auf der Nordhalbkugel rotieren große tropische Wirbelstürme gegen den Uhrzeigersinn, auf der Südhalbkugel im Uhrzeigersinn. Bildquelle: NOAA/CIRA, via NASA, <em>Geocolor Image of Hurricane Irma</em> (Wikimedia Commons, <a href="https://commons.wikimedia.org/wiki/File:Geocolor_Image_of_Hurricane_Irma.jpg">https://commons.wikimedia.org/wiki/File:Geocolor_Image_of_Hurricane_Irma.jpg</a>).</figcaption>
+    </figure>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.6.1 Bewegte Bezugssysteme</h3>
+<section>
+    <p>Zum besseren Verständnis von Scheinkräften müssen wir zunächst den Begriff des Bezugssystems genau definieren. Ein Bezugssystem ist ein Koordinatensystem, in dem wir die Positionen und Bewegungen von Objekten beschreiben. Dieses Koordiantensystem besteht aus einem Ursprungspunkt und drei Achsen, die in der Regel als x-, y- und z-Achse bezeichnet werden. In der klassischen Mechanik betrachten wir meist zwei Arten von Bezugssystemen: Inertialsysteme und nicht-inertiale Bezugssysteme.</p>
+
+    <p>Ein Inertialsystem ist ein Bezugssystem, das sich mit konstanter Geschwindigkeit bewegt oder in Ruhe ist. In einem Inertialsystem gelten die Gesetze der klassischen Mechanik, wie sie von Newton formuliert wurden, uneingeschränkt. Das bedeutet, dass ein Objekt, das sich in einem Inertialsystem befindet und keine äußeren Kräfte erfährt, entweder in Ruhe bleibt oder sich mit konstanter Geschwindigkeit bewegt.</p>
+
+    <p>Ein nicht-inertiales Bezugssystem hingegen ist ein Bezugssystem, das beschleunigt wird, sei es durch eine Änderung der Geschwindigkeit im Betrag oder durch eine Rotation. In solchen Bezugssystemen treten zusätzliche Effekte auf, die nicht durch die klassischen Gesetze der Mechanik erklärt werden können. Diese Effekte werden oft durch Scheinkräfte beschrieben, die nur in nicht-inertialen Bezugssystemen auftreten.</p>
+
+    <p>Als Beispiel für den Vergleich dieser Systeme stellen wir uns einen Zug vor, der an einem Bahnübergang vorbeifährt. Am Bahnübergang steht eine Person, die den Zug beobachtet. Außerdem gibt es eine Person im Zug. Wir stellen uns vor, dass auf der Stirn dieser beiden Personen jeweils ein Koordinatensystem befestigt ist, das sich mit der jeweiligen Person bewegt bzw. in Ruhe ist.</p>
+
+    <h4>Inertialsystem und Koordinatentransformation</h4>
+
+    <p>Angenommen, der Zug fährt mit konstanter Geschwindigkeit geradeaus in eine Richtung die wir der Einfachheit halber mit \(x\) bezeichnen. Die Bewegung der Spitze des Zuge sowie die Bewegung der Person im Zug wird der ruhende Beobachter, dessen Koordinatensystem wir mit \(S\) bezeichnen, als gleichförmige Bewegung mit der Geschwindigkeit</p>
+    \begin{equation} \vec v =\begin{pmatrix} v_x \\ 0 \\ 0 \end{pmatrix} \end{equation}
+    <p>beschreiben. Der Person am Bahnübergang wird in Ihrem Bezugssystem für die Position der Person im Zug die zeitabhängige Ortsfunktion</p>
+    \begin{equation} \vec r(t) = \begin{pmatrix} v_x t \\ 0 \\ 0 \end{pmatrix} + \vec r_0 \end{equation}
+    <p>zur Beschreibung benutzen. Die Person im Zug, deren Koordinatensystem wir mit \(S^\prime\) bezeichnen, befindet sich in Ruhe relativ zu ihrem eigenen Bezugssystem. Sie wird in Ihrem eigenen Bezugssystem \(S^\prime\) die Bewegung der Spitze des Zuges als gleichförmige Bewegung mit der Geschwindigkeit</p>
+    \begin{equation} \vec v^\prime= \begin{pmatrix} 0 \\ 0 \\ 0 \end{pmatrix}\end{equation}
+    <p>beschreiben, da sich die Spitze des Zuges relativ zu ihr nicht bewegt. Dahingegen wird Sie die Position der Person am Bahnübergang in Ihrem Bezugssystem \(S^\prime\) als gleichförmige gradlinige Bewegung beschreiben mit</p>
+    \begin{equation} \vec r^\prime(t) = \begin{pmatrix} -v_x t \\ 0 \\ 0 \end{pmatrix} + \vec r_0^\prime.\end{equation}
+    <p>Der Strich steht hierbei nicht für eine Ableitung, sondern kennzeichnet die Koordinaten im Bezugssystem \(S^\prime\).</p>
+
+    <p>Jedoch bewegt sich nicht nur die eine Person relativ zur anderen, sondern auch die Bezugssysteme selbst. Das Bezugssystem \(S^\prime\) bewegt sich mit der Geschwindigkeit</p>
+    \begin{equation} \vec v_{S^\prime} = \begin{pmatrix} v_x \\ 0 \\ 0 \end{pmatrix}\end{equation}
+    <p>relativ zum Bezugssystem \(S\). Die Beziehung zwischen den beiden Bezugssystemen wird durch die sogenannte <strong>Galilei-Transformation</strong> beschrieben. Diese Transformation gibt an, wie die Koordinaten und Zeiten in einem Bezugssystem in die Koordinaten und Zeiten in einem anderen Bezugssystem umgerechnet werden können. Für die Galilei-Transformation gilt:</p>
+    \begin{equation} \vec r^\prime = \vec r - \vec v_{S^\prime} t \label{eq:galilei_transformation}\end{equation}
+    <p>und</p>
+    \begin{equation} t^\prime = t. \end{equation}
+    <p>Das bedeutet, dass die Position eines Objekts in einem Bezugssystem durch Subtraktion der Geschwindigkeit des anderen Bezugssystems multipliziert mit der Zeit erhalten werden kann. Die Zeit bleibt in beiden Bezugssystemen gleich<span class="fussnote">Das wird auch im gesamten Abschnitt so bleiben, da die Zeit in der klassischen Mechanik als absolut angesehen wird. Erst in der Relativitätstheorie wird die Zeit relativ, das ist aber nicht mehr Teil dieser Vorlesung.</span>.</p>
+
+    <p>Wir können also den Abstand der beiden Ursprünge \(O\) und \(O^\prime\) der Bezugssysteme als Funktion der Zeit schreiben als</p>
+    \begin{equation} \vec r_{O^\prime O}(t) = \vec r_{O^\prime O,0} + \vec v_{S^\prime} t \end{equation}
+
+    <p>Dabei ist \(\vec r_{O^\prime O}(t)\) der Vektor vom Ursprung des Bezugssystems \(S\) zum Ursprung des Bezugssystems \(S^\prime\) zur Zeit \(t\) und \(\vec r_{O^\prime O,0}\) der Anfangsabstand der beiden Ursprünge zum Zeitpunkt \(t=0\).</p>
+
+    <p>Der Vektor vom Ursprung des Bezugssystems \(S^\prime\) zum Ort eines Objekts im Bezugssystem \(S^\prime\) ist dann gegeben durch</p>
+    \begin{equation} \vec r^\prime(t) = \vec r(t) - \vec r_{O^\prime O}(t). \end{equation}
+
+    <div class="beispiel" data-title="Senkrechter Wurf in einem fahrenden Zug">
+        <p>Angenommen, die Person im Zug wirft einen Ball senkrecht nach oben. Wir wollen die Bewegung des Balls sowohl aus der Sicht der Person im Zug als auch aus der Sicht der Person am Bahnübergang beschreiben. Wenn der Zug mit konstanter Geschwindigkeit \(v_x\) fährt, dann wird die Person im Zug die Bewegung des Balls tatsächlich als senkrechten Wurf beschreiben. Die Position des Balls im Bezugssystem \(S^\prime\) der Person im Zug wird durch die Gleichung</p>
+        \begin{equation} \vec r^\prime(t) = \begin{pmatrix} 0 \\ h_0+v_0 t - \frac{1}{2} g t^2 \\ 0 \end{pmatrix}\end{equation}
+        <p>beschrieben, wobei \(v_0\) die Anfangsgeschwindigkeit des Balls in vertikaler Richtung ist und \(g\) die Erdbeschleunigung darstellt.</p>
+
+        <p>Die Person am Bahnübergang hingegen wird die Bewegung des Balls als eine Kombination aus der horizontalen Bewegung des Zuges und der vertikalen Bewegung des Balls beschreiben. Den Verlauf der Bewegung können wir mit Formel <a class="xref" data-ref-eq="eq:galilei_transformation"></a> berechnen:</p>
+        \begin{equation} \vec r(t) = \vec r^\prime(t) + \vec v_{S^\prime} t = \begin{pmatrix} v_x t \\h_0+ v_0 t - \frac{1}{2} g t^2 \\ 0 \end{pmatrix} + \vec r_0. \end{equation}
+        <p>Somit beschreibt die Person am Bahnübergang eine parabolische Flugbahn des Balls, die durch die Kombination der horizontalen Bewegung des Zuges und der vertikalen Bewegung des Balls entsteht. Für die Person am Bahnübergang sieht der Wurf also aus wie ein schräger Wurf mit der horizontalen Geschwindigkeit \(v_x\).</p>
+    </div>
+
+    <div class="beispiel" data-title="Flugzeit eines senkrecht geworfenen Balls in einem fahrenden Zug">
+        <p>Wie lange dauert der Flug eines senkrecht nach oben geworfenen Balls in einem fahrenden Zug? Nehmen wir vereinfachende \(h_0=0\) an. Wir betrachten wieder die beiden Bezugssysteme \(S\) (Person am Bahnübergang) und \(S^\prime\) (Person im Zug). Die Person im Zug wirft den Ball mit einer Anfangsgeschwindigkeit \(v_0\) nach oben. Die Flugzeit \(t_f\) des Balls kann durch die Gleichung</p>
+        \begin{equation} 0 = v_0 t_f - \frac{1}{2} g t_f^2 \end{equation}
+        <p>bestimmt werden. Diese Gleichung hat zwei Lösungen: \(t_f = 0\) (der Zeitpunkt des Abwurfs) und</p>
+        \begin{equation} t_f = \frac{2 v_0}{g}. \end{equation}
+        <p>Dies ist die Zeit, die der Ball benötigt, um wieder auf die Hand der Person im Zug zurückzukehren.</p>
+
+        <p>Da die \(y\)-Komponente der Bewegung des Balls in beiden Bezugssystemen gleich ist, wird die Person am Bahnübergang die gleiche Flugzeit für den Ball messen. Somit ist die Flugzeit eines senkrecht nach oben geworfenen Balls unabhängig davon, ob der Beobachter sich im fahrenden Zug oder am Bahnübergang befindet, wenn der Zug mit konstanter Geschwindigkeit fährt.</p>
+
+        <p>Der Unterschied liegt in der horizontalen Bewegung des Balls, die die Person am Bahnübergang beobachtet. Diese führt dazu, dass die Flugbahn des Balls für die Person am Bahnübergang länger ist als für die Person im Zug. Da die Flugzeit für beide Personen gleich ist, wird die Person am Bahnübergang annehmen, dass der Ball eine höhere Geschwindigkeit hat, um die längere horizontale Strecke in der gleichen Zeit zurückzulegen.</p>
+    </div>
+
+    <h4>Nicht-inertiale Bezugssysteme und Scheinkräfte</h4>
+    <p>Was passiert nun, wenn der Zug nicht mit konstanter Geschwindigkeit fährt, sondern beschleunigt oder eine Kurve fährt? Wir schauen uns zunächst den Fall der gradlinigen Beschleunigung an. Angenommen, der Zug beschleunigt mit einer konstanten Beschleunigung</p>
+    \begin{equation} \vec a = \begin{pmatrix} a_x \\ 0 \\ 0 \end{pmatrix}.\end{equation}
+    <p>Die Person am Bahnübergang wird die Bewegung der Spitze des Zuges als eine Bewegung mit konstanter Beschleunigung beschreiben. Die Position der Spitze des Zuges im Bezugssystem \(S\) wird durch die Gleichung</p>
+    \begin{equation} \vec r(t) = \frac{1}{2} \vec a t^2 + \vec v_0 t + \vec r_0 \end{equation}
+    <p>beschrieben, wobei \(\vec v_0\) die Anfangsgeschwindigkeit des Zuges ist. Nehmen wir weiterhin an, dass der Zug sich nur in \(x\)-Richtung bewegt, dann ist</p>
+    \begin{equation} \vec a = \begin{pmatrix} a_x \\ 0 \\ 0 \end{pmatrix}\end{equation}
+    <p>und</p>
+    \begin{equation} \vec v_0 = \begin{pmatrix} v_{0x} \\ 0 \\ 0 \end{pmatrix}.\end{equation}
+
+    <p>Angenommen, die Person im Zug sitzt an einem Tisch, auf dem eine Kugel liegt. Bevor der Zug beschleunigte, wird die Person im Zug die Kugel als ruhend wahrgenommen haben. Wenn der Zug (positiv) beschleunigt, wird die Person im Zug beobachten, dass die Kugel nach hinten (gegen die Fahrtrichtung) rollt. Wenn der Zug abbremst (negativ beschleunigt), wird die Person im Zug beobachten, dass die Kugel nach vorne (in Fahrrichtung) rollt. Die Kugel ändert somit ihren gleichförmig gradlinigen Bewegungszustand, daher wird der Beobachter im Zug annehmen, dass eine Kraft auf die Kugel wirkt, die sie in die jeweilige Richtung beschleunigt. Der Beobachter an der Bahnschiene, nehmen wir mal in Gedanken an, er könne in den Zug schauen, wird jedoch feststellen, dass die Kugel sich in Wahrheit gradlinig gleichförmig bewegt, und der Zug selbst „unter der Kugel wegbeschleunigt bzw. wegbremst". Es ist der Zug, auf den die Kraft (durch den Motor oder die Bremsen) wirkt, nicht die Kugel.</p>
+
+    <p>Wir drücken wir das in Formeln aus?</p>
+
+    <p>Die Bewegung des Ursprung des Bezugssystems \(S^\prime\) ist nur beschleunigt und kann relativ zum Ursprung von \(S\) mit</p>
+    \begin{equation} \vec r_{O^\prime O}(t) = \vec r_{O^\prime O,0} + \vec v_{0} t + \frac{1}{2} \vec a t^2 \end{equation}
+    <p>beschrieben werden. Der Vektor vom Ursprung des Bezugssystems \(S^\prime\) zum Ort eines Objekts im Bezugssystem \(S^\prime\) ist dann gegeben durch</p>
+    \begin{equation} \vec r^\prime(t) = \vec r(t) - \vec r_{O^\prime O}(t) \end{equation}
+
+    <p>Angenommen, im ruhenden Bezugssystem \(S\) bewege sich ein Objekt mit \(\vec r_S(t)\), der Geschwindigkeit \(\vec v_S(t)\) und der Beschleunigung \(\vec a_S(t)\). Ein weiters Bezugsystem bewegt sich relativ zu \(S\) mit \(\vec v_0=\vec 0\) und \(\vec a_{S^\prime}=\vec a\).</p>
+
+    <p>Die Geschwindigkeit des Objekts im Bezugssystem \(S^\prime\) ist dann</p>
+    \begin{equation} \vec v_{S^\prime}(t) = \frac{d\vec r^\prime(t)}{dt} = \vec v_S(t) - \frac{1}{2} \vec a t^2 \end{equation}
+    <p>und die Beschleunigung des Objekts im Bezugssystem \(S^\prime\) ist</p>
+    \begin{equation} \vec a_{S^\prime}(t) = \frac{d\vec v_{S^\prime}(t)}{dt} = \vec a_S(t) - \vec a. \end{equation}
+
+    <p>Das bedeutet, dass zwei Beobachter, die sich in unterschiedlichen Bezugssystemen befinden, unterschiedliche Beschleunigungen für dasselbe Objekt messen können, wenn sich eines der Bezugssysteme beschleunigt. Daher werden die beiden Beobachter immer auch auf unterschiedliche Kräfte schließen, die auf das Objekt wirken, wenn Sie das zweite Newtonsche Axiom</p>
+    \begin{equation} \vec F = m \vec a \end{equation}
+    <p>anwenden.</p>
+
+    <p>Die zusätzliche Kraft, die der Beobachter im beschleunigten Bezugssystem \(S^\prime\) messen wird, bezeichnen wir als <strong>Trägheitskraft</strong> oder <strong>Scheinkraft</strong>.</p>
+
+    <div class="beispiel" data-title="Abbremsendes Auto">
+        <p>Ein Pickup fährt mit einer Geschwindigkeit von \(20\,\mathrm{m/s}\) und bremst dann mit einer konstanten Verzögerung von \(-5\,\mathrm{m/s^2}\) ab. Auf der Ladefläche des Pickups befindet sich eine Bowlingkugel. Aus Sicht des Fahrers wird die Kugel nach vorne beschleunigt, wenn das Auto abbremst und zwar mit einer Beschleunigung von \(5\,\mathrm{m/s^2}\).</p>
+    </div>
+
+    <div class="beispiel" data-title="Kurvenfahrt in einer Achterbahn">
+        <p>Eine Person, die in einer Achterbahn schnell um eine Kurve fährt, wird aus Ihrer Sicht behaupten, dass eine Kraft sie nach außen drückt. Diese Kraft ist jedoch eine Scheinkraft, die in ihrem nicht-inertialen Bezugssystem auftritt. Ihr System ist beschleunigt, da die Richtung ihrer Geschwindigkeit sich ständig ändert und auf den Achterbahnwagen durch die Normalkraft der Schiene eine Zentripetalkraft wirkt, die sie in die Kurve zieht. Die Scheinkraft, die sie nach außen drückt, wird als <strong>Zentrifugalkraft</strong> bezeichnet und ist proportional zur Masse der Person, dem Quadrat ihrer Geschwindigkeit und umgekehrt proportional zum Radius der Kurve.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.6.2 Das rotierende Bezugssystem</h3>
+<section>
+    <p>Nun betrachten wir, was passiert, wenn sich das Bezugssystem nicht linear beschleunigt, sondern rotiert. Ein rotierendes Bezugssystem ist ein nicht-inertiales Bezugssystem, da zu einer Rotation immer mindestens eine zentripetale Beschleunigung gehört. Ein Objekt auf einer Kreisbahn ist somit immer ein beschleunigtes Objekt. Wenn wir nun - gedacht - an dieses Objekt eine Koordinatensystem befestigen, das sich mit dem Objekt mitdreht, dann ist dieses Bezugssystem ein beschleunigtes Bezugssystem.</p>
+
+    <p>Da jedoch ein rotierendes Bezugssystem ein beschleunigtes Bezugssystem ist, werden mitbewegte Beobachter in diesem Bezugssystem Scheinkräfte wahrnehmen, die in einem Inertialsystem nicht existieren. Diese Scheinkräfte sind die <strong>Zentrifugalkraft</strong> und die <strong>Corioliskraft</strong>.</p>
+
+    <p>Beobachtet also ein mitbewegter Beobachter in einem rotierenden Bezugssystem \(S^\prime\) die beschleunigte (oder unbeschleunigte, dann ist \(a_S=0\)) Bewegung eines Objekts, so wird er die Beschleunigung</p>
+    \begin{equation} a_{S^\prime}= a_S + a_{\mathrm{Coriolis}} + a_\mathrm{Zentrifugal} \end{equation}
+    <p>messen, wobei \(a_\mathrm{Coriolis}\) die Corioliskraft und \(a_\mathrm{Zentrifugal}\) die Zentrifugalkraft ist.</p>
+
+    <p>Wir wollen auf die explizite Herleitung der Koordinatentransformationen in das rotierende Bezugssystem an dieser Stelle verzichten, jedoch versuchen, uns die auftretenden Scheinkräfte plausibel zu machen.</p>
+
+    <h4>Zentrifugalkraft</h4>
+    <p>Die Zentrifugalkraft wird von einem mitbewegten Beobachter in einem rotierenden Bezugssystem immer dann wahrgenommen, wenn sich ein Objekt in einem Abstand \(r\) von der Rotationsachse befindet. Die Zentrifugalkraft wirkt dabei immer radial nach außen, also weg von der Rotationsachse.</p>
+
+    <p>Um ein Gefühl für die Größe der Zentrifugalkraft zu bekommen, betrachten wir zunächst ein Objekt und einen Beobachter, die beide sich auf der selben Kreisbahn mit dem selben Radius \(r\) und der selben Winkelgeschwindigkeit \(\omega\) bewegen. In diesem Fall wird das Objekt relativ zum Beobachter in Ruhe sein, da sich eben beide gleich bewegen.</p>
+
+    <p>Der Beobachter wird also annehmen, dass - nach dem 1. Newtonschen Axiom - keine resultierende Kraft auf das Objekt wirkt. Wenn der Beobachter etwas Ahnung von Physik hat, wird er jedoch wissen, dass das Objekt eine Zentripetalkraft benötigt, um sich auf der Kreisbahn zu halten. Damit das Objekt (auch sich des mitbewegten Beobachters) gesamtkräftefrei ist, muss also eine weitere Kraft auf das Objekt wirken, die genau entgegen der Zentripetalkraft gerichtet ist und den gleichen Betrag hat. Diese Kraft wird der Beobachter als Zentrifugalkraft bezeichnen.</p>
+
+    <p>Aus diesen Überlegungen folgt, dass die Zentrifugalkraft den Betrag</p>
+    \begin{equation} F_\mathrm{Zentrifugal} = m \omega^2 r \end{equation}
+    <p>hat und radial nach außen gerichtet ist.</p>
+
+    <p>Angenommen, das Objekt ist eine Kugel an einem Seil. Dann stellt das Seil die nötige Kraft zur Verfügung, um die Kugel auf der Kreisbahn zu halten, die Seilkraft ist also die Zentripetalkraft. Der mitbewegte Beobachter wird nun die Kugel als gesamtkräftefrei ansehen, wenn er die Zentrifugalkraft berücksichtigt, die genau die Seilkraft aufhebt. Reißt nun das Seil, so wird der mitbewegte Beobachter beobachten, dass die Kugel (aus seiner Sicht) plötzlich von der Rotationsachse wegbewegt. Dies wird er erklären, indem er sagt, dass die Zentrifugalkraft nun nicht mehr durch die Seilkraft aufgehoben wird und die Kugel somit - nur noch unter Wirkung der Zentrifugalkraft - nach außen beschleunigt wird.</p>
+
+    <p>Mit den selben Argumenten wird eine Person, die unangeschnallt<span class="fussnote">Nicht nachmachen!</span> in einem Auto sitzt, das eine scharfe Kurve fährt. Sie wird behaupten, von der Zentrifugalkraft nach außen geschleudert zu werden.</p>
+
+    <p>Beobachter in ruhenden Bezugssystemen, wie z.&nbsp;B. eine Person, die in einem Heißluftballon sitzt und über der Situation schwebt (sei es bei der Person mit der Masse am Seil oder der Person im Auto), werden jedoch feststellen, dass es keineswegs eine Zentrifugalkraft ist, die die Kugel oder die Person nach außen drückt. Vielmehr bewegen sich sowohl die Kugel als auch die Person in geradlinig gleichförmiger Bewegung weiter, sobald die Zentripetalkraft wegfällt (im Falle des Seils) oder zu klein ist (im Falle des Autos - die Reibung mit den Sitzen reicht nicht aus, um die Person auf der Kreisbahn zu halten).</p>
+
+    <div class="beispiel" data-title="Zentrifugalkraft auf der Erde">
+        <p>Die Erde rotiert pro Tag einmal um ihre eigene Achse.</p>
+
+        <p>Das ergibt eine Winkelgeschwindigkeit von etwa</p>
+        \begin{equation} \omega = \frac{2\pi}{86400\,\mathrm{s}} \approx 7{,}2722\cdot 10^{-5}\,\mathrm{s^{-1}}. \end{equation}
+
+        <p>Am Äquator, wo der Radius der Erdrotation etwa \(r=6{,}378\cdot 10^{6}\,\mathrm{m}\) beträgt, beobachten mitbewegte Beobachter eine Zentrifugalkraft. Der Betrag dieser Kraft ist</p>
+        \begin{equation}
+        F_\mathrm{Zentrifugal}=m\omega^2 r.
+        \end{equation}
+        <p>Für ein Objekt mit der Masse \(m=1{,}0\,\mathrm{kg}\), \(\omega=7{,}27\cdot 10^{-5}\,\mathrm{s^{-1}}\) und \(r=6{,}378\cdot 10^{6}\,\mathrm{m}\) ergibt sich</p>
+        \begin{equation}
+        F_\mathrm{Zentrifugal}\approx 1{,}0\,\mathrm{kg}\cdot\left(7{,}2722\cdot 10^{-5}\,\mathrm{s^{-1}}\right)^2\cdot 6{,}378\cdot 10^{6}\,\mathrm{m}= 3{,}4\cdot 10^{-2}\,\mathrm{N}.
+        \end{equation}
+        <p>Diese Kraft wirkt nach außen (weg von der Rotationsachse) und ist nur ein kleiner Bruchteil der Gewichtskraft \(mg\approx 9{,}8\,\mathrm{N}\) für \(m=1{,}0\,\mathrm{kg}\); sie reduziert somit die scheinbare Schwere nur sehr geringfügig.</p>
+
+        <p>In Aachen (Breitengrad \(\varphi\approx 50^\circ\)) ist der effektive Abstand zur Rotationsachse \(r_\mathrm{Aachen}=r\cos\varphi\), also</p>
+        \begin{equation}
+        r_\mathrm{Aachen}\approx 6{,}378\cdot 10^{6}\,\mathrm{m}\cos(50^\circ)\approx 4{,}1\cdot 10^{6}\,\mathrm{m},
+        \end{equation}
+        <p>und die Zentrifugalkraft für \(m=1{,}0\,\mathrm{kg}\) beträgt</p>
+        \begin{equation}
+        F_{\mathrm{Zentrifugal},\,\mathrm{Aachen}}\approx 2{,}2\cdot 10^{-2}\,\mathrm{N}.
+        \end{equation}
+        <p>An den Polen ist der Radius der Erdrotation bezüglich der Rotationsachse gleich null, daher gibt es dort keine Zentrifugalkraft.</p>
+    </div>
+
+    <h4>Corioliskraft</h4>
+    <p>Um ein Verständnis für die Corioliskraft zu bekommen, stellen wir uns folgendes Experiment vor<span class="fussnote">Ein Video dieses Experimentes finden Sie unter <a href="https://www.experimente.physik.uni-freiburg.de/Mechanik_der_festen_Koerper/kraefteimrotierendensystem/corioliskraft/kugelaufrotierenderscheibe">https://www.experimente.physik.uni-freiburg.de/Mechanik_der_festen_Koerper/kraefteimrotierendensystem/corioliskraft/kugelaufrotierenderscheibe</a></span>.</p>
+
+    <p>Eine Kugel wird über eine Vorrichtung auf eine rotierende Scheibe gerollt, so dass sie sich zum Zeitpunkt der Berührung mit der Scheibe radial nach außen mit einer bestimmten Geschwindigkeit bewegt.</p>
+
+    <p>Ein äußerer Beobachter im ruhenden Bezugssystem \(S\), welches wir als „Laborsystem" bezeichnen, wird beobachten, dass sich die Kugel auf einer geraden Linie bewegt, die durch den Berührungspunkt der Kugel mit der Scheibe verläuft. Die Kugel wird sich also geradlinig und gleichförmig weiterbewegen, sobald sie die Scheibe berührt, da in diesem Bezugssystem keine Kräfte auf die Kugel wirken (wir vernachlässigen Reibungskräfte).</p>
+
+    <p>Ein mitbewegter Beobachter, der quasi auf der Scheibe sitzt (im Experiment realisiert durch eine Kamera, die auf einem mitdrehenden Stativ befestigt ist), wird jedoch beobachten, dass sich die Kugel auf einer gekrümmten Bahn bewegt. Die Kombination der Beobachtungen zeigt: rotiert die Scheibe (wahrgenommen vom äußeren Beobachter) gegen den Uhrzeigersinn, so wird die Kugel (wahrgenommen vom mitbewegten Beobachter) nach rechts abgelenkt. Rotiert die Scheibe im Uhrzeigersinn, so wird die Kugel nach links abgelenkt.</p>
+
+    <p>Diese Beobachtung wird uns später helfen, die Richtung der Corioliskraft zu bestimmen.</p>
+
+    <p>Zur Quantifizierung der Corioliskraft müssen wir uns das Experiment etwas genauer anschauen. Wir betrachten wieder zwei Bezugssysteme: das ruhende Laborsystem \(S\) und das rotierende Bezugssystem \(S^\prime\), welches sich mit der Scheibe mitdreht.</p>
+
+    <p>Der Beobachter \(B\) im Laborsystem \(S\) wird beobachten, dass die Kugel mit einer Anfangsgeschwindigkeit \(\vec v_0\) radial nach außen rollt, also nach \(t=R/v_0\) am Rand der Scheibe ankommt, wobei \(R\) der Radius der Scheibe ist.</p>
+
+    <p>Aus Sicht des Beobachters \(B^\prime\) im rotierenden Bezugssystem \(S^\prime\) wird die Kugel jedoch eine gekrümmte Bahn beschreiben. Kommt die Kugel am Rand der Scheibe an, so wird der Beobachter \(B^\prime\) zusätzlich zur radialen Bewegung der Kugel eine tangentiale Bewegung wahrnehmen. Dadurch hat \(B^\prime\) den Eindruck, die Kugel hätte eine längere Strecke zurückgelegt als \(B\), obwohl beide Beobachter die gleiche Zeit gemessen haben.</p>
+
+    <p>In \(B^\prime\)'s hat die Kugel zusätzlich zum radialen Weg \(R\) einen Kreisbogen \(\varphi \cdot R\) zurückgelegt, wobei \(\varphi\) der Winkel ist, um den sich die Scheibe während der Zeit \(t=R/v_0\) gedreht hat. Der Winkel \(\phi\) hängt von der Winkelgeschwindigkeit \(\omega\) der Scheibe ab:</p>
+    \begin{equation} \varphi = \omega t = \omega \frac{R}{v_0}. \end{equation}
+
+    <p>Die tangentiale Streckenkomponente, die der Beobachter \(B^\prime\) wahrnimmt, ist somit</p>
+    \begin{equation} s_\mathrm{tangential} = \varphi R = \omega t R = \omega \frac{R^2}{v_0} \end{equation}
+
+    <p>Der Beobachter mit \(B^\prime\) nimmt an, dass eine Beschleunigung in tangentialer Richtung auf die Kugel wirkt, um diese zusätzliche Strecke zurückzulegen.</p>
+
+    <p>Es gilt:</p>
+    \begin{equation}
+    s_\mathrm{tangential} = \frac{1}{2} a_{B^\prime} t^2= \omega \frac{R^2}{v_0}.
+    \end{equation}
+    <p>Die Zeit, die die Kugel in \(B\) benötigt, um zum Rand der Scheibe zu rollen, ist \(t=\frac{R}{v_0}\). \(B^\prime\) wird aber genau die selbe Zeit messen, also setzen wir diese Zeit in die Gleichung ein:</p>
+    \begin{equation}
+    \frac{1}{2} a_{B^\prime} \left(\frac{R}{v_0}\right)^2 = \omega \frac{R^2}{v_0}.
+    \end{equation}
+    <p>Diese Gleichung können wir nach der Beschleunigung \(a_{B^\prime}\) auflösen:</p>
+    \begin{equation}
+    a_{B^\prime} = 2 \cdot \omega \cdot \left(\frac{R^2}{v_0}\right) \cdot \left(\frac{v_0^2}{R^2}\right) = 2 \omega v_0.
+    \end{equation}
+
+    <p>Die Beschleunigung, die der Beobachter \(B^\prime\) wahrnimmt, ist also proportional zur Winkelgeschwindigkeit \(\omega\) der Scheibe und zur Geschwindigkeit \(v_0\) der Kugel. Diese Beschleunigung wird als <strong>Coriolisbeschleunigung</strong> bezeichnet und die entsprechende Kraft, die der Beobachter \(B^\prime\) annimmt, um diese Beschleunigung zu begründen, ist die <strong>Corioliskraft</strong>:</p>
+
+    \begin{equation}
+    F_\mathrm{Coriolis} = m \cdot a_{B^\prime} = 2 m \cdot \omega \cdot v_0.
+    \end{equation}
+
+    <p>Die Richtung der Corioliskraft können wir mit Hilfe des Rechte-Hand-Regel bestimmen, indem wir unsere Beobachtungen mit oben stehender Formel vergleichen. In der Formel oben sind die Größen \(F\), \(\omega\) und \(v_0\) Skalargrößen, jedoch im Allgemeinen sind diese Größen Vektoren. Daher können wir schließen, dass wir die Richtung der Corioliskraft mit dem Vektorprodukt bestimmen können (es kann kein Skalarprodukt sein, da das Ergebnis eine Kraft ist, also ein Vektor).</p>
+
+    <p>Jetzt müssen wir noch ausprobieren, in welcher Reihenfolge wir die Vektoren im Vektorprodukt anordnen müssen, um die richtige Richtung der Corioliskraft zu erhalten<span class="fussnote">Wir erinnern uns: Das Vektorprodukt \(\vec A \times \vec B\) ergibt einen Vektor, der senkrecht sowohl auf \(\vec A\) als auch auf \(\vec B\) steht, und die Richtung wird mit der Rechte-Hand-Regel bestimmt. Vertauscht man die Vektoren, so bekommt man einen entgegengesetzten Vektor heraus</span>.</p>
+
+    <p>Wir wissen aus dem Experiment, dass die Corioliskraft bei einer gegen den Uhrzeigersinn rotierenden Scheibe die Kugel nach rechts ablenkt. Die Winkelgeschwindigkeit \(\vec \omega\) zeigt bei einer gegen den Uhrzeigersinn Rotation nach oben (entlang der Rotationsachse). Die Geschwindigkeit \(\vec v_0\) der Kugel zeigt radial nach außen.</p>
+
+    <p>Diese Ablenkung nach rechts erhalten wir, wenn wir das Vektorprodukt</p>
+    \begin{equation}\vec F_\mathrm{Coriolis} = 2 m \left(\vec v_0 \times \vec \omega\right) \end{equation}
+    <p>verwenden.</p>
+
+    <div class="beispiel" data-title="Karussell auf einem Spielplatz">
+        <p>Auf Spielplätzen gibt es oft Karussells, die sich drehen, wenn Kinder darauf sitzen und mit den Händen einen feststehenden Teller drehen. Angenommen, vier Kinder sitzen jeweils im Winkel von \(90^\circ\) zueinander auf dem Karussell. Ein weiteres Kind steht außerhalb des Karussells bei \(0^\circ\). Das Karussell sei zunächst in Ruhe. Wirft nun das Kind bei \(180^\circ\) einen Ball radial nach außen zum Kind bei \(0^\circ\), so wird das Kind bei \(0^\circ\) den Ball gerade auf sich zukommen sehen. Auch das Kind außerhalb wird eine gerade Flugbahn des Balls beobachten.</p>
+
+        <p>Dreht sich nun das Karussell mit einer Winkelgeschwindigkeit \(\vec \omega\) gegen den Uhrzeigersinn, so wird das Kind bei \(0^\circ\) den Ball nicht mehr gerade auf sich zukommen sehen, sondern der Ball wird nach rechts abgelenkt sehen. Das Kind außerhalb des Karussells wird jedoch weiterhin eine gerade Flugbahn des Balls beobachten.</p>
+
+        <p>Wir können nun bestimmen, mit welcher Geschwindigkeit der Ball, abhängig von der Winkelgeschwindigkeit des Karussells und dem Radius, geworfen werden muss, damit nicht das Kind gegenüber, sondern das Kind rechts vom Werfenden den Ball fängt.</p>
+
+        <p>Typischerweise ist der Radius des Karussells auf einem Spielplatz etwa \(r=2{,}0\,\mathrm{m}\). Die Winkelgeschwindigkeit hängt davon ab, wie schnell die Kinder das Karussell drehen. Angenommen, die Kinder drehen das Karussell so, dass es sich einmal in \(4{,}0\,\mathrm{s}\) dreht, dann ist die Winkelgeschwindigkeit</p>
+        \begin{equation} \omega = \frac{2\pi}{4{,}0\,\mathrm{s}} = 1{,}57\,\mathrm{s^{-1}}. \end{equation}
+        <p>Um den Ball so zu werfen, dass das Kind rechts vom Werfenden den Ball fängt, muss der Ball so schnell geworfen werden, dass er die Strecke \(2\cdot 2{,}0\,\mathrm{m}=4{,}0\,\mathrm{m}\) in der Zeit \(t\) zurücklegt, die das Karussell für eine viertel Umdrehung benötigt:</p>
+        \begin{equation} t = \frac{1}{4} \cdot \frac{2\pi}{\omega} = \frac{\pi}{2\omega} = \frac{\pi}{2\cdot 1{,}57\,\mathrm{s^{-1}}} \approx 1{,}0\,\mathrm{s}. \end{equation}
+        <p>Die benötigte Wurfgeschwindigkeit ist somit</p>
+        \begin{equation} v_0 = \frac{4{,}0\,\mathrm{m}}{1{,}0\,\mathrm{s}} = 4{,}0\,\mathrm{m/s}. \end{equation}
+
+        <p>Die mitbewegten Kinder werden also eine Coriolisbeschleunigung von</p>
+        \begin{equation} a_\mathrm{Coriolis} = 2 \omega v_0 = 2 \cdot 1{,}57\,\mathrm{s^{-1}} \cdot 4{,}0\,\mathrm{m/s} = 12{,}6\,\mathrm{m/s^2} \end{equation}
+        <p>auf den Ball wahrnehmen, die ihn nach rechts ablenkt<span class="fussnote">Anmerkung: Diese Rechnung ist eine Abschätzung mit einem Fehler: In der \(1{,}0\,\mathrm{s}\), die der Ball unterwegs ist, ändert sich aufgrund der Gewichtskraft seine Höhe. Das bedeutet, dass man einen schrägen Wurf betrachten müsste, um die genaue Flugbahn zu berechnen. Die von uns errechnete Geschwindigkeit ist also nur die Geschwindigkeit in horizontaler Richtung, die nötig ist, um den Ball in der Zeit \(t\) zum Rand des Karussells zu werfen. Die Gesamtgeschwindigkeit des Balles muss höher sein. Findet der Wurf am Nord- oder Südpol statt, so wird die höhere Gesamtgeschwindigkeit jedoch keine Auswirkung auf die Corioliskraft haben, da die Corioliskraft nur von der horizontalen Komponente der Geschwindigkeit abhängt. Findet der Wurf jedoch am Äquator oder in Aachen statt, so wird die vertikale Komponente der Geschwindigkeit ebenfalls eine Corioliskraft hervorrufen, die die Flugbahn des Balles weiter beeinflusst. Dies würde die Berechnung jedoch zu kompliziert machen, daher haben wir diesen Effekt vernachlässigt.</span>.</p>
+    </div>
+
+    <div class="beispiel" data-title="Das Foucault'sche Pendel">
+        <p>Ein berühmtes Experiment, das die Corioliskraft auf der Erde demonstriert, ist das Foucault'sche Pendel. Dieses Pendel besteht aus einer schweren Kugel, die an einem langen Draht aufgehängt ist und frei schwingen kann.</p>
+
+        <p>Zur Erklärung des Effektes stellen wir uns zunächst vor, dieses Pendel wäre am Nordpol der Erde aufgehängt. Ein Beobachter, der sich mit dem Pendel mitdreht (also eine Person auf der Erde) wird beobachten, dass die Schwingungsebene des Pendels sich im Uhrzeigersinn dreht. Dies liegt daran, dass die Erde unter dem Pendel rotiert, während das Pendel in seiner Schwingungsebene bleibt. Der mitbewegte Beobachter wird die Corioliskraft als Ursache für diese Drehung der Schwingungsebene heranziehen müssen.</p>
+
+        <p>Ein Beobachter, der sich nicht mit der Erde mitdreht (z.&nbsp;B. ein Astronaut im Weltraum über dem Nordpol), wird jedoch feststellen, dass die Schwingungsebene des Pendels konstant bleibt und sich nicht dreht, sondern eben die Erde sich unter dem Pendel wegdreht (gegen den Uhrzeigersinn aus Sicht des Astronauten).</p>
+
+        <p>Da nach einem Tag die Erde sich einmal um ihre Achse gedreht hat, wird die Schwingungsebene des Pendels für den mitbewegten Beobachter eine vollständige Umdrehung im Uhrzeigersinn vollziehen. Daraus können wir Schlussfolgern, dass sie die Pendelebene pro Stunde um \(15^\circ\) dreht (da ein Tag 24 Stunden hat und \(360^\circ/24=15^\circ\) ergibt).</p>
+
+        <p>In Aachen, das sich auf einem Breitengrad von etwa \(50^\circ\) befindet, wird die Drehung der Schwingungsebene des Pendels langsamer erfolgen. Die Drehgeschwindigkeit der Schwingungsebene hängt vom Breitengrad \(\varphi\) ab und ist gegeben durch</p>
+        \begin{equation} \omega_\mathrm{Drehung} = \omega_\mathrm{Erde} \cdot \sin(\varphi), \end{equation}
+        <p>wobei \(\omega_\mathrm{Erde} = \frac{2\pi}{86400\,\mathrm{s}}\) die Winkelgeschwindigkeit der Erdrotation ist.</p>
+
+        <p>Am Äquator (\(\varphi=0^\circ\)) wird die Schwingungsebene des Pendels sich überhaupt nicht drehen.</p>
+
+        <p>Beides kann mit dem Kreuzprodukt in der Formel für die Corioliskraft erklärt werden. Am Äquator sind die Vektoren der Winkelgeschwindigkeit der Erde und der Geschwindigkeit des Pendels parallel, daher ist das Kreuzprodukt (und somit die Corioliskraft) null. Am Nordpol hingegen sind die Vektoren der Winkelgeschwindigkeit der Erde und der Geschwindigkeit des Pendels senkrecht zueinander, daher ist das Kreuzprodukt maximal und die Corioliskraft ist am stärksten ausgeprägt. Dazwischen spielt nur die Komponente des Geschwindigkeitsvektors eine Rolle, die senkrecht zur Winkelgeschwindigkeit der Erde steht, was durch den Sinus des Breitengrads beschrieben wird.</p>
+    </div>
+
+    <div class="beispiel" data-title="Corioliseffekt aus einer rotierenden Kugel">
+        <p>Wir schauen uns nun an, was passiert, wenn sich ein Objekt auf der Oberfläche einer rotierenden Kugel bewegt. Ein Beispiel hierfür ist die Erde, die sich um ihre eigene Achse dreht.</p>
+
+        <p>Angenommen, ein Objekt bewegt sich auf der Oberfläche der Kugel mit einer Geschwindigkeit \(\vec v_0\) in Nord-Süd-Richtung von Oslo nach Rom (auf der Nordhalbkugel). Da sich die Erde dreht, wird das Objekt aufgrund der Corioliskraft eine Ablenkung erfahren. Die Richtung der Ablenkung kann mit dem Vektorprodukt bestimmt werden. Die Winkelgeschwindigkeit der Erde \(\vec \omega\) zeigt entlang der Rotationsachse der Erde, also von Süden nach Norden. Die Geschwindigkeit des Objekts \(\vec v_0\) zeigt von Oslo nach Rom, also tangential zur Erdoberfläche in Süd-Nord-Richtung. \(\vec v_0\) hat also eine Komponente, die parallel zu \(\vec \omega\) und eine Komponente, die senkrecht zu \(\vec \omega\) steht. Nimmt man nun die Rechte-Hand-Regel für das Vektorprodukt \(\vec v_0 \times \vec \omega\) zur Hilfe, so erhält man eine Kraft nach Westen.</p>
+
+        <p>Dies bedeutet, dass das Objekt auf der Nordhalbkugel eine Ablenkung nach Westen erfährt, wenn es sich von Norden nach Süden bewegt. Bewegt sich das Objekt hingegen von Süden nach Norden, so erfährt es eine Ablenkung nach Osten.</p>
+
+        <p>Auf der Südhalbkugel kehrt sich die Situation um: Bewegt sich ein Objekt von Norden nach Süden, so erfährt es eine Ablenkung nach Osten, und bewegt es sich von Süden nach Norden, so erfährt es eine Ablenkung nach Westen.</p>
+    </div>
+
+    <div class="beispiel" data-title="Druchflussmesser auf Basis der Corioliskraft">
+        <p>Der Druchfluss einer Flüssigkeit in einem Rohr kann mit Hilfe der Corioliskraft gemessen werden. Hierzu wird das Rohr in eine U-Form gebogen und schwingt um eine Achse, die in der Ebene der U-Form liegt. Wenn die Flüssigkeit durch das Rohr fließt, erfährt sie aufgrund der Corioliskraft eine Ablenkung, und zwar in entgegengesetzte Richtungen in den beiden Armen des U-förmigen Rohrs. Diese Ablenkung führt zu einer Verdrehung des Rohrs, die mit einem Sensor gemessen werden kann. Die Größe der Verdrehung ist proportional zur Flussrate der Flüssigkeit, sodass durch Kalibrierung des Systems der Durchfluss gemessen werden kann.</p>
+    </div>
+
+    <div class="beispiel" data-title="Wetterphänomene und die Corioliskraft">
+        <p>Die Corioliskraft spielt eine entscheidende Rolle bei der Entstehung und Bewegung von Wetterphänomenen auf der Erde. Aufgrund der Erdrotation werden Luftmassen, die sich in Nord-Süd-Richtung bewegen, durch die Corioliskraft abgelenkt. Auf der Nordhalbkugel werden Luftmassen, die nach Süden strömen, nach Westen abgelenkt, während Luftmassen, die nach Norden strömen, nach Osten abgelenkt werden. Auf der Südhalbkugel ist es umgekehrt. Das führt dazu, dass sich Hoch- und Tiefdruckgebiete sowie Winde in charakteristischen Mustern bewegen. Zum Beispiel drehen sich Tiefdruckgebiete auf der Nordhalbkugel gegen den Uhrzeigersinn, während sie sich auf der Südhalbkugel im Uhrzeigersinn drehen. Diese Ablenkung durch die Corioliskraft ist auch verantwortlich für die Entstehung von Wirbelstürmen und anderen großräumigen Wetterphänomenen. Wichtig ist hierbei zu betonen, dass die Corioliskraft nur auf große Entfernungen und über längere Zeiträume hinweg signifikant wirkt; lokale Wetterphänomene, wie z.&nbsp;B. die Bildung von Gewittern, Stürme auf kleineren Längenskalen oder die Bewegung von Luftmassen in unmittelbarer Nähe, werden hauptsächlich durch andere Kräfte und Faktoren beeinflusst. Gut zu beobachten sind die Auswirkungen der Corioliskraft auf Wetterphänomene über den Ozeanen, weniger gut über Land, da die Landmassen durch ihre Topographie und andere lokale Effekte die Luftbewegungen stärker beeinflussen.</p>
+    </div>
+
+    <div class="beispiel" data-title="Der Einfluss der Corioliskraft auf den Abfluss von Badewannen und Toiletten">
+        <p>Es gibt eine weit verbreitete Annahme, dass die Corioliskraft den Abfluss von Badewannen und Toiletten beeinflusst, indem sie das Wasser in eine bestimmte Richtung dreht. Diese Vorstellung ist jedoch ein Mythos. Die Corioliskraft auf der Erde ist zwar real, aber ihre Wirkung auf kleinen Abständen, wie sie in Badewannen oder Toiletten auftreten, ist vernachlässigbar gering. Die Corioliskraft wird erst bei sehr großen Entfernungen und über längere Zeiträume hinweg signifikant, wie zum Beispiel bei Wetterphänomenen oder Ozeanströmungen. Bei der Überquerung des Äquators wird Touristen oft erzählt, man könne den Corioliseffekt beobachten, wenn man Wasser durch einen Trichter ablässt. Dies ist jedoch nicht der Fall; der Abfluss wird vielmehr durch die Form der Wanne, die Art des Ablassens und andere lokale Faktoren bestimmt.</p>
+    </div>
+
+    <div class="beispiel" data-title="Corioliskraft in MEMS Sensoren">
+        <p>Die Corioliskraft wird in Mikro-Elektro-Mechanischen Systemen (MEMS) genutzt, um Bewegungssensoren zu bauen. Diese Sensoren, wie z.&nbsp;B. Gyroskope, messen die Winkelgeschwindigkeit eines Objekts, indem sie die Corioliskraft auf schwingende Mikrostrukturen innerhalb des Sensors ausnutzen. Wenn der Sensor rotiert, erfährt die schwingende Struktur eine Corioliskraft, die eine messbare Verschiebung oder Änderung der Schwingungsfrequenz verursacht. Diese Änderung wird von elektronischen Schaltkreisen erfasst und in ein elektrisches Signal umgewandelt, das die Winkelgeschwindigkeit des Sensors angibt. Solche MEMS-Sensoren sind in vielen modernen Geräten wie Smartphones, Drohnen und Fahrzeugen weit verbreitet.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">1.6.3 Zusammenfassung</h3>
+<section>
+    <div class="zusammenfassung" data-title="Bewegte Bezugssysteme und Scheinkräfte">
+        <ul>
+            <li><strong>Bezugssysteme:</strong>
+                <ul>
+                    <li><strong>Inertialsystem (\(S\)):</strong> Bewegt sich mit konstanter Geschwindigkeit oder ist in Ruhe. Hier gelten Newtons Gesetze uneingeschränkt (\(\vec{F} = m\vec{a}\)).</li>
+                    <li><strong>Nicht-Inertialsystem (\(S'\)):</strong> Wird beschleunigt (linear oder Rotation). Hier treten <strong>Scheinkräfte</strong> auf, um Newtons Gesetze formal zu erhalten.</li>
+                </ul>
+            </li>
+
+            <li><strong>Koordinatentransformation (Galilei):</strong>
+                <ul>
+                    <li><strong>Position:</strong> \(\vec r^\prime = \vec r - \vec v_{S^\prime} t\)</li>
+                    <li><strong>Zeit:</strong> \(t^\prime = t\)</li>
+                    <li><strong>Beschleunigung (bei linearer Beschleunigung \(\vec a\) von \(S'\)):</strong> \(\vec a_{S^\prime} = \vec a_S - \vec a\)</li>
+                </ul>
+            </li>
+
+            <li><strong>Scheinkräfte (Trägheitskräfte):</strong>
+                <ul>
+                    <li><strong>Trägheitskraft (bei linearer Beschleunigung):</strong> Wirkt der Beschleunigung des Bezugssystems entgegen.
+                        \[ \vec F_\mathrm{Trägheit} = -m \vec a \]</li>
+                </ul>
+            </li>
+
+            <li><strong>Scheinkräfte in rotierenden Bezugssystemen (\(S'\)):</strong>
+                <ul>
+                    <li><strong>Newtonsche Gleichung in \(S'\) (im rotierenden Bezugsystem):</strong>
+                        \[ \vec F_{S^\prime} = \vec F_S + \vec F_{\mathrm{Zentrifugal}} + \vec F_{\mathrm{Coriolis}} \]</li>
+                    <li><strong>Zentrifugalkraft (\(\vec F_\mathrm{Zentrifugal}\)):</strong> Wirkt radial nach außen (vom Zentrum weg). Sie kompensiert die Zentripetalkraft im mitrotierenden System.
+                        \[ F_\mathrm{Zentrifugal} = m \omega^2 r \]</li>
+                    <li><strong>Corioliskraft (\(\vec F_\mathrm{Coriolis}\)):</strong> Wirkt senkrecht zur Bewegungsrichtung des Körpers im rotierenden System. Sie tritt nur auf, wenn sich der Körper relativ zum rotierenden System bewegt (\(\vec v^\prime \neq 0\)).
+                        \[ \vec F_\mathrm{Coriolis} = -2 m \left(\vec \omega \times \vec v^\prime\right) \]</li>
+                </ul>
+            </li>
+
+            <li><strong>Auswirkungen der Corioliskraft auf der Erde:</strong>
+                <ul>
+                    <li><strong>Nordhalbkugel:</strong> Ablenkung von bewegten Objekten (Wind, Wasser) immer nach rechts von der Bewegungsrichtung.</li>
+                    <li><strong>Südhalbkugel:</strong> Ablenkung von bewegten Objekten immer nach links von der Bewegungsrichtung.</li>
+                    <li><strong>Foucaultsches Pendel:</strong> Drehung der Schwingungsebene ist proportional zu \(\omega_\mathrm{Erde} \cdot \sin(\varphi)\), wobei \(\varphi\) der Breitengrad ist.</li>
+                    <li><strong>Badewannen/Toiletten:</strong> Der Effekt ist auf kleinen Skalen vernachlässigbar; die Drehrichtung wird von lokalen Faktoren bestimmt.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</section>
