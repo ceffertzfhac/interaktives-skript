@@ -771,8 +771,14 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   (Abb. 1.73, Zusammenfassung 1.9). Gleichungen fast alle aus align-Bloecken
   (jede `\\`-Zeile nummeriert). Verifikation Stufe 2/3/6 deckungsgleich mit PDF;
   **Stufe 5 (Browser-Sicht) offen — Freigabe ausstehend**.
-- [ ] **P12-A6 1.8 Gravitation** — 5 Subsections, 0 Abb.
-  (`pskript_mech_gravitation_v1.tex`, 22 KB). *(M)*
+- [x] **P12-A6 1.8 Gravitation** — 5 Subsections, 0 Abb.
+  (`pskript_mech_gravitation_v1.tex`, 22 KB). *(M)* — migriert 2026-07-25
+  (Branch `migration/kapitel-1.8`, Commit 37c4628): `chapters/ch_01_08_gravitation.html`,
+  31 Gl. (1.8.2=12, 1.8.3=6, 1.8.4=13; 1.8.1/1.8.5 ohne), 4 Beispiele (1.8.1–1.8.4),
+  keine Abbildung, keine Zusammenfassung -> Zaehler unveraendert (Abb. 1.73,
+  Zusammenfassung 1.9). 2 kapiteluebergreifende Verweise auf 1.2.7 (p-1-2-7).
+  Verifikation Stufe 2/3/6 deckungsgleich mit PDF; **Stufe 5 (Browser-Sicht) offen —
+  Freigabe ausstehend**. **Damit ist TK 1 (Mechanik, 1.0–1.8) vollstaendig migriert.**
 
 ### P12-B — TK 2 Elektromagnetismus (neu, `ch_03_*.html`, `data-tk-num="2"`)
 
