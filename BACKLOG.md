@@ -763,8 +763,14 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   Irma). Viele Inline-`\be` -> display equations; `\nicefrac`->`/`, `\url`-><a>,
   `\SI`-Zehnerpotenzen aufgeloest. Verifikation Stufe 1–4/6 deckungsgleich mit PDF;
   **Stufe 5 (Browser-Sicht) offen — Freigabe ausstehend**.
-- [ ] **P12-A5 1.7 Elastische und inelastische Stöße** — 2 Subsections, 0 Abb.
-  (`pskript_mech_dyn_stoesse.tex`, 17 KB). Kandidat: `stoss_simulation`. *(M)*
+- [x] **P12-A5 1.7 Elastische und inelastische Stöße** — 2 Subsections, 0 Abb.
+  (`pskript_mech_dyn_stoesse.tex`, 17 KB). Kandidat: `stoss_simulation`. *(M)* —
+  migriert 2026-07-25 (Branch `migration/kapitel-1.7`, Commit 52e92cd):
+  `chapters/ch_01_07_stoesse.html`, 47 Gl. (alle in 1.7.1; 1.7.2 ohne), 3 Beispiele
+  (1.7.1–1.7.3), keine Abbildung, keine Zusammenfassung -> Zaehler unveraendert
+  (Abb. 1.73, Zusammenfassung 1.9). Gleichungen fast alle aus align-Bloecken
+  (jede `\\`-Zeile nummeriert). Verifikation Stufe 2/3/6 deckungsgleich mit PDF;
+  **Stufe 5 (Browser-Sicht) offen — Freigabe ausstehend**.
 - [ ] **P12-A6 1.8 Gravitation** — 5 Subsections, 0 Abb.
   (`pskript_mech_gravitation_v1.tex`, 22 KB). *(M)*
 

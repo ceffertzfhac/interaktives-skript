@@ -89,7 +89,8 @@ src/numbering.js   init_numbering() — box, figure and image numbering off page
                    1.4 (Kreisbahnen, figs 1.38–1.60, offset 37/3), 1.5 (Rotation, figs
                    1.61–1.72, offset 60/7) and 1.6 (Bezugsysteme/Scheinkräfte, fig 1.73,
                    Zusammenfassung 1.9) — 1.6 sits after ch_02 in reading order and carries
-                   no offset (contiguous to 1.5). Only 1.0 (no figs) plus 1.7/1.8 remain.
+                   no offset (contiguous to 1.5). 1.7 (Stöße, no figs/no summary, unchanged counters)
+                   also migrated; only 1.0 (no figs) plus 1.8 remain.
                    The 1.4/1.5 offsets are now redundant (1.1–1.6 contiguous) but kept —
                    they still hold as ABSOLUTE start values.
                    Box titles are split into <span class="hb-type"> (type + number, uppercased
