@@ -782,8 +782,13 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
 
 ### P12-B — TK 2 Elektromagnetismus (neu, `ch_03_*.html`, `data-tk-num="2"`)
 
-- [ ] **P12-B0 2.0 Einleitung und Motivation** — 0 Subsections, 0 Abb.
-  (`pskript_em_einleitung_und_motivation.tex`, 2.3 KB). *(S)*
+- [x] **P12-B0 2.0 Einleitung und Motivation** — 0 Subsections, 0 Abb.
+  (`pskript_em_einleitung_und_motivation.tex`, 2.3 KB). *(S)* — migriert 2026-07-25
+  (Branch `migration/kapitel-2.0`, Commit 384ec39): `chapters/ch_03_00_einleitung.html`,
+  4 Prosa-Absaetze, nichts Nummeriertes. **Erster Abschnitt von TK 2** (`ch_03_*`,
+  `data-tk-num="2"`, `data-tk-title="Elektromagnetismus"`). DOM-Harness: neue Seite
+  "2.0 …" korrekt angehaengt, Zaehler unveraendert. Live-Test der 2.x-Nummerierung
+  (Abb. 2.1 / Beispiel 2.1.1 / 2.1.n-Gleichungen) folgt mit 2.1 (P12-B1).
 - [ ] **P12-B1 2.1 Grundlagen der Elektrizitätslehre** — 14 Subsections, 0 Abb.
   (`pskript_em_grundlagen_der_elektrizitaetslehre.tex`, 39 KB). Viele
   Schaltpläne/Symbole — prüfen ob als SVG-Icons oder PNG. *(L)*
