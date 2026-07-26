@@ -789,9 +789,20 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   `data-tk-num="2"`, `data-tk-title="Elektromagnetismus"`). DOM-Harness: neue Seite
   "2.0 …" korrekt angehaengt, Zaehler unveraendert. Live-Test der 2.x-Nummerierung
   (Abb. 2.1 / Beispiel 2.1.1 / 2.1.n-Gleichungen) folgt mit 2.1 (P12-B1).
-- [ ] **P12-B1 2.1 Grundlagen der Elektrizitätslehre** — 14 Subsections, 0 Abb.
+- [x] **P12-B1 2.1 Grundlagen der Elektrizitätslehre** — 14 Subsections, ~~0~~ 1 Abb.
   (`pskript_em_grundlagen_der_elektrizitaetslehre.tex`, 39 KB). Viele
-  Schaltpläne/Symbole — prüfen ob als SVG-Icons oder PNG. *(L)*
+  Schaltpläne/Symbole — prüfen ob als SVG-Icons oder PNG. *(L)* — migriert
+  2026-07-25 (Branch `migration/kapitel-2.1`, Commits 767039a/e83af2c):
+  `chapters/ch_03_01_grundlagen_elektrizitaetslehre.html`, 43 Gl. (2.1.1–2.1.43),
+  1 Beispiel (2.1.1), 1 Zusammenfassung (2.1), **1 Abbildung (Abb. 2.1)**. Die
+  eine Abb. ist ein **circuitikz-Schaltplan** (kein `\includegraphics`) — via
+  standalone `pdflatex` gerendert; **siunitx fehlt** in der texlive-Installation,
+  daher \SI/\si/\volt/\ohm durch minimale Ersatzmakros ersetzt (nur fuers Rendern).
+  **Erster TK-2-Abschnitt mit Nummern — 2.x-Nummerierung live bestaetigt**
+  (DOM-Harness: Abb. 2.1, Beispiel 2.1.1, Zusammenfassung 2.1; Kapitel-2-Zaehler
+  per data-figure-/zusammenfassung-offset="0" am h2 zurueckgesetzt). Verifikation
+  Stufe 2/3/4/6 deckungsgleich mit PDF; **Stufe 5 (Browser: Gleichungs-Tags 2.1.n)
+  offen — Freigabe ausstehend**.
 - [ ] **P12-B2 2.2 Elektrostatik** — 10 Subsections, 0 Abb.
   (`pskript_em_elektrostatik.tex`, 52 KB). Felder/Dipole — Vektorfeld-Plot-Kandidat?
   *(L)*

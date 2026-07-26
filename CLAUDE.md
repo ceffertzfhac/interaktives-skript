@@ -91,7 +91,12 @@ src/numbering.js   init_numbering() — box, figure and image numbering off page
                    Zusammenfassung 1.9) — 1.6 sits after ch_02 in reading order and carries
                    no offset (contiguous to 1.5). 1.7 (Stöße, no figs/no summary, unchanged counters)
                    also migrated, and 1.8 (Gravitation, no figs/no summary, unchanged
-                   counters) — TK 1 (Mechanik, 1.0–1.8) is now COMPLETE.
+                   counters) — TK 1 (Mechanik, 1.0–1.8) is now COMPLETE. TK 2
+                   (Elektromagnetismus, ch_03_*, data-tk-num="2") started: 2.0
+                   (Einleitung) and 2.1 (Grundlagen der Elektrizitätslehre) migrated.
+                   2.1's h2 carries data-figure-offset/-zusammenfassung-offset="0" to
+                   start the chapter-2 counters; the 2.x numbering is confirmed live
+                   (Abb. 2.1, Beispiel 2.1.1, Zusammenfassung 2.1, equations 2.1.n).
                    The 1.4/1.5 offsets are now redundant (1.1–1.6 contiguous) but kept —
                    they still hold as ABSOLUTE start values.
                    Box titles are split into <span class="hb-type"> (type + number, uppercased
