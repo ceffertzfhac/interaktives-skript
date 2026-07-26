@@ -1,0 +1,440 @@
+<!-- ch_03_01_grundlagen_elektrizitaetslehre.html — v0.13-Abschnitt 2.1 "Grundlagen
+     der Elektrizitätslehre" (1:1-Transkription aus
+     Input/v0.13/pskript_em_grundlagen_der_elektrizitaetslehre.tex).
+     TK 2 "Elektromagnetismus" (data-tk-num="2"), Section 2.1. Rein statisch.
+     14 Unterabschnitte 2.1.1–2.1.14, Gleichungen 2.1.1–2.1.43, 1 Beispiel (2.1.1),
+     1 Zusammenfassung (2.1), 1 Abbildung (Abb. 2.1). ERSTER TK-2-Abschnitt mit
+     nummeriertem Inhalt -> Live-Test der 2.x-Nummerierung (Kapitel-2-Zaehler
+     starten bei 0). data-figure-offset="0" + data-zusammenfassung-offset="0" am
+     h2 setzen den Kapitel-2-Start explizit (erste Abb. 2.1, Zusammenfassung 2.1).
+     Abbildung: circuitikz-Schaltplan, via standalone pdflatex (siunitx fehlt ->
+     minimale Ersatz-Unit-Makros nur fuers Rendern) -> pdftocairo PNG. -->
+
+
+<section>
+    <h2 class="inhaltsverzeichnis" data-figure-offset="0" data-zusammenfassung-offset="0">2.1 Grundlagen der Elektrizitätslehre</h2>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.1 Die elektrische Ladung</h3>
+<section>
+    <p>Genauso, wie wir jedem Objekt im Universum eine Masse \(m\geq 0\) zuschreiben können, können wir ihm auch eine elektrische Ladung zuordnen. Anders als die Masse kann dabei die elektrische Ladung sowohl positiv als auch negativ oder Null sein. Das Formelzeichen für die elektrische Ladung ist \(q\) oder \(Q\)<span class="fussnote">Oftmals verwendet man \(q\), wenn man eine „kleine" Ladung meint, also zum Beispiel die Ladung eines einzelnen Elektrons, \(Q\), wenn man eine größere (evtl. sogar makroskopische) Ladungsmenge beziehungsweise Ladungsansammlung meint. Dabei gibt es jedoch kein „richtig" oder „falsch" und keine klare Konvention.</span>, die Einheit der Ladung ist das Coulomb \(\mathrm{C}\), das sich aus den SI-Basiseinheiten Ampere und Sekunde zusammensetzt:</p>
+    \begin{equation}
+        \text{Elektrische Ladung } q \text{ in } \mathrm{C} \quad [q] = \mathrm{C}={\mathrm{A}\cdot \mathrm{s}}
+    \end{equation}
+
+    <h4>Quantelung der Ladung und Elementarladung</h4>
+    <p>Außerhalb der Welt der Quarks und Leptonen (also der Elementarteilchenphysik) ist jede Ladungsmenge ein Vielfaches der sogenannten Elementarladung \(e\), die den Betrag der Ladung eines Elektrons beziehungsweise Protons angibt:</p>
+    \begin{equation}
+        e = 1{,}602\,176\,634 \cdot 10^{-19}\,\mathrm{C}
+    \end{equation}
+    <p>Jede Ladung \(q\) oder \(Q\) lässt sich also als ganzzahliges Vielfaches der Elementarladung schreiben:</p>
+    \begin{equation}
+        q = n \cdot e \quad \text{mit } n \in \mathbb{Z}
+    \end{equation}
+    <p>wobei \(n\) eine ganze Zahl ist, die sowohl positiv als auch negativ sein kann.</p>
+
+    <h4>Ladungserhaltung</h4>
+    <p>In einem abgeschlossenen System bleibt die Summe aller elektrischen Ladungen konstant. Wird zum Beispiel bei der sogenannten „Paarerzeugung" ein Elektron-Positron-Paar erzeugt, so hat das Elektron die Ladung \(-e\) und das Positron die Ladung \(+e\). Die Summe der Ladungen vor und nach dem Prozess ist also jeweils Null:</p>
+    \begin{equation}
+        q_{\text{vorher}} = 0 = q_{\text{nachher}} = -e + e
+    \end{equation}
+    <p>Auch bei anderen Prozessen, wie zum Beispiel dem Zerfall eines Neutrons in ein Proton, ein Elektron und ein Antineutrino, bleibt die Summe der Ladungen erhalten:</p>
+    \begin{equation}
+        q_{\text{vorher}} = 0 = q_{\text{nachher}} = 0 + (-e) + 0
+    \end{equation}
+
+    <p>Elektrischer Strom, über den wir später noch sprechen werden, ist also keine „Ladungserzeugung", sondern ein Transport von Ladung von einem Ort zum anderen, also höchstens eine „Ladungstrennung".</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.2 Grundbegriffe der Elektrizitätslehre: Strom</h3>
+<section>
+    <p>Elektrischer Strom beschreibt, dass sich Ladungen gerichtet verschieben. Bewegen sich im Mittel gleich viele positive wie negative Ladungen in dieselbe Richtung, so entsteht kein elektrischer Strom. Bewegen sich positive (oder negative) Ladungen im Mittel genauso in positive wie in negative (Achsen-)Richtung, so entsteht ebenfalls kein elektrischer Strom. Erst wenn sich im Mittel mehr positive Ladung in eine Richtung bewegt als negative Ladung in dieselbe Richtung, oder wenn sich positive Ladungen in die eine Richtung bewegen und negative Ladungen in die entgegengesetzte Richtung, entsteht ein elektrischer Strom. Elektrischer Strom kann also als eine gerichtete Bewegung von Ladung verstanden werden. Dabei wissen wir heute, dass es meist die negativen Ladungsträger (Elektronen) sind, die sich bewegen, während die positiven Ladungsträger (Protonen) meist fest in einem Kristallgitter gebunden sind und sich nicht bewegen. Die sogenannte <strong>technische Stromrichtung</strong> wurde jedoch schon vor der Entdeckung des Elektrons festgelegt und beschreibt die Richtung, in die sich (theoretisch) positive Ladungen bewegen. Die sogenannte <strong>physikalische Stromrichtung</strong> beschreibt die Richtung, in die sich negative Ladungen bewegen. In der Praxis wird meist die technische Stromrichtung verwendet.</p>
+
+    <p>Bleibt der Strom, gemessen an einer bestimmten Stelle im Stromkreis, konstant, so spricht man von <strong>Gleichstrom</strong> (englisch: <em>direct current</em>, DC). Wechselt der Strom periodisch seine Richtung, so spricht man von <strong>Wechselstrom</strong> (englisch: <em>alternating current</em>, AC).</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.3 Leiter und Nichtleiter</h3>
+<section>
+    <p>Materialien, in denen sich Ladungen (meist Elektronen) frei bewegen können, nennt man Leiter. Dabei ist zu bemerken, dass sich nicht alle Elektronen in einem Material frei bewegen können. In Metallen sind es zum Beispiel die äußersten Elektronen der Atome, die nicht mehr fest an ein bestimmtes Atom gebunden sind und sich frei durch das Metall bewegen können. Typische Leiter sind Metalle wie Kupfer, Silber, Gold und Aluminium. Auch Salzwasser und ionisierte Gase (Plasmen) sind gute Leiter.</p>
+
+    <p>Materialien, in denen sich Ladungen nicht oder nur sehr eingeschränkt bewegen können, nennt man <strong>Isolatoren</strong> oder <strong>Nichtleiter</strong>. Dazu gehören zum Beispiel Glas, Keramik, Kunststoffe und Luft. In Isolatoren sind alle Elektronen fest an ihre Atome gebunden und können sich nicht frei bewegen. Typische Isolatoren sind Glas, Keramik, Kunststoffe und trockene Luft.</p>
+
+    <p>Zwischen den beiden Extremen Leiter und Isolator gibt es eine Vielzahl von Materialien, deren Leitfähigkeit sehr von äußeren Parametern wie Temperatur, Druck oder Lichteinfall abhängt. Solche Materialien nennt man <strong>Halbleiter</strong>. Typische Halbleiter sind Silizium und Germanium.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.4 Grundbegriffe der Elektrizitätslehre: Stromstärke</h3>
+<section>
+    <p>Bewegt sich in einer infinitesimalen Zeit \(\mathrm{d}t\) eine Nettoladungsmenge \(\mathrm{d}Q\) durch den Querschnitt eines stromdurchflossenen Leiters, so definiert man die <strong>Stromstärke</strong> \(I\) als:</p>
+    \begin{equation}
+        I = \frac{\mathrm{d}Q}{\mathrm{d}t}, \quad \text{Einheit:} \quad [I] = \mathrm{A} = \frac{\mathrm{C}}{\mathrm{s}}\quad \text{„Ampere"}
+    \end{equation}
+
+    <h4>Analogien zwischen Elektrizitätslehre und Alltagserfahrungen</h4>
+    <p>Die Mikrowelt der geladenen Teilchen, die sich in elektrischen Leitern bewegen, und die sich daraus ergebenden Phänomene und Zusammenhänge sind für uns Menschen oft schwer greifbar. Deswegen greifen viele Lehrbücher an dieser Stelle auf Analogien aus dem Alltag zurück. Auch wir werden uns im Lauf des Kapitels zum Elektromagnetismus verschiedener Analogien bedienen, um einige Konzepte und Ideen deutlicher zu machen. Sie müssen sich jedoch immer vor Augen halten, dass es sich immer nur um limitierte Analogien handelt, die einen Aspekt gut anschaulich erklären können, aber dann wiederum in einem anderen Aspekt versagen.</p>
+
+    <p>Drei typische Analogien sind:</p>
+    <ul>
+        <li>Die <strong>Wasseranalogie</strong>: Elektrischer Strom wird mit dem Fluss von Wasser in Röhren verglichen.</li>
+        <li>Die <strong>Verkehrsanalogie</strong>: Elektrischer Strom wird mit dem Verkehr von Autos auf Straßen und Autobahnen verglichen.</li>
+        <li>Die <strong>Skifahranalogie</strong>: Elektrische Spannung wird mit der Höhe eines Skihangs verglichen.</li>
+    </ul>
+
+    <p>Jede dieser Analogien hat ihre besonderen Stärken und Schwächen, jede ist jedoch in Bezug auf die tatsächlichen Ursachen, Phänomene und Zusammenhänge extrem limitiert, teils sogar widersprüchlich oder irreführend. Daher müssen Sie sich bei jeder Analogie klarmachen: In welchem Zusammenhang nutze ich die Analogie, wo hilft sie mir, wo versagt sie?</p>
+
+    <h4>Analogien zur Stromstärke</h4>
+    <p>Die elektrische Stromstärke \(I\), als Maß dafür, wie viel Ladung pro Zeit durch einen Leiterquerschnitt fließt, kann mit dem Fluss von Wasser durch einen Rohrquerschnitt oder mit dem Verkehrsfluss von Autos durch eine Mautstelle auf einer Autobahn verglichen werden. In beiden Fällen gilt: Je mehr von etwas durch eine bestimmte Stelle (Rohrquerschnitt, Mautstelle) pro Zeit fließt, desto größer ist der Fluss beziehungsweise die Stromstärke. Diese Analogien werden uns helfen, wenn wir betrachten, wie sich die Stromstärke in elektrischen Schaltkreisen verhält, zum Beispiel bei Verzweigungen oder Zusammenführungen von Leitern.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.5 Grundbegriffe der Elektrizitätslehre: Spannung</h3>
+<section>
+    <p>Die Stromstärke \(I\) können wir uns, vor allem mithilfe der Wasser- oder Verkehrsanalogie, gut als messbare Größe vorstellen. Insbesondere in der Verkehrsvorstellung ist es ziemlich einfach. Stellen Sie sich vor, Sie stellen sich auf eine Brücke über eine Autobahn und zählen, wie viele Autos \(N\) pro Zeiteinheit \(T\) unter Ihnen durchfahren. Das gibt Ihnen eine Vorstellung von der Stromstärke \(I\)<span class="fussnote">Hier sehen Sie auch schon die Limitation der Verkehrsanalogie: Auf diese Weise erhalten Sie die mittlere Anzahl der Autos pro Zeiteinheit \(\bar{I}=N/T\), aber nicht genau die für eine infinitesimale Zeit \(\mathrm{d}t\) gültige Stromstärke.</span> Die Stromstärke ist also eine beobachtbare Wirkung von etwas. Was verursacht den Stromfluss?</p>
+
+    <p>Als (eine der) Ursache(n) für den Stromfluss in elektrischen Leitern kann die <strong>Spannung</strong> angesehen werden. Spannung ist Ursache für die gerichtete Bewegung von Ladungen. Spannung herrscht nie an einem einzigen Punkt, sondern immer zwischen zwei Punkten \(A\) und \(B\). Die Spannung zwischen zwei Punkten \(A\) und \(B\) wird mit \(U_{AB}\) bezeichnet oder einfach nur als \(U\):</p>
+
+    \begin{equation}
+        U = U_{AB}, \quad \text{Einheit:} \quad [U] = \mathrm{V} = \frac{\mathrm{J}}{\mathrm{C}} \quad \text{„Volt"}
+    \end{equation}
+
+    <p>Bleibt die elektrische Spannung zwischen zwei Punkten \(A\) und \(B\) zeitlich konstant, so spricht man von <strong>Gleichspannung</strong>. Wechselt die Spannung periodisch Betrag und Vorzeichen, so spricht man von <strong>Wechselspannung</strong>. Typischerweise gilt: Eine Gleichspannung erzeugt Gleichstrom, eine Wechselspannung erzeugt Wechselstrom. Es gibt jedoch auch Ausnahmen von dieser Regel, die jedoch im Rahmen dieser Vorlesung nicht betrachtet werden können.</p>
+
+    <p>In der Wasseranalogie kann die Spannung mit dem Druckunterschied zwischen zwei Punkten in einem Rohrsystem verglichen werden. Alternativ kann man sich eine Spannung auch als Höhenunterschied zwischen zwei Punkten \(A\) und \(B\) in einem Wassersystem vorstellen. Wasser fließt immer von einem höheren Punkt zu einem tieferen Punkt. In der Skifahranalogie kann die Spannung mit dem Höhenunterschied zwischen zwei Punkten \(A\) und \(B\) auf einem Skihang verglichen werden. Ein Skifahrer bewegt sich immer von einem höheren Punkt zu einem tieferen Punkt. Der Druck- bzw. Höhenunterschied zwischen zwei Punkten ist also die Ursache für den gerichteten Fluss von Wasser beziehungsweise Skifahrern von einem Punkt zu einem anderen. Genauso ist die Spannung zwischen zwei Punkten die Ursache für den gerichteten Fluss von Ladungen von einem Punkt zu einem anderen.</p>
+
+    <p><strong>Spannungsquellen</strong> sind Bauteile, die eine elektrische Spannung zwischen zwei Punkten erzeugen bzw. aufrechterhalten können. Typische Spannungsquellen sind Batterien, Akkumulatoren, Generatoren, Solarmodule und Netzteile. Im physikalischen Praktikum werden Sie mit Labornetzteilen als Spannungsquellen arbeiten. Diese können eine (zum Teil einstellbare) Spannung zwischen den beiden Ausgangsklemmen erzeugen. Die beiden Anschlüsse oder Klemmen einer Spannungsquelle bezeichnet man manchmal auch als <strong>Pole</strong> der Spannungsquelle.</p>
+
+    <p>Manche Experimente können Sie auch mit Batterien durchführen. Keinesfalls sollten Sie jedoch versuchen, direkt an das Stromnetz (also die Steckdose) zu gehen, da dies lebensgefährlich sein kann!</p>
+
+    <p>Der Begriff der Spannung ist sehr eng verknüpft mit dem Begriff des <strong>elektrischen Potentials</strong>. Warum das so ist, werden wir uns im Abschnitt zum <strong>elektrischen Feld</strong> anschauen.</p>
+
+    <p>Schon vorab können Sie sich eine Definition oder Sprachregelung merken. Angenommen, es liegt eine bestimmte Spannung zwischen einem Punkt \(0\) und einem Punkt \(A\), und eine gleich große Spannung zwischen dem Punkt \(0\) und einem Punkt \(B\). Dann sagt man: „Die Punkte \(A\) und \(B\) liegen auf dem gleichen Potential". Dies bedeutet gleichzeitig, dass zwischen den Punkten \(A\) und \(B\) keine Spannung herrscht, also \(U_{AB}=0\). Dafür müssen die beiden Punkte \(A\) und \(B\) gar nicht tatsächlich physikalisch verbunden sein.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.6 Grundbegriffe der Elektrizitätslehre: Widerstand</h3>
+<section>
+    <p>Wir haben nun die Stromstärke als beobachtbare Wirkung und die Spannung als Ursache für den Stromfluss kennengelernt. Der Widerstand eines Leiters beschreibt, wie stark die Stromstärke auf eine bestimmte angelegte Spannung reagiert.</p>
+
+    <p>Der <strong>elektrische Widerstand</strong> \(R\) eines Leiters ist definiert als das Verhältnis der Spannung \(U\) über den Leiter zu der durch den Leiter fließenden Stromstärke \(I\):</p>
+    \begin{equation}
+        R = \frac{U}{I}, \quad \text{Einheit:} \quad [R] = \Omega = \frac{\mathrm{V}}{\mathrm{A}} \quad \text{„Ohm"}
+    \end{equation}
+
+    <p>Der Widerstand eines Leiters hängt von verschiedenen Faktoren ab, wie zum Beispiel dem Material, aus dem der Leiter besteht, der Länge des Leiters, dem Querschnitt des Leiters und der Temperatur. Bei manchen Materialien hängt der Widerstand auch von der Beleuchtungsstärke oder dem (mechanischen) Druck ab.</p>
+
+    <p>Man kann sich den Widerstand auch wie folgt vorstellen: Je größer der Widerstand eines Bauteils in einer elektrischen Schaltung, desto mehr wird der Stromfluss durch dieses Bauteil bei einer bestimmten Spannung behindert.</p>
+
+    <p>In der Verkehrsanalogie kann der Widerstand mit einer Baustelle auf der Autobahn verglichen werden. Je mehr Spuren bei einer Baustelle gesperrt sind, desto größer ist der Widerstand für den Verkehrsfluss und desto weniger Autos können pro Zeiteinheit durch die Baustelle fahren. Hat sich ein kontinuierlicher (zähfließender) Verkehrsstrom gebildet, so wird man sehen: Auch auf dem Autobahnabschnitt vor und nach der Baustelle ist die Anzahl der Autos pro Zeiteinheit (also die Stromstärke) reduziert, solange es keinen Zu- und Abfluss (Auffahrt oder Abfahrt) zwischendurch gibt. In der Wasseranalogie kann der Widerstand mit einer Verengung oder Verstopfung in einem Rohr verglichen werden. Je enger die Verstopfung, desto größer ist der Widerstand für den Wasserfluss und desto weniger Wasser kann pro Zeiteinheit durch die Verstopfung fließen.</p>
+
+    <p>In der Elektrizitätslehre wird der Begriff „Widerstand" auf zwei Weisen verwendet: Einmal beschreibt der Widerstand die Eigenschaft eines Bauteils, den Stromfluss zu behindern. Die Eigenschaft Widerstand kann jedem stromdurchflossenen Bauteil<span class="fussnote">Und später auch noch anderen Bauteilen</span> zugeordnet werden. Zum anderen wird der Begriff Widerstand auch für ein spezielles Bauteil in elektrischen Schaltungen verwendet, das genau diese Eigenschaft besitzt, also den Stromfluss zu behindern. Solche Bauteile nennt man -- wenn bestimmte Bedingungen erfüllt sind -- <strong>Ohmsche Widerstände</strong> oder einfach nur <strong>Widerstände</strong>.</p>
+
+    <p>Ohmsche Widerstände sind Widerstände, bei denen der Wert des Widerstands \(R\) unabhängig von der angelegten Spannung \(U\) und der durchfließenden Stromstärke \(I\) ist.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.7 Das Ohmsche Gesetz</h3>
+<section>
+    <p>Für Ohmsche Widerstände gilt das sogenannte <strong>Ohmsche Gesetz</strong>, das den Zusammenhang zwischen Spannung \(U\), Stromstärke \(I\) und Widerstand \(R\) beschreibt:</p>
+    \begin{equation}
+        U = R \cdot I
+    \end{equation}
+
+    <p>In dieser Gleichung ist der Ursache-Wirkungs-Zusammenhang besonders deutlich: Die Spannung \(U\) (Ursache) ist proportional zur Stromstärke \(I\) (Wirkung), wobei der Proportionalitätsfaktor der Widerstand \(R\) ist.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.8 Der elektrische Stromkreis</h3>
+<section>
+    <p>Damit überhaupt Strom fließen kann, müssen mindestens zwei Bedingungen erfüllt sein:</p>
+    <ol>
+        <li>Es muss eine Spannungsquelle vorhanden sein, die eine Spannung zwischen zwei Punkten erzeugt.</li>
+        <li>Es muss ein geschlossener Leiterweg (Stromkreis) vorhanden sein, der die beiden Anschlüsse der Spannungsquelle miteinander verbindet, damit Ladungen fließen können.<span class="fussnote">Von dieser Regel werden Sie später Ausnahmen kennenlernen, zum Beispiel wenn ein sogenannter Kondensator in den Stromkreis eingebaut wird.</span></li>
+    </ol>
+
+    <p>Elektrische Stromkreise kann man durch <strong>Schaltpläne</strong> darstellen. In Schaltplänen werden die verschiedenen Bauteile durch standardisierte Symbole dargestellt, die in der Regel genormt sind. Die wichtigsten Schaltzeichen finden Sie in der Praktikumsanleitung zum Versuch „Das Multimeter".</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.9 Parallel- und Reihenschaltung von Widerständen</h3>
+<section>
+    <p>Widerstände können in elektrischen Schaltkreisen auf verschiedene Weisen miteinander verbunden werden. Die verschiedenen Arten, wie die Widerstände miteinander verbunden werden können, kann man auch in zwei Grundtypen unterteilen: die <strong>Reihenschaltung</strong> und die <strong>Parallelschaltung</strong>.</p>
+
+    <h4>Reihenschaltung von Widerständen</h4>
+    <p>Bei der Reihenschaltung von Widerständen werden die Widerstände nacheinander in einer einzigen Leitung verbunden. Der Strom muss also nacheinander durch jeden Widerstand fließen. In einer Reihenschaltung von Widerständen ist die Stromstärke \(I\) durch jeden Widerstand gleich, da der Strom nur einen Weg hat, um durch die Schaltung zu fließen:</p>
+    \begin{equation}
+        I = I_1 = I_2 = I_3 = \ldots
+    \end{equation}
+    <p>In der Verkehrsanalogie entspricht dies einer Straße ohne Abzweigungen, auf der alle Autos nacheinander durch mehrere Baustellen fahren müssen. Innerhalb der Baustelle gehen keine Autos verloren oder kommen hinzu, daher ist die Anzahl der Autos pro Zeiteinheit (also die Stromstärke) überall gleich.</p>
+
+    <p>Die Gesamtspannung \(U\) über die Reihenschaltung ist die Summe der Spannungen über jeden einzelnen Widerstand:</p>
+    \begin{equation}
+        U_\text{ges} = U_1 + U_2 + U_3 + \ldots
+    \end{equation}
+
+    <p>In der Skifahranalogie entspricht dies einem Skihang mit mehreren Abschnitten unterschiedlicher Höhenunterschiede. Die Gesamtspannung (Höhenunterschied) ist die Summe der Höhenunterschiede jedes Abschnitts.</p>
+
+    <p>Der Reihenschaltung kann nun ein Gesamtwiderstand \(R_{\text{ges}}\) zugeordnet werden, der den gesamten Effekt der hintereinander geschalteten Widerstände auf den Stromfluss beschreibt.</p>
+
+    <p>Auch für den Gesamtwiderstand \(R_{\text{ges}}\) gilt das Ohmsche Gesetz:</p>
+    \begin{equation}
+        U_\text{ges} = R_{\text{ges}} \cdot I_{\text{ges}}= R_{\text{ges}} \cdot I
+    \end{equation}
+
+    <p>Im letzten Schritt der vorherigen Gleichung haben wir genutzt, dass die Stromstärke in einer Reihenschaltung überall gleich ist.</p>
+
+    <p>Die Gesamtspannung \(U\) kann nun in die Gleichung durch die Summe der Einzelspannungen ersetzt werden:</p>
+    \begin{equation}
+        U_1 + U_2 + U_3 + \ldots = R_{\text{ges}} \cdot I
+    \end{equation}
+
+    <p>Für jede Einzelspannung kann nun das Ohmsche Gesetz angewendet werden:</p>
+    \begin{equation}
+        R_1 \cdot I + R_2 \cdot I + R_3 \cdot I + \ldots = R_{\text{ges}} \cdot I
+    \end{equation}
+
+    <p>Da die Stromstärke \(I\) in jedem Term vorkommt, kann sie herausgekürzt werden:</p>
+    \begin{equation}
+        R_1 + R_2 + R_3 + \ldots = R_{\text{ges}}
+    \end{equation}
+
+    <p>Der Gesamtwiderstand einer Reihenschaltung von Widerständen ist also die Summe der Einzelwiderstände:</p>
+    \begin{equation}
+        R_{\text{ges}} = R_1 + R_2 + R_3 + \ldots
+    \end{equation}
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.10 Parallelschaltung von Widerständen</h3>
+<section>
+    <p>Bei der Parallelschaltung von Widerständen werden die Widerstände nebeneinander in separaten Leitungen verbunden. Der Strom, der ja aus einzelnen geladenen Teilchen besteht, muss sich also aufteilen, wobei jedes Teilchen nur durch einen der Widerstände fließen kann<span class="fussnote">Die Elementarladung ist, wie wir schon weiter oben festgestellt haben, unteilbar.</span>. In einer Parallelschaltung von Widerständen ist die Spannung \(U\) über jeden Widerstand gleich, da alle Widerstände direkt mit den gleichen beiden Punkten verbunden sind:</p>
+    \begin{equation}
+        U = U_1 = U_2 = U_3 = \ldots
+    \end{equation}
+    <p>In der Skifahranalogie entspricht dies mehreren Skipisten, bei denen alle am gleichen Startpunkt (Bergstation des Lifts) beginnen und am gleichen Endpunkt (Talstation des Lifts) enden. Der Höhenunterschied (Spannung) ist gleich, egal welche Skipiste gewählt wurde.</p>
+
+    <p>Da sich der Strom auf die einzelnen Widerstände aufteilt, ist die Gesamtstromstärke \(I_{\text{ges}}\) die Summe der Stromstärken durch jeden einzelnen Widerstand:</p>
+    \begin{equation}
+        I_{\text{ges}} = I_1 + I_2 + I_3 + \ldots
+    \end{equation}
+
+    <p>In der Verkehrsanalogie entspricht dies einer Baustelle mit mehreren parallelen voneinander unabhängigen Fahrspuren. Jedes Auto kann nur genau eine Fahrspur benutzen. Die Gesamtanzahl der Autos pro Zeiteinheit (also die Gesamtstromstärke) ist die Summe der Anzahl der Autos pro Zeiteinheit auf jeder einzelnen Fahrspur.</p>
+
+    <p>Der Parallelschaltung kann nun ein Gesamtwiderstand \(R_{\text{ges}}\) zugeordnet werden, der den gesamten Effekt der parallel geschalteten Widerstände auf den Stromfluss beschreibt.</p>
+
+    <p>Auch für den Gesamtwiderstand \(R_{\text{ges}}\) gilt das Ohmsche Gesetz:</p>
+    \begin{equation}
+        U_{\text{ges}} = R_{\text{ges}} \cdot I_{\text{ges}}
+    \end{equation}
+
+    <p>Die Gesamtstromstärke \(I_{\text{ges}}\) kann nun in die Gleichung durch die Summe der Einzelstromstärken ersetzt werden, die Spannung \(U_\text{ges}\) wird durch die (identische) Spannung \(U\) ersetzt:</p>
+    \begin{equation}
+        U = R_{\text{ges}} \cdot (I_1 + I_2 + I_3 + \ldots)
+    \end{equation}
+
+    <p>Für jede Einzelstromstärke kann nun das Ohmsche Gesetz angewendet werden:</p>
+    \begin{align}
+        U &amp;= R_1 \cdot I_1 \\[6pt]
+        U &amp;= R_2 \cdot I_2 \\[6pt]
+        U &amp;= R_3 \cdot I_3 \\[6pt]
+        &amp;\ldots
+    \end{align}
+
+    <p>Diese Gleichungen können nun nach den Einzelstromstärken umgestellt werden:</p>
+    \begin{align}
+        I_1 &amp;= \frac{U}{R_1} \\[6pt]
+        I_2 &amp;= \frac{U}{R_2} \\[6pt]
+        I_3 &amp;= \frac{U}{R_3} \\[6pt]
+        &amp;\ldots
+    \end{align}
+    <p>Diese Ausdrücke für die Einzelstromstärken können nun in die Gleichung für die Gesamtstromstärke eingesetzt werden:</p>
+    \begin{equation}
+        U = R_{\text{ges}} \cdot \left(\frac{U}{R_1} + \frac{U}{R_2} + \frac{U}{R_3} + \ldots \right)
+    \end{equation}
+    <p>Da die Spannung \(U\) in jedem Term vorkommt, kann sie herausgekürzt werden:</p>
+    \begin{equation}
+        1 = R_{\text{ges}} \cdot \left(\frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3} + \ldots \right)
+    \end{equation}
+    <p>Diese Gleichung kann nun nach dem Gesamtwiderstand \(R_{\text{ges}}\) umgestellt werden:</p>
+    \begin{equation}
+        \frac{1}{R_{\text{ges}}} = \frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3} + \ldots
+    \end{equation}
+
+    <p>In einer Parallelschaltung von Widerständen ist also der Kehrwert des Gesamtwiderstands gleich der Summe der Kehrwerte der Einzelwiderstände.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.11 Die Kirchhoffschen Regeln: Knoten- und Maschenregel</h3>
+<section>
+    <p>Oftmals gibt es in elektrischen Schaltkreisen nicht nur simple Reihen- oder Parallelschaltungen von Widerständen, sondern komplexere Verschaltungen. Um solche komplexeren Schaltkreise analysieren zu können, benötigen wir zwei wichtige Regeln, die sogenannten <strong>Kirchhoffschen Regeln</strong>.</p>
+
+    <h4>Die Knotenregel</h4>
+    <p>Die <strong>Knotenregel</strong> besagt, dass die Summe der Ströme, die in einen Knotenpunkt eines Stromkreises hineinfließen, gleich der Summe der Ströme ist, die aus dem Knotenpunkt herausfließen. Mathematisch lässt sich dies wie folgt ausdrücken:</p>
+    \begin{equation}
+        \sum I_{\text{hinein}} = \sum I_{\text{heraus}}
+    \end{equation}
+
+    <p>Dabei ist jedoch wichtig, dass die Vorzeichen der Ströme beachtet werden. Ströme, die in den Knoten hineinfließen, werden positiv gezählt, Ströme, die aus dem Knoten herausfließen, werden negativ gezählt (oder umgekehrt). Hierbei ist es egal, ob Sie der Logik der technischen oder der physikalischen Stromrichtung folgen, solange Sie konsistent bleiben. Auch ist egal, ob Sie nun in den Knoten hinein- oder herausfließende Ströme positiv zählen, solange Sie auch hier konsistent bleiben.</p>
+
+    <h4>Die Maschenregel</h4>
+    <p>Die <strong>Maschenregel</strong> besagt, dass die Summe der Spannungen in einer geschlossenen Schleife (Masche) eines Stromkreises gleich Null ist. Mathematisch lässt sich dies wie folgt ausdrücken:</p>
+    \begin{equation}
+        \sum U = 0
+    \end{equation}
+
+    <p>Spannungsquellen werden dabei üblicherweise als positive Spannungen betrachtet, und man betrachtet den <strong>Spannungsabfall</strong> über Widerständen als negative Spannungen (oder umgekehrt). Wichtig ist auch hier, dass Sie konsistent bleiben.</p>
+
+    <p>Betrachten wir an dieser Stelle kurz den Begriff des Spannungsabfalls; diesen kann man sich insbesondere in der Skianalogie gut vorstellen. Die Spannungsquelle ist wie ein Skilift, der Sie aus dem Tal auf den Berg bringt. Dabei gewinnen Sie Höhe (Spannung). Wenn Sie dann den Berg hinunterfahren, verlieren Sie wieder Höhe (Spannungsabfall). Fahren Sie mehrere Abschnitte hinunter, so summieren sich die einzelnen Höhenverluste (Spannungsabfälle) zu einem Gesamtverlust. Am Ende der Abfahrt sind Sie wieder im Tal angekommen, also auf der gleichen Höhe wie zu Beginn der Fahrt. Die Summe aller Höhengewinne und -verluste ist also Null.</p>
+
+    <p>Daher spricht man davon, dass über Widerständen (oder auch über anderen Bauteilen, die keine Spannungsquellen sind) ein Spannungsabfall passiert.</p>
+
+    <div class="beispiel" data-title="Eine Schaltung">
+        <p>Gegeben ist eine Schaltung mit einer Spannungsquelle \(U=12\,\mathrm{V}\). Ein Widerstand \(R_1=100\,\Omega\) ist in Reihe zu einer Parallelschaltung aus den Widerständen \(R_2=200\,\Omega\) und \(R_3=600\,\Omega\) geschaltet. Gesucht ist die Stromstärke \(I_2\) durch den Widerstand \(R_2\).</p>
+
+        <figure class="abbildung" id="fig-em_schaltplan_gemischte_schaltung">
+            <img class="grafik" style="width:70%" src="bilder/em_schaltplan_gemischte_schaltung.png" alt="">
+            <figcaption>Schaltplan der gemischten Schaltung</figcaption>
+        </figure>
+
+        <p><strong>Lösung:</strong> Zuerst berechnen wir den Gesamtwiderstand der Schaltung. Der Widerstand \(R_1\) ist in Reihe mit der Parallelschaltung von \(R_2\) und \(R_3\) geschaltet. Der Gesamtwiderstand der Parallelschaltung von \(R_2\) und \(R_3\) ist:</p>
+        \begin{equation}
+            \frac{1}{R_{23}} = \frac{1}{R_2} + \frac{1}{R_3}
+        \end{equation}
+        <p>Dann betrachten wir den Gesamtwiderstand der gesamten Schaltung:</p>
+        \begin{equation}
+            R_{\text{ges}} = R_1 + R_{23}
+        \end{equation}
+        <p>Nun können wir die Gesamtstromstärke \(I_{\text{ges}}\) durch die Schaltung berechnen, indem wir das Ohmsche Gesetz anwenden:</p>
+        \begin{equation}
+            I_{\text{ges}} = \frac{U}{R_{\text{ges}}}
+        \end{equation}
+        <p>Da \(R_2\) und \(R_3\) parallel geschaltet sind, ist die Spannung über beiden Widerständen gleich der Spannung über der Parallelschaltung:</p>
+        \begin{equation}
+            U_{23} = U_2 = U_3
+        \end{equation}
+        <p>Aus dem Ohmschen Gesetz können wir nun folgern, wie sich die Stromstärke auf \(R_2\) und \(R_3\) aufteilt:</p>
+        \begin{align}
+            I_2 &amp;= \frac{U_{23}}{R_2} \\[6pt]
+            I_3 &amp;= \frac{U_{23}}{R_3}
+        \end{align}
+        <p>Es folgt:</p>
+        \begin{equation}
+            I_2 \cdot R_2 = (I_\text{ges} - I_2) \cdot R_3 \Leftrightarrow I_2 = \frac{I_\text{ges} \cdot R_3}{R_2 + R_3}
+        \end{equation}
+
+        <p>Und somit:</p>
+        \begin{align*}
+            I_2 &amp;= I_{\text{ges}}\cdot\frac{R_3}{R_2+R_3} \\[1em]
+            &amp;= \frac{U}{R_{\text{ges}}} \cdot \frac{R_3}{R_2+R_3} \\[1em]
+            &amp;= \frac{U}{R_1 + \frac{R_2 \cdot R_3}{R_2 + R_3}} \cdot \frac{R_3}{R_2+R_3} \\[1em]
+            &amp;= \frac{U \cdot R_3}{\left( R_1 + \frac{R_2 \cdot R_3}{R_2 + R_3} \right) \cdot (R_2+R_3)} \\[1em]
+            &amp;= \frac{U \cdot R_3}{R_1(R_2+R_3) + R_2 \cdot R_3} \\[1em]
+            &amp;= \frac{12\,\mathrm{V} \cdot 600\,\Omega}{100\,\Omega(200\,\Omega+600\,\Omega) + 200\,\Omega \cdot 600\,\Omega} \\[1em]
+            &amp;= 36\,\mathrm{mA}
+        \end{align*}
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.12 Elektrische Verbraucher</h3>
+<section>
+    <p>Bei vielen elektrischen Geräten, die wir im Alltag verwenden, sprechen wir von <strong>elektrischen Verbrauchern</strong>. Elektrische Verbraucher verbrauchen jedoch weder Strom, Ladung noch Spannung, sondern wandeln elektrische Energie in andere Energieformen um, wie zum Beispiel thermische Energie, mechanische Energie oder Lichtenergie.</p>
+
+    <p>Eine wichtige Kenngröße dabei ist die <strong>Leistung</strong> \(P\), die angibt, wie viel Energie pro Zeit in einem elektrischen Gerät umgesetzt wird. Die Leistung \(P\) wird definiert als:</p>
+    \begin{equation}
+        P = \frac{\mathrm{d}W}{\mathrm{d}t}, \quad \text{Einheit:} \quad [P] = \mathrm{W} = \frac{\mathrm{J}}{\mathrm{s}} \quad \text{„Watt"}
+    \end{equation}
+
+    <p>Betreiben Sie einen elektrischen Verbraucher mit einer Leistungsaufnahme \(P\) über eine Zeitdauer \(t\), so wird dabei die elektrische Energie \(W\) umgesetzt:</p>
+    \begin{equation}
+        W = P \cdot t
+    \end{equation}
+
+    <p>Diese Energie errechnet man gerne in der Einheit Kilowattstunde (kWh), die vor allem bei der Abrechnung des „Stromverbrauchs" durch den Energieversorger verwendet wird:</p>
+    \begin{equation}
+        1\,\mathrm{kWh} = 1\,\mathrm{kW} \cdot 1\,\mathrm{h} = 1000\,\mathrm{W} \cdot 3600\,\mathrm{s} = 3{,}6 \cdot 10^6\,\mathrm{J}
+    \end{equation}
+    <p>Ihren Stromversorger bezahlen Sie also in der Regel für die elektrische Energie, die Sie in Kilowattstunden in andere Energieformen umgewandelt haben<span class="fussnote">Auch von einem „Energieverbrauch" zu sprechen ist also streng genommen nicht korrekt, da Energie ja nicht verbraucht, sondern nur umgewandelt wird.</span>.</p>
+
+    <p>Typische elektrische Verbraucher im Physikpraktikum sind zum Beispiel Glühlampen oder CPU-Kühler, in denen ein Elektromotor verbaut ist. Glühlampen wandeln elektrische Energie in sichtbares Licht, aber auch in Wärmestrahlung um, während Elektromotoren elektrische Energie in mechanische Energie umwandeln, um zum Beispiel einen Lüfter anzutreiben. Die Umwandlung von elektrischer Energie in andere Energieformen ist in der Regel mit Verlusten verbunden, zum Beispiel in Form von „Abwärme"<span class="fussnote">Auch eine Form der thermischen Energie.</span>, die an die Umgebung abgegeben wird. Der <strong>Wirkungsgrad</strong> eines elektrischen Verbrauchers gibt an, wie viel der zugeführten elektrischen Energie tatsächlich in die gewünschte Energieform umgewandelt wird. Ein Wirkungsgrad von 100 % ist in der Praxis jedoch nie erreichbar, da immer Verluste auftreten.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.13 Messung von Spannung und Stromstärke</h3>
+<section>
+    <h4>Messung der Spannung</h4>
+    <p>Um die Spannung zwischen zwei Punkten in einem Stromkreis zu messen, verwendet man ein <strong>Voltmeter</strong>. Ein Voltmeter wird immer <strong>parallel</strong> zu den beiden Punkten geschaltet, zwischen denen die Spannung gemessen werden soll. Dabei ist es wichtig, dass das Voltmeter einen sehr hohen <strong>Innenwiderstand</strong> besitzt, damit der Stromfluss durch das Voltmeter vernachlässigbar klein ist und die Messung nicht beeinflusst wird. Als Innenwiderstand eines elektrischen Messgerätes bezeichnet man den Widerstand, den das Messgerät selbst dem Stromfluss entgegensetzt. Da ein Voltmeter parallel zum zu messenden Bauteil geschaltet wird, würde ein niedriger Innenwiderstand dazu führen, dass ein erheblicher Teil des Stroms durch das Voltmeter fließt, und dieser Strom nicht mehr durch das zu messende Bauteil fließt. Dies würde die Messung verfälschen.</p>
+
+    <h4>Messung der Stromstärke</h4>
+    <p>Um die Stromstärke in einem Stromkreis zu messen, verwendet man ein <strong>Amperemeter</strong>. Ein Amperemeter wird immer <strong>in Reihe</strong> zu dem Bauteil geschaltet, durch das der Strom gemessen werden soll. Es wird also der Stromfluss durch ein bestimmtes Bauteil oder durch einen bestimmten Punkt im Stromkreis gemessen. Dabei ist es wichtig, dass das Amperemeter einen sehr niedrigen <strong>Innenwiderstand</strong> besitzt, damit der Spannungsabfall über das Amperemeter vernachlässigbar klein ist und die Messung nicht beeinflusst wird. Ein hoher Innenwiderstand würde dazu führen, dass ein großer Teil der Spannung über das Amperemeter abfällt, und somit die Spannung über dem zu messenden Bauteil reduziert wird. Dies würde die Messung verfälschen.</p>
+
+    <h4>Multimeter</h4>
+    <p>In der Praxis werden oft <strong>Multimeter</strong> verwendet, die sowohl als Voltmeter als auch als Amperemeter (und oft auch als Ohmmeter) verwendet werden können. Multimeter haben in der Regel verschiedene Messbereiche und Einstellungen, die es ermöglichen, unterschiedliche Spannungen, Stromstärken und Widerstände zu messen. Beim Messen mit einem Multimeter ist es wichtig, die richtigen Einstellungen und Messbereiche zu wählen, um genaue Messwerte zu erhalten und das Messgerät nicht zu beschädigen. Im Praktikumsversuch „Das Multimeter" werden Sie den Umgang mit einem Multimeter erlernen.</p>
+
+    <h4>Stromrichtig und spannungsrichtig</h4>
+    <p>Oftmals möchten Sie sowohl den Stromfluss durch, als auch den Spannungsabfall über ein bestimmtes Bauteil messen. Dies dient zum Beispiel dazu, den Widerstand oder die Leistungsaufnahme des Bauteils zu bestimmen. Wenn Sie beide Größen simultan messen möchten, müssen Sie zwei Messgeräte verwenden: ein Amperemeter für die Stromstärke und ein Voltmeter für die Spannung. Dabei wird es durch die endlichen Innenwiderstände realer Messgeräte immer zu einer Beeinflussung der Messung kommen. Je nachdem, welche Messgröße beeinflusst wird und welche nicht, spricht man von <strong>stromrichtiger</strong> oder <strong>spannungsrichtiger</strong> Messung.</p>
+
+    <p>Schaltet man das Amperemeter in Reihe zu dem Bauteil, durch das der Strom gemessen werden soll, und das Voltmeter parallel zu dem Bauteil <strong>und</strong> dem Amperemeter, so wird nicht nur der Spannungsabfall über dem Bauteil gemessen, sondern auch der Spannungsabfall über dem Amperemeter. Da das Amperemeter zwar einen niedrigen, aber endlichen Innenwiderstand besitzt, wird dadurch nicht nur der Spannungsabfall über dem Bauteil, sondern auch der Spannungsabfall über dem Amperemeter gemessen; der gemessene Spannungswert ist also (leicht) größer als der tatsächliche Spannungsabfall über dem Bauteil. Ist der Widerstand des vermessenen Bauteils deutlich größer als der Innenwiderstand des Amperemeters, so ist dieser Fehler jedoch vernachlässigbar klein. Diese Messung wird als <strong>stromrichtige Messung</strong> bezeichnet, da die Stromstärke durch das Bauteil korrekt gemessen wird, während die Spannung leicht verfälscht ist.</p>
+
+    <p>Andererseits kann man das Voltmeter parallel zu dem Bauteil schalten, über dem die Spannung gemessen werden soll, und das Amperemeter vor oder hinter der Parallelschaltung in Reihe. Das Voltmeter wird in dem Fall genau den Spannungsabfall über dem Bauteil messen, da es ja direkt parallel zu dem Bauteil geschaltet ist. Allerdings wird durch den (sehr hohen) endlichen Innenwiderstand des Voltmeters ein Teil des Stroms durch das Voltmeter fließen, der dann nicht mehr durch das zu messende Bauteil fließt. Dadurch ist die tatsächlich durch das Bauteil fließende Stromstärke kleiner als die gemessene Stromstärke. Ist der Widerstand des vermessenen Bauteils deutlich kleiner als der Innenwiderstand des Voltmeters, so ist dieser Fehler jedoch vernachlässigbar klein. Diese Messung wird als <strong>spannungsrichtige Messung</strong> bezeichnet, da die Spannung über dem Bauteil korrekt gemessen wird, während die Stromstärke leicht verfälscht ist.</p>
+
+    <p>Zusammenfassend kann man sagen, dass die Wahl der Messanordnung davon abhängt, welche Messgröße (Stromstärke oder Spannung) möglichst genau gemessen werden soll, und wie die Widerstände der Bauteile im Vergleich zu den Innenwiderständen der Messgeräte sind.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.1.14 Zusammenfassung</h3>
+<section>
+    <div class="zusammenfassung" data-title="Grundlagen der Elektrizitätslehre">
+        <ul>
+            <li><strong>Die elektrische Ladung (\(q, Q\)):</strong>
+                <ul>
+                    <li>Grundlegende Eigenschaft von Objekten, kann positiv, negativ oder Null sein. Einheit: Coulomb (\(\mathrm{C}\)).</li>
+                    <li><strong>Quantelung:</strong> Jede Ladung ist ein ganzzahliges Vielfaches der Elementarladung \(e = 1{,}602\,176\,634 \cdot 10^{-19}\,\mathrm{C}\).
+                        \[ q = n \cdot e \quad \text{mit } n \in \mathbb{Z} \]</li>
+                    <li><strong>Ladungserhaltung:</strong> In einem abgeschlossenen System bleibt die Summe aller elektrischen Ladungen konstant (z.&nbsp;B. bei Paarerzeugung oder Zerfallsprozessen).</li>
+                </ul>
+            </li>
+
+            <li><strong>Grundgrößen der Elektrizitätslehre und ihre Zusammenhänge:</strong>
+                <ul>
+                    <li><strong>Elektrischer Strom (\(I\)):</strong> Gerichtete Bewegung von Ladungsträgern. Man unterscheidet die <strong>technische Stromrichtung</strong> (von \(+\) nach \(-\)) und die <strong>physikalische Stromrichtung</strong> (Elektronenbewegung).</li>
+                    <li><strong>Stromstärke (\(I\)):</strong> Ladungsmenge pro Zeit durch einen Leiterquerschnitt.
+                        \[ I = \frac{\mathrm{d}Q}{\mathrm{d}t} \]
+                        Einheit: Ampere (\(\mathrm{A}\)). Formen: Gleichstrom (DC) und Wechselstrom (AC).</li>
+
+                    <li><strong>Spannung (\(U\)):</strong> Ursache für den gerichteten Stromfluss; Potentialdifferenz zwischen zwei Punkten.
+                        \[ [U] = \mathrm{V} = \frac{\mathrm{J}}{\mathrm{C}} \]</li>
+
+                    <li><strong>Widerstand (\(R\)):</strong> Beschreibt, wie stark der Stromfluss durch ein Bauteil behindert wird.
+                        \[ R = \frac{U}{I} \]
+                        Einheit: Ohm (\(\Omega\)).</li>
+
+                    <li><strong>Elektrische Leistung (\(P\)):</strong> Rate der Energieumwandlung in einem elektrischen Verbraucher.
+                        \[ P = \frac{\mathrm{d}W}{\mathrm{d}t} \quad \text{bzw.} \quad W = P \cdot t \]
+                        Einheit: Watt (\(\mathrm{W}\)). Übliche Energieeinheit im Alltag: Kilowattstunde (\(\mathrm{kWh}\)).</li>
+                </ul>
+            </li>
+
+            <li><strong>Zentrale Gesetze und Regeln:</strong>
+                <ul>
+                    <li><strong>Ohmsches Gesetz:</strong> Bei sogenannten Ohmschen Widerständen ist der Widerstandswert \(R\) konstant und unabhängig von \(U\) und \(I\).
+                        \[ U = R \cdot I \]</li>
+
+                    <li><strong>Kirchhoffsche Regeln:</strong>
+                        <ul>
+                            <li><strong>Knotenregel:</strong> Die Summe der in einen Knoten fließenden Ströme ist gleich der Summe der abfließenden Ströme (\(\sum I_{\text{hinein}} = \sum I_{\text{heraus}}\)).</li>
+                            <li><strong>Maschenregel:</strong> Die Summe aller Spannungen (Quellspannungen und Spannungsabfälle) in einem geschlossenen Umlauf ist Null (\(\sum U = 0\)).</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            <li><strong>Schaltungsarten von Widerständen:</strong>
+                <ul>
+                    <li><strong>Reihenschaltung:</strong> Die Stromstärke ist in allen Bauteilen gleich. Die Spannungen und Widerstände addieren sich.
+                        \[ R_{\text{ges}} = R_1 + R_2 + R_3 + \dots \]</li>
+
+                    <li><strong>Parallelschaltung:</strong> Die Spannung über allen Zweigen ist gleich. Die Gesamtstromstärke ist die Summe der Einzelströme.
+                        \[ \frac{1}{R_{\text{ges}}} = \frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3} + \dots \]</li>
+                </ul>
+            </li>
+
+            <li><strong>Materialeigenschaften und Messung:</strong>
+                <ul>
+                    <li><strong>Leiter und Isolatoren:</strong> Leiter (z.&nbsp;B. Metalle) besitzen frei bewegliche Ladungsträger; Isolatoren (z.&nbsp;B. Kunststoffe) nicht. Halbleiter liegen in ihrer Leitfähigkeit dazwischen.</li>
+                    <li><strong>Spannungsmessung:</strong> Ein <strong>Voltmeter</strong> wird <strong>parallel</strong> geschaltet und benötigt einen idealerweise unendlich hohen Innenwiderstand.</li>
+                    <li><strong>Strommessung:</strong> Ein <strong>Amperemeter</strong> wird <strong>in Reihe</strong> geschaltet und benötigt einen idealerweise verschwindend geringen Innenwiderstand.</li>
+                    <li><strong>Messanordnungen:</strong> Man unterscheidet <strong>stromrichtige Messung</strong> (korrekte Stromstärke am Bauteil, Spannungsfehler durch Amperemeter) und <strong>spannungsrichtige Messung</strong> (korrekte Spannung am Bauteil, Stromfehler durch Voltmeter).</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</section>
