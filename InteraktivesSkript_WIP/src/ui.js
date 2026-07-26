@@ -277,7 +277,22 @@ export function toc_filter(query) {
         empty.remove();
     }
 }
+// Baut den mailto-Betreff des Kontakt-Links beim Oeffnen dynamisch: aktuelle
+// Version (aus #header_version) + aktueller Abschnitt (aktive Seite), damit eine
+// Rueckmeldung sofort Version und Fundstelle mitliefert. Faellt still auf den
+// statischen href zurueck, falls das Element/die Seite (noch) nicht da ist.
+function update_kontakt_mail() {
+    const link = ge('kontakt_mail');
+    if (!link) return;
+    const version = (ge('header_version')?.textContent || '').trim();
+    const page = getCurrentPage();
+    const parts = ['[Interaktives Skript]'];
+    if (version) parts.push(version);
+    if (page && page.title) parts.push('Abschnitt ' + page.title);
+    link.href = 'mailto:c.effertz@fh-aachen.de?subject=' + encodeURIComponent(parts.join(' – '));
+}
 export function kontakt() {
+    update_kontakt_mail();
     if(window.scrollY >= 70) {
         show("kontakt");
     }
