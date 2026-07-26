@@ -163,7 +163,9 @@ abgeschlossen.
 
 ## Schritt 9 — Abschluss
 
-- Version im Header (`index.html`, `#header_version`) hochziehen.
+- Version im Header (`index.html`, `#header_version`) hochziehen: **neuer
+  Abschnitt → MINOR-Stelle** (`1.15 → 1.16`), **Kleinänderung → PATCH-Stelle**
+  (`1.16 → 1.16.1`). Schema s. CLAUDE.md „Versionierung".
 - `CLAUDE.md` ergänzen, falls sich Architektur oder Konventionen geändert haben.
 - Bewusste Abweichungen von v0.13 dokumentieren (Runbook, Abschnitt 13).
 - Auf eigenem Branch arbeiten und **hochfrequent committen** — pro logischer
