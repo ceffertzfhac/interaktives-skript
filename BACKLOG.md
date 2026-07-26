@@ -803,9 +803,16 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   per data-figure-/zusammenfassung-offset="0" am h2 zurueckgesetzt). Verifikation
   Stufe 2/3/4/6 deckungsgleich mit PDF; **Stufe 5 (Browser: Gleichungs-Tags 2.1.n)
   offen — Freigabe ausstehend**.
-- [ ] **P12-B2 2.2 Elektrostatik** — 10 Subsections, 0 Abb.
+- [x] **P12-B2 2.2 Elektrostatik** — 10 Subsections, ~~0~~ 2 Abb.
   (`pskript_em_elektrostatik.tex`, 52 KB). Felder/Dipole — Vektorfeld-Plot-Kandidat?
-  *(L)*
+  *(L)* — migriert 2026-07-25 (Branch `migration/kapitel-2.2`, Commits
+  727074b/8793572): `chapters/ch_03_02_elektrostatik.html`, 86 Gl. (2.2.1–2.2.86),
+  6 Beispiele (2.2.1–2.2.6), 1 Zusammenfassung (2.2), **2 Abbildungen (Abb. 2.2,
+  2.3)** — beides tikzpicture-Bloecke (Feldueberlagerung + Dipol), via standalone
+  pdflatex gerendert ([[reference-circuitikz-ohne-siunitx]], hier plain tikz).
+  Kein Offset (contiguous zu 2.1). 5 kapiteluebergreifende Verweise (2.1 + 1.8)
+  alle aufgeloest. Verifikation Stufe 2/3/4/6 deckungsgleich mit PDF; **Stufe 5
+  (Browser: Gleichungs-Tags 2.2.n) offen — Freigabe ausstehend**.
 - [ ] **P12-B3 2.3 Elektrodynamik und Magnetismus** — 7 Subsections, 3 Abb.
   (`pskript_em_elektrodynamik_und_magnetismus.tex`, 71 KB). Kandidat:
   `lorentz_force_simulation`. *(L)*

@@ -97,6 +97,10 @@ src/numbering.js   init_numbering() — box, figure and image numbering off page
                    2.1's h2 carries data-figure-offset/-zusammenfassung-offset="0" to
                    start the chapter-2 counters; the 2.x numbering is confirmed live
                    (Abb. 2.1, Beispiel 2.1.1, Zusammenfassung 2.1, equations 2.1.n).
+                   2.2 (Elektrostatik) also migrated — contiguous to 2.1 (no offset),
+                   figs 2.2–2.3 (both rendered from tikzpicture blocks, not
+                   \includegraphics), Zusammenfassung 2.2, with 5 cross-refs back into
+                   2.1/1.8. Only 2.3 remains in TK 2.
                    The 1.4/1.5 offsets are now redundant (1.1–1.6 contiguous) but kept —
                    they still hold as ABSOLUTE start values.
                    Box titles are split into <span class="hb-type"> (type + number, uppercased
