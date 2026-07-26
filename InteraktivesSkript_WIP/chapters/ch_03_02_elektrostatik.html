@@ -1,0 +1,654 @@
+<!-- ch_03_02_elektrostatik.html — v0.13-Abschnitt 2.2 "Elektrostatik"
+     (1:1-Transkription aus Input/v0.13/pskript_em_elektrostatik.tex).
+     TK 2 "Elektromagnetismus" (data-tk-num="2"), Section 2.2. Rein statisch.
+     10 Unterabschnitte 2.2.1–2.2.10, Gleichungen 2.2.1–2.2.86, 6 Beispiele
+     (2.2.1–2.2.6), 1 Zusammenfassung (2.2), 2 Abbildungen (Abb. 2.2, 2.3).
+     KEIN Offset am h2: 2.2 folgt contiguous auf 2.1 (Abb. 2.1 -> 2.2/2.3,
+     Zusammenfassung 2.1 -> 2.2). Abbildungen sind tikzpicture-Blöcke (kein
+     \includegraphics) -> standalone pdflatex (siunitx-Ersatzmakros) -> PNG.
+     Querverweise auf 2.1 (p-2-1, p-2-1-1) und 1.8 (p-1-8-1/-2/-4).
+     Kleine bewusste Korrekturen offensichtlicher Quell-Tippfehler: der
+     verirrte Zeilenumbruch+"x:" in 2.2.9 ("denken x: moment mal") zu einem
+     Satz zusammengezogen; "$y-z$.Richtung" -> "y-z-Richtung". -->
+
+
+<section>
+    <h2 class="inhaltsverzeichnis">2.2 Elektrostatik</h2>
+    <p>Im Abschnitt&nbsp;<a class="xref" data-ref-sec="p-2-1"></a> haben wir uns mit den Grundlagen der Elektrizitätslehre primär phänomenologisch beschäftigt. Dabei hatten wir vor allem den Ursache-Wirkungszusammenhang in den Fokus genommen, der durch das Ohm'sche Gesetz beschrieben wird: eine Spannung \(U\) verursacht einen Strom \(I\), der proportional zur Spannung ist, wobei der Proportionalitätsfaktor der Widerstand \(R\) ist. Aber was ist Spannung überhaupt? Was bewegt die Ladungen in einem elektrischen Leiter? Um diese Fragen zu beantworten, werden wir zunächst die Coulomb-Kraft kennenlernen, die zwischen elektrischen Ladungen wirkt. Basierend auf der Coulomb-Kraft werden wir dann das elektrische Feld kennenlernen, was uns zum elektrischen Potential führt, ein Begriff der eng mit der Spannung verknüpft ist.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.1 Ladungsdichten</h3>
+<section>
+    <p>Zunächst müssen wir jedoch noch ein paar Begriffe einführen, welche wir in den folgenden Abschnitten verwenden werden. Den Begriff der Ladung hatten wir schon in Abschnitt <a class="xref" data-ref-sec="p-2-1-1"></a> kennengelernt. Elektrische Ladung können vereinzelt auftreten, dann bezeichnen wir die Ladung typischerweise mit \(q\). Wenn viele Ladungen, also eine insgesammt große Ladungsmenge, sich auf einen so kleinen Raumbereich konzentriert, dass die Ausdehnung des Raumbereiches im Vergleich zu allen anderen für das Problem relevanten Längenskalen vernachlässigbar ist, dann sprechen wir von einer Punktladung. In diesem Fall können wir die gesamte Ladungsmenge mit \(Q\) bezeichnen.</p>
+
+    <p>Andererseits können Ladungen auch räumlich homogen verteilt auftreten. In diesem Fall ist es sinnvoll, die Ladung nicht mehr als einzelne Größe zu betrachten, sondern als Dichte. Wir unterscheiden dabei drei verschiedene Arten von Ladungsdichten:</p>
+
+    <h4>Volumenladungsdichte</h4>
+    <p>Wenn eine Ladungsmenge \(Q\) homogen über ein Volumen \(V\) verteilt ist, dann definieren wir die Volumenladungsdichte \(\rho\) als</p>
+    \begin{equation}
+        \rho = \frac{Q}{V} \quad \left[\rho\right] = \frac{\mathrm{C}}{\mathrm{m^3}} = \mathrm{C/m^3}.
+    \end{equation}
+
+    <p>Ist die Ladungsmenge nicht homogen verteilt, so ist die Volumenladungsdichte eine Funktion des Ortes \(\vec{r}\):</p>
+    \begin{equation}
+        \rho(\vec{r}) = \frac{\mathrm{d}Q}{\mathrm{d}V} \quad \left[\rho(\vec{r})\right] = \frac{\mathrm{C}}{\mathrm{m^3}} = \mathrm{C/m^3}.
+    \end{equation}
+
+    <p>In diesem Fall gilt der Zusammenhang zwischen der Volumenladungsdichte und der Ladungsmenge:</p>
+    \begin{equation}
+        Q = \int_V \rho(\vec{r}) \, \mathrm{d}V.
+    \end{equation}
+
+    <p>Im Folgenden werden wir uns im Laufe des Physikkureses im ersten Semester mit homogenen Ladungsverteilungen, also mit im Bereich der Ladungsverteilung konstanten Volumenladungsdichten beschäftigen.</p>
+
+    <h4>Flächenladungsdichte</h4>
+    <p>Wenn eine Ladungsmenge \(Q\) homogen über eine Fläche \(A\) verteilt ist, dann definieren wir die Flächenladungsdichte \(\sigma\) als</p>
+    \begin{equation}
+        \sigma = \frac{Q}{A} \quad \left[\sigma\right] = \frac{\mathrm{C}}{\mathrm{m^2}} = \mathrm{C/m^2}.
+    \end{equation}
+    <p>Ist die Ladungsmenge nicht homogen verteilt, so ist die Flächenladungsdichte eine Funktion des Ortes \(\vec{r}\):</p>
+    \begin{equation}
+        \sigma(\vec{r}) = \frac{\mathrm{d}Q}{\mathrm{d}A} \quad \left[\sigma(\vec{r})\right] = \frac{\mathrm{C}}{\mathrm{m^2}} = \mathrm{C/m^2}.
+    \end{equation}
+
+    <p>In diesem Fall gilt der Zusammenhang zwischen der Flächenladungsdichte und der Ladungsmenge:</p>
+    \begin{equation}
+        Q = \int_A \sigma(\vec{r}) \, \mathrm{d}A.
+    \end{equation}
+
+    <p>Analog zur Volumenladungsdichte werden wir uns im Laufe des Physikkurses im ersten Semester im Wesentlichen mit homogenen Ladungsverteilungen, also mit im Bereich der Ladungsverteilung zum Beispiel konstanten Flächenladungsdichten beschäftigen.</p>
+
+    <h4>Linienladungsdichte</h4>
+    <p>Wenn eine Ladungsmenge \(Q\) homogen über eine Länge \(L\) verteilt ist, dann definieren wir die Linienladungsdichte \(\lambda\) als</p>
+    \begin{equation}
+        \lambda = \frac{Q}{L} \quad \left[\lambda\right] = \frac{\mathrm{C}}{\mathrm{m}} = \mathrm{C/m}.
+    \end{equation}
+    <p>Ist die Ladungsmenge nicht homogen verteilt, so ist die Linienladungsdichte eine Funktion des Ortes \(\vec{r}\):</p>
+    \begin{equation}
+        \lambda(\vec{r}) = \frac{\mathrm{d}Q}{\mathrm{d}L} \quad \left[\lambda(\vec{r})\right] = \frac{\mathrm{C}}{\mathrm{m}} = \mathrm{C/m}.
+    \end{equation}
+    <p>In diesem Fall gilt der Zusammenhang zwischen der Linienladungsdichte und der Ladungsmenge:</p>
+    \begin{equation}
+        Q = \int_L \lambda(\vec{r}) \, \mathrm{d}L.
+    \end{equation}
+
+    <p>Auch im Falle der Linienladungsdichte werden wir uns im Laufe des Physikkurses im ersten Semester im Wesentlichen mit homogenen Ladungsverteilungen, also mit im Bereich der Ladungsverteilung zum Beispiel konstanten Linienladungsdichten beschäftigen.</p>
+
+    <p>Ob wir nun eine Volumen-, Flächen- oder Linienladungsdichte verwenden, hängt ganz davon ab, wie die Ladungen im Raum verteilt sind.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.2 Die Coulomb-Kraft</h3>
+<section>
+    <p>Im Abschnitt&nbsp;<a class="xref" data-ref-sec="p-1-8-1"></a> haben wir uns schon mit den vier fundamentalen Grundkräften der Physik beschäftigt. Eine dieser Grundkräfte ist die elektromagnetische Wechselwirkung. Im folgenden Abschnitt werden wir uns eingehender mit einer Erscheinungsform der elektromagnetischen Wechselwirkung beschäftigen: der Coulomb-Kraft, die zwischen elektrischen Ladungen wirkt.</p>
+
+    <p>Schon im antiken Griechenland war das folgende bekannt: reibt man einen Bernstein mit einem Hasenfell, so zieht der Bernstein danach kleine Objekte wir zum Bespiel Blätter von Thymian an.</p>
+
+    <p>Es dauert jedoch viele Jahrhunderte, bis dieses Phänomen tiefer und mit wissenschaftlichen Methoden untersucht wurde. Im 18. Jahrhundert führte der Wissenschaftler Charles-Augustin de Coulomb eine Reihe von Experimenten durch, um die Kraft zu messen, die zwischen elektrisch geladenen Objekten wirkt. Er benutzte dazu eine sogenannte Torsionswaage, ein Gerät, das es ihm ermöglichte, sehr kleine Kräfte zu messen. Durch seine Experimente stellte Coulomb fest, dass die Kraft zwischen zwei Punktladungen \(q_1\) und \(q_2\) proportional zum Produkt der Ladungen und umgekehrt proportional zum Quadrat des Abstands \(r\) zwischen ihnen ist. Diese Erkenntnis führte zur Formulierung des Coulomb'schen Gesetzes.</p>
+
+    <p>Seine Erkenntnisse waren:</p>
+    <ul>
+        <li>Es gibt eine abstoßende und eine anziehende Kraft zwischen elektrischen Ladungen.</li>
+        <li>Gleiche Ladungen stoßen sich ab, ungleiche Ladungen ziehen sich an.</li>
+        <li>Die Kraft ist proportional zum Produkt der Ladungen: \(F \propto q_1 \cdot q_2\).</li>
+        <li>Die Kraft ist umgekehrt proportional zum Quadrat des Abstands zwischen den Ladungen: \(F \propto \frac{1}{r^2}\).</li>
+        <li>Die Kraft wirkt entlang der Verbindungslinie zwischen den beiden Ladungen.</li>
+    </ul>
+
+    <p>Vergleichen wir nun dies Erkenntnisse mit der vektoriellen Formulierung des Newton'schen Gravitationsgesetzes aus Abschnitt <a class="xref" data-ref-sec="p-1-8-2"></a>, so sehen wir: die mathematische Formulierung der Coulomb-Kraft sollte weitestgehend der des Gravitationsgesetzes ähneln, da die beschrieben Phänomene sehr ähnlich sind. Der einzige Unterschied ist, dass die Gravitationskraft immer anziehend ist, während die Coulomb-Kraft sowohl anziehend als auch abstoßend sein kann, abhängig von den Vorzeichen der beteiligten Ladungen.</p>
+
+    <p>Diese Überlegung legt nahe, dass die Coulombkraft, die ein geladenes Teilchen \(A\) auf ein anderes geladenes Teilchen \(B\) ausübt, in der folgenden vektoriellen Form formuliert werden kann:</p>
+    \begin{equation}
+        \vec{F}_{C,BA} \propto \frac{q_A q_B}{\vert r_{BA}\vert^2} \cdot \frac{\vec{r}_{BA}}{|\vec{r}_{BA}|},
+    \end{equation}
+
+    <p>wobei \(\vec{r}_{BA} = \vec{r}_B - \vec{r}_A\) der Ortsvektor von \(A\) nach \(B\) ist. Der Proportionalitätsfaktor ist eine Konstante, die als Coulombsche Konstante \(k_C\) bezeichnet wird und den Wert</p>
+    \begin{equation}
+        k_C = \frac{1}{4 \pi \varepsilon_0} \approx 8{,}9875 \cdot 10^9 \, \mathrm{N\,m^2/C^2}
+    \end{equation}
+    <p>hat. Hierbei ist \(\varepsilon_0\) die elektrische Feldkonstante (auch als Permittivität des Vakuums bezeichnet) mit dem Wert</p>
+    \begin{equation}
+        \varepsilon_0 \approx 8{,}8542 \cdot 10^{-12} \, \mathrm{C^2/(N\,m^2)}.
+    \end{equation}
+    <p>Damit lautet die vollständige vektorielle Formulierung des Coulomb'schen Gesetzes:</p>
+    \begin{equation}
+        \vec{F}_{C,BA} = k_C \cdot \frac{q_A q_B}{\vert r_{BA}\vert^2} \cdot \frac{\vec{r}_{BA}}{|\vec{r}_{BA}|} = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{q_A q_B}{\vert r_{BA}\vert^2} \cdot \frac{\vec{r}_{BA}}{|\vec{r}_{BA}|}.
+    \end{equation}
+
+    <p>Für das Coulombsche Gesetz gilt das dritte Newton'sche Axiom: <em>Actio = Reactio</em>. Das bedeutet, dass die Kraft, die Teilchen \(A\) auf Teilchen \(B\) ausübt, gleich groß und entgegengesetzt gerichtet ist zur Kraft, die Teilchen \(B\) auf Teilchen \(A\) ausübt:</p>
+    \begin{equation}
+        \vec{F}_{C,AB} = - \vec{F}_{C,BA}.
+    \end{equation}
+
+    <p>Diese lässt sich leicht anhand der vektoriellen Formulierung des Coulomb'schen Gesetzes überprüfen:</p>
+    \begin{equation}
+        \vec{F}_{C,AB} = k_C \frac{q_A q_B}{\vert r_{AB}\vert^2} \cdot \frac{\vec{r}_{AB}}{|\vec{r}_{AB}|} = k_C \frac{q_A q_B}{\vert r_{BA}\vert^2} \cdot \frac{-\vec{r}_{BA}}{|\vec{r}_{BA}|} = - \vec{F}_{C,BA}.
+    \end{equation}
+
+    <div class="beispiel" data-title="Vergleich zwischen Coulomb-Kraft und Gravitationskraft">
+        <p>Eine Elektron trägt genau eine negative Elementarladung \(q_e = -e\) mit \(e \approx 1{,}602 \cdot 10^{-19} \, \mathrm{C}\), während ein Proton genau eine positive Elementarladung \(q_p = +e\) trägt. Die Masse eines Elektrons beträgt \(m_e \approx 9{,}109 \cdot 10^{-31} \, \mathrm{kg}\), die eines Protons \(m_p \approx 1{,}673 \cdot 10^{-27} \, \mathrm{kg}\).</p>
+
+        <p>Betrachten wir nun die Kräfte, die zwischen einem Elektron und einem Proton in einem Abstand von \(r = 1{,}00 \cdot 10^{-6} \, \mathrm{m}= 1{,}00 \, \mathrm{\mu m}\) wirken.</p>
+
+        <p>Die Coulomb-Kraft, die das Elektron auf das Proton ausübt, beträgt:</p>
+        \begin{align}
+            F_C &amp;= k_C \frac{|q_e| |q_p|}{r^2} = \left(8{,}9875 \cdot 10^9 \, \mathrm{N\,m^2/C^2}\right) \frac{(1{,}602 \cdot 10^{-19} \, \mathrm{C})^2}{(1{,}00 \cdot 10^{-6} \, \mathrm{m})^2} \\[6pt]&amp;= 2{,}30 \cdot 10^{-16} \,\mathrm{N}.
+        \end{align}
+        <p>Die Coulomb-Kraft ist anziehend, da die Ladungen entgegengesetzt sind.</p>
+
+        <p>Die Gravitationskraft, die das Elektron auf das Proton ausübt, beträgt:</p>
+        \begin{align}
+            F_G &amp;= G \frac{m_e m_p}{r^2} \\[6pt] &amp;= \left(6{,}67430 \cdot 10^{-11} \, \mathrm{N\,m^2/kg^2}\right) \frac{(9{,}109 \cdot 10^{-31} \, \mathrm{kg})(1{,}673 \cdot 10^{-27} \, \mathrm{kg})}{(1{,}00 \cdot 10^{-6} \, \mathrm{m})^2} \\[6pt] &amp;= 1{,}02 \cdot 10^{-47} \, \mathrm{N}.
+        \end{align}
+        <p>Die Gravitationskraft ist ebenfalls anziehend, da Massen immer anziehend wirken.</p>
+
+        <p>Das Verhältnis der beiden Kräfte ist:</p>
+        \begin{equation}
+            \frac{F_C}{F_G} \approx \frac{2{,}30 \cdot 10^{-16} \, \mathrm{N}}{1{,}02 \cdot 10^{-47} \, \mathrm{N}} \approx 2{,}25 \cdot 10^{31}.
+        \end{equation}
+
+        <p>Die Coulomb-Kraft ist also etwa \(2{,}25 \cdot 10^{31}\)-mal stärker als die Gravitationskraft zwischen einem Elektron und einem Proton im Abstand von \(1{,}00 \, \mathrm{\mu m}\). Dies verdeutlicht, wie dominant die elektromagnetische Wechselwirkung im Vergleich zur Gravitation auf atomarer und subatomarer Ebene ist.</p>
+    </div>
+
+    <p>Für die Coulomb-Kraft gilt das Superpositionsprinzip: die Gesamt-Coulomb-Kraft, die auf eine Ladung wirkt, ist die Vektorsumme der Coulomb-Kräfte, die von allen anderen Ladungen ausgeübt werden. Wenn also mehrere Ladungen \(q_1, q_2, \ldots, q_n\) auf eine Ladung \(q_0\) wirken, dann ist die Gesamt-Coulomb-Kraft auf \(q_0\) gegeben durch:</p>
+    \begin{equation}
+        \vec{F}_{C,0} = \sum_{i=1}^{n} \vec{F}_{C,0i} = \sum_{i=1}^{n} k_C \frac{q_0 q_i}{\vert r_{0i}\vert^2} \cdot \frac{\vec{r}_{0i}}{|\vec{r}_{0i}|},
+    \end{equation}
+    <p>wobei \(\vec{r}_{0i} = \vec{r}_i - \vec{r}_0\) der Ortsvektor von \(q_0\) nach \(q_i\) ist.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.3 Das elektrische Feld</h3>
+<section>
+    <p>In Abschnitt <a class="xref" data-ref-sec="p-1-8-4"></a> hatten wir das Konzept des Gravitationsfeldes kennengelernt, das es uns ermöglicht, die Gravitationskraft, die auf eine Testmasse wirkt, zu beschreiben, ohne die Wechselwirkung zwischen der Testmasse und der Masse, die das Gravitationsfeld erzeugt, explizit zu betrachten. Dazu hatten wir das Gravitationsbeschleunigungsfeld \(\vec{g}(\vec{r})\) definiert als die Gravitationskraft pro Einheit Masse:</p>
+    \begin{equation}
+        \vec{g}(\vec{r}) = \frac{\vec{F}_G(\vec{r})}{m}.
+    \end{equation}
+    <p>Dabei ist \(m\) die Masse einer fiktiven Testmasse, die sich im Gravitationsfeld befindet und \(F_G(\vec{r})\) die Gravitationskraft, die auf die Testmasse am Ort \(\vec{r}\) wirkt.</p>
+
+    <p>Stellen wir uns nun das folgende vor. In der Mitte eines großen, ansonsten leeren Raumes, befindet sich eine größere Ladungsansammlung mit der Ladungsmenge \(Q\). Die Ausdehnung der Ladungsansammlung ist dabei so klein, dass wir sie als Punktladung betrachten können.</p>
+
+    <p>Nun stellen wir uns ein fiktives Messgerät (Sonde) vor. Die Sonde bestehe aus einer kleinen Ladung \(q\), die wir als Testladung bezeichnen, und einer Möglichkeit, den Kraftvektor zu messen, der auf die Testladung wirkt. Wir durchlaufen nun den gesamten Raum um die Ladung \(Q\) herum systematisch, messen mit der Sonde den Kraftvektor, der auf die Testladung \(q\) wirkt, und zeichnen diesen Kraftvektor in eine drei-dimensionale Karte des Raumes ein.</p>
+
+    <p>Damit könnten wir dann jedem Ort \(\vec{r}\) im Raum den Kraftvektor \(\vec{F}_C(\vec{r})\) zuordnen, der auf die Testladung \(q\) wirkt, wenn sie sich am Ort \(\vec{r}\) befindet.</p>
+
+    <p>Diese Karte bringt uns aber nur was, wenn wir die Kraft auf genau die Testladung \(q\) wissen möchten. Wollen wir etwas später jedoch die Kraft auf eine andere Testladung wissen, die evtl. einen anderen Ladungsbetrag oder sogar ein anderes Vorzeichen hat, dann müssten wir die gesamte Messprozedur wiederholen.</p>
+
+    <p>Daher wäre es viel praktischer, wenn wir eine Karte hätten, die uns die Kraft pro Einheit Ladung angibt. Diese Karte würde uns dann erlauben, die Kraft auf jede beliebige Testladung zu berechnen, indem wir einfach die Kraft pro Einheit Ladung mit der Ladung der Testladung multiplizieren.</p>
+
+    <p>Diese (fiktive) Karte ist das, was wir als das elektrische Feld \(\vec{E}(\vec{r})\) bezeichnen. Das elektrische Feld gibt an jedem Punkt im Raum die Kraft pro Einheit Ladung an, die auf eine Testladung wirken würde, wenn sie sich an diesem Punkt befände.</p>
+
+    <p>Mathematisch definieren wir das elektrische Feld als:</p>
+    \begin{equation}
+        \vec{E}(\vec{r}) = \frac{\vec{F}_C(\vec{r})}{q},
+    \end{equation}
+    <p>wobei \(q\) die Ladung der Testladung ist und \(\vec{F}_C(\vec{r})\) die Coulomb-Kraft, die auf die Testladung am Ort \(\vec{r}\) wirkt.</p>
+
+    <p>Das elektrische Feld hat die Einheit:</p>
+    \begin{equation}
+        \left[\vec{E}(\vec{r})\right] = \frac{\mathrm{N}}{\mathrm{C}} = \mathrm{V/m}.
+    \end{equation}
+
+    <p>Das elektrische Feld einer Punktladung \(Q\) im Ursprung eines Koordinatensystems ist gegeben durch:</p>
+
+    \begin{equation}
+        \vec{E_Q}(\vec{r}) = \frac{F_{C,Q}}{q} = \frac{\frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q q}{\vert r \vert^2} \cdot \frac{\vec{r}}{\vert \vec{r} \vert}}{q} = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q}{\vert r \vert^2} \cdot \frac{\vec{r}}{\vert \vec{r}\vert}
+    \end{equation}
+
+    <p>Auch für das elektrische Feld gilt das Superpositionsprinzip: das Gesamtfeld, das von mehreren Ladungen erzeugt wird, ist die Vektorsumme der Felder, die von jeder einzelnen Ladung erzeugt werden. Wenn also mehrere Ladungen \(q_1, q_2, \ldots, q_n\) ein elektrisches Feld erzeugen, dann ist das Gesamtfeld an einem Punkt \(\vec{r}\) gegeben durch:</p>
+    \begin{equation}
+        \vec{E}(\vec{r}) = \sum_{i=1}^{n} \vec{E}_{q_i}(\vec{r})
+    \end{equation}
+    <p>wobei \(\vec{E}_{q_i}(\vec{r})\) das elektrische Feld ist, das von der Ladung \(q_i\) erzeugt wird.</p>
+
+    <h4>Anmerkung</h4>
+    <p>Der Vektor \(\vec r/\vert \vec r \vert\) in der Formel für das elektrische Feld ist ein Einheitsvektor, der gerne auch als \(\vec e_r\) geschrieben wird. Er zeigt <strong>radial</strong> von der Ladung weg. Daher spricht man auch davon, dass das elektrische Feld einer Punktladung <strong>radial</strong> oder <strong>Kugelsymmetrisch</strong> ist.</p>
+
+    <div class="beispiel" data-title="Überlagung von Feldern">
+        <p>Zwei Punktladungen \(Q_1 = 1{,}00\,\mathrm{nC}\) und \(Q_2 = 1{,}00\,\mathrm{nC}\) befinden sich im Abstand von \(l= 10{,}0\,\mathrm{cm}\) auf der \(x\)-Achse eines Koordinatensystems, wobei die Ladung \(Q_1\) bei \(x=0\) und die Ladung \(Q_2\) bei \(x=l\) liegt.</p>
+
+        <p>Bestimmt werden soll das elektrische Feld an dem Punkt \(P\), der mit den Punkten, an denen die Ladungen sitzen, ein gleichseitiges Dreieck bildet.</p>
+
+        <figure class="abbildung" id="fig-em_ueberlagerung_felder_zwei_ladungen">
+            <img class="grafik" style="width:45%" src="bilder/em_ueberlagerung_felder_zwei_ladungen.png" alt="">
+            <figcaption>Vektorielle Überlagerung der elektrischen Felder zweier Punktladungen.</figcaption>
+        </figure>
+
+        <p>Da es sich um ein gleichseitiges Dreieck handelt, ist der Abstand von beiden Ladungen zum Punkt \(P\) identisch mit dem Abstand der Ladungen untereinander:</p>
+        \begin{equation}
+            r_1 = r_2 = l = 0{,}10\,\mathrm{m}
+        \end{equation}
+        <p>Die Winkel der Verbindungsvektoren zur \(x\)-Achse betragen \(\alpha_1 = 60^\circ\) (für \(Q_1\)) und \(\alpha_2 = 120^\circ\) (für \(Q_2\)).</p>
+
+        <p>Da \(Q_1 = Q_2 = Q\) und \(r_1 = r_2 = l\), haben die Beträge der Feldstärken \(E_1\) und \(E_2\) denselben Wert \(E_0\):</p>
+        \begin{equation}
+            E_1 = E_2 = E_0 = \frac{1}{4\pi\epsilon_0} \cdot \frac{Q}{l^2}
+        \end{equation}
+        <p>Mit \(Q =1{,}0 \cdot 10^{-9}\,\mathrm{C}\) und \(l = 0{,}1\,\mathrm{m}\):</p>
+        \begin{equation}
+            E_0= 8{,}99 \cdot 10^9\,\mathrm{\frac{V\,m}{C}} \cdot \frac{1{,}0 \cdot 10^{-9}\,\mathrm{C}}{(0{,}1\,\mathrm{m})^{2}} = 899\,\mathrm{V/m}
+        \end{equation}
+
+        <p>Das Gesamtfeld \(\vec{E}_{\text{res}}\) ist die Summe der Vektoren: \(\vec{E}_{\text{res}} = \vec{E}_1 + \vec{E}_2\). Aus Symmetriegründen heben sich die \(x\)-Komponenten auf, da \(E_1\) nach rechts oben und \(E_2\) im gleichen Winkel nach links oben zeigt:</p>
+        \begin{equation}
+            E_{x,\text{res}} = E_0 \cdot \cos(60^\circ) + E_0 \cdot \cos(120^\circ) = E_0 \cdot (0{,}5 - 0{,}5) = 0
+        \end{equation}
+        <p>Die \(y\)-Komponenten addieren sich:</p>
+        \begin{equation}
+            E_{y,\text{res}} = E_1 \cdot \sin(60^\circ) + E_2 \cdot \sin(60^\circ) = 2 \cdot E_0 \cdot \sin(60^\circ)
+        \end{equation}
+        <p>Mit \(\sin(60^\circ) = \frac{\sqrt{3}}{2}\), folgt:</p>
+        \begin{equation}
+            \vec E_{\text{res}} = 2 \cdot E_0 \cdot \frac{\sqrt{3}}{2} \cdot \vec e_y = E_0 \cdot \sqrt{3} \cdot \vec e_y
+        \end{equation}
+
+        \begin{equation}
+           \vec E_{\text{res}} = 1557\,\mathrm{V/m}\cdot \vec e_y
+        \end{equation}
+        <p>Der Vektor des resultierenden Feldes zeigt am Punkt \(P\) exakt in positive \(y\)-Richtung (senkrecht zur Verbindungslinie der Ladungen).</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.4 Der elektrische Dipol</h3>
+<section>
+    <p>Ein sogenannter <strong>elektrischer Dipol</strong> stellt einen sehr wichtigen Spezialfall unter den Ladungsverteilungen dar, da er unter anderem in der Chemie und in den Materialwissenschaften eine große Rolle spielt. Ein elektrischer Dipol besteht aus zwei Punktladungen mit gleichem Betrag der Ladungsmenge, jedoch mit entgegengesetztem Vorzeichen, die sich in einem bestimmten, fixierten Abstand zueinander befinden.</p>
+
+    <p>Sie können sich zunächst einen Dipol wie eine Hantel vorstellen. Die beiden Hantelgewichte entsprechen dabei den beiden Ladungen, die durch eine starre, ungeladene, isolierende Stange miteinander verbunden sind.</p>
+
+    <p>Der Abstand zwischen den beiden Ladungen wird als Dipolabstand \(d\) bezeichnet. Die Ladung mit dem positiven Vorzeichen wird als positive Dipolladung \(+q\) bezeichnet, während die Ladung mit dem negativen Vorzeichen als negative Dipolladung \(-q\) bezeichnet wird.</p>
+
+    <p>Gehen wir davon aus, dass die beiden Ladungen auf der \(x\)-Achse eines Koordinatensystems liegen, wobei die positive Dipolladung bei \(x = +\frac{d}{2}\) und die negative Dipolladung bei \(x = -\frac{d}{2}\) positioniert ist.</p>
+
+    <p>Wir betrachten einen Punkt \(P\) auf der \(y\)-Achse in einer Höhe \(h\) über dem Ursprung des Koordinatensystems. Wir wollen nun das elektrische Feld an diesem Punkt \(P\) berechnen, das durch den Dipol erzeugt wird.</p>
+
+    <figure class="abbildung" id="fig-em_dipol_schema">
+        <img class="grafik" style="width:45%" src="bilder/em_dipol_schema.png" alt="">
+        <figcaption>Schematische Darstellung eines elektrischen Dipols und des Punktes \(P\), an dem das elektrische Feld berechnet werden soll.</figcaption>
+    </figure>
+
+    <p>Es ist zu bemerken, dass das Problem zylindersymmetrisch ist, da der Dipol entlang der \(x\)-Achse ausgerichtet ist und wir das Feld an einem Punkt auf der \(y\)-Achse berechnen. Daher können wir uns darauf konzentrieren, die Komponenten des elektrischen Feldes in \(x\)- und \(y\)-Richtung zu bestimmen, wobei die \(y\)-Achse beliebig rotiert werden kann. Sei \(s\) der Abstand von jeder der Ladungen zum Punkt \(P\). Dann gilt:</p>
+    \begin{equation}
+        s = \sqrt{\left(\frac{d}{2}\right)^2 + h^2}.
+    \end{equation}
+
+    <p>Das elektrische Feld an Punkt \(P\) ist die Vektorsumme der Felder, die von den beiden Dipolladungen erzeugt werden:</p>
+    \begin{equation}
+        \vec{E_+}(s,h)= \frac{1}{4 \pi \varepsilon_0} \cdot \frac{+Q}{s^2} \cdot \frac{1}{s} \begin{pmatrix}
+            -\frac{d}{2} \\ h
+        \end{pmatrix}
+    \end{equation}
+    \begin{equation}
+        \vec{E_-}(s,h)= \frac{1}{4 \pi \varepsilon_0} \cdot \frac{-Q}{s^2} \cdot \frac{1}{s} \begin{pmatrix}
+            \frac{d}{2} \\ h
+        \end{pmatrix}
+    \end{equation}
+    <p>Die Gesamtfeldstärke am Punkt \(P\) ergibt sich aus der Überlagerung (Superposition) der beiden Felder:</p>
+    \begin{equation}
+        \vec{E}(s) = \vec{E_+}(s,h) + \vec{E_-}(s,h) = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q}{s^3} \begin{pmatrix}
+            -d \\ 0
+        \end{pmatrix} = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q d}{s^3} \begin{pmatrix}
+            -1 \\ 0
+        \end{pmatrix}
+    \end{equation}
+
+    <p>Da \(s\) und \(h\) voneinander abhängen, brauchen wir nur noch eine Variable, um das elektrische Feld auszudrücken.</p>
+
+    <p>Das elektrische Feld eines Dipols am Punkt \(P\) zeigt also parallel zur Dipolachse (in diesem Fall entlang der \(x\)-Achse) und ist proportional zum Produkt der Ladung \(Q\) und des Dipolabstands \(d\), sowie umgekehrt proportional zur dritten Potenz des Abstands \(s\) von den Ladungen zum Punkt \(P\).</p>
+
+    <p>Das Produkt \(Q \cdot d\) wird auch als das <strong>Dipolmoment</strong> \(p\) des Dipols bezeichnet:</p>
+    \begin{equation}
+        p = Q \cdot d.
+    \end{equation}
+    <p>Vektorell gilt:</p>
+    \begin{equation}
+        \vec{p} = Q \cdot \vec{d}.
+    \end{equation}
+    <p>Dabei ist \(\vec{d}\) der Vektor, der von der negativen zur positiven Ladung zeigt und dessen Länge dem Dipolabstand \(d\) entspricht.</p>
+
+    <p>Damit kann das elektrische Feld eines Dipols am Punkt \(P\) auch in der folgenden Form geschrieben werden:</p>
+    \begin{equation}
+        \vec{E}(s) =-\frac{1}{4 \pi \varepsilon_0} \cdot \frac{\vec p}{s^3}
+    \end{equation}
+
+    <p>Der elektrische Dipol hat eine sehr interessante Eigenschaft: bringt man einen elektrischen Dipol in ein externes elektrisches Feld, so erfährt der Dipol ein Drehmoment, das dazu neigt, den Dipol so auszurichten, dass sein Dipolmoment \(\vec{p}\) in Richtung des externen Feldes zeigt. Dieses Verhalten ist vergleichbar mit dem eines magnetischen Dipols in einem magnetischen Feld, zum Beispiel bei einem Kompass, der sich im Erdmagnetfeld ausrichtet.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.5 Homogene (und konstante) elektrische Felder</h3>
+<section>
+    <p>Ein Sonderfall unter den elektrischen Feldern sind die sogenannten <strong>homogenen</strong> elektrischen Felder. Ein homogenes elektrisches Feld ist dadurch gekennzeichnet, dass die Feldstärke \(\vec{E}\) an jedem Punkt im betrachteten Raumabschnitt den gleichen Betrag und die gleiche Richtung hat. Daher hängt das elektrische Feld in einem homogenen Feld nicht vom Ort \(\vec{r}\) ab:</p>
+    \begin{equation}
+        \vec{E}(\vec{r}) = \text{konstant}.
+    \end{equation}
+
+    <p>In der Physik unterscheiden wir zwischen <strong>homogenen Größen und konstanten Größen</strong>. Eine homogene Größe ist eine Größe, die in einem bestimmten Raumabschnitt überall (das heißt an jedem Ort innerhalb dieses Abschnitts) den gleichen Wert hat. Eine konstante Größe ist eine Größe, die sich im Laufe der Zeit nicht ändert. Daher ist ein homogenes elektrisches Feld nicht notwendigerweise auch ein konstantes elektrisches Feld. Ein homogenes elektrisches Feld kann sich im Laufe der Zeit ändern, solange es in jedem betrachteten Raumabschnitt zu jedem Zeitpunkt den gleichen Betrag und die gleiche Richtung hat.</p>
+
+    <p>Ein homogenes elektrisches Feld kann zum Beispiel durch zwei große, parallele Metallplatten erzeugt werden, die mit entgegengesetzten elektrischen Ladungen aufgeladen sind. Zwischen diesen Platten ist das elektrische Feld nahezu homogen, solange der Abstand zwischen den Platten im Vergleich zu ihrer Ausdehnung klein ist. Eine solche Ladungsanordnung werden wir später als <strong>Kondensator</strong> kennenlernen.</p>
+
+    <div class="beispiel" data-title="Dipol in einem homogenen elektrischen Feld">
+        <p>Ein Dipol mit dem Dipolmoment \(\vec{p}\), welches beliebig im Raum ausgerichtet sein kann, befindet sich in einem homogenen elektrischen Feld \(\vec{E}=E_0\cdot \vec e_x\). Berechnet werden soll das Drehmoment \(\vec{M}\), das auf den Dipol wirkt.</p>
+
+        <p>Wir berechnen die Kräfte, die auf die beiden Dipolladungen wirken:</p>
+        \begin{equation}
+            \vec{F}_+ = +q \cdot \vec{E} = +q \cdot E_0 \cdot \vec{e}_x
+        \end{equation}
+        \begin{equation}
+            \vec{F}_- = -q \cdot \vec{E} = -q \cdot E_0 \cdot \vec{e}_x
+        \end{equation}
+        <p>Die beiden Kräfte wirken also in entgegengesetzte Richtungen entlang der \(x\)-Achse, also entlang oder entgegengesetzt zur Richtung des elektrischen Feldes.</p>
+
+        <p>Der Schwerpunkt des Dipols liegt genau in der Mitte zwischen den beiden Ladungen. Wir bezeichnen den Vektor vom Schwerpunkt zu der positiven Ladung als \(\vec{r}_+\) und den Vektor vom Schwerpunkt zu der negativen Ladung als \(\vec{r}_-\). Dann gilt:</p>
+        \begin{equation}
+            \vec{r}_+ = \frac{\vec d}{2}
+        \end{equation}
+        \begin{equation}
+            \vec{r}_- = -\frac{\vec d}{2}
+        \end{equation}
+
+        <p>Das Drehmoment \(\vec{M}\), das auf den Dipol wirkt, ergibt sich aus der Vektorsumme der Drehmomente, die durch die beiden Kräfte erzeugt werden:</p>
+        \begin{equation}
+            \vec{M} = \vec{r}_+ \times \vec{F}_+ + \vec{r}_- \times \vec{F}_-
+        \end{equation}
+
+        <p>Einsetzen ergibt:</p>
+        \begin{align}
+            \vec{M} &amp;= \frac{\vec d}{2} \times \left( +q \cdot E_0 \cdot \vec{e}_x\right) - \frac{\vec d}{2}\times \left( -q \cdot E_0 \cdot \vec{e}_x\right)\\[6pt]
+            &amp;= \frac{q \cdot E_0}{2} \cdot \left( \vec d \times \vec{e}_x + \vec d \times \vec{e}_x \right) \\[6pt]
+            &amp;= q \cdot E_0 \cdot \left( \vec d \times \vec{e}_x \right) \\[6pt]
+            &amp;= \vec p \times \vec{E}
+        \end{align}
+
+        <p>Das bedeutet: ein Dipol in einem homogenen elektrischen Feld erfährt so lange ein Drehmoment, bis sich das Dipolmoment \(\vec{p}\) des Dipols in Richtung des elektrischen Feldes \(\vec{E}\) ausgerichtet hat. Man kann sich also einen Dipol als eine Art Kompassnadel für das elektrische Feld vorstellen.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.6 (Elektrische) Feldlinien</h3>
+<section>
+    <p>Es kann sehr mühsam sein, sich ein elektrisches Feld nur anhand der Vektorpfeile vorzustellen, die an verschiedenen Punkten im Raum eingezeichnet sind. Daher gibt es eine alternative Möglichkeit, elektrische Felder zu visualisieren: die sogenannten Feldlinien.</p>
+
+    <p>Statt einzelne Vektoren zu zeichnen, werden kontinuierliche Linien gezeichnet, die die Richtung des elektrischen Feldes an jedem Punkt im Raum anzeigen. Diese Linien werden als <strong>Feldlinien</strong> bezeichnet.</p>
+
+    <p>Für Feldlinen gelten folgende Regeln:</p>
+    <ul>
+        <li>Die Feldlinien beginnen an positiven Ladungen und enden an negativen Ladungen.</li>
+        <li>Ausnahme: Feldlinien können auch im Unendlichen beginnen oder enden, aber nur eines von beiden.</li>
+        <li>Die Dichte der Feldlinien (also wie eng sie beieinander liegen) gibt die Stärke des elektrischen Feldes an: je dichter die Linien, desto stärker das Feld.</li>
+        <li>Die Richtung der Feldlinien an einem Punkt entspricht der Richtung des elektrischen Feldes an diesem Punkt.</li>
+        <li>Feldlinien dürfen sich nicht kreuzen. An jedem Punkt im Raum kann es nur eine Richtung des elektrischen Feldes geben.</li>
+    </ul>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.7 Das elektrische Potential</h3>
+<section>
+    <p>Wir haben in der Mechanik den Begriff der konservativen Kräfte kennengelernt. Zur Erinnerung: eine Kraft ist konservativ, wenn die Arbeit, die sie verrichtet, nur vom Anfangs- und Endpunkt des Weges abhängt, aber nicht vom Weg selbst:</p>
+    \begin{equation}
+        W = \int_{A}^{B} \vec{F}(\vec{r}) \cdot d\vec{r} = W_{BA}\quad \text{(unabhängig vom konkreten Weg zwischen A und B)}.
+    \end{equation}
+    <p>Wenn eine Kraft konservativ ist, dann können wir eine Größe definieren, die als <strong>potentielle Energie</strong> bezeichnet wird. Die potentielle Energie \(E_{\text{pot}}\) an einem Punkt \(B\) im Raum ist definiert als die Arbeit, die erforderlich ist, um einen Körper von einem Referenzpunkt \(A\) zu dem Punkt \(B\) zu bewegen:</p>
+    \begin{equation}
+        E_{\text{pot}}(BA) = - \int_{A}^{B} \vec{F}(\vec{r}) \cdot d\vec{r}.
+    \end{equation}
+    <p>Zum Beispiel war die potentielle Energie eines Körpers der Masse \(m\), welcher in der Nähe der Erdboberfläche um eine Höhe \(h\) angehoben wird, gegeben durch:</p>
+    \begin{equation}
+        E_{\text{pot}}(h) = m \cdot g \cdot h.
+    \end{equation}
+    <p>Die potentielle Energie einer Feder, die um eine Strecke \(x\) gedehnt oder gestaucht wird, war gegeben durch:</p>
+    \begin{equation}
+        E_{\text{pot}}(x) = \frac{1}{2} k \cdot x^2.
+    \end{equation}
+    <p>Die potenzielle Energie kann wieder abgegeben werden, wenn der Körper wieder in den Referenzpunkt zurückkehrt. Dabei kann zum Beispiel die potentielle Energie eines angehobenen Körpers in kinetische Energie umgewandelt werden, wenn der Körper fallen gelassen wird.</p>
+
+    <p>Auch die Coulomb-Kraft ist eine konservative Kraft. Daher können wir auch für die Coulomb-Kraft eine potentielle Energie definieren.</p>
+
+    <p>Stehen wir uns folgendes vor: eine Punktladung \(+Q\) befindet sich im Ursprung eines Koordinatensystems. Eine zweite, ebenfalls punktförmige Testladung \(+q\) befindet sich im Abstand \(r_A\) zur Ladung \(+Q\) und wird dort festgehalten. Wenn wir nun die Ladung loslassen würden, dann würde die Coulomb-Kraft die Ladung \(+q\) weg von der Ladung \(+Q\) beschleunigen, dabei würde die Ladung \(+q\) kinetische Energie gewinnen. Der Zuwachs an kinetischer Energie der Ladung \(+q\) kommt dabei von der potentiellen Energie, die die Ladung \(+q\) im elektrischen Feld der Ladung \(+Q\) besitzt.</p>
+
+    <p>Bringen wir nun die Ladung \(+q\) von dem Punkt \(A\) im Abstand \(r_A\) zu einem Punkt \(B\) im Abstand \(r_B<r_A\) zur Ladung, so können wir zwei Betrachtungen anstellen:</p>
+    <ul>
+        <li>Wenn die Ladung aus dem Punkt, der näher an der Ladung \(+Q\) liegt, losgelassen wird, dann wird Sie an dem Punkt, an dem Sie ursprünglich festgehalten wurde, schon eine gewisse kinetische Energie besitzen. Daher wird Sie an jedem weiter entfernten Punkt eine größere kinetische Energie besitzen als vorher. Dieses „mehr" an kinetischer Energie muss die Ladung bei der Bewegun von \(A\) nach \(B\) dazugewonnen haben.</li>
+        <li>Andererseits muss man, um die Ladung \(+q\) von dem Punkt \(A\) zum Punkt \(B\) zu bewegen, der ja näher an der Ladung \(+Q\) liegt, gegen die abstoßende Coulomb-Kraft arbeiten. Diese Arbeit, die man verrichten muss, um die Ladung \(+q\) von \(A\) nach \(B\) zu bewegen, entspricht genau dem Zuwachs an potentieller Energie der Ladung \(+q\), die Sie im elektrischen Feld der Ladung \(+Q\) besitzt.</li>
+    </ul>
+
+    <p>Bewegt man also eine positive Ladung im elektrischen Feld einer anderen positiven Ladung näher zu dieser Ladung hin, so muss man Arbeit gegen die abstoßende Coulomb-Kraft verrichten. Diese Arbeit wird in Form von potentieller Energie in dem elektrischen Feld gespeichert. Die potentielle Energie von \(+q\) nimmt zu. Gleiches gilt für zwei negative Ladungen. Der Prozess der Bewegung von \(A\) nach \(B\) wird nicht von selbst ablaufen, sondern man muss von außen Arbeit verrichten, um die Ladung \(+q\) näher zu \(+Q\) zu bringen.</p>
+
+    <p>Ist die Ladung \(+q\) jedoch schon in der Nähe von \(+Q\) und wird losgelassen, so wird die Coulomb-Kraft die Ladung \(+q\) weg von \(+Q\) beschleunigen. Dabei wird die potentielle Energie, die die Ladung \(+q\) im elektrischen Feld von \(+Q\) besitzt, in kinetische Energie umgewandelt. Die potentielle Energie von \(+q\) nimmt ab. Dieser Prozess läuft von selbst ab.</p>
+
+    <p>Die potentielle Energie \(E_{\text{pot}}(r)\) einer Punktladung \(+q\) im elektrischen Feld einer Punktladung \(+Q\) im Abstand \(r\) ist gegeben durch:</p>
+    \begin{align}
+        E_{\text{pot}}(r) &amp;=\int_{r_A}^{r_B} \vec{F}_C(r) \cdot d\vec{r} = \int_{r_A}^{r_B} \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q q}{r^2} \cdot \vec e_r \cdot d\vec{r} \\[6pt]&amp;= \int_{r_A}^{r_B} \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q q}{r^2} dr = \frac{1}{4 \pi \varepsilon_0} \cdot Q q \left( \frac{1}{r_A} - \frac{1}{r_B} \right)
+    \end{align}
+
+    <p>Wählt man als Nullpunkt der potentiellen Energie den Punkt im Unendlichen, in dem die Ladung alle potentielle Energie in kinetische Energie umgewandelt haben wird, so ergibt sich für die potentielle Energie einer Punktladung \(+q\) im elektrischen Feld einer Punktladung \(+Q\) im Abstand \(r\):</p>
+    \begin{equation}
+        E_{\text{pot}}(r) = \lim_{r_A \to \infty} \int_{r_A}^{r} \vec{F}_C(r) \cdot d\vec{r} = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q q}{r}
+    \end{equation}
+
+    <p>Die potentielle Energie hängt also davon ab, wie weit die Ladung \(+q\) von der Ladung \(+Q\) entfernt ist und von der Ladung \(q\) selbst. Analog zum elektrischen Feld wünschen wir uns jedoch eine Größe, die uns die potenzielle Energie pro Einheit Ladung angibt, also nicht mehr von einer bestimmten Testladung \(q\) abhängt. Diese Größe ist das <strong>elektrische Potenzial</strong> \(U(r)\), das an einem Punkt im Abstand \(r\) von der Ladung \(+Q\) definiert ist als:</p>
+    \begin{equation}
+        U(r) = \frac{E_{\text{pot}}(r)}{q}=\frac{1}{q}\int_{\infty}^{r} F_C(r) \cdot d\vec{r}
+    \end{equation}
+
+    <p>Das elektrische Potenzial hat die Einheit:</p>
+    \begin{equation}
+        [U] = \frac{\mathrm{J}}{\mathrm{C}} = \mathrm{V}.
+    \end{equation}
+
+    <p>Allgemein kann man den Zusammenhang zwischen Potenzialdifferenz und der Coulomb-Kraft folgendermaßen ausdrücken:</p>
+    \begin{equation}
+        \Delta U = U(B) - U(A) = - \int_{A}^{B} \vec{E} \cdot d\vec{r} = - \int_{A}^{B} \frac{\vec{F}_C}{q} \cdot d\vec{r}
+    \end{equation}
+
+    <div class="beispiel" data-title="Elektrisches Potential einer Punktladung">
+        <p>Das elektrische Potential \(U(r)\) einer Punktladung \(+Q\) im Abstand \(r\) ist gegeben durch:</p>
+        \begin{equation}
+            U(r) = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q}{r}
+        \end{equation}
+    </div>
+
+    <div class="beispiel" data-title="Potenzialdifferenz zwischen zwei parallelen geladenen Platten">
+        <p>Zwei große, parallele Metallplatten sind im Abstand \(d\) mit der Flächenladung \(\pm \sigma\) im Berag gleich, aber mit entgegengesetztem Vorzeichen aufgeladen. Eine Platte sitze bei \(x=0\) und die andere bei \(x=d\), die Ausdehnung der Platten erstreckt sich in die \(y\)-\(z\)-Richtung. Bestimmt werden soll die Potentialdifferenz \(\Delta U\) zwischen den beiden Platten. Die Platte bei \(x=0\) sei positiv geladen, die Platte bei \(x=d\) negativ.</p>
+
+        <p>Zwischen den Platten herrscht ein homogenes elektrisches Feld der Stärke:</p>
+        \begin{equation}
+            E = \frac{\sigma}{\varepsilon_0}\cdot \vec e_x
+        \end{equation}
+
+        <p>Es gilt:</p>
+        \begin{equation}
+            \Delta U = U(d) - U(0) = - \int_{0}^{d} \vec{E} \cdot d\vec{r} = - \int_{0}^{d} \frac{\sigma}{\varepsilon_0} \cdot \vec e_x \cdot d\vec{r}
+        \end{equation}
+        <p>Bringt man nun eine Ladung \(+q\) von der Platte bei \(x=0\) zur Platte bei \(x=d\), so muss man gegen die Kraft des elektrischen Feldes arbeiten. Daher ist die Potentialdifferenz positiv, und \(\vec e_x\) und \(d\vec{r}\) zeigen in die gleiche Richtung:</p>
+        \begin{equation}
+            \Delta U = - \int_{0}^{d} \frac{\sigma}{\varepsilon_0} \cdot dx = - \frac{\sigma}{\varepsilon_0} \cdot (d-0) = - \frac{\sigma \cdot d}{\varepsilon_0}
+        \end{equation}
+    </div>
+
+    <p>Wir sehen also: lade ich zwei Platten mit entgegengesetzten Ladungen auf, so entsteht zwischen den Platten eine Potentialdifferenz, die proportional zur Flächenladung \(\sigma\) und zum Abstand \(d\) der Platten ist. Durch den Prozess des Aufladens wird Arbeit verrichtet, die in Form von potentieller Energie im elektrischen Feld zwischen den Platten gespeichert wird. Diese potentielle Energie kann später wieder abgegeben werden, wenn die Ladungen auf den Platten wieder entladen werden. Die Energie kann nun genutzt werden, um zum Beispiel elektrische Geräte zu betreiben. Eine solche Anordnung aus zwei geladenen Platten wird als <strong>Kondensator</strong> bezeichnet und spielt eine wichtige Rolle in der Elektrotechnik und Elektronik. Sie wird genutzt, um elektrische Energie zu speichern und bei Bedarf wieder abzugeben. Verbindet man die beiden Platten mit jeweils einem Leiter, und sind die Leiter noch nicht mit einem Verbraucher verbunden und auch nicht miteinander kurzgeschlossen, so fließt kein Strom und zwischen den beiden Leiterenden besteht die selbe Potentialdifferenz wie zwischen den Platten. Dadurch kann man die gespeicherte Energie auch in einem räumlichen Abstand von den Platten nutzen, um elektrische Geräte zu betreiben. Dieser Prozess beschreibt, sehr stark vereinfacht, das Grundprinzip unseres Stromnetzes. An einem Ort wird Ladungstrennung betrieben, an einem anderen Ort wird die gespeicherte Energie genutzt, um elektrische Geräte zu betreiben.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.8 Zusammenhang zwischen Potential und dem Spannungsbegriff</h3>
+<section>
+    <p>In der Elektrotechnik wird die Potentialdifferenz oft als <strong>Spannung</strong> bezeichnet. Die Spannung \(U\) zwischen zwei Punkten A und B ist definiert als die Potentialdifferenz zwischen diesen beiden Punkten:</p>
+    \begin{equation}
+        U = U(B) - U(A) = \Delta U
+    \end{equation}
+    <p>Die Spannung hat die Einheit Volt (V), wobei 1 Volt definiert ist als 1 Joule pro Coulomb:</p>
+    \begin{equation}
+        1 \,\mathrm{V} = 1 \frac{\mathrm{J}}{\mathrm{C}}
+    \end{equation}
+
+    <p>Das bedeutet, dass bei unseren Steckdosen im Haushalt, bei denen eine Spannung von 230 V anliegt, zwischen einer Phase und dem Neutralleiter eine Potentialdifferenz von 230 Joule pro Coulomb besteht. Das heißt, wenn eine Ladung von 1 Coulomb durch ein elektrisches Gerät fließt, wird eine Energie von 230 Joule übertragen. Diese Energie kann genutzt werden, um elektrische Geräte zu betreiben, wie zum Beispiel Lampen, Computer oder Haushaltsgeräte.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.9 Die Kapazität</h3>
+<section>
+    <p>Bisher hatten wir nur Ladungen betrachtet, die sich jeweils auf einen sehr kleinen Raumabschnitt konzentrieren, also Punktladungen. In der Praxis gibt es jedoch auch viele Situationen, in denen Ladungen auf größeren Flächen verteilt sind, wie zum Beispiel auf Metallplatten oder in Kondensatoren.</p>
+
+    <p>Jede Anordnung aus zwei leitenden Objekten, die geometrisch zueinander angeordnet sind und zwischen denen sich keine leitende Verbindung befindet, heisst <strong>Kondensator</strong>.</p>
+
+    <p>Einen Kondensator kann man <strong>aufladen</strong>, indem eine Ladungsmenge \(+Q\) auf das eine leitende Objekt und die Ladungsmenge \(-Q\) auf das andere leitende Objekt bringt.</p>
+
+    <p>Die Gesamtladung des Kondensators ist dabei immer null, da die positiven und negativen Ladungen sich gegenseitig aufheben:</p>
+    \begin{equation}
+        Q_{\text{gesamt}} = +Q + (-Q) = 0.
+    \end{equation}
+
+    <p>Dennoch ist es Konvention, die <strong>Ladung eines Kondensators</strong> als den Betrag der Ladung auf einem der beiden leitenden Objekte zu definieren:</p>
+    \begin{equation}
+        Q_{\text{Kondensator}} = |Q| = +Q = -(-Q).
+    \end{equation}
+
+    <p>Eine häufig verwendete Art des Kondensators ist der sogenannte <strong>Plattenkondensator</strong>, der aus zwei parallelen Metallplatten besteht, die durch einen kleinen Abstand voneinander getrennt sind. Dabei gehen wir davon aus, dass der Abstand der Platten sehr groß ist im Vergleich zur Größe von zwei Ladungsträgern, denn kann können wir guten Gewissens behaupten, dass die Potenialdifferenz des Kondensators gleich der Potenialdifferenz von zwei unendlich großen Platten ist:</p>
+    \begin{equation}
+        \Delta U=\frac{\sigma \cdot d}{\varepsilon_0}
+    \end{equation}
+
+    <p>Die Flächenladungsdichte \(\sigma\) ist dabei definiert als die Ladung pro Fläche:</p>
+    \begin{equation}
+        \sigma = \frac{Q}{A}
+    \end{equation}
+    <p>wobei \(A\) die Fläche einer der beiden Platten ist, wir gehen von einer homogenen Ladungsverteilung auf den Platten aus.</p>
+
+    <p>Eingesetzt in die Gleichung für die Potentialdifferenz ergibt sich:</p>
+    \begin{equation}
+        \Delta U = \frac{Q}{A \cdot \varepsilon_0} \cdot d
+    \end{equation}
+
+    <p>Die Potentialdifferenz zwischen den Platten eines Plattenkondensators hängt also von der Ladung \(Q\) auf den Platten, der Fläche \(A\) der Platten und dem Abstand \(d\) zwischen den Platten ab. Die Ladung \(Q\) wird auf den Kondensator aufgebracht, die Fläche \(A\) und der Abstand \(d\) sind feste geometrische Eigenschaften des Kondensators. Daher biete es sich an, die Ladung \(Q\) in Abhängigkeit von der Potentialdifferenz \(\Delta U\) auszudrücken:</p>
+    \begin{equation}
+        Q = \frac{A \cdot \varepsilon_0}{d} \cdot \Delta U
+    \end{equation}
+
+    <p>Der Proportionalitätsfaktor zwischen der Ladung \(Q\) und der Potentialdifferenz \(\Delta U\) wird als <strong>Kapazität</strong> \(C\) des Kondensators bezeichnet:</p>
+    \begin{equation}
+        C = \frac{A \cdot \varepsilon_0}{d}
+    \end{equation}
+    <p>Die Kapazität eines Kondensators gibt also an, wie viel Ladung pro Volt Potentialdifferenz auf dem Kondensator gespeichert werden kann; oder anderererseits: wieviel Potentialdifferenz entsteht, wenn eine bestimmte Ladung auf dem Kondensator gespeichert wird.</p>
+
+    <p>Die Kapazität hat die Einheit:</p>
+    \begin{equation}
+        [C] = \frac{[\mathrm{C}]}{[\mathrm{V}]} = \mathrm{F} \quad \text{(Farad)}
+    \end{equation}
+
+    <h4>Der Ladevorgang eines Kondensators</h4>
+    <p>Nehmen wir an, wir haben einen Plattenkondensator mit der Kapazität \(C\), der zunächst ungeladen ist. Wir verbinden nun die beiden Platten des Kondensators mit etwas, was wir uns zunächst als eine „Ladungspumpe" vorstellen können, die in der Lage ist, Ladungen von einer Platte zur anderen zu transportieren. Solange beide Platten ungeladen sind, braucht es für die erste infinitesimale Ladungsmenge \(dq\) keine Arbeit, um diese Ladung von der einen Platte zur anderen zu transportieren, da ja noch kein elektrisches Feld existiert. Sobald jedoch eine Ladungsmenge \(q\) auf dem Kondensator gespeichert ist, stößt die vorhandene Ladung auf den Platten jede weitere Ladung gleichen Vorzeichens ab. Um eine weitere infinitesimale Ladungsmenge \(dq\) auf den Kondensator zu bringen, muss also gegen die abstoßende Kraft der bereits vorhandenen Ladung \(q\) gearbeitet werden. Die Arbeit \(dW\), die erforderlich ist, um die infinitesimale Ladungsmenge \(dq\) auf den Kondensator zu bringen, ist gegeben durch:</p>
+    \begin{equation}
+        dW = \Delta U \cdot dq
+    \end{equation}
+    <p>wobei \(\Delta U\) die Potentialdifferenz zwischen den Platten des Kondensators ist, wenn bereits die Ladungsmenge \(q\) auf dem Kondensator gespeichert ist.</p>
+
+    <p>Jetzt werden Sie vielleicht denken: moment mal, das elektrische Feld besteht doch zwischen den Platten, aber die Ladungen bringe ich doch durch die Kabel außerhalb des Kondensators auf die Platten. Das stimmt, aber hier kommt wieder ins Spiel, dass das elektrische Feld konservativ ist. Die Arbeit, die erforderlich ist, um die Ladung \(dq\) von der einen Platte zur anderen zu bringen, hängt nicht vom konkreten Weg ab. Ob ich den Weg zwischen den Platten wähle und gegen das elektrische Feld arbeite, oder ob ich die Ladung durch die Kabel außerhalb des Kondensators bringe, macht keinen Unterschied für die Arbeit, die ich verrichten muss.</p>
+
+    <p>Die Potentialdifferenz \(\Delta U\) zwischen den Platten des Kondensators, wenn die Ladungsmenge \(q\) auf dem Kondensator gespeichert ist, ist gegeben durch:</p>
+    \begin{equation}
+        \Delta U = \frac{q}{C}
+    \end{equation}
+    <p>Eingesetzt in die Gleichung für die Arbeit \(dW\) ergibt sich:</p>
+    \begin{equation}
+        dW = \frac{q}{C} \cdot dq
+    \end{equation}
+    <p>Um die gesamte Arbeit \(W\), die erforderlich ist, um den Kondensator von einem ungeladenen Zustand (Ladung \(0\)) zu einem geladenen Zustand mit der Ladung \(Q\) zu bringen, zu berechnen, integrieren wir über alle infinitesimalen Arbeiten \(dW\):</p>
+    \begin{equation}
+        W = \int_{0}^{Q} \frac{q}{C} \cdot dq = \frac{1}{C} \int_{0}^{Q} q \cdot dq = \frac{1}{C} \cdot \left[ \frac{q^2}{2} \right]_{0}^{Q} = \frac{1}{C} \cdot \frac{Q^2}{2}
+    \end{equation}
+    <p>Dadurch, dass auf einem Kondensator der Kapazität \(C\) die Ladung \(Q\) gespeichert wird, wird also die Energie</p>
+    \begin{equation}
+        W = \frac{1}{2} \cdot \frac{Q^2}{C}
+    \end{equation}
+    <p>in Form von potentieller Energie im elektrischen Feld des Kondensators gespeichert.</p>
+
+    <div class="beispiel" data-title="Verändern des Abstand eines Plattenkondensators">
+        <p>Angenommen, ein Plattenkondensator mit Platten der Fläche \(A\) und einem initialen Plattenabstand \(d_1\) ist mit der Ladung \(Q\) aufgeladen. Der Kondensator wird nun von dem Zustand mit dem Plattenabstand \(d_1\) in den Zustand mit dem Plattenabstand \(d_2>d_1\) gebracht. Muss dafür Arbeit verrichtet werden, oder wird dabei Arbeit frei? Wie groß ist die Arbeit \(W\), die dabei verrichtet wird oder frei wird?</p>
+
+        <p>Durch das Vergrößern des Plattenabstands verringert sich die Kapazität des Kondensators:</p>
+        \begin{equation}
+            C_1 = \frac{A \cdot \varepsilon_0}{d_1}
+        \end{equation}
+        \begin{equation}
+            C_2 = \frac{A \cdot \varepsilon_0}{d_2}
+        \end{equation}
+        <p>Dadurch ändert sich die gespeicherte Energie im Kondensator von:</p>
+        \begin{align}
+            E_{\text{pot,1}} &amp;= \frac{1}{2} \cdot \frac{Q^2}{C_1} = \frac{1}{2} \cdot \frac{Q^2 \cdot d_1}{A \cdot \varepsilon_0}\\[6pt]
+            E_{\text{pot,2}} &amp;= \frac{1}{2} \cdot \frac{Q^2}{C_2} = \frac{1}{2} \cdot \frac{Q^2 \cdot d_2}{A \cdot \varepsilon_0}
+        \end{align}
+
+        <p>Die Änderung der gespeicherten Energie im Kondensator ist also:</p>
+        \begin{equation}
+            \Delta E_{\text{pot}} = E_{\text{pot,2}} - E_{\text{pot,1}} = \frac{1}{2} \cdot \frac{Q^2}{A \cdot \varepsilon_0} \cdot (d_2 - d_1)
+        \end{equation}
+        <p>Da \(d_2 > d_1\) ist, ist auch \(\Delta E_{\text{pot}} > 0\). Das bedeutet: die gespeicherte Energie im Kondensator nimmt zu. Um diese Energiezunahme zu erreichen, muss also Arbeit verrichtet werden. Die Arbeit \(W\), die verrichtet werden muss, um den Plattenabstand von \(d_1\) auf \(d_2\) zu vergrößern, ist also:</p>
+        \begin{equation}
+            W = \Delta E_{\text{pot}} = \frac{1}{2} \cdot \frac{Q^2}{A \cdot \varepsilon_0} \cdot (d_2 - d_1)
+        \end{equation}
+
+        <p>Das Energie verrichtet werden muss, um den Plattenabstand zu vergrößern, ist insofern logisch, als wenn man sich das gegenteilige Szenario vorstellt. Angenommen, die Platten könnten sich frei bewegen, dann würden die Platten sich aufgrund der anziehenden Kraft zwischen den entgegengesetzt geladenen Platten aufeinander zubewegen. Dabei würde die gespeicherte Energie im Kondensator abnehmen, und die Differenz der Energie würde in kinetische Energie der Platten umgewandelt werden. Umgekehrt muss also Arbeit verrichtet werden, um die Platten auseinander zu ziehen.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.2.10 Zusammenfassung</h3>
+<section>
+    <div class="zusammenfassung" data-title="Elektrostatik und elektrische Felder">
+        <ul>
+            <li><strong>Ladungsverteilungen und -dichten:</strong>
+                <ul>
+                    <li><strong>Punktladung:</strong> Ladung \(Q\) konzentriert in einem vernachlässigbar kleinen Raumbereich.</li>
+                    <li><strong>Ladungsdichten:</strong> Beschreibung räumlich verteilter Ladungen:
+                        <ul>
+                            <li>Volumenladungsdichte: \(\rho = \frac{\mathrm{d}Q}{\mathrm{d}V}\) in \(\mathrm{C/m^3}\).</li>
+                            <li>Flächenladungsdichte: \(\sigma = \frac{\mathrm{d}Q}{\mathrm{d}A}\) in \(\mathrm{C/m^2}\).</li>
+                            <li>Linienladungsdichte: \(\lambda = \frac{\mathrm{d}Q}{\mathrm{d}L}\) in \(\mathrm{C/m}\).</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            <li><strong>Die Coulomb-Kraft (\(\vec{F}_C\)):</strong>
+                <ul>
+                    <li>Beschreibt die Kraft zwischen zwei Punktladungen \(q_A\) und \(q_B\).</li>
+                    <li><strong>Gesetz:</strong> \(\vec{F}_{C,BA} = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{q_A q_B}{\vert r_{BA}\vert^2} \cdot \frac{\vec{r}_{BA}}{|\vec{r}_{BA}|}\).</li>
+                    <li><strong>Eigenschaften:</strong> Proportional zum Produkt der Ladungen, umgekehrt proportional zum Abstandsquadrat. Gleiche Ladungen stoßen sich ab, ungleiche ziehen sich an.</li>
+                    <li><strong>Superpositionsprinzip:</strong> Die Gesamtkraft auf eine Ladung ist die Vektorsumme aller Einzelkräfte.</li>
+                </ul>
+            </li>
+
+            <li><strong>Das elektrische Feld (\(\vec{E}\)):</strong>
+                <ul>
+                    <li>Definiert als Kraft pro Einheit Ladung: \(\vec{E}(\vec{r}) = \frac{\vec{F}_C(\vec{r})}{q}\).</li>
+                    <li><strong>Einheit:</strong> \(\mathrm{N/C} = \mathrm{V/m}\).</li>
+                    <li><strong>Punktladungsfeld:</strong> \(\vec{E}(\vec{r}) = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q}{r^2} \cdot \vec{e}_r\) (radialsymmetrisch).</li>
+                    <li><strong>Feldlinien:</strong> Visualisierung der Feldrichtung (von \(+\) nach \(-\)) und Feldstärke (Liniendichte).</li>
+                </ul>
+            </li>
+
+            <li><strong>Der elektrische Dipol:</strong>
+                <ul>
+                    <li>Besteht aus zwei entgegengesetzten Ladungen \(\pm q\) im Abstand \(d\).</li>
+                    <li><strong>Dipolmoment:</strong> \(\vec{p} = q \cdot \vec{d}\) (zeigt von \(-\) nach \(+\)).</li>
+                    <li><strong>Drehmoment im Feld:</strong> \(\vec{M} = \vec{p} \times \vec{E}\) (neigt zur Ausrichtung parallel zum Feld).</li>
+                </ul>
+            </li>
+
+            <li><strong>Elektrisches Potential (\(U\)) und Spannung:</strong>
+                <ul>
+                    <li><strong>Potential:</strong> Potentielle Energie pro Einheit Ladung: \(U(r) = \frac{E_{\text{pot}}(r)}{q}\).</li>
+                    <li><strong>Spannung:</strong> Differenz zweier Potentiale: \(U_{AB} = U(B) - U(A) = - \int_{A}^{B} \vec{E} \cdot d\vec{r}\).</li>
+                    <li><strong>Konservativität:</strong> Die Arbeit im elektrischen Feld ist wegunabhängig.</li>
+                </ul>
+            </li>
+
+            <li><strong>Kapazität und Kondensator:</strong>
+                <ul>
+                    <li><strong>Kondensator:</strong> Anordnung zur Speicherung von Ladung und Energie.</li>
+                    <li><strong>Kapazität (\(C\)):</strong> Verhältnis von Ladung zu Spannung: \(C = \frac{Q}{U}\). Einheit: Farad (\(\mathrm{F}\)).</li>
+                    <li><strong>Plattenkondensator:</strong> \(C = \varepsilon_0 \cdot \frac{A}{d}\) (abhängig von Geometrie).</li>
+                    <li><strong>Energieinhalt:</strong> Im elektrischen Feld gespeicherte Energie: \(W = \frac{1}{2} C U^2 = \frac{1}{2} \frac{Q^2}{C}\).</li>
+                </ul>
+            </li>
+
+            <li><strong>Homogene Felder:</strong>
+                <ul>
+                    <li><strong>Homogen:</strong> Feldstärke \(\vec{E}\) ist ortsunabhängig (Betrag und Richtung überall gleich).</li>
+                    <li><strong>Konstant:</strong> Feldstärke ist zeitunabhängig.</li>
+                    <li>Beispiel: Idealer Plattenkondensator im Inneren.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</section>
