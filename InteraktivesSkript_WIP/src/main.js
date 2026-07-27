@@ -7,7 +7,7 @@
 import { interaktiv, generate_highlight_boxes, safari_bug, make_static,
          update_all, toggle_darkmode, test, reload_mathjax, reset, hide,
          init_text_size_controls, adjust_text_size, set_width_mode,
-         init_width_mode } from './core.js';
+         init_width_mode, toggle_settings, close_settings } from './core.js';
 import { generate_toc, offsetAnchor, toc, toc_filter, kontakt, close_zoom, zoom, pause } from './ui.js';
 import { init_print, check_print, from_qr } from './print.js';
 import { paginate, showPage } from './pages.js';
@@ -188,6 +188,11 @@ function bind_events() {
     document.addEventListener("click", dispatch_click);
     document.addEventListener("input", dispatch_input);
     document.addEventListener("change", dispatch_change);
+    // Escape schliesst das Einstellungen-Popover (und andere Einblendungen,
+    // die close_* anbieten), ohne dass ein expliziter Schliessen-Klick noetig ist.
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") close_settings();
+    });
 }
 
 function dispatch_input(e) {
@@ -214,6 +219,8 @@ function dispatch_click(e) {
         case "adjust_text_size": adjust_text_size(parseInt(el.dataset.step, 10) || 0); break;
         case "set_width_mode": set_width_mode(el.dataset.mode); break;
         case "toggle_darkmode": toggle_darkmode(); break;
+        case "toggle_settings": toggle_settings(); break;
+        case "close_settings": close_settings(); break;
         case "close_zoom": close_zoom(); break;
         case "test": test(); break;
         case "reload-mathjax": reload_mathjax(); break;

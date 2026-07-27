@@ -22,6 +22,7 @@ export const speed_factor = 1;
 const TEXT_LEVEL_MIN = 1;
 const TEXT_LEVEL_MAX = 5;
 const DEFAULT_TEXT_LEVEL = 2;
+const TEXT_LEVEL_STORAGE_KEY = "skript_text_level";
 
 let text_level = DEFAULT_TEXT_LEVEL;
 let paper_base_font_size = null;
@@ -230,6 +231,17 @@ export function toggle_darkmode(){
     }
 }
 
+// Einstellungen-Popover (Zahnrad-Taste im Header). Vorlage: der Tablet-Drawer
+// (shell.js::toggle_drawer/close_drawer) -- Backdrop + Panel in #settings, per
+// .hidden geschaltet. Die Lese-Einstellungen (Textgroesse, Ansichtsbreite,
+// Farbpalette) liegen darin statt als direkte Header-Buttons.
+export function toggle_settings() {
+    const s = ge("settings");
+    if (!s) return;
+    s.classList.contains("hidden") ? show("settings") : hide("settings");
+}
+export function close_settings() { hide("settings"); }
+
 function read_paper_metrics() {
     const paper = ge("paper");
     if (!paper) return null;
@@ -293,6 +305,13 @@ function apply_text_size() {
 }
 
 export function init_text_size_controls() {
+    // Persistierte Stufe wiederherstellen (rundet das Einstellungsmenue ab,
+    // das die Textgroesse jetzt neben Palette und Breite buendelt).
+    try {
+        const s = localStorage.getItem(TEXT_LEVEL_STORAGE_KEY);
+        const lvl = parseInt(s, 10);
+        if (lvl >= TEXT_LEVEL_MIN && lvl <= TEXT_LEVEL_MAX) text_level = lvl;
+    } catch (_) {}
     read_paper_metrics();
     apply_text_size();
 }
@@ -301,6 +320,7 @@ export function adjust_text_size(step) {
     if (!step) return;
     text_level = Math.min(TEXT_LEVEL_MAX, Math.max(TEXT_LEVEL_MIN, text_level + step));
     apply_text_size();
+    try { localStorage.setItem(TEXT_LEVEL_STORAGE_KEY, String(text_level)); } catch (_) {}
 }
 
 // Breiten-Modus (v2.0): seit der Ablösung der Sticky-Grafikspalte (splitter.js)
