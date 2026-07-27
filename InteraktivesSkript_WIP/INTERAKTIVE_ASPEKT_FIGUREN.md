@@ -2,12 +2,27 @@
 
 Anleitung, um aus einer der umfangreichen Stand-alone-Simulationen
 (`Input/Simulationen/Project_*`) eine **interaktive Aspekt-Figur** an einer
-konkreten Stelle im Skript zu bauen. Zwei Referenz-Implementierungen:
+konkreten Stelle im Skript zu bauen. Referenz-Implementierungen:
 
 - **Abbildung 1.38** — `src/figures/aspekt_kreisbahn.js` + `.css`
   (Positions-Aspekt in 1.4.1; Regler φ, R; Massenpunkt greifbar).
 - **Abbildung 1.40** — `src/figures/aspekt_weg_zeit.js` + `.css`
   (Weg-Zeit-Aspekt; Regler t, R, T; Auto-Stopp-Animation 0…6 s + Graph).
+- **Abbildung 1.59** — `src/figures/aspekt_alpha_omega.js` + `.css`
+  (Winkelbeschleunigung als Vektor in 1.4.9; Regler t, R, ω₀, α; ω(t)-Graph).
+  Erste Figur auf dem **zweiten Motor**, s. u.
+
+> **Motor-Wahl (VOR allem anderen entscheiden).** Es gibt zwei portierte Motoren:
+> `src/figures/kreisbewegung/` (Draufsicht, rein 2D — alle Figuren 1.38–1.51) und
+> `src/figures/kreis_spiral/` (ISO-3D-Ansicht mit **sichtbarer Drehachse**, dazu
+> α, Ebenenhöhe h und Spiralmodus nativ — ab Abb. 1.59). Alles, was auf der
+> Drehachse liegt (ω, α, h), ist im 2D-Motor nicht darstellbar (dort wären es
+> Punkte) → `kreis_spiral`. Alles andere bleibt bei `kreisbewegung`. Beide haben
+> ihr **eigenes** `runtime.js`/`createRuntime()` (Prefix `kb<n>_` bzw. `ks<n>_`)
+> und ihren eigenen Store-Singleton; sie beeinflussen sich nicht. `kreis_spiral`
+> nutzt die schon portierten Helfer `kreisbewegung/lib/*` mit (keine Kopie).
+> Der zweite Motor hat **keine** eigene gcN-Sim im Skript (rein Figuren-Motor);
+> seine Abweichungen zur Quelle sind im Code mit `PORT-AENDERUNG` markiert.
 
 Geschrieben als **Runbook**: erst Konzept & Architektur, dann Schritt für
 Schritt, dann der Katalog der real aufgetretenen Fallstricke (der wertvollste
@@ -362,6 +377,8 @@ Auto-Stopp-Figuren rufen denselben Helfer statt eigenem Schwellen.
 | 20 | Vergleich zweier Parameter ist unphysikalisch/unverständlich | Nach Parameterwechsel lief die Zeit an der alten Stelle weiter | **Konvention der Stand-alones (schiefer Wurf):** ändert ein Regler die *Kurvenform*, springt der Laufparameter `t` auf 0 und die Animation stoppt — der neue Verlauf entsteht von vorn über dem alten |
 | 21 | **Gar keine** Figur rendert (auch die unbeteiligten) | `main.js` importiert alle Figurenmodule als Seiteneffekt — ein **Syntaxfehler in einem** Modul reißt den ganzen Modulgraph mit. Real: `-00` ist in ES-Modulen (immer strict) ein Oktal-Literal → `SyntaxError` | Erstdiagnose bei „nichts da": Konsolenfehler lesen, dann `node --input-type=module --check < <modul>.js` über alle geänderten Module |
 | 22 | Element am oberen Figurenrand (z. B. Lupe) ist beim Lesen nicht sichtbar | `.aspekt-figur { overflow:hidden }` macht die Figur zum Scroll-Container für `position:sticky` → die `.aspekt-runbar` klebt nie; und der obere Rand von `.aspekt-main` verschwindet beim Scrollen unter der klebenden Seiten-Kopfleiste | Bedienelemente an einen Container hängen, der in Leseposition sichtbar ist (hier: **in** die Ablaufleiste, `position:static` + `margin-left:auto`), nicht absolut an den oberen Rand des Hauptbereichs |
+| 23 | Graph-Hover zeigt dauerhaft den Wert bei t = 0, egal wo die Maus steht (nur `kreis_spiral`) | `updateGraphHover()` deckelt `hoverT` auf `store.simulatedTime` — die Sim-Zeit, die die *Stand-alone*-Animation fortschreibt. Eine Aspekt-Figur führt die Zeit aber selbst (eigene RAF-Schleife + t-Regler) und ließ das Feld auf 0 | in der eigenen `draw(t)` **`store.simulatedTime = t` mitziehen**. Generell: Motorfelder, die die Sim-UI fortschreibt (Zeit, Zoom, Auto-Stopp), muss die Figur übernehmen — der Motor ist ohne die UI nur halb versorgt |
+| 24 | Ein Vektor der Vorlagen-Sim ist in der Aspekt-Figur praktisch unsichtbar (α ~17 px gegen ω ~189 px) | Die Längen-Faktoren der Sim (`OMEGA_LEN_FACTOR`, `ALPHA_LEN_FACTOR`) sind auf **ihre** Reglerbereiche (°/s bzw. °/s²) abgestimmt. In den Bereichen der Figur (rad, kapitelkonform) ergibt derselbe Faktor ein Längenverhältnis von ~11:1 — und damit ist die Bildaussage („α parallel/antiparallel zu ω") verloren | Größen mit **verschiedenen Einheiten** haben keinen gemeinsamen Maßstab: jeder Größe ihren **eigenen, linearen** Maßstab geben (proportional zum Wert, doppelter Wert = doppelter Pfeil), im Motor additiv überschreibbar machen (`store.omegaLenFactor`/`.alphaLenFactor`/`.axisVecLenCap`) und die Konvention **in der Bildunterschrift benennen**. Eine Längen-Kappe verhindert, dass der Pfeil bei Extremwerten aus der Zeichenfläche läuft (vgl. die log-Skalierung in 1.50/1.51) |
 
 ---
 
