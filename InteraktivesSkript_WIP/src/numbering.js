@@ -61,15 +61,18 @@ function chapterPrefix(page, index) {
     return m ? m[1] : String(index + 1);
 }
 
-function numberBoxes(page, prefix, chapter, counters) {
+function numberBoxes(page, prefix, chapter, counters, boxNumbers) {
     page.el.querySelectorAll(BOX_SELECTOR).forEach(box => {
         const type = Object.keys(BOX_LABELS).find(k => box.classList.contains(k));
         if (!type) return;
         counters[type] = (counters[type] || 0) + 1;
+        const scope = CHAPTER_SCOPED.has(type) ? chapter : prefix;
+        // Boxen mit stabiler id fuer Querverweise (data-ref-box) merken.
+        if (boxNumbers && box.id)
+            boxNumbers[box.id] = { label: BOX_LABELS[type], num: scope + '.' + counters[type] };
         const titleEl = box.querySelector('.highlight_box_title');
         if (titleEl) {
             const sub = box.dataset.title || '';
-            const scope = CHAPTER_SCOPED.has(type) ? chapter : prefix;
             // Typ + Nummer in .hb-type (Versalien per CSS), der boxeigene
             // Titel in .hb-name (Gross/klein) -- s. core.js/styles.css.
             let typeEl = titleEl.querySelector('.hb-type');
@@ -165,6 +168,7 @@ function numberImages(page, prefix, state, figNumbers) {
 //   <a class="xref" data-ref-fig="fig-...">  -> "Abbildung 1.38"
 //   <a class="xref" data-ref-sec="p-1-4-5">  -> "Abschnitt 1.4.5"
 //   <a class="xref" data-ref-eq="eq_...">    -> "(1.4.12)"
+//   <a class="xref" data-ref-box="bsp-...">  -> "Beispiel 1.1.2" (Box-id)
 // Formelnummern kommen aus MathJax' Label-Register (allLabels: label ->
 // {tag, id}); MathJax rendert \ref selbst nur als Text, nicht als Link.
 function resolveFigRefs(figNumbers) {
@@ -186,6 +190,17 @@ function resolveSecRefs() {
         const m = page.title.match(/^([0-9.]+)/);
         a.textContent = 'Abschnitt ' + (m ? m[1] : page.title);
         a.setAttribute('href', '#' + page.id);
+    });
+}
+
+// Verweis auf eine nummerierte Box (Beispiel/Bemerkung/…) ueber ihre id.
+// Nummer + Typlabel liefert numberBoxes in boxNumbers[id].
+function resolveBoxRefs(boxNumbers) {
+    document.querySelectorAll('a[data-ref-box]').forEach(a => {
+        const info = boxNumbers[a.dataset.refBox];
+        if (!info) return;
+        a.textContent = info.label + ' ' + info.num;
+        a.setAttribute('href', '#' + a.dataset.refBox);
     });
 }
 
@@ -247,6 +262,7 @@ export function init_numbering() {
     const boxCounters = {};   // pro Section (ausser CHAPTER_SCOPED, s. o.)
     const state = {};         // Abbildungen/Simulationen -- kapitelweit
     const figNumbers = {};    // Figur-id -> vergebene Nummer (fuer Querverweise)
+    const boxNumbers = {};    // Box-id -> {label, num} (fuer data-ref-box)
     pages.forEach((page, i) => {
         const prefix = sectionPrefix(page, i);
         const chap = chapterPrefix(page, i);
@@ -282,12 +298,13 @@ export function init_numbering() {
             if (offEl.dataset.zusammenfassungOffset != null)
                 boxCounters.zusammenfassung = parseInt(offEl.dataset.zusammenfassungOffset, 10) || 0;
         }
-        numberBoxes(page, prefix, chapter, boxCounters);
+        numberBoxes(page, prefix, chapter, boxCounters, boxNumbers);
         numberFigures(page, prefix, state);
         numberImages(page, chapter, state, figNumbers);
     });
     resolveFigRefs(figNumbers);
     resolveSecRefs();
+    resolveBoxRefs(boxNumbers);
     resolve_eq_refs();   // greift erst, wenn MathJax fertig ist (s. main.js)
 }
 
