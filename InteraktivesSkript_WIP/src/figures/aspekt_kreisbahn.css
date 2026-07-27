@@ -70,13 +70,15 @@
        „Bahngeschwindigkeit (in Orange)" = --kb-vlat. Wie omega/alpha sind auch
        diese NICHT frei waehlbar, sondern an die LaTeX-Quelle fixiert
        (\textcolor[HTML]{474747} bzw. {F47A2D}). --kb-rlat (dunkles Grau) nur in
-       1.57; --kb-vlat (Orange) in 1.57 UND 1.58. --kb-azp (Violett, s. unten bei
-       Einfuehrung von 1.58) fuer die Zentripetalbeschleunigung „in Violett".
+       1.57; --kb-vlat (Orange) in 1.57 UND 1.58. --kb-azp (Violett #8361af) fuer
+       die Zentripetalbeschleunigung „in Violett" — nur in 1.58 (zentripetalkreuz),
+       ebenfalls an die LaTeX-Quelle fixiert (\textcolor[HTML]{8361af}).
        Bekannte Schwaeche: --kb-vlat (Orange #F47A2D) liegt nahe an --kb-ay
        (#e0782d, ebenfalls Orange); in 1.57/1.58 wird KEINE a_x/a_y-Komponente
        gezeigt, die Kollision tritt nicht auf. */
     --kb-rlat: #474747;
     --kb-vlat: #F47A2D;
+    --kb-azp: #8361af;
     --kb-r-sm: 6px;
     --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
     --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);
@@ -309,6 +311,7 @@
 .aspekt-figur .legend-swatch[data-c="alpha"] { background: var(--kb-alpha); }
 .aspekt-figur .legend-swatch[data-c="rlat"]  { background: var(--kb-rlat); }
 .aspekt-figur .legend-swatch[data-c="vlat"]  { background: var(--kb-vlat); }
+.aspekt-figur .legend-swatch[data-c="azp"]   { background: var(--kb-azp); }
 .aspekt-figur .legend-label { font-size: calc(11.5px * var(--kb-text-scale)); color: var(--kb-text2); }
 
 /* ── Analyse-Werte (Struktur + Optik VERBATIM aus der Stand-alone) ──────── */
