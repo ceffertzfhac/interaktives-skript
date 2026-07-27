@@ -240,10 +240,40 @@ Quelle: `pskript_sw_einleitung_und_motivation.tex` · WIP: `ch_04_00_einleitung.
 
 ---
 
+### 3.1 Schwingungen
+
+Quelle: `pskript_sw_schwingungen.tex` · WIP: `ch_04_01_schwingungen.html`
+
+| # | Art | Quelle (Zeile) | Stelle | Befund | Korrekt | WIP |
+|---|-----|----------------|--------|--------|---------|-----|
+| 1 | T | 258 | „Gilt oben **dargesellte** Proportionalität" | Buchstabendreher (t fehlt) | dargestellte | erhalten |
+| 2 | T | 264 | „unter **Anwednung** des zweiten Newtonschen Gesetzes" | n fehlt | Anwendung | erhalten |
+| 3 | T | 370 | „müssen wir uns **zunäcsht** klar machen" | Buchstabendreher (cs statt n) | zunächst | erhalten |
+| 4 | T | 537 | „Die Auslenkung des **Fadenpedels** aus seiner Ruhelage" | n fehlt | Fadenpendels | erhalten |
+| 5 | S | 526 | „Es handelt sich also, das sieht man an den Eigenschaften …, um eine Rückstellkraft" | Satzbau (Einschub bricht „es handelt sich um") | (umformulieren) | erhalten |
+| 6 | S | 526 | „Es handelt sich also **bei Schwingung** des Fadenpendels" | „der" fehlt | bei der Schwingung | erhalten |
+| 7 | F | 412 | „(siehe Abbildung \ref{fig:feder_masse_schwingung_horizontal})" | Referenz auf **nicht existente** Abbildung (es gibt nur das vertikale Feder-Masse-Pendel, Abb. 3.3); im PDF „Abbildung ??" | (Klammusdruck weglassen) | korrigiert — Klammusdruck „(siehe Abbildung …)" weggelassen, Sachtext unverändert; in ch_04_01-Kopf dokumentiert |
+| 8 | T | 334 | „die Funktion \ref{eq:allg_loesung_harmonische_schwingung2}" | Label-Tippfehler (Unterstrich vor der 2 fehlt) → undefiniertes Label | eq:allg_loesung_harmonische_schwingung_2 | korrigiert — data-ref-eq zeigt auf die offensichtlich gemeinte Kosinus-Form (Z. 359 verwendet sie korrekt); in ch_04_01-Kopf dokumentiert |
+| 9 | S | 589 | „(Gleichung \ref{…_2}) und Gleichung \ref{…})" | Klammerfehler (unebenmäßige Klammern) | (Kommasetzung) | korrigiert — xref-bedingt zu „, (3.1.16) und (3.1.15)," umgeformt (Deskriptor-Verdopplung vermieden) |
+
+---
+
+### 3.2 Wellen
+
+Quelle: `pskript_sw_wellen.tex` · WIP: `ch_04_02_wellen.html`
+
+Die v0.13-Quelle enthält **keinen Inhalt** zu „Wellen" — die Datei besteht nur
+aus dem Vermerk, dass das Kapitel im WS 2025/26 nicht behandelt wurde. Der
+Abschnitt wurde als **Platzhalter-Stub** (h2 + Quellnotiz) migriert.
+
+| # | Art | Quelle (Zeile) | Stelle | Befund | Korrekt | WIP |
+|---|-----|----------------|--------|--------|---------|-----|
+| 1 | T | 1 | „wird dieser **Abschitt** zunächst ausgelassen" | n fehlt | Abschnitt | erhalten |
+
+---
+
 ## Noch nicht migriert
 
-- **3.1 Schwingungen** (`pskript_sw_schwingungen.tex`)
-- **3.2 Wellen** (`pskript_sw_wellen.tex`)
 - **Kapitel „Dynamik der Drehbewegung" (ch_02-Gerüst `ch_02_kinematik_starrer_koerper.html`)** — Altgerüst, nicht Teil der aktiven Migration.
 
 *(Funde bei der jeweiligen Migration hier nachtragen.)*
