@@ -72,38 +72,41 @@
 }
 
 /* ── Tritanopia (Blau-Gelb) — Hell ──────────────────────────────────────── */
-/* Blau (ω, a_r, x-Komponenten) kollabiert mit Grün → wandert auf Grün-
-   Helligkeitsstufen (Blau sieht Tritan ohnehin grünlich). Rot-Familie (v, α,
-   a_t, a_x) je nach Helligkeit. */
+/* Blau (ω, a_r, x-Komponenten) kollabiert mit Grün → die Grün-Familie wird
+   über HELLIGKEIT gestaffelt: a (azp) dunkel, ω/a_r mid, a_y (ry) hell. So
+   bleiben a und a_y (in 1.50 gleichzeitig gezeigt) unterscheidbar. Rot-
+   Familie (v, α, a_t, a_x) je nach Helligkeit. Abgestimmt mit
+   cvd_check.mjs (ΔE76 unter Tritan-Simulation ≥ 5 je koexistierendem Paar). */
 :root[data-palette="tritan"][data-darkmode="0"] .aspekt-figur,
 :root[data-palette="tritan"][data-darkmode="0"] #gc10 {
     --kb-rlat: #3a3a3a;  --kb-r:   #3a3a3a;
     --kb-vlat: #E69F00;  --kb-vel: #E69F00;  --kb-v: #E69F00;
-    --kb-azp:  #009E73;  --kb-acc: #009E73;
-    --kb-omega: #7fd4b0;
+    --kb-azp:  #2b6e51;  --kb-acc: #2b6e51;
+    --kb-omega: #009E73;
     --kb-alpha: #D55E00;
     --kb-at: #c0392b;
-    --kb-ar: #2b6e51;
+    --kb-ar: #009E73;
     --kb-rx: #0072B2;  --kb-vx: #0072B2;
-    --kb-ry: #009E73;  --kb-vy: #009E73;  --kb-ay: #009E73;
+    --kb-ry: #5fb88a;  --kb-vy: #5fb88a;  --kb-ay: #5fb88a;
     --kb-ax: #8a2418;
     --kb-traj: #999999;
 }
 
 /* ── Tritanopia (Blau-Gelb) — Dunkel ────────────────────────────────────── */
-/* Gegenüber Hell: r auf hellgrau, dunkle Rot-/Grün-Töne aufgehellt (auf
-   dunklem Grund sonst zu schwer). */
+/* Gegenüber Hell: r auf hellgrau; Grün-/Rot-Töne aufgehellt (auf dunklem
+   Grund sonst zu schwer). Gleiche Helligkeits-Staffelung der Grün-Familie
+   (a am hellsten, ω/a_r mid, a_y hell). Abgestimmt mit cvd_check.mjs. */
 :root[data-palette="tritan"][data-darkmode="1"] .aspekt-figur,
 :root[data-palette="tritan"][data-darkmode="1"] #gc10 {
     --kb-rlat: #d0d0d0;  --kb-r:   #d0d0d0;
     --kb-vlat: #E69F00;  --kb-vel: #E69F00;  --kb-v: #E69F00;
-    --kb-azp:  #3fc488;  --kb-acc: #3fc488;
-    --kb-omega: #7fd4b0;
+    --kb-azp:  #5fd49d;  --kb-acc: #5fd49d;
+    --kb-omega: #4caa7d;
     --kb-alpha: #e8703a;
     --kb-at: #e05a4a;
     --kb-ar: #4caa7d;
     --kb-rx: #3f8fd6;  --kb-vx: #3f8fd6;
-    --kb-ry: #3fc488;  --kb-vy: #3fc488;  --kb-ay: #3fc488;
+    --kb-ry: #7fd4b0;  --kb-vy: #7fd4b0;  --kb-ay: #7fd4b0;
     --kb-ax: #c45040;
     --kb-traj: #9aa3b8;
 }
