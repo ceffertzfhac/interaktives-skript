@@ -100,7 +100,13 @@ src/numbering.js   init_numbering() — box, figure and image numbering off page
                    2.2 (Elektrostatik) also migrated — contiguous to 2.1 (no offset),
                    figs 2.2–2.3 (both rendered from tikzpicture blocks, not
                    \includegraphics), Zusammenfassung 2.2, with 5 cross-refs back into
-                   2.1/1.8. Only 2.3 remains in TK 2.
+                   2.1/1.8. 2.3 (Elektrodynamik und Magnetismus) also migrated —
+                   contiguous to 2.2 (no offset), 7 subsections, figs 2.4–2.8
+                   (2.4/2.5 from tikzpicture blocks, 2.6 Kreisspule, 2.7/2.8 Drehmoment
+                   auf Leiterschleife from \includegraphics-PDFs), Beispiele 2.3.1–2.3.5,
+                   Zusammenfassung 2.3, equations 2.3.1–2.3.96 (verified against the
+                   v0.13 PDF). TK 2 (Elektromagnetismus, 2.0–2.3) is now COMPLETE.
+                   Only TK 3 (Schwingungen und Wellen) remains.
                    The 1.4/1.5 offsets are now redundant (1.1–1.6 contiguous) but kept —
                    they still hold as ABSOLUTE start values.
                    Box titles are split into <span class="hb-type"> (type + number, uppercased
