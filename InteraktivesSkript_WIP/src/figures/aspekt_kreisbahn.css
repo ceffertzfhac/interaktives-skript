@@ -50,6 +50,20 @@
     --kb-ax: #17a2b8;
     --kb-ay: #e0782d;
     --kb-traj: #7f7f7f;   /* durchlaufener Bogen */
+    /* Drehachsen-Groessen (eingefuehrt mit Abb. 1.59, „Winkelbeschleunigung als
+       Vektor"): omega blau, alpha rot. Diese zwei Farben sind AUSNAHMSWEISE
+       nicht frei waehlbar — die Bildunterschrift der statischen Abbildung
+       benennt sie im Text („Winkelbeschleunigung (in Rot)", „Winkelgeschwindig-
+       keit (in Blau)"), und die interaktive Figur uebernimmt genau diese
+       Unterschrift. Werte daher aus der LaTeX-Quelle des Skripts
+       (\\textcolor[HTML]{1555A2} bzw. {bf262d}), nicht aus Okabe-Ito.
+       Bekannte Schwaeche: --kb-omega (blau) liegt nahe an --kb-vel/--kb-rx
+       (beides Blau) und --kb-alpha nahe an --kb-acc/--kb-vy (beides Rot); in
+       Abb. 1.59 wird KEINE dieser anderen Groessen gezeigt (nur r, omega,
+       alpha, phi), die Kollision tritt also nicht auf. Bei einer kuenftigen
+       Figur, die omega/alpha ZUSAMMEN mit v oder a zeigt, hier pruefen. */
+    --kb-omega: #1555A2;
+    --kb-alpha: #bf262d;
     --kb-r-sm: 6px;
     --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
     --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);
@@ -278,6 +292,8 @@
 .aspekt-figur .legend-swatch[data-c="rx"]   { background: var(--kb-rx); }
 .aspekt-figur .legend-swatch[data-c="ry"]   { background: var(--kb-ry); }
 .aspekt-figur .legend-swatch[data-c="traj"] { background: repeating-linear-gradient(90deg, var(--kb-traj) 0 4px, transparent 4px 7px); height: 2px; }
+.aspekt-figur .legend-swatch[data-c="omega"] { background: var(--kb-omega); }
+.aspekt-figur .legend-swatch[data-c="alpha"] { background: var(--kb-alpha); }
 .aspekt-figur .legend-label { font-size: calc(11.5px * var(--kb-text-scale)); color: var(--kb-text2); }
 
 /* ── Analyse-Werte (Struktur + Optik VERBATIM aus der Stand-alone) ──────── */
