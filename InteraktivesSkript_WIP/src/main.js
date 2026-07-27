@@ -31,12 +31,15 @@ import { buildAratWinkelbeschlFig } from './figures/aspekt_arat_winkelbeschl.js'
 // mit Drehachse). Der Import zieht diesen Motor mit ins Bundle; er ist
 // unabhaengig vom Kreisbewegungs-Motor (eigener Store-Singleton).
 import { buildAlphaOmegaFig } from './figures/aspekt_alpha_omega.js';
+// Abb. 1.57 — „Winkelgeschwindigkeit als Vektor" (\vec v = \vec\omega\times\vec r,
+// ISO-3D). Baut auf demselben kreis_spiral-Motor auf wie 1.59 (\alpha=0 fix).
+import { buildOmegaVektorFig } from './figures/aspekt_omega_vektor.js';
 
 // Aspekt-Figuren: jede .aspekt-figur wird ueber data-aspekt einer Factory
 // zugeordnet, die ihre EIGENE Motor-Instanz (Prefix + storeInstance) baut
 // (s. kreisbewegung/runtime.js) -> beliebig viele Figuren, auch auf derselben
 // Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
-const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig };
+const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig };
 
 function init_aspekt_figuren() {
     document.querySelectorAll('.aspekt-figur[data-aspekt]').forEach(fig => {

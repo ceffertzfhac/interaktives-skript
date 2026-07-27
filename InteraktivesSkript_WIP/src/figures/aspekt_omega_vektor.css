@@ -1,0 +1,269 @@
+/* aspekt_omega_vektor.css — Optik der Aspekt-Figur zu Abbildung 1.57 (Winkel-
+   geschwindigkeit als Vektor, ISO-Ansicht mit Drehachse). Das LAYOUT
+   (Mittelspalte Szene | Diagramm, Ablaufleiste, Tempo-Pills, Modus-Regeln
+   schmal/normal/breit, Overlay) ist 1:1 von aspekt_alpha_omega.css (Abb. 1.59)
+   uebernommen — gleiches Interaktionsmuster (Szene neben EINEM Diagramm,
+   Play/Pause), nur `data-aspekt` umbenannt. Farb-Tokens, Panel-/Slider-/
+   Legenden-/Analyse-/Lupe-/Caption-Regeln kommen unveraendert aus
+   aspekt_kreisbahn.css (geladen), weil diese Figur ebenfalls .aspekt-figur ist.
+
+   Wie 1.59 wird die Szene vom Kreis-/Spiralbewegungs-Motor gezeichnet
+   (src/figures/kreis_spiral/, ISO-Ansicht mit Drehachse z). Die Regeln fuer die
+   ISO-Szene und die klassenbasierten Diagrammlinien (.graph-line-1/.graph-point)
+   stehen hier zusaetzlich — Struktur und Werte VERBATIM aus
+   aspekt_alpha_omega.css (das seinerseits aus css/styles.css der Quell-Sim
+   uebernommen hat), nur data-aspekt umbenannt und die Vektor-FARBEN auf die
+   Palette dieser Figur (--kb-omega/--kb-rlat/--kb-vlat). */
+
+/* ── Mittel-Spalte: Szene links, Diagramm rechts (Zeile) ────────────────────── */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-main {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-main-content {
+    position: relative;
+    display: flex; flex-direction: row; align-items: center; min-width: 0;
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-runbar {
+    position: sticky;
+    top: 0;
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 8px;
+    background: var(--kb-surface);
+    border-bottom: none;
+    box-shadow: none;
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-main .aspekt-scene { padding: 8px; flex: 0 0 40%; min-width: 0; }
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-main .aspekt-svg {
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none; margin: 0 auto;
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 60%; }
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-graph-svg {
+    display: block; width: 100%; height: auto; max-height: 50vh; max-width: none; margin: 0 auto;
+}
+
+/* ── Vergleichslinie (vorheriger Durchlauf): gestrichelt + dünner als die
+   aktuelle \varphi(t)-Linie. ──────────────────────────────────────────────── */
+.aspekt-figur[data-aspekt="omega-vektor"] [id$="graph_prev_line"] {
+    stroke: var(--kb-accent); stroke-opacity: .5;
+    stroke-width: calc(1.5px * var(--kb-lw, 1)); stroke-dasharray: 6,4;
+    fill: none; pointer-events: none;
+}
+
+/* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme, ca. 60 %) ─────────── */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-btn-row {
+    display: flex; gap: 6px;
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-btn.aspekt-btn-icon {
+    flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border2); border-radius: 6px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-btn.aspekt-btn-icon:hover {
+    color: var(--kb-accent); border-color: var(--kb-accent);
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-btn.aspekt-btn-icon svg {
+    width: 15px; height: 15px; display: block;
+}
+
+/* ── Tempo-Pills (Slow-Mo analog zur Vorlage: 1× … ⅛×) ──────────────────── */
+.aspekt-figur[data-aspekt="omega-vektor"] .speed-pills { display: flex; gap: 5px; }
+.aspekt-figur[data-aspekt="omega-vektor"] .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: calc(11.5px * var(--kb-text-scale, 1));
+    color: var(--kb-text2); cursor: pointer; transition: all .15s;
+    position: relative; -webkit-user-select: none; user-select: none;
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+.aspekt-figur[data-aspekt="omega-vektor"] .speed-pill.active {
+    background: color-mix(in srgb, var(--kb-accent) 12%, transparent);
+    border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
+}
+
+/* ── Einklappbare Panel-Abschnitte (Muster wie 1.50/1.51/1.59). Scoped auf
+   diese Figur. ZWINGEND: das Markup nutzt <button class="panel-label"> +
+   .acc-chevron (s. aspekt_omega_vektor.js PANEL_LEFT), aber OHNE diesen Block
+   rendern die Köpfe mit UA-Button-Styling (16-px-Schrift statt 10,5 px) und das
+   Chevron-SVG ohne Breite/Hoehe. Block VERBATIM aus aspekt_alpha_omega.css
+   (1.59), nur data-aspekt umbenannt — der Fix, der 1.59 anfangs fehlte, hier
+   gleich richtig gemacht. Begruendung s. aspekt_alpha_omega.css /
+   aspekt_arat_winkelbeschl.css. ─────────────────────────────────────────── */
+.aspekt-figur[data-aspekt="omega-vektor"] .panel-section.collapsible > .panel-label {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    width: 100%; padding: 0; background: transparent; border: none;
+    text-align: left; cursor: pointer; font-family: inherit; line-height: inherit;
+}
+#paper .aspekt-figur[data-aspekt="omega-vektor"] .panel-section.collapsible > .panel-label {
+    font-size: calc(10.5px * var(--kb-text-scale));
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .acc-chevron { display: inline-flex; color: var(--kb-text3); transition: transform .2s ease; }
+.aspekt-figur[data-aspekt="omega-vektor"] .acc-chevron svg { width: 14px; height: 14px; }
+.aspekt-figur[data-aspekt="omega-vektor"] .panel-section.collapsed > .panel-label { margin-bottom: 0; }
+.aspekt-figur[data-aspekt="omega-vektor"] .panel-section.collapsed > .panel-label .acc-chevron { transform: rotate(-90deg); }
+.aspekt-figur[data-aspekt="omega-vektor"] .panel-section.collapsed > .panel-label ~ * { display: none !important; }
+
+/* ── Schmal-Modus: Szene und Diagramm UNTEREINANDER (gestapelt) — nur dieser
+   Modus. Normal/breit bleiben Zeile. ─────────────────────────────────────── */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="omega-vektor"] .aspekt-main-content {
+    flex-direction: column;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="omega-vektor"] .aspekt-svg {
+    height: 34vh; width: auto; max-width: 100%; margin: 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="omega-vektor"] .aspekt-graph-svg {
+    height: auto; max-height: 34vh; width: 90%; margin: 0 auto;
+}
+
+/* ── Breit-Modus: Szene und Diagramm NEBENEINANDER mit mehr Hoehe. ─────────── */
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 42%; padding: 8px;
+}
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 58%; padding: 0 8px 8px;
+}
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="omega-vektor"] .aspekt-svg { max-height: 60vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="omega-vektor"] .aspekt-graph-svg { max-height: 60vh; }
+
+/* ── Overlay (Lupe): ebenfalls Zeile (Szene | Diagramm) und an die Viewport-
+   Hoehe deckeln. ─────────────────────────────────────────────────────────── */
+.aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-main { flex-direction: column; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-main-content { flex-direction: row; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-scene { flex: 0 0 42%; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-graph { flex: 1 1 58%; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-svg {
+    width: 100%; height: auto; max-height: 64vh; max-width: none;
+}
+.aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-graph-svg {
+    max-width: none; width: 100%; height: auto; max-height: 64vh;
+}
+
+/* Zoom + schmal: Szene und Diagramm untereinander (nur dieser Modus). */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-main-content {
+    flex-direction: column;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-graph {
+    flex: 1 1 auto;
+}
+
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-body {
+    display: block;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-panel-left {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-panel-right {
+    display: none;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-runbar {
+    padding: 6px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-scene {
+    padding: 6px 8px 4px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-main-content .aspekt-graph {
+    padding: 0 8px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-svg {
+    height: min(34vh, 308px); width: auto; max-width: 100%; margin: 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="omega-vektor"] .aspekt-graph-svg {
+    height: auto; max-height: min(29vh, 252px); width: 90%; margin: 0 auto;
+}
+
+/* ══ ISO-SZENE (Kreis-/Spiralbewegungs-Motor) ══════════════════════════════════
+   Struktur + Werte VERBATIM aus aspekt_alpha_omega.css (das aus css/styles.css
+   der Quell-Sim uebernommen hat), IDs pro Instanz prefixt (ks<n>_) -> Suffix-
+   Selektoren, gescopt auf .aspekt-scene. Linienstaerken x --kb-lw, Schriften
+   x --kb-fs; die Pfeilspitzen sind markerUnits=userSpaceOnUse mit FESTER Laenge. */
+
+/* Koordinatenachsen + Achsenbeschriftung (x, y, z) */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="iso_axis_x"],
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="iso_axis_y"],
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="iso_axis_z"] {
+    stroke: var(--kb-text); stroke-opacity: .5; stroke-width: calc(1.5px * var(--kb-lw));
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="iso_label_x"],
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="iso_label_y"],
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="iso_label_z"] {
+    fill: var(--kb-text2); font-family: var(--kb-font);
+    font-size: calc(12px * var(--kb-text-scale) * var(--kb-fs)); font-style: italic;
+}
+/* Bahnebene (Kreisscheibe in der Hoehe h) */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="iso_circle_path"] {
+    fill: var(--kb-traj); fill-opacity: .16;
+    stroke: var(--kb-traj); stroke-opacity: .55; stroke-width: calc(1px * var(--kb-lw));
+}
+/* Massenpunkt + durchlaufene Bahn */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="point"] { fill: var(--kb-accent); stroke: var(--kb-text); stroke-width: 1; }
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="trajectory_path"] {
+    stroke: var(--kb-traj); stroke-width: calc(2px * var(--kb-lw)); stroke-dasharray: 4,4; fill: none;
+}
+/* Winkel phi (Bogen + Label) — Akzentfarbe wie in allen anderen Figuren */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="phi_arc"] {
+    stroke: var(--kb-accent); stroke-width: calc(1.5px * var(--kb-lw)); fill: none;
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="phi_label"] {
+    fill: var(--kb-accent); font-family: var(--kb-font); font-style: italic;
+    font-size: calc(14px * var(--kb-text-scale)); text-anchor: middle; dominant-baseline: middle;
+}
+/* Vektoren: Ortsvektor r (grau, von der LaTeX-Quelle vorgegeben), omega (blau,
+   ebenfalls von der Quelle vorgegeben), Bahngeschwindigkeit v (orange, von der
+   Quelle vorgegeben). Tokens --kb-rlat/--kb-omega/--kb-vlat in
+   aspekt_kreisbahn.css. \vec a wird in dieser Figur nicht gezeigt (Thema von
+   1.58); die Regel fuer [id$="acceleration_vector"] aus der zentralen
+   aspekt_kreisbahn.css greift hier nicht (Vektor ist unsichtbar). */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="position_vector"] {
+    stroke: var(--kb-rlat); stroke-width: calc(var(--kb-vec-hw) * var(--kb-lw));
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="omega_vector"] {
+    stroke: var(--kb-omega); stroke-width: calc(var(--kb-vec-hw) * var(--kb-lw));
+}
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="velocity_vector"] {
+    stroke: var(--kb-vlat); stroke-width: calc(var(--kb-vec-hw) * var(--kb-lw));
+}
+/* Marker-Fuellungen (Polygon waere sonst schwarz) */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="ks_arrowhead"] polygon   { fill: var(--kb-text); fill-opacity: .5; }
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="arrow-r"] polygon        { fill: var(--kb-rlat); }
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="arrow-v"] polygon        { fill: var(--kb-vlat); }
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="arrow-omega"] polygon    { fill: var(--kb-omega); }
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="arrow-phi"] polygon      { fill: var(--kb-accent); }
+/* Zoom-Text (Motor schreibt ihn; hier dezent wie in der Vorlage) */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-scene [id$="zoom_text_display"] {
+    fill: var(--kb-text3); font-family: var(--kb-font-mono);
+    font-size: calc(11px * var(--kb-text-scale) * var(--kb-fs));
+}
+
+/* ══ DIAGRAMM ══════════════════════════════════════════════════════════════════
+   Dieser Motor zeichnet die Datenlinie KLASSEN-basiert (.graph-line-1/
+   .graph-point). \varphi(t) in der Akzentfarbe (wie \omega(t) in 1.44 / 1.59).
+   Struktur (Hintergrund/Gitter/Achsen/Ticks/Titel/Hover) liegt zentral in
+   aspekt_kreisbahn.css. ────────────────────────────────────────────────────── */
+.aspekt-figur[data-aspekt="omega-vektor"] .graph-line   { fill: none; stroke-width: calc(2px * var(--kb-lw)); }
+.aspekt-figur[data-aspekt="omega-vektor"] .graph-line-1 { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="omega-vektor"] .graph-line-2 { stroke: var(--kb-vel); }
+.aspekt-figur[data-aspekt="omega-vektor"] .graph-point  { fill: var(--kb-accent); }
+
+/* ── Hinweiszeile unter den Reglern (welches Teilbild der statischen Abbildung
+   die aktuelle \omega_0-Einstellung zeigt). ──────────────────────────────── */
+.aspekt-figur[data-aspekt="omega-vektor"] .aspekt-hint {
+    margin-top: 6px;
+    font-size: calc(11px * var(--kb-text-scale, 1));
+    line-height: 1.35;
+    color: var(--kb-text3);
+}

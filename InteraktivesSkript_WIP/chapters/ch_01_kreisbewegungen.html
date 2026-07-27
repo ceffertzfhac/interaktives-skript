@@ -938,7 +938,17 @@
 
     <p>Das bedeutet: ganz allgemein ist die Bahngeschwindigkeit eines Massenpunktes auf einer Kreisbahn gegeben durch das Kreuzprodukt der vektoriellen Winkelgeschwindigkeit \(\vec{\omega}(t)\) und dem Ortsvektor \(\vec{r}(t)\). Aus den Eigenschaften des Kreuzproduktes folgt, dass es für den Ortsvektor \(\vec r\) egal ist, ob der Ursprung des Koordinatensystems im Mittelpunkt der Kreisbahn liegt oder ob der Ursprung nach oben oder unten verschoben ist, zum Kreuzprodukt trägt immer nur die Komponente bei, die in der Bewegungsebene liegt.</p>
 
-    <figure class="abbildung" id="fig-skript-kreisbewegung-dphi-dr">
+    <!-- Interaktive Aspekt-Figur zu Abb. 1.57 (Winkelgeschwindigkeit als Vektor).
+         Ersetzt am Bildschirm die statische Abbildung, die als Druck-Fallback
+         direkt darunter bleibt (nur-druck). Der Regler \omega_0 (mit Vorzeichen)
+         fasst beide Teilbilder (a)/(b) der statischen Abbildung zusammen. Die
+         statische Abbildung teilt sich die ID nicht mit Abb. 1.56 (deren ID
+         fig-skript-kreisbewegung-dphi-dr unangetastet bleibt); sie traegt hier
+         eine eigene ID, damit label_aspekt_figuren (getElementById) das Label
+         dieser Figur und nicht das von 1.56 trifft. -->
+    <div class="aspekt-figur nur-bildschirm" id="aspekt-omega-vektor" data-aspekt="omega-vektor" data-title="Winkelgeschwindigkeit als Vektor (interaktiv)" data-figref="fig-skript-kreisbewegung-omegavecpos" data-caption="Abbildung zur Veranschaulichung der Beziehung \(\vec v = \vec \omega \times \vec{r}\). Der <span style=&quot;color:#1555a2&quot;>Vektor der Winkelgeschwindigkeit (in Blau) \(\vec \omega\)</span> steht senkrecht auf der Bewegungsebene und zeigt entlang der Drehachse (daher ist die Szene räumlich/isometrisch dargestellt). Das Kreuzprodukt mit dem <span style=&quot;color:#474747&quot;>Ortsvektor (in Grau) \(\vec{r}\)</span> ergibt die <span style=&quot;color:#f47a2d&quot;>tangentiale Bahngeschwindigkeit (in Orange) \(\vec v\)</span>. Interaktiv: das Vorzeichen von \(\omega_0\) legt über die Rechte-Hand-Regel die Drehrichtung fest — \(\omega_0&gt;0\) bewegt den Massenpunkt gegen den Uhrzeigersinn, \(\omega_0&lt;0\) im Uhrzeigersinn; beide Fälle decken die beiden Teilbilder der statischen Abbildung in einem Regler ab. Die Regler \(R\) und \(\omega_0\) formen den Lauf, der Zeit-Regler \(t\) tastet ihn ab. Das Diagramm daneben zeigt \(\varphi(t)=\omega_0 t\): eine Gerade, deren Steigung \(\omega_0\) ist — gleiches Vorzeichen, gleicher Drehrichtungssinn. Die Bahngeschwindigkeit \(\vec v\) ist maßstäblich gezeichnet (reale Länge \(|\vec v|=|\omega|R\)), nicht übertrieben wie in der statischen Vorlage; bei kleinen \(\omega_0\) ist sie daher kurz. Ortsvektor \(\vec r\), Winkel \(\varphi\) und durchlaufene Bahn lassen sich unter „Darstellung“ ausblenden. Hinweis zu den Pfeillängen: \(\vec\omega\) [rad/s], \(\vec r\) [m] und \(\vec v\) [m/s] haben verschiedene Einheiten, ein gemeinsamer Maßstab existiert nicht — jeder Pfeil ist proportional zu seinem eigenen Wert, das Längenverhältnis untereinander ist Konvention; aussagekräftig sind Richtung und (bei \(\vec v\)) der reale Betrag."></div>
+
+    <figure class="abbildung nur-druck" id="fig-skript-kreisbewegung-omegavecpos">
         <div class="abbildung-sub-imgs">
             <div class="subfig" style="width:48%">
                 <img style="width:90%" class="grafik" src="bilder/skript_kreisbewegung_dphi_dr.png" alt="">
