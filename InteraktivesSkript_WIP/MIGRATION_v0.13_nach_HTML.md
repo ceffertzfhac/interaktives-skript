@@ -378,9 +378,20 @@ auseinanderlaufen können:
 | Abbildung | `<a class="xref" data-ref-fig="fig-<basename>">` | `numbering.js`, aus dem Figuren-Zähler | 10 |
 | Abschnitt | `<a class="xref" data-ref-sec="p-1-4-5">` | aus dem Seitenregister (`pages.js::slugFor`) | 5 |
 | Gleichung | `<a class="xref" data-ref-eq="eq_…">` | aus MathJax' Label-Register | 16 |
+| Box (Beispiel/…) | `<a class="xref" data-ref-box="bsp-<name>">` | `numbering.js`, aus dem Box-Zähler (id der Zielbox) | 1 |
 
 Jede Abbildung bekommt dafür eine **stabile id aus ihrem Bildnamen**
-(`id="fig-skript-kreisbewegung-winkel"`), unabhängig von ihrer Nummer.
+(`id="fig-skript-kreisbewegung-winkel"`), unabhängig von ihrer Nummer; ebenso
+braucht jede referenzierbare **Box** eine stabile `id` (`id="bsp-feder-masse-pendel"`).
+
+> **Der Resolver liefert den Deskriptor, die Prosa NICHT.** Jeder Typ rendert
+> das volle Label (`data-ref-sec`→„Abschnitt N", `data-ref-fig`→„Abbildung N",
+> `data-ref-eq`→„(N)", `data-ref-box`→„Beispiel N"). Also `im <a data-ref-sec>`
+> schreiben, **nicht** `im Abschnitt <a data-ref-sec>` (sonst „im Abschnitt
+> Abschnitt N"); `Formel <a data-ref-eq>`, **nicht** `Formel (<a data-ref-eq>)`.
+> Diese Doppelung ist offline unsichtbar (Harness prüft Nummern, nicht die Wörter
+> davor) — im echten Browser gegen „Abschnitt Abschnitt"/„Abbildung Abbildung"/`((`
+> prüfen. In v1.19 wurden 80 solcher Dubletten korpusweit entfernt.
 
 **MathJax rendert `\ref` nur als Text, nicht als Link.** Die Nummern stehen
 aber im Label-Register und sind nach dem Typeset abgreifbar:
