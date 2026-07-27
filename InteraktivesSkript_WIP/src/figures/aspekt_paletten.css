@@ -1,0 +1,109 @@
+/* aspekt_paletten.css — wählbare Vektor-Farbpaletten für die Aspekt-Figuren
+   (Barrierefreiheit bei Farbfehlsichtigkeit / CVD).
+
+   Die KANONISCHE Quellen-Palette (Normalfarbsehen) liegt als --kb-*-WERT- und
+   ALIAS-Tokens in aspekt_kreisbahn.css auf .aspekt-figur (Spezifität (0,1,0));
+   darkmode.css setzt dieselben Tokens für den Darkmode neu (entkoppelt, d. h.
+   ALIAS-Token werden DIREKT gesetzt, nicht via var() auf die WERT-Token).
+
+   Hier kommen ZWEI CVD-optimierte Paletten dazu, jede mit einer Hell- und einer
+   Dunkel-Variante (CVD-Paletten gelten auch im Darkmode — Nutzervorgabe):
+     • deuter  — Deuteranopia (Rot-Grün-Sichtig): nutzt die intakte Blau/Gelb-
+                 Achse + Helligkeit (Okabe-Ito-basiert).
+     • tritan  — Tritanopia (Blau-Gelb-Sichtig): nutzt die intakte Rot/Grün-
+                 Achse, je Familie 3 Helligkeitsstufen + Grau.
+
+   Auswahl-Signal ist <html data-palette="normal|deuter|tritan"> (gesetzt in
+   core.js::set_palette, persistiert in localStorage 'skript_palette'); der
+   Hell/Dunkel-Zweig liegt an <html data-darkmode="0|1"> (gesetzt in
+   toggle_darkmode, rein additiv — der Darkmode toggelt weiterhin den <link>).
+   "normal" bekommt KEINEN Override-Block: hier gilt die Quellen-Palette bzw.
+   im Darkmode darkmode.css.
+
+   Jeder Block setzt WERT- UND ALIAS-Token (18 gesamt): weil darkmode.css die
+   Alias-Token direkt setzt, müsste sonst im Dark+CVD-Fall der Darkmode-Alias-
+   Wert gewinnen. Spezifität (0,4,0) schlägt sowohl Default (0,1,0) als auch
+   darkmode.css (0,1,0). #gc10 wird mitgeführt (Forward-Compat, parity mit
+   darkmode.css); der Container ruht aktuell (Kap. 1.4 rein statisch).
+
+   Bildunterschrift-Farbworte („in Blau/Rot/Orange …", fest in der Prosa und
+   alt-Texten) weichen unter CVD-Paletten bewusst ab — die Vektor-Farben werden
+   zugunsten der Unterscheidbarkeit umdefiniert; Hinweis im Einstellungsmenü.
+   Statische bilder/*.png (Druck-Fallback) sind Raster und werden NICHT
+   umgefärbt — die Palette wirkt nur in den interaktiven SVG-Figuren.
+
+   Wiederverwendung derselben Hex-Werte across Families (z. B. rx = a-Blau) ist
+   CVD-bedingt (begrenzte unterscheidbare Farben) und betrifft nur NICHT-
+   gleichzeitig gezeigte Größen — analog zu den dokumentierten Schwächen der
+   Quellen-Palette in aspekt_kreisbahn.css. */
+
+/* ── Deuteranopia (Rot-Grün) — Hell ─────────────────────────────────────── */
+:root[data-palette="deuter"][data-darkmode="0"] .aspekt-figur,
+:root[data-palette="deuter"][data-darkmode="0"] #gc10 {
+    --kb-rlat: #000000;  --kb-r:   #000000;
+    --kb-vlat: #E69F00;  --kb-vel: #E69F00;  --kb-v: #E69F00;
+    --kb-azp:  #0072B2;  --kb-acc: #0072B2;
+    --kb-omega: #56B4E9;
+    --kb-alpha: #D55E00;
+    --kb-at: #CC79A7;
+    --kb-ar: #009E73;
+    --kb-rx: #0072B2;  --kb-vx: #0072B2;
+    --kb-ry: #009E73;  --kb-vy: #009E73;  --kb-ay: #009E73;
+    --kb-ax: #D55E00;
+    --kb-traj: #999999;
+}
+
+/* ── Deuteranopia (Rot-Grün) — Dunkel ───────────────────────────────────── */
+/* Gegenüber Hell: r grau (schwarz wäre auf dunkel unsichtbar), a_x auf Gelb
+   (im Darkmodus lesbar, im Hellmodus nicht). */
+:root[data-palette="deuter"][data-darkmode="1"] .aspekt-figur,
+:root[data-palette="deuter"][data-darkmode="1"] #gc10 {
+    --kb-rlat: #d0d0d0;  --kb-r:   #d0d0d0;
+    --kb-vlat: #E69F00;  --kb-vel: #E69F00;  --kb-v: #E69F00;
+    --kb-azp:  #0072B2;  --kb-acc: #0072B2;
+    --kb-omega: #56B4E9;
+    --kb-alpha: #D55E00;
+    --kb-at: #CC79A7;
+    --kb-ar: #009E73;
+    --kb-rx: #0072B2;  --kb-vx: #0072B2;
+    --kb-ry: #009E73;  --kb-vy: #009E73;  --kb-ay: #009E73;
+    --kb-ax: #F0E442;
+    --kb-traj: #9aa3b8;
+}
+
+/* ── Tritanopia (Blau-Gelb) — Hell ──────────────────────────────────────── */
+/* Blau (ω, a_r, x-Komponenten) kollabiert mit Grün → wandert auf Grün-
+   Helligkeitsstufen (Blau sieht Tritan ohnehin grünlich). Rot-Familie (v, α,
+   a_t, a_x) je nach Helligkeit. */
+:root[data-palette="tritan"][data-darkmode="0"] .aspekt-figur,
+:root[data-palette="tritan"][data-darkmode="0"] #gc10 {
+    --kb-rlat: #3a3a3a;  --kb-r:   #3a3a3a;
+    --kb-vlat: #E69F00;  --kb-vel: #E69F00;  --kb-v: #E69F00;
+    --kb-azp:  #009E73;  --kb-acc: #009E73;
+    --kb-omega: #7fd4b0;
+    --kb-alpha: #D55E00;
+    --kb-at: #c0392b;
+    --kb-ar: #2b6e51;
+    --kb-rx: #0072B2;  --kb-vx: #0072B2;
+    --kb-ry: #009E73;  --kb-vy: #009E73;  --kb-ay: #009E73;
+    --kb-ax: #8a2418;
+    --kb-traj: #999999;
+}
+
+/* ── Tritanopia (Blau-Gelb) — Dunkel ────────────────────────────────────── */
+/* Gegenüber Hell: r auf hellgrau, dunkle Rot-/Grün-Töne aufgehellt (auf
+   dunklem Grund sonst zu schwer). */
+:root[data-palette="tritan"][data-darkmode="1"] .aspekt-figur,
+:root[data-palette="tritan"][data-darkmode="1"] #gc10 {
+    --kb-rlat: #d0d0d0;  --kb-r:   #d0d0d0;
+    --kb-vlat: #E69F00;  --kb-vel: #E69F00;  --kb-v: #E69F00;
+    --kb-azp:  #3fc488;  --kb-acc: #3fc488;
+    --kb-omega: #7fd4b0;
+    --kb-alpha: #e8703a;
+    --kb-at: #e05a4a;
+    --kb-ar: #4caa7d;
+    --kb-rx: #3f8fd6;  --kb-vx: #3f8fd6;
+    --kb-ry: #3fc488;  --kb-vy: #3fc488;  --kb-ay: #3fc488;
+    --kb-ax: #c45040;
+    --kb-traj: #9aa3b8;
+}

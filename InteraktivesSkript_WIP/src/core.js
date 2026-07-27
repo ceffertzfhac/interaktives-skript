@@ -13,11 +13,19 @@ const CONTAINER_SLACK = 50;
 // greift wirksam erst bei breit.
 const PAPER_MAX_WIDTHS = { schmal: "710px", normal: "845px", breit: "1175px" };
 const WIDTH_STORAGE_KEY = "skript_width_mode";
+const PALETTE_STORAGE_KEY = "skript_palette";
+const PALETTES = ["normal", "deuter", "tritan"];
 
 export let interaktiv = true; //statisches oder interaktives Skript
 export let darkmode_on = false;
 export const linspace = 100;
 export const speed_factor = 1;
+
+// Darkmode-Signal an der Wurzel (rein additiv): der Darkmode toggelt weiterhin
+// den <link disabled>, aber <html data-darkmode="0|1"> erlaubt den CVD-Paletten
+// (aspekt_paletten.css) einen Hell/Dunkel-Zweig. Initial "0"; toggle_darkmode
+// hält es synchron. Module sind defer -> document steh bereit.
+document.documentElement.dataset.darkmode = "0";
 
 const TEXT_LEVEL_MIN = 1;
 const TEXT_LEVEL_MAX = 5;
@@ -229,6 +237,8 @@ export function toggle_darkmode(){
     else {
         ge("darkmode_stylesheet").disabled=true
     }
+    // Wurzel-Signal synchron halten (CVD-Paletten verzweigen Hell/Dunkel, s.o.).
+    document.documentElement.dataset.darkmode = darkmode_on ? "1" : "0";
 }
 
 // Einstellungen-Popover (Zahnrad-Taste im Header). Vorlage: der Tablet-Drawer
@@ -362,6 +372,33 @@ export function init_width_mode() {
         if (s && CONTENT_WIDTHS[s]) mode = s;
     } catch (_) {}
     set_width_mode(mode, false);
+}
+
+// Farbpalette (Normal + 2 CVD: Deuteranopia, Tritanopia). Vorlage:
+// set_width_mode/init_width_mode. Das <html data-palette="…">-Signal steuert
+// die Vektor-Farb-Override-Bloecke in aspekt_paletten.css (kein Re-Render
+// noetig: CSS-Custom-Properties kaskadieren, SVG stroke/fill via var() werden
+// automatisch neu aufgeloest).
+function mark_active_palette(mode) {
+    document.querySelectorAll('[data-action="set_palette"]').forEach(el => {
+        el.classList.toggle("active", el.dataset.palette === mode);
+    });
+}
+export function set_palette(mode, persist = true) {
+    if (!PALETTES.includes(mode)) return;
+    document.documentElement.dataset.palette = mode;
+    mark_active_palette(mode);
+    if (persist) {
+        try { localStorage.setItem(PALETTE_STORAGE_KEY, mode); } catch (_) {}
+    }
+}
+export function init_palette() {
+    let mode = "normal";
+    try {
+        const s = localStorage.getItem(PALETTE_STORAGE_KEY);
+        if (s && PALETTES.includes(s)) mode = s;
+    } catch (_) {}
+    set_palette(mode, false);
 }
 
 export function reset(){

@@ -7,7 +7,8 @@
 import { interaktiv, generate_highlight_boxes, safari_bug, make_static,
          update_all, toggle_darkmode, test, reload_mathjax, reset, hide,
          init_text_size_controls, adjust_text_size, set_width_mode,
-         init_width_mode, toggle_settings, close_settings } from './core.js';
+         init_width_mode, toggle_settings, close_settings, set_palette,
+         init_palette } from './core.js';
 import { generate_toc, offsetAnchor, toc, toc_filter, kontakt, close_zoom, zoom, pause } from './ui.js';
 import { init_print, check_print, from_qr } from './print.js';
 import { paginate, showPage } from './pages.js';
@@ -218,6 +219,7 @@ function dispatch_click(e) {
         case "kontakt": kontakt(); break;
         case "adjust_text_size": adjust_text_size(parseInt(el.dataset.step, 10) || 0); break;
         case "set_width_mode": set_width_mode(el.dataset.mode); break;
+        case "set_palette": set_palette(el.dataset.palette); break;
         case "toggle_darkmode": toggle_darkmode(); break;
         case "toggle_settings": toggle_settings(); break;
         case "close_settings": close_settings(); break;
@@ -248,6 +250,7 @@ async function init() {
     bind_events();
     init_text_size_controls();
     init_width_mode();
+    init_palette();
     // Kapitel-Fragmente holen + injizieren + flachen, BEVOR irgendetwas auf
     // den Kapitel-DOM loslaeuft (highlight boxes, paginate, toc, shell,
     // figure panels, numbering). await, damit die Injektion steht.

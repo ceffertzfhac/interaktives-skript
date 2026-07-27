@@ -29,6 +29,10 @@
              Kreisbewegungs-Simulation zurueckkehrt.
         <link rel="stylesheet" href="src/figures/kreisbewegung/styles.css"> -->
         <link id="darkmode_stylesheet" rel="stylesheet" href="src/darkmode.css" disabled="true">
+        <!-- Wählbare Vektor-Farbpaletten (CVD): Override-Blöcke für
+             data-palette="deuter|tritan" × data-darkmode="0|1". Normal = kein
+             Override (Quellen-Palette bzw. darkmode.css). S. aspekt_paletten.css. -->
+        <link rel="stylesheet" href="src/figures/aspekt_paletten.css">
 
         <!-- qrjs2 (QR-Codes im Druckpfad, global window.QRCode) liegt LOKAL unter
              src/vendor/ statt am CDN: der frueher gepinnte integrity-Hash passte
@@ -95,7 +99,7 @@
             <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation">☰</button>
             <div id="header_brand">
                 <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
-                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.24.0</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
+                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.25.0</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
                      (Nutzervorgabe). Details im Kontakt-Kasten und in DISCLAIMER.md. --><span id="header_prototyp" title="Prototyp: Umsetzung und Inhalte sind vorlaeufig und ungeprueft">Prototyp</span></span>
                 <span id="header_author">Prof. Dr. rer. nat. C. Effertz</span>
             </div>
@@ -164,6 +168,24 @@
         <div id="settings" class="hidden">
             <div id="settings_overlay" data-action="close_settings"></div>
             <div id="settings_panel" role="dialog" aria-label="Einstellungen">
+                <div class="settings_section">
+                    <div class="settings_section_label">Farbpalette</div>
+                    <div id="palette_buttons" role="group" aria-label="Farbpalette">
+                        <button type="button" class="palette_button" data-action="set_palette" data-palette="normal">
+                            <span class="palette_swatch" data-swatches="normal"></span>
+                            <span class="palette_label">Normal</span>
+                        </button>
+                        <button type="button" class="palette_button" data-action="set_palette" data-palette="deuter">
+                            <span class="palette_swatch" data-swatches="deuter"></span>
+                            <span class="palette_label">Rot-Grün-Sichtig</span>
+                        </button>
+                        <button type="button" class="palette_button" data-action="set_palette" data-palette="tritan">
+                            <span class="palette_swatch" data-swatches="tritan"></span>
+                            <span class="palette_label">Blau-Gelb-Sichtig</span>
+                        </button>
+                    </div>
+                    <p class="settings_hint">Bei Farbfehlsichtigkeits-Paletten weichen die Farben der Vektoren von den Bildunterschriften ab; statische Druckabbildungen werden nicht umgefärbt.</p>
+                </div>
                 <div class="settings_section">
                     <div class="settings_section_label">Textgröße</div>
                     <div id="text_size_controls" aria-label="Textgröße">

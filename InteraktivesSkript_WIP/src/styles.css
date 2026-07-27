@@ -1851,6 +1851,41 @@ input[type="range"]::-moz-range-track {
     line-height: 1.4;
     color: var(--ink-3);
 }
+#palette_buttons { display: flex; flex-direction: column; gap: 6px; }
+.palette_button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--ink-2);
+    border-radius: 8px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    text-align: left;
+}
+.palette_button:hover { background: var(--surface-3); }
+.palette_button.active {
+    background: var(--teal);
+    color: var(--teal-ink);
+    border-color: var(--teal);
+    font-weight: 600;
+}
+.palette_swatch {
+    width: 54px;
+    height: 14px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+/* Vorschau-Streifen (3 repräsentative Vektorfarben je Palette; die echten
+   Vektor-Farben für die Figuren stehen in aspekt_paletten.css). */
+.palette_swatch[data-swatches="normal"] { background: linear-gradient(90deg,#474747,#f47a2d,#1555a2); }
+.palette_swatch[data-swatches="deuter"] { background: linear-gradient(90deg,#000000,#E69F00,#0072B2); }
+.palette_swatch[data-swatches="tritan"] { background: linear-gradient(90deg,#3a3a3a,#E69F00,#009E73); }
 
 /* ── Tablet-Breakpoint (erste responsive Regel im Projekt) ───────────────── */
 @media (max-width: 1024px) {
