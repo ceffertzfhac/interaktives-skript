@@ -1,0 +1,468 @@
+<!-- ch_04_01_schwingungen.html — v0.13-Abschnitt 3.1 "Schwingungen"
+     (1:1-Transkription aus Input/v0.13/pskript_sw_schwingungen.tex).
+     Zweiter Abschnitt von TK 3 "Schwingungen und Wellen" (data-tk-num="3").
+     Rein statisch: 9 Unterabschnitte, 4 Abbildungen (alle TikZ -> PNG gerendert),
+     67 nummerierte Gleichungen (3.1.1–3.1.67), 1 Bemerkung (3.1.1) und
+     3 Beispiele (3.1.1–3.1.3), keine Zusammenfassung.
+
+     BEWUSSTE ABWEICHUNGEN von v0.13 (Runbook Abschnitt 13):
+
+     1. Abschnittsnummerierung: Im PDF ist die Einleitung (3.0) falsch als "3.1"
+        nummeriert und "Schwingungen" ebenfalls als "3.1" (Dublette, s. Kommentar
+        in ch_04_00_einleitung.html). Wir folgen der offensichtlichen Intention
+        (analog TK 1/TK 2): 3.0 Einleitung, 3.1 Schwingungen, 3.2 Wellen. Die
+        Gleichungs-/Box-Nummern stimmen mit dem PDF überein, da das PDF
+        "Schwingungen" ebenfalls als 3.1 führt (3.1.1–3.1.67, Beispiele 3.1.1–3.1.3,
+        Bemerkung 3.1.1) — referenznummern.py bestätigt das.
+
+     2. QUELLFEHLER: In der Prosa zu 3.1.5 (Zeile 412 der .tex) wird die
+        (nicht existente) Abbildung fig:feder_masse_schwingung_horizontal
+        referenziert — eine Abbildung, die in der v0.13-Quelle NICHT existiert
+        (es gibt nur das vertikale Feder-Masse-Pendel, Abb. 3.3). Im PDF ergibt
+        das „Abbildung ??". Der Klammusdruck „(siehe Abbildung …)" wird hier
+        daher weggelassen; der Sachtext bleibt unverändert.
+
+     3. QUELLFEHLER (Label-Tippfehler): In Beispiel 3.1.1 (Zeile 334 der .tex)
+        steht der Verweis auf eq:allg_loesung_harmonische_schwingung2 (ohne
+        Unterstrich vor der 2) — ein undefiniertes Label. Die offensichtliche
+        Intention (Zeile 359 verwendet korrekt …_2) ist die Kosinus-Form
+        eq:allg_loesung_harmonische_schwingung_2; darauf zeigt data-ref-eq hier.
+
+     Die Abbildungen (Abb. 3.1–3.4, kapitelweiter Zähler) starten bei 3.1, da
+     3.0 keine Abbildung verbraucht — data-figure-offset="0" am <h2>. -->
+
+<section>
+    <h2 class="inhaltsverzeichnis" data-figure-offset="0">3.1 Schwingungen</h2>
+
+    <p>Stellen wir uns zwei verschiedene mechanische Systeme vor. Beide bestehen aus einer halbkugelförmigen Schale und einer kleinen Kugel.</p>
+
+    <p>Legen wir die Schale mit der Öffnung nach unten auf einen Tisch und platzieren die Kugel genau mittig oben auf der Schale, so wird die Kugel in dieser Position verharren, wenn wir sie loslassen. In dieser Position heben sich die Vektoren der Normalkraft und der Gewichtskraft gegenseitig auf und nach dem ersten Newtonschen Gesetz bleibt die Kugel in Ruhe. Eine solche Position, in der sich die Summe aller auf einen Körper wirkenden Kräfte zum Nullvektor ergibt, bezeichnen wir im Folgenden als <strong>Gleichgewichtslage</strong>.</p>
+
+    <p>Drehen wir die halbkugelförmige Schale nun um, so dass die Öffnung nach oben zeigt, und legen die Kugel genau mittig unten in die Schale, so bleibt die Kugel ebenfalls in dieser Position, wenn wir sie loslassen. Auch in diesem Fall heben sich die Vektoren der Normalkraft und der Gewichtskraft auf und nach dem ersten Newtonschen Gesetz bleibt die Kugel in Ruhe. Auch diese Position ist eine <strong>Gleichgewichtslage</strong>.</p>
+
+    <p>In der <a class="xref" data-ref-fig="fig-gleichgewicht"></a> sind beide Gleichgewichtslagen dargestellt. Obwohl in beiden Situationen die Kugel in Ruhe bleibt, unterscheiden sich die beiden Gleichgewichtslagen wesentlich voneinander.</p>
+
+    <figure class="abbildung" id="fig-gleichgewicht">
+        <div class="abbildung-sub-imgs">
+            <div class="subfig" style="width:48%">
+                <img class="grafik" style="width:100%" src="bilder/gleichgewicht_konkav.png" alt="">
+                <div class="subcap">(a) Konkave Schale (stabil)</div>
+            </div>
+            <div class="subfig" style="width:48%">
+                <img class="grafik" style="width:100%" src="bilder/gleichgewicht_konvex.png" alt="">
+                <div class="subcap">(b) Konvexe Kuppel (instabil)</div>
+            </div>
+        </div>
+        <figcaption>Gleichgewichtslagen: In beiden Fällen sind \(\vec F_G\) und \(\vec F_N\) antiparallel und betragsmäßig gleich; links stabil (Schale), rechts instabil (Kuppel).</figcaption>
+    </figure>
+
+    <figure class="abbildung" id="fig-auslenkung">
+        <div class="abbildung-sub-imgs">
+            <div class="subfig" style="width:48%">
+                <img class="grafik" style="width:100%" src="bilder/auslenkung_konkav.png" alt="">
+                <div class="subcap">(a) Konkav: \(\vec F_{\mathrm{ges}}\) rückstellend</div>
+            </div>
+            <div class="subfig" style="width:48%">
+                <img class="grafik" style="width:100%" src="bilder/auslenkung_konvex.png" alt="">
+                <div class="subcap">(b) Konvex: \(\vec F_{\mathrm{ges}}\) nicht rückstellend</div>
+            </div>
+        </div>
+        <figcaption>Auslenkung: Auf der konkaven Schale zeigt die resultierende Kraft \(\vec F_{\mathrm{ges}}\) zurück zur Gleichgewichtslage (stabil), auf der konvexen Kuppel weg davon (instabil).</figcaption>
+    </figure>
+
+    <p>Der Unterschied in den beiden Situationen ist Ihnen sicherlich intuitiv klar: Wird die Kugel <strong>auf</strong> der Kuppel (oberhalb) leicht aus ihrer Gleichgewichtslage ausgelenkt, so wird sie von der Kuppel herunterrollen und nicht von alleine wieder in die Gleichgewichtslage zurückkehren. Wird die Kugel hingegen <strong>in</strong> der Schale leicht aus ihrer Gleichgewichtslage ausgelenkt, so rollt sie von der Schale wieder zurück in Richtung der Gleichgewichtslage (siehe <a class="xref" data-ref-fig="fig-auslenkung"></a>).</p>
+
+    <p>Der Grund für das unterschiedliche Verhalten liegt in der resultierenden Gesamtkraft und der daraus folgenden Beschleunigung der Kugel. Die resultierende Gesamtkraft ergibt sich in beiden Fällen aus der Vektorsumme der Normalkraft \(\vec F_N\) und der Gewichtskraft \(\vec F_G\). Während in der <a class="xref" data-ref-fig="fig-gleichgewicht"></a> die beiden Kräfte sich zu Null addieren, ergibt sich bei einer Auslenkung der Kugel eine nicht verschwindende resultierende Kraft \(\vec F_{\mathrm{ges}}\) (<a class="xref" data-ref-fig="fig-auslenkung"></a>). Der Unterschied zwischen den beiden Situationen liegt in der Richtung dieser resultierenden Kraft, wie in der <a class="xref" data-ref-fig="fig-auslenkung"></a> ersichtlich ist: Im Fall der Kugel in der Schale zeigt die resultierende Kraft \(\vec F_{\mathrm{ges}}\) stets zurück in Richtung der Gleichgewichtslage. Im Fall der Kugel auf der Kuppel zeigt die resultierende Kraft \(\vec F_{\mathrm{ges}}\) stets weiter weg von der Gleichgewichtslage.</p>
+
+    <p>Eine resultierende Gesamtkraft, die immer zurück in Richtung der Gleichgewichtslage zeigt, bezeichnet man als <strong>Rückstellkraft</strong>. Ein physikalisches oder technisches System, das eine Rückstellkraft besitzt, wenn es aus seiner Gleichgewichtslage ausgelenkt wird, ist in der Lage, <em>Schwingungen</em> auszuführen. Solche Systeme bezeichnen wir als <strong>Schwingungssysteme</strong>.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">3.1.1 Definition des Schwingungsbegriffs</h3>
+<section>
+    <p>Was ist eine Schwingung? Eine Schwingung ist eine bestimmte Klasse von Bewegungen, die sich durch folgende Merkmale auszeichnet:</p>
+    <ul>
+        <li>Eine Schwingung ist eine periodische Änderung einer beliebigen physikalischen Größe (z.&nbsp;B. Ort, Spannung, Druck, …) um einen Mittelwert, auch genannt der <strong>Ruhewert</strong> bzw. die <strong>Gleichgewichtslage</strong>.</li>
+        <li>Mechanische Schwingungen treten immer dann auf, wenn aus einer Auslenkung eines Objektes aus seiner Ruhe- oder Gleichgewichtslage eine resultierende Gesamtkraft folgt, die versucht, die Gleichgewichtslage wiederherzustellen.</li>
+        <li>In diesem Fall bezeichnen wir die resultierende Gesamtkraft als <strong>Rückstellkraft</strong>.</li>
+    </ul>
+
+    <figure class="abbildung" id="fig-feder_masse_schwingung">
+        <img class="grafik" style="width:70%" src="bilder/feder_masse_schwingung.png" alt="">
+        <figcaption>Vertikales Feder-Masse-Pendel als Beispiel eines mechanischen Schwingungssystems: In der Gleichgewichtslage (links) heben sich Federkraft \(\vec F_S\) und Gewichtskraft \(\vec F_G\) auf, die resultierende Kraft \(\vec F_{\mathrm{ges}}\) ist null. Wird die Masse nach oben (Mitte) oder unten (rechts) ausgelenkt, so zeigt die resultierende Kraft \(\vec F_{\mathrm{ges}}\) jeweils zurück in Richtung der Gleichgewichtslage.</figcaption>
+    </figure>
+
+    <p>Ein klassisches Beispiel für ein mechanisches Schwingungssystem ist eine Feder-Masse-Schwingung (<a class="xref" data-ref-fig="fig-feder_masse_schwingung"></a>). Eine Feder mit Federkonstante \(k\) hänge von der Decke eines Labors, an der Feder ist eine Masse \(m\) befestigt. Ist die Masse in Ruhe, so befindet sie sich in der Gleichgewichtslage. In der Gleichgewichtslage ist die nach oben gerichtete Federkraft betragsmäßig gleich der nach unten gerichteten Gewichtskraft der Masse, sodass sich die beiden Kräfte zu Null addieren und die Masse in Ruhe bleibt (linke Darstellung in der <a class="xref" data-ref-fig="fig-feder_masse_schwingung"></a>). Wird die Masse aus ihrer Gleichgewichtslage nach oben ausgelenkt, wie in der mittleren Abbildung zu sehen, so ist die nach oben gerichtete Federkraft kleiner als die nach unten gerichtete Gewichtskraft. Die resultierende Gesamtkraft zeigt also nach unten, zurück in Richtung der Gleichgewichtslage. Wird die Masse aus ihrer Gleichgewichtslage nach unten ausgelenkt, wie in der rechten Abbildung zu sehen, so ist die nach oben gerichtete Federkraft größer als die nach unten gerichtete Gewichtskraft. Die resultierende Gesamtkraft zeigt also nach oben, zurück in Richtung der Gleichgewichtslage. In beiden Fällen ist die resultierende Gesamtkraft eine Rückstellkraft, die versucht, die Masse wieder in die Gleichgewichtslage zurückzubringen.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">3.1.2 Harmonische Schwingungen</h3>
+<section>
+    <p>Ein wichtiger Spezialfall von Schwingungen sind die sogenannten <strong>harmonischen Schwingungen</strong>. Eine Schwingung nennt man harmonisch, wenn die Rückstellkraft im Betrag \(\vert \vec F_{\mathrm{R}}\vert\) proportional zur Auslenkung \(y\) aus der Gleichgewichtslage ist, also in einer Dimension:</p>
+    \begin{equation}
+      F \propto -y,
+    \end{equation}
+    <p>beziehungsweise in Vektorform:</p>
+    \begin{equation}
+      \vec F \propto -\vec y.
+    \end{equation}
+    <p>Das Minuszeichen zeigt an, dass die Rückstellkraft stets in die entgegengesetzte Richtung der Auslenkung zeigt, also zurück in Richtung der Gleichgewichtslage.</p>
+
+    <p>Das \(y\) steht dabei für die physikalische Größe, die sich periodisch ändert. In mechanischen Schwingungen ist dies zum Beispiel die Auslenkung eines Feder-Masse-Systems aus seiner Gleichgewichtslage, also eine Größe mit der Dimension der Länge, oder die Winkelauslenkung eines Pendels, also eine Größe mit der Dimension eines Winkels. In elektrischen Schwingkreisen ist dies zum Beispiel die Spannung oder die elektrische Ladung.</p>
+
+    <p>Gilt oben dargestellte Proportionalität, so kann man die Rückstellkraft formelmäßig als</p>
+    \begin{equation}
+      \vec F = -c \cdot \vec y
+    \end{equation}
+    <p>ausdrücken, wobei \(c\) eine Proportionalitätskonstante ist, die von der Art des Schwingungssystems abhängt<span class="fussnote">Insbesondere muss \(c\) so gewählt werden, dass die Einheiten auf beiden Seiten der Gleichung übereinstimmen.</span>.</p>
+
+    <p>Da die Rückstellkraft bei einem Schwingungssystem gleich der resultierenden Gesamtkraft ist, können wir unter Anwendung des zweiten Newtonschen Gesetzes schreiben:</p>
+    \begin{equation}
+      m \cdot \vec a = \vec F_{\mathrm{ges}} = \vec F = -c \cdot \vec y,
+    \end{equation}
+    <p>wobei \(m\) die Masse des schwingenden Körpers und \(\vec a\) seine Beschleunigung ist. Daraus folgt:</p>
+    \begin{equation}
+      \vec a = -\frac{c}{m} \cdot \vec y.
+    \end{equation}
+
+    <p>Der Einfachheit betrachten wir im Folgenden nur eindimensionale Schwingungen, bei denen \(y\) kein Vektor, sondern eine skalare Größe ist. In diesem Fall können wir die obige Gleichung als</p>
+    \begin{equation}
+      a = -\frac{c}{m} \cdot y
+    \end{equation}
+    <p>schreiben.</p>
+
+    <p>Wendet man nun den aus der Kinematik bekannten Zusammenhang an, dass die Beschleunigung die zweite Ableitung des Ortes nach der Zeit ist, also</p>
+    \begin{equation}
+      a = \frac{\mathrm{d}^2 y}{\mathrm{d} t^2}=\ddot{y},
+    \end{equation}
+    <p>so erhalten wir die sogenannte <strong>Differentialgleichung der harmonischen Schwingung</strong>:</p>
+    \begin{equation}
+      \ddot{y} + \frac{c}{m} \cdot y = 0.
+      \label{eq_diffgl_harmonische_schwingung}
+    \end{equation}
+
+    <div class="bemerkung" data-title="Differentialgleichungen">
+        <p>Eine Differentialgleichung ist eine Klasse mathematischer Gleichungen, die Ihnen bisher eventuell noch nicht begegnet ist. Bei „normalen" Gleichungen sucht man typischerweise nach einer Menge von Zahlen oder Vektoren, die die Gleichung erfüllen. Die Gleichung</p>
+        \begin{equation}
+          2x^2 + 2 = 10
+        \end{equation}
+        <p>sucht nach der passenden Zahl \(x\), die diese Gleichung erfüllt. Die Lösungsmenge ist in diesem Fall \(x=\pm 2\). Bei Differentialgleichungen ist die gesuchte Größe jedoch keine Zahl oder ein Vektor, sondern eine Funktion, die ihrerseits von einem Argument (einer Variablen) abhängt. In Gleichung</p>
+        \begin{equation}
+          \ddot{y} + \frac{c}{m} \cdot y = 0
+        \end{equation}
+        <p>ist die gesuchte Funktion \(y(t)\), die von der Variablen \(t\) (der Zeit) abhängt. Die Gleichung verlangt, dass die zweite Ableitung dieser Funktion nach der Zeit plus einem konstanten Faktor mal der Funktion selbst den Wert Null ergibt.</p>
+        <p>Wie Sie Differentialgleichungen im Allgemeinen lösen können, werden wir in diesem Skript nicht behandeln. Zum Teil ist dies Inhalt der höheren Mathematikvorlesungen.</p>
+    </div>
+
+    <p>Die Differentialgleichung der harmonischen Schwingung, Gleichung <a class="xref" data-ref-eq="eq_diffgl_harmonische_schwingung"></a>, lautet also:</p>
+    \begin{equation}
+      \ddot{y} + \frac{c}{m} \cdot y = 0.
+    \end{equation}
+    <p>Dies ist ein Suchauftrag: Suche eine Funktion \(y(t)\), deren zweite Ableitung nach der Zeit plus einem konstanten Faktor mal der Funktion selbst den Wert Null ergibt. Man kann den Suchauftrag durch Umformen der Gleichung auch so schreiben:</p>
+    \begin{equation}
+      \ddot{y} = -\frac{c}{m} \cdot y.
+    \end{equation}
+    <p>Diese Formulierung sagt aus, dass die zweite Ableitung der Funktion \(y(t)\) (also die Beschleunigung) proportional zur Funktion selbst ist, aber mit umgekehrtem Vorzeichen.</p>
+
+    <p>Wir suchen also eine (oder mehrere) Funktionen \(y(t)\), die, wenn man sie zweimal nach der Zeit ableitet, wieder eine Funktion ergeben, die proportional zur ursprünglichen Funktion ist, aber mit umgekehrtem Vorzeichen. In der Klasse der trigonometrischen Funktionen finden wir genau solche Funktionen: Die Sinus- und die Kosinusfunktion besitzen diese Eigenschaft. So ist zum Beispiel die zweite Ableitung der Sinusfunktion:</p>
+    \begin{equation}
+      \frac{\mathrm{d}^2}{\mathrm{d} t^2} \sin(\omega t) = -\omega^2 \sin(\omega t),
+    \end{equation}
+    <p>wobei \(\omega\) eine Konstante ist, die wir später als <strong>Kreisfrequenz</strong> bezeichnen werden. Wir sehen, dass die zweite Ableitung der Sinusfunktion wieder die Sinusfunktion selbst ist, multipliziert mit dem Faktor \(-\omega^2\). Die Sinusfunktion erfüllt also die gesuchte Eigenschaft. Ebenso ist die zweite Ableitung der Kosinusfunktion:</p>
+    \begin{equation}
+      \frac{\mathrm{d}^2}{\mathrm{d} t^2} \cos(\omega t) = -\omega^2 \cos(\omega t).
+    \end{equation}
+    <p>Auch die Kosinusfunktion erfüllt also die gesuchte Eigenschaft.</p>
+
+    <p>Die allgemeine Lösung der Differentialgleichung der harmonischen Schwingung ist daher eine Linearkombination aus Sinus- und Kosinusfunktion:</p>
+    \begin{equation}
+      y(t) = A \cdot \sin(\omega t) + B \cdot \cos(\omega t),
+      \label{eq_allg_loesung_harmonische_schwingung}
+    \end{equation}
+    <p>wobei \(A\) und \(B\) Konstanten sind, die von den Anfangsbedingungen des Schwingungssystems abhängen (z.&nbsp;B. Anfangsauslenkung und Anfangsgeschwindigkeit). Nutzen wir die Zusammenhänge der Trigonometrie, so können wir die allgemeine Lösung auch in der Form</p>
+    \begin{equation}
+      y(t) = y_\mathrm{max} \cdot \cos(\omega t + \varphi_0)
+      \label{eq_allg_loesung_harmonische_schwingung_2}
+    \end{equation}
+    <p>schreiben, wobei \(y_\mathrm{max}\) die Amplitude der Schwingung und \(\varphi_0\) die Anfangsphase ist. Die beiden Darstellungen der allgemeinen Lösung sind äquivalent und können ineinander umgerechnet werden.</p>
+
+    <div class="beispiel" data-title="Lösung der Differentialgleichung der harmonischen Schwingung">
+        <p>Wir können uns davon überzeugen, dass die Funktion <a class="xref" data-ref-eq="eq_allg_loesung_harmonische_schwingung_2"></a> tatsächlich die Differentialgleichung der harmonischen Schwingung erfüllt, indem wir sie zweimal nach der Zeit ableiten und in die Gleichung einsetzen.</p>
+        <p>Die erste Ableitung der Funktion <a class="xref" data-ref-eq="eq_allg_loesung_harmonische_schwingung"></a> nach der Zeit ist:</p>
+        \begin{equation}
+          \dot{y}(t) = -y_\mathrm{max} \cdot \omega \cdot \sin(\omega t + \varphi_0).
+        \end{equation}
+        <p>Die zweite Ableitung nach der Zeit ist:</p>
+        \begin{equation}
+          \ddot{y}(t) = -y_\mathrm{max} \cdot \omega^2 \cdot \cos(\omega t + \varphi_0).
+        \end{equation}
+        <p>Setzen wir dies in die Differentialgleichung der harmonischen Schwingung ein, so erhalten wir:</p>
+        \begin{equation}
+          \ddot{y} + \frac{c}{m} \cdot y = -y_\mathrm{max} \cdot \omega^2 \cdot \cos(\omega t + \varphi_0) + \frac{c}{m} \cdot y_\mathrm{max} \cdot \cos(\omega t + \varphi_0).
+        \end{equation}
+        <p>Fassen wir die Terme zusammen, so ergibt sich:</p>
+        \begin{equation}
+          \ddot{y} + \frac{c}{m} \cdot y = y_\mathrm{max} \cdot \cos(\omega t + \varphi_0) \cdot \left(-\omega^2 + \frac{c}{m}\right).
+        \end{equation}
+        <p>Damit die Gleichung für alle Zeiten \(t\) erfüllt ist, muss der Ausdruck in den Klammern null sein, also:</p>
+        \begin{equation}
+          -\omega^2 + \frac{c}{m} = 0,
+        \end{equation}
+        <p>woraus folgt:</p>
+        \begin{equation}
+          \omega^2 = \frac{c}{m}.
+        \end{equation}
+        <p>Dies zeigt, dass die Funktion <a class="xref" data-ref-eq="eq_allg_loesung_harmonische_schwingung_2"></a> tatsächlich die Differentialgleichung der harmonischen Schwingung erfüllt, wenn die Kreisfrequenz \(\omega\) durch die Beziehung</p>
+        \begin{equation}
+          \omega = \sqrt{\frac{c}{m}}
+        \end{equation}
+        <p>gegeben ist.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">3.1.3 Die Phase und die Phasenverschiebung</h3>
+<section>
+    <p>In der allgemeinen Lösung der harmonischen Schwingung, <a class="xref" data-ref-eq="eq_allg_loesung_harmonische_schwingung_2"></a>, tritt der Term \(\omega t + \varphi_0\) im Argument des Cosinus auf. Diesen Term bezeichnet man als die <strong>Phase</strong> der Schwingung. Die Phase ist eine Größe, die angibt, in welchem Zustand sich die Schwingung zu einem bestimmten Zeitpunkt \(t\) befindet. Die Phase setzt sich aus zwei Teilen zusammen: Dem ersten Teil \(\omega t\), der von der Zeit abhängt, und dem zweiten Teil \(\varphi_0\), der eine Konstante ist und als <strong>Phasenverschiebung</strong> bezeichnet wird. Die Phasenverschiebung \(\varphi_0\) gibt an, wie weit die Schwingung zu Beginn der Beobachtung (also bei \(t=0\)) bereits fortgeschritten ist. Die Phasenverschiebung hängt also vom Anfangszustand des Schwingungssystems ab, genau wie in Gleichung <a class="xref" data-ref-eq="eq_allg_loesung_harmonische_schwingung"></a> die Konstanten \(A\) und \(B\) von den Anfangsbedingungen abhängen.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">3.1.4 Kreisfrequenz, Frequenz und Periode</h3>
+<section>
+    <p>Die Kreisfrequenz \(\omega\) ist eine wichtige Größe bei harmonischen Schwingungen. Um ihre Bedeutung zu verstehen, müssen wir uns zunächst klar machen, dass der Cosinus eine periodische Funktion ist, die sich alle \(2\pi\) wiederholt. Das bedeutet, dass die Funktion \(y(t)\) in Gleichung <a class="xref" data-ref-eq="eq_allg_loesung_harmonische_schwingung_2"></a> denselben Wert annimmt, wenn sich der Term im Cosinus (die sogenannte <strong>Phase</strong>) um \(2\pi\) ändert:</p>
+    \begin{equation}
+      \omega t + \varphi_0 = \omega (t + T) + \varphi_0 + 2\pi,
+    \end{equation}
+    <p>wobei \(T\) die Zeitdauer ist, nach der sich die Phase um \(2\pi\) ändert. Kürzen wir \(\varphi_0\) auf beiden Seiten und formen die Gleichung um, so erhalten wir:</p>
+    \begin{equation}
+      \omega t = \omega t + \omega T + 2\pi.
+    \end{equation}
+    <p>Kürzen wir \(\omega t\) auf beiden Seiten, so folgt:</p>
+    \begin{equation}
+      0 = \omega T + 2\pi,
+    \end{equation}
+    <p>woraus sich die Beziehung</p>
+    \begin{equation}
+      \omega T = 2\pi
+    \end{equation}
+    <p>ergibt.</p>
+
+    <p>Die Kreisfrequenz \(\omega\) beschreibt also, wie schnell sich die Phase der Schwingung ändert. Genauer gesagt gibt die Kreisfrequenz an, um wie viel Radiant sich die Phase pro Sekunde ändert. Die Zeitdauer \(T\), nach der sich die Phase um \(2\pi\) ändert, bezeichnet man als <strong>Periode</strong> oder <strong>Periodendauer</strong> der Schwingung. Die Periode ist also die Zeitdauer, die das Schwingungssystem benötigt, um einen vollständigen Schwingungszyklus auszuführen.</p>
+
+    <p>Eine mit der Kreisfrequenz verwandte Größe ist die <strong>Frequenz</strong> \(f\), die angibt, wie viele Schwingungszyklen das System pro Sekunde ausführt. Die Frequenz ist der Kehrwert der Periode:</p>
+    \begin{equation}
+      f = \frac{1}{T}.
+    \end{equation}
+
+    <p>Zusammenfassend kann man sagen:</p>
+    <ul>
+        <li>Die Kreisfrequenz \(\omega\) gibt an, um wie viel Radiant sich die Phase der Schwingung pro Sekunde ändert.</li>
+        <li>Die Periode \(T\) ist die Zeitdauer für einen vollständigen Schwingungszyklus.</li>
+        <li>Die Frequenz \(f\) ist die Anzahl der Schwingungszyklen pro Sekunde.</li>
+        <li>Die Beziehungen zwischen diesen Größen sind:
+        \begin{equation}
+          \omega = 2\pi f = \frac{2\pi}{T} \quad \text{bzw.} \quad f = \frac{\omega}{2\pi} \quad \text{und} \quad T = \frac{2\pi}{\omega}.
+        \end{equation}</li>
+    </ul>
+
+    <p>Aus der Differentialgleichung der harmonischen Schwingung, Gleichung <a class="xref" data-ref-eq="eq_diffgl_harmonische_schwingung"></a>, folgt, dass die Kreisfrequenz \(\omega\) durch die Beziehung</p>
+    \begin{equation}
+      \omega = \sqrt{\frac{c}{m}}
+    \end{equation}
+    <p>gegeben ist, wobei \(c\) die Proportionalitätskonstante der Rückstellkraft und \(m\) die Masse des schwingenden Körpers ist.</p>
+
+    <p>Was genau die Proportionalitätskonstante \(c\) in einem konkreten Schwingungssystem ist, hängt von der Art des Systems ab. In mechanischen Systemen ermittelt man die Proportionalitätskonstante \(c\) aus dem 2. Newtonschen Gesetz und den spezifischen Kräften, die im System wirken.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">3.1.5 Horizontales Feder-Masse-System</h3>
+<section>
+    <p>Schauen wir uns zum Beispiel ein horizontales Feder-Masse-System an, bei dem die Masse auf einer reibungsfreien Oberfläche gleitet und an einer Feder mit der Federkonstante \(k\) befestigt ist. Wird die Masse aus ihrer Gleichgewichtslage um eine Strecke \(y\) ausgelenkt, so wirkt auf die Masse die Rückstellkraft der Feder gemäß dem Hookeschen Gesetz:</p>
+    \begin{equation}
+      F_S = -k \cdot y.
+    \end{equation}
+    <p>Die resultierende Gesamtkraft auf die Masse ist in diesem Fall also die Federkraft:</p>
+    \begin{equation}
+      F_{\mathrm{ges}} = F_S = -k \cdot y.
+    \end{equation}
+    <p>und das 2. Newtonsche Gesetz lautet:</p>
+    \begin{equation}
+      m \cdot a = F_{\mathrm{ges}} = -k \cdot y.
+    \end{equation}
+    <p>Vergleichen wir diese Formel mit der Differentialgleichung der harmonischen Schwingung, Gleichung <a class="xref" data-ref-eq="eq_diffgl_harmonische_schwingung"></a>, so erkennen wir, dass die Proportionalitätskonstante \(c\) in diesem Fall gleich der Federkonstante \(k\) ist:</p>
+    \begin{equation}
+      c = k.
+    \end{equation}
+    <p>Daraus folgt, dass die Kreisfrequenz \(\omega\) des Feder-Masse-Systems durch die Beziehung</p>
+    \begin{equation}
+      \omega = \sqrt{\frac{k}{m}}
+    \end{equation}
+    <p>gegeben ist.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">3.1.6 Vertikales Feder-Masse-System</h3>
+<section>
+    <p>Die Differentialgleichung des vertikalen Feder-Masse-Systems (siehe <a class="xref" data-ref-fig="fig-feder_masse_schwingung"></a>) enthält zusätzlich zur Federkraft auch noch einen konstanten Term durch die Gewichtskraft der Masse. Dadurch scheint sich die Lösung nicht so einfach raten zu lassen wie oben stehend. Die Mathematik zeigt jedoch, dass die Lösung der Differentialgleichung des vertikalen Feder-Masse-Systems dieselbe Form hat wie die Lösung des horizontalen Feder-Masse-Systems, nur dass die Gleichgewichtslage durch die Gewichtskraft der Masse verschoben ist. Die Kreisfrequenz \(\omega\) des vertikalen Feder-Masse-Systems ist ebenfalls durch die Beziehung</p>
+    \begin{equation}
+      \omega = \sqrt{\frac{k}{m}}
+    \end{equation}
+    <p>gegeben.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">3.1.7 Das Fadenpendel</h3>
+<section>
+    <figure class="abbildung" id="fig-pendulum_forces">
+        <img class="grafik" style="width:55%" src="bilder/pendulum_forces.png" alt="">
+        <figcaption>Kräfte am Fadenpendel: Die Gewichtskraft \(\vec{F}_g\) (rot) wirkt senkrecht nach unten. Die Fadenkraft \(\vec{F}_Z\) (grün) wirkt entlang des Fadens zum Aufhängungspunkt. Die resultierende Kraft \(\vec{F}_{\mathrm{res}}\) (blau) ist die Vektoraddition von \(\vec{F}_g\) und \(\vec{F}_Z\) und zeigt tangential zur Pendelbewegung. Das Parallelogramm der Kräfte veranschaulicht die Vektoraddition. Die Einheitsvektoren \(\vec{e}_r\) und \(\vec{e}_\theta\) (grau) zeigen die Richtung radial entlang des Fadens bzw. tangential zur Pendelbewegung an.</figcaption>
+    </figure>
+
+    <p>Ein weiteres klassisches Beispiel für ein mechanisches Schwingungssystem ist das Fadenpendel (siehe <a class="xref" data-ref-fig="fig-pendulum_forces"></a>). Ein Fadenpendel besteht aus einer Masse, die an einem masselosen Faden aufgehängt ist und frei schwingen kann. Wird die Masse aus ihrer Gleichgewichtslage um einen Winkel \(\theta\) ausgelenkt, so wirkt auf die Masse die Gewichtskraft \(\vec{F}_g\) nach unten. Zusätzlich wirkt die Fadenkraft \(\vec{F}_Z\) entlang des Fadens zum Aufhängungspunkt. Die resultierende Kraft \(\vec{F}_{\mathrm{res}}\) auf die Masse ist die Vektoraddition von \(\vec{F}_g\) und \(\vec{F}_Z\). Wir gehen davon aus, dass der Faden keine Dehnung oder Stauchung zulässt, sodass die Bewegung der Masse nur tangential zur Pendelbewegung erfolgen kann. Die Fadenkraft \(\vec{F}_Z\) hebt den radialen Anteil der Gewichtskraft auf, sodass die resultierende Kraft \(\vec{F}_{\mathrm{res}}\) nur noch den tangentialen Anteil der Gewichtskraft enthält.</p>
+
+    <p>Die resultierende Gesamtkraft abhängig vom Auslenkwinkel \(\theta\) ist:</p>
+    \begin{equation}
+      F_{\mathrm{res}} = -m \cdot g \cdot \sin(\theta),
+    \end{equation}
+    <p>wobei \(m\) die Masse der Pendelmasse und \(g\) die Erdbeschleunigung ist. Es handelt sich also, das sieht man an den Eigenschaften der Sinusfunktion und dem Minuszeichen, um eine Rückstellkraft, die immer entgegen der Auslenkung wirkt. Allerdings ist die Rückstellkraft in diesem Fall nicht echt proportional zur Auslenkung \(\theta\), sondern proportional zum Sinus der Auslenkung \(\sin(\theta)\). Es handelt sich also bei der Schwingung des Fadenpendels um keine harmonische Schwingung.</p>
+
+    <p>Dieses Dilemma lässt sich jedoch lösen, wenn man davon ausgeht, dass die Auslenkungen des Pendels sehr klein sind, also der Winkel \(\theta\) nur kleine Werte annimmt. Für kleine Winkel gilt näherungsweise:</p>
+    \begin{equation}
+      \sin(\theta) \approx \theta,
+    \end{equation}
+    <p>wobei \(\theta\) in Bogenmaß gemessen wird. Unter dieser Annahme wird die Rückstellkraft des Fadenpendels näherungsweise proportional zur Auslenkung \(\theta\):</p>
+    \begin{equation}
+      F_{\mathrm{res}} \approx -m \cdot g \cdot \theta.
+    \end{equation}
+
+    <p>Die Auslenkung des Fadenpendels aus seiner Ruhelage wird durch den Winkel \(\theta\) beschrieben oder durch die Auslenkung des Pendels aus seiner Ruhelage entlang des Kreisbogens, die wir mit \(y\) bezeichnen. Der Zusammenhang zwischen dem Winkel \(\theta\) und der Auslenkung \(y\) entlang des Kreisbogens ist:</p>
+    \begin{equation}
+      y = l \cdot \theta,
+    \end{equation}
+    <p>wobei \(l\) die Länge des Fadens ist.</p>
+
+    <p>Damit lässt sich das 2. Newtonsche Gesetz für das Fadenpendel für kleine Auslenkungswinkel formulieren:</p>
+    \begin{equation}
+      m \cdot a = F_{\mathrm{res}} = -m \cdot g \cdot \frac{y}{l}\quad \Leftrightarrow \quad \ddot{y}= -\frac{g}{l} \cdot y.
+    \end{equation}
+
+    <p>Vergleicht man diese Gleichung mit der Differentialgleichung der harmonischen Schwingung, Gleichung <a class="xref" data-ref-eq="eq_diffgl_harmonische_schwingung"></a>, so erkennt man, dass die Proportionalitätskonstante \(c\) in diesem Fall gleich \(\frac{m \cdot g}{l}\) ist:</p>
+    \begin{equation}
+      c = \frac{m \cdot g}{l}.
+    \end{equation}
+    <p>Daraus folgt, dass die Kreisfrequenz \(\omega\) des Fadenpendels durch die Beziehung</p>
+    \begin{equation}
+      \omega = \sqrt{\frac{g}{l}}
+    \end{equation}
+    <p>gegeben ist.</p>
+
+    <p>Die Periode \(T\) des Fadenpendels ist somit:</p>
+    \begin{equation}
+      T = 2\pi \sqrt{\frac{l}{g}}.
+    \end{equation}
+
+    <p>Man sieht, dass die Periode des Fadenpendels nur von der Länge des Fadens \(l\) und der Erdbeschleunigung \(g\) abhängt, nicht aber von der Masse \(m\) der Pendelmasse.</p>
+
+    <div class="beispiel" data-title="Der Zusammenhang \(g \approx \pi^2\)">
+        <p>Rechnet man den numerischen Wert von \(\pi\) zum Quadrat aus, so erhält man \(\pi^2 \approx 9{,}87\). Dies ist sehr nah am Wert der Erdbeschleunigung \(g \approx 9{,}81\,\mathrm{m/s^2}\) auf der Erdoberfläche. Das muss reiner Zufall sein, denn die Zahl \(\pi\) ist eine mathematische Konstante, die in der Geometrie von Kreisen auftaucht, während \(g\) eine physikalische Konstante ist, die die Stärke der Gravitationskraft auf der Erdoberfläche beschreibt. Oder? Ist es wirklich nur ein Zufall, dass diese beiden Zahlen so nah beieinander liegen?</p>
+
+        <p>Betrachten wir die Periode \(T\) des Fadenpendels:</p>
+        \begin{equation}
+          T = 2\pi \sqrt{\frac{l}{g}}.
+        \end{equation}
+        <p>Wenn wir die Länge des Fadens \(l\) so wählen, dass sie genau \(1\,\mathrm{m}\) beträgt, dann wird die Periode des Fadenpendels:</p>
+        \begin{equation}
+          T = 2\pi \sqrt{\frac{1\,\mathrm{m}}{g}}.
+        \end{equation}
+        <p>Umgeformt nach \(g\) ergibt sich:</p>
+        \begin{equation}
+          g = \frac{4\pi^2}{T^2} \cdot 1\,\mathrm{m}.
+        \end{equation}
+        <p>Angenommen, die Zeiteinheit der Sekunde wäre noch gar nicht definiert worden. Wir wollen nun die Sekunde definieren und wir haben ein Fadenpendel mit der Länge \(l=1\,\mathrm{m}\) zur Hand. Angenommen, wir würden die Sekunde so definieren, dass sie gerade die Zeit ist, die das Pendel braucht, um genau einmal von links nach rechts (oder von rechts nach links, nicht aber wieder zurück) zu schwingen. Dann wäre die Periode des Pendels nach unserer neuen Definition der Sekunde genau \(T=2\,\mathrm{s}\). Setzen wir diesen Wert in die obige Gleichung ein, so erhalten wir:</p>
+        \begin{equation}
+          g = \frac{4\pi^2}{(2\,\mathrm{s})^2} \cdot 1\,\mathrm{m} = \frac{4\pi^2}{4\,\mathrm{s^2}} \cdot 1\,\mathrm{m} = \pi^2 \cdot \frac{1\,\mathrm{m}}{\mathrm{s^2}}.
+        \end{equation}
+        <p>In diesem Fall wäre die Erdbeschleunigung \(g\) also genau \(\pi^2\,\mathrm{m/s^2}\).</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">3.1.8 Anfangsbedingungen und Anfangswertprobleme</h3>
+<section>
+    <p>Die allgemeine Lösung der Differentialgleichung der harmonischen Schwingung, <a class="xref" data-ref-eq="eq_allg_loesung_harmonische_schwingung_2"></a> und <a class="xref" data-ref-eq="eq_allg_loesung_harmonische_schwingung"></a>, enthalten jeweils zwei Konstanten (\(A\) und \(B\) beziehungsweise \(y_\mathrm{max}\) und \(\varphi_0\)), die von den Anfangsbedingungen des Schwingungssystems abhängen. Um diese Konstanten zu bestimmen, benötigt man also Informationen über den Anfangszustand des Systems, also zum Beispiel die Anfangsauslenkung und die Anfangsgeschwindigkeit der schwingenden Masse. Solche Probleme, bei denen man die Anfangsbedingungen kennt und die Konstanten der allgemeinen Lösung bestimmen möchte, bezeichnet man als <strong>Anfangswertprobleme</strong>.</p>
+
+    <div class="beispiel" data-title="Anfangswertproblem eines Feder-Masse-Systems">
+        <p>Ein Feder-Masse-System mit der Masse \(m=0{,}5\,\mathrm{kg}\) und der Federkonstante \(k=2{,}0\,\mathrm{N/m}\) wird aus der Gleichgewichtslage um \(y(0)=0{,}10\,\mathrm{m}\) nach unten ausgelenkt und aus der Ruhe dann losgelassen. Bestimmen Sie die Bewegungsgleichung \(y(t)\) der Masse.</p>
+
+        <p><strong>Lösung:</strong> Zunächst bestimmen wir die Kreisfrequenz \(\omega\) des Systems:</p>
+        \begin{equation}
+          \omega = \sqrt{\frac{c}{m}} = \sqrt{\frac{2{,}0\,\mathrm{N/m}}{0{,}5\,\mathrm{kg}}} = \sqrt{4{,}0\,\mathrm{s^{-2}}} = 2{,}0\,\mathrm{s^{-1}}.
+        \end{equation}
+        <p>Die allgemeine Lösung der Differentialgleichung der harmonischen Schwingung lautet:</p>
+        \begin{equation}
+          y(t) = A \cdot \sin(\omega t) + B \cdot \cos(\omega t).
+        \end{equation}
+        <p>Um die Konstanten \(A\) und \(B\) zu bestimmen, nutzen wir die Anfangsbedingungen:</p>
+        <ul>
+            <li>Anfangsauslenkung: \(y(0) = -0{,}10\,\mathrm{m}\) (nach unten ausgelenkt)</li>
+            <li>Anfangsgeschwindigkeit: \(\dot{y}(0) = 0\,\mathrm{m/s}\) (aus der Ruhe losgelassen)</li>
+        </ul>
+
+        <p>Setzen wir die Anfangsauslenkung in die allgemeine Lösung ein:</p>
+        \begin{align}
+           y(0) &amp;= A \cdot \sin(0) + B \cdot \cos(0) = B = -0{,}10\,\mathrm{m}\\
+           \dot{y}(0) &amp;= A \cdot \omega \cdot \cos(0) - B \cdot \omega \cdot \sin(0) = A \cdot \omega = 0\,\mathrm{m/s}
+         \end{align}
+        <p>Daraus folgt:</p>
+        \begin{align}
+          B &amp;= -0{,}10\,\mathrm{m},\\
+          A &amp;= 0\,\mathrm{m}.
+        \end{align}
+        <p>Die Bewegungsgleichung der Masse lautet somit:</p>
+        \begin{equation}
+          y(t) = -0{,}10\,\mathrm{m} \cdot \cos(2{,}0\,\mathrm{s^{-1}} \cdot t).
+        \end{equation}
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">3.1.9 Energie der harmonischen Schwingung</h3>
+<section>
+    <p>Ist die Reibung in einem Schwingungssystem vernachlässigbar, so bleibt die Gesamtenergie des Systems während der Schwingung konstant. Die Gesamtenergie setzt sich aus der kinetischen Energie \(E_\mathrm{kin}\) und der potentiellen Energie \(E_\mathrm{pot}\) des Systems zusammen:</p>
+    \begin{equation}
+      E_{\mathrm{ges}} = E_{\mathrm{kin}} + E_{\mathrm{pot}}.
+    \end{equation}
+
+    <p>Schauen wir uns diesen Zusammenhang am Beispiel des Feder-Masse-Systems an. Die kinetische Energie der schwingenden Masse ist:</p>
+    \begin{equation}
+      E_{\mathrm{kin}} = \frac{1}{2} m \cdot \dot{y}^2,
+    \end{equation}
+    <p>wobei \(\dot{y}\) die Geschwindigkeit der Masse ist. Die potentielle Energie der Feder ist:</p>
+    \begin{equation}
+      E_{\mathrm{pot}} = \frac{1}{2} k \cdot y^2,
+    \end{equation}
+    <p>wobei \(y\) die Auslenkung der Masse aus der Gleichgewichtslage ist.</p>
+
+    <p>Gehen wir von einer reinen Cosinusschwingung aus, also:</p>
+    \begin{equation}
+      y(t) = y_\mathrm{max} \cdot \cos(\omega t),
+    \end{equation}
+    <p>so ist die Geschwindigkeit der Masse:</p>
+    \begin{equation}
+      \dot{y}(t) = -y_\mathrm{max} \cdot \omega \cdot \sin(\omega t).
+    \end{equation}
+    <p>Setzen wir diese Ausdrücke für \(y(t)\) und \(\dot{y}(t)\) in die Formeln für die kinetische und potentielle Energie ein, so erhalten wir:</p>
+    \begin{align}
+      E_{\mathrm{kin}}(t) &amp;= \frac{1}{2} m \cdot \left(-y_\mathrm{max} \cdot \omega \cdot \sin(\omega t)\right)^2 = \frac{1}{2} m \cdot y_\mathrm{max}^2 \cdot \omega^2 \cdot \sin^2(\omega t),\\
+      E_{\mathrm{pot}}(t) &amp;= \frac{1}{2} k \cdot \left(y_\mathrm{max} \cdot \cos(\omega t)\right)^2 = \frac{1}{2} k \cdot y_\mathrm{max}^2 \cdot \cos^2(\omega t).
+    \end{align}
+    <p>Die Gesamtenergie des Systems ist somit:</p>
+    \begin{equation}
+      E_{\mathrm{ges}}(t) = \frac{1}{2} m \cdot y_\mathrm{max}^2 \cdot \omega^2 \cdot \sin^2(\omega t) + \frac{1}{2} k \cdot y_\mathrm{max}^2 \cdot \cos^2(\omega t).
+    \end{equation}
+
+    <p>Unter Anwendung des Zusammenhangs \(\omega^2 = \frac{k}{m}\) können wir die Gesamtenergie vereinfachen:</p>
+    \begin{align}
+      E_{\mathrm{ges}}(t) &amp;= \frac{1}{2} m \cdot y_\mathrm{max}^2 \cdot \frac{k}{m} \cdot \sin^2(\omega t) + \frac{1}{2} k \cdot y_\mathrm{max}^2 \cdot \cos^2(\omega t)\\
+      &amp;= \frac{1}{2} k \cdot y_\mathrm{max}^2 \cdot \sin^2(\omega t) + \frac{1}{2} k \cdot y_\mathrm{max}^2 \cdot \cos^2(\omega t)\\
+      &amp;= \frac{1}{2} k \cdot y_\mathrm{max}^2 \cdot \left(\sin^2(\omega t) + \cos^2(\omega t)\right).
+    \end{align}
+    <p>Da für alle Zeiten \(t\) gilt, dass \(\sin^2(\omega t) + \cos^2(\omega t) = 1\), folgt:</p>
+    \begin{equation}
+      E_{\mathrm{ges}} = \frac{1}{2} k \cdot y_\mathrm{max}^2.
+    \end{equation}
+    <p>Die Gesamtenergie des Feder-Masse-Systems bleibt also während der Schwingung konstant und ist nur von der Federkonstante \(k\) und der Amplitude \(y_\mathrm{max}\) der Schwingung abhängig.</p>
+
+    <p>Dies gilt für alle harmonischen Schwingungssysteme ohne Reibung: Die Gesamtenergie bleibt konstant und ist nur von den systemabhängigen Parametern und der Amplitude der Schwingung abhängig. Innerhalb des Systems wird die Energie zwischen kinetischer und potenzieller Energie hin- und hergewandelt. Da die Ausdrücke für die Energien jeweils den Sinus und den Cosinus zum Quadrat enthalten, passiert der Energieaustausch mit der doppelten Frequenz der Schwingung.</p>
+</section>
