@@ -1,0 +1,679 @@
+<!-- ch_03_03_elektrodynamik_magnetismus.html — v0.13-Abschnitt 2.3
+     "Elektrodynamik und Magnetismus" (1:1-Transkription aus
+     Input/v0.13/pskript_em_elektrodynamik_und_magnetismus.tex).
+     TK 2 "Elektromagnetismus" (data-tk-num="2"), Section 2.3. Rein statisch.
+     7 Unterabschnitte 2.3.1–2.3.7, Gleichungen 2.3.1–2.3.96, 5 Beispiele
+     (2.3.1–2.3.5), 1 Zusammenfassung (2.3), 5 Abbildungen (Abb. 2.4–2.8).
+     KEIN Offset am h2: 2.3 folgt contiguous auf 2.2 (Abb. 2.3 -> 2.4…2.8,
+     Zusammenfassung 2.2 -> 2.3). Abbildungen: Abb. 2.4/2.5 aus tikzpicture
+     (standalone pdflatex), Abb. 2.6 = skript_Bfeldkreisspule.png (kopiert),
+     Abb. 2.7/2.8 aus Drehmoment_auf_Leiterschleife*.pdf (pdftocairo).
+     Querverweise auf 2.1 (p-2-1), 2.2 (p-2-2, p-2-2-1) + viele interne eq/fig.
+     Bewusste Korrektur eines Quell-Tippfehlers: in eq_lorentzkraft_allgemein
+     stand "\frac{q_B}\cdot I_A" (defektes \frac) -> als "q_B \cdot I_A"
+     gesetzt, so wie die identische Formel im "recall" (2.3.3) korrekt steht.
+     Nummerierungs-Kuriosum: die eq_lorentzkraft_superposition-align endet in
+     v0.13 mit einem ueberzaehligen "\\" vor \end{align}. amsmath erzeugt daraus
+     eine LEERE nummerierte Gleichung (das PDF zaehlt sie -> 2.3.2 hat 22 Gl.),
+     MathJax verwirft sie. Damit die Nummern deckungsgleich zum PDF bleiben
+     (sonst waere ab 2.3.23 alles um 1 versetzt), steht dort eine
+     "\phantom{x}"-Zeile, die die leere nummerierte Gleichung reproduziert. -->
+
+
+<section>
+    <h2 class="inhaltsverzeichnis">2.3 Elektrodynamik und Magnetismus</h2>
+    <p>Im Abschnitt <a class="xref" data-ref-sec="p-2-2"></a> haben wir uns mit den Kräften zwischen Ladungen beschäftigt, und mit den elektrischen Feldern, die unbewegte Ladungen erzeugen. Diesen Bereich des Elektromagnetismus haben wir mit dem Begriff der <strong>Elektrostatik</strong> bezeichnet. Im nächsten Abschnitt beschäftigen wir uns damit, was geschieht, wenn sich Ladungen bewegen. Wir werden den Begriff der <strong>Stromstärke</strong> und <strong>Stromdichte</strong> einführen und uns mit den Kräften zwischen zwei stromdurchflossenen Leitern beschäftigen.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.3.1 Stromstärke und Stromdichte</h3>
+<section>
+    <p>Im vorherigen Abschnitt hatten wir gesehen, dass eine statische Ladungsverteilung, zum Beispiel zwei geladene Kondensatorplatten, ein elektrisches Feld erzeugt. Schauen wir uns in diesem elektrischen Feld zwei Punkte \(A\) und \(B\) an, zum Beispiel jeweils einen Punkt auf einer der Platten des Kondesators, so herscht zwischen den beiden Punkte eine Potenzialdifferenz \(U_{AB}\), welche wir auch als Spannung bezeichnet haben. Diese Spannung liegt auch zwischen den Klemmen zweier Kabel an, die jeweils an einer Seite mit den Kondensatorplatten verbunden sind. Im Abschnitt <a class="xref" data-ref-sec="p-2-1"></a> hatten wir außerdem das Ohm'sche Gesetz kennengelernt, welches besagt, dass eine Spannung \(U\) einen Strom \(I\) verursacht, der proportional zur Spannung ist, wobei der Proportionalitätsfaktor der Widerstand \(R\) ist.</p>
+
+    <p>Dieser Strom \(I\) ist definiert als die Ladungsmenge, die pro Zeitintervall durch einen Querschnitt eines Leiters fließt:</p>
+    \begin{equation}
+    I = \frac{\text{d}Q}{\text{d}t}
+    \end{equation}
+    <p>Die Einheit der Stromstärke ist Ampere (\(1\,\mathrm{A} = 1\,\frac{\mathrm{C}}{\mathrm{s}}\)).</p>
+
+    <p>Ist die Stromstärke zeitlich konstant, so können wir die Formel auch als</p>
+    \begin{equation}
+    I = \frac{Q}{t}
+    \end{equation}
+    <p>schreiben, wobei \(Q\) die Ladungsmenge ist, die in der Zeit \(t\) durch den Querschnitt des Leiters fließt.</p>
+
+    <p>Die Stromstärke bezieht sich auf eine bestimmte Querschnittsfläche \(A\) eines Leiters und ist so definiert, dass die Stromstärke positiv ist, wenn positive Ladungen in Richtung der Flächennormale der Querschnittsfläche fließen, also von hinten nach vorne durch die Fläche. Fließen negative Ladungen in die entgegengesetzte Richtung, also von vorne nach hinten durch die Fläche, so ist die Stromstärke ebenfalls positiv. Andererseits ist die Stromstärke negativ, wenn positive Ladungen entgegen der Flächennormale fließen, also von vorne nach hinten durch die Fläche, oder wenn negative Ladungen in Richtung der Flächennormale fließen, also von hinten nach vorne durch die Fläche.</p>
+
+    <p>Die Defintion der Stromstärke orientiert sich also an der sogenannten <strong>technischen Stromrichtung</strong>, die davon ausgeht, dass positive Ladungen sich bewegen. Die jeweils entgegengesetzte Bewegungsrichtung nennt man die <strong>physikalische Stromrichtung</strong>, die so auf diese weise definiert worden ist, da man heute weiss, dass es in Metallen die negativen Elektronen sind, die sich bewegen, während die positiven Atomrümpfe fest im Metallgitter verankert sind.</p>
+
+    <p>Die Stromstärke ist jedoch eine skalare Größe, die zwar ein Vorzeichen, aber keine Richtung im Sinne eines Vektors besitzt. Daher muss man bei der Betrachtung von Stromstärken immer die Querschnittsfläche mitdenken und anhand der Konvention der technischen Stromrichtung entscheiden, in welche Richtung der Strom fließt.</p>
+
+    <p>Um dies zu vermeiden, definieren wir zusätzlich zur Stromstärke die <strong>Stromdichte</strong> \(\vec{j}\) als vektorielle Größe, die sowohl einen Betrag als auch eine Richtung besitzt. Mit der Stromdichte kommt man des Weiteren auch die Frage beantworten, wie dicht die Ladungsträger sich durch einen Leiter bewegen und welche Geschwindigkeit sie dabei besitzen.</p>
+
+    <p>Die Stromdichte \(\vec{j}\) ist definiert als der Strom pro Querschnittsfläche:</p>
+    \begin{equation}
+    \vec{j} = \frac{\text{d}I}{\text{d}A} \cdot \vec{n}_A
+    \end{equation}
+    <p>wobei \(\vec{n}_A\) der Einheitsnormalenvektor der Querschnittsfläche \(A\) ist<span class="fussnote">Also ein Vektor, der senkrecht auf der Querschnittfläche steht und die Länge 1 hat.</span>. Die Einheit der Stromdichte ist Ampere pro Quadratmeter (\(1\,\frac{\mathrm{A}}{\mathrm{m}^2}\)).</p>
+
+    <p>Setzt man die Defintion der Stromstärke in die Definition der Stromdichte ein, erhält man:</p>
+    \begin{equation}
+    \vec{j} = \frac{\text{d}}{\text{d}A} \left( \frac{\text{d}Q}{\text{d}t} \right) \cdot \vec{n}_A  \label{eq_stromdichte_def}
+    \end{equation}
+
+    <p>Elektrischer Strom ist die gerichtete Nettobewegung von elektrischen Ladungsträgern. In einem metallischen Leiter sind die beweglichen Ladungsträger die Elektronen, die sich mit einer mittleren Geschwindigkeit \(\vec{v}\) durch den Leiter bewegen.</p>
+
+    <p>Es gilt:</p>
+    \begin{equation}
+        \vec v = \frac{\text{d}x}{\text{d}t}\cdot \vec{n}_A \label{eq_driftgeschwindigkeit}
+    \end{equation}
+    <p>wobei \(\text{d}x\) die Strecke ist, die die Elektronen in der Zeit \(\text{d}t\) zurücklegen. Sie müssen sich klarmachen, dass es sich hierbei nicht um die Geschwindigkeit eines einzelnen Elektrons handelt, sondern um die mittlere Geschwindigkeit aller Leitungselektronen, die sich durch den Leiter bewegen. Diese mittlere Geschwindigkeit wird auch als <strong>Driftgeschwindigkeit</strong> bezeichnet. Diese Geschwindigkeit muss im Mittel in Richtung der Flächennormalen der Querschnittsfläche zeigen, da es sonst einen Nettostromfluss parallel zur Querschnittsfläche, also aus dem Leiter heraus oder in den Leiter hinein, geben würde, was nicht der Fall ist.</p>
+
+    <p>Multiplizieren wir nun die Gleichung <a class="xref" data-ref-eq="eq_driftgeschwindigkeit"></a> rechts und links mit \(\vec n_A\) und formen die erhaltene Gleichung um, so erhalten wir:</p>
+    \begin{equation}
+        \text{d}t = \frac{\text{d}x}{\vec{v}\cdot \vec n_A} \label{eq_zeitintervall_driftgeschwindigkeit}
+    \end{equation}
+
+    <p>Setzen wir nun die Gleichung <a class="xref" data-ref-eq="eq_zeitintervall_driftgeschwindigkeit"></a> in die Gleichung <a class="xref" data-ref-eq="eq_stromdichte_def"></a> ein, so erhalten wir:</p>
+    \begin{equation}
+    \vec{j} = \frac{\text{d}}{\text{d}A} \left( \frac{\text{d}Q}{\text{d}x} \cdot \frac{\vec{v}\cdot \vec n_A}{1} \right) \cdot \vec{n}_A
+    \end{equation}
+    <p>Dabei ist \(\frac{\text{d}Q}{\text{d}x}\) die Ladungsmenge pro Längeneinheit entlang der Bewegungsrichtung der Elektronen. Diese Größe wird als <strong>Längenladungsdichte</strong> \(\lambda\) bezeichnet, siehe Abschnitt <a class="xref" data-ref-sec="p-2-2-1"></a>. Das Skalarprodukt \(\vec{v}\cdot \vec n_A\) ist die mittlere Geschwindigkeit \(v\) der Elektronen durch die Fläche.</p>
+
+    <p>Somit können wir die Gleichung für die Stromdichte als</p>
+    \begin{equation}
+    \vec{j} = \frac{\text{d}}{\text{d}A} \left( \lambda \cdot (\vec{v}\cdot \vec n_A) \right) \cdot \vec{n}_A = v \cdot \frac{\text{d}\lambda}{\text{d}A} \cdot \vec{n}_A
+    \end{equation}
+    <p>umschreiben.</p>
+
+    <p>Zuguterletzt ist die Größe \(\frac{\text{d}\lambda}{\text{d}A}\) die <strong>Raumladungsdichte</strong> \(\rho\), siehe Abschnitt <a class="xref" data-ref-sec="p-2-2-1"></a>. Somit erhalten wir für die Stromdichte die Formel:</p>
+    \begin{equation}
+    \vec{j} = \rho \cdot v \cdot \vec n_A \label{eq_stromdichte_raumladungsdichte}
+    \end{equation}
+
+    <div class="beispiel" data-title="Die Driftgeschwindigkeit von Elektronen im Kupferkabel">
+        <p>Ein Kupferkabel, wie es für die Hausinstallation beützt wird, hat einen Querschnitt von \(1{,}0\,\mathrm{mm^2}\) und besitzt \(8{,}4\cdot 10^{19}\) Leitungselektronen (freie Elektronen, die zur elektrischen Stromleitung beitragen) pro Kubikmillimeter. Wie groß ist die Driftgeschwindigkeit der Elektronen, wenn durch das Kabel ein Strom von \(1{,}0\,\mathrm{A}\) fließt?</p>
+
+        <p><strong>Lösung:</strong> Wir gehen von einer konstanten Stromstärke, einer konstanten Stromdichte sowie einer konstanten Raumladungsdichte aus. Es ist nicht die Raumladungsdichte \(\rho\) gegeben, sondern die Zahl der Elektronen \(N\) pro Längeneinheit \(l\), also eine Längenanzahldichte \(n=\frac{N}{l}\) des Drahtes und die Querschnittsfläche. Wir müssen also zunächst die Raumladungsdichte \(\rho\) berechnen.</p>
+        \begin{equation}
+            \rho=\frac{Q}{V}=\frac{N\cdot e}{A\cdot l}
+        \end{equation}
+        <p>Außerdem ist nicht die Stromdichte gegeben, sondern die Stromstärke, die wie folgt mit der Stromdichte zusammenhängt:</p>
+        \begin{equation}
+            I=j\cdot A
+        \end{equation}
+        <p>Wir formen die Gleichung <a class="xref" data-ref-eq="eq_stromdichte_raumladungsdichte"></a> nach der Driftgeschwindigkeit \(v\) um und setzen die beiden vorherigen Gleichungen ein:</p>
+        \begin{equation}
+            v=\frac{j}{\rho}=\frac{I}{A}\cdot \frac{A}{n\cdot e}=\frac{I}{n\cdot e}
+        \end{equation}
+        <p>Setzen wir die gegebenen Werte ein, so erhalten wir:</p>
+        \begin{equation}
+            v=\frac{1{,}0\,\mathrm{A}}{8{,}4\cdot 10^{19}\,\mathrm{\frac{1}{mm}}\cdot 1{,}6\cdot 10^{-19}\,\mathrm{C}}=7{,}4\cdot 10^{-2}\,\mathrm{mm/s}
+        \end{equation}
+        <p>Die Elektronen bewegen sich also mit einer Driftgeschwindigkeit von nur etwa \(0{,}074\,\mathrm{mm/s}\) durch das Kupferkabel. Dies ist erstaunlich langsam und widerspricht auf den ersten Blick der Intiution und Alltagserfahrung. Wenn ich auf den Lichtschalter drücke, dann geht doch mehr oder weniger, für den Menschen nicht oder kaum merkbar, sofort das Licht an. Wie kann das sein, wenn sich die Elektronen doch so langsam bewegen?</p>
+
+        <p>Das liegt daran, dass es zwar nicht der elektrische Strom ist, der sehr schnell fließt, aber das elektrische Feld, welches die Elektronen in Bewegung setzt. Dieses Feld breitet sich mit Lichtgeschwindigkeit aus. Sobald der Schalter betätigt wird, breitet sich das elektrische Feld mit Lichtgeschwindigkeit durch die Leitungen aus und setzt die Elektronen, also auch die, die sich schon im Kabel in der oder in der Nähe der Lichtquelle befinden, in Bewegung.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.3.2 Die Lorentzkraft</h3>
+<section>
+    <p>Bewegen sich Ladungen in einem elektrischen Feld, so erfahren sie eine Kraft, die wir als <strong>Coulomb-Kraft</strong> kennengelernt haben. Bewegen sich jedoch Ladungen relativ zueinander, so erfahren sie zusätzlich zur Coulomb-Kraft eine weitere Kraft, die wir als <strong>Lorentzkraft</strong> bezeichnen.</p>
+
+    <h4>Die Lorentzkraft zwischen zwei parallelen Leitern - Einführung</h4>
+    <p>Folgendes wird beobachtet: Verlaufen zwei stromdurchflossene Leiter parallel zueinander, so ziehen Sie sich entweder an oder stoßen sich ab. Dabei kann man eine Abstoßung beobachten, wenn die beiden Leiter in Reihe geschaltet sind, also der Strom in beiden Leitern in unterschiedliche Richtungen fließt. Sind die Leiter parallel geschaltet, also der Strom in beiden Leitern fließt in die gleiche Richtung, so ziehen sich die Leiter an.</p>
+
+    <p>Diese Beobachtungen sind in Abbildung <a class="xref" data-ref-fig="fig-em_kraft_parallele_leiter"></a> zusammengefasst.</p>
+
+    <figure class="abbildung" id="fig-em_kraft_parallele_leiter">
+        <img class="grafik" style="width:45%" src="bilder/em_kraft_parallele_leiter.png" alt="">
+        <figcaption>Kraftwirkung zwischen zwei parallelen, stromdurchflossenen Leitern. Oben: Bei gleicher Stromrichtung ziehen sich die Leiter an. Unten: Bei entgegengesetzter Stromrichtung stoßen sie sich ab.</figcaption>
+    </figure>
+
+    <h4>Die Lorentzkraft auf eine parallel zum Leiter bewegte Ladung</h4>
+    <p>Um die Beobachtungen zu erklären, müssen wir zunächst uns ansehen, welche Kraft ein stromdurchflossener Leiter auf eine einzelne Ladung ausübt, die sich parallel zum Leiter bewegt. Diese Situation ist in Abbildung <a class="xref" data-ref-fig="fig-em_lorentzkraft_ladung"></a> dargestellt.</p>
+
+    <figure class="abbildung" id="fig-em_lorentzkraft_ladung">
+        <img class="grafik" style="width:40%" src="bilder/em_lorentzkraft_ladung.png" alt="">
+        <figcaption>Lorentzkraft auf eine positive Ladung \(q\), die sich parallel zur Stromrichtung bewegt.</figcaption>
+    </figure>
+
+    <p>Der Leiter selbst ist - auch wenn er Strom führt - elektrisch neutral, da sich die Elektronen zwar verschieben, es aber pro Längenabschnitt des Leiters genauso viele positive Atomrümpfe wie negative Elektronen gibt. Somit übt der Leiter keine Coulomb-Kraft auf die Ladung \(q\) aus. Dennoch wirkt eine Kraft auf die Ladung.</p>
+
+    <p>Man beobachtet das folgende:</p>
+    <ul>
+        <li>Die Kraft ist entweder zum Leiter hin oder vom Leiter weg gerichtet, je nachdem, ob die Ladung positiv oder negativ ist.</li>
+        <li>Je größer der Strom \(I\) im Leiter ist, desto größer ist die Kraft auf die Ladung.</li>
+        <li>Je schneller sich die Ladung mit der Geschwindigkeit \(\vec{v}\) parallel zum Leiter bewegt, desto größer ist die Kraft auf die Ladung.</li>
+        <li>Je größer der Abstand \(r\) zwischen Leiter und Ladung ist, desto kleiner ist die Kraft auf die Ladung.</li>
+        <li>Je größer die Ladung \(q\) ist, desto größer ist die Kraft auf die Ladung.</li>
+    </ul>
+
+    <p>Folgende Proportionalitäten lassen sich beobachten:</p>
+    \begin{align}
+        \vec{F}_L &amp;\propto q \label{eq_lorentzkraft_propto_q} \\[6pt]
+        \vec{F}_L &amp;\propto I \label{eq_lorentzkraft_propto_I} \\[6pt]
+        \vec{F}_L &amp;\propto v \label{eq_lorentzkraft_propto_v} \\[6pt]
+        \vec{F}_L &amp;\propto \frac{1}{r} \label{eq_lorentzkraft_propto_r}
+    \end{align}
+
+    <p>Zusammengefasst gilt also:</p>
+    \begin{equation}
+        \vec{F}_L \propto \frac{q \cdot I \cdot v}{r} \label{eq_lorentzkraft_proportionalitaeten}
+    \end{equation}
+
+    <p>Fehlt nur noch eine passende Proportionalitätskonstante, um eine Gleichung für die Lorentzkraft aufzustellen. Diese Proportionalitätskonstante ist</p>
+    \begin{equation}
+        \mu_0/(2\pi)= 2\cdot 10^{-7}\,\mathrm{\frac{N}{A^2}}\quad\text{mit}\quad \mu_0 = 1{,}2566\cdot 10^{-6}\,\mathrm{\frac{kg \cdot m}{s^2\cdot A^2}} \label{eq_mu0}
+    \end{equation}
+
+    <p>Ähnlich wie der Coulombkraft ist die Proportionalitätskonstante zusammengesetzt aus einer fundamentalen Naturkonstante \(\mu_0\), die als <strong>magnetische Feldkonstante</strong> oder <strong>Permeabilität des Vakuums</strong> bezeichnet wird, und einem geometrischen Faktor \(2\cdot \pi\), der aus der Zylindersymmetrie des Leiters resultiert<span class="fussnote">Analog zum Faktor \(4 \cdot pi\) in der Coulombkraft, der aus der Kugelsymmetrie einer Punktladung resultiert.</span>.</p>
+
+    <h4>Herleitung: Die Lorentzkraft zwischen zwei parallelen Leitern</h4>
+    <p>Es gibt also eine Kraft zwischen einem stromdurchflossenen Leiter und einer bewegten Ladung. Da Stromfluss selbst nichts anderes ist als die Bewegung von Ladungen, muss es also auch eine Kraft zwischen zwei stromdurchflossenen Leitern geben, die umso größer ist, je mehr Ladungsträger sich bewegen, also um so größer ist, je größer die Stromstärke in den Leitern ist.</p>
+
+    <p>Für die Kräfte zwischen einem stromdurchflossenen Leiter (nennen wir ihn Leiter \(B\)) und <strong>allen</strong> Ladungen in einem anderen stromdurchflossenen Leiter (nennen wir ihn Leiter \(A\)) gilt einerseits der Schwerpunktsatz sowie das Superpositionsprinzip. Somit können wir die Kraft, die Leiter \(B\) auf Leiter \(A\) ausübt, berechnen, indem wir die Kräfte auf alle einzelnen Ladungen in Leiter \(A\) aufsummieren.</p>
+
+    \begin{align}
+        \vec{F}_{BA,\text{ges}}&amp;=\sum_{i} \vec{F}_{L,i} \label{eq_lorentzkraft_superposition}\\[6pt]
+        &amp;= \sum_{i} \frac{\mu_0}{2\pi} \cdot \frac{q_i \cdot I_B \cdot v_i}{r_i}\\[6pt]
+        &amp;= \frac{\mu_0}{2\pi} \cdot \frac{I_B}{r} \cdot \sum_{i} q_i \cdot v_i \label{eq_lorentzkraft_aufsummieren}\\[6pt]
+        \phantom{x}
+    \end{align}
+
+    <p>Gehen wir davon aus, dass alle Ladungsträger im Leiter \(A\) im Mittelwert die gleiche Driftgeschwindigkeit \(v\) besitzen und der Abstand \(r\) zwischen den Leitern überall gleich ist, und dass die Summe über alle Ladungen \(q_i\) im Leiter \(A\) gerade die Gesamtladung \(Q_A\) des Leiters \(A\) ergibt, so können wir die Gleichung <a class="xref" data-ref-eq="eq_lorentzkraft_aufsummieren"></a> als</p>
+    \begin{equation}
+        \vec{F}_{BA,\text{ges}} = \frac{\mu_0}{2\pi} \cdot \frac{I_B}{r} \cdot Q_A \cdot v \label{eq_lorentzkraft_gesamtladung}
+    \end{equation}
+    <p>umschreiben.</p>
+
+    <p>Erinnern wir uns nun an die Stromdichte! Dort haben wir den Zusammenhang gefunden:</p>
+    \begin{equation}
+        j = \rho \cdot v \label{eq_stromdichte_raumladungsdichte_erinnerung}
+    \end{equation}
+
+    <p>In der Gesamtkraft (Gleichung <a class="xref" data-ref-eq="eq_lorentzkraft_gesamtladung"></a>) taucht auch die Geschwindigkeit \(v\) der Ladungsträger auf, jedoch die Gesamtladung statt der Ladungsdichte. Wir können jedoch die Gesamtladung \(Q_A\) des Leiters \(A\) auch als Produkt aus der Raumladungsdichte \(\rho\) und dem Volumen \(V\) des Leiters schreiben:</p>
+    \begin{equation}
+        Q_A = \rho \cdot V \label{eq_gesamtladung_raumladungsdichte}
+    \end{equation}
+    <p>Setzen wir dies in die Gleichung <a class="xref" data-ref-eq="eq_lorentzkraft_gesamtladung"></a> ein, so erhalten wir:</p>
+    \begin{equation}
+        \vec{F}_{BA,\text{ges}} = \frac{\mu_0}{2\pi} \cdot \frac{I_B}{r} \cdot \rho \cdot V \cdot v \label{eq_lorentzkraft_mit_volumen}
+    \end{equation}
+
+    <p>Der Faktor \(\rho \cdot v\) in der Gleichung <a class="xref" data-ref-eq="eq_lorentzkraft_mit_volumen"></a> ist genau wieder die Stromdichte, welche ihrerseits gleich der Stromstärke pro Querschnittsfläche ist:</p>
+    \begin{equation}
+        \rho \cdot v = j = \frac{I_A}{A} \label{eq_stromdichte_stromstaerke_querschnitt}
+    \end{equation}
+
+    <p>Stellen wir uns nun noch den Leiter als einen Zylinder mit Grundfläche \(A\) und Länge \(l\) vor, so ist das Volumen des Leiters gerade:</p>
+    \begin{equation}
+        V = A \cdot l \label{eq_volumen_zylinder}
+    \end{equation}
+
+    <p>Somit können wir in der Gleichung <a class="xref" data-ref-eq="eq_lorentzkraft_mit_volumen"></a> die Terme \(\rho \cdot v\) und \(V\) durch die Gleichungen <a class="xref" data-ref-eq="eq_stromdichte_stromstaerke_querschnitt"></a> und <a class="xref" data-ref-eq="eq_volumen_zylinder"></a> ersetzen und erhalten:</p>
+    \begin{equation}
+        \vec{F}_{BA,\text{ges}} = \frac{\mu_0}{2\pi} \cdot \frac{I_B}{r} \cdot \frac{I_A}{A} \cdot A \cdot l
+    \end{equation}
+    <p>Kürzen wir die Querschnittsfläche \(A\) heraus, so erhalten wir:</p>
+    \begin{equation}
+        \vec{F}_{BA,\text{ges}} = \frac{\mu_0}{2\pi} \cdot \frac{I_A \cdot I_B}{r} \cdot l \label{eq_lorentzkraft_endformel}
+    \end{equation}
+
+    <p>Das ist die Formel für den Betrag der Lorentzkraft zwischen zwei stromdurchflossenen Leitern der Länge \(l\), die den Abstand \(r\) zueinander haben und die Stromstärken \(I_A\) und \(I_B\) führen.</p>
+
+    <p>Die Richtung können wir berücksichtigen, indem wir noch mit dem Einheitsvektor in Verbinungsrichtung multiplizieren:</p>
+    \begin{equation}
+        \vec{F}_{BA,\text{ges}} =-\frac{\mu_0}{2\pi} \cdot \frac{I_A \cdot I_B}{r} \cdot l \cdot \frac{\vec r_{BA}}{\vert \vec r_{BA}\vert}\label{eq_lorentzkraft_endformel_richtung}
+    \end{equation}
+
+    <p>Das Minus sorgt für die korrekte Richtung der Kraft, da der Vektor \(\vec r_{BA}\) vom Leiter \(B\) zum Leiter \(A\) zeigt, die Kraft aber in die entgegengesetzte Richtung wirkt, also von \(A\) nach \(B\), wenn die Ströme parallel fließen.</p>
+
+    <p>Zuguterletzt müssen wir noch über die Bedeutung von \(l\) sprechen, der Länge, die in der Gleichung <a class="xref" data-ref-eq="eq_lorentzkraft_endformel_richtung"></a> auftaucht. \(l\) gibt die Länge an, über die die beiden Leiter parallel zueinander verlaufen.</p>
+
+    <h4>Lorentzkraft auf eine in beliebiger Richtung bewegte Ladung</h4>
+    <p>Zunächst hatten wir der Einfachheit halber nur die Lorentzkraft auf eine Ladung betrachtet, die sich parallel zu einem stromdurchflossenen Leiter bewegt. Das ist natürlich ein sehr eingeschränkter Sonderfall. Im Allgemeinen kann sich eine Ladung in beliebiger Richtung relativ zu einem stromdurchflossenen Leiter bewegen.</p>
+
+    <p>Nehmen wir an, dass der Stromfluss durch einen irgendwie im Raum orientierten Leiter \(A\) ausgedrückt werden kann durch den Stromdichtenvektor \(\vec{j}\) und dass sich ein Ladungsträger \(B\) an einem Ort, den wir relativ zum Leiter durch den Ortsvektor \(\vec{r}_{BA}\) beschreiben, mit der Geschwindigkeit \(\vec{v_B}\) bewegt. Dann kann die Lorentzkraft auf die Ladung \(q_B\) wie folgt ausgedrückt werden:</p>
+    \begin{equation}
+        \vec{F}_{L,AB} = \frac{\mu_0}{2\pi} \cdot q_B \cdot I_A \cdot \left( \vec v_B \times \left( \frac{\vec j_B}{\vert \vec j_B \vert} \times \frac{\vec r_{BA}}{\vert \vec r_{BA} \vert^2} \right) \right) \label{eq_lorentzkraft_allgemein}
+    \end{equation}
+
+    <p>Beachten Sie, dass der Vektor \(\frac{\vec j_B}{\vert \vec j_B \vert}\) hier als Einheitsvektor in technischer Stromrichtung fungiert, die Stromstärke selbst als \(I_A\) in der Gleichung auftaucht.</p>
+
+    <div class="beispiel" data-title="Die Lorentzkraft zwischen zwei parallelen Leitern und die Defintion des Ampere">
+        <p>Zwei lange, parallele Leiter sind \(1{,}0\,\mathrm{m}\) voneinander entfernt und führen jeweils einen Strom von \(1{,}0\,\mathrm{A}\). Berechnen Sie die Kraft pro Meter Länge, die jeder Leiter auf den anderen ausübt.</p>
+
+        <p><strong>Lösung:</strong> Wir verwenden die Gleichung <a class="xref" data-ref-eq="eq_lorentzkraft_endformel"></a> für die Lorentzkraft zwischen zwei parallelen Leitern:</p>
+        \begin{equation}
+            \vec{F}_{BA,\text{ges}} = \frac{\mu_0}{2\pi} \cdot \frac{I_A \cdot I_B}{r} \cdot l
+        \end{equation}
+        <p>Setzen wir die gegebenen Werte ein, so erhalten wir:</p>
+        \begin{equation}
+            \vec{F}_{BA,\text{ges}} = \frac{1{,}2566\cdot 10^{-6}\,\mathrm{\frac{kg \cdot m}{s^2\cdot A^2}}}{2\pi} \cdot \frac{1{,}0\,\mathrm{A} \cdot 1{,}0\,\mathrm{A}}{1{,}0\,\mathrm{m}} \cdot 1{,}0\,\mathrm{m} = 2{,}0\cdot 10^{-7}\,\mathrm{N}
+        \end{equation}
+
+        <p>Das ist die ursprüngliche Definition des Ampere: Zwei parallele Leiter, die \(1{,}0\,\mathrm{m}\) voneinander entfernt sind, üben eine Kraft von \(2{,}0\cdot 10^{-7}\,\mathrm{N}\) pro Meter Länge aufeinander aus, wenn sie jeweils einen Strom von \(1{,}0\,\mathrm{A}\) führen.</p>
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.3.3 Die magnetische Induktion</h3>
+<section>
+    <p>Im Kapitel zur Gravitationskraft und auch im Kapitel zur Coulombkraft haben wir uns mit einer Idee beschäftigt: was wäre, wenn wir die Kraftwirkung eines Objektes auf ein anderes Objekt nicht direkt als Kraft ausdrücken, sondern uns stattdessen das ein Objekt als Quelle eines Feldes ansehen, unter dessen Einfluss das zweite Objekt eine Kraft erfährt? Wäherend die Kraft immer, als Wechselwirkung, von den Eigenschaften beider Objekte abhängt, hinge dann das Feld nur von den Eigenschaften des felderzeugenden Objektes ab.</p>
+
+    <p>Das Feld der Coulombkraft haben wir als das elektrische Feld bezeichnet, das Feld einer Ladung konnte errechnet werden aus dem Quotienten der konkreten Coulombkraft auf eine fiktive Probeladung geteilt durch die Ladungsmenge dieser Probeladung. Das Feld der Gravitationskraft haben wir als das Gravitationsbeschleunigungsfeld bezeichnet, das Feld einer Masse konnte errechnet werden aus dem Quotienten der konkreten Gravitationskraft auf eine fiktive Probemasse geteilt durch die Masse dieser Probemasse. In beiden Feldern mussten wir die Kraft durch eine konkrete Eigenschaft eines (fiktiven) zweiten Objektes teilen, um das Feld zu definieren. Das sich ergebende Feld hing dann vom konkreten Ort im Raum ab, der betrachet wird, das Feld war also eine Eigenschaft des Raumes an diesem Ort:</p>
+    \begin{equation}
+        \vec{E}(\vec r) = \frac{\vec{F}_C(\vec r)}{q} \quad\quad\quad\quad \vec{g}(\vec r) = \frac{\vec{F}_G(\vec r)}{m}
+    \end{equation}
+
+    <p>Diese Idee wollen wir nun auf die Lorentzkraft übertragen. Schauen wir uns dazu die Lorentzkraft eines stromdurchflossenen Leiters \(A\) auf eine bewegte Ladung \(q_B\) an, wie sie in Gleichung <a class="xref" data-ref-eq="eq_lorentzkraft_allgemein"></a> beschrieben ist:</p>
+    \begin{equation}
+        \vec{F}_{L,AB} = \frac{\mu_0}{2\pi} \cdot {q_B}\cdot I_A \cdot \left( \vec v_B \times \left( \frac{\vec j_B}{\vert \vec j_B \vert} \times \frac{\vec r_{BA}}{\vert \vec r_{BA} \vert^2} \right) \right) \label{eq_lorentzkraft_allgemein_recall}
+    \end{equation}
+
+    <p>Die Kraft hängt also von verschiedenen Eigenschaften des Leiters \(A\) ab (Stromstärke \(I_A\), Richtung des Stroms \(\frac{\vec j_B}{\vert \vec j_B \vert}\)), und von verschiedenen Eigenschaften der bewegten Ladung \(B\) (Ladungsmenge \(q_B\), Geschwindigkeit \(\vec v_B\)). Zuguterletzt hängt die Kraft auch noch vom Abstandsvektor \(\vec r_{BA}\) ab, der die räumliche Beziehung zwischen den beiden Objekten beschreibt.</p>
+
+    <p>Die magnetische Induktion \(\vec{B}\) ist nun definiert als der Teil der Lorentzkraft, der nur von den Eigenschaften des stromdurchflossenen Leiters \(A\),</p>
+
+    \begin{equation}
+        \vec{B}_A(\vec r) = \frac{\mu_0}{2\pi} \cdot I_A \cdot \left( \frac{\vec j_B}{\vert \vec j_B \vert} \times \frac{\vec r}{\vert \vec r \vert^2} \right) \label{eq_magnetische_induktion},
+    \end{equation}
+    <p>wobei \(\vec r\) hier der Ortsvektor ist, der den Ort beschreibt, an dem die magnetische Induktion betrachtet wird, dabei ist \(\vec r\) die kürzeste Verbindung vom Leiter zum betrachteten Ort.</p>
+
+    <p>Der Zusammenhang zwischen der Lorentzkraft auf eine bewegte Ladung \(q_B\) und der magnetischen Induktion \(\vec{B}_A\) des Leiters \(A\) ist dann:</p>
+    \begin{equation}
+        \vec{F}_{L,AB} = q_B \cdot \left(\vec v_B \times \vec{B}_A(\vec r_{BA})\right) \label{eq_lorentzkraft_mit_b}
+    \end{equation}
+
+    <p>Die magnetische Induktion \(\vec{B}\) ist also eine Eigenschaft des Raumes an einem Ort \(\vec r\), die nur von den Eigenschaften des stromdurchflossenen Leiters abhängt. Die Lorentzkraft auf eine bewegte Ladung \(q_B\) an diesem Ort ergibt sich dann aus dem Kreuzprodukt der Geschwindigkeit der Ladung mit der magnetischen Induktion, multipliziert mit der Ladungsmenge. Die magnetische Induktion hat also eine ähnliche Rolle wie das elektrische Feld oder das Gravitationsbeschleunigungsfeld, allerdings mit dem Unterschied, dass die Kraftwirkung nicht nur von einer Eigenschaft des zweiten Objektes abhängt (Ladungsmenge oder Masse), sondern von zwei Eigenschaften (Ladungsmenge und Geschwindigkeit). Die magnetische Induktion wird auch als <strong>B-Feld</strong> bezeichnet. Die Einheit der magnetischen Induktion ist das Tesla:</p>
+    \begin{equation}
+        \left[ \vec{B} \right] = \mathrm{T} = \mathrm{\frac{N \cdot s}{C \cdot m}}
+    \end{equation}
+
+    <div class="beispiel" data-title="Berechnung der magnetischen Induktion eines stromdurchflossenen Leiters">
+        <p>Ein langer, gerader Leiter, der entlang der \(z\)-Achse eines Koordinatensystems liegt, führt einen Strom von \(3{,}0\,\mathrm{A}\). Berechnen Sie die magnetische Induktion in einem Punkt, der \(0{,}5\,\mathrm{m}\) vom Leiter entfernt ist. Der Punkt liegt senkrecht zum Leiter.</p>
+        <p><strong>Lösung:</strong> Zunächst überlegen wir uns: macht es einen Unterschied, in welcher Richtung vom Leiter aus gesehen der betrachtete Punkt liegt? Ja und Nein. Der Betrag der magnetischen Induktion hängt nur vom Abstand ab, nicht von der Richtung. Die Richtung der magnetischen Induktion hängt jedoch von der Richtung des Stroms im Leiter und der Richtung vom Leiter zum betrachteten Punkt ab. Die Richtung der magnetischen Induktion kann man über das Kreuzprodukt in Gleichung <a class="xref" data-ref-eq="eq_magnetische_induktion"></a> mithilfe der rechten-Hand-Regel bestimmen, wobei der Daumen in Stromrichtung zeigt und der Zeigefinger in Richtung vom Leiter zum betrachteten Punkt. Der Mittelfinger zeigt dann in Richtung der magnetischen Induktion. Dreht man den Zeigeringer, also die Richtung vom Leiter zum Punkt, so ändert sich auch die Richtung der magnetischen Induktion entsprechend. Sie zeigt immer senkrecht zur Ebene, die durch den Leiter und den betrachteten Punkt aufgespannt wird, und damit immer tangential zu einem Kreis um den Leiter.</p>
+
+        <p>Das bedeutet: egal in welche Richtung der Punkt liegt, der Betrag der magnetischen Induktion ist immer gleich und der Vektor der magnetischen Induktion zeigt immer tangential zu einem Kreis um den Leiter. Die magentische Indukltion ist also zylindersymmetrisch um den Leiter, das heisst, man kann den Leiter beliebig um einen Winkel drehen, ohne dass sich die magnetische Induktion ändert.</p>
+
+        <p>Nun zur Berechnung des Betrags der magnetischen Induktion. Wir verwenden Gleichung <a class="xref" data-ref-eq="eq_magnetische_induktion"></a>:</p>
+        \begin{equation}
+            \vec{B}_A(\vec r) = \frac{\mu_0}{2\pi} \cdot I_A \cdot \left( \frac{\vec j_B}{\vert \vec j_B \vert} \times \frac{\vec r}{\vert \vec r \vert^2} \right)
+        \end{equation}
+        <p>Der Betrag des Kreuzprodukts zweier Einheitsvektoren ist immer 1, wenn die Vektoren senkrecht zueinander stehen, was hier der Fall ist. Somit vereinfacht sich die Gleichung für den Betrag der magnetischen Induktion zu:</p>
+        \begin{equation}
+            B_A(r) = \frac{\mu_0}{2\pi} \cdot I_A \cdot \frac{1}{r}
+        \end{equation}
+        <p>Setzen wir die gegebenen Werte ein, so erhalten wir:</p>
+        \begin{equation}
+            B_A(r) = \frac{1{,}2566\cdot 10^{-6}\,\mathrm{\frac{kg \cdot m}{s^2\cdot A^2}}}{2\pi} \cdot \frac{3{,}0\,\mathrm{A}}{0{,}5\,\mathrm{m}} = 1{,}2\cdot 10^{-6}\,\mathrm{T}
+        \end{equation}
+        <p>Angenommen, wir betrachten einen Punkt in der \(x\)-\(y\)-Ebene, die vom Leiter durchdrungen wird, dann kann der Ortsvektor \(r\) ausgedrückt werden als</p>
+        \begin{equation}
+            \vec r = R \cdot \begin{pmatrix} \cos(\varphi) \\ \sin(\varphi) \\ 0 \end{pmatrix} \quad\quad\quad\quad\text{mit}\quad R = \vert \vec r \vert.
+        \end{equation}
+        <p>Damit ist der Einheitsvektor in Richtung \(\vec r\), den wir zum Berechnen der Richtung der magnetischen Induktion benötigen, gegeben durch</p>
+        \begin{equation}
+            \frac{\vec r}{\vert \vec r \vert} = \begin{pmatrix} \cos(\varphi) \\ \sin(\varphi) \\ 0 \end{pmatrix}
+        \end{equation}
+        <p>Der Einheitsvektor in Stromrichtung (entlang der \(z\)-Achse) ist gegeben durch</p>
+        \begin{equation}
+            \frac{\vec j_B}{\vert \vec j_B \vert} = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}
+        \end{equation}
+        <p>Die Richtung der magnetischen Induktion ergibt sich aus dem Kreuzprodukt dieser beiden Einheitsvektoren:</p>
+        \begin{equation}
+            \frac{\vec j_B}{\vert \vec j_B \vert} \times \frac{\vec r}{\vert \vec r \vert} = \begin{pmatrix} -\sin(\varphi) \\ \cos(\varphi) \\ 0 \end{pmatrix}
+        \end{equation}
+        <p>Somit ist die magnetische Induktion in Vektorform gegeben durch:</p>
+        \begin{equation}
+            \vec{B}_A(\vec r) = B_A(R) \cdot \begin{pmatrix} -\sin(\varphi) \\ \cos(\varphi) \\ 0 \end{pmatrix} = \frac{\mu_0}{2\pi} \cdot I_A \cdot \frac{1}{R} \cdot \begin{pmatrix} -\sin(\varphi) \\ \cos(\varphi) \\ 0 \end{pmatrix}
+        \end{equation}
+
+        <p>Durch Bildung des Skalarprodukts mit dem Ortsvektor \(\vec r\) können Sie sich davon überzeugen, dass die magnetische Induktion tatsächlich tangential zu einem Kreis um den Leiter zeigt:</p>
+        \begin{equation}
+            \vec{B}_A(\vec r) \cdot \vec r = 0
+        \end{equation}
+
+        <p>Man sagt: Das B-Feld bildet konzentrische Kreise um den Leiter, dabei nimmt die Feldstärke mit zunehmendem Abstand vom Leiter ab und der Feldvektor steht immer tangential zu diesen Kreisen. Die Richtung des B-Feldes kann mit der Korkenzieher-rechte-Hand-Regel bestimmt werden: Wenn der Daumen der rechten Hand in Stromrichtung zeigt, dann zeigen die gekrümmten Finger in die Richtung des B-Feldes.</p>
+    </div>
+
+    <p>Analog zu den elektrischen Feldlinien, die die Richtung des elektrischen Feldes anzeigen, können wird die magnetische Induktion im Raum über <strong>magnetischen Feldlinien</strong> darstellen. Für magnetische Feldlinien gilt:</p>
+    <ul>
+        <li>Die Richtung der magnetischen Feldlinien entspricht der Richtung der magnetischen Induktion.</li>
+        <li>Die Dichte der magnetischen Feldlinien entspricht der Stärke der magnetischen Induktion.</li>
+        <li>Magnetische Feldlinien sind immer geschlossen, sie beginnen und enden also nie.</li>
+    </ul>
+
+    <p>Insbesondere der letzte Punkt unterscheidet magnetische Feldlinien von elektrischen Feldlinien, die in der Elektrostatik immer an einer Ladung beginnen oder enden. Magnetische Feldlinien hingegen bilden immer geschlossene Schleifen, da es keine magnetischen Monopole gibt (also keine isolierten magnetischen Nord- oder Südpole). Das ist der Grund für ein Phänomen, dass Sie vielleicht schon kennnen: wenn man einen Stabmageneten in zwei Hälften schneidet<span class="fussnote">Achtung: das ist nur ein Gedankenexperiment und Sie sollten dies nicht in der Praxis ausprobieren, da Sie sich dabei verletzen können!</span>, so entstehen nicht zwei einzelne Magnete mit jeweils einem Nord- und einem Südpol, sondern es entstehen zwei neue Stabmagneten, die jeweils wieder einen Nord- und einen Südpol besitzen. Teilt man nochmal, passiert wieder dasselbe!</p>
+
+    <div class="beispiel" data-title="Kraft eines Leiters auf eine bewegte Ladung über das B-Feld">
+        <p>Angenommen, ein stromdurchflossener Leiter \(A\) führt einen Strom von \(1{,}00\,\mathrm{kA}\) durch den Ursprung eines Koordinatensystems entlang der \(z\)-Achse. Eine Ladung \(q_B\) mit \(1\cdot e\) bewegt sich relativ zu dem Leiter mit einer Geschwindigkeit von \(\vec v_B = \begin{pmatrix} 0{,}0 \\ 0{,}0 \\ 1{,}0 \end{pmatrix} \cdot \mathrm{m/s}\). Wir möchten die Kraft auf die Ladung berechnen, in dem Moment, in dem sie sich im Punkt \(\vec r = \begin{pmatrix} 1{,}0 \\ -2{,}0 \\ 3{,}0 \end{pmatrix} \cdot \mathrm{m}\) befindet.</p>
+
+        <p><strong>Lösung:</strong> Zunächst bestimmen wir die geometrischen Größen. Da der Leiter entlang der \(z\)-Achse verläuft, ist das Quadrat des senkrechten Abstands \(r_\perp\) gegeben durch die \(x\)- und \(y\)-Komponenten des Ortsvektors:</p>
+        \begin{equation}
+            r_\perp^2 = 1{,}0^2 + (-2{,}0)^2 = 5{,}0 \cdot \mathrm{m^2}
+        \end{equation}
+        <p>Der Einheitsvektor in Stromrichtung ist \(\vec{e}_z = (0, 0, 1)^T\).</p>
+
+        <p>Die magnetische Induktion \(\vec{B}_A\) eines unendlich langen Leiters im Punkt \(\vec{r}\) lautet allgemein:</p>
+        \begin{equation} \label{eq:B_feld_allg}
+            \vec{B}_A(\vec r) = \frac{\mu_0 \cdot I_A}{2\pi \cdot r_\perp^2} \cdot \left( \vec{e}_z \times \vec r \right)
+        \end{equation}
+        <p>Die Lorentzkraft auf die Ladung \(q_B\) ist gegeben durch:</p>
+        \begin{equation} \label{eq:lorentzkraft}
+            \vec{F}_{L,AB} = q_B \cdot \left(\vec v_B \times \vec{B}_A(\vec r)\right)
+        \end{equation}
+        <p>Wir setzen nun Gleichung (<a class="xref" data-ref-eq="eq:B_feld_allg"></a>) in Gleichung (<a class="xref" data-ref-eq="eq:lorentzkraft"></a>) ein, um einen geschlossenen Ausdruck für die Kraft zu erhalten, ohne Zwischenwerte zu berechnen:</p>
+        \begin{equation}
+            \vec{F}_{L,AB} = \frac{\mu_0 \cdot I_A \cdot q_B}{2\pi \cdot r_\perp^2} \cdot \left[ \vec v_B \times \left( \vec{e}_z \times \vec r \right) \right]
+        \end{equation}
+        <p>Nun setzen wir die Zahlenwerte und Vektoren ein. Der Vorfaktor fasst alle Skalare zusammen:</p>
+        \begin{align}
+            \vec{F}_{L,AB} &amp;= \frac{1{,}2566\cdot 10^{-6} \, \mathrm{N/A^2} \cdot 1{,}00\cdot 10^3\,\mathrm{A} \cdot 1{,}602\cdot 10^{-19}\,\mathrm{C}}{2\pi \cdot 5{,}0\,\mathrm{m^2}} \\[6pt]
+            &amp;\quad \cdot \left[ \left( \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \mathrm{\frac{m}{s}} \right) \times \left( \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \times \begin{pmatrix} 1{,}0 \\ -2{,}0 \\ 3{,}0 \end{pmatrix} \mathrm{m} \right) \right]
+        \end{align}
+        <p>Wir berechnen zunächst das innere Kreuzprodukt (B-Feld-Richtung):</p>
+        \begin{equation}
+            \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \times \begin{pmatrix} 1{,}0 \\ -2{,}0 \\ 3{,}0 \end{pmatrix} = \begin{pmatrix} 2{,}0 \\ 1{,}0 \\ 0 \end{pmatrix}
+        \end{equation}
+        <p>Anschließend das äußere Kreuzprodukt (Kraft-Richtung):</p>
+        \begin{equation}
+            \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \times \begin{pmatrix} 2{,}0 \\ 1{,}0 \\ 0 \end{pmatrix} = \begin{pmatrix} -1{,}0 \\ 2{,}0 \\ 0 \end{pmatrix}
+        \end{equation}
+        <p>Zusammen mit dem berechneten Vorfaktor ergibt sich die resultierende Kraft:</p>
+        \begin{equation}
+            \vec{F}_{L,AB} = 6{,}4\cdot 10^{-24}\,\mathrm{N} \cdot \begin{pmatrix} -1{,}0 \\ 2{,}0 \\ 0 \end{pmatrix}
+        \end{equation}
+    </div>
+
+    <p>Auch die Wechelwirkung zwischen zwei stromdurchflossenen Leitern kann über das B-Feld beschrieben werden. Der Leiter \(A\) erzeugt im Raum um sich herum ein B-Feld, das auf die bewegten Ladungen im Leiter \(B\) eine Lorentzkraft ausübt. Die Kraft auf den Leiter \(B\) ergibt sich dann aus der Summe der Lorentzkraft auf alle bewegten Ladungen im Leiter \(B\). Dies führt wieder zur Gleichung <a class="xref" data-ref-eq="eq_lorentzkraft_endformel_richtung"></a> für die Kraft zwischen zwei parallelen Leitern. Ausgedrückt mit dem B-Feld des Leiters \(A\) ist die Kraft auf den Leiter \(B\) gegeben durch:</p>
+    \begin{equation}
+        \vec{F}_{BA,\text{ges}} = I_B \cdot \vec l_B \times \vec{B}_A(\vec r_{BA}) \label{eq_lorentzkraft_leiter_mit_b}
+    \end{equation}
+    <p>wobei \(\vec l_B\) ein Vektor ist, der die Länge und Richtung des Leiters \(B\) angibt, und \(\vec{B}_A(\vec r_{BA})\) die magnetische Induktion des Leiters \(A\) am Ort des Leiters \(B\) ist.</p>
+
+    <div class="beispiel" data-title="Kraft zwischen zwei parallelen Leitern über das B-Feld">
+        <p>Ein stromdurchflossener Leiter \(A\) führt einen Strom von \(1{,}0\,\mathrm{A}\) entlang der \(z\)-Achse. Ein zweiter Leiter \(B\) der Länge \(L_B = 1{,}0\,\mathrm{m}\) verläuft parallel zum Leiter \(A\) durch den Punkt \(\begin{pmatrix} 1{,}0 \\ -2{,}0 \\ 3{,}0 \end{pmatrix} \cdot \mathrm{m}\) und führt ebenfalls einen Strom von \(1{,}0\,\mathrm{A}\) in gleicher Richtung. Berechnen Sie die Kraft, die der Leiter \(A\) auf den Leiter \(B\) ausübt.</p>
+
+        <p><strong>Lösung:</strong> Die Berechnung erfolgt analog zum vorherigen Beispiel, jedoch ersetzen wir die bewegte Punktladung \(q \cdot \vec{v}\) durch das Stromelement \(I_B \cdot \vec{l}_B\). Der senkrechte Abstand zum Leiter \(A\) ist wieder durch \(r_\perp^2 = 5{,}0\,\mathrm{m^2}\) gegeben. Der Vektor für den Leiterabschnitt \(B\) lautet \(\vec{l}_B = \begin{pmatrix} 0 \\ 0 \\ 1{,}0 \end{pmatrix} \cdot \mathrm{m}\).</p>
+
+        <p>Die magnetische Induktion \(\vec{B}_A\) am Ort von Leiter \(B\) ist:</p>
+        \begin{equation} \label{eq:B_feld_leiter}
+            \vec{B}_A(\vec r) = \frac{\mu_0 \cdot I_A}{2\pi \cdot r_\perp^2} \cdot \left( \vec{e}_z \times \vec r \right)
+        \end{equation}
+        <p>Die Kraft auf den stromdurchflossenen Leiter \(B\) ergibt sich aus:</p>
+        \begin{equation} \label{eq:lorentzkraft_leiter}
+            \vec{F}_{BA} = I_B \cdot \left( \vec{l}_B \times \vec{B}_A(\vec r) \right)
+        \end{equation}
+        <p>Durch Einsetzen von Gleichung (<a class="xref" data-ref-eq="eq:B_feld_leiter"></a>) in (<a class="xref" data-ref-eq="eq:lorentzkraft_leiter"></a>) erhalten wir die Gesamtformel:</p>
+        \begin{equation}
+            \vec{F}_{BA} = \frac{\mu_0 \cdot I_A \cdot I_B}{2\pi \cdot r_\perp^2} \cdot \left[ \vec{l}_B \times \left( \vec{e}_z \times \vec r \right) \right]
+        \end{equation}
+        <p>Nun setzen wir die Werte ein. Wir beachten dabei, dass \(\vec{l}_B\) in \(z\)-Richtung zeigt und somit die Richtung von \(\vec{e}_z\) hat:</p>
+        \begin{align}
+            \vec{F}_{BA} &amp;= \frac{1{,}2566\cdot 10^{-6}\,\mathrm{N/A^2} \cdot 1{,}0\,\mathrm{A} \cdot 1{,}0\,\mathrm{A}}{2\pi \cdot 5{,}0\,\mathrm{m^2}} \\[6pt]
+            &amp;\quad \cdot \left[ \begin{pmatrix} 0 \\ 0 \\ 1{,}0 \end{pmatrix} \mathrm{m} \times \left( \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \times \begin{pmatrix} 1{,}0 \\ -2{,}0 \\ 3{,}0 \end{pmatrix} \mathrm{m} \right) \right]
+        \end{align}
+        <p>Wir werten die Vektorprodukte aus. Das innere Produkt ergibt die Richtung des B-Feldes:</p>
+        \begin{equation}
+            \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \times \begin{pmatrix} 1{,}0 \\ -2{,}0 \\ 3{,}0 \end{pmatrix} = \begin{pmatrix} 2{,}0 \\ 1{,}0 \\ 0 \end{pmatrix}
+        \end{equation}
+        <p>Das äußere Produkt ergibt die Kraftrichtung (Lorentzkraft):</p>
+        \begin{equation}
+            \begin{pmatrix} 0 \\ 0 \\ 1{,}0 \end{pmatrix} \times \begin{pmatrix} 2{,}0 \\ 1{,}0 \\ 0 \end{pmatrix} = \begin{pmatrix} -1{,}0 \\ 2{,}0 \\ 0 \end{pmatrix}
+        \end{equation}
+        <p>Mit dem berechneten Vorfaktor (\(\approx 4{,}0 \cdot 10^{-8}\,\mathrm{N/m^2}\)) erhalten wir schließlich:</p>
+        \begin{equation}
+            \vec{F}_{BA} = 4{,}0\cdot 10^{-8}\,\mathrm{N} \cdot \begin{pmatrix} -1{,}0 \\ 2{,}0 \\ 0 \end{pmatrix}
+        \end{equation}
+    </div>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.3.4 Magnetische Feldlinien eines Kreisringes und einer Zylinderspule</h3>
+<section>
+    <p>Da für B-Felder das Superpositionsprinzip gilt, können wir die magnetische Induktion beliebig komplexer Anordnungen von stromdurchflossenen Leitern durch Addition der B-Felder einzelner (infinitesimaler) Leitersegmente berechnen. Die diesen Problemstellungen zugrundeliegende Mathematik ist jedoch relativ komplex und wird in weiterführenden Kursen behandelt. Wir versuchen an dieser Stelle nur, und grundlegende Eigenschaften zweier wichtiger Spezialfälle qualitativ klarzumachen: dem Kreisring und der Zylinderspule.</p>
+
+    <p>Zunächst schauen wir uns den Fall eines stromdurchflossenen Kreisringes an. Um uns das resultierende B-Feld dieses Leiters zu verstehen, gehen wir von einem geraden Leiter aus. Ein gerade der Leiter erzeugt ein B-Feld, bei dem die Feldlinien konzentrische Kreise um den Leiter bilden und die Feldliniendichte mit zunehmendem Abstand vom Leiter abnimmt. Das gilt auch noch, wenn es sich um ein kleines, gerades Leitersegment handelt. Ein weiteres kleines, gerades Leitersegment, das in einem Winkel zum ersten Segment steht, erzeugt ebenfalls ein B-Feld mit konzentrischen Kreisen um sich herum, die Ebene, in der diese Kreise liegen, ist jedoch um den Winkel zwischen den beiden Leitersegmenten gedreht. In beiden Fällen kann die Richtung der magnetischen Induktion mit der Korkenzieher-rechte-Hand-Regel bestimmt werden.</p>
+
+    <p>Einen stromdurchflossenen Kreisring können wir uns als eine Aneinanderreihung vieler kleiner, gerader Leitersegmente vorstellen, die jeweils in einem anderen Winkel zueinander stehen. Jedes dieser kleinen Leitersegmente erzeugt ein B-Feld mit konzentrischen Kreisen um sich herum, die Ebene dieser Kreise ist jedoch jeweils um den Winkel des Leitersegments gedreht. Überlagern sich nun diese vielen kleinen B-Felder, so ergibt sich ein Gesamtfeld, das die folgenden Eigenschaften hat:</p>
+    <ul>
+        <li>Im Inneren des Kreisringes, in der Ebene des Kreisringes, verlaufen die magnetischen Feldlinien alle parallel zueinander und senkrecht zur Ebene des Kreisringes. Die B-Felder verstärken sich also im Inneren des Kreisringes gegenseitig, es entsteht ein relativ starkes, homogenes B-Feld.</li>
+        <li>Außerhalb des Kreisringes haben sich die B-Felder der einzelnen Leitersegmente größtenteils gegenseitig aufgehoben, es entsteht also ein relativ schwaches B-Feld.</li>
+    </ul>
+
+    <figure class="abbildung" id="fig-skript_Bfeldkreisspule">
+        <img class="grafik" style="width:60%" src="bilder/skript_Bfeldkreisspule.png" alt="">
+        <figcaption>Magnetische Feldlinien eines stromdurchflossenen Kreisringes. Im Inneren des Kreisringes verlaufen die Feldlinien parallel zueinander und senkrecht zur Ebene des Kreisringes, außerhalb des Kreisringes ist das B-Feld relativ schwach und nimmt mit zunehmendem Abstand zum Ring ab.</figcaption>
+    </figure>
+
+    <p>Abbildung <a class="xref" data-ref-fig="fig-skript_Bfeldkreisspule"></a> zeigt die magnetischen Feldlinien eines stromdurchflossenen Kreisringes.</p>
+
+    <p>Eine Zylinderspule können wir uns als eine Aneinanderreihung vieler stromdurchflossener Kreisringe vorstellen, wobei die Mittelpunkte aller Kreisringe sich auf einer geraden Linie befinden, die sich im Mittelpunkt eines gedachten Zylinders liegt. Das resultierende B-Feld einer solchen Zylinderspule entsteht aus der gedanklichen Überlagerung der B-Felder der einzelnen Kreisringe. Die Eigenschaften des resultierenden B-Feldes sind dabei:</p>
+    <ul>
+        <li>Im Inneren der Zylinderspule verlaufen die magnetischen Feldlinien alle parallel zueinander und entlang der Achse der Zylinderspule. Die B-Felder der einzelnen Kreisringe verstärken sich also im Inneren der Spule gegenseitig, es entsteht ein relativ starkes, homogenes B-Feld.</li>
+        <li>Die im Inneren der Spule entstehenden B-Felder der einzelnen Kreisringe laufen außerhalb der Spule in entgegengesetzte Richtungen zurück. Dabei laufen jedoch nicht alle Feldlinien nahe der Spule zurück, sondern einige verlaufen auch weiter entfernt von der Spule. Die Dichte der Feldlinien außerhalb der Spule nimmt mit zunehmendem Abstand von der Spule ab, es entsteht also ein relativ schwaches B-Feld außerhalb der Spule.</li>
+    </ul>
+
+    <p>Sowohl beim Kreisring als auch bei der Zylinderspule entsteht also im Inneren ein relativ starkes, homogenes B-Feld, während außerhalb ein relativ schwaches B-Feld entsteht, das mit zunehmendem Abstand von der Spule oder dem Kreisring abnimmt. Dem homogenen B-Feld im Inneren der Spule oder des Kreisringes kann eine bestimmte Richtung zugewiesen werden, die senkrecht zur Ebene des Kreisringes bzw. entlang der Achse der Zylinderspule verläuft und durch die Richtung des Stroms im Leiter nach der Korkenzieher-rechte-Hand-Regel bestimmt wird. Diese Richtung wird als <strong>Nordpol</strong> des Magnetfeldes bezeichnet, die entgegengesetzte Richtung als <strong>Südpol</strong>, analog zu den Polen eines Stabmagneten. Sie hängt mit einer weiteren Eigenschaft zusammen, die wir im Folgenden besprechen werden: dem magnetischen Moment.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.3.5 Das magnetische Moment</h3>
+<section>
+    <p>Wir hatten im Abschnitt zur Elektrostatik das Konzept des elektrischen Dipolmomentes eingeführt. Ein elektrischer Dipol besteht aus zwei entgegengesetzt geladenen Punktladungen, die einen gewissen Abstand zueinander haben. Das elektrische Dipolmoment ist ein Vektor, der von der negativen zur positiven Ladung zeigt und dessen Betrag das Produkt aus der Ladungsmenge und dem Abstand der beiden Ladungen ist. Bringt man einen elektrischen Dipol in ein elektrisches Feld, so erfährt der Dipol ein Drehmoment, das versucht, den Dipol so auszurichten, dass das Dipolmoment in Richtung des elektrischen Feldes zeigt. Wir hatten gesagt, dass wir uns den elektrischen Dipol als eine Art Kompassnadel für das elektrische Feld vorstellen können.</p>
+
+    <p>„Echte" Kompassnadeln richten sich jedoch nicht nach elektrischen Feldern aus, sondern nach magnetischen Feldern, genauergesagt dem Magnetfeld der Erde. Warum ist das so? Der Grund dafür ist, dass ein Kompassnadeln ein magnetisches (Dipol)-moment<span class="fussnote">Wir sprechen im Folgenden nur von einem magnetischen Moment</span> besitzt.</p>
+
+    <p>Um diesen Begriff genauer zu verstehen - und um das Verhalten des Kompassnadel zu verstehen - schauen wir uns eine rechteckige Leiterschleife an. Die Seitenlängen der Leiterschleife seien \(a\) und \(b\). Die Schleife liegt in einer Ebene. Ein Strom \(I\) fließt durch die Leiterschleife. Die Leiterschleife befindet sich in einem homogenen magnetischen Feld \(\vec{B}\), der mit dem Normalenvektor der Schleifenebene einen Winkel \(\varphi\) einschließt.</p>
+
+    <figure class="abbildung" id="fig-Drehmoment_auf_Leiterschleife_2">
+        <img class="grafik" style="width:60%" src="bilder/Drehmoment_auf_Leiterschleife_2.png" alt="">
+        <figcaption>Eine rechteckige Leiterschleife mit den Seitenlängen \(a\) und \(b\) liegt in einem homogenen magnetischen Feld \(\vec{B}\). Ein Strom \(I\) fließt durch die Leiterschleife. Der Normalenvektor der Schleifenebene bildet mit dem Magnetfeld einen Winkel \(\alpha\).</figcaption>
+    </figure>
+
+    <p>Um nun die Kraft auf die Leiterschleife zu berechnen, betrachten wir zunächst die Kraft auf die einzelnen Leitersegmente der Schleife, und nutzen dafür die Formel:</p>
+    \begin{equation}
+        \vec{F}_L = I \cdot \vec{l} \times \vec{B}
+    \end{equation}
+    <p>wobei \(\vec{l}\) der Vektor ist, der die Länge und Richtung des Leitersegments angibt.</p>
+
+    <p>Die Leiterschleife besteht aus vier Leitersegmenten. Die beiden Leitersegmente mit der Länge \(a\) beschreiben wir mit den Vektoren \(\vec l_{a,1/2}\), die beiden Leitersegmente mit der Länge \(b\) mit den Vektoren \(\vec l_{b,1/2}\), dabei sind \(\vec l_{a,1}\) und \(\vec l_{a,2}\) antiparallel zueinander, ebenso \(\vec l_{b,1}\) und \(\vec l_{b,2}\).</p>
+
+    <p>Die Kräfte auf die einzelnen Leitersegmente sind dann:</p>
+    \begin{align}
+        \vec{F}_{a,1} &amp;= I \cdot \vec l_{a,1} \times \vec{B} \\[6pt]
+        \vec{F}_{a,2} &amp;= I \cdot \vec l_{a,2} \times \vec{B} \\[6pt]
+        \vec{F}_{b,1} &amp;= I \cdot \vec l_{b,1} \times \vec{B} \\[6pt]
+        \vec{F}_{b,2} &amp;= I \cdot \vec l_{b,2} \times \vec{B}
+        \label{eq_kraefte_leiterschleife}
+    \end{align}
+
+    <p>Die Kräfte auf die beiden Leitersegmente mit der Länge \(a\) heben sich gegenseitig auf, da die Vektoren \(\vec l_{a,1}\) und \(\vec l_{a,2}\) antiparallel zueinander sind. Dasselbe gilt für die Kräfte auf die beiden Leitersegmente mit der Länge \(b\). Somit ist die resultierende Kraft auf die Leiterschleife insgesamt null:</p>
+    \begin{equation}
+        \vec{F}_{\text{ges}} = \vec{F}_{a,1} + \vec{F}_{a,2} + \vec{F}_{b,1} + \vec{F}_{b,2} = \vec{0}
+    \end{equation}
+    <p>Obwohl die resultierende Kraft auf die Leiterschleife null ist, kann dennoch ein Drehmoment auf die Leiterschleife wirken, das versucht, die Schleife zu drehen.</p>
+
+    <p>Nehmen wir an, die Leiterschleife könne sich um eine Achse drehen, die durch die Mitte der Schleife verläuft und parallel zu den Leitersegmenten mit der Länge \(a\) ist (dargestellt durch die mittige gestrichelte Linie in der Abbildung). Die beiden Leitersegmente mit der Länge \(b\) tragen dann nicht zum Drehmoment bei, da ihre Kräfte entlang der Drehachse wirken. Die beiden Leitersegmente mit der Länge \(a\) hingegen erzeugen ein Drehmoment, da ihre Kräfte senkrecht zur Drehachse wirken, siehe Abbildung <a class="xref" data-ref-fig="fig-Drehmoment_auf_Leiterschleife_Seitenansicht"></a>.</p>
+
+    <figure class="abbildung" id="fig-Drehmoment_auf_Leiterschleife_Seitenansicht">
+        <img class="grafik" style="width:60%" src="bilder/Drehmoment_auf_Leiterschleife_Seitenansicht.png" alt="">
+        <figcaption>Seitenansicht der Leiterschleife. Die Drehachse verläuft durch die Mitte der Schleife und ist parallel zu den Leitersegmenten mit der Länge \(a\). Die Kräfte auf die Leitersegmente mit der Länge \(a\) erzeugen ein Drehmoment um die Drehachse, während die Kräfte auf die Leitersegmente mit der Länge \(b\) kein Drehmoment erzeugen. Die Flächennormale \(\vec n\) der Leiterschleife bildet mit dem Magnetfeld \(\vec B\) den Winkel \(\alpha\), das B-Feld \(\vec B\) bildet mit \(\vec l_{b,1}\) den Winkel \(\beta\).</figcaption>
+    </figure>
+
+    <p>Das Drehmoment, das durch die Kraft auf das Leitersegment mit der Länge \(a\) erzeugt wird, ist gegeben durch:</p>
+    \begin{equation}
+        \vec{M}_{a,1} = \vec r_{a,1} \times \vec{F}_{a,1}
+    \end{equation}
+    <p>wobei \(\vec r_{a,1}\) der Vektor ist, der vom Drehpunkt (Mittelpunkt der Schleife) zum Angriffspunkt der Kraft auf das Leitersegment mit der Länge \(a\) zeigt. Analog gilt für das andere Leitersegment mit der Länge \(a\):</p>
+    \begin{equation}
+        \vec{M}_{a,2} = \vec r_{a,2} \times \vec{F}_{a,2}
+    \end{equation}
+
+    <p>Das resultierende Drehmoment auf die Leiterschleife ist dann:</p>
+    \begin{equation}
+        \vec{M}_{\text{ges}} = \vec{M}_{a,1} + \vec{M}_{a,2} = \vec r_{a,1} \times \vec{F}_{a,1} + \vec r_{a,2} \times \vec{F}_{a,2}
+    \end{equation}
+
+    <p>Die Vektoren \(\vec r_{a,1}\) und \(\vec r_{a,2}\) sind betragsmäßig gleich groß, jedoch antiparallel zueinander. Sie können ausgedrückt werden durch die Vektoren \(l_{b,1/2}\):</p>
+    \begin{align}
+        \vec r_{a,1} &amp;= -\frac{1}{2}\cdot \vec l_{b,1}=\frac{1}{2} \cdot \vec l_{b,2} \\[6pt]
+        \vec r_{a,2} &amp;= \frac{1}{2} \cdot \vec l_{b,1}=-\frac{1}{2} \cdot \vec l_{b,2}
+    \end{align}
+
+    <p>Setzen wir dies in die Gleichung für das resultierende Drehmoment ein, so erhalten wir:</p>
+    \begin{align}
+        \vec{M}_{\text{ges}} &amp;= \frac{1}{2} \cdot \vec l_{b,2} \times \vec{F}_{a,1} + \frac{1}{2} \cdot \vec l_{b,1} \times \vec{F}_{a,2} \\[6pt]
+        &amp;= \frac{1}{2} \cdot \vec l_{b,2} \cdot \times \vec{F}_{a,1} - \frac{1}{2} \cdot \vec l_{b,2} \times \vec{F}_{a,2} \\[6pt]
+        &amp;= \frac{1}{2} \cdot \vec l_{b,2} \times \left( \vec{F}_{a,1} - \vec{F}_{a,2} \right)
+    \end{align}
+
+    <p>Setzt man nun die Kräfte aus Gleichung <a class="xref" data-ref-eq="eq_kraefte_leiterschleife"></a> ein, so erhält man:</p>
+    \begin{equation}
+        \vec{M}_{\text{ges}} = \frac{1}{2} \cdot \vec l_{b,2} \times \left[ I \cdot \left( \vec l_{a,1} \times \vec{B} \right) - I \cdot \left( \vec l_{a,2} \times \vec{B} \right) \right]
+    \end{equation}
+    <p>Da die Vektoren \(\vec l_{a,1}\) und \(\vec l_{a,2}\) antiparallel zueinander stehen, also gilt:</p>
+    \begin{equation}
+        \vec l_{a,2} = - \vec l_{a,1}
+    \end{equation}
+    <p>kann man die Gleichung für das Drehmoment weiter vereinfachen:</p>
+    \begin{align}
+        \vec{M}_{\text{ges}} &amp;= \frac{1}{2} \cdot \vec l_{b,2} \times \left[ I \cdot \left( \vec l_{a,1} \times \vec{B} \right) + I \cdot \left( \vec l_{a,1} \times \vec{B} \right) \right] \\[6pt]
+        &amp;= \frac{1}{2} \cdot \vec l_{b,2} \times \left[ 2I \cdot \left( \vec l_{a,1} \times \vec{B} \right) \right] \\[6pt]
+        &amp;= I \cdot \vec l_{b,2} \times \left( \vec l_{a,1} \times \vec  B \right)\\[6pt]
+        &amp;=-I \cdot \vec l_{b,1} \times \left( \vec l_{a,1} \times \vec  B \right)
+    \end{align}
+
+    <p>Aus der Mathematik ist bekannt, wie man Faktoren in einem dreifachen Vektorprodukt zyklisch vertauschen kann. Es gilt:</p>
+    \begin{equation}
+        \vec{A} \times \left( \vec{B} \times \vec{C} \right) = \vec{B} \times \left( \vec{C} \times \vec{A} \right) = \vec{C} \times \left( \vec{A} \times \vec{B} \right)
+    \end{equation}
+    <p>Wenden wir dies auf unser dreifaches Vektorprodukt an, so erhalten wir:</p>
+    \begin{equation}
+        \vec{M}_{\text{ges}} = -I \cdot \vec B \times \left( \vec l_{b,1} \times \vec l_{a,1} \right)
+    \end{equation}
+
+    <p>Das Vektorprodukt \(\vec l_{b,1} \times \vec l_{a,1}\) ist ein Vektor, der senkrecht zur Ebene der Leiterschleife steht. Sein Betrag ist gleich dem Flächeninhalt \(A\) der Leiterschleife:</p>
+    \begin{equation}
+        A = a \cdot b = \vert \vec l_{b,1} \vert \cdot \vert \vec l_{a,1} \vert
+    \end{equation}
+    <p>Wir definieren den Einheitsvektor \(\vec n\), der senkrecht zur Ebene der Leiterschleife steht:</p>
+    \begin{equation}
+        \vec n = \frac{\vec l_{b,1} \times \vec l_{a,1}}{\vert \vec l_{b,1} \times \vec l_{a,1} \vert}=\frac{\vec l_{b,1}\times \vec l_{b,2}}{A}
+    \end{equation}
+
+    <p>Somit können wir das Vektorprodukt \(\vec l_{b,1} \times \vec l_{a,1}\) durch \(A \cdot \vec n\) ersetzen und erhalten für das Drehmoment:</p>
+    \begin{equation}
+        \vec{M}_{\text{ges}} = -I \cdot A \cdot \vec B \times \vec n
+    \end{equation}
+
+    <p>Nutzt man nun noch die Eigenschaft von Vektorprodukten, dass gilt:</p>
+    \begin{equation}
+        \vec A \times \vec B = - \vec B \times \vec A
+    \end{equation}
+    <p>so erhält man für das Drehmoment auf die Leiterschleife:</p>
+    \begin{equation}
+        \vec{M}_{\text{ges}} = I \cdot A \cdot \vec n \times \vec B
+    \end{equation}
+
+    <p>Das Drehmoment, das eine stromdurchflossene Leiterschleife in einem homogenen Magnetfeld erfährt, ist also proportional zum Produkt aus dem Strom \(I\) durch die Schleife, der Fläche \(A\) der Schleife und der Magnetfeldstärke \(B\).</p>
+
+    <p>Die Größen \(I\) und \(A\) sowie die Flächennormale \(\vec n\) der Schleife können wir zu einer neuen Größe zusammenfassen, dem <strong>magnetischen Moment</strong> \(\vec \mu\) der Leiterschleife:</p>
+    \begin{equation}
+        \vec \mu = I \cdot A \cdot \vec n
+    \end{equation}
+
+    <p>Damit gilt für das Drehmoment auf die Leiterschleife in einem homogenen Magnetfeld:</p>
+    \begin{equation}
+        \vec{M}_{\text{ges}} = \vec \mu \times \vec B
+    \end{equation}
+
+    <p>Eine Leiterschleife in einem homogenen Magnetfeld erfährt also ein Drehmoment, das versucht, das magnetische Moment der Schleife so auszurichten, dass die Flächennormale der Schleife in Richtung des Magnetfeldes zeigt, die Leiterscheife also senkrecht zum Magnetfeld steht.</p>
+
+    <p>Eine Leiterschleife kann somit als eine Art Kompassnadel für magnetische Felder betrachtet werden, da sie versucht, ihr magnetisches Moment in Richtung des Magnetfeldes auszurichten.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.3.6 Magnetismus in Materie</h3>
+<section>
+    <p>Wir haben im vorherigen Abschnitt herausgefunden, dass eine stromdurchflossene Leiterschleife ein B-Feld erzeugt, dessen Feldlinien im Inneren der Schleife parallel zueinander verlaufen und parallel zur Flächennormalen der Schleife stehen. Außerdem haben wir gesehen, dass eine Leiterschleife in einem externen B-Feld ein Drehmoment erfährt, das versucht, die Flächennormale der Schleife in Richtung des externen B-Feldes auszurichten.</p>
+
+    <p>Diese beiden Eigenschaften können wir nutzen, um die Grundlagen des Magnetismus in Materie zu verstehen.</p>
+
+    <p>Auch wenn wir heute wissen, dass es mitnichten so ist, wie Bohr es sich zunächst vorgestellt hatte, dass Elektronen um einen Atomkern kreisen und so einen keinen Kreisstrom darstellen, so wissen wir dennoch, dass die Elektronen in einem Atom ein magnetisches Moment besitzen. Die magnetischen Momente der einzelnen Elektronen eines Atoms können sich dann zu einem Gesamtmagnetischen Moment des Atoms addieren. Daher können die Elektronen eines Atoms sowohl als Ursache eines B-Feldes betrachtet werden, als auch als kleine Kompassnadeln, die versuchen, ihr magnetisches Moment in Richtung eines B-Feldes auszurichten. Wir können ein einzeles Atom als eine Art „Elementarmagneten" betrachten.</p>
+
+    <p>In einem Festkörper befinden sich sehr viele Atome dicht beieinander. Die magnetischen Momente der einzelnen Atome können sich dabei auf verschiedene Arten zueinander ausrichten, was zu unterschiedlichen magnetischen Eigenschaften des Materials führt. Wir unterscheiden dabei drei Haupttypen von Magnetismus in Materie: Diamagnetismus, Paramagnetismus und Ferromagnetismus. Warum sich die magnetischen Momente der Atome in einem Material auf verschiedene Arten zueinander ausrichten, hängt von den quantenmechanischen Wechselwirkungen zwischen den Elektronen der Atome ab, die wir hier nicht weiter vertiefen werden. Es sei nur gesagt, dass jedes System versucht, seinen Energiezustand zu minimieren, und eine Möglichkeit dafür ist, dass sich die magnetischen Momente der Atome in einer bestimmten Weise zueinander ausrichten.</p>
+
+    <h4>Ferromagnetismus</h4>
+    <p>In ferromagnetischen Materialien richten sich die magnetischen Momente in bestimmten Bereichen, den sogenannten <strong>Weiss'schen Bezirken</strong>, parallel zueinander aus. Man kann also dem Bereich ein bestimmtes magnetische Moment zuschreiben, welches deutlich stärker ist als die einzelnen magnetischen Momente der Atome. Allerdings sind diese Bereiche meist deutlich kleiner als das betrachtete Werkstück selbst, und in einem benachbarten Bereich können die magnetischen Momente in eine andere Richtung zeigen. Da in einem <strong>unmagnetisierten ferromagnetischen Material</strong> die magnetischen Momente der einzelnen Bereiche zufällig ausgerichtet sind, heben sich die magnetischen Felder der einzelnen Bereiche über das gesamte Werkstück hinweg auf und es entsteht kein messbares äußeres Magnetfeld.</p>
+
+    <p>Bringt man jedoch ein ferromagnetisches Material in ein äußeres Magnetfeld, so versuchen die magnetischen Momente der einzelnen Bereiche, sich in Richtung des äußeren Magnetfeldes auszurichten. Dadurch vergrößert sich das magnetische Moment der einzelnen Bereiche in Richtung des äußeren Magnetfeldes, und es entsteht ein messbares äußeres Magnetfeld des Werkstücks. Entfernt man das äußere Magnetfeld wieder, so bleiben die magnetischen Momente der Bereiche in vielen Fällen in ihrer ausgerichteten Richtung, und das Werkstück bleibt magnetisiert. Wie lange und unter welchen äußeren Bedingungen das Werkstück magnetisiert bleibt, hängt vom Material ab und bestimmt, ob das Material als <strong>Permanentmagnet</strong> verwendet werden kann.</p>
+
+    <p>Einige ferromagnetische Materialien verlieren ihre Magnetisierung nach kurzer Zeit, andern behalten sie über lange Zeiträume. Erhitzt man ein ferromagnetisches Material über eine bestimmte Temperatur, die <strong>Curie-Temperatur</strong>, so verlieren die magnetischen Momente der Bereiche ihre Ausrichtung und das Material wird unmagnetisch. Auch Erschütterungen können dazu führen, dass die magnetischen Momente der Bereiche ihre Ausrichtung verlieren und das Material unmagnetisch wird.</p>
+
+    <p>Ferromagnetische Materialien sind z.&nbsp;B. Eisen, Nickel, Kobalt und einige Legierungen dieser Metalle. Man unterscheidet dabei zwischen <strong>Weichmagneten</strong>, die leicht magnetisiert und entmagnetisiert werden können (z.&nbsp;B. Weicheisen), und <strong>Hartmagneten</strong>, die ihre Magnetisierung über lange Zeiträume behalten (z.&nbsp;B. Neodym-Eisen-Bor-Legierungen).</p>
+
+    <h4>Paramagnetismus</h4>
+    <p>In paramagnetischen Materialien richten sich die magnetischen Momente der einzelnen Atome oder Moleküle in einem äußeren Magnetfeld teilweise oder ganz parallel zum äußeren Magnetfeld aus. Dadurch entsteht ein messbares äußeres Magnetfeld des Werkstücks. Nimmt man das äußere Magnetfeld wieder weg, so verlieren die magnetischen Momente der Atome oder Moleküle sehr schnell ihre Ausrichtung und das Werkstück wird unmagnetisch; paramagnetische Materialien können also nicht als Permanentmagneten verwendet werden oder längerfristig magnetisiert bleiben. Dadurch, dass sich die magnetischen Momente parallel ausrichten, kann man mit einem Ferromagneten ein paramagnetisches Material schwach anziehen. Die Kraft, die es benötigt, um das paramagnetische Material vom Ferromagneten zu trennen, ist jedoch vergleichsweise gering.</p>
+
+    <p>Beispiele für paramagnetische Materialien sind Aluminium, Platin und Chrom.</p>
+
+    <h4>Diamagnetismus</h4>
+    <p>In diamagnetischen Materialien richten sich die magnetischen Momente der einzelnen Atome oder Moleküle in einem äußeren Magnetfeld entgegengesetzt zum äußeren Magnetfeld aus. Dadurch entsteht ein messbares äußeres Magnetfeld des Werkstücks, das dem äußeren Magnetfeld entgegengesetzt ist. Nimmt man das äußere Magnetfeld wieder weg, so verlieren die magnetischen Momente der Atome oder Moleküle sehr schnell ihre Ausrichtung und das Werkstück wird unmagnetisch; diamagnetische Materialien können also nicht als Permanentmagneten verwendet werden oder längerfristig magnetisiert bleiben.</p>
+
+    <p>Diagmenetische Materialien sind zum Beispiel Bismut, Kupfer, Gold und Wasser.</p>
+</section>
+
+<h3 class="inhaltsverzeichnis">2.3.7 Zusammenfassung</h3>
+<section>
+    <div class="zusammenfassung" data-title="Magnetismus und Magnetostatik">
+        <ul>
+            <li><strong>Elektrischer Strom und Stromdichte:</strong>
+                <ul>
+                    <li><strong>Stromstärke (\(I\)):</strong> Ladung pro Zeit durch einen Querschnitt. \(I = \frac{\mathrm{d}Q}{\mathrm{d}t}\) in Ampere (\(\mathrm{A}\)).</li>
+                    <li><strong>Stromdichte (\(\vec{j}\)):</strong> Vektorielle Größe, beschreibt Strom pro Fläche. \(\vec{j} = \rho \cdot \vec{v}\) (Raumladungsdichte \(\times\) Driftgeschwindigkeit).</li>
+                    <li><strong>Driftgeschwindigkeit (\(v\)):</strong> Die mittlere Geschwindigkeit der Ladungsträger (in Metallen Elektronen), meist sehr gering (\(\mathrm{mm/s}\)-Bereich).</li>
+                </ul>
+            </li>
+
+            <li><strong>Die Lorentzkraft (\(\vec{F}_L\)):</strong>
+                <ul>
+                    <li>Kraft auf eine bewegte Ladung \(q\) in einem Magnetfeld \(\vec{B}\):
+                        \[ \vec{F}_L = q \cdot (\vec{v} \times \vec{B}) \]</li>
+                    <li><strong>Eigenschaften:</strong> Die Kraft wirkt immer senkrecht zur Geschwindigkeit und senkrecht zum Magnetfeld (Rechte-Hand-Regel).</li>
+                    <li><strong>Zwischen zwei Leitern:</strong> Parallele Ströme ziehen sich an, antiparallele Ströme stoßen sich ab.
+                        \[ F = \frac{\mu_0}{2\pi} \cdot \frac{I_A \cdot I_B}{r} \cdot l \]</li>
+                </ul>
+            </li>
+
+            <li><strong>Magnetische Induktion / B-Feld (\(\vec{B}\)):</strong>
+                <ul>
+                    <li>Beschreibt die Stärke und Richtung der magnetischen Wirkung. Einheit: Tesla (\(\mathrm{T}\)).</li>
+                    <li><strong>Magnetische Feldkonstante:</strong> \(\mu_0 \approx 1{,}257 \cdot 10^{-6} \, \mathrm{\frac{V\,s}{A\,m}}\).</li>
+                    <li><strong>Feld eines geraden Leiters:</strong> \(B(r) = \frac{\mu_0 \cdot I}{2\pi \cdot r}\). Die Feldlinien bilden konzentrische Kreise um den Leiter.</li>
+                    <li><strong>Feldlinien:</strong> Sind immer geschlossen (keine magnetischen Monopole).</li>
+                </ul>
+            </li>
+
+            <li><strong>Magnetisches Moment (\(\vec{\mu}\)):</strong>
+                <ul>
+                    <li>Eine stromdurchflossene Leiterschleife wirkt wie ein magnetischer Dipol.</li>
+                    <li><strong>Definition:</strong> \(\vec{\mu} = I \cdot A \cdot \vec{n}\) (Strom \(\times\) Fläche \(\times\) Normalenvektor).</li>
+                    <li><strong>Drehmoment im B-Feld:</strong> \(\vec{M} = \vec{\mu} \times \vec{B}\). Das Feld versucht, das magnetische Moment parallel zu den Feldlinien auszurichten.</li>
+                </ul>
+            </li>
+
+            <li><strong>Magnetismus in Materie:</strong>
+                <ul>
+                    <li><strong>Diamagnetismus:</strong> Materie erzeugt ein schwaches, dem äußeren Feld entgegenwirkendes Feld (z.&nbsp;B. Wasser, Kupfer).</li>
+                    <li><strong>Paramagnetismus:</strong> Magnetische Momente richten sich parallel zum äußeren Feld aus, Effekt verschwindet nach Entfernen des Feldes (z.&nbsp;B. Aluminium).</li>
+                    <li><strong>Ferromagnetismus:</strong> Starke Ausrichtung in <strong>Weiss'schen Bezirken</strong>. Bleibt oft nach Entfernen des Feldes bestehen. Verliert Eigenschaft oberhalb der <strong>Curie-Temperatur</strong> (z.&nbsp;B. Eisen, Nickel).</li>
+                </ul>
+            </li>
+
+            <li><strong>Spezielle Feldformen:</strong>
+                <ul>
+                    <li><strong>Kreisring:</strong> Erzeugt im Zentrum ein verstärktes, annähernd homogenes Feld.</li>
+                    <li><strong>Zylinderspule:</strong> Erzeugt im Inneren ein starkes, homogenes Magnetfeld parallel zur Spulenachse.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</section>
