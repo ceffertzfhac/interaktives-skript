@@ -17,68 +17,75 @@
     /* ── Kapitel-1.4-Vektorfarbpalette (P-AF-2: kapitelweit konsistent UND
        farbfehlsicher). EINZIGE Farbquelle für ALLE 1.4-Aspekt-Figuren — jede
        Figur referenziert diese Tokens, definiert keine eigenen (einzige Ausnahme
-       ist der HV-Strichstärken-Override in aspekt_vxvy_zeit.css). Werte an
-       Okabe-Ito (CVD-safe) angelehnt; die freigegebenen Hauptvektoren r/v und
-       der Akzent bleiben unverändert (1.38/1.42 optisch freigegeben).
-       Bedeutung → Token → Farbe:
-         r    Ortsvektor        gold    #b08010  (freigegeben 1.38)
-         rx   r_x-Komponente    blau    #1f77b4  (freigegeben 1.38)
-         ry   r_y-Komponente    grün    #1a8a50  (freigegeben 1.38)
-         v    Geschwindigkeit   blau    #0072b2  (Okabe-Ito, freigegeben 1.42)
-         vx   v_x-Komponente    violett #cc79a7  (Okabe-Ito; WAR #b8860b gold →
-                                                  kollidierte mit r gold in 1.42)
-         vy   v_y-Komponente    rot     #c03030
-         traj durchlaufener Bogen grau   #7f7f7f
-       Reserviert für künftige Beschleunigungs-Figur (Werte aus der Sim; bei
-       Einführung auf CVD-Sicherheit prüfen — a #c0392b und vy #c03030 beide rot,
-       in keiner Figur gleichzeitig, aber dokumentieren):
-         a    Beschleunigung    rot     #c0392b
-         ax   a_x-Komponente    cyan    #17a2b8
-         ay   a_y-Komponente    orange  #e0782d
+       ist der HV-Strichstärken-Override in aspekt_vxvy_zeit.css).
+
+       KANONISCHE QUELLE ist die LaTeX-Vorlage (Input/v0.13/…_kreis_v1.tex):
+       die Bildunterschriften benennen die Hauptvektor-Farben ausdrücklich im
+       Text (\textcolor[HTML]{…}), und die Zerlegungs-Formel färbt die Terme
+       (\textcolor{red}/\textcolor{blue}). Diese Farben sind NICHT frei wählbar,
+       sondern an die Quelle fixiert — Abweichung wäre ein Bug. Die Quellen-
+       Farben liegen als WERT-Tokens (--kb-rlat/-vlat/-azp/-omega/-alpha/-at/-ar)
+       vor; die älteren Namen (--kb-r/-vel/-acc/-v) sind ALIAS-Tokens, die darauf
+       verweisen, damit alle Figuren automatisch die Quellen-Farbe zeigen, ohne
+       dass jede Nutzungsstelle umgeschrieben werden muss.
+
+       Hauptvektoren (Quelle: Bildunterschrift):
+         r    Ortsvektor            grau     #474747  --kb-rlat  (--kb-r Alias)
+         v    Bahngeschwindigkeit   orange   #F47A2D  --kb-vlat  (--kb-vel, --kb-v Alias)
+         a/aZP Beschleunigung       violett  #8361af  --kb-azp   (--kb-acc Alias)
+         ω    Winkelgeschwindigkeit blau     #1555A2  --kb-omega
+         α    Winkelbeschleunigung  rot      #bf262d  --kb-alpha
+       Polarzerlegung von a (Quelle: Formel — α·R-Term rot, ω²·R-Term blau):
+         a_t  Tangentialbeschl.     rot      #d24b3e  --kb-at
+         a_r  Radial/Zentripetal    blau     #2f74d0  --kb-ar
+       Kartesische Komponenten (Quelle vergibt KEINE Farben — frei wählbar,
+       kapitelweit einheitlich: y-Komponenten grün, x-Komponenten blau):
+         rx   r_x-Komponente        blau     #1f77b4  --kb-rx
+         ry   r_y-Komponente        grün     #1a8a50  --kb-ry
+         vx   v_x-Komponente        blau     = --kb-rx  (--kb-vx Alias)
+         vy   v_y-Komponente        grün     = --kb-ry  (--kb-vy Alias)
+         ay   a_y-Komponente        grün     = --kb-ry  (--kb-ay Alias)
+         ax   a_x-Komponente        cyan     #17a2b8  --kb-ax  (AUSNAHME: nicht
+              blau wie die anderen x-Komponenten, weil die Quellen-kanonische
+              a_r blau ist und in 1.50/1.51 GLEICHZEITIG mit a_x gezeigt wird —
+              a_x weicht auf Cyan aus, um von a_r (blau, gestrichelt) distinct
+              zu bleiben. cyan vs. blau + dashed/solid trennt sie zuverlässig.)
+         traj durchlaufener Bogen   grau     #7f7f7f  --kb-traj
+
        Erweiterungsregel: neues Vektor-Objekt in 1.4 → Token HIER anlegen, Farbe
-       CVD-distinkt zu obigen wählen (Okabe-Ito-Palette). 1.5 darf eine EIGENE
-       Palette definieren (eigene Tokens/Datei). Bekannte Schwäche: v (#0072b2)
-       und rx (#1f77b4) beide blau — in keiner 1.4-Figur gleichzeitig gezeigt;
-       bei einer künftigen Figur mit r- UND v-Familie prüfen. */
-    --kb-r: #b08010;
-    --kb-rx: #1f77b4;
-    --kb-ry: #1a8a50;
-    --kb-vel: #0072b2;
-    --kb-vx: #cc79a7;
-    --kb-vy: #c03030;
-    --kb-acc: #c0392b;
-    --kb-ax: #17a2b8;
-    --kb-ay: #e0782d;
-    --kb-traj: #7f7f7f;   /* durchlaufener Bogen */
-    /* Drehachsen-Groessen (eingefuehrt mit Abb. 1.59, „Winkelbeschleunigung als
-       Vektor"): omega blau, alpha rot. Diese zwei Farben sind AUSNAHMSWEISE
-       nicht frei waehlbar — die Bildunterschrift der statischen Abbildung
-       benennt sie im Text („Winkelbeschleunigung (in Rot)", „Winkelgeschwindig-
-       keit (in Blau)"), und die interaktive Figur uebernimmt genau diese
-       Unterschrift. Werte daher aus der LaTeX-Quelle des Skripts
-       (\\textcolor[HTML]{1555A2} bzw. {bf262d}), nicht aus Okabe-Ito.
-       Bekannte Schwaeche: --kb-omega (blau) liegt nahe an --kb-vel/--kb-rx
-       (beides Blau) und --kb-alpha nahe an --kb-acc/--kb-vy (beides Rot); in
-       Abb. 1.59 wird KEINE dieser anderen Groessen gezeigt (nur r, omega,
-       alpha, phi), die Kollision tritt also nicht auf. Bei einer kuenftigen
-       Figur, die omega/alpha ZUSAMMEN mit v oder a zeigt, hier pruefen. */
-    --kb-omega: #1555A2;
-    --kb-alpha: #bf262d;
-    /* Abb. 1.57 („Winkelgeschwindigkeit als Vektor") UND 1.58 („zentripetalkreuz"):
-       die Bildunterschriften benennen die Farben ausdruecklich — „Winkelgeschwin-
-       digkeit (in Blau)" = --kb-omega (oben), „Ortsvektor (in Grau)" = --kb-rlat,
-       „Bahngeschwindigkeit (in Orange)" = --kb-vlat. Wie omega/alpha sind auch
-       diese NICHT frei waehlbar, sondern an die LaTeX-Quelle fixiert
-       (\textcolor[HTML]{474747} bzw. {F47A2D}). --kb-rlat (dunkles Grau) nur in
-       1.57; --kb-vlat (Orange) in 1.57 UND 1.58. --kb-azp (Violett #8361af) fuer
-       die Zentripetalbeschleunigung „in Violett" — nur in 1.58 (zentripetalkreuz),
-       ebenfalls an die LaTeX-Quelle fixiert (\textcolor[HTML]{8361af}).
-       Bekannte Schwaeche: --kb-vlat (Orange #F47A2D) liegt nahe an --kb-ay
-       (#e0782d, ebenfalls Orange); in 1.57/1.58 wird KEINE a_x/a_y-Komponente
-       gezeigt, die Kollision tritt nicht auf. */
+       CVD-distinkt wählen. 1.5 darf eine EIGENE Palette definieren.
+
+       Bekannte Schwächen (alles NICHT-gleichzeitig-gezeigte Paare, je Figur
+       nur eine Familie — wie bisher dokumentiert und akzeptiert):
+         • Blau: --kb-omega (1.57-1.59, 3D), --kb-rx/--kb-vx (1.38/1.42, 2D),
+           --kb-ar (1.50/1.51, 2D polar) — drei verschiedene Blautöne für drei
+           nicht-koexistierende Größen.
+         • Rot: --kb-alpha (1.59, 3D), --kb-at (1.50/1.51, 2D polar) — beide
+           „Quellen-Rot"; a_t = α·R, also inhaltlich passend.
+         • Warm: --kb-vlat (v, orange) vs. --kb-at (a_t, rot) in 1.50/1.51
+           (v optional, a_t default) — dashed vs. solid trennt sie. */
+    /* ── WERT-Tokens (Quellen-Farben, kanonisch) ── */
     --kb-rlat: #474747;
     --kb-vlat: #F47A2D;
     --kb-azp: #8361af;
+    --kb-omega: #1555A2;
+    --kb-alpha: #bf262d;
+    --kb-at: #d24b3e;
+    --kb-ar: #2f74d0;
+    --kb-rx: #1f77b4;
+    --kb-ry: #1a8a50;
+    --kb-ax: #17a2b8;   /* AUSNAHME: cyan, s.o. (a_r ist das Quellen-Blau) */
+    --kb-traj: #7f7f7f; /* durchlaufener Bogen */
+    /* ── ALIAS-Tokens (ältere Namen → Quellen-Farbe) — Nutzungsstellen bleiben
+       unverändert, zeigen aber automatisch die kanonische Farbe. ── */
+    --kb-r:   var(--kb-rlat);   /* r: war gold #b08010 → grau (Quelle) */
+    --kb-vel: var(--kb-vlat);   /* v: war blau #0072b2 → orange (Quelle) */
+    --kb-acc: var(--kb-azp);    /* a: war rot #c0392b → violett (Quelle) */
+    --kb-v:   var(--kb-vlat);   /* v (winkelbeschl-Lokalname) → kapitelweit orange */
+    --kb-vx:  var(--kb-rx);     /* v_x: war violett #cc79a7 → blau (x=blau) */
+    --kb-vy:  var(--kb-ry);     /* v_y: war rot #c03030 → grün (y=grün) */
+    --kb-ay:  var(--kb-ry);     /* a_y: war orange #e0782d → grün (y=grün; war
+                                   Kollision mit v orange in 1.50) */
     --kb-r-sm: 6px;
     --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
     --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);
