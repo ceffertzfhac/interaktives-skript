@@ -114,7 +114,18 @@ src/numbering.js   init_numbering() — box, figure and image numbering off page
                    (before it for ch 1/2), so the PDF numbers the Einleitung as 3.1
                    AND "Schwingungen" as 3.1 (duplicate). We follow the obvious intent
                    (matching TK 1/TK 2): 3.0 Einleitung, 3.1 Schwingungen, 3.2 Wellen —
-                   documented in ch_04_00_einleitung.html. Remaining: 3.1, 3.2.
+                   documented in ch_04_00_einleitung.html. 3.1 (Schwingungen)
+                   also migrated — 9 subsections, figs 3.1–3.4 (all TikZ→PNG,
+                   data-figure-offset="0" starting the chapter-3 figure counter),
+                   67 equations (3.1.1–3.1.67), 3 Beispiele + 1 Bemerkung, no
+                   Zusammenfassung; two v0.13 SOURCE BUGS handled and documented
+                   in ch_04_01_schwingungen.html (a \ref to a non-existent
+                   horizontal-figure, and a label typo …schwingung2). 3.2 (Wellen)
+                   migrated as a faithful PLACEHOLDER STUB — the v0.13 source has
+                   no Wellen content (only a "not covered in WS 2025/26" note), so
+                   ch_04_02_wellen.html is just the h2 + that note as one page,
+                   no offset. TK 3 (3.0–3.2) is now structurally COMPLETE; 3.2
+                   gets real content when the topic is lectured.
                    The 1.4/1.5 offsets are now redundant (1.1–1.6 contiguous) but kept —
                    they still hold as ABSOLUTE start values.
                    Box titles are split into <span class="hb-type"> (type + number, uppercased
