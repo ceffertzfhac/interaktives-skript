@@ -23,14 +23,13 @@
 // zeigt also immer radial nach innen — ungeachtet des Vorzeichens von \omega_0.
 // aDecomp='none' laesst drawVectors genau diesen kartesischen Vektor zeichnen.
 //
-// PARAMETER: \omega_0 (Anfangs-Winkelgeschwindigkeit, auch 0/negativ) mit
-// demselben Bereich wie 1.57/1.59 (\pm 2,0 rad/s, Schritt 0,05).
-//   * Default \omega_0 = 1,0 rad/s (nicht 0,2 wie 1.57/1.59): \vec a_ZP ist hier
+// PARAMETER: \omega_0 (Anfangs-Winkelgeschwindigkeit, auch 0/negativ), Bereich
+// \pm 4,0 rad/s (Nutzervorgabe, breiter als 1.57/1.59 mit \pm 2,0), Schritt 0,05.
+//   * Default \omega_0 = 2,0 rad/s (Nutzervorgabe, nicht 0,2 wie 1.57/1.59): \vec a_ZP ist hier
 //     MASSSTAEBLICH gezeichnet (reale Laenge ACC_SCALE des Motors, nicht
-//     uebertrieben wie in der statischen Abbildung). Bei \omega_0=0,2 waere
-//     |a_ZP| = R\omega^2 = 0,06 m/s^2 -> Pfeillaenge ~1 px (unsichtbar); erst
-//     bei \omega_0=1,0 wird |a_ZP| = 1,5 m/s^2 -> ~23 px, gut lesbar und
-//     vergleichbar mit \vec v (|v|=|omega|R=1,5 m/s -> ~45 px). Wer \vec a_ZP
+//     uebertrieben wie in der statischen Abbildung). Bei \omega_0=2,0 (Default,
+//     Nutzervorgabe) wird |a_ZP| = R\omega^2 = 6 m/s^2 -> ~90 px, gut lesbar und
+//     vergleichbar mit \vec v (|v|=|omega|R=3 m/s -> ~90 px). Wer \vec a_ZP
 //     kleiner sehen will, regelt \omega_0 herunter.
 //
 // ABWEICHUNGEN von der statischen Abbildung, bewusst und begruendet:
@@ -71,11 +70,15 @@ const T_AUTO = 12;            // fester Auto-Stopp nach 12 s (Bereich 0…12 s w
                               // 1.39/1.41/1.44/1.57/1.59). |a_ZP| = R\omega_0^2 ist
                               // konstant — die Linie steht waagerecht; der Lauf
                               // zeigt, wie \vec v und \vec a_ZP mitdrehen.
-// Bereich wie in 1.57/1.59 (kapitelweit gleiche Regler-Anmutung). \omega_0 darf
-// 0 und negativ sein: \omega_0>0 = Teilbild (a), \omega_0<0 = Teilbild (b),
-// \omega_0=0 = Stillstand (|a_ZP|=0). Default 1,0 (s. Modulkopf: bei 0,2 waere
-// \vec a_ZP massstäblich unsichtbar).
-const OMEGA0_MIN = -2.0, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 1.0, OMEGA0_STEP = 0.05;
+// \omega_0 darf 0 und negativ sein: \omega_0>0 = Teilbild (a), \omega_0<0 =
+// Teilbild (b), \omega_0=0 = Stillstand (|a_ZP|=0). Bereich ±4 und Default 2,0
+// sind NUTZERVORGABE (breiter als 1.57/1.59 mit ±2/0,2): \vec a_ZP ist hier
+// massstäblich gezeichnet, und bei Default \omega_0=2,0 wird |a_ZP| = R\omega^2
+// = 6 m/s^2 -> ~90 px — gut lesbar und vergleichbar mit \vec v (~90 px). An den
+// Rändern (\omega_0=±4, R=2) werden die massstäblichen In-plane-Vektoren groß
+// (gewollt — der Nutzer stellt sie so ein); das |a_ZP|(t)-Diagramm skaliert
+// automatisch mit.
+const OMEGA0_MIN = -4.0, OMEGA0_MAX = 4.0, OMEGA0_DEFAULT = 2.0, OMEGA0_STEP = 0.05;
 const R_MIN = 0.1, R_MAX = 2.0, R_DEFAULT = 1.5, R_STEP = 0.05;
 
 // -- Laenge des Drehachsen-Vektors \vec\omega (eigener Maßstab) -----------------
