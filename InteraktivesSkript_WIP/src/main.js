@@ -17,7 +17,7 @@ import { init_figure_panels, toggle_panel } from './figures/panels.js';
 import { init_numbering, resolve_eq_refs } from './numbering.js';
 import { loadChapters, typesetAfterLoad } from './chapters.js';
 import { init_footnotes, toggle_footnote } from './footnotes.js';
-import { toggle_aspekt, close_aspekt_overlay, toggle_analyse, toggle_panel_left, buildKreisbahnFig } from './figures/aspekt_kreisbahn.js';
+import { toggle_aspekt, close_aspekt_overlay, toggle_analyse, toggle_panel_left, buildKreisbahnFig, apply_farbwoerter } from './figures/aspekt_kreisbahn.js';
 import { buildWegZeitFig } from './figures/aspekt_weg_zeit.js';
 import { buildWinkelZeitFig } from './figures/aspekt_winkel_zeit.js';
 import { buildVxVyZeitFig } from './figures/aspekt_vxvy_zeit.js';
@@ -266,6 +266,11 @@ async function init() {
     init_aspekt_figuren();
     init_numbering();
     label_aspekt_figuren();   // Nummer der statischen Abb. in die interaktive Bildunterschrift
+    // Farb-Nennungen der persistenten Palette in die (gerade gebauten) Captions
+    // setzen, BEVOR MathJax typesetAfterLoad() läuft (die reinen Wort-Spans
+    // fasst MathJax nicht an). init_palette() lief früher, fand noch keine
+    // .farbwort → no-op; hier sind die Captions da.
+    apply_farbwoerter();
     // NACH init_numbering: die Schiene („Auf dieser Seite") liest .highlight_box_title,
     // das init_numbering erst setzt. Stand init_shell() bisher UEBER init_numbering(),
     // zeigte die Schiene beim ersten Laden nur den Box-Typ („Beispiel") ohne

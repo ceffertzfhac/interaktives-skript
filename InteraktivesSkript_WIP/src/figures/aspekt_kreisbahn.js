@@ -512,3 +512,47 @@ export function toggle_panel_left(btn) {
     const collapsed = panel.classList.toggle('collapsed');
     btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
 }
+
+// ── Farb-Nennungen in interaktiven Bildunterschriften folgen der Palette ──────
+// Die data-caption der Aspekt-Figuren enthält Farb-Worte („in Blau/Rot/…"),
+// die als <span class="farbwort kb-sw-<tok>" data-vec="<tok>">…</span> markiert
+// sind. Unter einer CVD-Palette werden die --kb-*-WERT-Token umdefiniert, also
+// passt das Wort nicht mehr zur gezeichneten Farbe. apply_farbwoerter() setzt
+// die Worte pro (Palette × Hell/Dunkel) aus der Wortmap nach — aufgerufen beim
+// Palette-Wechsel (core.js::set_palette), beim Darkmode-Wechsel
+// (core.js::toggle_darkmode) und einmal beim Init (main.js, nach dem Caption-
+// Bau). Die Einfärbung selbst läuft deklarativ über .kb-sw-<tok> (var(--kb-*)),
+// hier wird NUR das Wort (textContent) getauscht.
+//
+// Wortmap: pro Palette/Hell-Dunkel das Wort je Token, abgeleitet aus den
+// tatsächlichen Hexwerten in aspekt_paletten.css/aspekt_kreisbahn.css. Ein
+// Helligkeits-Qualifier (Hell-/Dunkel-) genau dort, wo eine CVD-Palette zwei
+// Token derselben Hue-Familie zuordnet — Helligkeit ist die Achse, die der
+// CVD-Leser noch sicher sieht (so bleibt „ω Hellblau vs a_ZP Blau" in 1.58
+// unterscheidbar). Normal-Hell/Dunkel identisch: darkmode.css ändert nur die
+// Alias-Token + --kb-traj (Grau→Grau), die WERT-Token behalten ihre Hue.
+const FARBWORT = {
+    normal: { 0: { omega:'Blau', rlat:'Grau', vlat:'Orange', azp:'Violett', alpha:'Rot', traj:'Grau' },
+              1: { omega:'Blau', rlat:'Grau', vlat:'Orange', azp:'Violett', alpha:'Rot', traj:'Grau' } },
+    deuter: { 0: { omega:'Hellblau', rlat:'Schwarz', vlat:'Orange', azp:'Blau', alpha:'Rot', traj:'Grau' },
+              1: { omega:'Hellblau', rlat:'Grau',    vlat:'Orange', azp:'Blau', alpha:'Rot', traj:'Grau' } },
+    tritan: { 0: { omega:'Grün', rlat:'Grau', vlat:'Orange', azp:'Dunkelgrün', alpha:'Rot', traj:'Grau' },
+              1: { omega:'Grün', rlat:'Grau', vlat:'Orange', azp:'Hellgrün',  alpha:'Rot', traj:'Grau' } },
+};
+
+export function apply_farbwoerter() {
+    const pal  = document.documentElement.dataset.palette || 'normal';
+    const dark = document.documentElement.dataset.darkmode === '1' ? 1 : 0;
+    const map  = (FARBWORT[pal] || FARBWORT.normal)[dark];
+    if (!map) return;
+    document.querySelectorAll('.aspekt-figur .farbwort').forEach(el => {
+        const w = map[el.dataset.vec];
+        if (!w) return;
+        // Groß-/Kleinschreibung des vorhandenen Worts übernehmen (Quell-Captions
+        // mischen „in Blau" vs „blau, tangential"): „blau"→„hellblau", „Blau"→„Hellblau".
+        const cur = el.textContent || '';
+        const lower = cur && cur[0] === cur[0].toLowerCase() && cur[0] !== cur[0].toUpperCase();
+        el.textContent = lower ? w[0].toLowerCase() + w.slice(1) : w;
+    });
+}
+window.apply_farbwoerter = apply_farbwoerter;   // runtime-Global (kein core→figures-Import, s. renumber_equations)

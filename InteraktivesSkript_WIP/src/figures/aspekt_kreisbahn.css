@@ -321,6 +321,25 @@
 .aspekt-figur .legend-swatch[data-c="azp"]   { background: var(--kb-azp); }
 .aspekt-figur .legend-label { font-size: calc(11.5px * var(--kb-text-scale)); color: var(--kb-text2); }
 
+/* ── Farbwort/Einfärbung in interaktiven Bildunterschriften ──────────────────
+   Die data-caption der Aspekt-Figuren trägt Farb-Nennungen („in Blau/Rot/…")
+   und – in 1.57 – inline Einfärbungen der Vektorbezeichnungen. Damit diese der
+   gewählten Vektor-Palette folgen (CVD-Paletten definieren die --kb-*-WERT-
+   Token neu), laufen sie über var(--kb-*) statt über hartcodierte Hexwerte:
+   • .kb-sw-<tok>            – färbt einen Span (Vektorbezeichnung ODER Wort)
+                               mit dem WERT-Token; recolorent sich automatisch.
+   • .farbwort[data-vec=…]   – das Farbwort selbst; textContent wird pro Palette
+                               von aspekt_kreisbahn.js::apply_farbwoerter gesetzt
+                               (siehe Wortmap dort); zusätzlich .kb-sw-<tok> zur
+                               Selbst-Einfärbung. Statische nur-druck-figcaptions
+                               tragen weiterhin feste Farben (Raster-PNGs). */
+.aspekt-figur .kb-sw-omega { color: var(--kb-omega); }
+.aspekt-figur .kb-sw-rlat  { color: var(--kb-rlat); }
+.aspekt-figur .kb-sw-vlat  { color: var(--kb-vlat); }
+.aspekt-figur .kb-sw-azp   { color: var(--kb-azp); }
+.aspekt-figur .kb-sw-alpha { color: var(--kb-alpha); }
+.aspekt-figur .kb-sw-traj  { color: var(--kb-traj); }
+
 /* ── Analyse-Werte (Struktur + Optik VERBATIM aus der Stand-alone) ──────── */
 .aspekt-figur .panel-body { padding: 0; }
 .aspekt-figur .panel-body .panel-section { padding: 12px 14px; }

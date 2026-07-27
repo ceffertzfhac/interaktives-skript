@@ -239,6 +239,10 @@ export function toggle_darkmode(){
     }
     // Wurzel-Signal synchron halten (CVD-Paletten verzweigen Hell/Dunkel, s.o.).
     document.documentElement.dataset.darkmode = darkmode_on ? "1" : "0";
+    // Farb-Nennungen in interaktiven Bildunterschriften nachführen (Wortmap je
+    // Palette × Hell/Dunkel in aspekt_kreisbahn.js). Runtime-Global, kein Import
+    // (core darf figures/* nicht importen — Zyklus).
+    if (window.apply_farbwoerter) window.apply_farbwoerter();
 }
 
 // Einstellungen-Popover (Zahnrad-Taste im Header). Vorlage: der Tablet-Drawer
@@ -391,6 +395,9 @@ export function set_palette(mode, persist = true) {
     if (persist) {
         try { localStorage.setItem(PALETTE_STORAGE_KEY, mode); } catch (_) {}
     }
+    // Farb-Nennungen in interaktiven Bildunterschriften nachführen (Wortmap je
+    // Palette × Hell/Dunkel in aspekt_kreisbahn.js). Runtime-Global, kein Import.
+    if (window.apply_farbwoerter) window.apply_farbwoerter();
 }
 export function init_palette() {
     let mode = "normal";
