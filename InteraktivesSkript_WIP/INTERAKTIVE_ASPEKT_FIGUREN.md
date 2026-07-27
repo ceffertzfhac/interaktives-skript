@@ -254,10 +254,20 @@ Analyse-Regeln** aus der portierten `kreisbewegung/styles.css` **abgeleitet** un
 auf `.aspekt-figur` statt `#gc10` gescopt — in zwei Dateien:
 
 - `aspekt_kreisbahn.css` — **gemeinsame** Aspekt-Optik, geladen für **alle**
-  Aspekt-Figuren. Tokens (`aspekt_kreisbahn.css:8-24`): `--kb-surface*`,
-  `--kb-border*`, `--kb-text*`, `--kb-accent (var(--fh,#00b2a9))`,
-  `--kb-r/-rx/-ry/-traj` (figuren-eigene Farben), `--kb-text-scale
+  Aspekt-Figuren. UI-Tokens: `--kb-surface*`, `--kb-border*`, `--kb-text*`,
+  `--kb-accent (var(--fh,#00b2a9))`, `--kb-text-scale
   (var(--paper-graphics-scale,1))` (Grafik-UI-Skalierung, s. §C).
+  **Vektorfarbpalette (kanonisch aus der LaTeX-Quelle, s. Kommentarblock am
+  Tokens-Block in der Datei):** die Hauptvektoren sind an die Bildunterschriften
+  fixiert — r grau `--kb-rlat` (#474747), v orange `--kb-vlat` (#F47A2D),
+  a/a_ZP violett `--kb-azp` (#8361af), ω blau `--kb-omega` (#1555A2), α rot
+  `--kb-alpha` (#bf262d); die Polarzerlegung a_t rot / a_r blau (`--kb-at`/
+  `--kb-ar`) an die Formel (\textcolor{red}/\textcolor{blue}). Kartesische
+  Komponenten: y grün `--kb-ry`, x blau `--kb-rx` (a_x cyan `--kb-ax` als
+  Ausnahme, da a_r das Quellen-Blau ist). Die älteren Namen `--kb-r/-vel/-acc/
+  -v/-vx/-vy/-ay` sind **Alias-Tokens** darauf — Nutzungsstellen zeigen
+  automatisch die kanonische Farbe. **Nie** Vektor-Farben hardcodieren oder
+  pro Figur neu definieren; immer diese Tokens referenzieren.
   Struktur-Klassen: `panel-section` + `panel-label`, `panel-header` +
   `panel-body` (Kopf-Leiste zum Ein-/Ausklappen), `slider-label`/`slider-row`/
   `slider-val`, `legend-grid`/`legend-swatch`/`legend-label`, `analysis-grid`/
