@@ -268,6 +268,28 @@ auf `.aspekt-figur` statt `#gc10` gescopt — in zwei Dateien:
   -v/-vx/-vy/-ay` sind **Alias-Tokens** darauf — Nutzungsstellen zeigen
   automatisch die kanonische Farbe. **Nie** Vektor-Farben hardcodieren oder
   pro Figur neu definieren; immer diese Tokens referenzieren.
+  **Wählbare CVD-Paletten (v1.25):** die Quellen-Palette ist die *Normal*-Palette
+  (für Normalfarbsehen). Zusätzlich gibt es zwei farbfehlsichtigkeits-optimierte
+  Paletten — Deuteranopia (Rot-Grün, Okabe-Ito auf der intakten Blau/Gelb-Achse)
+  und Tritanopia (Blau-Gelb, Rot-/Grün-Familien je 3 Helligkeitsstufen) — in
+  `aspekt_paletten.css` als 4 Override-Blöcke (`deuter`/`tritan` × hell/dunkel).
+  Auswahl-Signal `<html data-palette="normal|deuter|tritan">` (gesetzt in
+  `core.js::set_palette`, persistiert in `skript_palette`), Hell/Dunkel-Zweig an
+  `<html data-darkmode="0|1">` (rein additives Signal, das `toggle_darkmode`
+  synchron hält). Jeder Block setzt **alle 18 --kb-*-Tokens** (WERT + ALIAS —
+  `darkmode.css` entkoppelt die Aliase direkt, sonst gewänne im Dark+CVD-Fall
+  der Darkmode-Alias). Normal = kein Override. **Kein Re-Render nötig**: die
+  Custom-Properties kaskandieren, SVG `stroke`/`fill` via `var()` werden
+  automatisch neu aufgelöst. Wähler ist die **Farbpalette-Sektion im
+  Einstellungen-Popover** (Zahnrad-Button neben Darkmode; dort sitzen auch
+  Textgröße und Ansichtsbreite). Bildunterschrift-Farbworte
+  (fest in Prosa/`alt`) weichen unter CVD-Paletten bewusst ab (Hinweis im
+  Popover); statische `bilder/*.png` sind Raster und werden **nicht** umgefärbt.
+  **CVD-Werte verifizieren** mit `.claude/skills/interaktive-aspekt-figur/
+  scripts/cvd_check.mjs` (Brettel-Dichromatie-Simulation + paarweise ΔE76 pro
+  koexistierender Vektor-Menge + Luminanzkontrast gegen den Hintergrund); die
+  Werte in `aspekt_paletten.css` sind mit diesem Skript abgestimmt — bei einer
+  Palette-Änderung beide Dateien synchron halten und das Skript neu laufen lassen.
   Struktur-Klassen: `panel-section` + `panel-label`, `panel-header` +
   `panel-body` (Kopf-Leiste zum Ein-/Ausklappen), `slider-label`/`slider-row`/
   `slider-val`, `legend-grid`/`legend-swatch`/`legend-label`, `analysis-grid`/
