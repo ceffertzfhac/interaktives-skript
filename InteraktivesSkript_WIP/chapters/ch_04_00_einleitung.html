@@ -1,0 +1,36 @@
+<!-- ch_04_00_einleitung.html — v0.13-Abschnitt 3.0 "Einleitung und Motivation"
+     (1:1-Transkription aus Input/v0.13/pskript_sw_einleitung_und_motivation.tex).
+     ERSTER Abschnitt von TK 3 "Schwingungen und Wellen" (data-tk-num="3" auf dem
+     <div> in index.html). Rein statisch: keine Abbildungen, keine Gleichungen,
+     keine Boxen — nur Prosa. 3.0 verbraucht 0 Abbildungen/0 Zusammenfassungen und
+     traegt daher KEINEN Offset (Kapitel-3-Zaehler starten beim Kapitelwechsel
+     automatisch bei 0 und werden vom ersten migrierten Abschnitt mit Inhalt —
+     kuenftig 3.1 — gesetzt). Analog zu 1.0 und 2.0.
+
+     BEWUSSTE ABWEICHUNG von v0.13 (Runbook Abschnitt 13): Im PDF ist dieser
+     Abschnitt faelschlich als "3.1" nummeriert und der Folgeabschnitt
+     "Schwingungen" ebenfalls als "3.1" (Dublette). Ursache ist ein Quellfehler im
+     Master (Physik_pskript_v0.13.tex): dort steht \addtocounter{section}{-1} NACH
+     \section{Einleitung und Motivation} statt davor (bei Mechanik/EM davor -> 1.0
+     bzw. 2.0). Gewollt war offensichtlich — analog TK 1/TK 2 — 3.0 Einleitung,
+     3.1 Schwingungen, 3.2 Wellen; entsprechend hier als 3.0 gefuehrt.
+
+     Zwei Querverweise (v0.13 \ref): auf Abschnitt 1.1.7 "Die Strecke"
+     (subsec_strecke) und auf die Box Beispiel 1.1.2 "Feder-Masse-Pendel"
+     (bbsp_feder_masse_pendel, id="bsp-feder-masse-pendel" in ch_01_01). Deskriptor
+     ("Abschnitt"/"Beispiel") liefert der Resolver in numbering.js — die Prosa
+     laesst ihn weg. -->
+
+<section>
+    <h2 class="inhaltsverzeichnis">3.0 Einleitung und Motivation</h2>
+
+    <p>Schon im <a class="xref" data-ref-sec="p-1-1-7"></a> hatten wir im <a class="xref" data-ref-box="bsp-feder-masse-pendel"></a> das Feder-Masse-Pendel als Beispiel für eine eindimensionale Bewegung verwendet und gesehen, dass das Feder Masse-Pendel eine <strong>periodische Bewegung</strong> ausführt. Während zum Beispiel im freien Fall die Masse die Masse von einer Strarthöhe bis zum Boden fällt und dort nach Aufprall liegen bleibt, bewegt sich die Masse beim Feder-Masse-Pendel immer wieder hin und her um eine <strong>Gleichgewichtslage</strong>.</p>
+
+    <p>Das Feder-Masse-Pendel ist jedoch nur ein einzige Beispiel einer sehr großen Klasse von physikalischen Systemen, die sich alle periodisch verhalten. Aber nicht nur physikalisch-technische Systeme verhalten sich periodisch, auch biologische Systeme (z.&nbsp;B. Herzschlag, Schlaf-Wach-Rhythmus), wirtschaftliche Systeme (z.&nbsp;B. Konjunkturzyklen) und viele weitere Systeme zeigen periodische Verhaltensweisen. Das alleine macht die Betrachtung periodischer Systeme interessant und wichtig.</p>
+
+    <p>Im Bereich der Ingenieurwissenschaften sind periodische Vorgänge von besonderer Bedeutung, da viele technische Systeme auf periodischen Vorgängen beruhen (z.&nbsp;B. Motoren, Generatoren, Wechselstromnetze, Schwingkreise in der Elektronik, usw.). Andererseits können periodische Vorgänge in technischen Systemen auch unerwünscht sein (z.&nbsp;B. Schwingungen in Bauwerken, Brücken, Flugzeugen, usw.), die es zu vermeiden gilt. Daher ist das Verständnis periodischer Vorgänge und deren Beschreibung von großer Bedeutung für Ingenieure und Techniker.</p>
+
+    <p>Schwingungen sind Vorgänge, bei denen eine physikalisch-technische Größe (z.&nbsp;B. Position, Spannung, Stromstärke, Druck, usw.) periodisch um einen Mittelwert (z.&nbsp;B. Gleichgewichtslage, Nullpunkt, usw.) schwankt. Dabei verändert sich der Mittelwert der Größe nicht, sondern die Größe <strong>oszilliert</strong> um diesen Mittelwert. Bei einer mechanischen Schwingung bewegt sich der Schwerpunkt des Systems im zeitlichen Mittel nicht, sondern oszilliert um eine Gleichgewichtslage. Eine Schwingung ist ein ortsfester zeitlich periodischer Vorgang.</p>
+
+    <p>Eine Welle entsteht, wenn schwingungsfähige Systeme miteinander gekoppelt sind, so dass Energie von einem schwingungsfähigen System auf ein anderes übertragen werden kann. Dadurch breiten sich das Schwingungssignal und die damit verbundene Energie räumlich aus. Wellen sind also räumlich und zeitlich periodische Vorgänge. Wellen können sich in verschiedenen Medien ausbreiten, z.&nbsp;B. in festen Körpern (z.&nbsp;B. Schallwellen in Festkörpern), Flüssigkeiten (z.&nbsp;B. Wasserwellen) oder Gasen (z.&nbsp;B. Schallwellen in Luft). Es gibt auch elektromagnetische Wellen (z.&nbsp;B. Lichtwellen, Radiowellen), die sich im Vakuum ausbreiten können. Sie sind in den Ingenieurwissenschaften von großer Bedeutung, z.&nbsp;B. in der Telekommunikation, der Radar- und Satellitentechnik, der Optik und vielen anderen Bereichen. Insbesondere im Bereich der Messtechnik und Sensorik spielen Wellen und ihre spezifischen Eigenschaften eine wichtige Rolle, zum Beispiel bei der charakterisierung von Materialien, der zerstörungsfreien Prüfung von Bauteilen und der Entwicklung von Sensoren für verschiedene physikalische Größen.</p>
+</section>
