@@ -106,6 +106,50 @@
     border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
 }
 
+/* ── Einklappbare Panel-Abschnitte (Muster wie 1.50/1.51: der Abschnitts-Kopf
+   ist ein Button .panel-label mit Chevron; .collapsed blendet die Geschwister
+   nach dem Button aus und dreht den Chevron). Scoped auf diese Figur.
+   ZWINGEND fuer diese Figur: das Markup nutzt <button class="panel-label"> +
+   .acc-chevron (s. aspekt_alpha_omega.js PANEL_LEFT), aber OHNE diesen Block
+   rendern die Köpfe mit UA-Button-Styling (Rand, Hintergrund, 16-px-Schrift
+   statt 10,5 px) und das Chevron-SVG ohne Breite/Hoehe in der
+   Default-Replaced-Groesse — die Bedien-Leiste weicht dann optisch massiv von
+   den <div>-Köpfen der anderen Figuren ab. Block VERBATIM aus
+   aspekt_arat_winkelbeschl.css (1.51), nur data-aspekt umbenannt. ─────────── */
+.aspekt-figur[data-aspekt="alpha-omega"] .panel-section.collapsible > .panel-label {
+    /* Button-Mechanik + Chevron-Layout. Typographie (Gewicht/Spacing/
+       Großschreibung/Farbe/Margin) kommt aus der Basis-.panel-label
+       (aspekt_kreisbahn.css), die auf den <button class="panel-label">
+       genauso zuschlägt wie auf die <div class="panel-label">-Köpfe der
+       anderen Figuren. font-family/line-height per inherit, weil <button>
+       sonst UA-System-Schrift bzw. UA-line-height (normal) nähme. Die
+       font-size wird SEPARAT weiter unten mit #paper-Scoping geholt — siehe
+       dort, warum Klassen-Scoping hier NICHT reicht. */
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    width: 100%; padding: 0; background: transparent; border: none;
+    text-align: left; cursor: pointer; font-family: inherit; line-height: inherit;
+}
+/* font-size HOLT die Basis-Größe (10.5px) zurück, die die Regel
+   `#paper button` (styles.css) jedem <button> im Paper stiehlt: jene setzt
+   font-size auf Prosa-Größe (16px) mit Spezifität (1,0,1) (ID #paper +
+   button) und schlägt damit die Basis-.panel-label (0,2,0). Ohne diesen
+   Override wären „Parameter"/„Tempo"/… hier 16px statt 10,5px und damit
+   massiv größer als die div-Köpfe der anderen Figuren. #paper-Scoping hebt
+   die Spezifität auf (1,5,0) > (1,0,1). Im Overlay (Figur per
+   wrap.appendChild(fig) aus #paper herausgelöst) greift #paper button
+   nicht → Basis 10,5px, dieser Selector auch nicht → bleibt korrekt 10,5px.
+   letter-spacing (.1em) und die geerbte line-height korrigieren sich mit
+   der font-size automatisch. Ausführliche Begründung in
+   aspekt_arat_winkelbeschl.css. */
+#paper .aspekt-figur[data-aspekt="alpha-omega"] .panel-section.collapsible > .panel-label {
+    font-size: calc(10.5px * var(--kb-text-scale));
+}
+.aspekt-figur[data-aspekt="alpha-omega"] .acc-chevron { display: inline-flex; color: var(--kb-text3); transition: transform .2s ease; }
+.aspekt-figur[data-aspekt="alpha-omega"] .acc-chevron svg { width: 14px; height: 14px; }
+.aspekt-figur[data-aspekt="alpha-omega"] .panel-section.collapsed > .panel-label { margin-bottom: 0; }
+.aspekt-figur[data-aspekt="alpha-omega"] .panel-section.collapsed > .panel-label .acc-chevron { transform: rotate(-90deg); }
+.aspekt-figur[data-aspekt="alpha-omega"] .panel-section.collapsed > .panel-label ~ * { display: none !important; }
+
 /* ── Schmal-Modus: Szene und Diagramm UNTEREINANDER (gestapelt) — nur dieser
    Modus. Normal/breit bleiben Zeile (.aspekt-main-content ist flex-row).
    Nutzer-Vorgabe: kernsim größer (×1,4: 24→34 vh), Diagramm dafür kleiner
