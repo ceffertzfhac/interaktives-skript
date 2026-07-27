@@ -284,7 +284,7 @@ const PANEL_LEFT = `
     <label class="aspekt-check"><input type="checkbox" id="ak_pos" checked><span>Ortsvektor \\(\\vec r\\) einblenden</span></label>
     <label class="aspekt-check"><input type="checkbox" id="ak_phi" checked><span>Winkel \\(\\varphi\\) einblenden</span></label>
     <label class="aspekt-check"><input type="checkbox" id="ak_traj" checked><span>durchlaufene Bahn einblenden</span></label>
-    <div class="aspekt-hint">\(\vec\omega\) und \(\vec\alpha\) haben verschiedene Einheiten (\(\mathrm{rad/s}\) bzw. \(\mathrm{rad/s^2}\)) — ihre Pfeillängen sind daher jeweils proportional zum eigenen Wert, aber untereinander nicht vergleichbar. Aussagekräftig ist die RICHTUNG (gleich- oder gegensinnig zur Drehachse), nicht das Längenverhältnis.</div>
+    <div class="aspekt-hint">\\(\\vec\\omega\\) und \\(\\vec\\alpha\\) haben verschiedene Einheiten (\\(\\mathrm{rad/s}\\) bzw. \\(\\mathrm{rad/s^2}\\)) — ihre Pfeillängen sind daher jeweils proportional zum eigenen Wert, aber untereinander nicht vergleichbar. Aussagekräftig ist die RICHTUNG (gleich- oder gegensinnig zur Drehachse), nicht das Längenverhältnis.</div>
   </div>
   <div class="panel-section collapsible collapsed">
     <button type="button" class="panel-label" aria-expanded="false">Legende${CHEVRON}</button>
