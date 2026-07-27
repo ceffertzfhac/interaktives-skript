@@ -78,7 +78,7 @@ const T_AUTO = 12;            // fester Auto-Stopp nach 12 s (Bereich 0…12 s w
 // omega_0 darf 0 und negativ sein (Drehsinn kehrt sich um, \vec\omega zeigt dann
 // in −z); alpha darf ± sein: alpha>0 = Teilbild (a) parallel, alpha<0 =
 // Teilbild (b) antiparallel, alpha=0 = gleichfoermig (Grenzfall Abb. 1.44).
-const OMEGA0_MIN = -2.0, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 1.0, OMEGA0_STEP = 0.05;
+const OMEGA0_MIN = -2.0, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 0.2, OMEGA0_STEP = 0.05;
 const ALPHA_MIN = -0.3, ALPHA_MAX = 0.3, ALPHA_DEFAULT = 0.15, ALPHA_STEP = 0.01;
 // Radius-Bereich der Vorlagen-Sim (radius_slider: 0,1 … 2,0 m), Schrittweite wie
 // in den anderen Aspekt-Figuren (0,05 statt 0,1 — feineres Ziehen).
