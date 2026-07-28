@@ -152,10 +152,6 @@ input[type="range"]::-moz-range-track {
     filter: invert(1) hue-rotate(180deg) saturate(10);
     mix-blend-mode: lighten;
 }
-.darkmode_icon {
-    filter: invert(1) hue-rotate(180deg) saturate(10);
-    mix-blend-mode: lighten;
-}
 
 /* ── Kapitel-App-Shell (v2.0) ─────────────────────────────────────────────── */
 .grafik-container {
