@@ -182,7 +182,22 @@ src/figures/kreis_spiral/   the SECOND motor (no gcN sim of its own — figure-o
                           sim UI); store.simDuration (precompute horizon per figure);
                           plot rect inside store.graphScale[idx] (ghost-curve projection);
                           store.omegaLenFactor/.alphaLenFactor/.axisVecLenCap (own length
-                          scales for the axis vectors — see aspekt_alpha_omega.js).
+                          scales for the axis vectors — see aspekt_alpha_omega.js);
+                          store.isoElevation (viewing height above the orbit plane in
+                          degrees; undefined = the source's true isometry, 35.264°).
+                          The last one exists because ISO foreshortening makes an
+                          in-plane vector of CONSTANT magnitude project between 0.707×
+                          and 1.225× (factor √3) depending on direction — reported as a
+                          bug on fig. 1.57 ("die Bahngeschwindigkeit wird länger/kürzer").
+                          It is not a bug: the projection is algebraically identical to
+                          the source sim AND to legacy's to2d(…, perspective 3) — both
+                          just default to a top-down view, while 1.57–1.59 sit in ISO
+                          permanently. Those three therefore offer a „Blickrichtung"
+                          toggle (flach 60° = default, räumlich = the isometry); at 60°
+                          the variation drops to 1.15 while the rotation axis (and with
+                          it ω/α) is foreshortened to 0.61. projectISO keeps the
+                          HORIZONTAL in-plane factor fixed, so the zoom rule and the
+                          scene width are unaffected — only the ellipse gets rounder.
 src/figures/aspekt_alpha_omega.js   aspect figure 1.59 (α as a vector, 1.4.9) — FIRST figure on
                           the kreis_spiral motor: ISO scene with ω (blue) and α (red) on the z
                           axis, single ω(t) graph, sliders t/R/ω₀/α, auto-stop (0…12 s), ghost
