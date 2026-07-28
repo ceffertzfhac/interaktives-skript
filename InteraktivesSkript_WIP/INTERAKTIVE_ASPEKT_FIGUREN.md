@@ -26,17 +26,30 @@ konkreten Stelle im Skript zu bauen. Referenz-Implementierungen:
   — bei 0,2 wäre der maßstäbliche \vec a_ZP unsichtbar). Die Geisterkurve legt sich bei ω-Vorzeichenwechsel
   EXAKT auf die vorherige → Kernaussage (a_ZP unabhängig vom Vorzeichen).
 
-> **Motor-Wahl (VOR allem anderen entscheiden).** Es gibt zwei portierte Motoren:
-> `src/figures/kreisbewegung/` (Draufsicht, rein 2D — alle Figuren 1.38–1.51) und
+> **Motor-Wahl (VOR allem anderen entscheiden).** Es gibt drei portierte Motoren:
+> `src/figures/kreisbewegung/` (Draufsicht, rein 2D — alle Figuren 1.38–1.51),
 > `src/figures/kreis_spiral/` (ISO-3D-Ansicht mit **sichtbarer Drehachse**, dazu
-> α, Ebenenhöhe h und Spiralmodus nativ — ab Abb. 1.59). Alles, was auf der
-> Drehachse liegt (ω, α, h), ist im 2D-Motor nicht darstellbar (dort wären es
-> Punkte) → `kreis_spiral`. Alles andere bleibt bei `kreisbewegung`. Beide haben
-> ihr **eigenes** `runtime.js`/`createRuntime()` (Prefix `kb<n>_` bzw. `ks<n>_`)
-> und ihren eigenen Store-Singleton; sie beeinflussen sich nicht. `kreis_spiral`
-> nutzt die schon portierten Helfer `kreisbewegung/lib/*` mit (keine Kopie).
-> Der zweite Motor hat **keine** eigene gcN-Sim im Skript (rein Figuren-Motor);
-> seine Abweichungen zur Quelle sind im Code mit `PORT-AENDERUNG` markiert.
+> α, Ebenenhöhe h und Spiralmodus nativ — ab Abb. 1.59) und
+> `src/figures/grundbegriffe/` (2D-Diagramm einer **beliebigen Bahnkurve** statt
+> einer Kreisbahn, mit Ortsvektoren/Verschiebung/Abstand/Weglänge — Abb. 1.1).
+> Entscheidungsreihenfolge: Bewegung auf einer **Kreis-/Spiralbahn**? Nein →
+> `grundbegriffe` (die beiden anderen können nur Kreisbahnen). Ja, und etwas
+> liegt auf der **Drehachse** (ω, α, h)? → `kreis_spiral` (im 2D-Motor wären das
+> Punkte). Sonst → `kreisbewegung`. Alle drei haben ihr **eigenes**
+> `runtime.js`/`createRuntime()` (Prefix `kb<n>_`, `ks<n>_`, `gk<n>_`) und ihren
+> eigenen Store-Singleton; sie beeinflussen sich nicht. `kreis_spiral` und
+> `grundbegriffe` nutzen die schon portierten Helfer `kreisbewegung/lib/*` mit
+> (keine Kopie). Motor 2 und 3 haben **keine** eigene gcN-Sim im Skript (reine
+> Figuren-Motoren); ihre Abweichungen zur Quelle sind im Code mit
+> `PORT-AENDERUNG` markiert.
+>
+> **Motor 3 fällt aus dem Muster der ersten beiden** und ist deshalb NICHT die
+> Vorlage für eine Kreisbewegungs-Figur: er ist zeitlos (kein
+> `requestAnimationFrame`, kein Play/Pause/Auto-Stopp, keine Ablaufleiste), hat
+> keine `show*`-Flags, sondern ein `store.toggles`-Objekt, und seine Bedienung
+> sind **Schalter mit Hover-Erklärung** statt Regler allein. Wer eine weitere
+> Figur zu Kapitel 1.1 baut, kopiert `aspekt_grundbegriffe.js`; wer eine
+> Kreisbewegungs-Figur baut, bleibt bei der Kaskade in Abschnitt 0a.
 
 Geschrieben als **Runbook**: erst Konzept & Architektur, dann Schritt für
 Schritt, dann der Katalog der real aufgetretenen Fallstricke (der wertvollste
