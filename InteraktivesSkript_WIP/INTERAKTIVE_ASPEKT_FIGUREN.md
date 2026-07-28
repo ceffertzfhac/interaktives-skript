@@ -6,8 +6,10 @@ konkreten Stelle im Skript zu bauen. Referenz-Implementierungen:
 
 - **Abbildung 1.38** — `src/figures/aspekt_kreisbahn.js` + `.css`
   (Positions-Aspekt in 1.4.1; Regler φ, R; Massenpunkt greifbar).
-- **Abbildung 1.40** — `src/figures/aspekt_weg_zeit.js` + `.css`
-  (Weg-Zeit-Aspekt; Regler t, R, T; Auto-Stopp-Animation 0…6 s + Graph).
+- **Abbildung 1.39** — `src/figures/aspekt_weg_zeit.js` + `.css`
+  (Weg-Zeit-Aspekt; Regler t, R, T; Auto-Stopp-Animation 0…12 s + Graph).
+  (Historisch „1.40" genannt — 1.40 ist die *statische* Radial-Tangential-
+  Abbildung; die Datei gehoert zu Abb. 1.39.)
 - **Abbildung 1.59** — `src/figures/aspekt_alpha_omega.js` + `.css`
   (Winkelbeschleunigung als Vektor in 1.4.9; Regler t, R, ω₀, α; ω(t)-Graph).
   Erste Figur auf dem **zweiten Motor**, s. u.
