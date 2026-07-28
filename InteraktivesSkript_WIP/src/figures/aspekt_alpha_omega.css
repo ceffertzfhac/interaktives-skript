@@ -268,16 +268,16 @@
     stroke: var(--kb-traj); stroke-opacity: .55; stroke-width: calc(1px * var(--kb-lw));
 }
 /* Massenpunkt + durchlaufene Bahn */
-.aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="point"] { fill: var(--kb-accent); stroke: var(--kb-text); stroke-width: 1; }
+.aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="point"] { fill: var(--kb-point); stroke: var(--kb-text); stroke-width: 1; }
 .aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="trajectory_path"] {
     stroke: var(--kb-traj); stroke-width: calc(2px * var(--kb-lw)); stroke-dasharray: 4,4; fill: none;
 }
 /* Winkel phi (Bogen + Label) — Akzentfarbe wie in allen anderen Figuren */
 .aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="phi_arc"] {
-    stroke: var(--kb-accent); stroke-width: calc(1.5px * var(--kb-lw)); fill: none;
+    stroke: var(--kb-phi); stroke-width: calc(1.5px * var(--kb-lw)); fill: none;
 }
 .aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="phi_label"] {
-    fill: var(--kb-accent); font-family: var(--kb-font); font-style: italic;
+    fill: var(--kb-phi); font-family: var(--kb-font); font-style: italic;
     font-size: calc(14px * var(--kb-text-scale)); text-anchor: middle; dominant-baseline: middle;
 }
 /* Vektoren: Ortsvektor r (gold, wie kapitelweit), omega (blau), alpha (rot).
@@ -298,7 +298,7 @@
 .aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="arrow-r"] polygon        { fill: var(--kb-r); }
 .aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="arrow-omega"] polygon    { fill: var(--kb-omega); }
 .aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="arrow-alpha"] polygon    { fill: var(--kb-alpha); }
-.aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="arrow-phi"] polygon      { fill: var(--kb-accent); }
+.aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="arrow-phi"] polygon      { fill: var(--kb-phi); }
 /* Zoom-Text (Motor schreibt ihn; hier dezent wie in der Vorlage) */
 .aspekt-figur[data-aspekt="alpha-omega"] .aspekt-scene [id$="zoom_text_display"] {
     fill: var(--kb-text3); font-family: var(--kb-font-mono);

@@ -51,6 +51,26 @@
               a_x weicht auf Cyan aus, um von a_r (blau, gestrichelt) distinct
               zu bleiben. cyan vs. blau + dashed/solid trennt sie zuverlässig.)
          traj durchlaufener Bogen   grau     #7f7f7f  --kb-traj
+       Szenen-Objekte ohne eigene Vektor-Rolle (Quelle: die GEZEICHNETEN Farben
+       der Abbildungs-SVGs in Input/v0.13/PSkriptBilder, nicht die Bildunter-
+       schrift — die benennt nur die Hauptvektoren):
+         φ    Winkelbogen + Label   grün     #28a745  --kb-phi
+         pt   Massenpunkt           rot      #dc3545  --kb-point
+       Beide standen bis v1.26 auf der UI-Akzentfarbe (FH-Türkis) und waren
+       damit die auffälligste Abweichung vom PDF-Skript. Der Punkt nimmt das
+       Rot der 2D-Abbildungen (#dc3545), NICHT das der ISO-Abbildungen
+       (#bf262d) — dort ist der Punkt zwar ebenfalls rot, aber #bf262d ist
+       hier schon als --kb-alpha vergeben, und in 1.59 sind Punkt und α
+       gleichzeitig sichtbar.
+
+       BEWUSST NICHT übernommen (Quelle wäre mehrdeutig oder unbrauchbar):
+         • a_t/a_r zeichnet die Quelle wie a in Violett (#8361af) — 1.50/1.51
+           zeigen beide GLEICHZEITIG, dort ist die Rot/Blau-Trennung nötig.
+         • Die Komponenten r_x/r_y färbt die Quelle gar nicht (graue Hilfs-
+           linien #adb5bd); die interaktiven Figuren brauchen sie unterscheidbar.
+         • Den durchlaufenen Bogen zeichnet die Quelle blau (#0d6efd); hier
+           bliebe er grau, weil er sonst mit ω (blau) und den x-Komponenten
+           (blau) konkurriert und als Hintergrund-Spur zurücktreten soll.
 
        Erweiterungsregel: neues Vektor-Objekt in 1.4 → Token HIER anlegen, Farbe
        CVD-distinkt wählen. 1.5 darf eine EIGENE Palette definieren.
@@ -76,6 +96,9 @@
     --kb-ry: #1a8a50;
     --kb-ax: #17a2b8;   /* AUSNAHME: cyan, s.o. (a_r ist das Quellen-Blau) */
     --kb-traj: #7f7f7f; /* durchlaufener Bogen */
+    --kb-phi: #28a745;  /* Winkel φ (Bogen + Label) — Quelle: der grüne Winkel-
+                           bogen und das grüne φ in den Vektor-SVGs */
+    --kb-point: #dc3545;/* Massenpunkt — Quelle: der rote Punkt auf der Bahn */
     /* ── ALIAS-Tokens (ältere Namen → Quellen-Farbe) — Nutzungsstellen bleiben
        unverändert, zeigen aber automatisch die kanonische Farbe. ── */
     --kb-r:   var(--kb-rlat);   /* r: war gold #b08010 → grau (Quelle) */
@@ -131,7 +154,7 @@
 .aspekt-figur .aspekt-svg { display: block; width: 100%; max-width: 460px; height: auto; }
 .aspekt-figur .aspekt-scene [id$="disk"] { stroke: var(--kb-traj); stroke-width: calc(1.5px * var(--kb-lw)); opacity: 0.32; }
 .aspekt-figur .aspekt-scene [id$="trajectory_path"] { stroke: var(--kb-traj); stroke-width: calc(2px * var(--kb-lw)); }
-.aspekt-figur .aspekt-scene [id$="point"] { fill: var(--kb-accent); stroke: var(--kb-text); }
+.aspekt-figur .aspekt-scene [id$="point"] { fill: var(--kb-point); stroke: var(--kb-text); }
 .aspekt-figur .aspekt-scene [id$="point"] {
     cursor: grab;
     touch-action: none;
@@ -171,20 +194,20 @@
 .aspekt-figur .aspekt-scene [id$="ax_arrow"] polygon { fill: var(--kb-text); }
 .aspekt-figur .aspekt-axis-label { fill: var(--kb-text); font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); font-style: italic; }
 /* Winkel-Visualisierung (Bogen + φ-Label) */
-.aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-accent); stroke-width: calc(2px * var(--kb-lw)); }
+.aspekt-figur .aspekt-angle-arc { fill: none; stroke: var(--kb-phi); stroke-width: calc(2px * var(--kb-lw)); }
 /* Pfeilspitze am Bogenende (P-Wunsch): zeigt die positive Drehrichtung an.
    markerUnits=strokeWidth (Default) -> Groesse skaliert automatisch mit der
    Bogen-Strichstaerke (und damit mit --kb-lw), kein Extra-Handling noetig.
    Nur der AKTUELLE Bogen traegt den Marker (per JS gesetzt), nicht die
    verblassten Geisterbögen vergangener Umdrehungen. */
-.aspekt-figur .aspekt-scene [id$="angle_arrow"] polygon { fill: var(--kb-accent); }
+.aspekt-figur .aspekt-scene [id$="angle_arrow"] polygon { fill: var(--kb-phi); }
 /* Geisterbögen vollendeter Umdrehungen (1.41): jeder abgeschlossene Umlauf
    bleibt als verblasster Vollkreis im Hintergrund stehen. Opazität so gewählt,
    dass die Summe der alten Bögen schwächer bleibt als der aktuelle Bogen (0,3
    × ≤3 Umläufe ≈ 0,66 < 1,0). Gleiche Strichstärke wie der aktuelle Bogen. */
 .aspekt-figur .aspekt-angle-arc-prev { opacity: 0.3; }
 .aspekt-figur .aspekt-angle-label {
-    fill: var(--kb-accent);
+    fill: var(--kb-phi);
     font-family: var(--kb-font);
     font-size: calc(17px * var(--kb-text-scale));
     font-style: italic;

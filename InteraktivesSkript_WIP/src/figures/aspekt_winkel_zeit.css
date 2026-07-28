@@ -4,7 +4,7 @@
    aspekt_kreisbahn.css (geladen), weil diese Figur ebenfalls .aspekt-figur ist.
    Hier stehen NUR die Ergänzungen: die Graph-Klassen (aus der portierten
    styles.css der Sim, hier auf [data-aspekt="winkel-zeit"] gescopt), die
-   φ(t)-Linienfarbe in --kb-accent (gleich der Winkelbogen-Farbe, damit Szene
+   φ(t)-Linienfarbe in --kb-phi (gleich der Winkelbogen-Farbe, damit Szene
    und Diagramm zusammengehören) und die Mittel-Spalte (.aspekt-main), die Szene
    + Diagramm NEBENEINANDER stellt — wie die statische Vorlage (Kreis links,
    Winkel-Zeit-Diagramm rechts). Nur im Schmal-Modus wird gestapelt. */
@@ -51,17 +51,17 @@
 /* ── Graph-Struktur (Hintergrund, Gitter, Achsen, Skalen, Titel, Hover, Hit-
    Rect, Linienbreiten/-schriften) liegt ZENTRAL in aspekt_kreisbahn.css
    (gescopt auf .aspekt-figur, inkl. der ×1,5-Skalierung via --kb-lw/--kb-fs).
-   Hier pro Figur NUR die Datenlinien-FARBE — φ(t)=--kb-accent (gleich dem
+   Hier pro Figur NUR die Datenlinien-FARBE — φ(t)=--kb-phi (gleich dem
    Winkelbogen in der Szene, damit Szene und Diagramm zusammengehören). IDs
    sind pro Instanz prefixt (kb<n>_, s. runtime.js) -> Suffix-Selektoren. ──── */
-.aspekt-figur[data-aspekt="winkel-zeit"] [id$="graph_line"]  { stroke: var(--kb-accent); }
-.aspekt-figur[data-aspekt="winkel-zeit"] [id$="graph_point"] { fill: var(--kb-accent); }
+.aspekt-figur[data-aspekt="winkel-zeit"] [id$="graph_line"]  { stroke: var(--kb-phi); }
+.aspekt-figur[data-aspekt="winkel-zeit"] [id$="graph_point"] { fill: var(--kb-phi); }
 
 /* ── Vergleichslinie (vorheriger Durchlauf): gestrichelt + dünner als die
    aktuelle φ(t)-Linie. Eingeblendet vom JS, sobald ein Neudurchlauf startet
    (Feature-Vorgabe: letzte Kurve zum Vergleichen stehen lassen). ──────────── */
 .aspekt-figur[data-aspekt="winkel-zeit"] [id$="graph_prev_line"] {
-    stroke: var(--kb-accent); stroke-opacity: .5;
+    stroke: var(--kb-phi); stroke-opacity: .5;
     stroke-width: calc(1.5px * var(--kb-lw, 1)); stroke-dasharray: 6,4;
     fill: none; pointer-events: none;
 }
