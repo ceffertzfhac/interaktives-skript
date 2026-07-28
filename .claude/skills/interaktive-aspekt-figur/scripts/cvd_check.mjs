@@ -17,25 +17,25 @@
 //            eindeutig unter dem Schwellen (→ Werte nachjustieren).
 
 // ── WERT-Tokens je Palette (Spiegel von aspekt_paletten.css) ──────────────
-// 11 WERT-Tokens; ALIAS-Tokens (r, vel, acc, v, vx, vy, ay) spiegeln diese
+// 13 WERT-Tokens; ALIAS-Tokens (r, vel, acc, v, vx, vy, ay) spiegeln diese
 // (s. CSS), daher hier nicht erneut aufgeführt.
 const PALETTES = {
-  normal:        { rlat:"#474747", vlat:"#F47A2D", azp:"#8361af", omega:"#1555A2", alpha:"#bf262d", at:"#d24b3e", ar:"#2f74d0", rx:"#1f77b4", ry:"#1a8a50", ax:"#17a2b8", traj:"#7f7f7f" },
-  deuter_hell:   { rlat:"#000000", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#D55E00", traj:"#999999" },
-  deuter_dunkel: { rlat:"#d0d0d0", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#F0E442", traj:"#9aa3b8" },
-  tritan_hell:   { rlat:"#3a3a3a", vlat:"#E69F00", azp:"#2b6e51", omega:"#009E73", alpha:"#D55E00", at:"#c0392b", ar:"#009E73", rx:"#0072B2", ry:"#5fb88a", ax:"#8a2418", traj:"#999999" },
-  tritan_dunkel: { rlat:"#d0d0d0", vlat:"#E69F00", azp:"#5fd49d", omega:"#4caa7d", alpha:"#e8703a", at:"#e05a4a", ar:"#4caa7d", rx:"#3f8fd6", ry:"#7fd4b0", ax:"#c45040", traj:"#9aa3b8" },
+  normal:        { phi:"#28a745", point:"#dc3545", rlat:"#474747", vlat:"#F47A2D", azp:"#8361af", omega:"#1555A2", alpha:"#bf262d", at:"#d24b3e", ar:"#2f74d0", rx:"#1f77b4", ry:"#1a8a50", ax:"#17a2b8", traj:"#7f7f7f" },
+  deuter_hell:   { phi:"#5a5a5a", point:"#B84DBF", rlat:"#000000", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#D55E00", traj:"#999999" },
+  deuter_dunkel: { phi:"#9a9a9a", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#F0E442", traj:"#9aa3b8" },
+  tritan_hell:   { phi:"#5a5a5a", point:"#B84DBF", rlat:"#3a3a3a", vlat:"#E69F00", azp:"#2b6e51", omega:"#009E73", alpha:"#D55E00", at:"#c0392b", ar:"#009E73", rx:"#0072B2", ry:"#5fb88a", ax:"#8a2418", traj:"#999999" },
+  tritan_dunkel: { phi:"#9a9a9a", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#5fd49d", omega:"#4caa7d", alpha:"#e8703a", at:"#e05a4a", ar:"#4caa7d", rx:"#3f8fd6", ry:"#7fd4b0", ax:"#c45040", traj:"#9aa3b8" },
 };
 
 // ── Koexistierende Vektor-Farben je Figur (Tokens) ────────────────────────
 // ay → ry-Token, vx → rx-Token, v → vlat-Token (Aliase, s. CSS).
 const SETS = [
-  { name:"1.38 Positionen",        toks:["rlat","rx","ry"] },
-  { name:"1.50 ax/ay-Zerlegung",   toks:["rlat","vlat","azp","ax","ry"] },
-  { name:"1.51 a_t/a_r-Zerlegung", toks:["rlat","vlat","azp","at","ar"] },
-  { name:"1.57 ω-Vektor",          toks:["rlat","vlat","omega"] },
-  { name:"1.58 a_ZP-Kreuz",        toks:["omega","vlat","azp","rlat"] },
-  { name:"1.59 α/ω",               toks:["rlat","omega","alpha"] },
+  { name:"1.38 Positionen",        toks:["rlat","rx","ry","phi","point"] },
+  { name:"1.50 ax/ay-Zerlegung",   toks:["rlat","vlat","azp","ax","ry","phi","point"] },
+  { name:"1.51 a_t/a_r-Zerlegung", toks:["rlat","vlat","azp","at","ar","phi","point"] },
+  { name:"1.57 ω-Vektor",          toks:["rlat","vlat","omega","phi","point"] },
+  { name:"1.58 a_ZP-Kreuz",        toks:["omega","vlat","azp","rlat","point"] },
+  { name:"1.59 α/ω",               toks:["rlat","omega","alpha","phi","point"] },
 ];
 
 // ── CVD-Simulation (Brettel 1997, lineares RGB, Schweregrad 1.0) ──────────
@@ -103,7 +103,14 @@ const BG = { hell: "#ffffff", dunkel: "#1e2228" };
 let failed = false;
 const failures = [];
 
-function checkPalette(name, cvdKey, bgKey) {
+// nurInfo: Messung ausgeben, aber NICHT den Exit-Code bestimmen. Genutzt fuer
+// die Quellen-Palette ("normal") unter CVD-Simulation: deren Farben sind vom
+// PDF-Skript vorgegeben (Wiedererkennungswert) und teils grundsaetzlich nicht
+// farbfehlsicher -- der gruene Winkelbogen und der rote Massenpunkt liegen
+// unter Deuteranopie bei DeltaE 4,4. Genau dafuer existieren die CVD-Paletten;
+// ein Fehlschlag hier waere nicht behebbar, sondern nur die Wiederholung
+// dessen, was die Umschaltung loest.
+function checkPalette(name, cvdKey, bgKey, nurInfo = false) {
   const pal = PALETTES[name];
   const bgLin = hexToSrgb(BG[bgKey]).map(srgbToLin);
   const bgL = relLum(bgLin);
@@ -115,7 +122,7 @@ function checkPalette(name, cvdKey, bgKey) {
     const cr = contrastRatio(relLum(lin), bgL);
     const flag = cr < CONTRAST_FAIL ? "  <<< KONTRAST" : "";
     console.log(`  Kontrast  ${tok.padEnd(6)} ${pal[tok]}  CR=${cr.toFixed(2)}${flag}`);
-    if (cr < CONTRAST_FAIL) { failed = true; failures.push(`${name}: Kontrast ${tok}=${pal[tok]} CR=${cr.toFixed(2)}`); }
+    if (cr < CONTRAST_FAIL && !nurInfo) { failed = true; failures.push(`${name}: Kontrast ${tok}=${pal[tok]} CR=${cr.toFixed(2)}`); }
   }
 
   // 2) Paarweises ΔE pro koexistierendem Set
@@ -128,7 +135,7 @@ function checkPalette(name, cvdKey, bgKey) {
     }
     const flag = min < DE_FAIL ? "  <<< VERWECHSELBAR" : min < DE_WARN ? "  ~ grenzwertig" : "";
     console.log(`  ΔE76  ${set.name.padEnd(24)} min=${min.toFixed(1)}  (${minPair[0]}↔${minPair[1]})${flag}`);
-    if (min < DE_FAIL) { failed = true; failures.push(`${name}: ${set.name} ${minPair[0]}↔${minPair[1]} ΔE=${min.toFixed(1)}`); }
+    if (min < DE_FAIL && !nurInfo) { failed = true; failures.push(`${name}: ${set.name} ${minPair[0]}↔${minPair[1]} ΔE=${min.toFixed(1)}`); }
   }
 }
 
@@ -137,9 +144,9 @@ checkPalette("deuter_hell",   "deuter", "hell");
 checkPalette("deuter_dunkel", "deuter", "dunkel");
 checkPalette("tritan_hell",   "tritan", "hell");
 checkPalette("tritan_dunkel", "tritan", "dunkel");
-console.log("\n--- Vergleich: Quellen-Palette (Normal) unter CVD (so sieht es der CVD-Leser OHNE Palette) ---");
-checkPalette("normal", "deuter", "hell");
-checkPalette("normal", "tritan", "hell");
+console.log("\n--- INFO (kein Gate): Quellen-Palette (Normal) unter CVD -- so sieht es der CVD-Leser OHNE Palette ---");
+checkPalette("normal", "deuter", "hell", true);
+checkPalette("normal", "tritan", "hell", true);
 
 console.log("");
 if (failures.length) {

@@ -62,6 +62,11 @@
     --kb-ry: #009E73;  --kb-vy: #009E73;  --kb-ay: #009E73;
     --kb-ax: #D55E00;
     --kb-traj: #999999;
+    /* Szenen-Objekte: der Winkelbogen wird zur neutralen Hilfslinie
+       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen),
+       der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
+    --kb-phi: #5a5a5a;
+    --kb-point: #B84DBF;
 }
 
 /* ── Deuteranopia (Rot-Grün) — Dunkel ───────────────────────────────────── */
@@ -80,6 +85,11 @@
     --kb-ry: #009E73;  --kb-vy: #009E73;  --kb-ay: #009E73;
     --kb-ax: #F0E442;
     --kb-traj: #9aa3b8;
+    /* Szenen-Objekte: der Winkelbogen wird zur neutralen Hilfslinie
+       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen),
+       der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
+    --kb-phi: #9a9a9a;
+    --kb-point: #B84DBF;
 }
 
 /* ── Tritanopia (Blau-Gelb) — Hell ──────────────────────────────────────── */
@@ -101,6 +111,11 @@
     --kb-ry: #5fb88a;  --kb-vy: #5fb88a;  --kb-ay: #5fb88a;
     --kb-ax: #8a2418;
     --kb-traj: #999999;
+    /* Szenen-Objekte: der Winkelbogen wird zur neutralen Hilfslinie
+       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen),
+       der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
+    --kb-phi: #5a5a5a;
+    --kb-point: #B84DBF;
 }
 
 /* ── Tritanopia (Blau-Gelb) — Dunkel ────────────────────────────────────── */
@@ -120,4 +135,9 @@
     --kb-ry: #7fd4b0;  --kb-vy: #7fd4b0;  --kb-ay: #7fd4b0;
     --kb-ax: #c45040;
     --kb-traj: #9aa3b8;
+    /* Szenen-Objekte: der Winkelbogen wird zur neutralen Hilfslinie
+       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen),
+       der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
+    --kb-phi: #9a9a9a;
+    --kb-point: #B84DBF;
 }
