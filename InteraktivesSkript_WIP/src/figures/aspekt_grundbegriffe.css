@@ -1,0 +1,135 @@
+/* aspekt_grundbegriffe.css — Optik der Aspekt-Figur zu Abb. 1.1 (Grundbegriffe
+   der Kinematik). Ergaenzung zu aspekt_kreisbahn.css, das die GEMEINSAMEN
+   Regeln aller Aspekt-Figuren traegt (Panel/Slider/Legende/Analyse/Lupe/
+   Overlay/Breiten-Modi/Caption + Gitter-, Achsen- und Titel-Optik des
+   Diagramms). Hier steht nur, was diese Figur zusaetzlich braucht:
+   ihre Farb-Tokens, die Szenen-Klassen des Motors und die Steuerzeilen.
+
+   Struktur und Werte sind aus der Stand-alone-Sim uebernommen
+   (Input/Simulationen/Project_grundbegriffe_kinematik_simulation/css/styles.css),
+   nur auf .aspekt-figur gescopt und auf die --kb-*-Basistokens umgestellt. */
+
+/* ── Farb-Palette Kapitel 1.1 ────────────────────────────────────────────────
+   EIGENE Palette (die --kb-*-Vektorfarben in aspekt_kreisbahn.css sind an das
+   Kapitel 1.4 „Kreisbewegungen" gebunden — s. Erweiterungsregel dort: ein
+   anderes Kapitel darf eine eigene Palette definieren). Praefix --gk-*.
+
+   QUELLE ist die statische Abb. 1.1 bzw. ihre Bildunterschrift (CLAUDE.md,
+   v1.27: „Die Standard-Palette folgt den STATISCHEN Abbildungen"). Die
+   Bildunterschrift benennt zwei Farben ausdruecklich:
+     • „Das BLAU hervorgehobene Segment der Bahn … repraesentiert die
+       tatsaechlich zurueckgelegte Weglaenge s_AB"      -> --gk-weg  blau
+     • „Der ROT gestrichelte Vektor ist die Verschiebung" -> --gk-dba  rot
+   Die uebrigen Farben stammen aus der Stand-alone-Sim (Bahnkurve grau,
+   Ortsvektoren orange, Gegenrichtung gruen).
+
+   ABWEICHUNG von der Sim (bewusst): dort ist die Verschiebung A->B gruen und
+   die Gegenrichtung B->A rot. Hier sind beide GETAUSCHT, damit der im Skript
+   ABGEBILDETE Vektor (A->B) rot ist wie im Druck — Wiedererkennungswert geht
+   vor Sim-Treue. Der Abstand teilt sich die Farbe mit der Verschiebung A->B,
+   weil er deren Betrag ist (gleiche visuelle Rolle, wie in der Sim). */
+.aspekt-figur[data-aspekt="grundbegriffe"] {
+    --gk-path: #aaaaaa;   /* ganze Bahnkurve s(t) — Hintergrund-Spur */
+    --gk-pos:  #e69f00;   /* Ortsvektoren s_A / s_B — Orange */
+    --gk-dba:  #d62728;   /* Verschiebung Δs_BA (A→B) + Abstand — Rot (Quelle) */
+    --gk-dab:  #2ca02c;   /* Verschiebung Δs_AB (B→A) — Gruen */
+    --gk-weg:  #0072b2;   /* Weglaenge (Bahnsegment A→B) — Blau (Quelle) */
+}
+
+/* ── Szene: Diagramm-Elemente des Motors ─────────────────────────────────────
+   IDs sind pro Instanz prefixt (gk<n>_, s. grundbegriffe/runtime.js) -> die
+   Marker ueber Suffix-Selektoren ansprechen. Alles andere laeuft ueber die
+   Klassen, die render.js vergibt (1:1 die der Vorlage). */
+.aspekt-figur .aspekt-scene [id$="graph-arrowhead"] polygon { fill: var(--kb-text); }
+.aspekt-figur .aspekt-scene [id$="arrowhead-pos"] polygon { fill: var(--gk-pos); }
+.aspekt-figur .aspekt-scene [id$="arrowhead-dba"] polygon { fill: var(--gk-dba); }
+.aspekt-figur .aspekt-scene [id$="arrowhead-dab"] polygon { fill: var(--gk-dab); }
+
+/* Strichstaerken kommen als SVG-Attribut aus render.js (sie sind an die
+   Pfeil-Verkuerzung shortenEnd(…, 5·strokeWidth) gekoppelt) und werden hier
+   BEWUSST NICHT ueberschrieben — eine CSS-Strichstaerke wuerde die Spitzen
+   verschieben. Skaliert wird stattdessen ueber die Diagramm-Groesse. */
+.aspekt-figur .path-bg-line { fill: none; stroke: var(--gk-path); }
+.aspekt-figur .weg-line     { fill: none; stroke: var(--gk-weg); }
+.aspekt-figur .pos-vector   { stroke: var(--gk-pos); }
+.aspekt-figur .dba-vector   { stroke: var(--gk-dba); }
+.aspekt-figur .dab-vector   { stroke: var(--gk-dab); }
+.aspekt-figur .ab-point     { fill: var(--kb-text); }
+
+/* Vektor-Labels — eigene Klasse OHNE stroke (kein Faux-Bold). */
+.aspekt-figur .vector-label { stroke: none; font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); }
+.aspekt-figur .pos-vector-label { fill: var(--gk-pos); }
+.aspekt-figur .dba-vector-label { fill: var(--gk-dba); }
+.aspekt-figur .dab-vector-label { fill: var(--gk-dab); }
+
+/* Bemassungslinie „Abstand" (Endstriche + Projektionslinien + Beschriftung). */
+.aspekt-figur .abstand-dim { stroke: var(--gk-dba); fill: var(--gk-dba); stroke-width: calc(1.2px * var(--kb-lw)); }
+.aspekt-figur .abstand-projline { stroke: var(--kb-text3); stroke-width: calc(.8px * var(--kb-lw)); stroke-dasharray: 2 2; }
+
+/* Diagramm ist QUERFORMAT (600x455) statt hochkant wie die Kreisbahn-Figuren
+   -> etwas mehr Breite im Fliesstext, und im Overlay an der Hoehe gedeckelt
+   (0,758 · 82vh ≈ 62vh Bildhoehe, also derselbe Hoehenanteil wie dort). */
+.aspekt-figur[data-aspekt="grundbegriffe"] .aspekt-svg { max-width: 560px; }
+.aspekt-figur[data-aspekt="grundbegriffe"].aspekt-im-overlay .aspekt-svg { max-width: min(100%, 82vh); }
+
+/* ── Steuerzeilen (Checkbox + Label + Wertanzeige) ───────────────────────────
+   Ganze Zeile hoverbar/klickbar (Vorlagen-Verhalten: Klick neben der Checkbox
+   schaltet sie, Hover zeigt die Erklaerung + hebt das Element im Diagramm
+   hervor). Bedien-Element -> Schrift bewusst OHNE --kb-fs. */
+.aspekt-figur .vis-control-row {
+    display: grid; grid-template-columns: 18px 1fr auto; align-items: center;
+    gap: 8px; padding: 5px 4px; border-radius: 6px; cursor: pointer;
+    transition: background-color .15s;
+}
+.aspekt-figur .vis-control-row:hover { background: var(--kb-surface2); }
+.aspekt-figur .vis-control-row input[type="checkbox"] { width: 15px; height: 15px; margin: 0; accent-color: var(--kb-accent); cursor: pointer; }
+.aspekt-figur .vis-control-label { font-size: calc(12px * var(--kb-text-scale)); }
+.aspekt-figur .vis-control-value {
+    font-family: var(--kb-font-mono); font-size: calc(10.5px * var(--kb-text-scale));
+    font-weight: 600; justify-self: end; white-space: nowrap; color: var(--kb-text2);
+}
+.aspekt-figur .label-path { color: var(--gk-path); }
+.aspekt-figur .label-pos  { color: var(--gk-pos); }
+.aspekt-figur .label-dba  { color: var(--gk-dba); }
+.aspekt-figur .label-dab  { color: var(--gk-dab); }
+.aspekt-figur .label-weg  { color: var(--gk-weg); }
+
+/* Spaltenvektor-Anzeige (x,y) mit Klammern via ::before/::after (aus der
+   Vorlage — paedagogisch: Vektor als Spalte, nicht als Zeile). */
+.aspekt-figur .vector-display { display: inline-flex; align-items: center; gap: 3px; }
+.aspekt-figur .vector-display::before, .aspekt-figur .vector-display::after { font-size: 1.6em; font-weight: 100; }
+.aspekt-figur .vector-display::before { content: '\0028'; }
+.aspekt-figur .vector-display::after  { content: '\0029'; }
+.aspekt-figur .vector-components { display: flex; flex-direction: column; align-items: center; line-height: 1.15; }
+
+/* Hinweiszeile unter den Zeit-Reglern. */
+.aspekt-figur .aspekt-hint {
+    font-size: calc(10.5px * var(--kb-text-scale)); color: var(--kb-text3);
+    line-height: 1.5; margin-top: 6px;
+}
+
+/* ── Legende ─────────────────────────────────────────────────────────────── */
+.aspekt-figur .legend-swatch[data-c="gk-path"] { background: var(--gk-path); }
+.aspekt-figur .legend-swatch[data-c="gk-pos"]  { background: var(--gk-pos); }
+.aspekt-figur .legend-swatch[data-c="gk-weg"]  { background: var(--gk-weg); }
+.aspekt-figur .legend-swatch[data-c="gk-dba"]  { background: repeating-linear-gradient(90deg, var(--gk-dba) 0 5px, transparent 5px 9px); height: 3px; }
+.aspekt-figur .legend-swatch[data-c="gk-dab"]  { background: repeating-linear-gradient(90deg, var(--gk-dab) 0 5px, transparent 5px 9px); height: 3px; }
+
+/* Farb-Worte in der interaktiven Bildunterschrift folgen den Tokens (analog
+   .kb-sw-* in aspekt_kreisbahn.css). Diese Figur hat KEINE CVD-Overrides, die
+   Tokens sind also fix -> das Wort bleibt korrekt, es genuegt die Einfaerbung;
+   apply_farbwoerter() (Wort-Austausch pro Palette) ist hier nicht noetig. */
+.aspekt-figur .gk-sw-weg { color: var(--gk-weg); }
+.aspekt-figur .gk-sw-dba { color: var(--gk-dba); }
+
+/* ── Analyse-Seitenleiste: die acht Erklaer-Varianten ────────────────────── */
+.aspekt-figur .analysis-variant h3 {
+    margin: 0 0 8px 0; color: var(--kb-accent);
+    font-size: calc(12.5px * var(--kb-text-scale)); font-weight: 600;
+}
+.aspekt-figur .analysis-variant p {
+    margin: 0; line-height: 1.6;
+    font-size: calc(11.5px * var(--kb-text-scale)); color: var(--kb-text2);
+}
+/* Formeln in den Erklaerungen bleiben im Textfluss (keine Box, keine Nummer). */
+.aspekt-figur .analysis-variant mjx-container { background: none; border: none; padding: 0; margin: 0; }

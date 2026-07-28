@@ -40,12 +40,16 @@ import { buildOmegaVektorFig } from './figures/aspekt_omega_vektor.js';
 // \times \vec v, ISO-3D). Baut auf demselben kreis_spiral-Motor auf wie 1.57/1.59
 // (\alpha=0 fix); die Aussage ist die Vorzeichenunabhaengigkeit von \vec a_ZP.
 import { buildZentripetalkreuzFig } from './figures/aspekt_zentripetalkreuz.js';
+// Abb. 1.1 (1.1.4 „Der Ort") — Grundbegriffe der Kinematik. EIGENER, dritter
+// Motor (src/figures/grundbegriffe/): eine beliebige Bahnkurve statt einer
+// Kreis-/Spiralbahn, s. Kopfkommentar von aspekt_grundbegriffe.js.
+import { buildGrundbegriffeFig } from './figures/aspekt_grundbegriffe.js';
 
 // Aspekt-Figuren: jede .aspekt-figur wird ueber data-aspekt einer Factory
 // zugeordnet, die ihre EIGENE Motor-Instanz (Prefix + storeInstance) baut
 // (s. kreisbewegung/runtime.js) -> beliebig viele Figuren, auch auf derselben
 // Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
-const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig };
+const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig };
 
 function init_aspekt_figuren() {
     document.querySelectorAll('.aspekt-figur[data-aspekt]').forEach(fig => {

@@ -242,6 +242,18 @@ input[type="range"]::-moz-range-track {
     --kb-graph-bg: #161925;  /* Vorlage --graph-bg (dunkles Navy) */
     --kb-grid-line: #262c42; /* Vorlage --grid-line */
 }
+/* Farb-Palette der Kapitel-1.1-Figur (Abb. 1.1, --gk-*, s.
+   aspekt_grundbegriffe.css): eigene Tokenfamilie, daher eigener Dunkel-Zweig.
+   Werte 1:1 aus dem body.dark-Block der Stand-alone-Sim, mit derselben
+   Rot/Gruen-Vertauschung wie im Hell-Modus (der ABGEBILDETE Vektor A→B ist rot
+   wie im Druck — Begruendung steht bei den Hell-Tokens). */
+.aspekt-figur[data-aspekt="grundbegriffe"] {
+    --gk-path: #7d8296;
+    --gk-pos:  #f0b23e;
+    --gk-dba:  #ff5c5c;
+    --gk-dab:  #4cd24c;
+    --gk-weg:  #56b4e9;
+}
 /* Box-Titel: im Light-Mode wird der Typ-Akzent mit --ink abgedunkelt (55 %
    Akzent). Auf dunklem Grund kehrt sich das um -- dort muss der helle
    --ink-Anteil ueberwiegen, sonst faellt der Titel unter WCAG AA (Lernziel
