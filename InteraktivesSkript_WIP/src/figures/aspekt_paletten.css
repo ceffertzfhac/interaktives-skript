@@ -63,9 +63,10 @@
     --kb-ax: #D55E00;
     --kb-traj: #999999;
     /* Szenen-Objekte: der Winkelbogen wird zur neutralen Hilfslinie
-       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen),
+       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen; der
+       Grauwert ist gegen r UND die graue Bahnspur optimiert, Kontrast ≥ 3),
        der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
-    --kb-phi: #5a5a5a;
+    --kb-phi: #6c6c6c;
     --kb-point: #B84DBF;
 }
 
@@ -86,9 +87,10 @@
     --kb-ax: #F0E442;
     --kb-traj: #9aa3b8;
     /* Szenen-Objekte: der Winkelbogen wird zur neutralen Hilfslinie
-       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen),
+       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen; der
+       Grauwert ist gegen r UND die graue Bahnspur optimiert, Kontrast ≥ 3),
        der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
-    --kb-phi: #9a9a9a;
+    --kb-phi: #6c6c6c;
     --kb-point: #B84DBF;
 }
 
@@ -112,9 +114,10 @@
     --kb-ax: #8a2418;
     --kb-traj: #999999;
     /* Szenen-Objekte: der Winkelbogen wird zur neutralen Hilfslinie
-       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen),
+       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen; der
+       Grauwert ist gegen r UND die graue Bahnspur optimiert, Kontrast ≥ 3),
        der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
-    --kb-phi: #5a5a5a;
+    --kb-phi: #6c6c6c;
     --kb-point: #B84DBF;
 }
 
@@ -136,8 +139,9 @@
     --kb-ax: #c45040;
     --kb-traj: #9aa3b8;
     /* Szenen-Objekte: der Winkelbogen wird zur neutralen Hilfslinie
-       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen),
+       (die Quellen-Grün wäre hier vom roten Punkt nicht zu trennen; der
+       Grauwert ist gegen r UND die graue Bahnspur optimiert, Kontrast ≥ 3),
        der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
-    --kb-phi: #9a9a9a;
+    --kb-phi: #6c6c6c;
     --kb-point: #B84DBF;
 }

@@ -21,21 +21,23 @@
 // (s. CSS), daher hier nicht erneut aufgeführt.
 const PALETTES = {
   normal:        { phi:"#28a745", point:"#dc3545", rlat:"#474747", vlat:"#F47A2D", azp:"#8361af", omega:"#1555A2", alpha:"#bf262d", at:"#d24b3e", ar:"#2f74d0", rx:"#1f77b4", ry:"#1a8a50", ax:"#17a2b8", traj:"#7f7f7f" },
-  deuter_hell:   { phi:"#5a5a5a", point:"#B84DBF", rlat:"#000000", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#D55E00", traj:"#999999" },
-  deuter_dunkel: { phi:"#9a9a9a", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#F0E442", traj:"#9aa3b8" },
-  tritan_hell:   { phi:"#5a5a5a", point:"#B84DBF", rlat:"#3a3a3a", vlat:"#E69F00", azp:"#2b6e51", omega:"#009E73", alpha:"#D55E00", at:"#c0392b", ar:"#009E73", rx:"#0072B2", ry:"#5fb88a", ax:"#8a2418", traj:"#999999" },
-  tritan_dunkel: { phi:"#9a9a9a", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#5fd49d", omega:"#4caa7d", alpha:"#e8703a", at:"#e05a4a", ar:"#4caa7d", rx:"#3f8fd6", ry:"#7fd4b0", ax:"#c45040", traj:"#9aa3b8" },
+  deuter_hell:   { phi:"#6c6c6c", point:"#B84DBF", rlat:"#000000", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#D55E00", traj:"#999999" },
+  deuter_dunkel: { phi:"#6c6c6c", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#F0E442", traj:"#9aa3b8" },
+  tritan_hell:   { phi:"#6c6c6c", point:"#B84DBF", rlat:"#3a3a3a", vlat:"#E69F00", azp:"#2b6e51", omega:"#009E73", alpha:"#D55E00", at:"#c0392b", ar:"#009E73", rx:"#0072B2", ry:"#5fb88a", ax:"#8a2418", traj:"#999999" },
+  tritan_dunkel: { phi:"#6c6c6c", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#5fd49d", omega:"#4caa7d", alpha:"#e8703a", at:"#e05a4a", ar:"#4caa7d", rx:"#3f8fd6", ry:"#7fd4b0", ax:"#c45040", traj:"#9aa3b8" },
 };
 
 // ── Koexistierende Vektor-Farben je Figur (Tokens) ────────────────────────
 // ay → ry-Token, vx → rx-Token, v → vlat-Token (Aliase, s. CSS).
+// traj (durchlaufene Bahn) ist mitgelistet: sie ist grau wie r und wie der
+// Winkelbogen der CVD-Paletten — genau die Nachbarschaft, die auffallen muss.
 const SETS = [
-  { name:"1.38 Positionen",        toks:["rlat","rx","ry","phi","point"] },
-  { name:"1.50 ax/ay-Zerlegung",   toks:["rlat","vlat","azp","ax","ry","phi","point"] },
-  { name:"1.51 a_t/a_r-Zerlegung", toks:["rlat","vlat","azp","at","ar","phi","point"] },
-  { name:"1.57 ω-Vektor",          toks:["rlat","vlat","omega","phi","point"] },
-  { name:"1.58 a_ZP-Kreuz",        toks:["omega","vlat","azp","rlat","point"] },
-  { name:"1.59 α/ω",               toks:["rlat","omega","alpha","phi","point"] },
+  { name:"1.38 Positionen",        toks:["rlat","rx","ry","phi","point","traj"] },
+  { name:"1.50 ax/ay-Zerlegung",   toks:["rlat","vlat","azp","ax","ry","phi","point","traj"] },
+  { name:"1.51 a_t/a_r-Zerlegung", toks:["rlat","vlat","azp","at","ar","phi","point","traj"] },
+  { name:"1.57 ω-Vektor",          toks:["rlat","vlat","omega","phi","point","traj"] },
+  { name:"1.58 a_ZP-Kreuz",        toks:["omega","vlat","azp","rlat","point","traj"] },
+  { name:"1.59 α/ω",               toks:["rlat","omega","alpha","phi","point","traj"] },
 ];
 
 // ── CVD-Simulation (Brettel 1997, lineares RGB, Schweregrad 1.0) ──────────
@@ -88,6 +90,9 @@ function simulatedLab(hex, cvdKey) {
   return xyzToLab(xyz);
 }
 
+// Lab OHNE CVD-Simulation (normales Farbsehen).
+function srgbToLab(hex) { return xyzToLab(linToXyz(hexToSrgb(hex).map(srgbToLin))); }
+
 // ── Schwellen ─────────────────────────────────────────────────────────────
 // ΔE76 unter der jeweiligen CVD-Simulation: primäres Unterscheidbarkeits-Maß.
 const DE_WARN = 10;   // grenzwertig
@@ -98,6 +103,14 @@ const DE_FAIL = 5;    // eindeutig zu nah -> justieren
 // Quellen-Palette selbst hat Orange #F47A2D nur bei CR 2.74 — also Schwellen
 // bei 2.0 (Auf-Weiß-Line 2.2..2.7 ist akzeptiert, <2.0 wirklich zu blass).
 const CONTRAST_FAIL = 2.0;
+// ΔE76 OHNE Simulation (normales Farbsehen). Eigene, groessere Schwelle: hier
+// geht es nicht um Verwechslung durch eine Sehschwaeche, sondern darum, dass
+// zwei duenne Linien/kleine Flaechen derselben Farbfamilie nebeneinander noch
+// als verschieden gelesen werden. Reines INFO — die Quellen-Palette ist vom
+// PDF-Skript vorgegeben und darf nicht am Werkzeug scheitern; die Zahl macht
+// aber sichtbar, WO die Quelle selbst eng wird (roter Massenpunkt neben rotem
+// alpha-Pfeil in 1.59: ΔE 9,9 — die Quelle zeichnet in Abb. 1.60 beides rot).
+const DE_NORMAL_ENG = 15;
 const BG = { hell: "#ffffff", dunkel: "#1e2228" };
 
 let failed = false;
@@ -147,6 +160,24 @@ checkPalette("tritan_dunkel", "tritan", "dunkel");
 console.log("\n--- INFO (kein Gate): Quellen-Palette (Normal) unter CVD -- so sieht es der CVD-Leser OHNE Palette ---");
 checkPalette("normal", "deuter", "hell", true);
 checkPalette("normal", "tritan", "hell", true);
+
+// ── Normales Farbsehen: engste koexistierende Paare je Palette (INFO) ──────
+// Schliesst die Luecke, die entsteht, weil die Quellen-Palette oben nur noch
+// unter CVD-Simulation und dort nur als INFO gemessen wird.
+console.log("\n--- INFO (kein Gate): engste Paare bei NORMALEM Farbsehen ---");
+for (const name of Object.keys(PALETTES)) {
+  const pal = PALETTES[name];
+  const eng = [];
+  for (const set of SETS) {
+    const labs = set.toks.map(t => srgbToLab(pal[t]));
+    for (let i=0;i<labs.length;i++) for (let j=i+1;j<labs.length;j++) {
+      const d = dE76(labs[i],labs[j]);
+      if (d < DE_NORMAL_ENG) eng.push(`${set.toks[i]}↔${set.toks[j]} ΔE=${d.toFixed(1)} (${set.name})`);
+    }
+  }
+  const uniq = [...new Set(eng)];
+  console.log(`  ${name.padEnd(14)} ${uniq.length ? uniq.join("; ") : `keine unter ΔE ${DE_NORMAL_ENG}`}`);
+}
 
 console.log("");
 if (failures.length) {

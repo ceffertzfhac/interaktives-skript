@@ -61,7 +61,11 @@
        Rot der 2D-Abbildungen (#dc3545), NICHT das der ISO-Abbildungen
        (#bf262d) — dort ist der Punkt zwar ebenfalls rot, aber #bf262d ist
        hier schon als --kb-alpha vergeben, und in 1.59 sind Punkt und α
-       gleichzeitig sichtbar.
+       gleichzeitig sichtbar. Auch mit dem entfernteren Rot bleiben die beiden
+       das engste Paar der Palette (ΔE 9,9 bei normalem Sehen, gemessen von
+       cvd_check.mjs) — das ist hingenommen, weil die Quelle selbst so färbt
+       (Abb. 1.60 zeichnet α-Pfeil UND Massenpunkt rot) und weil Form und Ort
+       eindeutig trennen: gefüllte Scheibe auf der Bahn ↔ Pfeil auf der Achse.
 
        BEWUSST NICHT übernommen (Quelle wäre mehrdeutig oder unbrauchbar):
          • a_t/a_r zeichnet die Quelle wie a in Violett (#8361af) — 1.50/1.51
