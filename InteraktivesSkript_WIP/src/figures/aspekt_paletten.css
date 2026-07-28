@@ -37,7 +37,16 @@
    Wiederverwendung derselben Hex-Werte across Families (z. B. rx = a-Blau) ist
    CVD-bedingt (begrenzte unterscheidbare Farben) und betrifft nur NICHT-
    gleichzeitig gezeigte Größen — analog zu den dokumentierten Schwächen der
-   Quellen-Palette in aspekt_kreisbahn.css. */
+   Quellen-Palette in aspekt_kreisbahn.css.
+
+   SYNC-PFLICHT bei Hex-Änderung: diese Datei ist die Quelle der Vektor-Farben.
+   Zwei weitere Stellen spiegeln sie und sind mitzuziehen —
+     • cvd_check.mjs (PALETTES-Spiegel) bei JEDER Hex-Änderung;
+     • FARBWORT-Wortmap in aspekt_kreisbahn.js, wenn die Änderung die Hue- oder
+       Helligkeits-Kategorie verschiebt (z. B. Blau→Grün) oder zwei koexistie-
+       rende Token auf dasselbe Wort zusammenfallen lässt. caption_farbwort_
+       check.mjs wacht über Vollständigkeit + Disambiguierung + .kb-sw-*-Klasse,
+       NICHT aber über Wort↔Hex-Korrekturtheit — das bleibt menschliches Urteil. */
 
 /* ── Deuteranopia (Rot-Grün) — Hell ─────────────────────────────────────── */
 :root[data-palette="deuter"][data-darkmode="0"] .aspekt-figur,

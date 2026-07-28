@@ -531,6 +531,13 @@ export function toggle_panel_left(btn) {
 // CVD-Leser noch sicher sieht (so bleibt „ω Hellblau vs a_ZP Blau" in 1.58
 // unterscheidbar). Normal-Hell/Dunkel identisch: darkmode.css ändert nur die
 // Alias-Token + --kb-traj (Grau→Grau), die WERT-Token behalten ihre Hue.
+//
+// SYNC: Quelle der Vektor-Farben ist aspekt_paletten.css (s. SYNC-PFLICHT dort).
+// Verschiebt eine Hex-Änderung die Hue-/Helligkeits-Kategorie oder lässt zwei
+// koexistierende Token auf dasselbe Wort zusammenfallen, ist diese Map in allen
+// betroffenen Kombinationen mitzuziehen. caption_farbwort_check.mjs wacht über
+// Vollständigkeit (a), Disambiguierung (b) und .kb-sw-*-Klasse (c) — NICHT über
+// Wort↔Hex-Korrekturtheit; das bleibt menschliches Urteil.
 export const FARBWORT = {
     normal: { 0: { omega:'Blau', rlat:'Grau', vlat:'Orange', azp:'Violett', alpha:'Rot', traj:'Grau' },
               1: { omega:'Blau', rlat:'Grau', vlat:'Orange', azp:'Violett', alpha:'Rot', traj:'Grau' } },
