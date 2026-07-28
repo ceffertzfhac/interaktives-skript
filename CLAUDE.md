@@ -29,14 +29,14 @@ The repo root holds:
 - `Input/` — drop folder for source material the user provides; **read-only reference, do not edit**. **Untracked and git-ignored on purpose** — the repository is public and this material must not be published, so it exists only in the local working copy (see `.gitignore`). Never `git add` anything under `Input/`:
   - `Input/InteraktivesSkript_legacy/` — the **frozen baseline** snapshot of the site as of the split (relocated here from the repo root). Do not edit; it exists for reference/diffing against WIP. Started byte-identical to WIP. *(The legacy `src/script.js` — the whole app in one 2787-line file — lives only here now; WIP is modularized, see Architecture.)*
   - `Input/v0.13/` — LaTeX source of the **complete target script** (`Physik_pskript_v0.13.tex` + compiled `.pdf` + per-chapter `.tex` files) spanning all 15+ chapters (Mechanics, EM, Schwingungen, Wellen, Gravitation, Stöße, …). This is the content target the WIP is being scaled toward.
-  - `Input/Simulationen/` — 16 standalone simulation projects (Atwood, Federpendel, freier Fall, Kreisbewegung, Wellen, Lorentz-force, schiefer Wurf, …) — candidate source material for future interactive figures. `Project_kreisbewegung_simulation/` has been adapted into the WIP as `src/figures/kreisbewegung/` (gc10, section 1.5.5); its own `shared/js/*` dependency (a sibling-project library not included in this repo's `Input/`) was ported alongside it into `src/figures/kreisbewegung/lib/`. `Project_kreis_spiralbewegung_simulation/` has likewise been adapted into `src/figures/kreis_spiral/` — the SECOND motor, used by the aspekt figures that need the rotation axis in view (ISO 3D); it reuses the already-ported `kreisbewegung/lib/*` instead of carrying its own copy of the shared helpers (`shared/js/export-image.js` was not needed — the sim's own UI/topbar is not ported).
+  - `Input/Simulationen/` — 16 standalone simulation projects (Atwood, Federpendel, freier Fall, Kreisbewegung, Wellen, Lorentz-force, schiefer Wurf, …) — candidate source material for future interactive figures. Two are already adapted into the WIP as the two figure motors: `Project_kreisbewegung_simulation/` → `src/figures/kreisbewegung/` (gc10, section 1.5.5; its sibling-project `shared/js/*` dependency, not part of this repo's `Input/`, was ported alongside into `kreisbewegung/lib/`) and `Project_kreis_spiralbewegung_simulation/` → `src/figures/kreis_spiral/` (reuses the already-ported `kreisbewegung/lib/*`; the sim's own UI/topbar and `export-image.js` were not needed). Details: "Module layout" below.
 
 Inside the WIP site folder the structure is:
   - `index.html` — **the shell only**: header/overlays, `#paper` mount holding one `<div data-chapter="…">` placeholder per chapter + the global `.chapter-pagenav`. Chapter prose lives in `chapters/` and is injected at runtime (see `src/chapters.js`). MathJax `$$…$$` / `\[…\]` / `\(…\)` formulas sit inside the chapter fragments, not here.
   - `chapters/` — **one HTML fragment per v0.13 section** (`ch_NN[_MM]_<slug>.html`, currently 17 files: `ch_00_grundlagen` = TK 0, `ch_01_*` + `ch_02_dynamik_drehbewegung` = TK 1 Mechanik, `ch_03_*` = TK 2 Elektromagnetismus, `ch_04_*` = TK 3 Schwingungen/Wellen; each transcribed 1:1 from its `Input/v0.13/*.tex`). Each fragment holds the h2 section intro + h3 subsections + their `<section>`s, figures, highlight boxes — everything that used to be inline in `index.html`. Fetched + injected by `src/chapters.js` before `paginate()`; reading order and the TK grouping come from the `<div data-chapter="…" data-tk-num data-tk-title>` order in `index.html` (note `ch_02` sits between `ch_01_03` and `ch_01_06`). Prose is **static** — interactivity is added per figure (see aspect figures). **Adding a section = one new file here + one `<div data-chapter="…">` line in `index.html` (O(1)).**
   - `MIGRATION_v0.13_nach_HTML.md` — **runbook for migrating the next chapter out of `Input/v0.13/`** (German): counter scopes, asset pipeline (PDF/TikZ → PNG), LaTeX→HTML macro mapping, MathJax config, cross-references, the three verification harnesses, a catalogue of 13 real pitfalls with how each was detected, and a checklist. **Read it before starting another chapter** — most of the listed traps are silent (wrong-but-consistent numbering, an image that is a PDF wearing a `.png` extension, a loaded-but-not-enabled MathJax package).
   - `VERIFIKATION_kapitel_1.4.md` — phase-by-phase test plan for the migrated chapter, with acceptance criteria
-  - `INTERAKTIVE_ASPEKT_FIGUREN.md` — **runbook for building an interactive "aspect figure"** (German) that reuses a stand-alone sim's engine — `figures/kreisbewegung/` (2D top-down, figures 1.38–1.51) or `figures/kreis_spiral/` (ISO 3D with the rotation axis, figure 1.59 onward) — feature-gated onto one chapter aspect, two-stage (inline + magnifier overlay), optics derived from the sim. Each figure builds its own `createRuntime()` motor instance (per-instance store/DOM isolation, so multiple figures coexist), registered via `main.js::ASPEKT_FACTORIES`. **Section 0a is the efficiency rule: copy an existing figure and feature-gate it — never write one from scratch.** The template cascade is: nearest aspekt figure (by interaction pattern, not topic) → the stand-alone sim (for optics *and* interaction conventions) → the static v0.13 figure → the legacy figure. "Like fig. 1.38" means pixel-identical, not "similar" — a deviation that is arguably *more* correct still counts as a bug. Concept, step-by-step, a catalogue of 26 real pitfalls (arrow-length coupling `ARROW_LEN=5·strokeWidth`, hidden DOM stubs `updateScene` dereferences, unnumbered `\[…\]` panel formulas, CSS-specificity vs. the overlay, section-link nav bug, graph-hit-rect null deref, speed-radio/runbar per-instance collisions, the now-solved singleton-store conflict; and from fig. 1.41: a MathJax-`foreignObject` glyph sits constantly too low because the `mjx-container` is the *line box* — use a native `<svg:text>` for single glyphs instead, `<input type=range>` fires one `input` per intermediate value so comparison-curve snapshots must be per drag-gesture, ghost curves must be stored as data and re-projected because axes rescale, a curve-shaping parameter change must reset the run parameter to 0, a syntax error in **one** figure module kills **all** figures via `main.js`'s side-effect imports, and `overflow:hidden` on `.aspekt-figur` makes it the sticky scroll container so `position:sticky` children never stick; and from fig. 1.59: a figure that drives the clock itself must keep `store.simulatedTime` in sync or the graph hover clamps to t=0 forever, and a source sim's vector length factors can be unreadable in an aspekt figure's slider ranges — quantities with different units need separate, documented scales; and from figs. 1.57/1.58: a static figure that shares its `id` with an earlier figure occurrence (`label_aspekt_figuren` resolves via `getElementById` → first match wins → wrong "Abb. 1.n" badge) must get a unique id on its 2nd occurrence while the 1st keeps it (so a self-xref "Abbildung 1.56" still resolves), and a vector drawn to REAL scale (not exaggerated like its static source) can be invisible at the family's default ω₀=0.2 — pick a figure-specific default that makes every shown vector legible and document the deviation), and a checklist. Verify visually yourself before asking the user: `.claude/skills/interaktive-aspekt-figur/scripts/figur_screenshot.mjs` drives headless Chromium (playwright-core) for per-width-mode/overlay screenshots and ink-box geometry — *looking beats measuring*, and when measuring, measure the innermost drawn element. Reference impls: `src/figures/aspekt_kreisbahn.js` (fig. 1.38), `src/figures/aspekt_weg_zeit.js` (fig. 1.39), `src/figures/aspekt_winkel_zeit.js` (fig. 1.41) and — for the ISO-3D motor — `src/figures/aspekt_alpha_omega.js` (fig. 1.59), `aspekt_omega_vektor.js` (fig. 1.57) and `aspekt_zentripetalkreuz.js` (fig. 1.58, the latest — the nearest-neighbor clone to copy for the next ISO-3D aspect figure). **Pick the motor first**: anything that has to show the rotation axis (ω, α, the plane height h) needs `kreis_spiral`; everything else stays on `kreisbewegung`. `CHANGES_aspekt_1.38_1.40_und_grundgeruest.md` documents every change since the first (singleton) version. (Figure numbers are the document's actual `Abb. 1.n` from `numbering.js` — note the gap: 1.40 is the static radial-tangential figure, not an aspekt figure, which is why the file historically called „weg-zeit 1.40" is really 1.39.)
+  - `INTERAKTIVE_ASPEKT_FIGUREN.md` — **runbook for building an interactive "aspect figure"** (German): a stand-alone sim's engine feature-gated onto one chapter aspect, two-stage (inline + magnifier overlay), registered via `main.js::ASPEKT_FACTORIES`. **Read it before touching an aspect figure.** Its three opening rules, because they decide everything downstream: (1) **pick the motor first** — anything that must show the rotation axis (ω, α, plane height h) needs `kreis_spiral` (ISO 3D), everything else stays on `kreisbewegung` (2D top-down); (2) **copy an existing figure and feature-gate it, never write one from scratch** (template cascade: nearest figure *by interaction pattern, not topic* → the stand-alone sim → the static v0.13 figure → the legacy figure); (3) **"like fig. 1.38" means pixel-identical**, not "similar". The rest is concept, step-by-step, a **catalogue of 26 real pitfalls** (the valuable part — most are silent) and a checklist; do not mirror that catalogue here, it grows with every figure. Verify visually *yourself* before asking the user — `.claude/skills/interaktive-aspekt-figur/scripts/figur_screenshot.mjs` (headless Chromium, per width-mode/overlay screenshots + ink-box geometry); looking beats measuring, and when measuring, measure the innermost drawn element. Change history since the first (singleton) version: `CHANGES_aspekt_1.38_1.40_und_grundgeruest.md`.
   - `src/` — the ESM modules (`main.js` entry + `core/transform/ui/print/pages/shell/chapters.js` + `figures/*.js`); no monolithic `script.js` (that survives only in `Input/InteraktivesSkript_legacy/`)
   - `src/styles.css`, `src/darkmode.css` — styles; `darkmode.css` is loaded but `disabled` and toggled at runtime
   - `bilder/` — static figure PNGs/SVGs used in static mode and prose
@@ -85,50 +85,18 @@ src/numbering.js   init_numbering() — box, figure and image numbering off page
                    in the MIDDLE of a chapter can be skipped without shifting the migrated
                    sections' numbers (first figure of the section = figure-offset + 1; the
                    value is removable once all prior sections are migrated contiguously).
-                   Currently migrated: 1.1 (Kinematik, figs 1.1–1.20), 1.2 (Impuls und
-                   Kraft, figs 1.21–1.30), 1.3 (Arbeit/Leistung/Energie, figs 1.31–1.37),
-                   1.4 (Kreisbahnen, figs 1.38–1.60, offset 37/3), 1.5 (Rotation, figs
-                   1.61–1.72, offset 60/7) and 1.6 (Bezugsysteme/Scheinkräfte, fig 1.73,
-                   Zusammenfassung 1.9) — 1.6 sits after ch_02 in reading order and carries
-                   no offset (contiguous to 1.5). 1.7 (Stöße, no figs/no summary, unchanged counters)
-                   also migrated, and 1.8 (Gravitation, no figs/no summary, unchanged
-                   counters) — TK 1 (Mechanik, 1.0–1.8) is now COMPLETE. TK 2
-                   (Elektromagnetismus, ch_03_*, data-tk-num="2") started: 2.0
-                   (Einleitung) and 2.1 (Grundlagen der Elektrizitätslehre) migrated.
-                   2.1's h2 carries data-figure-offset/-zusammenfassung-offset="0" to
-                   start the chapter-2 counters; the 2.x numbering is confirmed live
-                   (Abb. 2.1, Beispiel 2.1.1, Zusammenfassung 2.1, equations 2.1.n).
-                   2.2 (Elektrostatik) also migrated — contiguous to 2.1 (no offset),
-                   figs 2.2–2.3 (both rendered from tikzpicture blocks, not
-                   \includegraphics), Zusammenfassung 2.2, with 5 cross-refs back into
-                   2.1/1.8. 2.3 (Elektrodynamik und Magnetismus) also migrated —
-                   contiguous to 2.2 (no offset), 7 subsections, figs 2.4–2.8
-                   (2.4/2.5 from tikzpicture blocks, 2.6 Kreisspule, 2.7/2.8 Drehmoment
-                   auf Leiterschleife from \includegraphics-PDFs), Beispiele 2.3.1–2.3.5,
-                   Zusammenfassung 2.3, equations 2.3.1–2.3.96 (verified against the
-                   v0.13 PDF). TK 2 (Elektromagnetismus, 2.0–2.3) is now COMPLETE.
-                   TK 3 (Schwingungen und Wellen, ch_04_*, data-tk-num="3") started:
-                   3.0 (Einleitung) migrated — pure prose, no offset (chapter-3
-                   counters reset to 0 at the chapter boundary, first content section
-                   3.1 will set them). NOTE a v0.13 SOURCE BUG: the master puts
-                   \addtocounter{section}{-1} AFTER \section{Einleitung} for chapter 3
-                   (before it for ch 1/2), so the PDF numbers the Einleitung as 3.1
-                   AND "Schwingungen" as 3.1 (duplicate). We follow the obvious intent
-                   (matching TK 1/TK 2): 3.0 Einleitung, 3.1 Schwingungen, 3.2 Wellen —
-                   documented in ch_04_00_einleitung.html. 3.1 (Schwingungen)
-                   also migrated — 9 subsections, figs 3.1–3.4 (all TikZ→PNG,
-                   data-figure-offset="0" starting the chapter-3 figure counter),
-                   67 equations (3.1.1–3.1.67), 3 Beispiele + 1 Bemerkung, no
-                   Zusammenfassung; two v0.13 SOURCE BUGS handled and documented
-                   in ch_04_01_schwingungen.html (a \ref to a non-existent
-                   horizontal-figure, and a label typo …schwingung2). 3.2 (Wellen)
-                   migrated as a faithful PLACEHOLDER STUB — the v0.13 source has
-                   no Wellen content (only a "not covered in WS 2025/26" note), so
-                   ch_04_02_wellen.html is just the h2 + that note as one page,
-                   no offset. TK 3 (3.0–3.2) is now structurally COMPLETE; 3.2
-                   gets real content when the topic is lectured.
-                   The 1.4/1.5 offsets are now redundant (1.1–1.6 contiguous) but kept —
-                   they still hold as ABSOLUTE start values.
+                   The per-section migration state is deliberately NOT tracked here (it
+                   changes with every migration): read the offsets on the h2s in
+                   chapters/ and each fragment's header comment, plus BACKLOG.md P12
+                   for what is left. Status as of v1.27: TK 0–3 all migrated, only
+                   ch_04_02 (3.2 Wellen) is a faithful placeholder stub because the
+                   v0.13 source has no content there. Offsets currently live only on
+                   ch_00 (0/0), ch_01_kreisbewegungen (37/3), ch_02 (60/7), ch_03_01
+                   (0/0) and ch_04_01 (figures 0); everything else is contiguous, and
+                   the 1.4/1.5 offsets are redundant by now but kept as valid ABSOLUTE
+                   start values. v0.13 SOURCE BUGS found while migrating are documented
+                   in the affected fragment (e.g. the duplicate section number 3.1 in
+                   ch_04_00_einleitung.html), not here.
                    Box titles are split into <span class="hb-type"> (type + number, uppercased
                    via CSS) and <span class="hb-name"> (the box's own title, normal case, so
                    formula parts aren't mangled) — core.js creates the type span, numbering.js
@@ -151,23 +119,6 @@ src/figures/kreisbewegung/  self-contained multi-file figure (gc10): constants/s
                           (and the sleeping gc10 sim) can reuse the motor without clobbering each
                           other. state.js::q(id) = getElementById(store.idPrefix + id); the
                           default idPrefix 'kb_' keeps gc10 untouched.
-src/figures/aspekt_kreisbahn.js   interactive "aspect figure" 1.38 (positions aspect, 1.4.1):
-                          its own buildKreisbahnFig(fig) factory, a createRuntime() motor
-                          instance, feature-gated store.show* flags, slider + pointer-drag of the
-                          mass point, two-stage (inline + magnifier overlay). Also exports the
-                          generic toggles (toggle_aspekt/close_aspekt_overlay/toggle_analyse/
-                          toggle_panel_left) reused by ALL aspekt figures via main.js binding.
-src/figures/aspekt_weg_zeit.js     aspect figure 1.39 (x(t)/y(t) way-time aspect): same per-
-                          instance pattern, adds stacked dual graphs + auto-stop animation
-                          (0…12 s) via playback.js::resetOnPlayAfterAutoStop. Graph hover is gated
-                          to .aspekt-im-overlay only. „Letzte Kurve behalten" toggle freezes the
-                          previous run as a dashed thinner ghost line (graph_prev_line_top/bottom).
-src/figures/aspekt_winkel_zeit.js   aspect figure 1.41 (φ(t) angle-time aspect): same per-instance
-                          pattern, single graph (graphType1='phit', not stacked) + auto-stop (0…12 s).
-                          Sliders only t + T (R fixed at 1.5 m — radius doesn't move the angle curve).
-                          Angle arc per revolution like 1.38; each completed revolution stays as a
-                          faded full-circle ghost (.aspekt-angle-arc-prev) — current arc most prominent.
-                          Same „Letzte Kurve behalten" ghost-line toggle in the diagram.
 src/figures/kreis_spiral/   the SECOND motor (no gcN sim of its own — figure-only), ported from
                           Input/Simulationen/Project_kreis_spiralbewegung_simulation/:
                           constants/physics/render/state.js + runtime.js, reusing
@@ -178,64 +129,36 @@ src/figures/kreis_spiral/   the SECOND motor (no gcN sim of its own — figure-o
                           acceleration), the plane height h and the spiral mode natively.
                           Own store singleton + own createRuntime() (prefix 'ks<n>_'), fully
                           independent of the kreisbewegung motor. Port changes vs. the source
-                          are minimal, additive and marked "PORT-AENDERUNG" in the code:
-                          store.idPrefix in q(); trimmed initDOM (scene/graph/live only, no
-                          sim UI); store.simDuration (precompute horizon per figure);
-                          plot rect inside store.graphScale[idx] (ghost-curve projection);
-                          store.omegaLenFactor/.alphaLenFactor/.axisVecLenCap (own length
-                          scales for the axis vectors — see aspekt_alpha_omega.js);
-                          store.isoElevation (viewing height above the orbit plane in
-                          degrees; undefined = the source's true isometry, 35.264°).
-                          The last one exists because ISO foreshortening makes an
-                          in-plane vector of CONSTANT magnitude project between 0.707×
-                          and 1.225× (factor √3) depending on direction — reported as a
-                          bug on fig. 1.57 ("die Bahngeschwindigkeit wird länger/kürzer").
-                          It is not a bug: the projection is algebraically identical to
-                          the source sim AND to legacy's to2d(…, perspective 3) — both
-                          just default to a top-down view, while 1.57–1.59 sit in ISO
-                          permanently. Those three therefore offer a „Blickrichtung"
-                          toggle (flach 60° = default, räumlich = the isometry); at 60°
-                          the variation drops to 1.15 while the rotation axis (and with
-                          it ω/α) is foreshortened to 0.61. projectISO keeps the
-                          HORIZONTAL in-plane factor fixed, so the zoom rule and the
-                          scene width are unaffected — only the ellipse gets rounder.
-src/figures/aspekt_alpha_omega.js   aspect figure 1.59 (α as a vector, 1.4.9) — FIRST figure on
-                          the kreis_spiral motor: ISO scene with ω (blue) and α (red) on the z
-                          axis, single ω(t) graph, sliders t/R/ω₀/α, auto-stop (0…12 s), ghost
-                          curve, Darstellung toggles (r/φ/trajectory). One α slider covers BOTH
-                          sub-figures of the static figure (α>0 = (a), α<0 = (b), α=0 = uniform);
-                          antiparallel α runs ω through zero, where the ω arrow flips. ω/α arrow
-                          lengths use SEPARATE linear scales (different units → no common scale;
-                          the sim's own factors made α ~11× too short to read) — stated in the
-                          caption and in the Darstellung note.
-src/figures/aspekt_omega_vektor.js   aspect figure 1.57 (ω as a vector, 1.4.8 —
-                          \vec v = \vecω × \vec r): clone of 1.59 on the same
-                          kreis_spiral motor (α=0 fix, no α slider). ISO scene with
-                          ω (blue, axis), r (grey), v (orange); single φ(t) graph
-                          (analog to 1.59's ω(t) — φ=ω₀t linear ramp; ghost curve
-                          shows ±ω₀ slope = the two rotation directions). The ω₀
-                          slider sign covers BOTH sub-figures of the static figure
-                          (ω₀>0 = (a) gegen den Uhrzeigersinn, ω₀<0 = (b) im
-                          Uhrzeigersinn). Colors fixed to the LaTeX source
-                          (\textcolor[HTML]{1555A2}/{474747}/{F47A2D} → --kb-omega/
-                          --kb-rlat/--kb-vlat, the latter two NEW in
-                          aspekt_kreisbahn.css). v drawn to real scale (VEL_SCALE).
-src/figures/aspekt_zentripetalkreuz.js   aspect figure 1.58 (a_ZP as a vector,
-                          1.4.8 — \vec a_ZP = \vecω × \vec v): clone of 1.57 on the
-                          same motor (α=0 fix). ISO scene with ω (blue), v (orange),
-                          a_ZP (violet, --kb-azp #8361af NEW); single |a_ZP|(t)=Rω²
-                          graph (CONSTANT — the ghost curve of a +ω run lies EXACTLY
-                          on a −ω run at the same |ω₀|, making the core statement —
-                          a_ZP points inward regardless of ω's sign — visible). r is
-                          a toggle (default OFF — the static figure shows no r);
-                          aDecomp='none' draws the purely centripetal cartesian
-                          acceleration. DEFAULT ω₀ = 2.0 rad/s at slider range ±4
-                          (NOT 0.2 like 1.57/1.59): a_ZP is drawn to real scale
-                          (ACC_SCALE), and at ω₀=0.2 |a_ZP|=0.06 m/s² → ~1 px
-                          (invisible) — the deviation is
-                          documented in the module header and caption. Quantities
-                          with different units need separate, documented scales
-                          (pitfall 24, same family as 1.59's ω/α).
+                          are minimal, additive and marked "PORT-AENDERUNG" in the code
+                          (store.idPrefix in q(); trimmed initDOM; store.simDuration; plot
+                          rect inside store.graphScale[idx]; own ω/α arrow-length scales;
+                          store.isoElevation). The last one exists because ISO foreshortening
+                          makes an in-plane vector of CONSTANT magnitude project between
+                          0.707× and 1.225× — not a bug (identical to the source sim and to
+                          legacy's to2d(…, perspective 3), which merely default to top-down),
+                          hence the „Blickrichtung" toggle on 1.57–1.59 (flach 60° = default,
+                          räumlich = true isometry). Full rationale: INTERAKTIVE_ASPEKT_FIGUREN.md.
+src/figures/aspekt_<name>.js   the 14 interactive "aspect figures", one module + one
+                          .css each. ALL share one pattern: a buildXFig(fig) factory, its own
+                          createRuntime() motor instance, feature-gated store.show* flags,
+                          sliders, two-stage display (inline + magnifier overlay), a single
+                          or stacked graph with auto-stop + ghost curve. **Never write one
+                          from scratch — copy the nearest existing figure and feature-gate
+                          it**; the runbook INTERAKTIVE_ASPEKT_FIGUREN.md holds the template
+                          cascade, and each module's header comment names its own template
+                          and every deviation from it (per-figure detail lives THERE, not
+                          here, so this list stays O(1) as figures are added):
+                            kreisbewegung (2D)   1.38 kreisbahn · 1.39 weg_zeit ·
+                              1.41 winkel_zeit · 1.42 vxvy_zeit · 1.43 betragv_zeit ·
+                              1.44 omega_zeit · 1.46 axay_zeit · 1.47 betraga_zeit ·
+                              1.49 periodendauer · 1.50 axay_winkelbeschl ·
+                              1.51 arat_winkelbeschl
+                            kreis_spiral (ISO)   1.57 omega_vektor · 1.58 zentripetalkreuz ·
+                              1.59 alpha_omega
+                          aspekt_kreisbahn.js (1.38) additionally exports the generic toggles
+                          (toggle_aspekt/close_aspekt_overlay/toggle_analyse/toggle_panel_left)
+                          reused by ALL figures via main.js binding, and is the binding OPTICAL
+                          reference — "like 1.38" means pixel-identical, not "similar".
 src/figures/aspekt_*.css   optics derived from kreisbewegung/styles.css, scoped to .aspekt-figur
                           (shared aspekt_kreisbahn.css for all + per-figure aspekt_<name>.css);
                           --kb-lw/--kb-fs tokens on .aspekt-figur scale line widths / fonts ×1.5
@@ -301,8 +224,8 @@ A deliberately-preserved legacy bug: `fig_5.js`'s gc51 `>6.27` wrap increments *
 - **Safari foreignObject workaround (kept v1.6)**: `core.js::safari_bug()` UA-sniffs Safari and adds a `.fixed` class (150px margin shift) to `.fo_inner` elements to compensate for Safari mis-positioning HTML text inside SVG `<foreignObject>`. This is a *rendering* quirk, not a missing API, so `@supports` cannot detect it — UA sniff is the pragmatic fallback, documented inline. Revisit if a CSS-only fix for foreignObject becomes known. Non-Safari browsers are unchanged (no `.fixed`).
 - **Responsive scope (v1.6)**: **Desktop/Tablet-only by decision** — no phone support. The viewport meta (`width=device-width, initial-scale=1`) is correct; the only responsive breakpoint is `@media (max-width: 1024px)` (tablet), which swaps the left rail + right marginalia for a slide-in drawer. Do not add phone-targeted CSS without revisiting that decision.
 - **Width mode + print decoupling**: `core.js::set_width_mode` (schmal/normal/breit) sets inline `width` on `#content`, inline `--paper-max-width` on `#paper`, persists to `localStorage`, and sets `<html data-width-mode="…">` — the **CSS signal** for mode-dependent rules (always select via `:root[data-width-mode="…"]`, never JS classes; aspekt figures scope theirs with `:not(.aspekt-im-overlay)` so the overlay layout wins). Text scaling (`core.js::metrics_for_level`/`apply_text_size`, 5 steps) exposes two scales on `#paper`: `--paper-font-size`/`-line-height` for prose and `--paper-graphics-scale`/`-line-scale` (gentler) for UI/SVG text. **Print must decouple from the width mode**: `print.js::print_page` strips the inline `#content` width and `#paper` `--paper-max-width` from the clone (they'd win by inline specificity and the printout would track the screen mode); the print column is a fixed 700 px in `styles.css`, with `#fff` backgrounds to save toner.
-- **Einstellungen-Popover + wählbare Farbpaletten (v1.24/v1.25)**: Textgröße, Ansichtsbreite und Farbpalette sitzen seit v1.24 nicht mehr als direkte Header-Buttons, sondern im Einstellungen-Popover (`#settings`, Backdrop+Panel nach Drawer-Vorlage), geöffnet über den Zahnrad-Button in `#toolbar` (`core.js::toggle_settings`/`close_settings`; Escape schließt). Textgröße bekommt seitdem Persistenz (`skript_text_level`); Ansichtsbreite war schon persistiert (`skript_width_mode`). Die **Farbpalette** (`core.js::set_palette`/`init_palette`, persistiert in `skript_palette`) setzt `<html data-palette="normal|deuter|tritan">` — Normal = Quellen-Palette, Deuteranopia (Rot-Grün) + Tritanopia (Blau-Gelb) = CVD-optimierte Overrides in `aspekt_paletten.css`. Der Darkmode-Zweig der CVD-Blöcke greift an `<html data-darkmode="0|1">` — ein rein additives Wurzel-Signal, das `toggle_darkmode` (das weiterhin den `<link>` toggelt) synchron hält; ohne das Signal gäbe es keinen Hell/Dunkel-Selektor für die CVD-Overrides. **Kein Re-Render nötig**: CSS-Custom-Properties kaskandieren, SVG `stroke`/`fill` via `var(--kb-…)` werden automatisch neu aufgelöst. Bildunterschrift-Farb-Nennungen und inline-Einfärbungen der interaktiven Aspekt-Figuren folgen der Palette: Farb-Worte als `farbwort`-Spans werden pro Palette × Hell/Dunkel von `aspekt_kreisbahn.js::apply_farbwoerter` gesetzt (Wortmap, aufgerufen aus `set_palette`/`toggle_darkmode`/init; Case-Erhaltung des Quell-Worts), Einfärbungen über `.kb-sw-<tok>`-Klassen via `var(--kb-*)`; statische `nur-druck`-figcaptions + `bilder/*.png` (Raster) bleiben fix. Verifikation der CVD-Werte: `.claude/skills/interaktive-aspekt-figur/scripts/cvd_check.mjs` (Brettel-Simulation + ΔE76). **Die Standard-Palette folgt den STATISCHEN Abbildungen** (Wiedererkennungswert, Nutzervorgabe v1.27): die Hauptvektoren stammen aus den Bildunterschriften (`\textcolor[HTML]{…}`), die Szenen-Objekte aus den GEZEICHNETEN Farben der Quell-SVGs in `Input/v0.13/PSkriptBilder` — Winkelbogen + φ-Label grün `#28a745` (`--kb-phi`) und Massenpunkt rot `#dc3545` (`--kb-point`); beide standen vorher auf der UI-Akzentfarbe (FH-Türkis) und waren damit die auffälligste Abweichung vom PDF. Bewusst NICHT übernommen: a_t/a_r (Quelle zeichnet beide violett wie a, 1.50/1.51 zeigen sie gleichzeitig), die Komponenten r_x/r_y (Quelle färbt sie gar nicht) und der durchlaufene Bogen (Quelle blau, kollidiert mit ω) — begründet im Kopf von `aspekt_kreisbahn.css`. Folge fürs Prüfwerkzeug: die Quellen-Palette ist unter Deuteranopie prinzipiell NICHT trennscharf (grüner Bogen ↔ roter Punkt = ΔE 4,4), deshalb misst `cvd_check.mjs` sie nur noch als INFO und lässt allein die vier CVD-Paletten den Exit-Code bestimmen. Farbwort-Strukturwächter: `.claude/skills/interaktive-aspekt-figur/scripts/caption_farbwort_check.mjs` (jedes Caption-`data-vec` hat einen `FARBWORT`-Eintrag in allen 6 Kombinationen; pro Caption kein Wort-Doppel pro Kombination; `.kb-sw-<tok>`-Klasse vorhanden).
-- **MathJax equation numbering (v1.7)**: equations are numbered by MathJax, not by `numbering.js` — `tex.tags:'ams'` in the inline config in `index.html`, with `tagformat.number` producing `1.4.n`. **A loaded extension is not an enabled one**: `[tex]/tagformat` and `[tex]/color` must appear *both* in `loader.load` *and* in `tex.packages: {'[+]': […]}`, otherwise tags silently fall back to `(1)` and `\textcolor` doesn't render. The section prefix is **already dynamic**, not a fixed `1.4.` constant: `numbering.js::renumber_equations()` walks `getPages()` after the first typeset and builds `eq_tag_map[laufendeNr] = sectionPrefix(page) + '.' + lokal`, where `sectionPrefix` reads the section number off each page's title (`1.4.3 …` → `1.4`, `1.5.1 …` → `1.5`, `0.2.1 …` → `0.2`); the second MathJax pass then renders those tags. So adding 1.1/2.1/3.1 needs no numbering change — the prefix comes from the migrated page titles (verified 2026-07-24: 1.4-pages → `1.4.n`, 1.5-pages → `1.5.n`, 0.x-pages → `0.x.n`).
+- **Einstellungen-Popover + wählbare Farbpaletten (v1.24/v1.25)**: Textgröße, Ansichtsbreite und Farbpalette sitzen im Einstellungen-Popover (`#settings`, Zahnrad in `#toolbar`; `core.js::toggle_settings`/`close_settings`, Escape schließt), alle drei persistiert (`skript_text_level`/`skript_width_mode`/`skript_palette`). Die Palette (`core.js::set_palette`/`init_palette`) setzt `<html data-palette="normal|deuter|tritan">`; Normal = Quellen-Palette (kein Override), Deuteranopie/Tritanopie = CVD-Overrides in `aspekt_paletten.css`, deren Hell/Dunkel-Zweig an `<html data-darkmode="0|1">` hängt — ein rein additives Wurzel-Signal, das `toggle_darkmode` (toggelt weiterhin den `<link>`) synchron hält, sonst gäbe es für die Overrides keinen Hell/Dunkel-Selektor. **Kein Re-Render nötig** — Custom Properties kaskadieren, `var(--kb-…)` in SVG `stroke`/`fill` löst automatisch neu auf. Bildunterschriften folgen der Palette: Farb-Worte als `farbwort`-Spans setzt `aspekt_kreisbahn.js::apply_farbwoerter` pro Palette × Hell/Dunkel, Einfärbungen laufen über `.kb-sw-<tok>`-Klassen; statische `nur-druck`-figcaptions + `bilder/*.png` bleiben fix. **Die Standard-Palette folgt den STATISCHEN Abbildungen** (Wiedererkennungswert, Nutzervorgabe v1.27) — Hauptvektoren aus den `\textcolor[HTML]{…}` der Bildunterschriften, Szenen-Objekte aus den gezeichneten Farben der Quell-SVGs; welche Quellfarben bewusst NICHT übernommen wurden und warum, steht begründet im Kopf von `aspekt_kreisbahn.css`. Folge: die Quellen-Palette ist unter Deuteranopie prinzipiell nicht trennscharf, deshalb misst der Prüfer sie nur als INFO. Prüfwerkzeuge in `.claude/skills/interaktive-aspekt-figur/scripts/`: `cvd_check.mjs` (Brettel + ΔE76, Exit-Code nur aus den vier CVD-Paletten) und `caption_farbwort_check.mjs` (Struktur der Caption-Farbwörter).
+- **MathJax equation numbering (v1.7)**: equations are numbered by MathJax, not by `numbering.js` — `tex.tags:'ams'` in the inline config in `index.html` plus `tagformat.number`. **A loaded extension is not an enabled one**: `[tex]/tagformat` and `[tex]/color` must appear *both* in `loader.load` *and* in `tex.packages: {'[+]': […]}`, otherwise tags silently fall back to `(1)` and `\textcolor` doesn't render. The section prefix is **dynamic**, not a hard-coded constant: `numbering.js::renumber_equations()` walks `getPages()` after the first typeset and builds `eq_tag_map[laufendeNr] = sectionPrefix(page) + '.' + lokal`, where `sectionPrefix` reads the section number off each page's title (`1.4.3 …` → `1.4`, `0.2.1 …` → `0.2`); the second MathJax pass renders those tags. A new section therefore needs no numbering change — the prefix comes from its page titles.
 - **Cross-references: the resolver is the single source of the descriptor (v1.19)**: `numbering.js` resolves four xref anchor types and each emits the *full* label — `data-ref-fig` → `"Abbildung N"`, `data-ref-sec` → `"Abschnitt N"`, `data-ref-eq` → `"(N)"`, `data-ref-box` → `"Beispiel N"` (or the box's type, keyed by the target box's stable `id`). **The prose must NOT repeat that descriptor** — write `im <a data-ref-sec>`, not `im Abschnitt <a data-ref-sec>` (the latter renders "im Abschnitt Abschnitt N"), and `Formel <a data-ref-eq>`, not `Formel (<a data-ref-eq>)`. A corpus-wide sweep in v1.19 removed 80 such duplicated descriptors (17 sec / 25 fig / 38 eq across 7 chapters); the doubling was invisible to the verification harnesses because they check numbers, not surrounding words. Verify rendered xrefs in a real browser (grep the page text for `"Abschnitt Abschnitt"`, `"Abbildung Abbildung"`, `((`), not just the numbers.
 - **Keep the box class lists in sync**: the v0.13 box types `bemerkung`/`wichtig` were added in v1.7, and *five* independent places enumerate box classes — `core.js::generate_highlight_boxes` (icons), `numbering.js::BOX_LABELS` (titles), `styles.css` (the card look + the 50px icon gutter), the `mjx-container[display="true"]` "no box-in-box" rule, and `shell.js::landmarksFor` (left rail). Missing one is silent: a box without the CSS rule loses its frame *and* its icon escapes into the rail. When adding a type, grep all five.
 - **Figure sizing follows v0.13**: each `<img class="grafik">` inside `figure.abbildung` carries an inline `style="width:xx%"` taken from the source's `\includegraphics[width=0.8\textwidth]` (they range 0.25–0.99), and sub-figure containers carry the `\begin{subfigure}{0.48\textwidth}` outer width. This is necessary because the legacy `.grafik { width:100% }` rule would otherwise stretch every image to the column and upscale small diagrams past their native resolution — `#paper figure.abbildung > img.grafik { width:auto }` neutralizes it. The two TikZ figures are rendered via standalone `pdflatex` + `pdftocairo -png -r 300` (sources not kept in the repo, only the PNGs in `bilder/`).
