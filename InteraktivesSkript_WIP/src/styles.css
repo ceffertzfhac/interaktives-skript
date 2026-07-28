@@ -1845,6 +1845,53 @@ input[type="range"]::-moz-range-track {
     line-height: 1.4;
     color: var(--ink-3);
 }
+
+/* ── Druck-Menue „Was drucken?" (Drucker-Taste, s. print.js::toggle_print_menu)
+   Optik am Einstellungen-Popover orientiert (Backdrop + Panel, z-index 40/41). */
+#print_menu_overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,22,26,.35);
+    z-index: 40;
+}
+#print_menu_panel {
+    position: fixed;
+    top: 64px;
+    right: 12px;
+    width: 220px;
+    max-width: calc(100vw - 24px);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.18);
+    z-index: 41;
+    padding: 14px 16px 16px;
+    font-family: var(--font-ui);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.print_menu_label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+}
+.print_menu_button {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--ink-2);
+    border-radius: 8px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    text-align: left;
+}
+.print_menu_button:hover { background: var(--surface-3); }
 #palette_buttons { display: flex; flex-direction: column; gap: 6px; }
 .palette_button {
     display: flex;

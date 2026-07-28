@@ -14,15 +14,71 @@ import { toggle_aspekt } from './figures/aspekt_kreisbahn.js';
 // einzigen gelesenen Params. auto_print/window.print()-Autostart wurde
 // entfernt: der toter Safari-Workaround (auto_print stets false) startete
 // nie automatisch; Nutzer druckt manuell (s. #print_instruction).
-export function init_print() { //reopen in new tab
-    let link = "";
-    if(location.href.split("#").length==2) {
-        link = location.href.split("#")[0]+"?print=true";
+// Druckmenue („Was drucken?") oeffnen/schliessen — Popover wie #settings.
+export function toggle_print_menu() { show("print_menu"); }
+export function close_print_menu() { hide("print_menu"); }
+
+// Baut den Druck-Link auf Basis der aktuellen Basis-URL (ohne Hash/Query) +
+// Query und oeffnet ihn im neuen Tab. Gemeinsamer Helper fuer init_print
+// (alles) und print_scope (komplex/kapitel/abschnitt).
+function openPrintTab(query) {
+    const base = location.href.split("#")[0].split("?")[0];
+    window.open(base + query, '_blank').focus();
+}
+
+export function init_print() { //reopen in new tab — alles (Default)
+    openPrintTab("?print=true");
+}
+
+// Druck-Scope relativ zur aktuellen Seite (Nutzervorgabe 2026-07-24):
+// komplex = gesamter Themenkomplex, kapitel = aktueller Abschnitt (h2 + h3s),
+// abschnitt = nur die aktuelle Seite. Alles geht ueber init_print() ohne
+// Scope-Parameter. Die eigentliche Filterung laeuft im Druck-Tab in
+// print_page() anhand der hier uebergebenen page-Id.
+export function print_scope(scope) {
+    if (scope === "alles") { init_print(); return; }
+    const page = getCurrentPage();
+    // Ohne aktuelle Seite (sollte nicht vorkommen) Fallback auf alles.
+    if (!page) { init_print(); return; }
+    openPrintTab("?print=true&scope=" + encodeURIComponent(scope) +
+                 "&page=" + encodeURIComponent(page.id));
+}
+
+// Keep-Set der zu druckenden Seiten-Ids aus dem Seitenregister (pages.js)
+// relativ zur per ?page= uegebenen Seite. null = alles behalten.
+function scopeKeepSet(scope, pageId) {
+    const pages = getPages();
+    const idx = pages.findIndex(p => p.id === pageId);
+    if (idx === -1) return null;          // Seite nicht gefunden -> alles
+    if (scope === "abschnitt") return new Set([pageId]);
+    if (scope === "kapitel") {
+        //Aktueller Abschnitt = naechstgelegene h2-Seite + folgende h3s bis
+        // zur naechsten h2 (exklusiv).
+        let start = idx;
+        while (start > 0 && pages[start].level !== "h2") start--;
+        let end = pages.length;
+        for (let j = start + 1; j < pages.length; j++) {
+            if (pages[j].level === "h2") { end = j; break; }
+        }
+        return new Set(pages.slice(start, end).map(p => p.id));
     }
-    else {
-        link = location.href+"?print=true";
+    if (scope === "komplex") {
+        const tk = pages[idx].tk ? pages[idx].tk.num : null;
+        if (tk === null) return null;
+        return new Set(pages.filter(p => p.tk && p.tk.num === tk).map(p => p.id));
     }
-    window.open(link, '_blank').focus();
+    return null;
+}
+
+function applyPrintScope(pc) {
+    const scope = getParam("scope");
+    const pageId = getParam("page");
+    if (!scope || !pageId) return;        // Default: alles drucken
+    const keep = scopeKeepSet(scope, pageId);
+    if (!keep) return;                    // Fallback alles
+    pc.querySelectorAll(".chapter-page").forEach(pgEl => {
+        if (!keep.has(pgEl.dataset.pageId)) pgEl.remove();
+    });
 }
 export function check_print() { //check if this page was just opened in a new tab for printing
     if (getParam("print") === "true") {
@@ -48,6 +104,11 @@ export function print_page() {
     hide("toc_container");
 
     restorePagination();
+
+    // Druck-Scope (Nutzervorgabe „Was drucken?"): relativ zur per ?page=
+    // uebergebenen Seite nur die gewaehlte Menge behalten, den Rest aus dem
+    // Klon entfernen. Fehlt scope/page -> alles (Default, bisheriges Verhalten).
+    applyPrintScope(pc);
 
     // Breiten-Modus vom Druck ENTkoppeln (Nutzer-Feedback): set_width_mode
     // setzt Inline-Breiten auf #content (width) und #paper (--paper-max-width);
