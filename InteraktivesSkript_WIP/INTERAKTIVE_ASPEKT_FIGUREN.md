@@ -282,9 +282,13 @@ auf `.aspekt-figur` statt `#gc10` gescopt — in zwei Dateien:
   Custom-Properties kaskandieren, SVG `stroke`/`fill` via `var()` werden
   automatisch neu aufgelöst. Wähler ist die **Farbpalette-Sektion im
   Einstellungen-Popover** (Zahnrad-Button neben Darkmode; dort sitzen auch
-  Textgröße und Ansichtsbreite). Bildunterschrift-Farbworte
-  (fest in Prosa/`alt`) weichen unter CVD-Paletten bewusst ab (Hinweis im
-  Popover); statische `bilder/*.png` sind Raster und werden **nicht** umgefärbt.
+  Textgröße und Ansichtsbreite). Bildunterschrift-Farb-Nennungen und inline-
+  Einfärbungen der interaktiven Aspekt-Figuren folgen der Palette: Farb-Worte
+  als `farbwort`-Spans werden pro Palette × Hell/Dunkel von
+  `aspekt_kreisbahn.js::apply_farbwoerter` gesetzt (Wortmap, aufgerufen aus
+  `set_palette`/`toggle_darkmode`/init), Einfärbungen über `.kb-sw-<tok>` via
+  `var(--kb-*)`; statische `nur-druck`-figcaptions + `bilder/*.png` (Raster)
+  bleiben fix.
   **CVD-Werte verifizieren** mit `.claude/skills/interaktive-aspekt-figur/
   scripts/cvd_check.mjs` (Brettel-Dichromatie-Simulation + paarweise ΔE76 pro
   koexistierender Vektor-Menge + Luminanzkontrast gegen den Hintergrund); die

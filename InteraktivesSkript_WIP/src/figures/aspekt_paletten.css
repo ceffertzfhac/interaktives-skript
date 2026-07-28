@@ -26,11 +26,13 @@
    darkmode.css (0,1,0). #gc10 wird mitgeführt (Forward-Compat, parity mit
    darkmode.css); der Container ruht aktuell (Kap. 1.4 rein statisch).
 
-   Bildunterschrift-Farbworte („in Blau/Rot/Orange …", fest in der Prosa und
-   alt-Texten) weichen unter CVD-Paletten bewusst ab — die Vektor-Farben werden
-   zugunsten der Unterscheidbarkeit umdefiniert; Hinweis im Einstellungsmenü.
-   Statische bilder/*.png (Druck-Fallback) sind Raster und werden NICHT
-   umgefärbt — die Palette wirkt nur in den interaktiven SVG-Figuren.
+   Bildunterschrift-Farb-Nennungen („in Blau/Rot/Orange …") und inline-
+   Einfärbungen in den interaktiven data-caption-Figuren folgen der Palette:
+   Farb-Worte als <span class="farbwort" data-vec="…"> werden pro Palette ×
+   Hell/Dunkel von aspekt_kreisbahn.js::apply_farbwoerter gesetzt (Wortmap),
+   Einfärbungen über .kb-sw-<tok> via var(--kb-*). Statische nur-druck-
+   figcaptions + bilder/*.png (Druck-Fallback, Raster) bleiben fix — sie
+   beschreiben unveränderliche PNGs.
 
    Wiederverwendung derselben Hex-Werte across Families (z. B. rx = a-Blau) ist
    CVD-bedingt (begrenzte unterscheidbare Farben) und betrifft nur NICHT-
