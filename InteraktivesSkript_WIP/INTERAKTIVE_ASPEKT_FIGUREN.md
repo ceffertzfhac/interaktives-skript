@@ -294,6 +294,15 @@ auf `.aspekt-figur` statt `#gc10` gescopt — in zwei Dateien:
   koexistierender Vektor-Menge + Luminanzkontrast gegen den Hintergrund); die
   Werte in `aspekt_paletten.css` sind mit diesem Skript abgestimmt — bei einer
   Palette-Änderung beide Dateien synchron halten und das Skript neu laufen lassen.
+  **Farbwort-Struktur wachen** `.claude/skills/interaktive-aspekt-figur/scripts/
+  caption_farbwort_check.mjs`: (a) jedes in einer `data-caption` benutzte
+  `data-vec` hat einen `FARBWORT`-Eintrag in allen 6 Kombinationen (sonst
+  übergeht `apply_farbwoerter` das Span stillschweigend), (b) pro Caption bekommt
+  in keiner Kombination ein Token-Paar dasselbe Wort (keine mehrdeutige Caption
+  — Helligkeits-Qualifier als Disambiguierung), (c) jedes benutzte Token hat eine
+  `.kb-sw-<tok>`-Klasse (Einfärbung intakt). Neu laufen lassen, sobald eine
+  Caption ein neues `data-vec` oder ein neuer Vektor-Farbtoken in Captions
+  dazukommt — fängt die beiden stillen Fehler der handgepflegten Wortmap.
   Struktur-Klassen: `panel-section` + `panel-label`, `panel-header` +
   `panel-body` (Kopf-Leiste zum Ein-/Ausklappen), `slider-label`/`slider-row`/
   `slider-val`, `legend-grid`/`legend-swatch`/`legend-label`, `analysis-grid`/

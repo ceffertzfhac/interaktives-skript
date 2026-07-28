@@ -531,7 +531,7 @@ export function toggle_panel_left(btn) {
 // CVD-Leser noch sicher sieht (so bleibt „ω Hellblau vs a_ZP Blau" in 1.58
 // unterscheidbar). Normal-Hell/Dunkel identisch: darkmode.css ändert nur die
 // Alias-Token + --kb-traj (Grau→Grau), die WERT-Token behalten ihre Hue.
-const FARBWORT = {
+export const FARBWORT = {
     normal: { 0: { omega:'Blau', rlat:'Grau', vlat:'Orange', azp:'Violett', alpha:'Rot', traj:'Grau' },
               1: { omega:'Blau', rlat:'Grau', vlat:'Orange', azp:'Violett', alpha:'Rot', traj:'Grau' } },
     deuter: { 0: { omega:'Hellblau', rlat:'Schwarz', vlat:'Orange', azp:'Blau', alpha:'Rot', traj:'Grau' },
