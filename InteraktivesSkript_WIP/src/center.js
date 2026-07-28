@@ -1,9 +1,11 @@
 // center.js — Auto-Zentrierung des Papierbereichs (#content) im Browserfenster.
 //
 // Zwei Faelle:
-//  (A) Fenster breiter als der Papierbereich: #content/#paper sind per CSS
-//      (margin:auto + symmetrisches .chapter-body-Grid) bereits
-//      browserzentriert -- hier ist nichts zu tun.
+//  (A) Fenster breiter als der Papierbereich: #content (die Papier-Karte) ist
+//      per CSS (margin:auto) bereits browserzentriert -- hier ist nichts zu
+//      tun. (#paper, die Lesespalte, behaelt ihren Rail-Offset wie bisher;
+//      der wurde bewusst NICHT ausgeglichen, da das eine dauerhafte leere
+//      rechte Rinne erzeugt haette.)
 //  (B) Fenster schmaler als der Papierbereich -> horizontaler Überlauf: die
 //      initiale Scroll-Lage wird so gesetzt, dass #content mittig liegt
 //      (window.scrollX = Überlauf/2). Sobald der NUTZER selbst horizontal
