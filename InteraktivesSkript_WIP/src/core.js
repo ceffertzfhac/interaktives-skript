@@ -367,6 +367,10 @@ export function set_width_mode(mode, persist = true) {
     // kollidieren (oder jetzt wieder Platz haben) -- Bruecke zu numbering.js
     // (s. dortiger Kommentar zum core->numbering-Zyklus).
     if (window.relayout_eq_numbers) window.relayout_eq_numbers();
+    // Breiten-Modus-Wechsel ist ein expliziter Layout-Wechsel (kein "aktives
+    // Scrollen"): Auto-Zentrierung neu aufsetzen -- Bruecke zu center.js ohne
+    // Import-Zyklus (s. dortigen Kommentar). Setzt die Nutzer-Aussetzung zurueck.
+    if (window.center_recenter) window.center_recenter();
 }
 
 export function init_width_mode() {

@@ -16,6 +16,7 @@ import { init_shell, toggle_drawer, close_drawer, chapter_prev, chapter_next, go
 import { init_figure_panels, toggle_panel } from './figures/panels.js';
 import { init_numbering, resolve_eq_refs } from './numbering.js';
 import { loadChapters, typesetAfterLoad } from './chapters.js';
+import { init_center } from './center.js';
 import { init_footnotes, toggle_footnote } from './footnotes.js';
 import { toggle_aspekt, close_aspekt_overlay, toggle_analyse, toggle_panel_left, buildKreisbahnFig, apply_farbwoerter } from './figures/aspekt_kreisbahn.js';
 import { buildWegZeitFig } from './figures/aspekt_weg_zeit.js';
@@ -276,6 +277,9 @@ async function init() {
     // zeigte die Schiene beim ersten Laden nur den Box-Typ („Beispiel") ohne
     // Nummer/Titel (s. BACKLOG P5). paginate() bleibt vorher (Seitenregister).
     init_shell();
+    // Auto-Zentrierung des Papierbereichs (nach init_shell, Layout steht);
+    // center.js staffelt selbst per rAF, damit der Überlauf messbar ist.
+    init_center();
     // Injizierte Formeln re-typesetzen, sobald MathJax bereit ist (Gate wie
     // numbering.js). renumber laeuft ueber reload_mathjax mit.
     typesetAfterLoad();
