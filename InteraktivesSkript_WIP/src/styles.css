@@ -77,7 +77,12 @@ body {
    (s. core.js::set_width_mode) -- kein --scale/--g/Sticky-Grafikspalte mehr. */
 #content {
     width: 1280px;
-    max-width: calc(100vw - 40px);
+    /* Desktop (>1024px): KEINE Kappe auf die Fensterbreite -- #content behaelt
+       seine Modus-Breite (s. core.js::set_width_mode) und ueberlaeuft bei
+       schmalerem Fenster, damit der Papierbereich horizontal gescrollt und per
+       Auto-Zentrierung (src/center.js) mittig platzierbar ist. Die Kappe gilt
+       nur im Tablet-Breakpoint (@media max-width:1024px) fuer das responsive
+       Einschalg-Layout. */
     margin: 0 auto 40px;
     border-radius: 14px;
     /* Kein overflow:hidden hier (Nutzer-Feedback zur Rail): eine
@@ -103,15 +108,17 @@ body {
 }
 #print_container #paper { background: #fff; }
 
-/* Dritte Spalte ist `auto`, nicht fix 210px: hat die aktive Seite keine
-   Marginalien-Boxen, setzt shell.js `.hidden` auf #chapter_marginalia
-   (visibility:hidden + position:absolute) -- die Spalte faellt dann auf 0
-   zusammen und die Lesespalte bekommt den Platz, statt eine leere 210px-Rinne
-   stehen zu lassen. Die Breite der gefuellten Spalte steht an
-   #chapter_marginalia selbst. */
+/* Beide Seitenspalten fix 220px (Rail links, Marginalie rechts): ist die
+   Marginalie per shell.js `.hidden` (visibility:hidden + position:absolute)
+   ausgeblendet, faellt ihre Spalte NICHT auf 0 zusammen, weil die Trackgroesse
+   explizit 220px ist (im Gegensatz zum frueheren `auto`). So gleichen sich linke
+   Rail und rechte Marginalien-Spur aus und #paper sitzt mit seinem margin:auto
+   in der mittleren 1fr-Spur mittig in #content -- und damit, sobald #content
+   selbst zentriert ist, browserzentriert (Auto-Zentrierung, s. src/center.js).
+   Die gefuellte Marginalie (210px Inhalt) hat 10px Luft im 220px-Track. */
 .chapter-body {
     display: grid;
-    grid-template-columns: 220px minmax(0, 1fr) auto;
+    grid-template-columns: 220px minmax(0, 1fr) 220px;
     align-items: start;
     gap: 24px;
     padding: 0 24px;
@@ -1906,6 +1913,9 @@ input[type="range"]::-moz-range-track {
     #chapter_rail_desktop_wrap,
     #chapter_marginalia { display: none; }
     #paper { max-width: 100%; }
+    /* Tablet: #content auf die Fensterbreite kappen (kein horizontaler
+       Auto-Zentrier-Überlauf unterhalb des Desktop-Grids, s. #content oben). */
+    #content { max-width: calc(100vw - 40px); }
 }
 @media (min-width: 1025px) {
     #chapter_drawer { display: none !important; }
