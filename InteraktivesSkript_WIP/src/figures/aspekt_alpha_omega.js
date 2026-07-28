@@ -105,6 +105,21 @@ const OMEGA_LEN_FACTOR_FIG = 0.8 * DEG;    // m je (°/s)
 const ALPHA_LEN_FACTOR_FIG = 4.0 * DEG;    // m je (°/s²)
 const AXIS_VEC_LEN_CAP = 2.6;              // m (= 195 px bei 75 px/m)
 
+// -- Blickrichtung der ISO-Szene (store.isoElevation, s. render.js::projectISO) --
+// Die Bahnebene wird schraeg gesehen, ein Kreis also als Ellipse. Ein Vektor
+// KONSTANTER Laenge in dieser Ebene erscheint dadurch je nach Richtung
+// verschieden lang — in der echten Isometrie (35,264°) um den Faktor sqrt(3)
+// = 1,73, bei 60° nur noch um 1,15. Diese perspektivische Laengenaenderung wurde
+// (an Abb. 1.57) als Fehler gemeldet, obwohl die Betraege konstant sind. Statt
+// sie zu verstecken, ist sie UMSCHALTBAR: Default „flach" (60°), Alternative
+// „raeumlich" (die Isometrie der Quell-Sim und der Legacy-Ansicht „Iso") — der
+// Vergleich beider Stellungen zeigt, dass die Aenderung von der Perspektive
+// kommt und nicht von der Physik. Preis des flachen Blicks: die Drehachse wird
+// staerker verkuerzt (Faktor 0,61), \vec\omega also kuerzer gezeichnet.
+// Einheitlich in 1.57/1.58/1.59.
+const ELEV_FLACH = 60;                     // Grad ueber der Bahnebene
+// 'iso' -> store.isoElevation = undefined = Vorgabe des Motors (35,264°)
+
 // -- Szene: Skelett der ISO-Ansicht, 1:1 aus der Vorlagen-Sim (index.html),
 //    ks_-IDs (pro Instanz geprefixt). Enthaelt AUCH die 2D-Elemente und die
 //    Stoppuhr-Stubs: drawBackground()/updateScene() fassen sie an (Sichtbarkeit,
@@ -284,6 +299,12 @@ const PANEL_LEFT = `
     <label class="aspekt-check"><input type="checkbox" id="ak_pos" checked><span>Ortsvektor \\(\\vec r\\) einblenden</span></label>
     <label class="aspekt-check"><input type="checkbox" id="ak_phi" checked><span>Winkel \\(\\varphi\\) einblenden</span></label>
     <label class="aspekt-check"><input type="checkbox" id="ak_traj" checked><span>durchlaufene Bahn einblenden</span></label>
+    <div class="slider-label">Blickrichtung</div>
+    <div class="speed-pills">
+      <label class="speed-pill"><input type="radio" name="ak_view" value="flach" checked><span>flach</span></label>
+      <label class="speed-pill"><input type="radio" name="ak_view" value="iso"><span>räumlich</span></label>
+    </div>
+    <div class="aspekt-hint">Die Bahnebene wird schräg gesehen, der Kreis erscheint daher als Ellipse — und ein Pfeil in dieser Ebene je nach Richtung unterschiedlich lang, obwohl sich sein Betrag nicht ändert. „räumlich" ist die echte isometrische Ansicht (Längen schwanken um den Faktor \\(\\sqrt3\\approx1{,}73\\)), „flach" blickt steiler von oben (nur noch 1,15). Beim Umschalten ändert sich <em>nur</em> die Perspektive, nicht die Physik. Dafür wird im flachen Blick die Drehachse stärker verkürzt — \\(\\vec\\omega\\) und \\(\\vec\\alpha\\) liegen auf ihr und werden also kürzer gezeichnet.</div>
     <div class="aspekt-hint">\\(\\vec\\omega\\) und \\(\\vec\\alpha\\) haben verschiedene Einheiten (\\(\\mathrm{rad/s}\\) bzw. \\(\\mathrm{rad/s^2}\\)) — ihre Pfeillängen sind daher jeweils proportional zum eigenen Wert, aber untereinander nicht vergleichbar. Aussagekräftig ist die RICHTUNG (gleich- oder gegensinnig zur Drehachse), nicht das Längenverhältnis.</div>
   </div>
   <div class="panel-section collapsible collapsed">
@@ -379,7 +400,7 @@ export function buildAlphaOmegaFig(fig) {
     // prefixen, sonst findet querySelectorAll(`input[name="${p}speed"]`) nichts
     // und die Pills einer Figur wuerden mit denen einer anderen kollidieren.
     scene.innerHTML =
-      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`)}` +
+      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`).replace(/name="ak_view"/g, `name="${p}view"`)}` +
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE.replace(/ks_/g, p)}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH.replace(/ks_/g, p)}</div></div></div>` +
@@ -423,9 +444,12 @@ export function buildAlphaOmegaFig(fig) {
     const ak_pos = ge(p + 'ak_pos'), ak_phi = ge(p + 'ak_phi'), ak_traj = ge(p + 'ak_traj');
     const ak_keep = ge(p + 'ak_keep');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
+    const viewRadios = scene.querySelectorAll(`input[name="${p}view"]`);
     let curT = T_AUTO;                    // Initial: der volle Lauf ist gezeichnet
     let speedFactor = 1.0;
     let keepPrev = false;
+    // undefined = Motor-Vorgabe (echte Isometrie); Default hier: flach.
+    let elevDeg = ELEV_FLACH;
 
     const n = (x, d) => Number.isFinite(x) ? x.toFixed(d).replace('.', ',') : '—';
 
@@ -557,6 +581,8 @@ export function buildAlphaOmegaFig(fig) {
                 simDuration: T_AUTO,
                 // Eigene Laengen-Maßstaebe der Drehachsen-Vektoren (s. oben)
                 omegaLenFactor: OMEGA_LEN_FACTOR_FIG,
+                // Blickrichtung (undefined -> echte Isometrie des Motors)
+                isoElevation: elevDeg,
                 alphaLenFactor: ALPHA_LEN_FACTOR_FIG,
                 axisVecLenCap: AXIS_VEC_LEN_CAP,
             });
@@ -666,6 +692,17 @@ export function buildAlphaOmegaFig(fig) {
             else if (act === 'reset') reset();
         });
     });
+    // Blickrichtung: reine Ansichtssache — Laufzeit, Datenreihe und Diagramm
+    // bleiben unberuehrt (kein paramChange). rebuild(false) zeichnet den
+    // Hintergrund (ISO-Achsen + Bahn-Ellipse) mit der neuen Projektion neu.
+    viewRadios.forEach(r => r.addEventListener('change', () => {
+        if (!r.checked) return;
+        elevDeg = (r.value === 'iso') ? undefined : ELEV_FLACH;
+        viewRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
+        rebuild(false);
+    }));
+    viewRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
+
     speedRadios.forEach(r => r.addEventListener('change', () => {
         speedFactor = parseFloat(r.value);
         speedRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));

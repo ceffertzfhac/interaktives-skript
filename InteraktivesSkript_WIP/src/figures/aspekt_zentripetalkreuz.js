@@ -89,6 +89,21 @@ const DEG = Math.PI / 180;
 const OMEGA_LEN_FACTOR_FIG = 0.8 * DEG;    // m je (°/s)
 const AXIS_VEC_LEN_CAP = 2.6;              // m (= 195 px bei 75 px/m)
 
+// -- Blickrichtung der ISO-Szene (store.isoElevation, s. render.js::projectISO) --
+// Die Bahnebene wird schraeg gesehen, ein Kreis also als Ellipse. Ein Vektor
+// KONSTANTER Laenge in dieser Ebene erscheint dadurch je nach Richtung
+// verschieden lang — in der echten Isometrie (35,264°) um den Faktor sqrt(3)
+// = 1,73, bei 60° nur noch um 1,15. Diese perspektivische Laengenaenderung wurde
+// (an Abb. 1.57) als Fehler gemeldet, obwohl die Betraege konstant sind. Statt
+// sie zu verstecken, ist sie UMSCHALTBAR: Default „flach" (60°), Alternative
+// „raeumlich" (die Isometrie der Quell-Sim und der Legacy-Ansicht „Iso") — der
+// Vergleich beider Stellungen zeigt, dass die Aenderung von der Perspektive
+// kommt und nicht von der Physik. Preis des flachen Blicks: die Drehachse wird
+// staerker verkuerzt (Faktor 0,61), \vec\omega also kuerzer gezeichnet.
+// Einheitlich in 1.57/1.58/1.59.
+const ELEV_FLACH = 60;                     // Grad ueber der Bahnebene
+// 'iso' -> store.isoElevation = undefined = Vorgabe des Motors (35,264°)
+
 // -- Szene: Skelett der ISO-Ansicht, 1:1 aus der Vorlagen-Sim (index.html),
 //    ks_-IDs (pro Instanz geprefixt) — identisch zu 1.57/1.59 (derselbe Motor-
 //    DOM-Vertrag, drawBackground/updateScene dereferenzieren alle Stubs).
@@ -226,6 +241,12 @@ const PANEL_LEFT = `
     <button type="button" class="panel-label" aria-expanded="false">Darstellung${CHEVRON}</button>
     <label class="aspekt-check"><input type="checkbox" id="ak_pos"><span>Ortsvektor \\(\\vec r\\) einblenden</span></label>
     <label class="aspekt-check"><input type="checkbox" id="ak_traj" checked><span>durchlaufene Bahn einblenden</span></label>
+    <div class="slider-label">Blickrichtung</div>
+    <div class="speed-pills">
+      <label class="speed-pill"><input type="radio" name="ak_view" value="flach" checked><span>flach</span></label>
+      <label class="speed-pill"><input type="radio" name="ak_view" value="iso"><span>räumlich</span></label>
+    </div>
+    <div class="aspekt-hint">Die Bahnebene wird schräg gesehen, der Kreis erscheint daher als Ellipse — und ein Pfeil in dieser Ebene je nach Richtung unterschiedlich lang, obwohl sich sein Betrag nicht ändert. „räumlich" ist die echte isometrische Ansicht (Längen schwanken um den Faktor \\(\\sqrt3\\approx1{,}73\\)), „flach" blickt steiler von oben (nur noch 1,15). Beim Umschalten ändert sich <em>nur</em> die Perspektive — \\(|\\vec a_\\text{ZP}|=\\omega_0^2R\\) und \\(|\\vec v|\\) bleiben konstant, wie das Diagramm zeigt. Dafür wird im flachen Blick die Drehachse stärker verkürzt, \\(\\vec\\omega\\) also kürzer gezeichnet.</div>
     <div class="aspekt-hint">\\(\\vec a_\\text{ZP}=\\vec\\omega\\times\\vec v\\) (Rechte-Hand-Regel): \\(\\vec\\omega\\) auf der Drehachse, \\(\\vec v\\) tangential -> \\(\\vec a_\\text{ZP}\\) radial nach innen (zum Mittelpunkt). Ein Vorzeichenwechsel von \\(\\omega_0\\) kehrt \\(\\vec v\\) um — \\(\\vec a_\\text{ZP}\\) aber zeigt IMMER nach innen: \\(|\\vec a_\\text{ZP}|=\\omega_0^2 R\\) hängt nur von \\(\\omega_0^2\\) ab, nicht vom Vorzeichen. \\(\\vec a_\\text{ZP}\\) ist maßstäblich gezeichnet (reale Länge, nicht übertrieben wie in der statischen Vorlage).</div>
   </div>
   <div class="panel-section collapsible collapsed">
@@ -315,7 +336,7 @@ export function buildZentripetalkreuzFig(fig) {
     fig.appendChild(scene);
 
     scene.innerHTML =
-      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`)}` +
+      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`).replace(/name="ak_view"/g, `name="${p}view"`)}` +
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE.replace(/ks_/g, p)}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH.replace(/ks_/g, p)}</div></div></div>` +
@@ -353,9 +374,12 @@ export function buildZentripetalkreuzFig(fig) {
     const ak_pos = ge(p + 'ak_pos'), ak_traj = ge(p + 'ak_traj');
     const ak_keep = ge(p + 'ak_keep');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
+    const viewRadios = scene.querySelectorAll(`input[name="${p}view"]`);
     let curT = T_AUTO;
     let speedFactor = 1.0;
     let keepPrev = false;
+    // undefined = Motor-Vorgabe (echte Isometrie); Default hier: flach.
+    let elevDeg = ELEV_FLACH;
 
     const n = (x, d) => Number.isFinite(x) ? x.toFixed(d).replace('.', ',') : '—';
 
@@ -470,6 +494,8 @@ export function buildZentripetalkreuzFig(fig) {
                 isAutoStopping: false,
                 simDuration: T_AUTO,
                 omegaLenFactor: OMEGA_LEN_FACTOR_FIG,
+                // Blickrichtung (undefined -> echte Isometrie des Motors)
+                isoElevation: elevDeg,
                 axisVecLenCap: AXIS_VEC_LEN_CAP,
             });
             store.R0 = parseFloat(ak_r.value);
@@ -567,6 +593,17 @@ export function buildZentripetalkreuzFig(fig) {
             else if (act === 'reset') reset();
         });
     });
+    // Blickrichtung: reine Ansichtssache — Laufzeit, Datenreihe und Diagramm
+    // bleiben unberuehrt (kein paramChange). rebuild(false) zeichnet den
+    // Hintergrund (ISO-Achsen + Bahn-Ellipse) mit der neuen Projektion neu.
+    viewRadios.forEach(r => r.addEventListener('change', () => {
+        if (!r.checked) return;
+        elevDeg = (r.value === 'iso') ? undefined : ELEV_FLACH;
+        viewRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
+        rebuild(false);
+    }));
+    viewRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
+
     speedRadios.forEach(r => r.addEventListener('change', () => {
         speedFactor = parseFloat(r.value);
         speedRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
