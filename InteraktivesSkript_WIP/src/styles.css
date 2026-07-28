@@ -677,10 +677,15 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
     right:50px;
     position: absolute;
 }
-/* Darkmode-Umschalter ist nun ein .icon_button mit Inline-SVG (Mondsichel)
-   wie Drucken/Kontakt/Einstellungen — gleiche Optik in Hell wie Dunkel, da
-   stroke=currentColor via --ink-2 bzw. darkmode.css läuft (kein PNG-Filter
-   mehr). */
+/* Darkmode-Umschalter: gleiches .icon_button-Kästchen wie Drucken/Kontakt/
+   Einstellungen, aber das bisherige PNG-Symbol statt eines SVG-Glyphen.
+   Größengleich mit den SVG-Icons (18×18); im Dark-Mode übernimmt die
+   generelle img-Regel in darkmode.css das invert(). */
+.icon_button img.darkmode_glyph {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
 /* Der Fortschrittsbalken nimmt den Restplatz zwischen Krume (links) und den
    Zurueck/Weiter-Chevrons (rechts) ein (flex:1) und ist darin mittig
    (justify-content:center) — so wächst/schrumpft die Bahn je nach verfügbarem
