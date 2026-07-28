@@ -43,7 +43,8 @@
 //     NICHT uebertrieben wie in der statischen Abbildung (dort sind die Vektoren
 //     „stark uebertrieben ... infinitesimal klein"). Bei kleinen \omega_0 ist
 //     \vec v daher kurz — das ist physikalisch korrekt; hochregeln von \omega_0
-//     laesst \vec v wachsen.
+//     laesst \vec v wachsen. DESHALB ist der Default \omega_0 = 1,0 rad/s und
+//     NICHT 0,2 wie in 1.59 (s. OMEGA0_DEFAULT).
 //   * \vec a wird NICHT gezeigt: bei \alpha=0 ist die Beschleunigung rein
 //     zentripetal und gehoert thematisch zu Abb. 1.58 („zentripetalkreuz"),
 //     die direkt folgt. Hier wuerde sie die Farbpalette dieser Figur
@@ -71,14 +72,26 @@ import { resetOnPlayAfterAutoStop, isAtAutoStopEnd } from './playback.js';
 import { ge } from '../core.js';
 
 const T_AUTO = 12;            // fester Auto-Stopp nach 12 s (Bereich 0…12 s wie
-                              // 1.39/1.41/1.44/1.59). Mit dem Default \omega_0=0,2
-                              // laeuft \varphi in 12 s auf 2,4 rad (≈137°) hoch —
-                              // deutlich sichtbare Rampe, ohne die y-Achse
-                              // sprengend.
+                              // 1.39/1.41/1.44/1.59). Mit dem Default \omega_0=1,0
+                              // laeuft \varphi in 12 s auf 12 rad (≈688°, knapp
+                              // zwei Umlaeufe) hoch — die \varphi(t)-Gerade bleibt
+                              // eine saubere Rampe, die y-Achse skaliert mit.
 // Bereich wie in 1.59 (kapitelweit gleiche Regler-Anmutung). \omega_0 darf 0 und
 // negativ sein: \omega_0>0 = Teilbild (a) gegen den Uhrzeigersinn, \omega_0<0 =
 // Teilbild (b) im Uhrzeigersinn, \omega_0=0 = Stillstand (Grenzfall).
-const OMEGA0_MIN = -2.0, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 0.2, OMEGA0_STEP = 0.05;
+//
+// DEFAULT 1,0 rad/s — ABWEICHUNG von 1.59 (dort 0,2), bewusst und noetig:
+// \vec v ist hier MASSSTAEBLICH gezeichnet (VEL_SCALE des Motors, keine
+// Ueberhoehung). Bei \omega_0=0,2 und R=1,5 ist |\vec v| = 0,3 m/s, der Pfeil also
+// 0,3·VEL_SCALE(0,4)·75 px/m ≈ 9 px lang — KUERZER als seine eigene Pfeilspitze
+// (ARROW_LEN_MAIN = 12,5 px). Der Motor blendet einen solchen Vektor komplett aus
+// (shortenEnd -> null, Fallstrick B23), d. h. die Bahngeschwindigkeit war im
+// Ausgangszustand gar nicht zu sehen. Bei \omega_0=1,0 ist |\vec v| = 1,5 m/s
+// -> ~45 px, klar lesbar. Gleiche Familie/Ursache wie bei 1.58 (dort Default 2,0
+// wegen des massstaeblichen \vec a_ZP). Weit heruntergeregelt (|\omega_0| unter
+// ~0,3 rad/s bei R=1,5) verschwindet \vec v weiterhin — das ist die ehrliche
+// Konsequenz des realen Massstabs, nicht ein Fehler.
+const OMEGA0_MIN = -2.0, OMEGA0_MAX = 2.0, OMEGA0_DEFAULT = 1.0, OMEGA0_STEP = 0.05;
 // Radius-Bereich der Vorlagen-Sim (radius_slider: 0,1 … 2,0 m), Schrittweite wie
 // in den anderen Aspekt-Figuren (0,05 statt 0,1 — feineres Ziehen).
 const R_MIN = 0.1, R_MAX = 2.0, R_DEFAULT = 1.5, R_STEP = 0.05;
