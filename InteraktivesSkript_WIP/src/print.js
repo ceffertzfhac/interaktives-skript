@@ -5,8 +5,9 @@
 
 import { ge, show, hide, interaktiv } from './core.js';
 import { zoom } from './ui.js';
-import { showAllPagesForPrint, restorePagination } from './pages.js';
+import { showAllPagesForPrint, restorePagination, getPages, showPage, getCurrentPage } from './pages.js';
 import { restoreMarginalia } from './shell.js';
+import { toggle_aspekt } from './figures/aspekt_kreisbahn.js';
 
 // Query-Parameter via URLSearchParams (statt vormals manuellem
 // findGetParameter-Parser). print (?print=true) und g (?g=gcN) sind die
@@ -77,15 +78,36 @@ export function print_page() {
     });
     const gc = pc.querySelectorAll(".grafik-container");
     for(let i=0;i<gc.length;i++){
-        create_qr(gc[i].id);
+        create_qr(gc[i], gc[i].id);
     }
+    // QR pro Aspekt-Figur: das interaktive Pendant (bildschirmseitig,
+    // .nur-bildschirm) verweist per data-figref auf das statische Druckbild
+    // (.nur-druck <figure id="fig-…">). Im Druck erscheint dieses Bild; der QR
+    // wird daran angehaengt und linkt zurueck auf ?g=<aspekt-figur-id>. Nur
+    // Abbildungen MIT interaktivem Pendant bekommen einen QR.
+    pc.querySelectorAll(".aspekt-figur").forEach(af => {
+        const linkId = af.id;
+        const figref = af.dataset.figref;
+        if (!linkId || !figref) return;
+        const staticFig = figref && CSS.escape
+            ? pc.querySelector("#" + CSS.escape(figref))
+            : pc.getElementById(figref);
+        if (staticFig) create_qr(staticFig, linkId);
+    });
 
     document.body.setAttribute("style","background-color:#fff;margin-top:0px;margin-left:100px;");
 }
 
-export function create_qr(element_id) {
+// QR-Code erzeugen und an targetEl anhaengen; der QR verweist auf
+// ?g=<linkId> (z. B. die id einer .aspekt-figur oder eines Legacy-gcN).
+// Verallgemeinert aus dem ehemaligen create_qr(element_id), das Ziel und
+// Link-ID gleichsetzte und per insertBefore oben einsetzte — fuer <figure>
+// ist append (unten) sauberer, und Ziel (gedrucktes Bild) != Link (interaktive
+// Figur) sind jetzt bewusst trennbar.
+export function create_qr(targetEl, linkId) {
+    if (!targetEl) return;
     var div_container = document.createElement("div");
-    var link = location.href.split("?")[0].split("#")[0]+"?g="+element_id;
+    var link = location.href.split("?")[0].split("#")[0]+"?g="+linkId;
     var div = document.createElement("div"),
     text = link,
     qr = QRCode.generateSVG(text, {
@@ -96,36 +118,46 @@ export function create_qr(element_id) {
         modulesize: 3
       });
     div.appendChild(qr);
-    //ge(element_id).appendChild(div);
     div_container.appendChild(div);
     div_container.setAttribute("class","qr_container");
 
     var title2 = document.createElement("div");
     title2.setAttribute("class","qr_title");
-    title2.innerHTML = "<a href='"+link+"'>"+link+"</a><br><br><i>Hinweis: Sie müssen im Ilias angemeldet sein</i>";
+    // Neutraler Hinweis (frueher ILIAS-spezifisch „Sie muessen im Ilias
+    // angemeldet sein"), unabhaengig von der konkreten Hosting-Plattform.
+    title2.innerHTML = "<a href='"+link+"'>"+link+"</a><br><br><i>Interaktive Version im Browser öffnen</i>";
     div_container.appendChild(title2);
 
-
-    ge(element_id).insertBefore(div_container,ge(element_id).firstChild);
-
+    targetEl.appendChild(div_container);
 }
 export function from_qr(){ //if user comes to this site via the qr code link
     const g = getParam("g");
+    if (!g) return;
+    const el = ge(g);
+    if (el && el.classList.contains("aspekt-figur")) {
+        // Paginierungs-bewusst (Variante A): die Seite der Figur einblenden,
+        // dann das Lupe-Overlay oeffnen — Analogon zum Legacy-zoom(), das auf
+        // einer Aspekt-Figur kein Ziel hat. showPage vor dem Overlay, damit die
+        // Figur sichtbar ist, bevor toggle_aspekt den Klon anlegt; ein rAF
+        // reicht fuer das Layout nach dem Seitenwechsel.
+        const page = getPages().find(p => p.el.contains(el));
+        if (page) showPage(page.id, { pushState: false });
+        requestAnimationFrame(() => {
+            const lupe = el.querySelector(".aspekt-lupe");
+            if (lupe) toggle_aspekt(lupe);
+        });
+        return;
+    }
+    // Legacy: ?g=gcN ueber den zoom()-Overlay der alten interaktiven Container.
     if(!interaktiv) { //statisch
         setTimeout(function(){
-            if(g) {
-                window.location = location.href.split("#")[0]+"#"+g;
-                zoom(ge(g));
-
-            }
+            window.location = location.href.split("#")[0]+"#"+g;
+            zoom(ge(g));
         }, 100);
     }
     else { //interaktiv
-        if(g) {
-            window.location = location.href.split("#")[0]+"#"+g;
-            zoom(ge(g));
-
-        }
+        window.location = location.href.split("#")[0]+"#"+g;
+        zoom(ge(g));
     }
 }
 function getParam(name) {
