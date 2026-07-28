@@ -56,6 +56,11 @@ export const store = {
   // ALPHA_LEN_FACTOR / keine Kappe, also Verhalten der Quell-Sim. Begruendung
   // in render.js::drawVectors.
   omegaLenFactor: undefined, alphaLenFactor: undefined, axisVecLenCap: undefined,
+  // PORT-AENDERUNG: Blickhoehe der ISO-Ansicht in Grad ueber der Bahnebene.
+  // undefined -> ISO_ELEVATION_DEFAULT (35,264°, die echte Isometrie der
+  // Quell-Sim). Groessere Werte = staerker von oben. Begruendung + Formel in
+  // render.js::projectISO.
+  isoElevation: undefined,
 
   // RAF-Bookkeeping
   aniFrameId: null, lastFrameTime: 0, simulatedTime: 0,

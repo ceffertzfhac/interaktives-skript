@@ -54,12 +54,41 @@ const ARROW_LEN_ACC = 5 * 3       // Beschleunigung sw=3 → 15 px
 const ARROW_LEN_POLAR = 5 * 2     // Polar-Komponenten sw=2 → 10 px
 
 // ── Koordinatentransformation (zentral) ──────────────────────────────────────
+// PORT-AENDERUNG: die BLICKHOEHE ist ueber store.isoElevation (Grad) einstellbar;
+// undefined -> ISO_ELEVATION_DEFAULT = die Isometrie der Quell-Sim, Formel und
+// Zahlen dann bit-identisch zu vorher.
+//
+// WARUM: die Quell-Sim (und die Legacy-Perspektive „Iso") zeigen die Bahnebene
+// unter der echten isometrischen Blickhoehe von 35,264°. Ein Kreis wird dabei zur
+// Ellipse mit dem Achsverhaeltnis sqrt(3) — ein Vektor KONSTANTER Laenge in der
+// Ebene erscheint je nach Richtung zwischen 0,707x und 1,225x, also um den Faktor
+// 1,73 unterschiedlich lang. In der Sim faellt das nicht auf (Default-Ansicht 2D,
+// ISO nur auf Knopfdruck); die Aspekt-Figuren 1.57–1.59 stehen dagegen DAUERHAFT
+// in ISO, und dort liest man die perspektivische Laengenaenderung leicht als
+// physikalische — genau das, was die Figuren widerlegen wollen. Ein flacherer
+// Blick (groessere Blickhoehe) druckt den Effekt: bei 60° bleiben nur noch 1,15.
+//
+// FORMEL (Orthogonalprojektion, Azimut 45°, Blickhoehe e):
+//   waagerechter Faktor der Ebenenachsen  h = cos(ISO_ANGLE)          (fest)
+//   senkrechter  Faktor der Ebenenachsen  v = h * sin(e)
+//   Faktor der Drehachse z                zf = h * sqrt(2) * cos(e)
+// Bei e = 35,264° ergibt das v = sin(ISO_ANGLE) = 0,5 und zf = 1 — exakt die
+// bisherigen Konstanten. h bleibt BEWUSST fest: die waagerechte Ausdehnung der
+// Bahn (und damit die Zoom-Regel currentPixelsPerMeter der Figuren) aendert sich
+// dadurch nicht, nur die Ellipse wird hoeher/runder. Die Drehachse wird flacher
+// gesehen und damit kuerzer — physikalisch richtig und der sichtbare Preis des
+// flachen Blicks.
+const ISO_ELEVATION_DEFAULT = Math.asin(Math.tan(ISO_ANGLE)) * 180 / Math.PI  // 35,264°
 function projectISO(x, y, z) {
   const s = store.currentPixelsPerMeter
-  const ca = Math.cos(ISO_ANGLE), sa = Math.sin(ISO_ANGLE)
+  const h = Math.cos(ISO_ANGLE)
+  const eDeg = Number.isFinite(store.isoElevation) ? store.isoElevation : ISO_ELEVATION_DEFAULT
+  const e = eDeg * Math.PI / 180
+  const v = h * Math.sin(e)
+  const zf = h * Math.SQRT2 * Math.cos(e)
   return {
-    x: ANIM_CX - x * s * ca + y * s * ca,
-    y: ANIM_CY + x * s * sa + y * s * sa - z * s,
+    x: ANIM_CX - x * s * h + y * s * h,
+    y: ANIM_CY + x * s * v + y * s * v - z * s * zf,
   }
 }
 
