@@ -32,6 +32,10 @@
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .axis-tick {
     stroke: var(--kb-text); stroke-width: calc(1px * var(--kb-lw, 1));
 }
+/* Diagramm-Titel 0,7× kleiner als der Shared-Default (Nutzervorgabe). */
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .graph-title-text {
+    font-size: calc(15px * var(--kb-text-scale) * var(--kb-fs) * 0.7);
+}
 
 /* ── Diagramm: Kurve x(t) ────────────────────────────────────────────────────
    Pro Segment eine Polyline (render.js). Einheitlich firebrick (Default) oder
