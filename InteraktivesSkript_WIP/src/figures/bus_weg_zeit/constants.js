@@ -65,18 +65,26 @@ export const CURVE_COLOR = '#b22222'
 // Skalen (kein Equal-Scale wie bei grundbegriffe — das t-x-Diagramm ist ein
 // Schema, keine Geometrie-Szene; die Ordinate ist bewusst staerker gerafft,
 // wie die statische Vorlage figsize(12,7)). PLOT_W/PLOT_H ≈ 1,71 (Landscape).
-export const PAD_L = 58
+// PAD_L bewusst knapp gehalten: die Hx-Beschriftungen (H1…H4) sitzen auf der
+// RECHTEN Plot-Seite (s. render.js), sodass links nur die numerischen x-Tick-
+// Labels (0/250/…/1500) Platz brauchen. Diagramm dadurch „leicht nach links
+// verschoben" (Plot beginnt weiter links, PLOT_W wächst). rightEdge = GRAPH_W
+// - PAD_R bleibt unveraendert, daher beruehrt die Verschiebung nicht die
+// vertikale Ausrichtung mit der Straßenszene (die an PAD_T..PAD_T+PLOT_H
+// und der SVG-Hoehe haengt, nicht an PAD_L).
+export const PAD_L = 44
 export const PAD_R = 22
 export const PAD_T = 40
 export const PAD_B = 48
 export const GRAPH_W = 620
-export const PLOT_W = GRAPH_W - PAD_L - PAD_R            // 540
+export const PLOT_W = GRAPH_W - PAD_L - PAD_R            // 554
 export const PLOT_H = 316                                // Landscape-Verhaeltnis
 export const GRAPH_H = PAD_T + PLOT_H + PAD_B            // 404
 
 export const T_MAX_BOUND = T_MAX                         // t-Achse 0 … 400
 export const X_MAX_BOUND = 1500                          // x-Achse 0 … 1500
-export const T_TICK_STEP = 50                            // t-Ticks alle 50 s
+export const T_TICK_STEP = 50                            // t-Ticks alle 50 s (vertikale Hilfslinien)
+export const X_TICK_STEP = 250                            // x-Ticks alle 250 m (horizontale Hilfslinien)
 
 // Sample-Dichte der Fahrt-Segmente (S-Kurve); Halt-Segmente sind flach -> nur
 // Endpunkte. Gesamt ~ 4·SAMPLES_FAHRT + Halt-Punkte, pro Frame neu gezeichnet.

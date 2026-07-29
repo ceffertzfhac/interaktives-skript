@@ -18,7 +18,7 @@
 
 import {
   PAD_L, PAD_T, PAD_B, PLOT_W, PLOT_H, GRAPH_W,
-  T_MAX_BOUND, X_MAX_BOUND, T_TICK_STEP,
+  T_MAX_BOUND, X_MAX_BOUND, T_TICK_STEP, X_TICK_STEP,
   STOP_POSITIONS, STOP_LABELS,
   STREET_ROAD_X, STREET_Y_TOP, STREET_Y_BOTTOM, STREET_LEN, STREET_ROAD_BOTTOM, BUS_W, BUS_H,
 } from './constants.js'
@@ -71,10 +71,16 @@ export function drawGrid() {
     DOM.gridGroup.appendChild(t)
   }
 
-  // x-Ticks an den Haltestellen (nur Strich + Label; die gestrichelte Fuehrung
-  // kommt aus dem Haltestellen-Toggle in updateVisualization, sonst doppelt).
-  for (const xv of STOP_POSITIONS) {
+  // x-Gitternetz + Ticks alle 250 m (HORIZONTAL, wie die vertikalen t-Linien
+  // alle 50 s). Die gestrichelte Hervorhebung an den Haltestellen (0/500/1000/
+  // 1500) liefert der Haltestellen-Toggle in updateVisualization; das feste
+  // 250er-Netz ist das allgemeine Hilfsraster (parallele Struktur zu den
+  // vertikalen 50er-Linien, Nutzervorgabe).
+  for (let xv = 0; xv <= X_MAX_BOUND + 1e-9; xv += X_TICK_STEP) {
     const p = physToScreen(0, xv)
+    DOM.gridGroup.appendChild(el('line', {
+      x1: x0, y1: p.y, x2: physToScreen(T_MAX_BOUND, 0).x, y2: p.y, class: 'grid-line',
+    }))
     DOM.gridGroup.appendChild(el('line', { x1: x0 - 5, y1: p.y, x2: x0, y2: p.y, class: 'axis-tick' }))
     const t = el('text', { x: x0 - 9, y: p.y, 'text-anchor': 'end', 'dominant-baseline': 'middle', class: 'tick-label' })
     t.textContent = xv
@@ -178,17 +184,22 @@ export function updateVisualization(t) {
   const y0 = physToScreen(0, 0).y
   const x0 = physToScreen(0, 0).x
 
-  // 1. Haltestellen-Linien (gestrichelt, horizontal) + H-Label am LINKEN Ende
-  //    (innen, knapp rechts der x-Achse). Frueher rechts vom Plotende (+4 über
-  //    dem t-Pfeil) -> abgeschnitten jenseits viewBox 620 UND H1 (x=0 liegt auf
-  //    der t-Achse) kollidierte mit der t-Pfeilspitze. Links gibt es beides nicht.
+  // 1. Haltestellen-Linien (gestrichelt, horizontal) + H-Label am RECHTEN
+  //    Ende (innen, knapp links des Plot-Endes; Nutzervorgabe — die Labels
+  //    sitzen rechts, daher konnte das Diagramm nach links ruecken, s.
+  //    constants.js PAD_L). Das Label schwebt knapp UEBER der Linie
+  //    (y = p.y - 4, default dominant-baseline 'auto' => Text oberhalb der
+  //    Basislinie), damit H1 (x=0 liegt auf der t-Achse y0) nicht mit der
+  //    t-Pfeilspitze am rechten Rand kollidiert (der alte rechts-Satz
+  //    schnitt genau dort ab / kollidierte mit dem Pfeil).
   if (tog.haltestellen) {
+    const rightEdge = physToScreen(T_MAX_BOUND, 0).x
     for (let i = 0; i < STOP_POSITIONS.length; i++) {
       const p = physToScreen(0, STOP_POSITIONS[i])
       DOM.plotArea.appendChild(el('line', {
-        x1: x0, y1: p.y, x2: physToScreen(T_MAX_BOUND, 0).x, y2: p.y, class: 'bw-stop-line',
+        x1: x0, y1: p.y, x2: rightEdge, y2: p.y, class: 'bw-stop-line',
       }))
-      const lbl = el('text', { x: x0 + 6, y: p.y, 'text-anchor': 'start', 'dominant-baseline': 'middle', class: 'bw-stop-line-label' })
+      const lbl = el('text', { x: rightEdge - 4, y: p.y - 4, 'text-anchor': 'end', class: 'bw-stop-line-label' })
       lbl.textContent = STOP_LABELS[i]
       DOM.plotArea.appendChild(lbl)
     }
