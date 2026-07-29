@@ -20,11 +20,11 @@
 // 13 WERT-Tokens; ALIAS-Tokens (r, vel, acc, v, vx, vy, ay) spiegeln diese
 // (s. CSS), daher hier nicht erneut aufgeführt.
 const PALETTES = {
-  normal:        { phi:"#28a745", point:"#dc3545", rlat:"#474747", vlat:"#F47A2D", azp:"#8361af", omega:"#1555A2", alpha:"#bf262d", at:"#d24b3e", ar:"#2f74d0", rx:"#1f77b4", ry:"#1a8a50", ax:"#17a2b8", traj:"#7f7f7f" },
-  deuter_hell:   { phi:"#6c6c6c", point:"#B84DBF", rlat:"#000000", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#D55E00", traj:"#999999" },
-  deuter_dunkel: { phi:"#6c6c6c", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#F0E442", traj:"#9aa3b8" },
-  tritan_hell:   { phi:"#6c6c6c", point:"#B84DBF", rlat:"#3a3a3a", vlat:"#E69F00", azp:"#2b6e51", omega:"#009E73", alpha:"#D55E00", at:"#c0392b", ar:"#009E73", rx:"#0072B2", ry:"#5fb88a", ax:"#8a2418", traj:"#999999" },
-  tritan_dunkel: { phi:"#6c6c6c", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#5fd49d", omega:"#4caa7d", alpha:"#e8703a", at:"#e05a4a", ar:"#4caa7d", rx:"#3f8fd6", ry:"#7fd4b0", ax:"#c45040", traj:"#9aa3b8" },
+  normal:        { phi:"#28a745", point:"#dc3545", rlat:"#474747", vlat:"#F47A2D", azp:"#8361af", omega:"#1555A2", alpha:"#bf262d", at:"#d24b3e", ar:"#2f74d0", rx:"#1f77b4", ry:"#1a8a50", ax:"#17a2b8", traj:"#7f7f7f", gkpath:"#aaaaaa", gkpos:"#e69f00", gkdba:"#d62728", gkdab:"#2ca02c", gkweg:"#0072b2" },
+  deuter_hell:   { phi:"#6c6c6c", point:"#B84DBF", rlat:"#000000", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#D55E00", traj:"#999999", gkpath:"#999999", gkpos:"#E69F00", gkdba:"#D55E00", gkdab:"#009E73", gkweg:"#0072B2" },
+  deuter_dunkel: { phi:"#6c6c6c", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#0072B2", omega:"#56B4E9", alpha:"#D55E00", at:"#CC79A7", ar:"#009E73", rx:"#0072B2", ry:"#009E73", ax:"#F0E442", traj:"#9aa3b8", gkpath:"#9aa3b8", gkpos:"#E69F00", gkdba:"#D55E00", gkdab:"#009E73", gkweg:"#56B4E9" },
+  tritan_hell:   { phi:"#6c6c6c", point:"#B84DBF", rlat:"#3a3a3a", vlat:"#E69F00", azp:"#2b6e51", omega:"#009E73", alpha:"#D55E00", at:"#c0392b", ar:"#009E73", rx:"#0072B2", ry:"#5fb88a", ax:"#8a2418", traj:"#999999", gkpath:"#999999", gkpos:"#E69F00", gkdba:"#c0392b", gkdab:"#5fb88a", gkweg:"#0e6b52" },
+  tritan_dunkel: { phi:"#6c6c6c", point:"#B84DBF", rlat:"#d0d0d0", vlat:"#E69F00", azp:"#5fd49d", omega:"#4caa7d", alpha:"#e8703a", at:"#e05a4a", ar:"#4caa7d", rx:"#3f8fd6", ry:"#7fd4b0", ax:"#c45040", traj:"#9aa3b8", gkpath:"#9aa3b8", gkpos:"#E69F00", gkdba:"#e05a4a", gkdab:"#7fd4b0", gkweg:"#2f9c78" },
 };
 
 // ── Koexistierende Vektor-Farben je Figur (Tokens) ────────────────────────
@@ -38,6 +38,9 @@ const SETS = [
   { name:"1.57 ω-Vektor",          toks:["rlat","vlat","omega","phi","point","traj"] },
   { name:"1.58 a_ZP-Kreuz",        toks:["omega","vlat","azp","rlat","point","traj"] },
   { name:"1.59 α/ω",               toks:["rlat","omega","alpha","phi","point","traj"] },
+  // Kapitel 1.1 — eigene Tokenfamilie (--gk-*, s. aspekt_grundbegriffe.css).
+  // Alle fuenf koennen gleichzeitig sichtbar sein (Startzustand der Figur).
+  { name:"1.1 Grundbegriffe",      toks:["gkpath","gkpos","gkdba","gkdab","gkweg"] },
 ];
 
 // ── CVD-Simulation (Brettel 1997, lineares RGB, Schweregrad 1.0) ──────────

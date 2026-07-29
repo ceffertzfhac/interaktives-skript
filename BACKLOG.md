@@ -434,6 +434,57 @@ Zuweisung per Freigabe-Tipp.
   Unterstrich (wie vₓ/vᵧ); der Vektorpfeil ist das kombinierende Zeichen U+20D7
   (auf Nutzerwunsch belassen). *(M)*
 
+## P-Aspekt-Bus — Abb. 1.2 Busfahrt: Strichmännchen als Mitfahrer (Kapitel 1.1)
+
+Eingetragen 2026-07-29 nach Nutzervorgabe (**nur Backlog, noch nicht umgesetzt**).
+Betroffen: `src/figures/bus_weg_zeit/` (Motor) + `src/figures/aspekt_bus_weg_zeit.js|.css`.
+
+Erweiterung der interaktiven Abb. 1.2 (Busfahrt Linie 42, Weg-Zeit-Diagramm)
+um ein **fußläufiges Strichmännchen**, das an H2 steht und zur H3 laufen
+kann, um dort in den Bus zu steigen — oder ihn zu verpassen. Didaktisch geht
+es um die Gegenüberstellung zweier Weg-Zeit-Kurven (Bus vs. Fußgänger) und
+die Frage, wer zuerst an H3 ist. Zwei Toggles steuern das Szenario, ein
+drittes blendet das Männchen ein/aus; das Männchen bekommt sein **eigenes
+Weg-Zeit-Diagramm** (zweite Kurve, eigene Farbe) ins bestehende t-x-Diagramm.
+
+- [ ] **P-Bus-1: Strichmännchen in der Straßenszene (H2→H3).** Ein
+  Strichmännchen (SVG, Ausrichtung bezüglich der Straße beachten — steht auf
+  der Straße, nicht im Straßenband) zwischen H2 und H3. Ein Toggle blendet
+  es ein/aus. Startpunkt so wählen, dass ein **schnell laufender Erwachsener
+  H3 gerade noch so erreicht** (Startzeit/-ort so, dass die Männchen-Kurve
+  bei „nicht verpasst" knapp vor dem Bus an H3 endet). *(M)*
+- [ ] **P-Bus-2: Toggle „Männchen verpasst den Bus".** Zwei Ausprägungen:
+  *(M)*
+  - **verpasst den Bus NICHT:** das Männchen läuft los, sobald der Bus (in
+    der Animation) steht — setzt sich also in Bewegung Richtung H3 und
+    kommt **5 Sekunden vor der Abfahrt** des Busses bei H3 an. Es „steigt
+    ein": das Männchen ist fortan **auf dem Bus zu sehen**, und sein
+    Weg-Zeit-Diagramm entwickelt sich **mit dem Bus** weiter (Männchen-Kurve
+    geht in die Bus-Kurve über / liegt auf ihr).
+  - **verpasst den Bus:** das Männchen ist zu langsam und kommt erst
+    **nach der Abfahrt** des Busses bei H3 an. Es verbleibt dann bis zum
+    Ende der Animation bei H3 (Männchen-Kurve geht ab H3 in eine Halt-
+    Gerade über, Männchen steht auf der Straße an H3).
+- [ ] **P-Bus-3: Eigenes Weg-Zeit-Diagramm des Männchens.** Zweite Kurve
+  (eigene Farbe, unterscheidbar von firebrick/Linie 42) im bestehenden
+  t-x-Diagramm, passend zum Bus-Verlauf je nach Toggle (P-Bus-2). Legende
+  erweitern. *(S–M)*
+
+**Vorabklärungen (vor Umsetzung):**
+- Männchen-Gehgeschwindigkeit („schnell laufender Erwachsener", so dass H3
+  gerade erreicht wird) festlegen — daraus Startort/Startzeit ableiten;
+  H2↔H3 sind 500 m. Realistische Orientierung ~1,4 m/s (flotter Spaziergang)
+  bis ~2,5 m/s (schnelles Gehen/Jogging); 500 m in 200 s = 2,5 m/s.
+- Bus-Halt an H2 ist 120…155 s, Fahrt H2→H3 ist 155…240 s, Halt an H3 ist
+  240…275 s (Abfahrt H3 = 275 s). „5 s vor Abfahrt an H3" = 270 s.
+- Startbedingung: Männchen läuft los, „sobald der Bus steht" — meint das
+  den Halt an H3 (240 s) oder schon H2? Mit Nutzer klären.
+- Strichmännchen-SVG-Stil + Ausrichtung auf der Straße (Beine auf
+  Mittellinie / Straßenband, nicht im Nichts) — Vorbild ggf. aus
+  `Input/Simulationen/` falls vorhanden.
+
+---
+
 ## P8 — Inhaltsverzeichnis: 3-stufige Hierarchie (Themenkomplex → Kapitel → Abschnitt)
 
 Eingetragen 2026-07-24 nach Nutzervorgabe. Das TOC (und die Navigation) ist
@@ -720,11 +771,18 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   in `index.html`, Offset-Startwerte vom 1.4-h2 an den 1.0-h2 verschoben.
   DOM-Harness: Seiten 40→41, keine Regression (Abb 1.72, Zusammenfassung 1.8,
   Boxen 1.4–1.5 unverändert). Stufe 5 (Sicht) offen — Freigabe „JA".
-- [ ] **P12-A1 1.1 Kinematik** — 14 Subsections, **21 Abbildungen**
-  (`pskript_mech_kinematik_gmni_v4.tex`, 104 KB). *Größter Brocken nach 1.5.13 —
-  eigene Sitzung(en).* Interaktiv-Kandidaten: `geschwindigkeit_simulation`,
+- [x] **P12-A1 1.1 Kinematik** — 14 Subsections, **20 Abbildungen** (vorab als
+  „21" geschätzt; tatsächlich Abb. 1.1–1.20)
+  (`pskript_mech_kinematik_gmni_v4.tex`, 104 KB). Interaktiv-Kandidaten: `geschwindigkeit_simulation`,
   `grundbegriffe_kinematik_simulation`, `freier_fall_simulation`,
-  `schraeger_wurf_simulation`. *(XL)*
+  `schraeger_wurf_simulation` (→ P12-E1, offen). *(XL)* — migriert (Commits
+  74e712/18059fa/3a4961b/c722eb3): `chapters/ch_01_01_kinematik.html`, 14
+  Unterabschnitte, Gl. 1.1.1–1.1.99, Abb. 1.1–1.20, Beispiele 1.1.x,
+  Zusammenfassung 1.1. Kein Offset am h2 (erster Abschnitt mit Abb/Zus — startet
+  lueckenlos bei 1.1; die 1.2/1.3-Luecke ueberspringt das 1.4-h2 mit 37/3). Alle
+  21 referenzierten Bilder vorhanden. Verifikation Stufe 1–4/6 deckungsgleich
+  mit PDF; **Stufe 5 (Browser-Sicht) offen — Freigabe ausstehend**. Interaktiv
+  (P12-E1) bleibt offen.
 - [x] **P12-A2 1.2 Dynamik – Impuls und Kraft** — 12 Subsections, 10 Abb.
   (`pskript_mech_dyn_kraft_impuls_gmni_v3.tex`, 74 KB). Kandidaten: `atwood_simulation`,
   `3massen_umlenkrollen_simulation`. *(L)* — migriert 2026-07-25 (Branch
@@ -813,15 +871,27 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   Kein Offset (contiguous zu 2.1). 5 kapiteluebergreifende Verweise (2.1 + 1.8)
   alle aufgeloest. Verifikation Stufe 2/3/4/6 deckungsgleich mit PDF; **Stufe 5
   (Browser: Gleichungs-Tags 2.2.n) offen — Freigabe ausstehend**.
-- [ ] **P12-B3 2.3 Elektrodynamik und Magnetismus** — 7 Subsections, 3 Abb.
+- [x] **P12-B3 2.3 Elektrodynamik und Magnetismus** — 7 Subsections, 5 Abb.
   (`pskript_em_elektrodynamik_und_magnetismus.tex`, 71 KB). Kandidat:
-  `lorentz_force_simulation`. *(L)*
+  `lorentz_force_simulation` (→ P12-E5, offen). *(L)* — migriert (Commit
+  27ff1d4 -> v1.18.0 + xref-Fix c722eb3): `chapters/ch_03_03_elektrodynamik_magnetismus.html`,
+  7 Unterabschnitte 2.3.1–2.3.7, Gl. 2.3.1–2.3.96, 5 Beispiele (2.3.1–2.3.5),
+  Zusammenfassung 2.3, 5 Abbildungen (Abb. 2.4–2.8; 2.4/2.5 tikzpicture, 2.6 PNG,
+  2.7/2.8 pdftocairo). Kein Offset (contiguous zu 2.2). Bewusste Korrektur eines
+  Quell-Tippfehlers in `eq_lorentzkraft_allgemein`. Alle 5 Bilder vorhanden.
+  Verifikation Stufe 2/3/4/6 deckungsgleich; **Stufe 5 (Browser: Gleichungs-Tags
+  2.3.n) offen — Freigabe ausstehend**. Interaktiv (P12-E5) bleibt offen.
 
 ### P12-C — TK 3 Schwingungen und Wellen (neu, `ch_04_*.html`, `data-tk-num="3"`)
 
-- [ ] **P12-C0 3.0/3.1 Einleitung und Motivation** — (`pskript_sw_einleitung_und_motivation.tex`,
+- [x] **P12-C0 3.0/3.1 Einleitung und Motivation** — (`pskript_sw_einleitung_und_motivation.tex`,
   3.2 KB). **TOC-Bug in v0.13:** „Einleitung" und „Schwingungen" sind *beide* als
-  „3.1" nummeriert — Nummerierung beim Migrieren korrigieren (3.0 vs 3.1). *(S)*
+  „3.1" nummeriert — Nummerierung beim Migrieren korrigieren (3.0 vs 3.1). *(S)* —
+  migriert (Commit 31bae8d -> v1.19.0): `chapters/ch_04_00_einleitung.html`,
+  reine Prosa (keine Abb/Gl/Boxen). TOC-Dublette bewusst zu 3.0 korrigiert (s.
+  Fragment-Header + MIGRATION-Runbook Abschnitt 13). Kein Offset (3.0 verbraucht
+  0 Abb/Zus; Kapitel-3-Zaehler starten bei 0). **Stufe 5 (Browser-Sicht) offen —
+  Freigabe ausstehend**. Kein Interaktiv-Kandidat.
 - [ ] **P12-C1 3.1 Schwingungen** — 9 Subsections, 0 Abb.
   (`pskript_sw_schwingungen.tex`, 42 KB). Kandidat: `federpendel_simulation`. *(L)*
 - [ ] **P12-C2 3.2 Wellen** — `pskript_sw_wellen.tex` = **207 Byte Stub** — in v0.13

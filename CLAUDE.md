@@ -138,9 +138,23 @@ src/figures/kreis_spiral/   the SECOND motor (no gcN sim of its own — figure-o
                           legacy's to2d(…, perspective 3), which merely default to top-down),
                           hence the „Blickrichtung" toggle on 1.57–1.59 (flach 60° = default,
                           räumlich = true isometry). Full rationale: INTERAKTIVE_ASPEKT_FIGUREN.md.
-src/figures/aspekt_<name>.js   the 14 interactive "aspect figures", one module + one
+src/figures/grundbegriffe/  the THIRD motor (figure-only, no gcN sim), ported from
+                          Input/Simulationen/Project_grundbegriffe_kinematik_simulation:
+                          constants/physics/render/state.js + runtime.js, reusing
+                          ../kreisbewegung/lib/* again. Exists because BOTH other motors can
+                          only draw circular/spiral paths — this one draws an ARBITRARY fixed
+                          trajectory x(t)/y(t) in an x-y diagram with position vectors,
+                          displacement, distance and path length (Abb. 1.1). Also the first
+                          TIMELESS motor: no requestAnimationFrame, no play/pause/auto-stop,
+                          no show* flags but a store.toggles object, and switches-with-hover-
+                          explanation instead of sliders alone — so it is NOT a template for a
+                          circular-motion figure. Port changes vs. the source are minimal,
+                          additive and marked "PORT-AENDERUNG" (store.idPrefix in q() and in
+                          every drawn id/marker URL; trimmed initDOM; null-guarded value
+                          readouts). Own store singleton + own createRuntime() (prefix 'gk<n>_').
+src/figures/aspekt_<name>.js   the 15 interactive "aspect figures", one module + one
                           .css each. ALL share one pattern: a buildXFig(fig) factory, its own
-                          createRuntime() motor instance, feature-gated store.show* flags,
+                          createRuntime() motor instance, feature-gated store flags,
                           sliders, two-stage display (inline + magnifier overlay), a single
                           or stacked graph with auto-stop + ghost curve. **Never write one
                           from scratch — copy the nearest existing figure and feature-gate
@@ -155,6 +169,13 @@ src/figures/aspekt_<name>.js   the 14 interactive "aspect figures", one module +
                               1.51 arat_winkelbeschl
                             kreis_spiral (ISO)   1.57 omega_vektor · 1.58 zentripetalkreuz ·
                               1.59 alpha_omega
+                            grundbegriffe (2D)   1.1 grundbegriffe  (Kapitel 1.1 — eigene
+                              --gk-*-Tokenfamilie statt der kapitelgebundenen --kb-*-
+                              Vektorfarben, daher DREI eigene Zweige: Hell in
+                              aspekt_grundbegriffe.css, Dunkel in darkmode.css, CVD in
+                              aspekt_paletten.css. Aliase gibt es hier keine, und die
+                              CVD-Selektoren sind spezifischer als der Darkmode-Block,
+                              also gewinnt Dunkel+CVD ohne Zusatzregel.)
                           aspekt_kreisbahn.js (1.38) additionally exports the generic toggles
                           (toggle_aspekt/close_aspekt_overlay/toggle_analyse/toggle_panel_left)
                           reused by ALL figures via main.js binding, and is the binding OPTICAL

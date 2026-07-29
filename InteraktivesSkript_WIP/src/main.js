@@ -10,7 +10,7 @@ import { interaktiv, generate_highlight_boxes, safari_bug, make_static,
          init_width_mode, toggle_settings, close_settings, set_palette,
          init_palette } from './core.js';
 import { generate_toc, offsetAnchor, toc, toc_filter, kontakt, close_zoom, zoom, pause } from './ui.js';
-import { init_print, check_print, from_qr } from './print.js';
+import { init_print, check_print, from_qr, toggle_print_menu, close_print_menu, print_scope } from './print.js';
 import { paginate, showPage } from './pages.js';
 import { init_shell, toggle_drawer, close_drawer, chapter_prev, chapter_next, goto_page } from './shell.js';
 import { init_figure_panels, toggle_panel } from './figures/panels.js';
@@ -40,12 +40,21 @@ import { buildOmegaVektorFig } from './figures/aspekt_omega_vektor.js';
 // \times \vec v, ISO-3D). Baut auf demselben kreis_spiral-Motor auf wie 1.57/1.59
 // (\alpha=0 fix); die Aussage ist die Vorzeichenunabhaengigkeit von \vec a_ZP.
 import { buildZentripetalkreuzFig } from './figures/aspekt_zentripetalkreuz.js';
+// Abb. 1.1 (1.1.4 „Der Ort") — Grundbegriffe der Kinematik. EIGENER, dritter
+// Motor (src/figures/grundbegriffe/): eine beliebige Bahnkurve statt einer
+// Kreis-/Spiralbahn, s. Kopfkommentar von aspekt_grundbegriffe.js.
+import { buildGrundbegriffeFig } from './figures/aspekt_grundbegriffe.js';
+// Abb. 1.2 (1.1.7 „Die Strecke") — Busfahrt Linie 42, Weg-Zeit-Diagramm.
+// EIGENER, vierter Motor (src/figures/bus_weg_zeit/): ein t-x-Diagramm +
+// Straßenszene mit wanderndem Bus statt einer Bahnkurve; strukturmodelliert
+// auf grundbegriffe/, s. Kopfkommentar von aspekt_bus_weg_zeit.js.
+import { buildBusWegZeitFig } from './figures/aspekt_bus_weg_zeit.js';
 
 // Aspekt-Figuren: jede .aspekt-figur wird ueber data-aspekt einer Factory
 // zugeordnet, die ihre EIGENE Motor-Instanz (Prefix + storeInstance) baut
 // (s. kreisbewegung/runtime.js) -> beliebig viele Figuren, auch auf derselben
 // Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
-const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig };
+const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig };
 
 function init_aspekt_figuren() {
     document.querySelectorAll('.aspekt-figur[data-aspekt]').forEach(fig => {
@@ -193,7 +202,7 @@ function bind_events() {
     // Escape schliesst das Einstellungen-Popover (und andere Einblendungen,
     // die close_* anbieten), ohne dass ein expliziter Schliessen-Klick noetig ist.
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") close_settings();
+        if (e.key === "Escape") { close_settings(); close_print_menu(); }
     });
 }
 
@@ -217,6 +226,9 @@ function dispatch_click(e) {
     switch (el.dataset.action) {
         case "toc": toc(); break;
         case "init_print": init_print(); break;
+        case "toggle_print_menu": toggle_print_menu(); break;
+        case "close_print_menu": close_print_menu(); break;
+        case "print_scope": print_scope(el.dataset.arg); break;
         case "kontakt": kontakt(); break;
         case "adjust_text_size": adjust_text_size(parseInt(el.dataset.step, 10) || 0); break;
         case "set_width_mode": set_width_mode(el.dataset.mode); break;

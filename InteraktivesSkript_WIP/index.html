@@ -24,6 +24,8 @@
         <link rel="stylesheet" href="src/figures/aspekt_alpha_omega.css">
         <link rel="stylesheet" href="src/figures/aspekt_omega_vektor.css">
         <link rel="stylesheet" href="src/figures/aspekt_zentripetalkreuz.css">
+        <link rel="stylesheet" href="src/figures/aspekt_grundbegriffe.css">
+        <link rel="stylesheet" href="src/figures/aspekt_bus_weg_zeit.css">
         <!-- Ruht mit der gc10-Figur (s. main.js): Kapitel 1.4 ist rein statisch,
              es gibt keine .grafik-container mehr. Wieder aktivieren, sobald die
              Kreisbewegungs-Simulation zurueckkehrt.
@@ -99,7 +101,7 @@
             <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation">☰</button>
             <div id="header_brand">
                 <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
-                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.28.1</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
+                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.31.15</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
                      (Nutzervorgabe). Details im Kontakt-Kasten und in DISCLAIMER.md. --><span id="header_prototyp" title="Prototyp: Umsetzung und Inhalte sind vorlaeufig und ungeprueft">Prototyp</span></span>
                 <span id="header_author">Prof. Dr. rer. nat. C. Effertz</span>
             </div>
@@ -147,7 +149,7 @@
                  Darkmode-Schalter. Feste Breite, damit nur die Krume schrumpft. -->
             <div id="header_controls">
                 <div id="toolbar">
-                    <button type="button" class="icon_button" data-action="init_print" title="Drucken" aria-label="Drucken">
+                    <button type="button" class="icon_button" data-action="toggle_print_menu" title="Drucken" aria-label="Drucken">
                         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 8V3h10v5M7 18H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 15h10v6H7z"/></svg>
                     </button>
                     <button type="button" class="icon_button" data-action="kontakt" title="Kontakt" aria-label="Kontakt">
@@ -204,6 +206,19 @@
                         <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="breit" title="Extrabreite Textspalte">Breit</button>
                     </div>
                 </div>
+            </div>
+        </div>
+        <!-- Druck-Menue „Was drucken?" (Drucker-Taste oben, s. print.js::
+             toggle_print_menu). Waehlt den Druck-Scope relativ zur aktiven
+             Seite; print_scope() haengt ?scope=…&page=… an den Druck-Link. -->
+        <div id="print_menu" class="hidden">
+            <div id="print_menu_overlay" data-action="close_print_menu"></div>
+            <div id="print_menu_panel" role="dialog" aria-label="Was drucken?">
+                <div class="print_menu_label">Was drucken?</div>
+                <button type="button" class="print_menu_button" data-action="print_scope" data-arg="alles">Alles</button>
+                <button type="button" class="print_menu_button" data-action="print_scope" data-arg="komplex">Themenkomplex</button>
+                <button type="button" class="print_menu_button" data-action="print_scope" data-arg="kapitel">Kapitel</button>
+                <button type="button" class="print_menu_button" data-action="print_scope" data-arg="abschnitt">Abschnitt</button>
             </div>
         </div>
         <div id="zoom_overlay" class="hidden" data-action="close_zoom"></div>
