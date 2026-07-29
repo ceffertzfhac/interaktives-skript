@@ -48,8 +48,9 @@ export function initDOM() {
   DOM.gridGroup = q('grid_group')
   DOM.plotArea = q('plot_area')
 
-  // Straßenszene-SVG
+  // Straßenszene-SVG (street_bg = Straße/Haltestellen, street_bus = Bus, dahinter)
   DOM.streetSvg = q('street_svg')
+  DOM.streetBg = q('street_bg')
   DOM.streetBus = q('street_bus')
 
   // Zeit-Regler

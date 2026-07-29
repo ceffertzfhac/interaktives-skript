@@ -105,7 +105,7 @@ export function drawGrid() {
   // Legende „Linie 42" (kleiner Farbfleck + Text, oben links im Plot).
   const lg = el('g', { class: 'bw-legend', transform: `translate(${PAD_L + 8}, ${PAD_T + 8})` })
   lg.appendChild(el('rect', { x: 0, y: 0, width: 18, height: 10, rx: 2, class: 'bw-curve' }))
-  const lt = el('text', { x: 24, y: 9, class: 'legend-text' })
+  const lt = el('text', { x: 24, y: 9, class: 'bw-legend-text' })
   lt.textContent = 'Linie 42'
   lg.appendChild(lt)
   DOM.gridGroup.appendChild(lg)
@@ -115,10 +115,11 @@ export function drawGrid() {
 // Straße + Haltestellen + Beschriftung; die Bus-Gruppe wird leer angelegt und
 // pro Frame per transform verschoben (updateVisualization).
 export function drawStreetStatic() {
-  const g = DOM.streetSvg
+  const g = DOM.streetBg
   if (!g) return
-  // Nur das statische Drumherium; die Bus-Gruppe (id street_bus) bleibt
-  // unangetastet (wird beim Bau gefuellt, hier nicht neu erzeugt).
+  // Nur das statische Drumherium; die Bus-Gruppe (id street_bus) liegt als
+  // eigenes <g> HINTER street_bg im SVG und wird beim Bau gefuellt, hier nicht
+  // neu erzeugt (z-Order: Straße/Haltestellen unter dem Bus).
   const roadY = STREET_ROAD_Y
   // Straßenband + Mittellinie.
   g.appendChild(el('rect', { x: STREET_X0 - 10, y: roadY - 18, width: STREET_LEN + 20, height: 36, rx: 4, class: 'bw-road' }))
