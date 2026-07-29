@@ -20,7 +20,7 @@
 // Bemassungslinie, Pfeil-Verkuerzung shortenEnd(…, 5·strokeWidth)) bleibt
 // unangetastet, weil sie die Optik der Vorlage ausmacht.
 
-import { T_MAX, PAD_L, PAD_T, PAD_B, PLOT_W } from './constants.js'
+import { T_MAX, PAD_L, PAD_T, PAD_B, PLOT_W, HEAD_LEN } from './constants.js'
 import { store, DOM } from './state.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
 import { setAxisLabel, setGraphTitle } from '../kreisbewegung/lib/svg-text.js'
@@ -119,16 +119,45 @@ export function drawGrid() {
 }
 
 // Kombiniertes Symbol-Label „s⃗" mit tiefgestelltem Index (Original-Unicode-
-// Trick: Combining-Arrow U+20D7 auf 's', Index als <tspan>). Der Index wird
-// per dy (statt baseline-shift="sub") gesenkt: baseline-shift ist als SVG-
-// Präsentationsattribut nicht in jedem Browser zuverlaessig tiefgestellt,
-// dy in Nutzer-Einheiten hingegen schon. Auf Following-Inhalt (das "|"-Paar
-// des Abstands-Labels) wird die Verschiebung mit dy="-4" wieder aufgehoben.
-function vectorLabelHTML(sub) {
-  return `s⃗<tspan dy="4" font-size="0.7em">${sub}</tspan>`
+// Trick: Combining-Arrow U+20D7 auf 's', Index als <tspan>). Die Labels werden
+// als SVG-Knoten gebaut (createElementNS), NICHT ueber label.innerHTML: das
+// innerHTML-Parsen auf SVG-<text> erzeugt <tspan> nicht zuverlaessig im
+// SVG-Namespace, worauf weder baseline-shift noch dy/font-size greifen wuerden
+// — der Index erschiene ungestellt (hoch). Der Index wird per dy in Nutzer-
+// Einheiten gesenkt; auf Following-Inhalt (das schliessende „|" des Abstands-
+// Labels) hebt ein resetTspan die Verschiebung wieder auf.
+function subTspan(text) {
+  const t = document.createElementNS(NS, 'tspan')
+  t.setAttribute('dy', '4')
+  t.setAttribute('font-size', '0.7em')
+  t.textContent = text
+  return t
 }
-function deltaLabelHTML(sub) {
-  return `Δs⃗<tspan dy="4" font-size="0.7em">${sub}</tspan>`
+function resetTspan(text) {
+  const t = document.createElementNS(NS, 'tspan')
+  t.setAttribute('dy', '-4')
+  t.textContent = text
+  return t
+}
+function vectorLabel(sub) {
+  const f = document.createDocumentFragment()
+  f.appendChild(document.createTextNode('s⃗'))
+  f.appendChild(subTspan(sub))
+  return f
+}
+function deltaLabel(sub) {
+  const f = document.createDocumentFragment()
+  f.appendChild(document.createTextNode('Δs⃗'))
+  f.appendChild(subTspan(sub))
+  return f
+}
+// |Δs⃗_BA| — oeffnendes „|", Δs⃗, tiefgestelltes BA, zurueckgesetztes „|".
+function abstandLabel() {
+  const f = document.createDocumentFragment()
+  f.appendChild(document.createTextNode('|Δs⃗'))
+  f.appendChild(subTspan('BA'))
+  f.appendChild(resetTspan('|'))
+  return f
 }
 
 // ── Dynamischer Overlay: Punkte A/B, Vektoren, Verschiebung, Abstand, Weg ───
@@ -155,16 +184,19 @@ export function updateVisualization(highlightId = null) {
   }
 
   // Kanonische Pfeilspitzen-Geometrie (refX=0 + shortenEnd, s. Marker-Defs im
-  // Skelett der Figur): die Linie wird um 5·strokeWidth gekuerzt, die Spitze
-  // landet damit exakt auf dem Zielpunkt.
-  // PORT-AENDERUNG 4: sw wird mit store.vectorScale multipliziert. Weil die
-  // Verkuerzung DENSELBEN Wert benutzt und der Marker markerUnits=strokeWidth
-  // ist, skalieren Schaft, Spitze und Verkuerzung gemeinsam — die Spitze bleibt
-  // exakt auf dem Zielpunkt. Genau deshalb darf die Strichstaerke NICHT per CSS
-  // gesetzt werden (dort waere sie von der Verkuerzung entkoppelt).
+  // Skelett der Figur): die Linie wird um HEAD_LEN gekuerzt, die Spitze landet
+  // damit exakt auf dem Zielpunkt.
+  // PORT-AENDERUNG 4 (revidiert): frueher war die Verkuerzung 5·strokeWidth und
+  // der Marker markerUnits=strokeWidth — Schaft, Spitze und Verkuerzung skalierten
+  // gemeinsam. Das bedeutete aber: ein dickerer Schaft (VECTOR_SCALE) kuerzte den
+  // Vektor stärker und drueckte kurze Vektoren ins display:none. Jetzt sind die
+  // Spitzen fest (userSpaceOnUse, HEAD_LEN/HEAD_H) und die Verkuerzung ist fest
+  // HEAD_LEN — die Strichstaerke (sw = sw0·vectorScale) ist davon ENTKOPPELT und
+  // darf frei wachsen, ohne die Vektorlaenge zu fressen. Die Spitze bleibt exakt
+  // auf dem Zielpunkt, weil Marker-Laenge == Verkuerzung == HEAD_LEN.
   const vecLine = (id, cls, x1, y1, x2, y2, sw0, markerId) => {
     const sw = sw0 * store.vectorScale
-    const s = shortenEnd(x1, y1, x2, y2, 5 * sw)
+    const s = shortenEnd(x1, y1, x2, y2, HEAD_LEN)
     // Vektor kuerzer als Pfeilspitze → verborgene Linie (Label bleibt sichtbar).
     if (!s) return el('line', { id: pid(id), x1, y1, x2, y2, class: cls, 'stroke-width': sw, 'marker-end': url(markerId), display: 'none' })
     return el('line', { id: pid(id), x1, y1, x2: s.x2, y2: s.y2, class: cls, 'stroke-width': sw, 'marker-end': url(markerId) })
@@ -173,14 +205,14 @@ export function updateVisualization(highlightId = null) {
   if (t.sA) {
     DOM.plotArea.appendChild(vecLine('vector_sA', 'pos-vector', x0, y0, xA, yA, highlightId === 'sA' ? 4 : 2, 'arrowhead-pos'))
     const label = el('text', { class: 'pos-vector-label vector-label', 'text-anchor': 'middle' })
-    label.innerHTML = vectorLabelHTML('A')
+    label.appendChild(vectorLabel('A'))
     placeSideLabel(label, x0, y0, xA, yA, xB, yB)
     DOM.plotArea.appendChild(label)
   }
   if (t.sB) {
     DOM.plotArea.appendChild(vecLine('vector_sB', 'pos-vector', x0, y0, xB, yB, highlightId === 'sB' ? 4 : 2, 'arrowhead-pos'))
     const label = el('text', { class: 'pos-vector-label vector-label', 'text-anchor': 'middle' })
-    label.innerHTML = vectorLabelHTML('B')
+    label.appendChild(vectorLabel('B'))
     placeSideLabel(label, x0, y0, xB, yB, xA, yA)
     DOM.plotArea.appendChild(label)
   }
@@ -189,7 +221,7 @@ export function updateVisualization(highlightId = null) {
     line.setAttribute('stroke-dasharray', '5,5')
     DOM.plotArea.appendChild(line)
     const label = el('text', { class: 'dba-vector-label vector-label', 'text-anchor': 'middle' })
-    label.innerHTML = deltaLabelHTML('BA')
+    label.appendChild(deltaLabel('BA'))
     placeAlongLabel(label, xA, yA, xB, yB)
     DOM.plotArea.appendChild(label)
   }
@@ -198,7 +230,7 @@ export function updateVisualization(highlightId = null) {
     line.setAttribute('stroke-dasharray', '5,5')
     DOM.plotArea.appendChild(line)
     const label = el('text', { class: 'dab-vector-label vector-label', 'text-anchor': 'middle' })
-    label.innerHTML = deltaLabelHTML('AB')
+    label.appendChild(deltaLabel('AB'))
     placeAlongLabel(label, xB, yB, xA, yA)
     DOM.plotArea.appendChild(label)
   }
@@ -268,7 +300,7 @@ function drawAbstandDimension(xA, yA, xB, yB, x0, y0) {
     const tx = (xAo + xBo) / 2, ty = (yAo + yBo) / 2
     const label = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'hanging', transform: `rotate(${readableAngle} ${tx} ${ty}) translate(0, 5)`, class: 'vector-label' })
     label.setAttribute('x', tx); label.setAttribute('y', ty)
-    label.innerHTML = `|Δs⃗<tspan dy="4" font-size="0.7em">BA</tspan><tspan dy="-4">|</tspan>`
+    label.appendChild(abstandLabel())
     group.appendChild(label)
   }
   DOM.plotArea.appendChild(group)

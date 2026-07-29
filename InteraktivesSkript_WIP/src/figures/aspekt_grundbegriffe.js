@@ -38,7 +38,7 @@
 import { store, DOM } from './grundbegriffe/state.js';
 import { computePath, deriveAB } from './grundbegriffe/physics.js';
 import { drawGrid, updateVisualization, updateAnalysisBox, computeBoundsFit } from './grundbegriffe/render.js';
-import { T_MIN, T_MAX, T_STEP, TA_DEFAULT, TB_DEFAULT, TOGGLE_KEYS, GRAPH_W } from './grundbegriffe/constants.js';
+import { T_MIN, T_MAX, T_STEP, TA_DEFAULT, TB_DEFAULT, TOGGLE_KEYS, GRAPH_W, HEAD_LEN, HEAD_H } from './grundbegriffe/constants.js';
 import { createRuntime } from './grundbegriffe/runtime.js';
 import { ge } from '../core.js';
 
@@ -52,10 +52,13 @@ const DEFAULT_TOGGLES = {
     verschiebung_BA: true, verschiebung_AB: false, abstand: true,
 };
 
-// Strichstaerke der Vektorpfeile gegenueber der Vorlage (Nutzervorgabe „etwas
-// dicker / groesser"). Wirkt im MOTOR, nicht per CSS: die Pfeil-Verkuerzung ist
-// an dieselbe Strichstaerke gekoppelt (s. PORT-AENDERUNG 4 in render.js), und
-// die Spitzen skalieren ueber markerUnits=strokeWidth gemeinsam mit dem Schaft.
+// Strichstaerke der Vektorpfeile gegenueber der Vorlage (Nutzervorgabe „dicker
+// und groesser"). Wirkt im MOTOR, nicht per CSS. Skaliert NUR den Schaft
+// (sw = sw0·VECTOR_SCALE); die Pfeilspitzen sind fest (userSpaceOnUse,
+// HEAD_LEN/HEAD_H) und die Verkuerzung ist fest HEAD_LEN — beides ENTKOPPELT
+// von der Strichstaerke, sonst wuerde ein dickerer Schaft die Vektoren kuerzen
+// (s. PORT-AENDERUNG 4 in render.js). Spitze bleibt exakt auf dem Zielpunkt,
+// weil Marker-Laenge == Verkuerzung == HEAD_LEN.
 const VECTOR_SCALE = 2.0;
 
 // Szene: die Diagramm-SVG der Vorlage. Die viewBox-Hoehe wird beim Bau aus dem
@@ -69,9 +72,9 @@ const SVG_SCENE = `
 <svg id="gk_graph_svg" viewBox="0 0 600 455" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <defs>
     <marker id="gk_graph-arrowhead" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
-    <marker id="gk_arrowhead-pos" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
-    <marker id="gk_arrowhead-dba" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
-    <marker id="gk_arrowhead-dab" markerWidth="5" markerHeight="3.5" refX="0" refY="1.75" orient="auto"><polygon points="0 0, 5 1.75, 0 3.5"/></marker>
+    <marker id="gk_arrowhead-pos" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="0" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
+    <marker id="gk_arrowhead-dba" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="0" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
+    <marker id="gk_arrowhead-dab" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="0" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
   </defs>
   <!-- Statisches Gitter/Achsen/Titel (drawGrid(), einmalig — die Bounds sind
        fest, da die Bahnkurve keine Funktionsvariante hat) -->
