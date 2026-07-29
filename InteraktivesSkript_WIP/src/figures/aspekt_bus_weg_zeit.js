@@ -62,7 +62,7 @@ const DEFAULT_TOGGLES = {
 // street_bus = Bus-Gruppe (von buildBus gefuellt, pro Frame per transform
 // verschoben). z-Order: bg vor bus -> Bus liegt oben auf der Straße.
 const SVG_STREET = `
-<svg id="bw_street_svg" viewBox="0 0 ${STREET_W} ${STREET_H}" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
+<svg id="bw_street_svg" viewBox="0 0 ${STREET_W} ${STREET_H}" width="${STREET_W}" height="${STREET_H}" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <g id="bw_street_bg"></g>
   <g id="bw_street_bus"></g>
 </svg>`;
@@ -316,7 +316,37 @@ export function buildBusWegZeitFig(fig) {
     });
     draw(curT);
 
+    // ── Straßen-Hoehe synct auf die Diagramm-Hoehe (s. CSS-Kommentar oben).
+    //    Das Diagramm ist breitentrieben (width:100%, height:auto, max-height);
+    //    die hochformatige Straßenszene muss ihm in die Hoehe folgen, damit die
+    //    Ordinate (linkes Plot-Ende) und das Straßenband auf derselben Skala
+    //    liegen (s. constants.js) und die Bus-Hoehe pixelgenau der Kurven-Hoehe
+    //    entspricht. CSS stretch/aspect-ratio scheitern daran (s. CSS-Kommentar),
+    //    daher hier per JS: Diagramm-Hoehe messen, Straßen-SVG-height setzen,
+    //    width:auto loest das viewBox-Verhaeltnis 220:404. Ein ResizeObserver
+    //    fängt Modus-Wechsel, Lupe und Viewport-Aenderung ab. Im Schmal-Modus
+    //    (flex-direction:column, Straße gestapelt) hat die Straße ihre eigene
+    //    Hoehe (CSS) -> inline-height loeschen, nicht syncen.
+    const streetSvg = ge(p + 'street_svg');
+    const graphSvg = ge(p + 'graph_svg');
+    const mainContent = scene.querySelector('.aspekt-main-content');
+    function syncStreetHeight() {
+        if (!streetSvg || !graphSvg || !mainContent) return;
+        if (getComputedStyle(mainContent).flexDirection !== 'row') {
+            streetSvg.style.height = '';          // CSS-Hoehe (30vh) greift
+            return;
+        }
+        const h = graphSvg.getBoundingClientRect().height;
+        if (h > 1) streetSvg.style.height = h + 'px';
+    }
+    if (typeof ResizeObserver !== 'undefined' && graphSvg) {
+        const ro = new ResizeObserver(syncStreetHeight);
+        ro.observe(graphSvg);
+    }
+    syncStreetHeight();
+
     // Beim Oeffnen/Schliessen der Lupe neu zeichnen (Layout-Switch Szene|Graph
-    // <-> Stapelung wird vom CSS gehandhabt; Inhalt bleibt, nur sichern).
-    fig.addEventListener('aspekt-overlay-toggled', () => { draw(curT); });
+    // <-> Stapelung wird vom CSS gehandhabt; Inhalt bleibt, nur sichern) +
+    // Straßen-Hoehe neu syncen (Overlay aendert die Diagramm-Hoehe).
+    fig.addEventListener('aspekt-overlay-toggled', () => { draw(curT); syncStreetHeight(); });
 }

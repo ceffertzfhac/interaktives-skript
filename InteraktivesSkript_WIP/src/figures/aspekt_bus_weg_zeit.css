@@ -117,25 +117,31 @@
 }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-main-content {
     position: relative;
-    display: flex; flex-direction: row; align-items: stretch; min-width: 0;
+    display: flex; flex-direction: row; align-items: flex-start; min-width: 0;
 }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-runbar {
     position: sticky; top: 0; z-index: 7;
     display: flex; align-items: center; justify-content: flex-start; gap: 8px;
     padding: 8px; background: var(--kb-surface); border-bottom: none; box-shadow: none;
 }
-/* Straßenszene ist HOCHFORMAT (vertikale Straße). Das Diagramm (Landscape,
-   width:100%, max-height) treibt die Hoehe der Zeile; die Szenen-Spalte wird
-   per align-items:stretch auf DIESELBE Hoehe gezogen, das Szenen-SVG fuellt sie
-   mit height:100%. Weil beide SVGs gleich hoch sind und Straße UND Ordinate
-   denselben y-Bereich + Maßstab haben (s. constants.js), liegt die Bus-Hoehe
-   pixelgenau auf der Kurven-Hoehe (Analogie Bus-Hoehe ↔ x). */
+/* Straßenszene ist HOCHFORMAT (vertikale Straße) und soll der Ordinate des
+   Diagramms in Position UND Skala entsprechen (s. constants.js: Straße und
+   Ordinate nutzen denselben y-Bereich + Maßstab). Das Diagramm (Landscape,
+   width:100%, height:auto, max-height) ist breitentrieben; die Straßenszene
+   muss IHM in die Hoehe folgen — CSS stretch/aspect-ratio scheitern daran
+   (entweder kollabiert width:auto auf 0, oder die Szene setzt aus ihrer
+   intrinsischen Breite eine EIGENE Hoehe und dominaiert die Zeile). Daher
+   sync die Factory die Straßen-Hoehe per JS auf die Diagramm-Hoehe
+   (ResizeObserver, s. aspekt_bus_weg_zeit.js) und ueberlaesst width:auto dem
+   viewBox-Verhaeltnis 220:404. Die intrinsic width/height-Attribute am SVG
+   (220×404) sind Fallback und geben width:auto eine definite Grundlage.
+   Im Schmal-Modus (Stapelung) hat die Straße ihre eigene Hoehe (s. unten) —
+   die JS-Sync greift dann nicht (flex-direction:column). */
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-main .aspekt-scene {
-    padding: 8px; flex: 0 0 auto; min-width: 0;
-    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 auto; padding: 0; min-width: 0;
 }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-main .aspekt-svg {
-    display: block; height: 100%; width: auto; max-width: 100%; max-height: none; margin: 0 auto;
+    display: block; height: auto; width: auto; max-width: none; max-height: none;
 }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 auto; }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-graph-svg {
@@ -197,7 +203,7 @@
 .aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 auto; padding: 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 auto; padding: 0 12px 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-svg {
-    width: auto; height: 100%; max-width: 100%;
+    display: block; width: auto; height: auto; max-width: none; max-height: none;
 }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-graph-svg {
     max-width: none; width: 100%; height: auto; max-height: 64vh;
