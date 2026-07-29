@@ -230,3 +230,51 @@
 :root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-graph-svg {
     height: auto; max-height: min(34vh, 300px); width: 92%; margin: 0 auto;
 }
+
+/* ── Physik-Block „Für Experten und Interessierte" ─────────────────────────── */
+/* Badge markiert den tiefergehenden Teil; die Formeln werden von MathJax aus dem
+   statischen \[...\] gerendert (reload_mathjax während typesetAfterLoad). Die
+   display-Formeln schrumpfen via max-width:100% (s. aspekt_kreisbahn.css) auf
+   die Panelbreite — die breiten cases-Umgebungen werden klein, clippen aber nicht. */
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-experten-badge {
+    display: inline-block;
+    font-size: calc(10.5px * var(--kb-text-scale));
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--bw-haltestelle, var(--kb-accent));
+    border: 1px solid var(--bw-haltestelle, var(--kb-accent));
+    border-radius: 999px;
+    padding: 1px 8px;
+    margin-bottom: 6px;
+}
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-fahrplan {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2px;
+    font-size: calc(11.5px * var(--kb-text-scale));
+}
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-fahrplan th,
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-fahrplan td {
+    padding: 3px 6px;
+    text-align: right;
+    border-bottom: 1px solid var(--kb-border2);
+}
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-fahrplan th:first-child,
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-fahrplan td:first-child {
+    text-align: left;
+}
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-fahrplan thead th {
+    color: var(--kb-text3);
+    font-weight: 600;
+    border-bottom: 1px solid var(--kb-border);
+}
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-fahrplan tbody tr:last-child td {
+    border-bottom: none;
+}
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-fahrplan mjx-container { display: inline !important; }
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-experten-note {
+    font-size: calc(11px * var(--kb-text-scale));
+    color: var(--kb-text3);
+    margin-top: 6px;
+    font-style: italic;
+}

@@ -155,10 +155,31 @@ const PANEL_RIGHT = `
     </div>
     <div class="panel-section">
       <div class="panel-label">Physik</div>
-      <div class="formula-box">
-        <div class="formula-box-cap">Weg-Zeit-Gesetz der Busfahrt:</div>
+      <div class="formula-box bw-experten">
+        <div class="bw-experten-badge">Für Experten und Interessierte</div>
+        <div class="formula-box-cap">Weg-Zeit-Gesetz der Busfahrt (Halt bzw. Fahrt)</div>
         <div>\\[x(t)=\\begin{cases}x_0, & \\text{Halt } (\\dot x=0)\\\\[2pt] x_0+\\displaystyle\\int_{0}^{\\,t-t_0} v(\\tau)\\,d\\tau, & \\text{Fahrt}\\end{cases}\\]</div>
-        <div>\\[v_{\\max}=\\frac{\\Delta x}{(1-r)\\,\\Delta t},\\quad r=0{,}3\\]</div>
+        <div class="formula-box-cap">Geschwindigkeit \\(v(\\tau)\\) — Trapez-Profil, je Phase einzeln (\\(\\tau=t-t_0\\))</div>
+        <div>\\[\\text{Beschleunigen: }\\; v=a\\,\\tau,\\quad 0\\le\\tau\\le t_\\mathrm{acc}\\]</div>
+        <div>\\[\\text{Konstant: }\\; v=v_{\\max},\\quad t_\\mathrm{acc}\\le\\tau\\le\\Delta t-t_\\mathrm{acc}\\]</div>
+        <div>\\[\\text{Bremsen: }\\; v=v_{\\max}-a\\,u,\\quad \\Delta t-t_\\mathrm{acc}\\le\\tau\\le\\Delta t\\]</div>
+        <div class="formula-box-cap">Weg \\(x(\\tau)=x_0+\\!\\int v\\,d\\tau\\) — S-Kurve, je Phase einzeln</div>
+        <div>\\[\\text{Beschleunigen: }\\; x=x_0+\\tfrac12 a\\,\\tau^2\\]</div>
+        <div>\\[\\text{Konstant: }\\; x=x_0+\\tfrac12 a\\,t_\\mathrm{acc}^2+v_{\\max}(\\tau-t_\\mathrm{acc})\\]</div>
+        <div>\\[\\text{Bremsen: }\\; x=x_0+\\tfrac12 a\\,t_\\mathrm{acc}^2+v_{\\max}(\\Delta t-2t_\\mathrm{acc})+v_{\\max}u-\\tfrac12 a\\,u^2\\]</div>
+        <div class="formula-box-cap">Definitionen (auf zwei Zeilen)</div>
+        <div>\\[\\tau=t-t_0,\\quad u=\\tau-(\\Delta t-t_\\mathrm{acc}),\\quad r=0{,}3\\]</div>
+        <div>\\[v_{\\max}=\\frac{\\Delta x}{(1-r)\\,\\Delta t},\\quad t_\\mathrm{acc}=r\\,\\Delta t,\\quad a=\\frac{v_{\\max}}{t_\\mathrm{acc}}\\]</div>
+        <div class="formula-box-cap">Fahrplan (angepinnte Werte, \\(\\Delta x=500\\,\\mathrm{m}\\))</div>
+        <table class="bw-fahrplan">
+          <thead><tr><th>Fahrt</th><th>\\(\\Delta t\\)</th><th>\\(v_{\\max}\\)</th><th>\\(a\\)</th></tr></thead>
+          <tbody>
+            <tr><td>H1&nbsp;→&nbsp;H2</td><td>90&nbsp;s</td><td>7,94&nbsp;m/s</td><td>0,294&nbsp;m/s²</td></tr>
+            <tr><td>H2&nbsp;→&nbsp;H3</td><td>85&nbsp;s</td><td>8,40&nbsp;m/s</td><td>0,330&nbsp;m/s²</td></tr>
+            <tr><td>H3&nbsp;→&nbsp;H4</td><td>95&nbsp;s</td><td>7,52&nbsp;m/s</td><td>0,264&nbsp;m/s²</td></tr>
+          </tbody>
+        </table>
+        <div class="bw-experten-note">Mit diesen Formeln und dem Fahrplan lässt sich \\(x(t)\\) für jeden Zeitpunkt der Busfahrt nachrechnen — Strecke für Strecke.</div>
       </div>
     </div>
   </div>
