@@ -20,7 +20,7 @@ import {
   PAD_L, PAD_T, PAD_B, PLOT_W, PLOT_H, GRAPH_W,
   T_MAX_BOUND, X_MAX_BOUND, T_TICK_STEP,
   STOP_POSITIONS, STOP_LABELS,
-  STREET_ROAD_Y, STREET_X0, STREET_LEN, BUS_W, BUS_H,
+  STREET_ROAD_X, STREET_Y_TOP, STREET_Y_BOTTOM, STREET_LEN, BUS_W, BUS_H,
 } from './constants.js'
 import { store, DOM } from './state.js'
 import { xAt, stateAt } from './physics.js'
@@ -45,9 +45,11 @@ export function physToScreen(t, x) {
   return { x: sx, y: sy }
 }
 
-// x (m) -> Straßen-Pixel-x (Straßenszene).
-function streetX(x) {
-  return STREET_X0 + (x / X_MAX_BOUND) * STREET_LEN
+// x (m) -> Straßen-Pixel-y (Straßenszene, VERTIKAL gekippt: x=0 unten,
+// x=1500 oben — analog zur Ordinate x(t) des t-x-Diagramms, damit die Bus-Hoehe
+// direkt der Kurven-Hoehe entspricht).
+function streetY(x) {
+  return STREET_Y_BOTTOM - (x / X_MAX_BOUND) * STREET_LEN
 }
 
 // ── Statisches Gitter/Achsen/Titel/Legende (einmalig) ────────────────────────
@@ -111,62 +113,57 @@ export function drawGrid() {
   DOM.gridGroup.appendChild(lg)
 }
 
-// ── Statische Straßenszene (einmalig) ────────────────────────────────────────
+// ── Statische Straßenszene (einmalig, VERTIKAL gekippt) ──────────────────────
 // Straße + Haltestellen + Beschriftung; die Bus-Gruppe wird leer angelegt und
-// pro Frame per transform verschoben (updateVisualization).
+// pro Frame per transform verschoben (updateVisualization). Die Straße laeuft
+// vertikal (x=0 unten, x=1500 oben), damit die Bus-Hoehe der Ordinate x(t) des
+// Diagramms entspricht — die Gegenüberstellung wird so sofort lesbar.
 export function drawStreetStatic() {
   const g = DOM.streetBg
   if (!g) return
   // Nur das statische Drumherium; die Bus-Gruppe (id street_bus) liegt als
   // eigenes <g> HINTER street_bg im SVG und wird beim Bau gefuellt, hier nicht
   // neu erzeugt (z-Order: Straße/Haltestellen unter dem Bus).
-  const roadY = STREET_ROAD_Y
-  // Straßenband + Mittellinie.
-  g.appendChild(el('rect', { x: STREET_X0 - 10, y: roadY - 18, width: STREET_LEN + 20, height: 36, rx: 4, class: 'bw-road' }))
-  g.appendChild(el('line', { x1: STREET_X0, y1: roadY, x2: STREET_X0 + STREET_LEN, y2: roadY, class: 'bw-road-mid' }))
-  // Fahrtrichtungspfeil rechts.
+  const rx = STREET_ROAD_X
+  // Straßenband + Mittellinie (vertikal).
+  g.appendChild(el('rect', { x: rx - 18, y: STREET_Y_TOP, width: 36, height: STREET_LEN, rx: 4, class: 'bw-road' }))
+  g.appendChild(el('line', { x1: rx, y1: STREET_Y_TOP, x2: rx, y2: STREET_Y_BOTTOM, class: 'bw-road-mid' }))
+  // Fahrtrichtungspfeil oben (zeigt nach oben = wachsendes x).
   g.appendChild(el('path', {
-    d: `M ${STREET_X0 + STREET_LEN + 4} ${roadY} l -10 -5 l 0 10 z`, class: 'bw-road-arrow',
+    d: `M ${rx} ${STREET_Y_TOP - 12} l -5 10 l 10 0 z`, class: 'bw-road-arrow',
   }))
 
-  // Haltestellen: Pfosten + Schild + Label.
+  // Haltestellen: Pfosten nach links + Label (H1 … H4).
   for (let i = 0; i < STOP_POSITIONS.length; i++) {
-    const sx = streetX(STOP_POSITIONS[i])
+    const sy = streetY(STOP_POSITIONS[i])
     const hg = el('g', { class: 'bw-haltestelle' })
-    hg.appendChild(el('line', { x1: sx, y1: roadY - 18, x2: sx, y2: roadY - 40, class: 'bw-stop-post' }))
-    hg.appendChild(el('rect', { x: sx - 9, y: roadY - 52, width: 18, height: 13, rx: 2, class: 'bw-stop-sign' }))
-    const sl = el('text', { x: sx, y: roadY - 42, 'text-anchor': 'middle', class: 'bw-stop-sign-label' })
-    sl.textContent = 'H'
-    hg.appendChild(sl)
-    const lbl = el('text', { x: sx, y: roadY + 34, 'text-anchor': 'middle', class: 'bw-stop-label' })
+    hg.appendChild(el('line', { x1: rx - 18, y1: sy, x2: rx - 38, y2: sy, class: 'bw-stop-post' }))
+    const lbl = el('text', { x: rx - 44, y: sy, 'text-anchor': 'end', 'dominant-baseline': 'middle', class: 'bw-stop-label' })
     lbl.textContent = STOP_LABELS[i]
     hg.appendChild(lbl)
     g.appendChild(hg)
   }
-
-  // Szenentitel.
-  const cap = el('text', { x: STREET_X0, y: 24, class: 'graph-title-text' })
-  cap.textContent = 'Straßenszene'
-  g.appendChild(cap)
 }
 
 // Bus-Gruppe einmalig fuellen (Kasten + Fenster + „42" + Raeder). Bleibt als
 // Kind von street_svg stehen; updateVisualization verschiebt sie per transform.
+// Bus ist VERTIKAL ausgerichtet: Laenge BUS_W entlang der Fahrtrichtung (nach
+// oben), Breite BUS_H quer — lokal um (0,0), die Gruppe wird per transform auf
+// die Straße gesetzt (translate(roadX, streetY(x))).
 export function buildBus() {
   const bus = DOM.streetBus
   if (!bus) return
   bus.innerHTML = ''
-  const cx = 0, cy = 0   // lokal; Gruppe wird per transform auf die Straße gesetzt
-  bus.appendChild(el('rect', { x: cx - BUS_W / 2, y: cy - BUS_H / 2, width: BUS_W, height: BUS_H, rx: 5, class: 'bw-bus' }))
-  // Fenster (drei kleine Rechtecke).
+  bus.appendChild(el('rect', { x: -BUS_H / 2, y: -BUS_W / 2, width: BUS_H, height: BUS_W, rx: 5, class: 'bw-bus' }))
+  // Fenster (drei uebereinander).
   for (let i = -1; i <= 1; i++) {
-    bus.appendChild(el('rect', { x: cx + i * 12 - 5, y: cy - BUS_H / 2 + 5, width: 10, height: 9, class: 'bw-bus-window' }))
+    bus.appendChild(el('rect', { x: -5, y: i * 14 - 4.5, width: 10, height: 9, class: 'bw-bus-window' }))
   }
-  // Raeder.
-  bus.appendChild(el('circle', { cx: cx - BUS_W / 4, cy: cy + BUS_H / 2, r: 5, class: 'bw-bus-wheel' }))
-  bus.appendChild(el('circle', { cx: cx + BUS_W / 4, cy: cy + BUS_H / 2, r: 5, class: 'bw-bus-wheel' }))
-  // Linien-Label „42".
-  const ln = el('text', { x: cx, y: cy + 4, 'text-anchor': 'middle', class: 'bw-bus-label' })
+  // Raeder (vorne oben + hinten unten, je innerhalb des Kastens).
+  bus.appendChild(el('circle', { cx: 0, cy: -BUS_W / 2 + 8, r: 5, class: 'bw-bus-wheel' }))
+  bus.appendChild(el('circle', { cx: 0, cy: BUS_W / 2 - 8, r: 5, class: 'bw-bus-wheel' }))
+  // Linien-Label „42" (aufrecht, lesbar).
+  const ln = el('text', { x: 0, y: 0, 'text-anchor': 'middle', 'dominant-baseline': 'middle', class: 'bw-bus-label' })
   ln.textContent = '42'
   bus.appendChild(ln)
 }
@@ -230,9 +227,9 @@ export function updateVisualization(t) {
   }
   DOM.plotArea.appendChild(el('circle', { cx: pp.x, cy: pp.y, r: 5, class: 'bw-point' }))
 
-  // 5. Bus auf der Straße verschieben.
+  // 5. Bus auf der Straße verschieben (vertikal: Hoehe = streetY(x)).
   if (DOM.streetBus) {
-    DOM.streetBus.setAttribute('transform', `translate(${streetX(xx).toFixed(1)}, ${STREET_ROAD_Y})`)
+    DOM.streetBus.setAttribute('transform', `translate(${STREET_ROAD_X}, ${streetY(xx).toFixed(1)})`)
   }
 }
 

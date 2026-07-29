@@ -85,14 +85,9 @@
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-stop-post {
     stroke: var(--bw-haltestelle); stroke-width: 2;
 }
-.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-stop-sign { fill: var(--bw-haltestelle); }
-.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-stop-sign-label {
-    fill: #ffffff; font-size: 9px; font-weight: 700; text-anchor: middle;
-    dominant-baseline: middle;
-}
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-stop-label {
     fill: var(--kb-text2); font-size: calc(12px * var(--kb-fs, 1)); font-weight: 600;
-    text-anchor: middle;
+    text-anchor: end; dominant-baseline: middle;
 }
 /* Bus-Icon (Linie 42, firebrick wie die Kurve). */
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-bus {
@@ -129,11 +124,14 @@
     display: flex; align-items: center; justify-content: flex-start; gap: 8px;
     padding: 8px; background: var(--kb-surface); border-bottom: none; box-shadow: none;
 }
-.aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-main .aspekt-scene { padding: 8px; flex: 0 0 34%; min-width: 0; }
+/* Straßenszene ist HOCHFORMAT (vertikale Straße) -> hoehengetrieben (height
+   fest, Breite folgt), Spalte passt sich dem Inhalt an. Diagramm (Landscape)
+   fuellt den Rest. Beide ~gleiche Hoehe -> Bus-Hoehe ↔ Kurven-Hoehe (Analogie). */
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-main .aspekt-scene { padding: 8px; flex: 0 0 auto; min-width: 0; }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-main .aspekt-svg {
-    display: block; width: 100%; height: auto; max-height: 44vh; max-width: none; margin: 0 auto;
+    display: block; height: 56vh; width: auto; max-width: 100%; max-height: none; margin: 0 auto;
 }
-.aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 66%; }
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 auto; }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-graph-svg {
     display: block; width: 100%; height: auto; max-height: 56vh; max-width: none; margin: 0 auto;
 }
@@ -184,23 +182,23 @@
     height: auto; max-height: 40vh; width: 92%; margin: 0 auto;
 }
 
-/* Breit-Modus: Zeile mit mehr Hoehe. */
+/* Breit-Modus: Zeile mit mehr Hoehe (Szene hoehengetrieben, Diagramm fuellt). */
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-scene {
-    flex: 0 0 36%; padding: 8px;
+    flex: 0 0 auto; padding: 8px;
 }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-graph {
-    flex: 1 1 64%; padding: 0 8px 8px;
+    flex: 1 1 auto; padding: 0 8px 8px;
 }
-:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-svg { max-height: 60vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-svg { height: 60vh; }
 :root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-graph-svg { max-height: 62vh; }
 
 /* Overlay (Lupe): Zeile (Szene | Diagramm), an Viewport-Hoehe gedeckelt. */
 .aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-main { flex-direction: column; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-main-content { flex-direction: row; }
-.aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 36%; padding: 12px; }
-.aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 64%; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-scene { flex: 0 0 auto; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-graph { flex: 1 1 auto; padding: 0 12px 12px; }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-svg {
-    width: 100%; height: auto; max-height: 64vh; max-width: none;
+    width: auto; height: 64vh; max-width: none;
 }
 .aspekt-figur.aspekt-im-overlay[data-aspekt="bus_weg_zeit"] .aspekt-graph-svg {
     max-width: none; width: 100%; height: auto; max-height: 64vh;
