@@ -295,7 +295,7 @@ function placeAlongLabel(label, xFrom, yFrom, xTo, yTo) {
   const angle = Math.atan2(dy, dx) * 180 / Math.PI
   const flipped = angle > 90 || angle < -90
   const readableAngle = flipped ? angle + 180 : angle
-  const offset = flipped ? 15 : -15
+  const offset = flipped ? 22 : -22
   const mx = (xFrom + xTo) / 2, my = (yFrom + yTo) / 2
   label.setAttribute('x', mx)
   label.setAttribute('y', my)
@@ -331,10 +331,11 @@ function drawAbstandDimension(xA, yA, xB, yB, x0, y0) {
     // KEIN dominant-baseline:hanging (das ankert y am OBEREN Rand, sodass der
     // per dy gesenkte Index BA nur 4 Einheiten unterhalb der Oberkante — also
     // auf Hoehe des Pfeils ⃗ — erschiene, statt tiefgestellt). Default-Baseline
-    // (alphabetisch) + translate(0,15) wie placeAlongLabel: die Schriftbasis
-    // liegt 15 Einheiten jenseits der Bemassungslinie, der Index sinkt per dy
-    // sauber ab. text-anchor:middle zentriert das ganze |Δs⃗_BA|.
-    label = el('text', { 'text-anchor': 'middle', transform: `rotate(${readableAngle} ${tx} ${ty}) translate(0, 15)`, class: 'vector-label' })
+    // (alphabetisch) + translate(0,22) wie placeAlongLabel: die Schriftbasis
+    // liegt 22 Einheiten jenseits der Bemassungslinie (etwas mehr Abstand als
+    // frueher, Nutzervorgabe), der Index sinkt per dy sauber ab.
+    // text-anchor:middle zentriert das ganze |Δs⃗_BA|.
+    label = el('text', { 'text-anchor': 'middle', transform: `rotate(${readableAngle} ${tx} ${ty}) translate(0, 22)`, class: 'vector-label' })
     label.setAttribute('x', tx); label.setAttribute('y', ty)
     label.appendChild(abstandLabel())
   }
