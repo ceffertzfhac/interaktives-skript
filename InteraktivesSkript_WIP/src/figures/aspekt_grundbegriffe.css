@@ -66,11 +66,16 @@
 .aspekt-figur .abstand-dim { stroke: var(--gk-dba); fill: var(--gk-dba); stroke-width: calc(1.2px * var(--kb-lw)); }
 .aspekt-figur .abstand-projline { stroke: var(--kb-text3); stroke-width: calc(.8px * var(--kb-lw)); stroke-dasharray: 2 2; }
 
-/* Diagramm ist QUERFORMAT (600x455) statt hochkant wie die Kreisbahn-Figuren
-   -> etwas mehr Breite im Fliesstext, und im Overlay an der Hoehe gedeckelt
-   (0,758 · 82vh ≈ 62vh Bildhoehe, also derselbe Hoehenanteil wie dort). */
-.aspekt-figur[data-aspekt="grundbegriffe"] .aspekt-svg { max-width: 560px; }
-.aspekt-figur[data-aspekt="grundbegriffe"].aspekt-im-overlay .aspekt-svg { max-width: min(100%, 82vh); }
+/* Diagramm ist QUERFORMAT statt hochkant wie die Kreisbahn-Figuren, und seine
+   viewBox-Hoehe folgt dem Datenbereich (computeBoundsFit in render.js:
+   600 x 402, Verhaeltnis h/w = 0,67 statt 0,758 — der tote obere Rand des
+   festen 4:3 entfaellt). Deshalb:
+   • im Fliesstext KEIN 460-px-Deckel wie bei den hochkanten Figuren, sondern
+     volle Spaltenbreite — bei 0,67 bleibt die Bildhoehe auch dann moderat;
+   • im Overlay an der Viewport-HOEHE gedeckelt: 0,67 · 92vh ≈ 62vh Bildhoehe,
+     also derselbe Hoehenanteil wie bei den uebrigen Aspekt-Figuren. */
+.aspekt-figur[data-aspekt="grundbegriffe"] .aspekt-svg { max-width: 100%; }
+.aspekt-figur[data-aspekt="grundbegriffe"].aspekt-im-overlay .aspekt-svg { max-width: min(100%, 92vh); }
 
 /* ── Steuerzeilen (Checkbox + Label + Wertanzeige) ───────────────────────────
    Ganze Zeile hoverbar/klickbar (Vorlagen-Verhalten: Klick neben der Checkbox

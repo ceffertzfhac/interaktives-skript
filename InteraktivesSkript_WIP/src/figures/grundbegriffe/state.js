@@ -14,7 +14,7 @@
 //      Aspekt-Figur bringt ihre eigene Bedienung mit.
 // Sonst 1:1 die Quelle, damit die Optik der Vorlage entspricht.
 
-import { TA_DEFAULT, TB_DEFAULT, ANALYSIS_VARIANTS, TOGGLE_KEYS } from './constants.js'
+import { TA_DEFAULT, TB_DEFAULT, ANALYSIS_VARIANTS, TOGGLE_KEYS, PLOT_H } from './constants.js'
 
 // ── Mutierbarer Zustand (einzige Quelle fuer alle veraenderlichen Werte) ────
 export const store = {
@@ -49,6 +49,12 @@ export const store = {
 
   // Von tA/tB abgeleitet (bei jeder Reglerbewegung neu berechnet)
   ab: null,         // { indexA, indexB, x_A, y_A, x_B, y_B, deltaS_mag, s_AB_length }
+
+  // PORT-AENDERUNG 3: Hoehe der Zeichenflaeche. In der Vorlage eine Konstante
+  // (PLOT_H, festes 4:3) — hier im store, damit eine Figur die Flaeche an den
+  // DATENbereich anpassen kann (computeBoundsFit) statt umgekehrt. Default =
+  // Vorlagenwert, die Sim-Optik bleibt damit unveraendert reproduzierbar.
+  plotH: PLOT_H,
 }
 
 // ── DOM-Cache ────────────────────────────────────────────────────────────────

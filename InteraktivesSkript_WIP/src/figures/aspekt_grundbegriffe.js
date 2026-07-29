@@ -37,8 +37,8 @@
 
 import { store, DOM } from './grundbegriffe/state.js';
 import { computePath, deriveAB } from './grundbegriffe/physics.js';
-import { drawGrid, updateVisualization, updateAnalysisBox, computeBounds } from './grundbegriffe/render.js';
-import { T_MIN, T_MAX, T_STEP, TA_DEFAULT, TB_DEFAULT, TOGGLE_KEYS } from './grundbegriffe/constants.js';
+import { drawGrid, updateVisualization, updateAnalysisBox, computeBoundsFit } from './grundbegriffe/render.js';
+import { T_MIN, T_MAX, T_STEP, TA_DEFAULT, TB_DEFAULT, TOGGLE_KEYS, GRAPH_W } from './grundbegriffe/constants.js';
 import { createRuntime } from './grundbegriffe/runtime.js';
 import { ge } from '../core.js';
 
@@ -52,7 +52,9 @@ const DEFAULT_TOGGLES = {
     verschiebung_BA: true, verschiebung_AB: false, abstand: true,
 };
 
-// Szene: die Diagramm-SVG der Vorlage (viewBox 600x455 = GRAPH_W x GRAPH_H).
+// Szene: die Diagramm-SVG der Vorlage. Die viewBox-Hoehe wird beim Bau aus dem
+// DATENbereich gesetzt (computeBoundsFit, s. unten) — der Platzhalterwert hier
+// ist nur gueltig, bis refresh() ihn ersetzt.
 // Marker-Geometrie 1:1 aus der Sim (refX=0 + shortenEnd(…, 5·strokeWidth) in
 // render.js) -> die Spitze landet exakt auf dem Zielpunkt. markerUnits bleibt
 // der Default (strokeWidth), damit Spitze und Schaft gemeinsam skalieren —
@@ -251,7 +253,12 @@ export function buildGrundbegriffeFig(fig) {
         store.tA = TA_DEFAULT;
         store.tB = TB_DEFAULT;
         store.path = computePath();
-        Object.assign(store, computeBounds(store.path.yMax));
+        // computeBoundsFit statt computeBounds: die Zeichenflaeche folgt dem
+        // Datenbereich statt umgekehrt -> gleicher Massstab in x und y, aber
+        // kein toter Rand (455 -> ~402 viewBox-Einheiten Hoehe, s. render.js).
+        const { xMaxBound, yMaxBound, plotH, graphH } = computeBoundsFit(store.path.yMax);
+        Object.assign(store, { xMaxBound, yMaxBound, plotH });
+        ge(p + 'graph_svg').setAttribute('viewBox', `0 0 ${GRAPH_W} ${graphH.toFixed(1)}`);
         drawGrid();
         syncTimeLabels();
         updateAnalysisBox('default');

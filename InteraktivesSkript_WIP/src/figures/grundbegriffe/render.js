@@ -11,11 +11,14 @@
 //      nicht (gleiches Muster wie render.js der beiden anderen Motoren).
 //   2. updateValueDisplays() prueft die Wertanzeigen auf Existenz, damit eine
 //      Figur einzelne Zeilen weglassen kann (Feature-Gating).
+//   3. Die Plot-Hoehe kommt aus store.plotH statt aus der Konstanten PLOT_H,
+//      und computeBoundsFit() ist als Alternative zu computeBounds() dazu-
+//      gekommen (s. dort). Default = Vorlagenwert -> Optik unveraendert.
 // Sonst 1:1 die Quelle — insbesondere die Geometrie (Label-Platzierung,
 // Bemassungslinie, Pfeil-Verkuerzung shortenEnd(…, 5·strokeWidth)) bleibt
 // unangetastet, weil sie die Optik der Vorlage ausmacht.
 
-import { T_MAX, PAD_L, PAD_T, PLOT_W, PLOT_H } from './constants.js'
+import { T_MAX, PAD_L, PAD_T, PAD_B, PLOT_W } from './constants.js'
 import { store, DOM } from './state.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
 import { setAxisLabel, setGraphTitle } from '../kreisbewegung/lib/svg-text.js'
@@ -34,20 +37,21 @@ const pid = id => store.idPrefix + id
 const url = id => `url(#${store.idPrefix}${id})`
 
 // ── Bahnkurve ist FEST → Bounds/Skalierung einmalig aus dem Maximum von y(t)
-// ableitbar (s. computeBounds, in der Figur einmalig aufgerufen).
+// ableitbar (s. computeBounds/computeBoundsFit, in der Figur einmalig gerufen).
 const X_MIN = 0, Y_MIN = 0
-const targetAspect = PLOT_W / PLOT_H
 
 // Physik (x,y) → Bildschirm (Pixel im viewBox).
 export function physToScreen(x, y) {
   const sx = PAD_L + ((x - X_MIN) / (store.xMaxBound - X_MIN)) * PLOT_W
-  const sy = (PAD_T + PLOT_H) - ((y - Y_MIN) / (store.yMaxBound - Y_MIN)) * PLOT_H
+  const sy = (PAD_T + store.plotH) - ((y - Y_MIN) / (store.yMaxBound - Y_MIN)) * store.plotH
   return { x: sx, y: sy }
 }
 
-// Bounds so waehlen, dass das feste Seitenverhaeltnis PLOT_W/PLOT_H erhalten
-// bleibt (1:1 aus dem Original uebernommenes Verfahren).
+// Bounds so waehlen, dass das feste Seitenverhaeltnis PLOT_W/store.plotH
+// erhalten bleibt (1:1 aus dem Original uebernommenes Verfahren): die
+// Zeichenflaeche gibt vor, der Datenbereich wird passend AUFGEBLAEHT.
 export function computeBounds(pathYMax) {
+  const targetAspect = PLOT_W / store.plotH
   const dataXMax = T_MAX + 0.5
   const dataYMax = pathYMax + 0.5
   let xMaxBound, yMaxBound
@@ -59,6 +63,21 @@ export function computeBounds(pathYMax) {
     xMaxBound = dataYMax * targetAspect
   }
   return { xMaxBound, yMaxBound }
+}
+
+// PORT-AENDERUNG 3: umgekehrte Richtung — die DATEN geben vor, die Hoehe der
+// Zeichenflaeche folgt. Ergebnis ist derselbe Massstab in x und y (die
+// Geometrie bleibt also unverzerrt: Vektorrichtungen, Winkel und Laengen sind
+// echt), aber OHNE den toten Rand, den computeBounds() erzeugt: dort blaeht
+// das feste 4:3 den y-Bereich auf 3,53 m auf, obwohl die Kurve nur bis 2,53 m
+// reicht — knapp ein Viertel der Bildhoehe blieb leer. Der Zuschlag von 0,5 m
+// je Achse ist der Platz fuer Achsenpfeil und Achsenbeschriftung (wie im
+// Original). Rueckgabe enthaelt zusaetzlich plotH + graphH fuer die viewBox.
+export function computeBoundsFit(pathYMax) {
+  const xMaxBound = T_MAX + 0.5
+  const yMaxBound = pathYMax + 0.5
+  const plotH = PLOT_W * (yMaxBound / xMaxBound)
+  return { xMaxBound, yMaxBound, plotH, graphH: PAD_T + plotH + PAD_B }
 }
 
 // ── Statisches Gitter/Achsen/Titel (einmalig — Bounds aendern sich nie) ─────
