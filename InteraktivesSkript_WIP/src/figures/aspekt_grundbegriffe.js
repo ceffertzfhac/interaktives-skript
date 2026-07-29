@@ -52,6 +52,11 @@ const DEFAULT_TOGGLES = {
     verschiebung_BA: true, verschiebung_AB: false, abstand: true,
 };
 
+// Strichstaerke der Vektorpfeile gegenueber der Vorlage (Nutzervorgabe „etwas
+// dicker"). Wirkt im MOTOR, nicht per CSS: die Pfeil-Verkuerzung ist an
+// dieselbe Strichstaerke gekoppelt (s. PORT-AENDERUNG 4 in render.js).
+const VECTOR_SCALE = 1.5;
+
 // Szene: die Diagramm-SVG der Vorlage. Die viewBox-Hoehe wird beim Bau aus dem
 // DATENbereich gesetzt (computeBoundsFit, s. unten) — der Platzhalterwert hier
 // ist nur gueltig, bis refresh() ihn ersetzt.
@@ -252,6 +257,7 @@ export function buildGrundbegriffeFig(fig) {
         Object.assign(store.toggles, DEFAULT_TOGGLES);
         store.tA = TA_DEFAULT;
         store.tB = TB_DEFAULT;
+        store.vectorScale = VECTOR_SCALE;
         store.path = computePath();
         // computeBoundsFit statt computeBounds: die Zeichenflaeche folgt dem
         // Datenbereich statt umgekehrt -> gleicher Massstab in x und y, aber

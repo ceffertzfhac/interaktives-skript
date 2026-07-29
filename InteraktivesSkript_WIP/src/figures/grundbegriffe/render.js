@@ -14,6 +14,8 @@
 //   3. Die Plot-Hoehe kommt aus store.plotH statt aus der Konstanten PLOT_H,
 //      und computeBoundsFit() ist als Alternative zu computeBounds() dazu-
 //      gekommen (s. dort). Default = Vorlagenwert -> Optik unveraendert.
+//   4. Die Strichstaerke der Vektorpfeile wird mit store.vectorScale
+//      multipliziert (und damit automatisch auch die Pfeil-Verkuerzung).
 // Sonst 1:1 die Quelle — insbesondere die Geometrie (Label-Platzierung,
 // Bemassungslinie, Pfeil-Verkuerzung shortenEnd(…, 5·strokeWidth)) bleibt
 // unangetastet, weil sie die Optik der Vorlage ausmacht.
@@ -151,7 +153,13 @@ export function updateVisualization(highlightId = null) {
   // Kanonische Pfeilspitzen-Geometrie (refX=0 + shortenEnd, s. Marker-Defs im
   // Skelett der Figur): die Linie wird um 5·strokeWidth gekuerzt, die Spitze
   // landet damit exakt auf dem Zielpunkt.
-  const vecLine = (id, cls, x1, y1, x2, y2, sw, markerId) => {
+  // PORT-AENDERUNG 4: sw wird mit store.vectorScale multipliziert. Weil die
+  // Verkuerzung DENSELBEN Wert benutzt und der Marker markerUnits=strokeWidth
+  // ist, skalieren Schaft, Spitze und Verkuerzung gemeinsam — die Spitze bleibt
+  // exakt auf dem Zielpunkt. Genau deshalb darf die Strichstaerke NICHT per CSS
+  // gesetzt werden (dort waere sie von der Verkuerzung entkoppelt).
+  const vecLine = (id, cls, x1, y1, x2, y2, sw0, markerId) => {
+    const sw = sw0 * store.vectorScale
     const s = shortenEnd(x1, y1, x2, y2, 5 * sw)
     // Vektor kuerzer als Pfeilspitze → verborgene Linie (Label bleibt sichtbar).
     if (!s) return el('line', { id: pid(id), x1, y1, x2, y2, class: cls, 'stroke-width': sw, 'marker-end': url(markerId), display: 'none' })

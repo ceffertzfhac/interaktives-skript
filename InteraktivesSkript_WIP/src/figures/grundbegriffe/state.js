@@ -55,6 +55,12 @@ export const store = {
   // DATENbereich anpassen kann (computeBoundsFit) statt umgekehrt. Default =
   // Vorlagenwert, die Sim-Optik bleibt damit unveraendert reproduzierbar.
   plotH: PLOT_H,
+
+  // PORT-AENDERUNG 4: Faktor auf die Strichstaerke der Vektorpfeile. Die
+  // Verkuerzung in vecLine() ist an dieselbe Strichstaerke gekoppelt
+  // (shortenEnd(…, 5·sw)), deshalb MUSS der Faktor hier und nicht per CSS
+  // wirken — sonst wandert die Pfeilspitze vom Zielpunkt weg.
+  vectorScale: 1,
 }
 
 // ── DOM-Cache ────────────────────────────────────────────────────────────────
