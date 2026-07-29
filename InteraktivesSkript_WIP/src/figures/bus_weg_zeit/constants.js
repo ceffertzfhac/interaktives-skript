@@ -95,9 +95,18 @@ export const STREET_W = 220
 export const STREET_H = GRAPH_H                           // gleiche SVG-Hoehe wie Diagramm
 export const STREET_ROAD_X = 118                           // Straßen-Mitte (vertikal)
 export const STREET_Y_TOP = PAD_T                          // = Diagramm-Plot oben  (x=1500)
-export const STREET_Y_BOTTOM = PAD_T + PLOT_H              // = Diagramm-Plot unten (x=0)
+export const STREET_Y_BOTTOM = PAD_T + PLOT_H              // = Diagramm-Plot unten (x=0) = H1
 export const STREET_LEN = PLOT_H                           // gleiche Skala wie die Ordinate (316 px / 1500 m)
-export const BUS_W = 54   // Bus-Laenge entlang der Fahrtrichtung (vertikal)
+// Die Straße reicht ETWAS ueber H1 hinaus nach unten: der Bus haelt mit der
+// FRONT an den Hx-Linien (s. render.js, Bus transform +BUS_W/2), sodass der
+// Buskasten unter die Front (= unter H1) ragt. Damit er an H1 nicht abwrackt,
+// endet das Straßenband unten erst STREET_ROAD_BOTTOM. Skala + Top bleiben
+// wie die Ordinate (STREET_Y_TOP..STREET_Y_BOTTOM = Plot 40..356), nur der
+// untere Rand wird verlaengert — die Front liegt weiterhin pixelgenau auf
+// der Kurvenhoehe. Bis STREET_H (gleiche viewBox-Hoehe wie das Diagramm ->
+// gleicher Maßstab via JS-Hoehe-Sync).
+export const STREET_ROAD_BOTTOM = STREET_H                 // Straße bis an den unteren SVG-Rand
+export const BUS_W = 44   // Bus-Laenge entlang der Fahrtrichtung (vertikal) — passt mit +Front-Offset unter H1
 export const BUS_H = 30   // Bus-Breite quer
 
 // ── Toggles (Bedienpanel) ──────────────────────────────────────────────────

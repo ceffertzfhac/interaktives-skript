@@ -20,7 +20,7 @@ import {
   PAD_L, PAD_T, PAD_B, PLOT_W, PLOT_H, GRAPH_W,
   T_MAX_BOUND, X_MAX_BOUND, T_TICK_STEP,
   STOP_POSITIONS, STOP_LABELS,
-  STREET_ROAD_X, STREET_Y_TOP, STREET_Y_BOTTOM, STREET_LEN, BUS_W, BUS_H,
+  STREET_ROAD_X, STREET_Y_TOP, STREET_Y_BOTTOM, STREET_LEN, STREET_ROAD_BOTTOM, BUS_W, BUS_H,
 } from './constants.js'
 import { store, DOM } from './state.js'
 import { xAt, stateAt } from './physics.js'
@@ -129,9 +129,11 @@ export function drawStreetStatic() {
   // eigenes <g> HINTER street_bg im SVG und wird beim Bau gefuellt, hier nicht
   // neu erzeugt (z-Order: Straße/Haltestellen unter dem Bus).
   const rx = STREET_ROAD_X
-  // Straßenband + Mittellinie (vertikal).
-  g.appendChild(el('rect', { x: rx - 18, y: STREET_Y_TOP, width: 36, height: STREET_LEN, rx: 4, class: 'bw-road' }))
-  g.appendChild(el('line', { x1: rx, y1: STREET_Y_TOP, x2: rx, y2: STREET_Y_BOTTOM, class: 'bw-road-mid' }))
+  // Straßenband + Mittellinie (vertikal). Das Band reicht bis STREET_ROAD_BOTTOM
+  // (etwas unter H1), damit der mit der FRONT an Hx haltende Bus (Kasten ragt
+  // unter die Front) an H1 nicht abwrackt (s. constants.js).
+  g.appendChild(el('rect', { x: rx - 18, y: STREET_Y_TOP, width: 36, height: STREET_ROAD_BOTTOM - STREET_Y_TOP, rx: 4, class: 'bw-road' }))
+  g.appendChild(el('line', { x1: rx, y1: STREET_Y_TOP, x2: rx, y2: STREET_ROAD_BOTTOM, class: 'bw-road-mid' }))
   // Fahrtrichtungspfeil oben (zeigt nach oben = wachsendes x).
   g.appendChild(el('path', {
     d: `M ${rx} ${STREET_Y_TOP - 12} l -5 10 l 10 0 z`, class: 'bw-road-arrow',
@@ -167,10 +169,6 @@ export function buildBus() {
   // Bus-Kastens (x = +BUS_H/2), nicht auf der Mittellinie.
   bus.appendChild(el('circle', { cx: BUS_H / 2, cy: -BUS_W / 2 + 8, r: 5, class: 'bw-bus-wheel' }))
   bus.appendChild(el('circle', { cx: BUS_H / 2, cy: BUS_W / 2 - 8, r: 5, class: 'bw-bus-wheel' }))
-  // Linien-Label „42" (aufrecht, lesbar).
-  const ln = el('text', { x: 0, y: 0, 'text-anchor': 'middle', 'dominant-baseline': 'middle', class: 'bw-bus-label' })
-  ln.textContent = '42'
-  bus.appendChild(ln)
 }
 
 // ── Dynamischer Overlay (pro Frame / pro Reglerbewegung) ─────────────────────
@@ -235,9 +233,12 @@ export function updateVisualization(t) {
   }
   DOM.plotArea.appendChild(el('circle', { cx: pp.x, cy: pp.y, r: 5, class: 'bw-point' }))
 
-  // 5. Bus auf der Straße verschieben (vertikal: Hoehe = streetY(x)).
+  // 5. Bus auf der Straße verschieben — FRONT auf streetY(x) (Bus-Kasten ragt
+  //    UNTER die Front, also +BUS_W/2 nach unten). So liegt die Bus-Front
+  //    pixelgenau auf der Kurvenhoehe (Analogie Front ↔ Kurvenpunkt) und der
+  //    Bus haelt mit der Front an den Hx-Linien.
   if (DOM.streetBus) {
-    DOM.streetBus.setAttribute('transform', `translate(${STREET_ROAD_X}, ${streetY(xx).toFixed(1)})`)
+    DOM.streetBus.setAttribute('transform', `translate(${STREET_ROAD_X}, ${(streetY(xx) + BUS_W / 2).toFixed(1)})`)
   }
 }
 
