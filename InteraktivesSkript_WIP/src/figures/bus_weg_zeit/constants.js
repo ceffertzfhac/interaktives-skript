@@ -74,11 +74,18 @@ export const CURVE_COLOR = '#b22222'
 // = GRAPH_W - PAD_R unveraendert, also beruehrt PAD_L nicht die vertikale
 // Ausrichtung mit der Straßenszene (haengt an PAD_T..PAD_T+PLOT_H + SVG-Hoehe).
 export const PAD_L = 56
-export const PAD_R = 22
+// PAD_R bewusst groß: rechts vom Plot Platz für die Hx-Stop-Beschriftung
+// (H1…H4), die im rechten Rand des SVG sitzt (s. render.js) — „rechts vom
+// Diagramm". Erhöht um 25 (vormals 22 -> 47), damit der Plot (rightEdge =
+// GRAPH_W - PAD_R) um 25 px nach LINKS rückt und der rechte Rand Platz für
+// die Hn bietet (Nutzervorgabe). Die Straße ist ein eigenes SVG und bleibt
+// unberührt; das Graph-SVG bleibt width:100% (Spalte unverändert) -> keine
+// Überlappung, Diagramm voll sichtbar. PLOT_W schrumpft um 25.
+export const PAD_R = 47
 export const PAD_T = 40
 export const PAD_B = 48
 export const GRAPH_W = 620
-export const PLOT_W = GRAPH_W - PAD_L - PAD_R            // 542
+export const PLOT_W = GRAPH_W - PAD_L - PAD_R            // 517
 export const PLOT_H = 316                                // Landscape-Verhaeltnis
 export const GRAPH_H = PAD_T + PLOT_H + PAD_B            // 404
 

@@ -87,17 +87,18 @@ export function drawGrid() {
     DOM.gridGroup.appendChild(t)
   }
 
-  // Hx-Stop-Beschriftung (H1…H4) auf der RECHTEN Plot-Seite — IMMER sichtbar
-  // (Basis-Achsenannotation wie die numerischen Ticks, KEIN Anzeige-Toggle).
-  // So bleiben die Haltestellen-Markierungen sichtbar, auch wenn der
-  // „Haltestellen"-Toggle (nur die gestrichelten Linien) per Default aus ist.
-  // Knapp UEBER der Zeile (y = p.y - 4, default dominant-baseline 'auto' =>
-  // Text oberhalb der Basis), damit H1 (x=0 liegt auf der t-Achse y0) nicht mit
-  // der t-Pfeilspitze am rechten Rand kollidiert (s. auch updateVisualization).
+  // Hx-Stop-Beschriftung (H1…H4) IMMER sichtbar (Basis-Achsenannotation wie die
+  // numerischen Ticks, KEIN Anzeige-Toggle) — im RECHTEN Rand des SVG, rechts
+  // vom Plot („rechts vom Diagramm", Nutzervorgabe). Der Plot rückt dafür über
+  // PAD_R nach links (s. constants.js); hier steht der freigewordene Platz.
+  // Vertikal ZENTRIERT auf der jeweiligen Stop-Linie (dominant-baseline
+  // 'middle', y = p.y), text-anchor=start. H1 (x=0) liegt auf der t-Achse y0;
+  // die t-Pfeilspitze endet ~rightEdge+5, das Label beginnt bei rightEdge+10
+  // -> 5 px Lücke, keine Kollision.
   const rightEdge = physToScreen(T_MAX_BOUND, 0).x
   for (let i = 0; i < STOP_POSITIONS.length; i++) {
     const p = physToScreen(0, STOP_POSITIONS[i])
-    const lbl = el('text', { x: rightEdge - 4, y: p.y - 4, 'text-anchor': 'end', class: 'bw-stop-line-label' })
+    const lbl = el('text', { x: rightEdge + 10, y: p.y, 'text-anchor': 'start', 'dominant-baseline': 'middle', class: 'bw-stop-line-label' })
     lbl.textContent = STOP_LABELS[i]
     DOM.gridGroup.appendChild(lbl)
   }
