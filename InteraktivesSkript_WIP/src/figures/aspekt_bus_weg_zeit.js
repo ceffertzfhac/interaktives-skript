@@ -47,13 +47,14 @@ import { createRuntime } from './bus_weg_zeit/runtime.js';
 import { resetOnPlayAfterAutoStop } from './playback.js';
 import { ge } from '../core.js';
 
-// Start-Zustand = die STATISCHE Abb. 1.2 (Nutzervorgabe: Wiedererkennungswert):
-// einheitlich rote Kurve (Halt/Fahrt-Einfaerbung aus), Haltestellen- +
-// Ereignis- + Ableselinien an.
+// Start-Zustand: ALLE Anzeige-Optionen aus (Nutzervorgabe) — nur die Kurve
+// x(t) + der Kurvenpunkt + der wandernde Bus stehen am Anfang. Haltestellen-,
+// Ereignis-, Ableselinien und die Halt/Fahrt-Einfaerbung werden per Toggle
+// zugeschaltet. (Frueher die statische Ansicht als Default; v1.31.8 geaendert.)
 const DEFAULT_TOGGLES = {
-    haltestellen: true,
-    ereignisse: true,
-    ableselinien: true,
+    haltestellen: false,
+    ereignisse: false,
+    ableselinien: false,
     haltFahrt: false,
 };
 
