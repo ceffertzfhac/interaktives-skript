@@ -142,10 +142,9 @@ export function drawStreetStatic() {
   // unter die Front) an H1 nicht abwrackt (s. constants.js).
   g.appendChild(el('rect', { x: rx - 18, y: STREET_Y_TOP, width: 36, height: STREET_ROAD_BOTTOM - STREET_Y_TOP, rx: 4, class: 'bw-road' }))
   g.appendChild(el('line', { x1: rx, y1: STREET_Y_TOP, x2: rx, y2: STREET_ROAD_BOTTOM, class: 'bw-road-mid' }))
-  // Fahrtrichtungspfeil oben (zeigt nach oben = wachsendes x).
-  g.appendChild(el('path', {
-    d: `M ${rx} ${STREET_Y_TOP - 12} l -5 10 l 10 0 z`, class: 'bw-road-arrow',
-  }))
+  // (Kein Fahrtrichtungspfeil oben: der Pfeil an der x-Achse des Diagramms
+  //  zeigt bereits nach oben = wachsendes x; ein zweiter am Straßenende wirkte
+  //  als abgesetztes Dreieck und ist auf Wunsch entfallen.)
 
   // Haltestellen: Pfosten nach links + Label (H1 … H4).
   for (let i = 0; i < STOP_POSITIONS.length; i++) {

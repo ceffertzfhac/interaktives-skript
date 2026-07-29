@@ -85,7 +85,6 @@
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-road-mid {
     stroke: #ffffff; stroke-width: 2; stroke-dasharray: 12 9;
 }
-.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-road-arrow { fill: var(--kb-text3); }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-stop-post {
     stroke: var(--bw-haltestelle); stroke-width: 2;
 }
