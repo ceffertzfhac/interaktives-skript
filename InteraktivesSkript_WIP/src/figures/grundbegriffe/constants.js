@@ -23,13 +23,26 @@ export const TB_DEFAULT = 3.2
 export const T_STEP = 0.01
 
 // ── Diagramm-Geometrie (Landscape) ───────────────────────────────────────────
-// Marge/Breite 1:1 aus dem Original uebernommen (ANIMATION_WIDTH=600,
-// PLOT_MARGINS={top:40,right:40,bottom:40,left:60}, Seitenverhaeltnis 4:3).
+// Margen/Breite aus dem Original (ANIMATION_WIDTH=600,
+// PLOT_MARGINS={top:40,right:40,bottom:40,left:60}, Seitenverhaeltnis 4:3),
+// mit einer Abweichung: WIDE streckt die Plot-Breite (und mit ihr den x-
+// Datenbereich, s. computeBoundsFit in render.js) um 10 % — die Hoehe bleibt.
+// Grund: Abb. 1.1 ist eine EINZEL-Diagramm-Figur; bei nur einem Diagramm darf
+// das Seitenverhaeltnis Breite bevorzugen (Nutzervorgabe v1.31.19: „hoehe
+// beibehalten, etwas breiter in allen Modi"). PLOT_W und xMaxBound wachsen
+// gemeinsam um WIDE, damit plotH und der x/y-Massstab konstant bleiben → die
+// Geometrie ist weiterhin unverzerrt (Vektorrichtungen/Winkel/Laengen echt),
+// nur der rechte Rand wächst etwas (Bahnkurve endet bei T_MAX, der Bereich
+// reicht bis (T_MAX+0,5)·WIDE). Der Cap in aspekt_grundbegriffe.css wächst
+// proportional (460→500), sodass bei cap-gebundener Breite die Bildhoehe
+// gleich bleibt (~309 px) — da alle drei Paper-Maxima (710/845/1175) ueber
+// dem Cap liegen, bindet der Cap in jedem Modus → hoehe in allen Modi gleich.
 export const PAD_L = 60
 export const PAD_R = 40
 export const PAD_T = 40
 export const PAD_B = 40
-export const PLOT_W = 600 - PAD_L - PAD_R
+export const WIDE = 1.1
+export const PLOT_W = (600 - PAD_L - PAD_R) * WIDE
 export const PLOT_H = PLOT_W / (4 / 3)
 export const GRAPH_W = PLOT_W + PAD_L + PAD_R
 export const GRAPH_H = PLOT_H + PAD_T + PAD_B

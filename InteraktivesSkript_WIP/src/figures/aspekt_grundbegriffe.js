@@ -71,7 +71,7 @@ const VECTOR_SCALE = 2.0;
 // Schaefte/groessere Spitzen fressen keine Vektorlaenge (s. PORT-AENDERUNG 4
 // in render.js).
 const SVG_SCENE = `
-<svg id="gk_graph_svg" viewBox="0 0 600 455" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
+<svg id="gk_graph_svg" viewBox="0 0 650 402" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <defs>
     <marker id="gk_graph-arrowhead" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
     <marker id="gk_arrowhead-pos" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="${HEAD_LEN}" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
@@ -267,7 +267,10 @@ export function buildGrundbegriffeFig(fig) {
         store.path = computePath();
         // computeBoundsFit statt computeBounds: die Zeichenflaeche folgt dem
         // Datenbereich statt umgekehrt -> gleicher Massstab in x und y, aber
-        // kein toter Rand (455 -> ~402 viewBox-Einheiten Hoehe, s. render.js).
+        // kein toter Rand (feste 4:3-Hoehe entfaellt -> ~402 viewBox-Einheiten,
+        // s. render.js). WIDE=1,1 streckt zusaetzlich die Breite (650x402 statt
+        // 600x402), die Hoehe bleibt (Einzeldiagramm darf Breite bevorzugen,
+        // Nutzervorgabe v1.31.19).
         const { xMaxBound, yMaxBound, plotH, graphH } = computeBoundsFit(store.path.yMax);
         Object.assign(store, { xMaxBound, yMaxBound, plotH });
         ge(p + 'graph_svg').setAttribute('viewBox', `0 0 ${GRAPH_W} ${graphH.toFixed(1)}`);
