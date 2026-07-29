@@ -125,6 +125,7 @@
    .kb-sw-* in aspekt_kreisbahn.css). Diese Figur hat KEINE CVD-Overrides, die
    Tokens sind also fix -> das Wort bleibt korrekt, es genuegt die Einfaerbung;
    apply_farbwoerter() (Wort-Austausch pro Palette) ist hier nicht noetig. */
+.aspekt-figur .gk-sw-pos { color: var(--gk-pos); }
 .aspekt-figur .gk-sw-weg { color: var(--gk-weg); }
 .aspekt-figur .gk-sw-dba { color: var(--gk-dba); }
 
