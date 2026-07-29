@@ -53,9 +53,10 @@ const DEFAULT_TOGGLES = {
 };
 
 // Strichstaerke der Vektorpfeile gegenueber der Vorlage (Nutzervorgabe „etwas
-// dicker"). Wirkt im MOTOR, nicht per CSS: die Pfeil-Verkuerzung ist an
-// dieselbe Strichstaerke gekoppelt (s. PORT-AENDERUNG 4 in render.js).
-const VECTOR_SCALE = 1.5;
+// dicker / groesser"). Wirkt im MOTOR, nicht per CSS: die Pfeil-Verkuerzung ist
+// an dieselbe Strichstaerke gekoppelt (s. PORT-AENDERUNG 4 in render.js), und
+// die Spitzen skalieren ueber markerUnits=strokeWidth gemeinsam mit dem Schaft.
+const VECTOR_SCALE = 2.0;
 
 // Szene: die Diagramm-SVG der Vorlage. Die viewBox-Hoehe wird beim Bau aus dem
 // DATENbereich gesetzt (computeBoundsFit, s. unten) — der Platzhalterwert hier
