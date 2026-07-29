@@ -78,6 +78,7 @@ const SVG_GRAPH = `
   </defs>
   <g id="bw_grid_group"></g>
   <g id="bw_plot_area"></g>
+  <text id="bw_time_display" x="12" y="399" class="aspekt-time-text"></text>
 </svg>`;
 
 // Eine Toggle-Zeile (Checkbox + Label). Keine Wertanzeige (reine Ein-/Aus-
@@ -181,9 +182,13 @@ export function buildBusWegZeitFig(fig) {
     // Skelett mit Per-Instanz-Prefix einhaengen, dann DOM binden. Motor-IDs
     // tragen 'bw_' -> ein Replace; Bedien-IDs tragen 'ak_' (und die Tempo-Pills
     // name="ak_speed") -> getrennt ersetzen, sonst greift querySelectorAll auf
-    // nichts und das Abspieltempo bleibt wirkungslos (Fallstrick #14).
+    // nichts und das Abspieltempo bleibt wirkungslos (Fallstrick #14). Die
+    // Toggle-IDs (bw_toggle_/bw_control_) liegen im PANEL_LEFT und muessen
+    // Ebenfalls den Instanz-Prefix bekommen — die Verdrahtung greift per
+    // ge(p+'toggle_'+key) auf sie zu, ohne Replace waeren sie prefixlos und
+    // die Toggles wirkungslos (gefunden beim Toggle-Funktionstest).
     scene.innerHTML =
-      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`)}` +
+      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`).replace(/bw_/g, p)}` +
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_STREET.replace(/bw_/g, p)}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH.replace(/bw_/g, p)}</div></div></div>` +
@@ -232,6 +237,8 @@ export function buildBusWegZeitFig(fig) {
         ge(p + 'ak_val_x').textContent = v.x;
         ge(p + 'ak_val_state').textContent = v.state;
         ge(p + 'ak_val_stop').textContent = v.stop;
+        // Zeit-Anzeige unten im Sim-Bereich (analog winkel_zeit: „t = … s").
+        const td = ge(p + 'time_display'); if (td) td.textContent = `t = ${v.t}`;
     }
 
     // Toggles: reine Ein-/Aus-Filter (kein Hover-Highlight). Klick neben der
