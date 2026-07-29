@@ -87,27 +87,28 @@ export function drawGrid() {
     DOM.gridGroup.appendChild(t)
   }
 
-  // Achsen mit Pfeilspitzen (t nach rechts, x nach oben).
+  // Achsen mit Pfeilspitzen (t nach rechts, x nach oben). Die Linien reichen
+  // je 5 px UEBER den Plot hinaus (x2 = rightEdge+5, y2 = yTop-5), damit die
+  // Pfeilspitze nicht exakt bei 400 s bzw. 1500 m endet (Nutzervorgabe).
+  const rightEdge = physToScreen(T_MAX_BOUND, 0).x
   DOM.gridGroup.appendChild(el('line', {
-    x1: x0, y1: y0, x2: physToScreen(T_MAX_BOUND, 0).x, y2: y0,
+    x1: x0, y1: y0, x2: rightEdge + 5, y2: y0,
     class: 'axis-line', 'marker-end': url('graph-arrowhead'),
   }))
   DOM.gridGroup.appendChild(el('line', {
-    x1: x0, y1: y0, x2: x0, y2: yTop,
+    x1: x0, y1: y0, x2: x0, y2: yTop - 5,
     class: 'axis-line', 'marker-end': url('graph-arrowhead'),
   }))
 
-  // Achsenbeschriftung „Größe / Einheit" — Platzierung wie grundbegriffe (Haus-
-  // stil): x-Label UNTERHALB der t-Achse rechtsbündig am Pfeilende (y0+35), y-
-  // Label OBEN rechts der x-Achse (x0+10, yTop-20). Beide damit sicher innerhalb
-  // des viewBox (die fruehere Start-Position +6 ragte ueber den rechten Rand
-  // hinaus und wurde beschnitten -> Achsenbeschriftung unsichtbar).
-  // Feinjustiert (Nutzervorgabe): „t / s" 5 px nach rechts (+5 am Pfeilende),
-  // „x(t) / m" 5 px nach links (x0+10 -> x0+5).
-  const xLabel = el('text', { x: physToScreen(T_MAX_BOUND, 0).x + 5, y: y0 + 35, 'text-anchor': 'end', class: 'axis-label' })
+  // Achsenbeschriftung „Größe / Einheit" — Haus-Stil: x-Label UNTERHALB der
+  // t-Achse rechtsbündig (y0+35), y-Label OBEN rechts der x-Achse (yTop-22).
+  // Feinjustiert (Nutzervorgabe): „t / s" 12 px rechts des Pfeilendes
+  // (rightEdge+17, text-anchor=end), „x(t) / m" 10 px nach links (x0-5) und
+  // 2 px nach oben (yTop-22). Beide bleiben innerhalb des viewBox.
+  const xLabel = el('text', { x: rightEdge + 17, y: y0 + 35, 'text-anchor': 'end', class: 'axis-label' })
   setAxisLabel(xLabel, 't / s')
   DOM.gridGroup.appendChild(xLabel)
-  const yLabel = el('text', { x: x0 + 5, y: yTop - 20, 'text-anchor': 'start', class: 'axis-label' })
+  const yLabel = el('text', { x: x0 - 5, y: yTop - 22, 'text-anchor': 'start', class: 'axis-label' })
   setAxisLabel(yLabel, 'x(t) / m')
   DOM.gridGroup.appendChild(yLabel)
 
