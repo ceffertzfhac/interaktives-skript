@@ -72,10 +72,10 @@ export function drawGrid() {
   }
 
   // x-Gitternetz + Ticks alle 250 m (HORIZONTAL, wie die vertikalen t-Linien
-  // alle 50 s). Die gestrichelte Hervorhebung an den Haltestellen (0/500/1000/
-  // 1500) liefert der Haltestellen-Toggle in updateVisualization; das feste
-  // 250er-Netz ist das allgemeine Hilfsraster (parallele Struktur zu den
-  // vertikalen 50er-Linien, Nutzervorgabe).
+  // alle 50 s). Die gestrichelte Hervorhebung + Hx-Labels an den Haltestellen
+  // (0/500/1000/1500) liefert der Haltestellen-Toggle in updateVisualization;
+  // das feste 250er-Netz ist das allgemeine Hilfsraster (parallele Struktur zu
+  // den vertikalen 50er-Linien, Nutzervorgabe).
   for (let xv = 0; xv <= X_MAX_BOUND + 1e-9; xv += X_TICK_STEP) {
     const p = physToScreen(0, xv)
     DOM.gridGroup.appendChild(el('line', {
@@ -85,22 +85,6 @@ export function drawGrid() {
     const t = el('text', { x: x0 - 9, y: p.y, 'text-anchor': 'end', 'dominant-baseline': 'middle', class: 'tick-label' })
     t.textContent = xv
     DOM.gridGroup.appendChild(t)
-  }
-
-  // Hx-Stop-Beschriftung (H1…H4) IMMER sichtbar (Basis-Achsenannotation wie die
-  // numerischen Ticks, KEIN Anzeige-Toggle) — im RECHTEN Rand des SVG, rechts
-  // vom Plot („rechts vom Diagramm", Nutzervorgabe). Der Plot rückt dafür über
-  // PAD_R nach links (s. constants.js); hier steht der freigewordene Platz.
-  // Vertikal ZENTRIERT auf der jeweiligen Stop-Linie (dominant-baseline
-  // 'middle', y = p.y), text-anchor=start. H1 (x=0) liegt auf der t-Achse y0;
-  // die t-Pfeilspitze endet ~rightEdge+5, das Label beginnt bei rightEdge+10
-  // -> 5 px Lücke, keine Kollision.
-  const rightEdge = physToScreen(T_MAX_BOUND, 0).x
-  for (let i = 0; i < STOP_POSITIONS.length; i++) {
-    const p = physToScreen(0, STOP_POSITIONS[i])
-    const lbl = el('text', { x: rightEdge + 10, y: p.y, 'text-anchor': 'start', 'dominant-baseline': 'middle', class: 'bw-stop-line-label' })
-    lbl.textContent = STOP_LABELS[i]
-    DOM.gridGroup.appendChild(lbl)
   }
 
   // Achsen mit Pfeilspitzen (t nach rechts, x nach oben).
@@ -118,10 +102,12 @@ export function drawGrid() {
   // Label OBEN rechts der x-Achse (x0+10, yTop-20). Beide damit sicher innerhalb
   // des viewBox (die fruehere Start-Position +6 ragte ueber den rechten Rand
   // hinaus und wurde beschnitten -> Achsenbeschriftung unsichtbar).
-  const xLabel = el('text', { x: physToScreen(T_MAX_BOUND, 0).x, y: y0 + 35, 'text-anchor': 'end', class: 'axis-label' })
+  // Feinjustiert (Nutzervorgabe): „t / s" 5 px nach rechts (+5 am Pfeilende),
+  // „x(t) / m" 5 px nach links (x0+10 -> x0+5).
+  const xLabel = el('text', { x: physToScreen(T_MAX_BOUND, 0).x + 5, y: y0 + 35, 'text-anchor': 'end', class: 'axis-label' })
   setAxisLabel(xLabel, 't / s')
   DOM.gridGroup.appendChild(xLabel)
-  const yLabel = el('text', { x: x0 + 10, y: yTop - 20, 'text-anchor': 'start', class: 'axis-label' })
+  const yLabel = el('text', { x: x0 + 5, y: yTop - 20, 'text-anchor': 'start', class: 'axis-label' })
   setAxisLabel(yLabel, 'x(t) / m')
   DOM.gridGroup.appendChild(yLabel)
 
@@ -200,10 +186,12 @@ export function updateVisualization(t) {
   const y0 = physToScreen(0, 0).y
   const x0 = physToScreen(0, 0).x
 
-  // 1. Haltestellen-Linien (gestrichelt, horizontal) — nur die LINIEN. Die
-  //    Hx-Labels (H1…H4) sind IMMER sichtbar in drawGrid (rechts), nicht Teil
-  //    dieses Toggles; der „Haltestellen"-Toggle schaltet nur die gestrichelte
-  //    Führung quer durchs Diagramm ein/aus (Default aus).
+  // 1. Haltestellen: gestrichelte Horizontale + Hx-Label im rechten Rand
+  //    (rechts vom Plot). NUR sichtbar, wenn der „Haltestellen"-Toggle aktiv
+  //    ist (Default aus) — die Labels kommen MIT den Linien, nicht immer.
+  //    Label vertikal zentriert auf der Linie (dominant-baseline 'middle'),
+  //    text-anchor=start bei rightEdge+10; H1 (x=0) liegt auf der t-Achse y0,
+  //    die t-Pfeilspitze endet ~rightEdge+5 -> 5 px Lücke, keine Kollision.
   if (tog.haltestellen) {
     const rightEdge = physToScreen(T_MAX_BOUND, 0).x
     for (let i = 0; i < STOP_POSITIONS.length; i++) {
@@ -211,6 +199,9 @@ export function updateVisualization(t) {
       DOM.plotArea.appendChild(el('line', {
         x1: x0, y1: p.y, x2: rightEdge, y2: p.y, class: 'bw-stop-line',
       }))
+      const lbl = el('text', { x: rightEdge + 10, y: p.y, 'text-anchor': 'start', 'dominant-baseline': 'middle', class: 'bw-stop-line-label' })
+      lbl.textContent = STOP_LABELS[i]
+      DOM.plotArea.appendChild(lbl)
     }
   }
 
