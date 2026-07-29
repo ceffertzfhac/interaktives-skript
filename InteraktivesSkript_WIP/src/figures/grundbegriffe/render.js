@@ -119,12 +119,16 @@ export function drawGrid() {
 }
 
 // Kombiniertes Symbol-Label „s⃗" mit tiefgestelltem Index (Original-Unicode-
-// Trick: Combining-Arrow U+20D7 auf 's', Index als <tspan baseline-shift>).
+// Trick: Combining-Arrow U+20D7 auf 's', Index als <tspan>). Der Index wird
+// per dy (statt baseline-shift="sub") gesenkt: baseline-shift ist als SVG-
+// Präsentationsattribut nicht in jedem Browser zuverlaessig tiefgestellt,
+// dy in Nutzer-Einheiten hingegen schon. Auf Following-Inhalt (das "|"-Paar
+// des Abstands-Labels) wird die Verschiebung mit dy="-4" wieder aufgehoben.
 function vectorLabelHTML(sub) {
-  return `s⃗<tspan baseline-shift="sub" font-size="0.7em">${sub}</tspan>`
+  return `s⃗<tspan dy="4" font-size="0.7em">${sub}</tspan>`
 }
 function deltaLabelHTML(sub) {
-  return `Δs⃗<tspan baseline-shift="sub" font-size="0.7em">${sub}</tspan>`
+  return `Δs⃗<tspan dy="4" font-size="0.7em">${sub}</tspan>`
 }
 
 // ── Dynamischer Overlay: Punkte A/B, Vektoren, Verschiebung, Abstand, Weg ───
@@ -264,7 +268,7 @@ function drawAbstandDimension(xA, yA, xB, yB, x0, y0) {
     const tx = (xAo + xBo) / 2, ty = (yAo + yBo) / 2
     const label = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'hanging', transform: `rotate(${readableAngle} ${tx} ${ty}) translate(0, 5)`, class: 'vector-label' })
     label.setAttribute('x', tx); label.setAttribute('y', ty)
-    label.innerHTML = `|Δs⃗<tspan baseline-shift="sub" font-size="0.7em">BA</tspan>|`
+    label.innerHTML = `|Δs⃗<tspan dy="4" font-size="0.7em">BA</tspan><tspan dy="-4">|</tspan>`
     group.appendChild(label)
   }
   DOM.plotArea.appendChild(group)
