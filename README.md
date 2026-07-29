@@ -3,10 +3,10 @@
 [![GitHub Pages](https://github.com/ceffertzfhac/interaktives-skript/actions/workflows/pages.yml/badge.svg)](https://github.com/ceffertzfhac/interaktives-skript/actions/workflows/pages.yml)
 
 Ein Vorlesungsskript, das man **anfassen** kann: Statt statischer Abbildungen
-stehen im Text interaktive Grafiken, in denen sich Winkel, Radius und Zeit
-verstellen lassen und Vektoren, Bahnkurven und Diagramme sofort mitlaufen.
-Entstanden für die Physik-Vorlesung im Fachbereich 8 der **FH Aachen**
-(Prof. Dr. rer. nat. C. Effertz).
+stehen im Text interaktive Grafiken, in denen sich Größen wie Ort, Zeit, Winkel
+oder Felder verstellen lassen und Vektoren, Bahnkurven und Diagramme sofort
+mitlaufen. Entstanden für die Physik-Vorlesung im Fachbereich 8 der
+**FH Aachen** (Prof. Dr. rer. nat. C. Effertz).
 
 **→ [Skript öffnen](https://ceffertzfhac.github.io/interaktives-skript/)**
 
@@ -24,15 +24,19 @@ Entstanden für die Physik-Vorlesung im Fachbereich 8 der **FH Aachen**
 
 ## Was drin ist (Arbeitsstand)
 
-- **Kapitel 1.4 „Kinematik der Drehbewegung und Kreisbahnen"** mit den
-  Abschnitten 1.4.1–1.4.12, Formeln in LaTeX-Satz (MathJax), Beispiel-,
-  Bemerkungs- und Zusammenfassungs-Boxen.
-- **Interaktive Aspekt-Figuren**: Kreisbahn und Ortsvektor (Abb. 1.38),
-  Weg-Zeit-Diagramme *x(t)/y(t)* (Abb. 1.39) und das Winkel-Zeit-Diagramm
-  *φ(t)* (Abb. 1.41) — mit Reglern, Ablaufsteuerung, Analyse-Werten und
-  Vergleichskurven.
+- **Vier Themenkomplexe** (Stand: 17 Kapitel-Fragmente, aus dem LaTeX-Skript
+  `v0.13` transkribiert): **TK 0** Grundlagen, **TK 1** Mechanik (Kinematik,
+  Dynamik, Bezugssysteme/Scheinkräfte, Stöße, Gravitation, Drehbewegung/
+  Kreisbahnen), **TK 2** Elektromagnetismus, **TK 3** Schwingungen & Wellen —
+  Formeln in LaTeX-Satz (MathJax), Beispiel-, Bemerkungs- und
+  Zusammenfassungs-Boxen.
+- **16 interaktive Aspekt-Figuren** auf vier Motoren: `kreisbewegung`
+  (2D, Abb. 1.38–1.51), `kreis_spiral` (ISO-3D, Abb. 1.57–1.59),
+  `grundbegriffe` (2D, Abb. 1.1) und `bus_weg_zeit` (Abb. 1.2) — mit Reglern,
+  Ablaufsteuerung, Analyse-Werten und Vergleichskurven.
 - **Lesekomfort**: Kapitelnavigation mit Seitenfortschritt, Inhaltsverzeichnis
-  mit Suche, drei Spaltenbreiten, fünf Textgrößen, Dunkelmodus.
+  mit Suche, drei Spaltenbreiten, fünf Textgrößen, Dunkelmodus, wählbare
+  Farbpaletten (auch CVD).
 - **Druckansicht** mit QR-Codes, die vom Papier zurück zur jeweiligen
   interaktiven Grafik führen.
 
@@ -61,8 +65,8 @@ python3 -m http.server 8000
 |---|---|
 | `InteraktivesSkript_WIP/` | **die Site** — hier finden alle Änderungen statt |
 | `InteraktivesSkript_WIP/index.html` | Grundgerüst (Kopfleiste, Overlays, Kapitel-Platzhalter) |
-| `InteraktivesSkript_WIP/chapters/` | ein HTML-Fragment je Kapitel, zur Laufzeit eingehängt |
-| `InteraktivesSkript_WIP/src/` | ES-Module: `main.js` + Kern, Seiten, Shell, Druck, `figures/` |
+| `InteraktivesSkript_WIP/chapters/` | 17 HTML-Fragmente (TK 0–3), zur Laufzeit eingehängt |
+| `InteraktivesSkript_WIP/src/` | ES-Module: `main.js` + Kern, Seiten, Shell, Druck, `figures/` (4 Motoren + 16 Aspekt-Figuren) |
 | `InteraktivesSkript_WIP/bilder/` | statische Abbildungen (auch Druck-Fallback) |
 | `BACKLOG.md` | Roadmap und offene Punkte |
 | `CLAUDE.md` | Architektur- und Konventionsübersicht für die Weiterentwicklung |
