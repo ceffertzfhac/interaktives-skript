@@ -71,11 +71,18 @@
    viewBox-Hoehe folgt dem Datenbereich (computeBoundsFit in render.js:
    600 x 402, Verhaeltnis h/w = 0,67 statt 0,758 — der tote obere Rand des
    festen 4:3 entfaellt). Deshalb:
-   • im Fliesstext KEIN 460-px-Deckel wie bei den hochkanten Figuren, sondern
-     volle Spaltenbreite — bei 0,67 bleibt die Bildhoehe auch dann moderat;
+   • im Fliesstext MIT 460-px-Deckel wie die uebrigen Einzelfiguren (1.38):
+     mit max-width:100% wuerde die Querformat-Box mit der Spaltenbreite
+     wachsen — sie war die EINZIGE Figur ohne Deckel und erschien deshalb
+     (insbes. im breiten Modus) zu „maechtig" und inkonsistent zu den
+     460-Figurtypen. Der Deckel haelt sie ueber schmal/normal/breit homogen
+     (Nutzervorgabe v1.31.17); bei 0,67 bleibt die Bildhoehe auch so moderat
+     (~308 px). KEINE zusaetzliche Schrift-Reduktion: sie wuerde die Titel-/
+     Achsen-Labels kleiner machen als bei den anderen Figuren und die eben
+     gewonnene Homogenitaet wieder aufheben.
    • im Overlay an der Viewport-HOEHE gedeckelt: 0,67 · 92vh ≈ 62vh Bildhoehe,
      also derselbe Hoehenanteil wie bei den uebrigen Aspekt-Figuren. */
-.aspekt-figur[data-aspekt="grundbegriffe"] .aspekt-svg { max-width: 100%; }
+.aspekt-figur[data-aspekt="grundbegriffe"] .aspekt-svg { max-width: 460px; }
 .aspekt-figur[data-aspekt="grundbegriffe"].aspekt-im-overlay .aspekt-svg { max-width: min(100%, 92vh); }
 
 /* ── Steuerzeilen (Checkbox + Label + Wertanzeige) ───────────────────────────
