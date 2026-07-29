@@ -434,6 +434,41 @@ Zuweisung per Freigabe-Tipp.
   Unterstrich (wie vₓ/vᵧ); der Vektorpfeil ist das kombinierende Zeichen U+20D7
   (auf Nutzerwunsch belassen). *(M)*
 
+- [x] **P-AF-6: Homogenität von Titel- & Achsenbeschriftungen über die Width-
+  Modi schmal/normal/breit.** (Nutzervorgabe 2026-07-29: „ähnliche Diagramme
+  sollen ähnlich aussehen — Einzeldiagramm vs. gestapelt muss nicht identisch
+  sein.") **Analyse-Ergebnis: homogen, kein eigenes Work-Item nötig.** Die
+  Schriftgrade sind modusunabhängig definiert — `.axis-label` 13 px,
+  `.tick-label` 11 px, `.graph-title-text` 15 px, je
+  `calc(Npx * var(--kb-text-scale) * var(--kb-fs))` (aspekt_kreisbahn.css:258–
+  260), `--kb-text-scale = --paper-graphics-scale` hängt an der Textstufe,
+  nicht am Width-Modus. Die Width-Modi (:446+) setzen nur Layout/Spaltenbreite,
+  KEINE Schriftgröße (einzige Modus-Schrift ist die schmale Legenden-Labelschrift
+  :468 — keine Überschrift/Achse). Einziges Diffusionsmoment war die SVG-Box-
+  breite: Einzelfiguren auf 460 px gedeckelt (gleiche Box → gleicher Schriftgrad),
+  gestaparte/vollbreite Figuren wachsen mit der Spalte. **Ausreißer war
+  grundbegriffe (1.1)** — als einzige Figur OHNE Cap wuchs sie mit der Spalte
+  und wirkte (insbes. breit) „mächtig" + inkonsistent; in v1.31.17 auf 460 px
+  gedeckelt → homogen. Folge-Regel v1.31.19: Einzeldiagramm darf Breite
+  bevorzugen (s. P-AF-7). *(S, nur Analyse)*
+
+- [ ] **P-AF-7: Pause-Button echtes Pause-Design.** Die Aspekt-Runbar
+  (`data-act="stop"`, mittlerer der Start/Stop/Reset-Knöpfe) ist semantisch
+  eine **Pause**, kein Stop: `stop()` hält an Ort (nur `playing=false;
+  cancelAnimationFrame`, kein `curT=0`), `start()` setzt an `curT` fort,
+  `reset()` setzt zurück (z. B. aspekt_betragv_zeit.js:686/699/700). Das Icon
+  ist aber ein **Stop-Glyph** (gefülltes Quadrat ■, `<rect x=7 y=7 width=10
+  height=10>`, ebd. :256) und Label/aria-label/title heißen „Stop". Fix: Icon
+  auf zwei Pause-Balken (‖, z. B. zwei `<rect>` bei x≈7/14, y=6, w=3, h=12) +
+  Label „Pause". Betroffen: die 14 Aspekt-Figuren mit `data-act="stop"` (je
+  eigene RUNBAR-Konstante → pro Datei): betragv_zeit, weg_zeit, winkel_zeit,
+  vxvy_zeit, axay_zeit, betraga_zeit, omega_zeit, periodendauer,
+  axay_winkelbeschl, arat_winkelbeschl, omega_vektor, zentripetalkreuz,
+  alpha_omega, bus_weg_zeit. Vorher pro Figur prüfen, ob `stop()` wirklich
+  halten (→ Pause) oder zurücksetzen (→ Stop bleibt korrekt) bedeutet — nur
+  erstere umbauen. Außerdem prüfen, ob die gc10-Kreisbewegung-Sim
+  (playBtn/pauseBtn) dasselbe Quadrat trägt. *(S–M)*
+
 ## P-Aspekt-Bus — Abb. 1.2 Busfahrt: Strichmännchen als Mitfahrer (Kapitel 1.1)
 
 Eingetragen 2026-07-29 nach Nutzervorgabe (**nur Backlog, noch nicht umgesetzt**).
