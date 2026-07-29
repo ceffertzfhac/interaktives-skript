@@ -102,10 +102,9 @@ const PANEL_LEFT = `
   <div class="panel-section">
     <div class="panel-label">Tempo</div>
     <div class="speed-pills">
-      <label class="speed-pill"><input type="radio" name="ak_speed" value="1.0" checked><span>1×</span></label>
-      <label class="speed-pill"><input type="radio" name="ak_speed" value="0.5"><span>½×</span></label>
-      <label class="speed-pill"><input type="radio" name="ak_speed" value="0.25"><span>¼×</span></label>
-      <label class="speed-pill"><input type="radio" name="ak_speed" value="0.125"><span>⅛×</span></label>
+      <label class="speed-pill"><input type="radio" name="ak_speed" value="4"><span>4×</span></label>
+      <label class="speed-pill"><input type="radio" name="ak_speed" value="12" checked><span>12×</span></label>
+      <label class="speed-pill"><input type="radio" name="ak_speed" value="60"><span>60×</span></label>
     </div>
   </div>
   <div class="panel-section">
@@ -182,7 +181,7 @@ export function buildBusWegZeitFig(fig) {
     // Skelett mit Per-Instanz-Prefix einhaengen, dann DOM binden. Motor-IDs
     // tragen 'bw_' -> ein Replace; Bedien-IDs tragen 'ak_' (und die Tempo-Pills
     // name="ak_speed") -> getrennt ersetzen, sonst greift querySelectorAll auf
-    // nichts und Slow-Mo bleibt wirkungslos (Fallstrick #14).
+    // nichts und das Abspieltempo bleibt wirkungslos (Fallstrick #14).
     scene.innerHTML =
       `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`)}` +
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
@@ -216,7 +215,7 @@ export function buildBusWegZeitFig(fig) {
     const ak_t = ge(p + 'ak_t');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let curT = T_DEFAULT;
-    let speedFactor = 1.0;
+    let speedFactor = 12;   // Default-Playback = 12× (die 400 s dauern sonst zu lang)
 
     // Zeichnen an der aktuellen Zeit + Live-Analyse aktualisieren.
     function draw(t) {
@@ -253,10 +252,10 @@ export function buildBusWegZeitFig(fig) {
     // Zeit-Regler: Schrubben stoppt die Animation und zeichnet direkt.
     ak_t.addEventListener('input', () => { stop(); draw(parseFloat(ak_t.value)); });
 
-    // ── Automatischer Ablauf (Sim-Zeit 0 … 400 s, Slow-Mo via Tempo-Pills,
-    //    Auto-Stopp am Ende — kein Umbrechen). Pro Instanz im Closure; Knöpfe/
-    //    Pills hängen direkt am Container (kein data-action — sie brauchen
-    //    Instanz-Zustand, wie die Slider).
+    // ── Automatischer Ablauf (Sim-Zeit 0 … 400 s, SPEEDUP via Tempo-Pills
+    //    4×/12×/60× — die 400 s wuerden sonst in Echtzeit ablaufen — Auto-Stopp
+    //    am Ende, kein Umbrechen). Pro Instanz im Closure; Knöpfe/Pills hängen
+    //    direkt am Container (kein data-action — sie brauchen Instanz-Zustand).
     let playing = false;
     let rafId = null;
     let lastTs = 0;
