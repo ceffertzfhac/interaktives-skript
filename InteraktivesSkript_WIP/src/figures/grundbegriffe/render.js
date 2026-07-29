@@ -15,16 +15,19 @@
 //      und computeBoundsFit() ist als Alternative zu computeBounds() dazu-
 //      gekommen (s. dort). Default = Vorlagenwert -> Optik unveraendert.
 //   4. Die Strichstaerke der Vektorpfeile wird mit store.vectorScale
-//      multipliziert (und damit automatisch auch die Pfeil-Verkuerzung).
+//      multipliziert (NUR der Schaft). Spitzen sind fest (userSpaceOnUse,
+//      HEAD_LEN/HEAD_H) mit refX=HEAD_LEN, der Schaft laeuft ungekuerzt bis
+//      ans Ziel — Strichstaerke, Spitzen und Vektorlaenge sind entkoppelt.
+//   5. Vektor-Labels werden per createElementNS als SVG-Knoten gebaut (nicht
+//      ueber innerHTML), damit der tiefgestellte Index (tspan dy/font-size)
+//      zuverlaessig greift.
 // Sonst 1:1 die Quelle — insbesondere die Geometrie (Label-Platzierung,
-// Bemassungslinie, Pfeil-Verkuerzung shortenEnd(…, 5·strokeWidth)) bleibt
-// unangetastet, weil sie die Optik der Vorlage ausmacht.
+// Bemassungslinie) bleibt unangetastet, weil sie die Optik der Vorlage ausmacht.
 
 import { T_MAX, PAD_L, PAD_T, PAD_B, PLOT_W, HEAD_LEN } from './constants.js'
 import { store, DOM } from './state.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
 import { setAxisLabel, setGraphTitle } from '../kreisbewegung/lib/svg-text.js'
-import { shortenEnd } from '../kreisbewegung/lib/vectors.js'
 
 const NS = 'http://www.w3.org/2000/svg'
 
@@ -183,23 +186,25 @@ export function updateVisualization(highlightId = null) {
     DOM.plotArea.appendChild(el('path', { id: pid('full_path_visual'), d, fill: 'none', class: 'path-bg-line', 'stroke-width': highlightId === 'pathBg' ? 4.5 : 2.5 }))
   }
 
-  // Kanonische Pfeilspitzen-Geometrie (refX=0 + shortenEnd, s. Marker-Defs im
-  // Skelett der Figur): die Linie wird um HEAD_LEN gekuerzt, die Spitze landet
-  // damit exakt auf dem Zielpunkt.
+  // Kanonische Pfeilspitzen-Geometrie (refX=HEAD_LEN, s. Marker-Defs im Skelett
+  // der Figur): der Referenzpunkt liegt auf der Spitze, die damit exakt auf dem
+  // Zielpunkt (x2,y2) sitzt; die Basis ragt HEAD_LEN entlang des Schafts zurueck.
+  // Der Schaft laeuft also UNGEKUERZT bis ans Ziel — keine shortenEnd-Verkuerzung
+  // mehr.
   // PORT-AENDERUNG 4 (revidiert): frueher war die Verkuerzung 5·strokeWidth und
   // der Marker markerUnits=strokeWidth — Schaft, Spitze und Verkuerzung skalierten
-  // gemeinsam. Das bedeutete aber: ein dickerer Schaft (VECTOR_SCALE) kuerzte den
-  // Vektor stärker und drueckte kurze Vektoren ins display:none. Jetzt sind die
-  // Spitzen fest (userSpaceOnUse, HEAD_LEN/HEAD_H) und die Verkuerzung ist fest
-  // HEAD_LEN — die Strichstaerke (sw = sw0·vectorScale) ist davon ENTKOPPELT und
-  // darf frei wachsen, ohne die Vektorlaenge zu fressen. Die Spitze bleibt exakt
-  // auf dem Zielpunkt, weil Marker-Laenge == Verkuerzung == HEAD_LEN.
+  // gemeinsam, ein dickerer Schaft (VECTOR_SCALE) kuerzte den Vektor und drueckte
+  // kurze Vektoren ins display:none. Jetzt sind die Spitzen fest (userSpaceOnUse,
+  // HEAD_LEN/HEAD_H) und vom Schaft (sw = sw0·vectorScale) ENTKOPPELT: dickere
+  // Schaefte und groessere Spitzen fressen keine Vektorlaenge. Nur ein Vektor
+  // kuerzer als die Spitze (len < HEAD_LEN) wird verborgen (Label bleibt sichtbar),
+  // sonst ragte die Basis hinter den Startpunkt.
   const vecLine = (id, cls, x1, y1, x2, y2, sw0, markerId) => {
     const sw = sw0 * store.vectorScale
-    const s = shortenEnd(x1, y1, x2, y2, HEAD_LEN)
+    const len = Math.hypot(x2 - x1, y2 - y1)
     // Vektor kuerzer als Pfeilspitze → verborgene Linie (Label bleibt sichtbar).
-    if (!s) return el('line', { id: pid(id), x1, y1, x2, y2, class: cls, 'stroke-width': sw, 'marker-end': url(markerId), display: 'none' })
-    return el('line', { id: pid(id), x1, y1, x2: s.x2, y2: s.y2, class: cls, 'stroke-width': sw, 'marker-end': url(markerId) })
+    if (len < HEAD_LEN) return el('line', { id: pid(id), x1, y1, x2, y2, class: cls, 'stroke-width': sw, 'marker-end': url(markerId), display: 'none' })
+    return el('line', { id: pid(id), x1, y1, x2, y2, class: cls, 'stroke-width': sw, 'marker-end': url(markerId) })
   }
 
   if (t.sA) {

@@ -64,17 +64,19 @@ const VECTOR_SCALE = 2.0;
 // Szene: die Diagramm-SVG der Vorlage. Die viewBox-Hoehe wird beim Bau aus dem
 // DATENbereich gesetzt (computeBoundsFit, s. unten) — der Platzhalterwert hier
 // ist nur gueltig, bis refresh() ihn ersetzt.
-// Marker-Geometrie 1:1 aus der Sim (refX=0 + shortenEnd(…, 5·strokeWidth) in
-// render.js) -> die Spitze landet exakt auf dem Zielpunkt. markerUnits bleibt
-// der Default (strokeWidth), damit Spitze und Schaft gemeinsam skalieren —
-// die Verkuerzung im Motor ist an dieselbe Strichstaerke gekoppelt.
+// Marker-Geometrie (abgewandelt gegenueber der Sim): refX=HEAD_LEN (Referenz-
+// punkt = TIP) -> die Spitze sitzt exakt auf dem Zielpunkt, der Schaft laeuft
+// ungekuerzt bis ans Ziel. markerUnits=userSpaceOnUse mit festen HEAD_LEN/
+// HEAD_H -> Spitze und Schaft (sw = sw0·VECTOR_SCALE) sind ENTKOPPELT; dickere
+// Schaefte/groessere Spitzen fressen keine Vektorlaenge (s. PORT-AENDERUNG 4
+// in render.js).
 const SVG_SCENE = `
 <svg id="gk_graph_svg" viewBox="0 0 600 455" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <defs>
     <marker id="gk_graph-arrowhead" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
-    <marker id="gk_arrowhead-pos" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="0" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
-    <marker id="gk_arrowhead-dba" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="0" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
-    <marker id="gk_arrowhead-dab" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="0" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
+    <marker id="gk_arrowhead-pos" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="${HEAD_LEN}" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
+    <marker id="gk_arrowhead-dba" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="${HEAD_LEN}" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
+    <marker id="gk_arrowhead-dab" markerUnits="userSpaceOnUse" markerWidth="${HEAD_LEN}" markerHeight="${HEAD_H}" refX="${HEAD_LEN}" refY="${HEAD_H / 2}" orient="auto"><polygon points="0 0, ${HEAD_LEN} ${HEAD_H / 2}, 0 ${HEAD_H}"/></marker>
   </defs>
   <!-- Statisches Gitter/Achsen/Titel (drawGrid(), einmalig — die Bounds sind
        fest, da die Bahnkurve keine Funktionsvariante hat) -->

@@ -56,10 +56,11 @@ export const store = {
   // Vorlagenwert, die Sim-Optik bleibt damit unveraendert reproduzierbar.
   plotH: PLOT_H,
 
-  // PORT-AENDERUNG 4: Faktor auf die Strichstaerke der Vektorpfeile. Die
-  // Verkuerzung in vecLine() ist an dieselbe Strichstaerke gekoppelt
-  // (shortenEnd(…, 5·sw)), deshalb MUSS der Faktor hier und nicht per CSS
-  // wirken — sonst wandert die Pfeilspitze vom Zielpunkt weg.
+  // PORT-AENDERUNG 4: Faktor auf die Strichstaerke der Vektorpfeile (nur der
+  // Schaft). Die Spitzen sind fest (userSpaceOnUse, HEAD_LEN/HEAD_H) und der
+  // Schaft laeuft ungekuerzt bis ans Ziel (refX=HEAD_LEN), deshalb wirkt dieser
+  // Faktor NUR auf die Dicke — nicht auf Laenge oder Spitzenposition. Die
+  // Strichstaerke kommt als SVG-Attribut, nicht per CSS (s. aspekt_grundbegriffe.css).
   vectorScale: 1,
 }
 

@@ -35,15 +35,18 @@ export const GRAPH_W = PLOT_W + PAD_L + PAD_R
 export const GRAPH_H = PLOT_H + PAD_T + PAD_B
 
 // ── Pfeilspitzen-Geometrie (userSpaceOnUse) ──────────────────────────────────
-// Feste Groesse in Nutzer-Einheiten, UNABHAENGIG von der Strichstaerke: dickere
-// Schaefte kuerzen die Vektoren nicht mehr (frueher war die Verkuerzung
-// 5·strokeWidth gekoppelt → VECTOR_SCALE 2,0 machte die Pfeile kuerzer und
-// drueckte kurze Vektoren ins display:none). HEAD_LEN muss mit der Verkuerzung
-// in render.js (vecLine) und den markerWidth-Defs in aspekt_grundbegriffe.js
-// (SVG_SCENE) uebereinstimmen, damit die Spitze (refX=0) exakt auf dem
-// Zielpunkt landet. HEAD_H ist die Basisbreite der Spitze.
-export const HEAD_LEN = 13
-export const HEAD_H = 9
+// Feste Groesse in Nutzer-Einheiten, UNABHAENGIG von der Strichstaerke. Die
+// Spitze hat refX=HEAD_LEN (Referenzpunkt = TIP), sitzt also exakt auf dem
+// Zielpunkt; die Basis ragt HEAD_LEN entlang des Schafts zurueck. Damit ist
+// der Schaft NICHT zu kuerzen — er laeuft ungekuerzt bis ans Ziel, und die
+// Spitze darf frei wachsen, ohne die Vektorlaenge zu fressen (frueher war die
+// Verkuerzung 5·strokeWidth gekoppelt, VECTOR_SCALE 2,0 machte die Pfeile
+// kuerzer). HEAD_LEN/HEAD_H muessen mit den markerWidth/markerHeight-Defs in
+// aspekt_grundbegriffe.js (SVG_SCENE) uebereinstimmen; HEAD_LEN ist zudem die
+// Schwelle in render.js (vecLine), ab der ein Vektor als zu kurz fuer die
+// Spitze verborgen wird (sonst ragte die Basis hinter den Startpunkt).
+export const HEAD_LEN = 17
+export const HEAD_H = 12
 
 // Die 8 Erklaer-Varianten der Analyse-Seitenleiste (statisches MathJax,
 // JS schaltet nur display um). 'default' = Standardtext ohne Auswahl.

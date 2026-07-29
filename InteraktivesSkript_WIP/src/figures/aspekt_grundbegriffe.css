@@ -45,10 +45,11 @@
 .aspekt-figur .aspekt-scene [id$="arrowhead-dba"] polygon { fill: var(--gk-dba); }
 .aspekt-figur .aspekt-scene [id$="arrowhead-dab"] polygon { fill: var(--gk-dab); }
 
-/* Strichstaerken kommen als SVG-Attribut aus render.js (sie sind an die
-   Pfeil-Verkuerzung shortenEnd(…, 5·strokeWidth) gekoppelt) und werden hier
-   BEWUSST NICHT ueberschrieben — eine CSS-Strichstaerke wuerde die Spitzen
-   verschieben. Skaliert wird stattdessen ueber die Diagramm-Groesse. */
+/* Strichstaerken kommen als SVG-Attribut aus render.js (vecLine: sw =
+   sw0·VECTOR_SCALE) und werden hier BEWUSST NICHT ueberschrieben — eine
+   CSS-Strichstaerke bliebe von der (festen) Spitzengeometrie entkoppelt und
+   wuerde den Schaft-Spitzen-Vergleich verschieben. Skaliert wird stattdessen
+   ueber die Diagramm-Groesse. */
 .aspekt-figur .path-bg-line { fill: none; stroke: var(--gk-path); }
 .aspekt-figur .weg-line     { fill: none; stroke: var(--gk-weg); }
 .aspekt-figur .pos-vector   { stroke: var(--gk-pos); }
