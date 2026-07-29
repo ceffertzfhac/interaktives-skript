@@ -180,14 +180,17 @@ export function updateVisualization(t) {
   const y0 = physToScreen(0, 0).y
   const x0 = physToScreen(0, 0).x
 
-  // 1. Haltestellen-Linien (gestrichelt, horizontal) + H-Label rechts.
+  // 1. Haltestellen-Linien (gestrichelt, horizontal) + H-Label am LINKEN Ende
+  //    (innen, knapp rechts der x-Achse). Frueher rechts vom Plotende (+4 über
+  //    dem t-Pfeil) -> abgeschnitten jenseits viewBox 620 UND H1 (x=0 liegt auf
+  //    der t-Achse) kollidierte mit der t-Pfeilspitze. Links gibt es beides nicht.
   if (tog.haltestellen) {
     for (let i = 0; i < STOP_POSITIONS.length; i++) {
       const p = physToScreen(0, STOP_POSITIONS[i])
       DOM.plotArea.appendChild(el('line', {
         x1: x0, y1: p.y, x2: physToScreen(T_MAX_BOUND, 0).x, y2: p.y, class: 'bw-stop-line',
       }))
-      const lbl = el('text', { x: physToScreen(T_MAX_BOUND, 0).x + 4, y: p.y, 'dominant-baseline': 'middle', class: 'bw-stop-line-label' })
+      const lbl = el('text', { x: x0 + 6, y: p.y, 'text-anchor': 'start', 'dominant-baseline': 'middle', class: 'bw-stop-line-label' })
       lbl.textContent = STOP_LABELS[i]
       DOM.plotArea.appendChild(lbl)
     }
