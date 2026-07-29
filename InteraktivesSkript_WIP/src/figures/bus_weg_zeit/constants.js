@@ -65,19 +65,20 @@ export const CURVE_COLOR = '#b22222'
 // Skalen (kein Equal-Scale wie bei grundbegriffe — das t-x-Diagramm ist ein
 // Schema, keine Geometrie-Szene; die Ordinate ist bewusst staerker gerafft,
 // wie die statische Vorlage figsize(12,7)). PLOT_W/PLOT_H ≈ 1,71 (Landscape).
-// PAD_L bewusst knapp gehalten: die Hx-Beschriftungen (H1…H4) sitzen auf der
-// RECHTEN Plot-Seite (s. render.js), sodass links nur die numerischen x-Tick-
-// Labels (0/250/…/1500) Platz brauchen. Diagramm dadurch „leicht nach links
-// verschoben" (Plot beginnt weiter links, PLOT_W wächst). rightEdge = GRAPH_W
-// - PAD_R bleibt unveraendert, daher beruehrt die Verschiebung nicht die
-// vertikale Ausrichtung mit der Straßenszene (die an PAD_T..PAD_T+PLOT_H
-// und der SVG-Hoehe haengt, nicht an PAD_L).
-export const PAD_L = 44
+// PAD_L: links brauchen die numerischen x-Tick-Labels (0/250/…/1500) Platz —
+// der 4-stellige „1500"-Label ist am breitesten (~44 viewBox-Einheiten bei
+// max. Textgroesse, --kb-text-scale bis 1,12 × --kb-fs 1,5), rechtsbündig
+// bei x0-9. PAD_L=56 gibt auch dort 3 px Rand (vor v1.31.8 war 58; die Hx-
+// Beschriftungen sitzen jetzt RECHTS, daher „leicht nach links" möglich, aber
+// der 4-stellige Ordinaten-Label setzt der Verschiebung eine Grenze). rightEdge
+// = GRAPH_W - PAD_R unveraendert, also beruehrt PAD_L nicht die vertikale
+// Ausrichtung mit der Straßenszene (haengt an PAD_T..PAD_T+PLOT_H + SVG-Hoehe).
+export const PAD_L = 56
 export const PAD_R = 22
 export const PAD_T = 40
 export const PAD_B = 48
 export const GRAPH_W = 620
-export const PLOT_W = GRAPH_W - PAD_L - PAD_R            // 554
+export const PLOT_W = GRAPH_W - PAD_L - PAD_R            // 542
 export const PLOT_H = 316                                // Landscape-Verhaeltnis
 export const GRAPH_H = PAD_T + PLOT_H + PAD_B            // 404
 
@@ -111,9 +112,11 @@ export const STREET_LEN = PLOT_H                           // gleiche Skala wie 
 // endet das Straßenband unten erst STREET_ROAD_BOTTOM. Skala + Top bleiben
 // wie die Ordinate (STREET_Y_TOP..STREET_Y_BOTTOM = Plot 40..356), nur der
 // untere Rand wird verlaengert — die Front liegt weiterhin pixelgenau auf
-// der Kurvenhoehe. Bis STREET_H (gleiche viewBox-Hoehe wie das Diagramm ->
-// gleicher Maßstab via JS-Hoehe-Sync).
-export const STREET_ROAD_BOTTOM = STREET_H                 // Straße bis an den unteren SVG-Rand
+// der Kurvenhoehe. STREET_ROAD_BOTTOM 4 px VOR dem viewBox-Boden (STREET_H),
+// nicht flush damit: sonst wirkt die Straßen-Unterkante am SVG-Rand wie um
+// wenige px abgeschnitten (Container/Subpixel). Der Buskasten reicht an H1
+// bis y = streetY(0)+BUS_W = 356+44 = 400 = STREET_ROAD_BOTTOM — passt genau.
+export const STREET_ROAD_BOTTOM = STREET_H - 4             // 400 — 4 px Rand zum viewBox-Boden
 export const BUS_W = 44   // Bus-Laenge entlang der Fahrtrichtung (vertikal) — passt mit +Front-Offset unter H1
 export const BUS_H = 30   // Bus-Breite quer
 

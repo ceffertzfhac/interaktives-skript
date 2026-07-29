@@ -87,6 +87,21 @@ export function drawGrid() {
     DOM.gridGroup.appendChild(t)
   }
 
+  // Hx-Stop-Beschriftung (H1…H4) auf der RECHTEN Plot-Seite — IMMER sichtbar
+  // (Basis-Achsenannotation wie die numerischen Ticks, KEIN Anzeige-Toggle).
+  // So bleiben die Haltestellen-Markierungen sichtbar, auch wenn der
+  // „Haltestellen"-Toggle (nur die gestrichelten Linien) per Default aus ist.
+  // Knapp UEBER der Zeile (y = p.y - 4, default dominant-baseline 'auto' =>
+  // Text oberhalb der Basis), damit H1 (x=0 liegt auf der t-Achse y0) nicht mit
+  // der t-Pfeilspitze am rechten Rand kollidiert (s. auch updateVisualization).
+  const rightEdge = physToScreen(T_MAX_BOUND, 0).x
+  for (let i = 0; i < STOP_POSITIONS.length; i++) {
+    const p = physToScreen(0, STOP_POSITIONS[i])
+    const lbl = el('text', { x: rightEdge - 4, y: p.y - 4, 'text-anchor': 'end', class: 'bw-stop-line-label' })
+    lbl.textContent = STOP_LABELS[i]
+    DOM.gridGroup.appendChild(lbl)
+  }
+
   // Achsen mit Pfeilspitzen (t nach rechts, x nach oben).
   DOM.gridGroup.appendChild(el('line', {
     x1: x0, y1: y0, x2: physToScreen(T_MAX_BOUND, 0).x, y2: y0,
@@ -184,14 +199,10 @@ export function updateVisualization(t) {
   const y0 = physToScreen(0, 0).y
   const x0 = physToScreen(0, 0).x
 
-  // 1. Haltestellen-Linien (gestrichelt, horizontal) + H-Label am RECHTEN
-  //    Ende (innen, knapp links des Plot-Endes; Nutzervorgabe — die Labels
-  //    sitzen rechts, daher konnte das Diagramm nach links ruecken, s.
-  //    constants.js PAD_L). Das Label schwebt knapp UEBER der Linie
-  //    (y = p.y - 4, default dominant-baseline 'auto' => Text oberhalb der
-  //    Basislinie), damit H1 (x=0 liegt auf der t-Achse y0) nicht mit der
-  //    t-Pfeilspitze am rechten Rand kollidiert (der alte rechts-Satz
-  //    schnitt genau dort ab / kollidierte mit dem Pfeil).
+  // 1. Haltestellen-Linien (gestrichelt, horizontal) — nur die LINIEN. Die
+  //    Hx-Labels (H1…H4) sind IMMER sichtbar in drawGrid (rechts), nicht Teil
+  //    dieses Toggles; der „Haltestellen"-Toggle schaltet nur die gestrichelte
+  //    Führung quer durchs Diagramm ein/aus (Default aus).
   if (tog.haltestellen) {
     const rightEdge = physToScreen(T_MAX_BOUND, 0).x
     for (let i = 0; i < STOP_POSITIONS.length; i++) {
@@ -199,9 +210,6 @@ export function updateVisualization(t) {
       DOM.plotArea.appendChild(el('line', {
         x1: x0, y1: p.y, x2: rightEdge, y2: p.y, class: 'bw-stop-line',
       }))
-      const lbl = el('text', { x: rightEdge - 4, y: p.y - 4, 'text-anchor': 'end', class: 'bw-stop-line-label' })
-      lbl.textContent = STOP_LABELS[i]
-      DOM.plotArea.appendChild(lbl)
     }
   }
 
