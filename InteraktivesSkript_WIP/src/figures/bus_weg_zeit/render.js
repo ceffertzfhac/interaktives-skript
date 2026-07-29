@@ -91,11 +91,15 @@ export function drawGrid() {
     class: 'axis-line', 'marker-end': url('graph-arrowhead'),
   }))
 
-  // Achsenbeschriftung „Größe / Einheit".
-  const xLabel = el('text', { x: physToScreen(T_MAX_BOUND, 0).x + 6, y: y0 + 6, 'text-anchor': 'start', class: 'axis-label' })
+  // Achsenbeschriftung „Größe / Einheit" — Platzierung wie grundbegriffe (Haus-
+  // stil): x-Label UNTERHALB der t-Achse rechtsbündig am Pfeilende (y0+35), y-
+  // Label OBEN rechts der x-Achse (x0+10, yTop-20). Beide damit sicher innerhalb
+  // des viewBox (die fruehere Start-Position +6 ragte ueber den rechten Rand
+  // hinaus und wurde beschnitten -> Achsenbeschriftung unsichtbar).
+  const xLabel = el('text', { x: physToScreen(T_MAX_BOUND, 0).x, y: y0 + 35, 'text-anchor': 'end', class: 'axis-label' })
   setAxisLabel(xLabel, 't / s')
   DOM.gridGroup.appendChild(xLabel)
-  const yLabel = el('text', { x: x0 - 8, y: yTop - 6, 'text-anchor': 'end', class: 'axis-label' })
+  const yLabel = el('text', { x: x0 + 10, y: yTop - 20, 'text-anchor': 'start', class: 'axis-label' })
   setAxisLabel(yLabel, 'x(t) / m')
   DOM.gridGroup.appendChild(yLabel)
 
@@ -159,9 +163,10 @@ export function buildBus() {
   for (let i = -1; i <= 1; i++) {
     bus.appendChild(el('rect', { x: -5, y: i * 14 - 4.5, width: 10, height: 9, class: 'bw-bus-window' }))
   }
-  // Raeder (vorne oben + hinten unten, je innerhalb des Kastens).
-  bus.appendChild(el('circle', { cx: 0, cy: -BUS_W / 2 + 8, r: 5, class: 'bw-bus-wheel' }))
-  bus.appendChild(el('circle', { cx: 0, cy: BUS_W / 2 - 8, r: 5, class: 'bw-bus-wheel' }))
+  // Raeder (vorne oben + hinten unten) — Mittelpunkte auf dem RECHTEN Rand des
+  // Bus-Kastens (x = +BUS_H/2), nicht auf der Mittellinie.
+  bus.appendChild(el('circle', { cx: BUS_H / 2, cy: -BUS_W / 2 + 8, r: 5, class: 'bw-bus-wheel' }))
+  bus.appendChild(el('circle', { cx: BUS_H / 2, cy: BUS_W / 2 - 8, r: 5, class: 'bw-bus-wheel' }))
   // Linien-Label „42" (aufrecht, lesbar).
   const ln = el('text', { x: 0, y: 0, 'text-anchor': 'middle', 'dominant-baseline': 'middle', class: 'bw-bus-label' })
   ln.textContent = '42'

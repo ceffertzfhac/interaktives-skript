@@ -82,17 +82,21 @@ export const T_TICK_STEP = 50                            // t-Ticks alle 50 s
 // Endpunkte. Gesamt ~ 4·SAMPLES_FAHRT + Halt-Punkte, pro Frame neu gezeichnet.
 export const SAMPLES_FAHRT = 120
 
-// ── Straßenszene-Geometrie (VERTIKAL gekippt) ────────────────────────────────
+// ── Straßenszene-Geometrie (VERTIKAL gekippt, an die Ordinate angeglichen) ────
 // Eigene kleine SVG links neben dem Diagramm (wie winkel_zeit: Szene | Graph).
 // Die Straße ist um 90° gekippt — VERTIKAL: x=0 unten, x=1500 oben, analog zur
-// Ordinate x(t) des t-x-Diagramms. So entspricht die Bus-Hoehe direkt der
-// Kurven-Hoehe und die Gegenüberstellung wird sofort lesbar (Bus-Hoehe ↔ x).
+// Ordinate x(t) des t-x-Diagramms. Position UND Skala der Straße werden hier
+// EXAKT an den Diagramm-Plot angeglichen (gleiche SVG-Hoehe GRAPH_H, gleicher
+// y-Bereich PAD_T … PAD_T+PLOT_H, gleicher Maßstab PLOT_H px / 1500 m), sodass
+// bei gleicher Pixel-Hoehe beider SVGs die Bus-Hoehe pixelgenau der Kurven-Hoehe
+// entspricht (Bus-Hoehe ↔ x). Die CSS stretcht die Szenen-Spalte auf die
+// Diagramm-Hoehe, damit beide SVGs gleich hoch rendern.
 export const STREET_W = 220
-export const STREET_H = 400
-export const STREET_ROAD_X = 118                          // Straßen-Mitte (vertikal)
-export const STREET_Y_TOP = 36                            // x = 1500 (oben)
-export const STREET_Y_BOTTOM = 372                        // x = 0 (unten)
-export const STREET_LEN = STREET_Y_BOTTOM - STREET_Y_TOP  // 336 px fuer 1500 m
+export const STREET_H = GRAPH_H                           // gleiche SVG-Hoehe wie Diagramm
+export const STREET_ROAD_X = 118                           // Straßen-Mitte (vertikal)
+export const STREET_Y_TOP = PAD_T                          // = Diagramm-Plot oben  (x=1500)
+export const STREET_Y_BOTTOM = PAD_T + PLOT_H              // = Diagramm-Plot unten (x=0)
+export const STREET_LEN = PLOT_H                           // gleiche Skala wie die Ordinate (316 px / 1500 m)
 export const BUS_W = 54   // Bus-Laenge entlang der Fahrtrichtung (vertikal)
 export const BUS_H = 30   // Bus-Breite quer
 
