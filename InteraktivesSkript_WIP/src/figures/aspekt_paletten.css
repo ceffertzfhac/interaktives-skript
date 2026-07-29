@@ -68,6 +68,16 @@
        der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
     --kb-phi: #6c6c6c;
     --kb-point: #B84DBF;
+
+    /* Kapitel-1.1-Palette (--gk-*, s. aspekt_grundbegriffe.css).
+       Deuteranopie: Quellen-Rot/Gruen (Verschiebung hin/zurueck) kollabiert -> die
+       Hinrichtung wandert auf Zinnoberrot (unter Deuteranopie gelblich), die
+       Gegenrichtung auf Blaugruen; Weglaenge bleibt Blau, Bahnspur Grau. */
+    --gk-path: #999999;
+    --gk-pos:  #E69F00;
+    --gk-dba:  #D55E00;
+    --gk-dab:  #009E73;
+    --gk-weg:  #0072B2;
 }
 
 /* ── Deuteranopia (Rot-Grün) — Dunkel ───────────────────────────────────── */
@@ -92,6 +102,15 @@
        der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
     --kb-phi: #6c6c6c;
     --kb-point: #B84DBF;
+
+    /* Kapitel-1.1-Palette (--gk-*, s. aspekt_grundbegriffe.css).
+       Wie Hell, nur die Weglaenge aufgehellt (dunkles Blau auf dunklem Grund
+       waere zu schwach) und die Bahnspur auf den Darkmode-Grauton. */
+    --gk-path: #9aa3b8;
+    --gk-pos:  #E69F00;
+    --gk-dba:  #D55E00;
+    --gk-dab:  #009E73;
+    --gk-weg:  #56B4E9;
 }
 
 /* ── Tritanopia (Blau-Gelb) — Hell ──────────────────────────────────────── */
@@ -119,6 +138,16 @@
        der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
     --kb-phi: #6c6c6c;
     --kb-point: #B84DBF;
+
+    /* Kapitel-1.1-Palette (--gk-*, s. aspekt_grundbegriffe.css).
+       Tritanopie: Blau kollabiert mit Gruen -> die Gruen/Blau-Familie wird ueber
+       HELLIGKEIT gestaffelt (Weglaenge dunkel, Gegenrichtung hell), die
+       Hinrichtung bleibt in der intakten Rot-Familie. */
+    --gk-path: #999999;
+    --gk-pos:  #E69F00;
+    --gk-dba:  #c0392b;
+    --gk-dab:  #5fb88a;
+    --gk-weg:  #0e6b52;
 }
 
 /* ── Tritanopia (Blau-Gelb) — Dunkel ────────────────────────────────────── */
@@ -144,4 +173,13 @@
        der Massenpunkt nimmt ein in beiden Paletten freies Magenta. */
     --kb-phi: #6c6c6c;
     --kb-point: #B84DBF;
+
+    /* Kapitel-1.1-Palette (--gk-*, s. aspekt_grundbegriffe.css).
+       Wie Hell, Gruen-/Rot-Toene aufgehellt; Helligkeits-Staffelung der
+       Gruen-Familie bleibt (Weglaenge mid, Gegenrichtung hell). */
+    --gk-path: #9aa3b8;
+    --gk-pos:  #E69F00;
+    --gk-dba:  #e05a4a;
+    --gk-dab:  #7fd4b0;
+    --gk-weg:  #2f9c78;
 }

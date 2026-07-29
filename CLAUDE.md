@@ -170,8 +170,12 @@ src/figures/aspekt_<name>.js   the 15 interactive "aspect figures", one module +
                             kreis_spiral (ISO)   1.57 omega_vektor · 1.58 zentripetalkreuz ·
                               1.59 alpha_omega
                             grundbegriffe (2D)   1.1 grundbegriffe  (Kapitel 1.1 — eigene
-                              --gk-*-Farbpalette in aspekt_grundbegriffe.css, KEINE CVD-
-                              Overrides in aspekt_paletten.css, s. Kommentar dort)
+                              --gk-*-Tokenfamilie statt der kapitelgebundenen --kb-*-
+                              Vektorfarben, daher DREI eigene Zweige: Hell in
+                              aspekt_grundbegriffe.css, Dunkel in darkmode.css, CVD in
+                              aspekt_paletten.css. Aliase gibt es hier keine, und die
+                              CVD-Selektoren sind spezifischer als der Darkmode-Block,
+                              also gewinnt Dunkel+CVD ohne Zusatzregel.)
                           aspekt_kreisbahn.js (1.38) additionally exports the generic toggles
                           (toggle_aspekt/close_aspekt_overlay/toggle_analyse/toggle_panel_left)
                           reused by ALL figures via main.js binding, and is the binding OPTICAL
