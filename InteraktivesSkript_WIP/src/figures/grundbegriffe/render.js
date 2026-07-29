@@ -155,9 +155,13 @@ function deltaLabel(sub) {
   return f
 }
 // |Δs⃗_BA| — oeffnendes „|", Δs⃗, tiefgestelltes BA, zurueckgesetztes „|".
+// Die beiden Betragstriche je im EIGENEN Knoten (nicht im selben Textknoten wie
+// Δs⃗), damit der Combining-Arrow U+20D7 ueber dem s die Striche nicht
+// mitverschiebt — sonst stünden die Striche auf unterschiedlicher Höhe.
 function abstandLabel() {
   const f = document.createDocumentFragment()
-  f.appendChild(document.createTextNode('|Δs⃗'))
+  f.appendChild(document.createTextNode('|'))
+  f.appendChild(document.createTextNode('Δs⃗'))
   f.appendChild(subTspan('BA'))
   f.appendChild(resetTspan('|'))
   return f
@@ -176,6 +180,12 @@ export function updateVisualization(highlightId = null) {
   const xB = physToScreen(ab.x_B, ab.y_B).x, yB = physToScreen(ab.x_B, ab.y_B).y
   const x0 = physToScreen(0, 0).x, y0 = physToScreen(0, 0).y
 
+  // Z-Order (unten → oben): Kurve → Bahnsegment → Punkte → Pfeile → Schrift.
+  // Die <text>-Labels werden gesammelt und ZULETZT angehaengt (Schrift immer im
+  // Vordergrund), damit sie kein Pfeil/Schaft/Punkt ueberdeckt.
+  const labels = []
+
+  // 1. Ganze Strecke (Bahnkurve) — ganz unten.
   if (t.pathBg) {
     const { x, y } = store.path
     let d = ''
@@ -185,6 +195,21 @@ export function updateVisualization(highlightId = null) {
     }
     DOM.plotArea.appendChild(el('path', { id: pid('full_path_visual'), d, fill: 'none', class: 'path-bg-line', 'stroke-width': highlightId === 'pathBg' ? 4.5 : 2.5 }))
   }
+
+  // 2. Bahnsegment (Weglänge) — über der Kurve.
+  if (t.weg) {
+    const { x, y } = store.path
+    let d = ''
+    for (let i = ab.indexA; i <= ab.indexB; i++) {
+      const p = physToScreen(x[i], y[i])
+      d += `${i === ab.indexA ? 'M' : 'L'} ${p.x.toFixed(2)} ${p.y.toFixed(2)} `
+    }
+    DOM.plotArea.appendChild(el('path', { id: pid('segment_path_visual'), d, fill: 'none', class: 'weg-line', 'stroke-width': highlightId === 'weg' ? 5 : 3.5 }))
+  }
+
+  // 3. Punkte A/B — über Kurve und Bahnsegment.
+  DOM.plotArea.appendChild(el('circle', { id: pid('point_A'), cx: xA, cy: yA, r: 5, class: 'ab-point' }))
+  DOM.plotArea.appendChild(el('circle', { id: pid('point_B'), cx: xB, cy: yB, r: 5, class: 'ab-point' }))
 
   // Kanonische Pfeilspitzen-Geometrie (refX=HEAD_LEN, s. Marker-Defs im Skelett
   // der Figur): der Referenzpunkt liegt auf der Spitze, die damit exakt auf dem
@@ -207,19 +232,20 @@ export function updateVisualization(highlightId = null) {
     return el('line', { id: pid(id), x1, y1, x2, y2, class: cls, 'stroke-width': sw, 'marker-end': url(markerId) })
   }
 
+  // 4. Vektoren (Pfeile) — über den Punkten („Pfeile immer vor dem Punkt").
   if (t.sA) {
     DOM.plotArea.appendChild(vecLine('vector_sA', 'pos-vector', x0, y0, xA, yA, highlightId === 'sA' ? 4 : 2, 'arrowhead-pos'))
     const label = el('text', { class: 'pos-vector-label vector-label', 'text-anchor': 'middle' })
     label.appendChild(vectorLabel('A'))
     placeSideLabel(label, x0, y0, xA, yA, xB, yB)
-    DOM.plotArea.appendChild(label)
+    labels.push(label)
   }
   if (t.sB) {
     DOM.plotArea.appendChild(vecLine('vector_sB', 'pos-vector', x0, y0, xB, yB, highlightId === 'sB' ? 4 : 2, 'arrowhead-pos'))
     const label = el('text', { class: 'pos-vector-label vector-label', 'text-anchor': 'middle' })
     label.appendChild(vectorLabel('B'))
     placeSideLabel(label, x0, y0, xB, yB, xA, yA)
-    DOM.plotArea.appendChild(label)
+    labels.push(label)
   }
   if (t.verschiebung_BA) {
     const line = vecLine('vector_verschiebung_BA', 'dba-vector', xA, yA, xB, yB, highlightId === 'verschiebung_BA' ? 4.5 : 2.5, 'arrowhead-dba')
@@ -228,7 +254,7 @@ export function updateVisualization(highlightId = null) {
     const label = el('text', { class: 'dba-vector-label vector-label', 'text-anchor': 'middle' })
     label.appendChild(deltaLabel('BA'))
     placeAlongLabel(label, xA, yA, xB, yB)
-    DOM.plotArea.appendChild(label)
+    labels.push(label)
   }
   if (t.verschiebung_AB) {
     const line = vecLine('vector_verschiebung_AB', 'dab-vector', xB, yB, xA, yA, highlightId === 'verschiebung_AB' ? 4.5 : 2.5, 'arrowhead-dab')
@@ -237,21 +263,15 @@ export function updateVisualization(highlightId = null) {
     const label = el('text', { class: 'dab-vector-label vector-label', 'text-anchor': 'middle' })
     label.appendChild(deltaLabel('AB'))
     placeAlongLabel(label, xB, yB, xA, yA)
-    DOM.plotArea.appendChild(label)
+    labels.push(label)
   }
-  if (t.abstand) drawAbstandDimension(xA, yA, xB, yB, x0, y0)
-  if (t.weg) {
-    const { x, y } = store.path
-    let d = ''
-    for (let i = ab.indexA; i <= ab.indexB; i++) {
-      const p = physToScreen(x[i], y[i])
-      d += `${i === ab.indexA ? 'M' : 'L'} ${p.x.toFixed(2)} ${p.y.toFixed(2)} `
-    }
-    DOM.plotArea.appendChild(el('path', { id: pid('segment_path_visual'), d, fill: 'none', class: 'weg-line', 'stroke-width': highlightId === 'weg' ? 5 : 3.5 }))
+  if (t.abstand) {
+    const lbl = drawAbstandDimension(xA, yA, xB, yB, x0, y0)  // Linien direkt; Label zurück
+    if (lbl) labels.push(lbl)
   }
 
-  DOM.plotArea.appendChild(el('circle', { id: pid('point_A'), cx: xA, cy: yA, r: 5, class: 'ab-point' }))
-  DOM.plotArea.appendChild(el('circle', { id: pid('point_B'), cx: xB, cy: yB, r: 5, class: 'ab-point' }))
+  // 5. Schrift im Vordergrund — alle Labels zuletzt.
+  for (const l of labels) DOM.plotArea.appendChild(l)
 
   updateValueDisplays()
 }
@@ -284,9 +304,14 @@ function placeAlongLabel(label, xFrom, yFrom, xTo, yTo) {
 
 // Bemassungslinie „Abstand" mit Endstrichen, senkrecht versetzt auf die vom
 // Ursprung abgewandte Seite (1:1 aus dem Original uebernommene Geometrie).
+// Gibt das <text>-Label ZURUECK (null, wenn nichts gezeichnet) — updateVisualization
+// haengt es im Foreground-Pass an, damit die Schrift ueber allen Linien liegt
+// (gleiche Strategie wie die Vektor-Labels). Die Linien selbst landen sofort im
+// Plot (unterhalb der Punkte/Vektoren).
 function drawAbstandDimension(xA, yA, xB, yB, x0, y0) {
   const dx = xB - xA, dy = yB - yA, len = Math.hypot(dx, dy)
   const group = el('g', { id: pid('dimension_line_abstand'), class: 'abstand-dim' })
+  let label = null
   if (len > 5) {
     const offset = 25, tickLength = 8
     const originSide = dx * (y0 - yA) - dy * (x0 - xA)
@@ -303,12 +328,18 @@ function drawAbstandDimension(xA, yA, xB, yB, x0, y0) {
     const angle = Math.atan2(dy, dx) * 180 / Math.PI
     const readableAngle = (angle > 90 || angle < -90) ? angle + 180 : angle
     const tx = (xAo + xBo) / 2, ty = (yAo + yBo) / 2
-    const label = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'hanging', transform: `rotate(${readableAngle} ${tx} ${ty}) translate(0, 5)`, class: 'vector-label' })
+    // KEIN dominant-baseline:hanging (das ankert y am OBEREN Rand, sodass der
+    // per dy gesenkte Index BA nur 4 Einheiten unterhalb der Oberkante — also
+    // auf Hoehe des Pfeils ⃗ — erschiene, statt tiefgestellt). Default-Baseline
+    // (alphabetisch) + translate(0,15) wie placeAlongLabel: die Schriftbasis
+    // liegt 15 Einheiten jenseits der Bemassungslinie, der Index sinkt per dy
+    // sauber ab. text-anchor:middle zentriert das ganze |Δs⃗_BA|.
+    label = el('text', { 'text-anchor': 'middle', transform: `rotate(${readableAngle} ${tx} ${ty}) translate(0, 15)`, class: 'vector-label' })
     label.setAttribute('x', tx); label.setAttribute('y', ty)
     label.appendChild(abstandLabel())
-    group.appendChild(label)
   }
   DOM.plotArea.appendChild(group)
+  return label
 }
 
 // ── Wertanzeigen neben den Steuerzeilen ─────────────────────────────────────
