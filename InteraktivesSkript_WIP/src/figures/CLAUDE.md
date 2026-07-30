@@ -44,6 +44,14 @@ aspekt_<name>.js/.css   die interaktiven Aspekt-Figuren, je ein Modul + ein CSS
 
 ### Klassische Figuren (Fabrik-Muster + einklappbare Karten)
 
+> **Abgelöst seit v1.7:** das gesamte `gcN`/`factory.js`/`fig_NN`/`selectN`-
+> Figurensystem ruht — keine `id="gcN"`-Container mehr in `chapters/*.html`,
+> `factory.js`/`fig_*.js`/`transform.js` werden von `main.js` nicht importiert,
+> `core.js::make_static`/`update_all` tragen Guards und no-oppen. Code steht nur
+> noch in `Input/InteraktivesSkript_legacy/`. Interaktive Figuren sind heute
+> **Aspekt-Figuren** (s. u. + Runbook `INTERAKTIVE_ASPEKT_FIGUREN.md`). Die
+> folgenden Absätze beschreiben die Legacy-Architektur als Referenz.
+
 Jede interaktive Figur ist ein nummerierter Container
 `<div id="gcN" class="grafik-container">` (N ∈ {1,3,31,32,4,5,51,6,8,9,10}) mit
 einem inline `<svg id="svgN">` plus Range-Slidern `id="rangeN_*"` (gc10 /
@@ -91,7 +99,7 @@ bleibt.
 
 | Motor | Sicht | ID-Prefix | Existiert, weil … |
 |---|---|---|---|
-| `kreisbewegung/` | 2D-Draufsicht | `kb_` (Default) | erste Portierung; treibt auch die Sim gc10 (Abschnitt 1.5.5) |
+| `kreisbewegung/` | 2D-Draufsicht | `kb_` (Default) | erste Portierung; die gc10-Standalone-Sim ruht seit v1.7 (s. „Klassische Figuren"), der Motor lebt über die Aspekt-Figuren weiter |
 | `kreis_spiral/` | ISO-3D (`projectISO`) mit sichtbarer **Rotationsachse** | `ks<n>_` | ω und α leben auf der Achse — in der 2D-Draufsicht unmöglich. Bringt α, Ebenenhöhe h und den Spiralmodus nativ mit |
 | `grundbegriffe/` | 2D-x-y-Diagramm, **beliebige** feste Bahnkurve x(t)/y(t) | `gk<n>_` | beide anderen können nur Kreis-/Spiralbahnen. Erster **zeitloser** Motor: kein rAF, kein Play/Pause, keine `show*`-Flags sondern `store.toggles`, Schalter-mit-Hover-Erklärung statt Slidern — **daher keine Vorlage für eine Kreisbewegungs-Figur** |
 | `bus_weg_zeit/` | Straßenszene + t-x-Diagramm, stückweise x(t) | `bw<n>_` | figur-only, keine passende Stand-alone-Sim; strukturell auf `grundbegriffe/` modelliert. `store.t` ist ein SKALARer Zeitcursor (kein tA/tB-Paar) — ein Cursor steuert Bus und Kurvenpunkt synchron |
@@ -112,9 +120,11 @@ dieses Repos — wurde nach `kreisbewegung/lib/` mitportiert);
 
 `kreisbewegung` nutzt **nicht** `factory.js` — sein Interaktionsmodell
 (durchgehendes Auto-Play über vorberechnete Zeitreihen + zwei Live-Graphen)
-passt nicht zum Slider-Drag-/φ-Wrap-Vertrag der Fabrik. Es initialisiert sich
-einmalig selbst über `initKreisbewegung()`, aufgerufen aus `main.js::init()`,
-nicht aus `update_all()`.
+passt nicht zum Slider-Drag-/φ-Wrap-Vertrag der Fabrik. Der gc10-Standalone-
+Init-Pfad (`initKreisbewegung()` aus `main.js::init()`) ist **seit v1.7
+auskommentiert** (kein gc10-Container mehr); der Motor wird heute ausschließlich
+über die Aspekt-Figuren angesteuert, die ihn per `createRuntime()` je Instanz
+isoliert einbinden.
 
 Zur ISO-Verkürzung in `kreis_spiral`: ein in der Ebene liegender Vektor
 **konstanten Betrags** projiziert zwischen 0,707× und 1,225× — kein Bug

@@ -156,6 +156,14 @@ pro Ansicht, nie zwei.
 
 ## Static vs. interactive mode
 
+> **Abgelöst seit v1.7:** der `gcN`-Container-Swap ist historisch — es gibt
+> keine `id="gcN"`-Container mehr in `chapters/*.html`, sodass `make_static()`s
+> `set()`-Aufrufe alle null-guarded no-oppen (`core.js:149-154`); die Funktion
+> macht live nur noch `reload_mathjax()`. Der `interaktiv`/`test()`-Toggle
+> (s. u.) funktioniert noch, hat aber keine `gcN`-Figuren mehr zum Umschalten.
+> Interaktive Figuren sind heute **Aspekt-Figuren** (s. `figures/CLAUDE.md` +
+> Runbook). Die folgenden Absätze beschreiben die Legacy-Mechanik als Referenz.
+
 `interaktiv` (exportiertes `let` in `core.js`) schaltet das ganze Dokument
 zwischen interaktiven SVG-Figuren und statischen Bildern um. Ist es `false`,
 überschreibt `make_static()` das `innerHTML` jedes `gcN`-Containers mit einem
@@ -171,6 +179,13 @@ ohne Codeänderung), „**tt**" in „bitte" ruft `reload_mathjax()`, um alle Fo
 neu zu rendern.
 
 ## 3D → 2D projection
+
+> **Abgelöst seit v1.7:** `transform.js` (`to2d`/`transform_line`/
+> `transform_polyline`) und die `fig_NN.js`-Konsumenten werden von `main.js`
+> nicht importiert; ein `selectN`-Dropdown gibt es im Dokument nicht mehr.
+> Die ISO-3D-Projektion der heutigen Aspekt-Figuren läuft im Motor
+> `kreis_spiral/` (`projectISO`, s. `figures/CLAUDE.md`). Folgender Absatz
+> beschreibt die Legacy-Projektion als Referenz.
 
 `to2d(d3, perspective)` projiziert einen 3D-Punkt `[x,y,z]` auf 2D-Bildschirm-
 koordinaten; `perspective` ∈ {1,2,3,4} wählt die Ansicht, gesteuert vom
