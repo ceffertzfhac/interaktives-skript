@@ -71,8 +71,8 @@ Startwert schadet er aber auch dann nicht.
 
 **Der Migrationsstand wird hier absichtlich NICHT geführt** (er ändert sich mit
 jeder Migration). Maßgeblich sind: die Offsets an den h2 in diesem Verzeichnis,
-der Kopfkommentar jedes Fragments und `BACKLOG.md` P12. Den aktuellen
-Offset-Stand reproduziert:
+der Kopfkommentar jedes Fragments und `backlog/P12-restliche-v013-inhalte.md`.
+Den aktuellen Offset-Stand reproduziert:
 
 ```
 grep -o 'data-[a-z]*-offset="[0-9]*"' chapters/*.html | sort -u

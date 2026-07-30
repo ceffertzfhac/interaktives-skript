@@ -52,7 +52,8 @@ Kapitel-Fragmente werden zur Laufzeit über HTTPS geholt (GitHub Pages);
 Die abhängigkeitsfreie Werkzeug-Basis ist **`.editorconfig`** im Repo-Wurzel-
 verzeichnis — Editoren mit EditorConfig-Unterstützung lesen sie automatisch,
 nichts zu installieren. Prettier/ESLint/TypeScript sind absichtlich auf einen
-späteren leichten Vite-/esbuild-Build vertagt (s. `BACKLOG.md`, Item 64); bis
+späteren leichten Vite-/esbuild-Build vertagt (s. `backlog/P1-struktur-token-effizienz.md`,
+Build-/Bundler-Entscheidung); bis
 dahin **keine `package.json` und keine Linter-Konfiguration** anlegen.
 
 ## Ausführen

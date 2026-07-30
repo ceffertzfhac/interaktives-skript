@@ -123,5 +123,5 @@ gezielt öffnen.
 | `InteraktivesSkript_WIP/src/CLAUDE.md` | Modul-Layout, Dependency-Graph, `data-action`-Binder, Paginierung, App-Shell, Druck/QR/Zoom/Darkmode, Breiten-Modus, A11y, Safari-Workaround |
 | `InteraktivesSkript_WIP/src/figures/CLAUDE.md` | Fabrik-Muster, die vier Figuren-Motoren, Aspekt-Figuren + Dispatch, Farbpaletten/CVD |
 | `DOKUMENTATION.md` | Index **aller** Dokus mit „lies das, wenn …" |
-| `BACKLOG.md` | Modernisierungsplan + Zielarchitektur, Arbeitsvorrat |
+| `BACKLOG.md` | **Index** des Arbeitsvorrats (ein Satz je Item); Details je Item in `backlog/<item>.md` |
 | `README.md` | öffentliche Projektbeschreibung + Arbeitsstand |

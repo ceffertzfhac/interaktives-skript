@@ -68,7 +68,7 @@ python3 -m http.server 8000
 | `InteraktivesSkript_WIP/chapters/` | 17 HTML-Fragmente (TK 0–3), zur Laufzeit eingehängt |
 | `InteraktivesSkript_WIP/src/` | ES-Module: `main.js` + Kern, Seiten, Shell, Druck, `figures/` (4 Motoren + 16 Aspekt-Figuren) |
 | `InteraktivesSkript_WIP/bilder/` | statische Abbildungen (auch Druck-Fallback) |
-| `BACKLOG.md` | Roadmap und offene Punkte |
+| `BACKLOG.md` | Roadmap und offene Punkte (Index; ein Item je Datei in `backlog/`) |
 | `DOKUMENTATION.md` | Index aller Dokus mit „lies das, wenn …" — der Einstieg |
 | `CLAUDE.md` | Arbeitsregeln + Wegweiser; die Subsystem-Details stehen in je einer `CLAUDE.md` neben dem Code (`chapters/`, `src/`, `src/figures/`) |
 

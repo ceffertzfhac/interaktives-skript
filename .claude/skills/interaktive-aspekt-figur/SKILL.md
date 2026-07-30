@@ -7,6 +7,8 @@ description: Eine interaktive „Aspekt-Figur" ins interaktive Skript einbauen �
 
 Vollständige Begründung und Schritt-für-Schritt: **`InteraktivesSkript_WIP/INTERAKTIVE_ASPEKT_FIGUREN.md`** (Runbook mit Konzept, Fallstricken, Checkliste). Diese Skill ist die Arbeitsanweisung + die ausführbaren Helfer. Begleit-Doku zu allen Änderungen seit der ersten Anlage (Singleton → Per-Instanz, 2. Figur 1.39, 3. Figur 1.41, Grundgerüst): `InteraktivesSkript_WIP/CHANGES_aspekt_1.38_1.40_und_grundgeruest.md`.
 
+Architektur-Überblick (Motoren, Fabrik-Muster, Dispatch, Farbpaletten): `InteraktivesSkript_WIP/src/figures/CLAUDE.md` — lädt sich beim Arbeiten in dem Ordner automatisch. Welche Figur welchen Motor nutzt, steht **nicht** in der Doku, sondern in `main.js::ASPEKT_FACTORIES` + im Kopfkommentar jeder `aspekt_*.js`.
+
 Referenz-Implementierungen: `src/figures/aspekt_kreisbahn.js` (Abb. 1.38, Positions-Aspekt), `src/figures/aspekt_weg_zeit.js` (Abb. 1.39, Weg-Zeit-Aspekt + gestapelte Graphen + Auto-Stopp + Vergleichslinie) und `src/figures/aspekt_winkel_zeit.js` (Abb. 1.41, Winkel-Zeit-Aspekt + einzelner Graph + Geisterbögen pro Umdrehung + Vergleichslinie). Nummern sind die echte `Abb. 1.n`-Zählung (1.40 = statische radial-tangential-Figur, keine Aspekt-Figur — deshalb ist „weg-zeit" 1.39, nicht 1.40).
 
 ## Grundsatz

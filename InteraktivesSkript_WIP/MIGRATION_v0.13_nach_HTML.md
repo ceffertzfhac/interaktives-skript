@@ -304,10 +304,12 @@ window.MathJax = {
 `(1)` statt `(1.4.1)`; `\textcolor` bleibt ebenfalls unwirksam. Der Fehler ist
 in einer Offline-Prüfung mit `AllPackages` **nicht** sichtbar.
 
-Das Präfix `'1.4.'` ist derzeit eine Konstante. **Sobald ein zweiter Abschnitt
-ins WIP kommt, muss es pro Seite ermittelt werden** (analog
-`numbering.js::sectionPrefix()`), sonst sind dort alle Formeln falsch
-nummeriert. → offener Punkt in `BACKLOG.md`.
+Das Präfix war anfangs die Konstante `'1.4.'`. **Seit v1.7 wird es pro Seite
+ermittelt** — `numbering.js::renumber_equations()` liest es via
+`sectionPrefix()` aus dem Seitentitel und lässt einen zweiten MathJax-Lauf die
+Tags setzen. Ein neuer Abschnitt braucht deshalb keine Änderung. (Verifiziert
+2026-07-24 über 1.4-, 1.5- und 0.x-Seiten, s. `backlog/P12-restliche-v013-inhalte.md`
+→ P12-0a.)
 
 ### 5.4 Zeilenabstand mehrzeiliger Formeln
 

@@ -6,7 +6,8 @@ description: Ein migriertes Kapitel des interaktiven Skripts gegen das v0.13-PDF
 # Verifikation eines migrierten Kapitels
 
 Hintergrund und Fallstricke: `InteraktivesSkript_WIP/MIGRATION_v0.13_nach_HTML.md`,
-Abschnitte 10 und 11.
+Abschnitte 10 und 11. Die Regeln, gegen die geprüft wird (Zähler-Scopes, Offsets,
+MathJax-Gleichungsnummern, Querverweis-Deskriptoren): `InteraktivesSkript_WIP/chapters/CLAUDE.md`.
 
 ## Der zentrale Denkfehler, den dieses Skill verhindern soll
 

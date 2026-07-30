@@ -7,6 +7,8 @@ description: Abbildungen aus Input/v0.13/PSkriptBilder ins interaktive Skript ü
 
 Teil der Kapitelmigration (Skill **v013-kapitel-migration**), auch einzeln
 nutzbar. Hintergrund: `InteraktivesSkript_WIP/MIGRATION_v0.13_nach_HTML.md`, Abschnitt 2.
+Die Breiten-Regel und warum sie nötig ist: `InteraktivesSkript_WIP/chapters/CLAUDE.md`,
+Abschnitt „Bildgrößen folgen v0.13".
 
 Ziel: `InteraktivesSkript_WIP/bilder/` enthält alle Abbildungen des Kapitels,
 in verlässlichem Format, mit den Breiten aus der Quelle.

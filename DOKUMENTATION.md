@@ -3,7 +3,7 @@
 Was es an Dokumentation gibt, was drinsteht und **wann man sie öffnet**. Zweck
 dieser Datei: entscheiden können, welche Doku man braucht, **ohne sie zu laden**.
 
-Aufbauprinzip (s. `BACKLOG.md` P18): drei Ladeklassen — **A** liegt in jedem Turn
+Aufbauprinzip (s. `backlog/P18-doku-architektur.md`): drei Ladeklassen — **A** liegt in jedem Turn
 im Kontext, **B** lädt sich beim Anfassen des jeweiligen Ordners automatisch nach,
 **C** wird bewusst geöffnet. Jede Information steht **genau einmal**, beim
 nächstliegenden Konsumenten.
@@ -39,7 +39,8 @@ nächstliegenden Konsumenten.
 
 | Datei | Inhalt | Lies das, wenn … |
 |---|---|---|
-| `BACKLOG.md` | Modernisierungsplan, Zielarchitektur, Arbeitsvorrat P0…P18 | eine neue Anfrage eingeordnet oder der nächste Arbeitsschritt gewählt wird |
+| `BACKLOG.md` | **Index** aller Backlog-Items: Titel, Status, ein Satz je Item | eine neue Anfrage eingeordnet oder der nächste Arbeitsschritt gewählt wird |
+| `backlog/<item>.md` | ein Item je Datei: Begründung, Sub-Tasks, Entscheidungen, erledigte Historie | an einem konkreten Item gearbeitet wird — **nur die eine Datei öffnen** |
 | `README.md` | öffentliche Projektbeschreibung + Abschnitt „Was drin ist (Arbeitsstand)" | der Arbeitsstand sich inhaltlich ändert (**Pflicht**, s. `CLAUDE.md`) |
 | `DISCLAIMER.md` | Haftungsausschluss, Prototyp-Status (auch inhaltlich) | Fragen zu Gewährleistung/Veröffentlichung aufkommen |
 
@@ -62,6 +63,6 @@ Damit der Pflichtkontext nicht mit dem Projekt wächst, sind diese Dinge
 | Frage | Quelle |
 |---|---|
 | Welche Aspekt-Figuren gibt es, welche nutzt welchen Motor? | `src/main.js::ASPEKT_FACTORIES` + Kopfkommentar jeder `src/figures/aspekt_*.js` (nennt Vorlage **und** jede Abweichung) |
-| Welcher Abschnitt ist migriert, welche Offsets gelten? | `data-*-offset` an den h2 in `chapters/`, Kopfkommentar jedes Fragments, `BACKLOG.md` P12 |
+| Welcher Abschnitt ist migriert, welche Offsets gelten? | `data-*-offset` an den h2 in `chapters/`, Kopfkommentar jedes Fragments, `backlog/P12-restliche-v013-inhalte.md` |
 | Welche Port-Änderungen hat ein Figuren-Motor? | Kopfkommentar von `src/figures/<motor>/runtime.js` bzw. `state.js` (im Code als `PORT-AENDERUNG` markiert) |
 | Welche v0.13-Quellenfehler betreffen Abschnitt X? | Kopfkommentar des betroffenen Fragments + `QUELLEN_FEHLER.md` |
