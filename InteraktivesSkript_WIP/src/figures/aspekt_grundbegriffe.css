@@ -69,14 +69,25 @@
 
 /* Diagramm ist QUERFORMAT statt hochkant wie die Kreisbahn-Figuren, und seine
    viewBox-Hoehe folgt dem Datenbereich (computeBoundsFit in render.js:
-   600 x 402, Verhaeltnis h/w = 0,67 statt 0,758 — der tote obere Rand des
-   festen 4:3 entfaellt). Deshalb:
-   • im Fliesstext KEIN 460-px-Deckel wie bei den hochkanten Figuren, sondern
-     volle Spaltenbreite — bei 0,67 bleibt die Bildhoehe auch dann moderat;
-   • im Overlay an der Viewport-HOEHE gedeckelt: 0,67 · 92vh ≈ 62vh Bildhoehe,
-     also derselbe Hoehenanteil wie bei den uebrigen Aspekt-Figuren. */
-.aspekt-figur[data-aspekt="grundbegriffe"] .aspekt-svg { max-width: 100%; }
-.aspekt-figur[data-aspekt="grundbegriffe"].aspekt-im-overlay .aspekt-svg { max-width: min(100%, 92vh); }
+   650 x 402, Verhaeltnis h/w = 0,62 statt 0,758 — der tote obere Rand des
+   festen 4:3 entfaellt). Als EINZEL-Diagramm-Figur darf Abb. 1.1 das
+   Seitenverhaeltnis zusaetzlich Breite bevorzugen (Nutzervorgabe v1.31.19):
+   WIDE=1,1 streckt die viewBox-Breite (650 statt 600), die Hoehe bleibt (402).
+   Deshalb:
+   • im Fliesstext MIT 500-px-Deckel (statt 460 wie die hochkanten Einzelfiguren
+     1.38): der Deckel wuchs proportional zum neuen Seitenverhaeltnis
+     (460 · 1,615/1,49 ≈ 500), sodass die Bildhoehe gleich bleibt (~309 px) und
+     nur die Breite wächst (460 -> 500). Die Einzeldiagramm-Figur ist damit
+     bewusst etwas breiter als die 460-Figurtypen — gewollte Ausnahme, keine
+     Homogenitaets-Verletzung (die 460-Regel gilt fuer hochkante/gestapelte
+     Figuren; s. v1.31.17). Da alle drei Paper-Maxima (710/845/1175) ueber dem
+     Cap liegen, bindet der Cap in jedem Modus → hoehe in allen Modi gleich.
+     KEINE zusaetzliche Schrift-Reduktion (s. v1.31.17).
+   • im Overlay an der Viewport-HOEHE gedeckelt: der vh-Deckel wuchs ebenfalls
+     proportional (92vh -> 100vh), also 0,62 · 100vh ≈ 62vh Bildhoehe wie
+     bisher — derselbe Hoehenanteil wie bei den uebrigen Aspekt-Figuren. */
+.aspekt-figur[data-aspekt="grundbegriffe"] .aspekt-svg { max-width: 500px; }
+.aspekt-figur[data-aspekt="grundbegriffe"].aspekt-im-overlay .aspekt-svg { max-width: min(100%, 100vh); }
 
 /* ── Steuerzeilen (Checkbox + Label + Wertanzeige) ───────────────────────────
    Ganze Zeile hoverbar/klickbar (Vorlagen-Verhalten: Klick neben der Checkbox

@@ -24,7 +24,7 @@
 // Sonst 1:1 die Quelle — insbesondere die Geometrie (Label-Platzierung,
 // Bemassungslinie) bleibt unangetastet, weil sie die Optik der Vorlage ausmacht.
 
-import { T_MAX, PAD_L, PAD_T, PAD_B, PLOT_W, HEAD_LEN } from './constants.js'
+import { T_MAX, PAD_L, PAD_T, PAD_B, PLOT_W, WIDE, HEAD_LEN } from './constants.js'
 import { store, DOM } from './state.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
 import { setAxisLabel, setGraphTitle } from '../kreisbewegung/lib/svg-text.js'
@@ -79,7 +79,11 @@ export function computeBounds(pathYMax) {
 // je Achse ist der Platz fuer Achsenpfeil und Achsenbeschriftung (wie im
 // Original). Rueckgabe enthaelt zusaetzlich plotH + graphH fuer die viewBox.
 export function computeBoundsFit(pathYMax) {
-  const xMaxBound = T_MAX + 0.5
+  // xMaxBound mit WIDE gestreckt (s. constants.js): zusammen mit PLOT_W (eben-
+  // falls ×WIDE) haelt das plotH und den x/y-Massstab konstant → Hoehe gleich,
+  // Breite wächst, Geometrie unverzerrt. Der Zuschlag 0,5 ist Platz fuer
+  // Achsenpfeil und -beschriftung (wie im Original); er wächst mit WIDE mit.
+  const xMaxBound = (T_MAX + 0.5) * WIDE
   const yMaxBound = pathYMax + 0.5
   const plotH = PLOT_W * (yMaxBound / xMaxBound)
   return { xMaxBound, yMaxBound, plotH, graphH: PAD_T + plotH + PAD_B }

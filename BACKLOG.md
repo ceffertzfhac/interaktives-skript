@@ -434,6 +434,41 @@ Zuweisung per Freigabe-Tipp.
   Unterstrich (wie vₓ/vᵧ); der Vektorpfeil ist das kombinierende Zeichen U+20D7
   (auf Nutzerwunsch belassen). *(M)*
 
+- [x] **P-AF-6: Homogenität von Titel- & Achsenbeschriftungen über die Width-
+  Modi schmal/normal/breit.** (Nutzervorgabe 2026-07-29: „ähnliche Diagramme
+  sollen ähnlich aussehen — Einzeldiagramm vs. gestapelt muss nicht identisch
+  sein.") **Analyse-Ergebnis: homogen, kein eigenes Work-Item nötig.** Die
+  Schriftgrade sind modusunabhängig definiert — `.axis-label` 13 px,
+  `.tick-label` 11 px, `.graph-title-text` 15 px, je
+  `calc(Npx * var(--kb-text-scale) * var(--kb-fs))` (aspekt_kreisbahn.css:258–
+  260), `--kb-text-scale = --paper-graphics-scale` hängt an der Textstufe,
+  nicht am Width-Modus. Die Width-Modi (:446+) setzen nur Layout/Spaltenbreite,
+  KEINE Schriftgröße (einzige Modus-Schrift ist die schmale Legenden-Labelschrift
+  :468 — keine Überschrift/Achse). Einziges Diffusionsmoment war die SVG-Box-
+  breite: Einzelfiguren auf 460 px gedeckelt (gleiche Box → gleicher Schriftgrad),
+  gestaparte/vollbreite Figuren wachsen mit der Spalte. **Ausreißer war
+  grundbegriffe (1.1)** — als einzige Figur OHNE Cap wuchs sie mit der Spalte
+  und wirkte (insbes. breit) „mächtig" + inkonsistent; in v1.31.17 auf 460 px
+  gedeckelt → homogen. Folge-Regel v1.31.19: Einzeldiagramm darf Breite
+  bevorzugen (s. P-AF-7). *(S, nur Analyse)*
+
+- [ ] **P-AF-7: Pause-Button echtes Pause-Design.** Die Aspekt-Runbar
+  (`data-act="stop"`, mittlerer der Start/Stop/Reset-Knöpfe) ist semantisch
+  eine **Pause**, kein Stop: `stop()` hält an Ort (nur `playing=false;
+  cancelAnimationFrame`, kein `curT=0`), `start()` setzt an `curT` fort,
+  `reset()` setzt zurück (z. B. aspekt_betragv_zeit.js:686/699/700). Das Icon
+  ist aber ein **Stop-Glyph** (gefülltes Quadrat ■, `<rect x=7 y=7 width=10
+  height=10>`, ebd. :256) und Label/aria-label/title heißen „Stop". Fix: Icon
+  auf zwei Pause-Balken (‖, z. B. zwei `<rect>` bei x≈7/14, y=6, w=3, h=12) +
+  Label „Pause". Betroffen: die 14 Aspekt-Figuren mit `data-act="stop"` (je
+  eigene RUNBAR-Konstante → pro Datei): betragv_zeit, weg_zeit, winkel_zeit,
+  vxvy_zeit, axay_zeit, betraga_zeit, omega_zeit, periodendauer,
+  axay_winkelbeschl, arat_winkelbeschl, omega_vektor, zentripetalkreuz,
+  alpha_omega, bus_weg_zeit. Vorher pro Figur prüfen, ob `stop()` wirklich
+  halten (→ Pause) oder zurücksetzen (→ Stop bleibt korrekt) bedeutet — nur
+  erstere umbauen. Außerdem prüfen, ob die gc10-Kreisbewegung-Sim
+  (playBtn/pauseBtn) dasselbe Quadrat trägt. *(S–M)*
+
 ## P-Aspekt-Bus — Abb. 1.2 Busfahrt: Strichmännchen als Mitfahrer (Kapitel 1.1)
 
 Eingetragen 2026-07-29 nach Nutzervorgabe (**nur Backlog, noch nicht umgesetzt**).
@@ -1304,6 +1339,171 @@ Kacheln; Linien/Punkte bleiben sichtbar, der Hintergrund wird transparent.
 - [ ] **P15-6 Verifikation** — Sicht in hell + dunkel auf mehreren
   betroffenen Abbildungen (Stufe 5, Freigabe „JA"); keine weißen Kacheln
   mehr auf farbigen Boxen/Darkmode. *(M)*
+
+---
+
+## P16 — Wurf-/Fall-Figuren interaktiv (Kapitel 1.1 Kinematik)
+
+Eingetragen 2026-07-30 nach Nutzervorgabe (*„Plane die Umsetzung aller Graphiken
+zum freien Fall, senkrechten Wurf und schrägen Wurf auf interaktiv, lege dazu
+backlogitems an"*). Detailliert **P12-E1** (1.1: `freier_fall` / `schraeger_wurf`).
+Betroffen: zwei neue Motoren `src/figures/freier_fall/` + `src/figures/schraeger_wurf/`
++ pro Abbildung ein `src/figures/aspekt_*.js|.css` + `chapters/ch_01_01_kinematik.html`
+(statische Abbildung jeweils auf `.nur-druck`, interaktive Variante `.nur-bildschirm`).
+Runbook: **INTERAKTIVE_ASPEKT_FIGUREN.md** (Regel 1 Motor zuerst, Regel 2 kopieren +
+feature-gate, Regel 3 „wie Abb. X" = pixel-identisch).
+
+**Quellen-Inventar** (v0.13 `pskript_mech_kinematik_gmni_v4.tex`; alle Abb. bereits
+statisch migriert in `ch_01_01_kinematik.html`):
+
+| Thema | Abb. | WIP-`fig-…`-ID | Zeigt |
+|---|---|---|---|
+| Freier Fall | **1.3** | `freierfall_1` | s-t, h₀=10 m, y↑, Null Boden |
+| Senkr. Wurf | **1.4** | `senkrechter_wurf_1` | s-t, v₀=10, h₀=20, y↑, Null Boden |
+| Senkr. Wurf | **1.5** | `senkrechter_wurf_2` | s-t, y↑, Null Abwurfpunkt |
+| Senkr. Wurf | **1.6** | `senkrechter_wurf_3` | s-t, y↓, Null Boden |
+| Senkr. Wurf | **1.7** | `senkrechter_wurf_4` | s-t, y↓, Null Abwurfpunkt |
+| Senkr. Wurf | **1.19** | `…geschwindigkeit_zeit_diagramm_senkr_wurf` | v-t, v₀=10, h₀=10 |
+| Schräger Wurf | **1.9** | `schraeger_wurf` | Flugbahn + 2× s-t (x, y) |
+| Schräger Wurf | **1.14** | `bahnkurve_schraeger_wurf` | Bahn y(x) + Schema |
+| Schräger Wurf | **1.18a/b** | `…tangentiale_geschwindigkeit_schraeger_wurf` (+`_2`) | Tangential-v⃗ + Ortsvektor, 2 Koordinatensysteme |
+| Schräger Wurf | **1.20** | `…geschwindigkeit_zeit_diagramm_schraeger_wurf` | 2× v-t (vx, vy) |
+
+Nicht interaktiv (Nachbarschaft, kein Wurf/Fall-Plot): 1.8 Feder-Masse-Pendel,
+1.10 Kreisbewegung, 1.11 Rutsche-Foto, 1.12 Schraubenbahn, 1.13 Spur-im-Schnee-Schema.
+
+**Motor-Wahl (Runbook-Regel 1 — Motor zuerst):**
+- **Motor A — `freier_fall` (1D)** aus `Input/Simulationen/Project_freier_fall_simulation/`
+  (v2.5.0). Rein vertikal; Slider `h₀` (1,8…25 m) + `v₀` (−10…10 m/s; v₀<0 Abwärtswurf,
+  v₀=0 freier Fall, v₀>0 Aufwärtswurf = senkrechter Wurf); s(t)/v(t)/a(t)-Diagramme;
+  v⃗-/a⃗-Pfeile; Stoppuhr; **vier Y-Achsen-Konfigs** (↑/↓ × Boden/Abwurfpunkt —
+  exakt die 1.4–1.7-Varianten); progressiver RAF-Datenlauf. Reuses
+  `../kreisbewegung/lib/{hover,format,ticks,svg-text}.js`.
+- **Motor B — `schraeger_wurf` (2D)** aus `Input/Simulationen/Project_schraeger_wurf_simulation/`
+  (v1.6.0). 2D-Projektil; Slider `h₀`/`|v₀|`/`α` (α=0 horizontal, α=90 senkrecht =
+  Obermenge); Wurfparabel y(x)/x(y); x(t)/y(t)/vx(t)/vy(t)/ax(t)/ay(t)/|v|(t);
+  v⃗ + vx/vy-Zerlegung + a⃗; Vergleichsbahn (frozen); Reichweite/Scheitelhöhe/
+  Auftreffwinkel; Precompute-then-interpolate. Reuses
+  `../kreisbewegung/lib/{hover,format,ticks,svg-text,vectors}.js` (`export-image.js`
+  nicht portiert — wie bei kreis_spiral weggelassen).
+- **Beide Projekte** importieren `../../shared/js/*` (physisch nicht in `Input/`,
+  aber als `src/figures/kreisbewegung/lib/*` bereits im WIP portiert) und
+  `../shared/css/design-system.css` (nicht übernehmen — WIP hat eigene
+  `aspekt_*.css`-Optik). Modultrennung constants/physics/render/state/ui wie die
+  Vorbild-Motoren; `runtime.js` mit `createRuntime()`/`withStore`/`bindDom` +
+  `store.idPrefix` in `q()` (Motor A `'ff<n>_'`, Motor B `'sw<n>_'`), analog
+  `kreis_spiral`/`grundbegriffe`. Port-Änderungen minimal/additiv, als
+  `PORT-AENDERUNG` markiert (idPrefix/q, trimmed initDOM, simDuration, Plot-Rect
+  im graphScale, eigene Vektorlängen-Skalen).
+
+**Vorlagen-Hierarchie** [[feedback-vorlagen-hierarchie]] pro Figur (alle drei
+Vorbilder prüfen): (1) nächste Aspekt-Figur *nach Interaktionsmuster, nicht Thema*
+  — zeit-scrub + gestapeltes Diagramm → `aspekt_weg_zeit`/`aspekt_periodendauer`;
+  einzelner Graph + Vektor → `aspekt_betragv_zeit`/`aspekt_omega_zeit`; Bahnkurve
+  ohne Zeitachse → neu (nächstes: `aspekt_kreisbahn` mit φ-scrub); (2) die
+  Stand-alone-Sim (Motor A/B); (3) die statische v0.13-Abbildung; (4) Legacy.
+
+**Entschieden 2026-07-30 (Nutzervorgabe):**
+- **Granularität: 1:1 pro Abbildung** — jede statische Abbildung bekommt ihre
+  eigene interaktive Aspekt-Figur als granulare Reduktion (wie bisher bei
+  1.38/1.39/…). Die **volle Stand-alone-Simulation** wird *separat* später
+  verfügbar (eigene öffentliche Instanz, s. Backlog „Link zur vollständigen
+  Stand-alone-Simulation"), im Skript wird *schrittweise granular* erweitert.
+  **Keine Konsolidierung** (kein Achs-Konfig-Toggle für 1.4–1.7, kein Koordinaten-
+  system-Toggle für 1.18a/b) — jede der 11 Abbildungen = eine Figur.
+- **Motor-Wahl: beide Motoren** portieren (Empfehlung gefolgt) — Motor A
+  `freier_fall` für 1.3/1.4–1.7/1.19, Motor B `schraeger_wurf` für 1.9/1.14/
+  1.18a/b/1.20.
+
+### Sub-Tasks
+
+- [x] **P16-0 Klärung** — Granularität: **1:1 pro Abbildung** (keine Konsolidierung);
+  Motor-Wahl: **beide Motoren** (A + B). Vorlagen-Hierarchie pro Figur bei
+  Umsetzung festgelegt. *(S)* — entschieden 2026-07-30.
+- [ ] **P16-1 Motor A portieren** — `src/figures/freier_fall/{constants,physics,render,state,runtime}.js`,
+  reuse `../kreisbewegung/lib/*`, `initFreierFall()` aus `main.js::init()`,
+  PORT-AENDERUNG-Marker. *(L)*
+- [ ] **P16-2 Motor B portieren** — `src/figures/schraeger_wurf/{constants,physics,render,state,runtime}.js`,
+  Precompute-then-interpolate, reuse `../kreisbewegung/lib/*` inkl. vectors,
+  `initSchraegerWurf()` aus `main.js::init()`. *(L)*
+- [ ] **P16-3 Aspekt-Figur Abb. 1.3** — Freier Fall s-t (Motor A). Copy &
+  feature-gate nächstes Weg-Zeit-Template; `data-aspekt` + `data-figref`,
+  Registrierung `main.js::ASPEKT_FACTORIES`. *(M)*
+- [ ] **P16-4 Aspekt-Figuren Abb. 1.4–1.7** — senkrechter Wurf s-t, 4 Y-Achsen-
+  Konfigs (Motor A); **4 separate Figuren** (1:1, je eigene Achs-Konfig). *(M–L)*
+- [ ] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
+- [ ] **P16-6 Aspekt-Figur Abb. 1.9** — schräger Wurf: Flugbahn + 2× s-t x/y
+  (Motor B). *(M)*
+- [ ] **P16-7 Aspekt-Figur Abb. 1.14** — Bahnkurve y(x) + Schema (Motor B, keine
+  Zeitachse → neuer Interaktionsmuster-Zweig). *(M)*
+- [ ] **P16-8 Aspekt-Figuren Abb. 1.18a/b** — Tangentialgeschwindigkeit + v⃗/
+  Ortsvektor, 2 Koordinatensysteme (Motor B); **2 separate Figuren** (1:1). *(M)*
+- [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
+- [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
+  Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
+  Regression), CVD-Palette (P-AF-2 — neue Vektor-Tokens für v⃗/vₓ/vᵧ/a⃗ kapitel-
+  konsistent in `aspekt_kreisbahn.css`/`darkmode.css`/`aspekt_paletten.css`),
+  Stufe 5 (Sicht) nur nach Freigabe „JA" [[feedback-screenshot-freigabe]]. *(M)*
+
+---
+
+## P17 — Weitere interaktive Figuren aus Kap. 1.1 (Kinematik, nicht Wurf/Fall)
+
+Eingetragen 2026-07-30 nach Nutzervorgabe + Kandidatur-Untersuchung von Kap. 1.1
+(alle 20 Abbildungen inventarisiert). Ergänzt **P16** (Wurf/Fall) um drei weitere
+interaktive Aspekt-Figuren, die aus derselben Untersuchung hervorgingen.
+Betroffen: `src/figures/aspekt_*.js|.css` + `chapters/ch_01_01_kinematik.html`
+(Static jeweils `.nur-druck`, interaktiv `.nur-bildschirm`).
+
+**Kandidatur-Entscheidung 2026-07-30 (Nutzervorgabe):**
+- **Aufgenommen:** 1.15, 1.10, 1.8 (s.u.).
+- **Nicht aufgenommen (bleiben statisch):** 1.11 Rutsche-Foto, 1.13 Spur-im-Schnee
+  (Konzept, durch 1.14/P16 interaktiv abgedeckt), 1.16 Tachometer-Foto — alles
+  Fotos/Konzept-Bilder ohne parameterabhängiges Verhalten.
+- **Nicht aufgenommen (bedingt geeignet, bewusst weggelassen):** 1.12 Schraubenbewegung
+  (3D, didaktisch wertvoll, Motor `kreis_spiral` existiert — falls später gewünscht,
+  nachrüsten); 1.17 Vorzeichen der Geschwindigkeit (schwacher Kandidat, nur kleine
+  Toggle-Figur — bewusst statisch gelassen).
+
+**Vorlagen-Hierarchie** [[feedback-vorlagen-hierarchie]] pro Figur (alle drei
+Vorbilder prüfen): (1) nächste Aspekt-Figur *nach Interaktionsmuster*; (2) die
+Stand-alone-Sim; (3) die statische v0.13-Abbildung; (4) Legacy. **„wie Abb. X" =
+pixel-identisch.**
+
+### Sub-Tasks
+
+- [ ] **P17-1 Aspekt-Figur Abb. 1.15 — Sekante vs. Tangente** (Durchschnitts- vs.
+  Momentangeschwindigkeit, Unterabschnitt 1.1.10 „Geschwindigkeit"). Statisches
+  `fig-kinematik_geschwindigkeit_unterschied_durchschnitt_momentan` interaktiv
+  nachbauen. Slider: Intervallgrenzen t₁/t₂ für die Sekante + Zeitpunkt t für die
+  Tangente an einer x(t)-Kurve; Δt→0-Übergang zeigt die Konvergenz Sekante→Tangente.
+  **Motor: `ableitung_simulation` neu portieren** (`src/figures/ableitung/`,
+  reuse `../kreisbewegung/lib/*`; deckt auch P12-E8-Hilfssim). Caption verweist
+  selbst auf eine ILIAS-Animation, die ersetzt wird. *(L — Motor + Figur)*
+- [ ] **P17-2 Aspekt-Figur Abb. 1.10 — Kreisbewegung x(t)/y(t)-Komponenten +
+  Bahn** (Unterabschnitt 1.1.7 „Die Strecke"). Statisches `fig-kreisbewegung_1`
+  interaktiv nachbauen: gestapelte x(t)/y(t)-Komponenten (Slider R, T) + Toggle
+  zum Bahn-View (x-y-Plot) — schließt exactly die Lücke, die der Text selbst
+  nennt („nicht leicht zu sehen, dass es eine Kreisbahn ist") und ist die Brücke
+  zu Abschnitt 1.1.8 „Die Bahn". **Motor: `kreisbewegung` bereits portiert** — nur
+  Aspekt-Figur per `createRuntime()`, kein neuer Motor. Vorlagen-Hierarchie:
+  `aspekt_weg_zeit` (gestapelte x/y) + `aspekt_kreisbahn` (Bahn) kombinieren.
+  *(M — nur Figur)*
+- [ ] **P17-3 Aspekt-Figur Abb. 1.8 — Feder-Masse-Pendel** (Unterabschnitt 1.1.7
+  „Die Strecke", Beispiel Feder-Masse-Pendel). Statisches
+  `fig-feder_masse_pendel_kinematik` interaktiv nachbauen: harmonische s(t) =
+  y₀·cos(2πt/T), Slider Amplitude y₀ + Periodendauer T; nicht-parabolische
+  Bewegung als Kontrast zu den Wurf-/Fall-Parabeln (P16). **Motor:
+  `federpendel_simulation` neu portieren** (`src/figures/federpendel/`, reuse
+  `../kreisbewegung/lib/*`; **deckt auch P12-E6 / Kap. 3.1 Schwingungen** — einmal
+  portieren, zwei Verwender). *(L — Motor + Figur)*
+- [ ] **P17-4 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
+  Übertrag, `node --check`, Smoke, Nummerierung (keine Regression), CVD-Palette
+  (P-AF-2), Stufe 5 (Sicht) nur nach Freigabe „JA" [[feedback-screenshot-freigabe]]. *(M)*
+
+**Querverweis:** P17-2 (1.10) und P16 (Wurf/Fall) nutzen beide `kreisbewegung`- bzw.
+die Wurf-Motoren per `createRuntime()` — die Motoren bleiben Singleton, jede
+Aspekt-Figur bekommt ihre eigene Instanz (idPrefix), wie bei 1.38–1.51 etabliert.
 
 ---
 
