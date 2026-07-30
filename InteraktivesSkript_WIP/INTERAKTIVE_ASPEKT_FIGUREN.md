@@ -50,6 +50,13 @@ konkreten Stelle im Skript zu bauen. Referenz-Implementierungen:
 > sind **Schalter mit Hover-Erklärung** statt Regler allein. Wer eine weitere
 > Figur zu Kapitel 1.1 baut, kopiert `aspekt_grundbegriffe.js`; wer eine
 > Kreisbewegungs-Figur baut, bleibt bei der Kaskade in Abschnitt 0a.
+>
+> **Vierter Motor `bus_weg_zeit/`** (Straßenszene + t-x-Diagramm, Prefix
+> `bw<n>_`) ist **figur-only** — keine Stand-alone-Sim, kein Auswahlziel für eine
+> neue Figur; strukturell auf `grundbegriffe/` modelliert. Der Entscheidungsbaum
+> oben gilt für die **drei portierten** Motoren; `bus_weg_zeit` existiert nur für
+> die eine Bus-Figur (Abb. 1.2). Inventar + Provenienz aller vier Motoren:
+> `src/figures/CLAUDE.md` „Die vier Motoren".
 
 Geschrieben als **Runbook**: erst Konzept & Architektur, dann Schritt für
 Schritt, dann der Katalog der real aufgetretenen Fallstricke (der wertvollste
@@ -274,17 +281,14 @@ auf `.aspekt-figur` statt `#gc10` gescopt — in zwei Dateien:
   Aspekt-Figuren. UI-Tokens: `--kb-surface*`, `--kb-border*`, `--kb-text*`,
   `--kb-accent (var(--fh,#00b2a9))`, `--kb-text-scale
   (var(--paper-graphics-scale,1))` (Grafik-UI-Skalierung, s. §C).
-  **Vektorfarbpalette (kanonisch aus der LaTeX-Quelle, s. Kommentarblock am
-  Tokens-Block in der Datei):** die Hauptvektoren sind an die Bildunterschriften
-  fixiert — r grau `--kb-rlat` (#474747), v orange `--kb-vlat` (#F47A2D),
-  a/a_ZP violett `--kb-azp` (#8361af), ω blau `--kb-omega` (#1555A2), α rot
-  `--kb-alpha` (#bf262d); die Polarzerlegung a_t rot / a_r blau (`--kb-at`/
-  `--kb-ar`) an die Formel (\textcolor{red}/\textcolor{blue}). Kartesische
-  Komponenten: y grün `--kb-ry`, x blau `--kb-rx` (a_x cyan `--kb-ax` als
-  Ausnahme, da a_r das Quellen-Blau ist). Die älteren Namen `--kb-r/-vel/-acc/
-  -v/-vx/-vy/-ay` sind **Alias-Tokens** darauf — Nutzungsstellen zeigen
-  automatisch die kanonische Farbe. **Nie** Vektor-Farben hardcodieren oder
-  pro Figur neu definieren; immer diese Tokens referenzieren.
+  **Vektorfarbpalette (kanonisch aus der LaTeX-Quelle):** die vollständige
+  `--kb-*`-Werte-Tabelle — welche Vektoren welche Farbe, Provenienz aus den
+  `\textcolor`-Bildunterschriften, Polar-/Kartesisch-Zuordnung, welche
+  Quellfarben bewusst nicht übernommen, und die Alias-Liste (`--kb-r/-vel/-acc/
+  -v/-vx/-vy/-ay` zeigen automatisch die kanonische Farbe) — steht im
+  **Kopfkommentar der Datei** (Kommentarblock am Tokens-Block); dort nachlesen.
+  **Nie** Vektor-Farben hardcodieren oder pro Figur neu definieren; immer diese
+  Tokens referenzieren.
   **Wählbare CVD-Paletten (v1.25):** die Quellen-Palette ist die *Normal*-Palette
   (für Normalfarbsehen). Zusätzlich gibt es zwei farbfehlsichtigkeits-optimierte
   Paletten — Deuteranopia (Rot-Grün, Okabe-Ito auf der intakten Blau/Gelb-Achse)
@@ -293,9 +297,10 @@ auf `.aspekt-figur` statt `#gc10` gescopt — in zwei Dateien:
   Auswahl-Signal `<html data-palette="normal|deuter|tritan">` (gesetzt in
   `core.js::set_palette`, persistiert in `skript_palette`), Hell/Dunkel-Zweig an
   `<html data-darkmode="0|1">` (rein additives Signal, das `toggle_darkmode`
-  synchron hält). Jeder Block setzt **alle 20 --kb-*-Tokens** (WERT + ALIAS —
-  `darkmode.css` entkoppelt die Aliase direkt, sonst gewänne im Dark+CVD-Fall
-  der Darkmode-Alias). Normal = kein Override. **Kein Re-Render nötig**: die
+  synchron hält). Die **Mechanik** der Override-Blöcke (dass WERT **und** ALIAS
+  gesetzt werden, warum `darkmode.css` die Aliase direkt entkoppelt, Sonderfall
+  Normal = kein Override) steht im **Kopfkommentar von `aspekt_paletten.css`**;
+  dort nachlesen. **Kein Re-Render nötig**: die
   Custom-Properties kaskandieren, SVG `stroke`/`fill` via `var()` werden
   automatisch neu aufgelöst. Wähler ist die **Farbpalette-Sektion im
   Einstellungen-Popover** (Zahnrad-Button neben Darkmode; dort sitzen auch

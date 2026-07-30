@@ -9,16 +9,23 @@ Schritt-für-Schritt, einen Katalog von 26 realen Fallstricken (der wertvolle
 Teil — die meisten sind still) und eine Checkliste. Änderungshistorie seit der
 ersten (Singleton-)Version: `../../CHANGES_aspekt_1.38_1.40_und_grundgeruest.md`.
 
-## Die drei Eröffnungsregeln (aus dem Runbook, weil hier entschieden)
+## Die drei Eröffnungsregeln
 
-1. **Motor zuerst wählen.** Alles, was die Rotationsachse zeigen muss (ω, α,
-   Ebenenhöhe h), braucht `kreis_spiral` (ISO-3D); alles andere bleibt auf
-   `kreisbewegung` (2D-Draufsicht). Beliebige Bahnkurven → `grundbegriffe`.
+> **Wer schreibt was?** `CLAUDE.md` = *was gilt* (Regel/Zeiger) · Runbook
+> (`INTERAKTIVE_ASPEKT_FIGUREN.md`) = *wie* (Schritte/Fallstricke) · Code-Kommentar
+> = *warum*. Zahlen und Aufzählungen stehen an **genau einer** Stelle; die anderen
+> verweisen dorthin (P18-Regel: Mengen verlinken, nicht aufzählen).
+
+1. **Motor zuerst wählen** — der Entscheidungsbaum (Kreis-/Spiralbahn? liegt
+   etwas auf der Drehachse? beliebige Bahnkurve?) steht im Runbook-Block
+   „Motor-Wahl". Inventar + Provenienz der vier Motoren: s. u. „Die vier Motoren".
 2. **Eine bestehende Figur kopieren und feature-gaten, nie von Grund auf
-   schreiben.** Vorlagen-Kaskade: nächste Figur *nach Interaktionsmuster, nicht
-   nach Thema* → die Stand-alone-Sim → die statische v0.13-Figur → die
-   Legacy-Figur.
-3. **„wie Abb. 1.38" heißt pixel-identisch**, nicht „ähnlich".
+   schreiben.** Die ganze Vorlagen-Kaskade (worin suchen, in welcher Reihenfolge,
+   mit Begründung) steht im Runbook §0a — dort nachlesen, bevor eine Figur
+   begonnen wird.
+3. **„wie Abb. 1.38" heißt pixel-identisch**, nicht „ähnlich" — die Begründung
+   und die Konsequenz (jede Abweichung ist ein Fehler, auch eine „richtigere")
+   stehen im Runbook §0a.
 
 Vor dem Vorlegen selbst visuell prüfen:
 `.claude/skills/interaktive-aspekt-figur/scripts/figur_screenshot.mjs`
@@ -148,8 +155,8 @@ eigene Vorlage und jede Abweichung davon benennt.
 `aspekt_kreisbahn.js` (Abb. 1.38) exportiert zusätzlich die generischen Toggles
 (`toggle_aspekt` / `close_aspekt_overlay` / `toggle_analyse` /
 `toggle_panel_left`), die ALLE Figuren über die Bindung in `main.js`
-mitbenutzen, und ist die **optische Referenz** — „wie 1.38" heißt
-pixel-identisch, nicht „ähnlich".
+mitbenutzen, und ist die **optische Referenz** — „wie 1.38" heißt pixel-identisch
+(Regel 3; Begründung + Konsequenz im Runbook §0a).
 
 ### Dispatch (nicht Fabrik-gebaut)
 
@@ -179,36 +186,35 @@ Overlay das Overlay-Layout gewinnt.
 
 ### Farbpaletten (CVD)
 
-`aspekt_paletten.css` enthält vier Override-Blöcke
-`:root[data-palette="deuter|tritan"][data-darkmode="0|1"] .aspekt-figur, … #gc10`,
-die alle 20 `--kb-*`-Tokens setzen — **WERT und ALIAS**, weil `darkmode.css` die
-Aliase direkt entkoppelt und sonst im Fall Dunkel+CVD der Darkmode-Alias
-gewönne. „Normal" bekommt keinen Override (es gilt die Quellen-Palette bzw.
-`darkmode.css`). **Kein Re-Render nötig** — Custom Properties kaskadieren,
-`var(--kb-…)` in SVG-`stroke`/`fill` löst automatisch neu auf. Die
-Bedienfläche (Einstellungen-Popover, Persistenz, `data-palette`/`data-darkmode`)
-ist in `../CLAUDE.md` beschrieben.
+**Regel:** Vektor-Farben **nie** hardcodieren oder pro Figur neu definieren —
+immer die `--kb-*`-Tokens referenzieren. CVD-Paletten werden über Custom-
+Property-Overrides gesetzt, **ohne Re-Render** (Custom Properties kaskadieren,
+`var(--kb-…)` in SVG-`stroke`/`fill` löst automatisch neu auf).
 
 **Die Standard-Palette folgt den STATISCHEN Abbildungen** (Wiedererkennungswert,
 Nutzervorgabe v1.27): Hauptvektoren aus den `\textcolor[HTML]{…}` der
 Bildunterschriften, Szenen-Objekte aus den gezeichneten Farben der Quell-SVGs.
-Welche Quellfarben bewusst NICHT übernommen wurden und warum, steht begründet im
-Kopf von `aspekt_kreisbahn.css`. Folge: die Quellen-Palette ist unter
-Deuteranopie prinzipiell nicht trennscharf — deshalb misst der Prüfer sie nur
-als INFO.
+Folge: die Quellen-Palette ist unter Deuteranopie prinzipiell nicht trennscharf
+— deshalb misst der Prüfer sie nur als INFO.
 
-Bildunterschriften folgen der Palette: Farb-Worte als `farbwort`-Spans setzt
-`aspekt_kreisbahn.js::apply_farbwoerter` je Palette × Hell/Dunkel, Einfärbungen
-laufen über `.kb-sw-<tok>`-Klassen. Statische `nur-druck`-figcaptions und
-`bilder/*.png` bleiben fix.
+**Quellen (Werte + Mechanik am Datei-Kopf, hier nur Zeiger — an genau einer
+Stelle):**
+- `aspekt_kreisbahn.css`-Kopf — die `--kb-*`-Werte-Tabelle (kanonisch aus der
+  LaTeX-Quelle, Provenienz, welche Quellfarben bewusst nicht übernommen und
+  warum, Alias-Liste).
+- `aspekt_paletten.css`-Kopf — die CVD-Mechanik (wie viele Override-Blöcke, dass
+  WERT **und** ALIAS gesetzt werden, warum `darkmode.css` die Aliase direkt
+  entkoppelt, Sonderfall Normal = kein Override).
+- **Sonderfall Kapitel 1.1** (Abb. 1.1, `aspekt_grundbegriffe`): eigene
+  `--gk-*`-Tokenfamilie statt der kapitelgebundenen `--kb-*`-Vektorfarben, daher
+  DREI eigene Zweige — Hell in `aspekt_grundbegriffe.css`, Dunkel in
+  `darkmode.css`, CVD in `aspekt_paletten.css`. Aliase gibt es hier keine, und
+  die CVD-Selektoren sind spezifischer als der Darkmode-Block, also gewinnt
+  Dunkel+CVD ohne Zusatzregel.
 
-Prüfwerkzeuge in `.claude/skills/interaktive-aspekt-figur/scripts/`:
-`cvd_check.mjs` (Brettel + ΔE76, Exit-Code nur aus den vier CVD-Paletten) und
-`caption_farbwort_check.mjs` (Struktur der Caption-Farbwörter).
-
-**Sonderfall Kapitel 1.1** (Abb. 1.1, `aspekt_grundbegriffe`): eigene
-`--gk-*`-Tokenfamilie statt der kapitelgebundenen `--kb-*`-Vektorfarben, daher
-DREI eigene Zweige — Hell in `aspekt_grundbegriffe.css`, Dunkel in
-`darkmode.css`, CVD in `aspekt_paletten.css`. Aliase gibt es hier keine, und die
-CVD-Selektoren sind spezifischer als der Darkmode-Block, also gewinnt Dunkel+CVD
-ohne Zusatzregel.
+**Bedienung + Prüfung** (wie wählen, `apply_farbwoerter`-Wortmap pro Palette ×
+Hell/Dunkel, `.kb-sw-<tok>`-Klassen, `cvd_check.mjs`/`caption_farbwort_check.mjs`,
+statische `nur-druck`-Captions + `bilder/*.png` bleiben fix) stehen im Runbook
+§4 — dort nachlesen, bevor an Palette/Caption gearbeitet wird. Die Bedienfläche
+(Einstellungen-Popover, Persistenz `skript_palette`/`data-palette`/`data-darkmode`)
+ist in `../CLAUDE.md` beschrieben.
