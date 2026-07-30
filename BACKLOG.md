@@ -1403,22 +1403,23 @@ Vorbilder prüfen): (1) nächste Aspekt-Figur *nach Interaktionsmuster, nicht Th
   ohne Zeitachse → neu (nächstes: `aspekt_kreisbahn` mit φ-scrub); (2) die
   Stand-alone-Sim (Motor A/B); (3) die statische v0.13-Abbildung; (4) Legacy.
 
-**Offen (P16-0 mit Nutzer klären):**
-- **Granularität:** 1:1 pro Abbildung (11 Aspekt-Figuren, Static jeweils
-  `.nur-druck`) ODER konsolidiert (z. B. eine interaktive Figur für 1.4–1.7 mit
-  Achs-Konfig-Toggle statt 4 separater; eine für 1.18a/b mit Koordinatensystem-
-  Toggle). Konsolidiert ist didaktisch stärker (Umschalten statt nebeneinander
-  Vergleichen), bricht aber die „pixel-identisch"-Regel und braucht eine klare
-  Zuordnung der Abbildungsnummer/des `data-figref`.
-- **Motor-Wahl bestätigen:** beide Motoren portieren ODER nur Motor B (α=90-Lock
-  deckt die 1D-Figuren ab)? Empfehlung: beide — Motor A ist für 1.3/1.4–1.7/1.19
-  didaktisch sauberer (keine x-Achse, Achs-Vergleich ist der Punkt); Motor B
-  für 1.9/1.14/1.18/1.20.
+**Entschieden 2026-07-30 (Nutzervorgabe):**
+- **Granularität: 1:1 pro Abbildung** — jede statische Abbildung bekommt ihre
+  eigene interaktive Aspekt-Figur als granulare Reduktion (wie bisher bei
+  1.38/1.39/…). Die **volle Stand-alone-Simulation** wird *separat* später
+  verfügbar (eigene öffentliche Instanz, s. Backlog „Link zur vollständigen
+  Stand-alone-Simulation"), im Skript wird *schrittweise granular* erweitert.
+  **Keine Konsolidierung** (kein Achs-Konfig-Toggle für 1.4–1.7, kein Koordinaten-
+  system-Toggle für 1.18a/b) — jede der 11 Abbildungen = eine Figur.
+- **Motor-Wahl: beide Motoren** portieren (Empfehlung gefolgt) — Motor A
+  `freier_fall` für 1.3/1.4–1.7/1.19, Motor B `schraeger_wurf` für 1.9/1.14/
+  1.18a/b/1.20.
 
 ### Sub-Tasks
 
-- [ ] **P16-0 Klärung** — Granularität (1:1 vs. konsolidiert) + Motor-Wahl (beide
-  vs. nur B) + Vorlagen-Hierarchie pro Figur festlegen. *(S)*
+- [x] **P16-0 Klärung** — Granularität: **1:1 pro Abbildung** (keine Konsolidierung);
+  Motor-Wahl: **beide Motoren** (A + B). Vorlagen-Hierarchie pro Figur bei
+  Umsetzung festgelegt. *(S)* — entschieden 2026-07-30.
 - [ ] **P16-1 Motor A portieren** — `src/figures/freier_fall/{constants,physics,render,state,runtime}.js`,
   reuse `../kreisbewegung/lib/*`, `initFreierFall()` aus `main.js::init()`,
   PORT-AENDERUNG-Marker. *(L)*
@@ -1428,16 +1429,15 @@ Vorbilder prüfen): (1) nächste Aspekt-Figur *nach Interaktionsmuster, nicht Th
 - [ ] **P16-3 Aspekt-Figur Abb. 1.3** — Freier Fall s-t (Motor A). Copy &
   feature-gate nächstes Weg-Zeit-Template; `data-aspekt` + `data-figref`,
   Registrierung `main.js::ASPEKT_FACTORIES`. *(M)*
-- [ ] **P16-4 Aspekt-Figur(en) Abb. 1.4–1.7** — senkrechter Wurf s-t, 4 Y-Achsen-
-  Konfigs (Motor A) — nach P16-0: 4 Figuren oder 1 mit Toggle. *(M–L)*
+- [ ] **P16-4 Aspekt-Figuren Abb. 1.4–1.7** — senkrechter Wurf s-t, 4 Y-Achsen-
+  Konfigs (Motor A); **4 separate Figuren** (1:1, je eigene Achs-Konfig). *(M–L)*
 - [ ] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
 - [ ] **P16-6 Aspekt-Figur Abb. 1.9** — schräger Wurf: Flugbahn + 2× s-t x/y
   (Motor B). *(M)*
 - [ ] **P16-7 Aspekt-Figur Abb. 1.14** — Bahnkurve y(x) + Schema (Motor B, keine
   Zeitachse → neuer Interaktionsmuster-Zweig). *(M)*
-- [ ] **P16-8 Aspekt-Figur Abb. 1.18a/b** — Tangentialgeschwindigkeit + v⃗/
-  Ortsvektor, 2 Koordinatensysteme (Motor B; 2 Subfiguren oder Toggle nach
-  P16-0). *(M)*
+- [ ] **P16-8 Aspekt-Figuren Abb. 1.18a/b** — Tangentialgeschwindigkeit + v⃗/
+  Ortsvektor, 2 Koordinatensysteme (Motor B); **2 separate Figuren** (1:1). *(M)*
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
