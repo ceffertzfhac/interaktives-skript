@@ -32,7 +32,7 @@ die Links hier zeigen auf den Pfad.
 | [P14 — Formel-Überstand je Width-Modus](backlog/P14-formel-ueberstand.md) | 0/5 | schmal/normal/breit prüfen und beheben |
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |
-| [P7 — Kapitel 0 („Grundlagen") migrieren](backlog/P7-kapitel-0-grundlagen.md) | 7/3 | Migration erledigt; offen sind QR-Codes auf Aspekt-Figuren, Druck-Auswahl-Dropdown, Link zur Stand-alone-Sim |
+| [P7 — Kapitel 0 („Grundlagen") migrieren](backlog/P7-kapitel-0-grundlagen.md) | 9/1 | Migration erledigt; QR-Druck + Druck-Auswahl-Dropdown waren schon code-complete (Backlog stale); offen nur noch der Sim-Link (URL-Mapping nötig) |
 | [P3 — Offene Punkte aus der Verifikation Kapitel 1.4](backlog/P3-verifikation-kapitel-1.4.md) | 16/1 | offen nur noch die Browser-Phasen (Wort-für-Wort gegen PDF, Druck, Sicht) |
 | [P19 — Doku-Hygiene: Restbefunde aus dem Review nach P18](backlog/P19-doku-hygiene.md) | 0/8 | schlafendes `gcN`-System in der Doku unmarkiert, Tatsachen an drei Orten, O(n)-Prüfpläne, fehlender Drift-Wächter |
 
