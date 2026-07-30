@@ -33,7 +33,6 @@ die Links hier zeigen auf den Pfad.
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |
 | [P7 — Kapitel 0 („Grundlagen") migrieren](backlog/P7-kapitel-0-grundlagen.md) | 7/3 | Migration erledigt; offen sind QR-Codes auf Aspekt-Figuren, Druck-Auswahl-Dropdown, Link zur Stand-alone-Sim |
-| [P18 — Dokumentations-Architektur context-freundlich umbauen](backlog/P18-doku-architektur.md) | 6/2 | CLAUDE.md-Umbau erledigt; offen: dieser Backlog-Split (P18-6) und die Skill-Pfade (P18-7) |
 | [P3 — Offene Punkte aus der Verifikation Kapitel 1.4](backlog/P3-verifikation-kapitel-1.4.md) | 16/1 | offen nur noch die Browser-Phasen (Wort-für-Wort gegen PDF, Druck, Sicht) |
 | [P-Aspekt-Figuren — Optik & Interaktion (Kap. 1.4)](backlog/PA-aspekt-figuren-optik.md) | 11/1 | offen nur noch P-AF-7: echtes Pause-Design in der Runbar |
 
@@ -50,6 +49,7 @@ die Links hier zeigen auf den Pfad.
 | [P9 — Schiene gefenstert](backlog/P9-schiene-gefenstert.md) | 3/0 | Vorgänger + aktives Kapitel + Nachfolger |
 | [P10 — Fortschrittsleiste in der Top-Bar](backlog/P10-fortschrittsleiste.md) | 2/0 | je nach Platz kürzen/strecken |
 | [P11 — Schmaler Header (≤ 1024 px)](backlog/P11-schmaler-header.md) | 2/0 | Brand verdichten + Width-Buttons S/M/L |
+| [P18 — Dokumentations-Architektur context-freundlich umbauen](backlog/P18-doku-architektur.md) | 8/0 | Wurzel-`CLAUDE.md` −82 %, Subsystem-Doku in verschachtelte `CLAUDE.md`, Doku-Index, Backlog-Split |
 
 ### Grundlage
 

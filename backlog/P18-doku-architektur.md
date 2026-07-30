@@ -140,14 +140,23 @@ Pflichtkontext pro Turn ≈ **11–12k → ~3k Token**; Backlog-Zugriff **33k �
   der neuen Dateien gesucht. 17 Fehltreffer, davon 16 Zitier-/Präfix-/Umbruch-
   Artefakte (verifiziert), **eine echte Lücke** (Fragment→Themenkomplex-
   Zuordnung) → durch einen Reproduktions-Grep in `chapters/CLAUDE.md` geschlossen.
-- [ ] **P18-6 BACKLOG-Split**: Index + `backlog/PNN-*.md` + `BACKLOG_ARCHIV.md`
-  für erledigte Items. Separat vom CLAUDE.md-Umbau machbar. **Offen — der
-  größere verbliebene Hebel** (123 KB ≈ 33k Token bei jedem Backlog-Zugriff). *(M)*
-- [ ] **P18-7 Skills/Runbooks** auf die neuen Pfade verweisen lassen (die vier
-  `SKILL.md` referenzieren heute CLAUDE.md-Abschnitte namentlich, z. B.
-  `v013-kapitel-migration` auf „Versionierung" und „CLAUDE.md ergänzen, falls
-  sich Architektur oder Konventionen geändert haben" — Letzteres muss jetzt auf
-  die **zuständige** verschachtelte Datei zeigen). Offen. *(S)*
+- [x] **P18-6 BACKLOG-Split**: Index + ein Item je Datei. *(M)* — 186d9fa,
+  131 KB → 6,6 KB Index + `backlog/<item>.md`. Zerlegung mechanisch und
+  **byte-exakt** (das Skript bricht ab, wenn Kopf + Item-Blöcke + Schwanz das
+  Original nicht zeichengenau reproduzieren); 22 Items, alle verlinkt, keine
+  verwaiste Datei. **Abweichung:** kein separates `BACKLOG_ARCHIV.md` — mit
+  einer Datei je Item lädt erledigte Historie ohnehin nur mit ihrem Item, und
+  ein zweiter Ablageort wäre eine weitere Stelle, die synchron bleiben müsste.
+  Der Index trennt stattdessen „Offen"/„Erledigt" mit Zählern erledigt/offen.
+- [x] **P18-7 Skills/Runbooks** auf die neuen Pfade verweisen lassen. *(S)* —
+  bf2549b. „CLAUDE.md ergänzen" zeigt jetzt auf die **zuständige**
+  verschachtelte Datei; die drei übrigen Skills bekamen je einen Zeiger dorthin;
+  „Item 64"/„Backlog:64" (schon vor dem Split tote Verweise) und die
+  „BACKLOG.md P12/P18"-Stellen zeigen auf die jeweilige Item-Datei.
+  **Dabei zwei inhaltlich veraltete Stellen gefunden:** Skill *und*
+  MIGRATION-Runbook beschrieben das MathJax-Abschnittspräfix noch als Konstante
+  und als offenen Backlog-Punkt — es wird seit v1.7 pro Seite ermittelt
+  (P12-0a, verifiziert 2026-07-24). Beide korrigiert.
 
 ### Nebenbefund beim Umbau
 
