@@ -54,6 +54,17 @@ Anweisung + Skripte; die Begründung steht jeweils im verlinkten Runbook.
 | `v013-abbildungen` | Abbildungen übernehmen, PDF/TikZ→PNG, Breiten | `bilder_pruefen.py`, `breiten_uebernehmen.py` |
 | `v013-verifikation` | migriertes Kapitel prüfen | `dom_harness.mjs`, `mathjax_pruefen.cjs`, `referenznummern.py` |
 
+**Doku-Drift-Wächter** (kein Skill, Standalone-Skript in der Repo-Wurzel):
+`python3 doku_drift_check.py` — nur stdlib, läuft in Sekunden, Exit ≠0 bei
+Abweichung. Prüft, dass Zahlen/Existenzaussagen in der Doku mit dem Code
+übereinstimmen: `aspekt_*.js`-Zahl == `ASPEKT_FACTORIES` == README ·
+`data-aspekt` in chapters ⊆ `ASPEKT_FACTORIES` · Motor-Ordner == Motoren-Tabelle ·
+README-Kapitelzahl == `ch_*.html`-Count · `--kb-*`/`--gk-*`-Token je
+Palettenblock == genannter Zahl · genannte Datei-/Symbolnamen existieren (oder
+sind als `Abgelöst seit v1.7` markiert) · kein `id="gcN"` in chapters. **Nach
+jeder Änderung an Figuren-Anzahl, Motoren, Kapiteln oder Paletten-Tokens
+laufen lassen** (P19-4).
+
 ## Wo Doku NICHT steht (bewusst)
 
 Damit der Pflichtkontext nicht mit dem Projekt wächst, sind diese Dinge

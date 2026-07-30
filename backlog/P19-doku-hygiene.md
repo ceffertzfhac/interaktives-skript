@@ -86,13 +86,24 @@ Motor, fehlende `center.js`/`footnotes.js`, 18 statt 20 Paletten-Token, gc10.
 Gemeinsames Muster: **die Doku behauptet eine Zahl oder eine Existenz, der Code
 weiß es besser.**
 
-- [ ] **P19-4** Kleines Skript (`.claude/skills/…/scripts/doku_drift_check.py`
-  oder Repo-Wurzel), das genau das prüft und bei Abweichung mit Exit≠0 endet:
-  Anzahl `aspekt_*.js` vs. `ASPEKT_FACTORIES` vs. README-Zahl · Motor-Ordner in
-  `src/figures/` vs. Motoren-Tabelle · `--kb-*`-Token je Palettenblock vs.
-  genannte Zahl · in der Doku genannte Datei-/Symbolnamen existieren · in der
-  Doku genannte `id="gcN"` existieren. Läuft in Sekunden, braucht keine
-  Abhängigkeiten (die Vorgabe „kein Paketmanager" bleibt gewahrt).
+- [x] **P19-4** Kleines Skript (`doku_drift_check.py` in der Repo-Wurzel), das
+  genau das prüft und bei Abweichung mit Exit≠0 endet. *(S, hoher Hebel)* —
+  umgesetzt 2026-07-30: `doku_drift_check.py`, nur Python-stdlib, `python3
+  doku_drift_check.py`, 7 Prüfungen, Exit≠0 bei Abweichung. Prüft: (1)
+  `aspekt_*.js`-Zahl == `ASPEKT_FACTORIES`-Länge == README-Zahl (je 16) ·
+  (2) `data-aspekt`-Keys in `chapters/*.html` ⊆ `ASPEKT_FACTORIES` · (3)
+  Motor-Ordner in `src/figures/` == Motoren-Tabelle in `figures/CLAUDE.md`
+  (je 4, gleiche Namen) · (4) README „17 Kapitel-Fragmente" == `ch_*.html`-Count
+  + „Vier Themenkomplexe" plausibilisiert (`data-tk-num` in `index.html`) ·
+  (5) `--kb-*`/`--gk-*`-Token je Palettenblock (4 Blöcke) == im
+  `aspekt_paletten.css`-Kopf genannter Zahl (20/5) · (6) in Doku genannte
+  Datei-/Symbolnamen existieren — Live-Referenzen müssen da sein, Legacy-Namen
+  (`factory.js`/`fig_5.js`/`transform.js`) nur in Dateien mit dem Marker
+  „Abgelöst seit v1.7" (P19-1) · (7) kein `id="gcN"` in `chapters/*.html`.
+  Negativ-Tests (README-Zahl verfälscht, `id="gc10"` eingesetzt) feuern wie
+  erwartet; danach clean. Eintrag in `DOKUMENTATION.md` „Ausführbare Helfer".
+  **Nach jeder Änderung an Figuren-Anzahl, Motoren, Kapiteln oder Paletten-
+  Tokens laufen lassen.**
 
 ---
 
