@@ -2,7 +2,7 @@
 
 Entstanden aus dem initialen Code-Review (Stand: Legacy/WIP-Split). Ziel: Modernisierung nach State-of-the-art Web-Dev in den Dimensionen **Performanz, Aktualität, Wartbarkeit** und – besondere Priorität – **Token-Effizienz beim Arbeiten im WIP** (Kosten für Agenten-Edits).
 
-> **Skalierbarkeits-Vorgabe (hard constraint):** Das finale Skript wird **deutlich größer** — ein *komplettes* Skript mit **15+ Kapiteln** und **vielen weiteren Abbildungen**; das klassische PDF-Skript hat **fast 400 Seiten**, d. h. auch der Prosa-Umfang ist in dieser Größenordnung. Aktueller Stand: ~9 Abschnitte, 11 interaktive Figuren, eine 2787-Zeilen-`script.js` und eine 1558-Zeilen-`index.html`. Die heutige Monolith- + Copy-Paste-pro-Figur-Architektur skaliert *nicht* dorthin (`script.js` → Zehntausende Zeilen, Figuren-Familien vervielfachen sich, `index.html` → Zehntausende Zeilen Prosa, nicht mehr in einem Edit-Context handhabbar). **Jedes Architektur-Item ist gegen das ~400-Seiten-/15+-Kapitel-Ziel zu bewerten; Hinzufügen eines Kapitels/ einer Figur muss O(1) Dateien und kleine Token-Kosten sein, nicht O(Größe-der-Gesamtdatei). Modularisieren muss sowohl Figuren-Logik *als auch* Prosa-Inhalt.**
+> **Skalierbarkeits-Vorgabe (hard constraint):** Das finale Skript wird **deutlich größer** — ein *komplettes* Skript mit **15+ Kapiteln** und **vielen weiteren Abbildungen**; das klassische PDF-Skript hat **fast 400 Seiten**, d. h. auch der Prosa-Umfang ist in dieser Größenordnung. Stand **bei Entstehung dieses Backlogs** (Legacy/WIP-Split): ~9 Abschnitte, 11 interaktive Figuren, eine 2787-Zeilen-`script.js` und eine 1558-Zeilen-`index.html`. Stand **2026-07-30**: 17 Kapitel-Fragmente, 16 interaktive Aspekt-Figuren auf vier Motoren, keine `script.js` mehr (modularisiertes ESM), `index.html` 352 Zeilen (reine Shell) — die Monolith-Punkte sind also erledigt, die Skalierungs-Vorgabe bleibt. Die heutige Monolith- + Copy-Paste-pro-Figur-Architektur skaliert *nicht* dorthin (`script.js` → Zehntausende Zeilen, Figuren-Familien vervielfachen sich, `index.html` → Zehntausende Zeilen Prosa, nicht mehr in einem Edit-Context handhabbar). **Jedes Architektur-Item ist gegen das ~400-Seiten-/15+-Kapitel-Ziel zu bewerten; Hinzufügen eines Kapitels/ einer Figur muss O(1) Dateien und kleine Token-Kosten sein, nicht O(Größe-der-Gesamtdatei). Modularisieren muss sowohl Figuren-Logik *als auch* Prosa-Inhalt.**
 
 Alle Änderungen **nur in `InteraktivesSkript_WIP/`**. `InteraktivesSkript_legacy/` bleibt eingefrorene Referenz.
 
@@ -35,6 +35,7 @@ die Links hier zeigen auf den Pfad.
 | [P7 — Kapitel 0 („Grundlagen") migrieren](backlog/P7-kapitel-0-grundlagen.md) | 7/3 | Migration erledigt; offen sind QR-Codes auf Aspekt-Figuren, Druck-Auswahl-Dropdown, Link zur Stand-alone-Sim |
 | [P3 — Offene Punkte aus der Verifikation Kapitel 1.4](backlog/P3-verifikation-kapitel-1.4.md) | 16/1 | offen nur noch die Browser-Phasen (Wort-für-Wort gegen PDF, Druck, Sicht) |
 | [P-Aspekt-Figuren — Optik & Interaktion (Kap. 1.4)](backlog/PA-aspekt-figuren-optik.md) | 11/1 | offen nur noch P-AF-7: echtes Pause-Design in der Runbar |
+| [P19 — Doku-Hygiene: Restbefunde aus dem Review nach P18](backlog/P19-doku-hygiene.md) | 0/8 | schlafendes `gcN`-System in der Doku unmarkiert, Tatsachen an drei Orten, O(n)-Prüfpläne, fehlender Drift-Wächter |
 
 ### Erledigt
 
