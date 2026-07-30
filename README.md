@@ -69,7 +69,8 @@ python3 -m http.server 8000
 | `InteraktivesSkript_WIP/src/` | ES-Module: `main.js` + Kern, Seiten, Shell, Druck, `figures/` (4 Motoren + 16 Aspekt-Figuren) |
 | `InteraktivesSkript_WIP/bilder/` | statische Abbildungen (auch Druck-Fallback) |
 | `BACKLOG.md` | Roadmap und offene Punkte |
-| `CLAUDE.md` | Architektur- und Konventionsübersicht für die Weiterentwicklung |
+| `DOKUMENTATION.md` | Index aller Dokus mit „lies das, wenn …" — der Einstieg |
+| `CLAUDE.md` | Arbeitsregeln + Wegweiser; die Subsystem-Details stehen in je einer `CLAUDE.md` neben dem Code (`chapters/`, `src/`, `src/figures/`) |
 
 ## Technik
 
