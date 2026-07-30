@@ -426,6 +426,24 @@
 .aspekt-figur .aspekt-lupe:hover { color: var(--kb-accent); border-color: var(--kb-accent); }
 .aspekt-figur .aspekt-lupe svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 
+/* ── Sim-Link (↗ im Kasten): externer Link zur Stand-alone-Sim, neben der Lupe
+   (gleicher Anker: .aspekt-runbar wenn vorhanden, sonst .aspekt-scene). Optik
+   1:1 wie die Lupe (Icon-Button 32×32, Rahmen, Surface). Außerhalb der Runbar
+   absolut oben rechts mit 48 px Versatz (links der Lupe); in der Runbar im
+   Flex-Fluss, per margin-left:auto rechtsbündig, Lupe folgt mit 8 px (main.js
+   setzt den Inline-Abstand an der Lupe). a statt button: semantisch ein Link. */
+.aspekt-figur .aspekt-simlink {
+    position: absolute; top: 8px; right: 48px; z-index: 8;
+    width: 32px; height: 32px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border); border-radius: 8px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+    text-decoration: none;
+}
+.aspekt-figur .aspekt-runbar .aspekt-simlink { position: static; margin-left: auto; }
+.aspekt-figur .aspekt-simlink:hover { color: var(--kb-accent); border-color: var(--kb-accent); }
+.aspekt-figur .aspekt-simlink svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
 /* ── Bildunterschrift (uebernimmt die Rolle von Abb. 1.38 am Bildschirm) ── */
 .aspekt-figur .aspekt-caption {
     padding: 10px 14px 12px; font-size: 0.85em; line-height: 1.45;
