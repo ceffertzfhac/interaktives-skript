@@ -1,16 +1,47 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code (claude.ai/code) when working in this repository.
+
+**Diese Datei ist bewusst kurz und muss es bleiben** — sie liegt in *jedem* Turn
+im Kontext. Hier stehen nur Regeln, die für *jede* Aufgabe gelten. Alles
+Subsystem-Wissen liegt in verschachtelten `CLAUDE.md`-Dateien, die Claude Code
+automatisch nachlädt, sobald Dateien im jeweiligen Unterbaum gelesen oder
+geändert werden (s. Wegweiser unten).
+
+> **Doku-Regel (P18):** *Mengen werden nicht in Prosa aufgezählt, sondern
+> verlinkt.* Eine neue Figur, ein neuer Motor, ein neues Kapitel dürfen **keine
+> Zeile** in dieser Datei erzeugen — sonst wächst der Pflichtkontext mit dem
+> Projekt. Detail gehört zum Code (Modul-Kopfkommentar) oder ins zuständige
+> Runbook, nicht hierher.
 
 ## What this is
 
-A static, single-page interactive physics script (German, topic: rotational motion / *Drehbewegungen auf Kreisbahnen*) for an FH Aachen course. There is **no build system, package manager, bundler, or test suite** — it is plain HTML/CSS/vanilla JS served as static files. All interactivity is hand-written DOM/SVG manipulation. Two third-party libraries: MathJax v3 `tex-svg` (LaTeX rendering) from a CDN, and `qrjs2` (print QR codes) **vendored locally** at `src/vendor/qrjs2.min.js` — see `src/vendor/README.md` for provenance/licence/checksum and why it is not on a CDN.
+A static, single-page interactive physics script (German, topic: rotational
+motion / *Drehbewegungen auf Kreisbahnen*) for an FH Aachen course. There is **no
+build system, package manager, bundler, or test suite** — it is plain
+HTML/CSS/vanilla JS served as static files. All interactivity is hand-written
+DOM/SVG manipulation. Two third-party libraries: MathJax v3 `tex-svg` (LaTeX
+rendering) from a CDN, and `qrjs2` (print QR codes) **vendored locally** at
+`src/vendor/qrjs2.min.js` — see `src/vendor/README.md` for provenance/licence/
+checksum and why it is not on a CDN.
 
-> **Scalability is a hard constraint.** The final script will be a *complete* script with **15+ chapters and many more figures** (current WIP: TK 0–3 migrated across 17 chapter fragments + 14 interactive aspect figures, modularized ESM — the content target lives in `Input/v0.13/`). The original monolithic, copy-paste-per-figure architecture (preserved in `Input/InteraktivesSkript_legacy/`) does not scale there. When proposing changes, optimize for "adding a chapter/figure is O(1) files and small token cost," not O(size-of-whole-file). The modernization plan toward that target lives in `BACKLOG.md` (with a target architecture sketch). When working in the WIP, also weigh **token efficiency of edits** — prefer edits that touch one small module over ones that require loading a whole large file.
+> **Scalability is a hard constraint.** The final script will be a *complete*
+> script with **15+ chapters and many more figures** — the content target lives
+> in `Input/v0.13/`. The original monolithic, copy-paste-per-figure architecture
+> (preserved in `Input/InteraktivesSkript_legacy/`) does not scale there. When
+> proposing changes, optimize for "adding a chapter/figure is O(1) files and
+> small token cost," not O(size-of-whole-file). The modernization plan toward
+> that target lives in `BACKLOG.md` (with a target architecture sketch). When
+> working in the WIP, also weigh **token efficiency of edits** — prefer edits
+> that touch one small module over ones that require loading a whole large file.
 
 ## Running it
 
-Serve the `InteraktivesSkript_WIP/` directory with any static server and open `index.html`. MathJax loads from a CDN, so a network connection is needed for formulas (qrjs2 is local); and chapter prose is fetched at runtime (`src/chapters.js`), which **requires an http(s) origin — `file://` will load no chapter content** (the page shell still renders). A local server covers both:
+Serve `InteraktivesSkript_WIP/` with any static server and open `index.html`.
+MathJax loads from a CDN, so a network connection is needed for formulas (qrjs2
+is local); chapter prose is fetched at runtime (`src/chapters.js`), which
+**requires an http(s) origin — `file://` will load no chapter content** (the page
+shell still renders). A local server covers both:
 
 ```
 cd InteraktivesSkript_WIP
@@ -18,240 +49,79 @@ python3 -m http.server 8000
 # open http://localhost:8000/
 ```
 
-There is nothing to build, lint, or test. To verify a change, reload the page and exercise the affected slider/figure.
+Es gibt nichts zu bauen, zu linten oder zu testen. Eine Änderung prüft man,
+indem man die Seite neu lädt und die betroffene Figur bedient.
 
 ## Repository layout
 
-The repo root holds:
+- `InteraktivesSkript_WIP/` — **the working copy. All edits go here.** This is
+  the only folder you should modify. (Innerhalb davon ist `Archiv/` eine
+  historische Kopie und ebenfalls in Ruhe zu lassen.)
+- `InteraktivesSkript_DesignPrototype/` — a preserved snapshot kept as a
+  design/diff reference. **Read-only, never edit.**
+- `Input/` — drop folder for source material the user provides; **read-only
+  reference, do not edit**. **Untracked and git-ignored on purpose** — the
+  repository is public and this material must not be published, so it exists
+  only in the local working copy (see `.gitignore`). **Never `git add` anything
+  under `Input/`:**
+  - `Input/InteraktivesSkript_legacy/` — the **frozen baseline** snapshot of the
+    site as of the split. Do not edit; it exists for reference/diffing against
+    WIP. Started byte-identical to WIP. *(The legacy `src/script.js` — the whole
+    app in one 2787-line file — lives only here now.)*
+  - `Input/v0.13/` — LaTeX source of the **complete target script**
+    (`Physik_pskript_v0.13.tex` + compiled `.pdf` + per-chapter `.tex` files)
+    spanning all 15+ chapters (Mechanics, EM, Schwingungen, Wellen, Gravitation,
+    Stöße, …). This is the content target the WIP is being scaled toward.
+  - `Input/Simulationen/` — 16 standalone simulation projects (Atwood,
+    Federpendel, freier Fall, Kreisbewegung, Wellen, Lorentz-force, schiefer
+    Wurf, …) — candidate source material for future interactive figures. Welche
+    davon bereits als Figuren-Motor portiert sind (und mit welchen
+    Port-Änderungen), steht in `InteraktivesSkript_WIP/src/figures/CLAUDE.md`.
 
-- `InteraktivesSkript_WIP/` — **the working copy. All edits go here.** This is the only folder you should modify.
-- `InteraktivesSkript_DesignPrototype/` — a preserved snapshot kept as a design/diff reference. **Read-only, never edit** (same status as `Input/InteraktivesSkript_legacy/`).
-- `Input/` — drop folder for source material the user provides; **read-only reference, do not edit**. **Untracked and git-ignored on purpose** — the repository is public and this material must not be published, so it exists only in the local working copy (see `.gitignore`). Never `git add` anything under `Input/`:
-  - `Input/InteraktivesSkript_legacy/` — the **frozen baseline** snapshot of the site as of the split (relocated here from the repo root). Do not edit; it exists for reference/diffing against WIP. Started byte-identical to WIP. *(The legacy `src/script.js` — the whole app in one 2787-line file — lives only here now; WIP is modularized, see Architecture.)*
-  - `Input/v0.13/` — LaTeX source of the **complete target script** (`Physik_pskript_v0.13.tex` + compiled `.pdf` + per-chapter `.tex` files) spanning all 15+ chapters (Mechanics, EM, Schwingungen, Wellen, Gravitation, Stöße, …). This is the content target the WIP is being scaled toward.
-  - `Input/Simulationen/` — 16 standalone simulation projects (Atwood, Federpendel, freier Fall, Kreisbewegung, Wellen, Lorentz-force, schiefer Wurf, …) — candidate source material for future interactive figures. Two are already adapted into the WIP as the two figure motors: `Project_kreisbewegung_simulation/` → `src/figures/kreisbewegung/` (gc10, section 1.5.5; its sibling-project `shared/js/*` dependency, not part of this repo's `Input/`, was ported alongside into `kreisbewegung/lib/`) and `Project_kreis_spiralbewegung_simulation/` → `src/figures/kreis_spiral/` (reuses the already-ported `kreisbewegung/lib/*`; the sim's own UI/topbar and `export-image.js` were not needed). Details: "Module layout" below.
+## Arbeitsregeln (Nutzervorgaben — gelten bei JEDEM Aufruf)
 
-Inside the WIP site folder the structure is:
-  - `index.html` — **the shell only**: header/overlays, `#paper` mount holding one `<div data-chapter="…">` placeholder per chapter + the global `.chapter-pagenav`. Chapter prose lives in `chapters/` and is injected at runtime (see `src/chapters.js`). MathJax `$$…$$` / `\[…\]` / `\(…\)` formulas sit inside the chapter fragments, not here.
-  - `chapters/` — **one HTML fragment per v0.13 section** (`ch_NN[_MM]_<slug>.html`, currently 17 files: `ch_00_grundlagen` = TK 0, `ch_01_*` + `ch_02_dynamik_drehbewegung` = TK 1 Mechanik, `ch_03_*` = TK 2 Elektromagnetismus, `ch_04_*` = TK 3 Schwingungen/Wellen; each transcribed 1:1 from its `Input/v0.13/*.tex`). Each fragment holds the h2 section intro + h3 subsections + their `<section>`s, figures, highlight boxes — everything that used to be inline in `index.html`. Fetched + injected by `src/chapters.js` before `paginate()`; reading order and the TK grouping come from the `<div data-chapter="…" data-tk-num data-tk-title>` order in `index.html` (note `ch_02` sits between `ch_01_03` and `ch_01_06`). Prose is **static** — interactivity is added per figure (see aspect figures). **Adding a section = one new file here + one `<div data-chapter="…">` line in `index.html` (O(1)).**
-  - `MIGRATION_v0.13_nach_HTML.md` — **runbook for migrating the next chapter out of `Input/v0.13/`** (German): counter scopes, asset pipeline (PDF/TikZ → PNG), LaTeX→HTML macro mapping, MathJax config, cross-references, the three verification harnesses, a catalogue of 13 real pitfalls with how each was detected, and a checklist. **Read it before starting another chapter** — most of the listed traps are silent (wrong-but-consistent numbering, an image that is a PDF wearing a `.png` extension, a loaded-but-not-enabled MathJax package).
-  - `VERIFIKATION_kapitel_1.4.md` — phase-by-phase test plan for the migrated chapter, with acceptance criteria
-  - `INTERAKTIVE_ASPEKT_FIGUREN.md` — **runbook for building an interactive "aspect figure"** (German): a stand-alone sim's engine feature-gated onto one chapter aspect, two-stage (inline + magnifier overlay), registered via `main.js::ASPEKT_FACTORIES`. **Read it before touching an aspect figure.** Its three opening rules, because they decide everything downstream: (1) **pick the motor first** — anything that must show the rotation axis (ω, α, plane height h) needs `kreis_spiral` (ISO 3D), everything else stays on `kreisbewegung` (2D top-down); (2) **copy an existing figure and feature-gate it, never write one from scratch** (template cascade: nearest figure *by interaction pattern, not topic* → the stand-alone sim → the static v0.13 figure → the legacy figure); (3) **"like fig. 1.38" means pixel-identical**, not "similar". The rest is concept, step-by-step, a **catalogue of 26 real pitfalls** (the valuable part — most are silent) and a checklist; do not mirror that catalogue here, it grows with every figure. Verify visually *yourself* before asking the user — `.claude/skills/interaktive-aspekt-figur/scripts/figur_screenshot.mjs` (headless Chromium, per width-mode/overlay screenshots + ink-box geometry); looking beats measuring, and when measuring, measure the innermost drawn element. Change history since the first (singleton) version: `CHANGES_aspekt_1.38_1.40_und_grundgeruest.md`.
-  - `src/` — the ESM modules (`main.js` entry + `core/transform/ui/print/pages/shell/chapters.js` + `figures/*.js`); no monolithic `script.js` (that survives only in `Input/InteraktivesSkript_legacy/`)
-  - `src/styles.css`, `src/darkmode.css` — styles; `darkmode.css` is loaded but `disabled` and toggled at runtime
-  - `bilder/` — static figure PNGs/SVGs used in static mode and prose
-  - `src/assets/` — SVG/PNG icons injected into highlight boxes
-  - `Archiv/` — an older snapshot of the same site nested inside (reference only, not linked/active)
+- **Nur `InteraktivesSkript_WIP/` bearbeiten.** `Input/` und
+  `InteraktivesSkript_DesignPrototype/` sind Referenz, niemals ändern.
+- **Kleinschrittig commiten.** Änderungen werden **pro logischer Einheit** als
+  eigener kleiner Commit abgegeben, nicht als ein großer Sammel-Commit. Eine
+  logische Einheit = ein Feature/Aspekt/Fix samt seinen Dateien. Vor jedem
+  Commit die betroffenen Dateien gezielt `git add`-en, `git diff --cached`
+  prüfen (schon zweimal ein stale-Index-Bug: c9fff3f, a655912), eine knappe
+  deutsche Commit-Message schreiben (Co-Authored-By-Footer nicht vergessen),
+  dann den nächsten.
+- **Nicht pushen/mergen ohne ausdrückliche Freigabe.** Committen ja, pushen nur
+  auf Aufforderung.
+- **Versionierung `#header_version`** (ab v1.15.1): **immer dreistellig**
+  `MAJOR.MINOR.PATCH` (alle drei Stellen werden geschrieben, auch die `0`).
+  **Neuer Abschnitt / größeres Feature → MINOR +1, PATCH auf 0**
+  (`1.15.2 → 1.16.0 → 1.17.0 …`); **Kleinänderung (Fix, Text/Optik-Anpassung,
+  Doku) → PATCH +1** (`1.16.0 → 1.16.1 …`). MAJOR bleibt vorerst `1`. Die Version
+  steht als einzige Quelle in `index.html` (`#header_version`) und wird pro
+  Commit-Einheit passend zur Änderungsart mitgezogen. (Historisch bis v1.15 wurde
+  die MINOR-Stelle auch für Kleinänderungen genutzt und zweistellig geschrieben;
+  die feinere Stufung gilt erst *ab jetzt*.)
+- **README bei Stand-Wechsel nachziehen** (ab 2026-07-30): die Repo-`README.md`
+  (Abschnitt „Was drin ist (Arbeitsstand)") muss bei **jeder inhaltlichen
+  Stand-Änderung** nachgezogen werden — neue/entfernte interaktive Figur, neuer
+  Motor, neues Kapitel/Themenkomplex, geänderte Figuren-/Fragment-/TK-Zahlen. Im
+  selben Arbeitszyklus als **eigener kleiner `docs(readme):`-Commit** (nicht
+  wochenlang aufschieben); auf GitHub steht die Änderung erst nach Merge/Push
+  nach `main` (nur auf ausdrückliche Freigabe).
+- **Sprache:** Inhalte und Code-Kommentare sind auf Deutsch; beim Bearbeiten von
+  Prosa oder Kommentaren die umgebende Sprache übernehmen.
 
-`__MACOSX/`, `*.DS_Store`, `Archiv.zip` — macOS zip metadata/junk; ignored, do not edit.
+## Wegweiser — wo steht was
 
-## Architecture (WIP — ESM modules + chapter app shell + figure factory)
+Diese Dateien laden sich **automatisch** nach, sobald Dateien im jeweiligen
+Ordner gelesen/geändert werden. Bei reinen Planungsfragen ohne Dateizugriff
+gezielt öffnen.
 
-### Module layout
-WIP ships as native ESM (no build step, no bundler). `index.html` loads `<script type="module" src="src/main.js">`; modules are deferred, so `main.js` calls `init()` at the end of the module (no `<body onload>`). MathJax stays a classic CDN `<script>` tag and qrjs2 a classic local one (`src/vendor/qrjs2.min.js`) → globals `window.MathJax` / `window.QRCode`.
-
-```
-src/main.js        entry: init() (async), central data-action binder, afterprint/hashchange listeners
-src/chapters.js   loadChapters() — fetches chapters/ch_NN_*.html at runtime, injects +
-                   flattens each into its <div data-chapter> placeholder in #paper so the
-                   fragment nodes become direct #paper children (paginate() unmodified);
-                   typesetAfterLoad() re-typesets injected formulas via MathJax.startup.promise
-                   gate (mirrors numbering.js) -> reload_mathjax (imports core only)
-src/core.js        state (interaktiv, darkmode_on, linspace, speed_factor), ge/show/hide,
-                   generate_highlight_boxes, safari_bug, degree_to_fraction, make_static,
-                   test, reload_mathjax, toggle_darkmode, reset, set_width_mode, update_all
-src/transform.js   to2d, transform_line, transform_polyline, ga  (imports ge from core)
-src/pages.js       paginate() — groups #paper into one-subsection-per-page .chapter-page
-                   units (h2 = chapter intro, h3 = subsection); showPage/getPages/next/prev;
-                   showAllPagesForPrint/restorePagination for the print flow
-src/shell.js       chapter app bar (breadcrumb/progress/hamburger), left rail (on-page
-                   landmarks + chapter mini-nav), right marginalia (reparents .anmerkung
-                   boxes of the active page), tablet drawer; reacts to pages.js's
-                   "pagechange" CustomEvent (no import of pages.js internals beyond its API)
-src/ui.js          toc (full-screen accordion + search filter, built from pages.js's page
-                   registry), generate_toc, toc_filter, kontakt, offsetAnchor,
-                   toggle_body_scroll, zoom, close_zoom, pause
-src/numbering.js   init_numbering() — box, figure and image numbering off pages.js's
-                   registry. **The v0.13 counter scopes are not uniform** (see
-                   Physik_skript_header_gmni_v3.tex) and the code mirrors that exactly:
-                     * beispiel/bemerkung/wichtig/lernziel/aufgabe -> {section} -> "1.4.n"
-                     * zusammenfassung                            -> {chapter} -> "1.n"
-                     * figure (no \numberwithin at all)           -> {chapter} -> "Abb. 1.n"
-                   CHAPTER_SCOPED marks the chapter-wide box types; chapter-wide counters
-                   reset to 0 at each chapter change and are then set to an ABSOLUTE start
-                   value by ANY page (usually a section h2) that carries
-                   data-figure-offset/data-zusammenfassung-offset — applied per-section, not
-                   only at the chapter's first h2, so a gap left by not-yet-migrated sections
-                   in the MIDDLE of a chapter can be skipped without shifting the migrated
-                   sections' numbers (first figure of the section = figure-offset + 1; the
-                   value is removable once all prior sections are migrated contiguously).
-                   The per-section migration state is deliberately NOT tracked here (it
-                   changes with every migration): read the offsets on the h2s in
-                   chapters/ and each fragment's header comment, plus BACKLOG.md P12
-                   for what is left. Status as of v1.27: TK 0–3 all migrated, only
-                   ch_04_02 (3.2 Wellen) is a faithful placeholder stub because the
-                   v0.13 source has no content there. Offsets currently live only on
-                   ch_00 (0/0), ch_01_kreisbewegungen (37/3), ch_02 (60/7), ch_03_01
-                   (0/0) and ch_04_01 (figures 0); everything else is contiguous, and
-                   the 1.4/1.5 offsets are redundant by now but kept as valid ABSOLUTE
-                   start values. v0.13 SOURCE BUGS found while migrating are documented
-                   in the affected fragment (e.g. the duplicate section number 3.1 in
-                   ch_04_00_einleitung.html), not here.
-                   Box titles are split into <span class="hb-type"> (type + number, uppercased
-                   via CSS) and <span class="hb-name"> (the box's own title, normal case, so
-                   formula parts aren't mangled) — core.js creates the type span, numbering.js
-                   refills both. Equations are numbered by MathJax itself (tags:'ams'), not here.
-src/print.js       init_print, check_print, print_page, create_qr, from_qr, findGetParameter
-src/figures/factory.js   createFigure() + shared omega-circle hooks (circleStep/Wrap/Render, omega*)
-src/figures/fig_NN.js     one file per figure; self-registers updateN/animateN/clearN on window
-src/figures/panels.js     init_figure_panels()/toggle_panel() — wraps every .grafik-container
-                          in a collapsible preview-card ↔ full-figure toggle (JS-only, no
-                          per-figure markup beyond an optional data-title/data-desc attribute)
-src/figures/kreisbewegung/  self-contained multi-file figure (gc10): constants/state/physics/
-                          render/ui.js + lib/{format,hover,svg-text,ticks,vectors}.js, ported
-                          from Input/Simulationen/Project_kreisbewegung_simulation/. Does not
-                          use figures/factory.js (its interaction model — continuous auto-play
-                          over precomputed time-series + dual live graphs — doesn't fit the
-                          factory's slider-drag/φ-wrap contract); self-initializes once via
-                          initKreisbewegung(), called from main.js's init(), not update_all().
-                          runtime.js adds createRuntime()/withStore/bindDom — a per-instance
-                          facade around the module-singleton store/DOM so several aspekt figures
-                          (and the sleeping gc10 sim) can reuse the motor without clobbering each
-                          other. state.js::q(id) = getElementById(store.idPrefix + id); the
-                          default idPrefix 'kb_' keeps gc10 untouched.
-src/figures/kreis_spiral/   the SECOND motor (no gcN sim of its own — figure-only), ported from
-                          Input/Simulationen/Project_kreis_spiralbewegung_simulation/:
-                          constants/physics/render/state.js + runtime.js, reusing
-                          ../kreisbewegung/lib/* (same shared helpers). Exists because it draws
-                          an ISO 3D view (projectISO) with the ROTATION AXIS visible — ω and α
-                          live on it, so figures about them (1.56–1.60) are impossible in the
-                          kreisbewegung motor's top-down 2D view. Also brings α (angular
-                          acceleration), the plane height h and the spiral mode natively.
-                          Own store singleton + own createRuntime() (prefix 'ks<n>_'), fully
-                          independent of the kreisbewegung motor. Port changes vs. the source
-                          are minimal, additive and marked "PORT-AENDERUNG" in the code
-                          (store.idPrefix in q(); trimmed initDOM; store.simDuration; plot
-                          rect inside store.graphScale[idx]; own ω/α arrow-length scales;
-                          store.isoElevation). The last one exists because ISO foreshortening
-                          makes an in-plane vector of CONSTANT magnitude project between
-                          0.707× and 1.225× — not a bug (identical to the source sim and to
-                          legacy's to2d(…, perspective 3), which merely default to top-down),
-                          hence the „Blickrichtung" toggle on 1.57–1.59 (flach 60° = default,
-                          räumlich = true isometry). Full rationale: INTERAKTIVE_ASPEKT_FIGUREN.md.
-src/figures/grundbegriffe/  the THIRD motor (figure-only, no gcN sim), ported from
-                          Input/Simulationen/Project_grundbegriffe_kinematik_simulation:
-                          constants/physics/render/state.js + runtime.js, reusing
-                          ../kreisbewegung/lib/* again. Exists because BOTH other motors can
-                          only draw circular/spiral paths — this one draws an ARBITRARY fixed
-                          trajectory x(t)/y(t) in an x-y diagram with position vectors,
-                          displacement, distance and path length (Abb. 1.1). Also the first
-                          TIMELESS motor: no requestAnimationFrame, no play/pause/auto-stop,
-                          no show* flags but a store.toggles object, and switches-with-hover-
-                          explanation instead of sliders alone — so it is NOT a template for a
-                          circular-motion figure. Port changes vs. the source are minimal,
-                          additive and marked "PORT-AENDERUNG" (store.idPrefix in q() and in
-                          every drawn id/marker URL; trimmed initDOM; null-guarded value
-                          readouts). Own store singleton + own createRuntime() (prefix 'gk<n>_').
-src/figures/aspekt_<name>.js   the 15 interactive "aspect figures", one module + one
-                          .css each. ALL share one pattern: a buildXFig(fig) factory, its own
-                          createRuntime() motor instance, feature-gated store flags,
-                          sliders, two-stage display (inline + magnifier overlay), a single
-                          or stacked graph with auto-stop + ghost curve. **Never write one
-                          from scratch — copy the nearest existing figure and feature-gate
-                          it**; the runbook INTERAKTIVE_ASPEKT_FIGUREN.md holds the template
-                          cascade, and each module's header comment names its own template
-                          and every deviation from it (per-figure detail lives THERE, not
-                          here, so this list stays O(1) as figures are added):
-                            kreisbewegung (2D)   1.38 kreisbahn · 1.39 weg_zeit ·
-                              1.41 winkel_zeit · 1.42 vxvy_zeit · 1.43 betragv_zeit ·
-                              1.44 omega_zeit · 1.46 axay_zeit · 1.47 betraga_zeit ·
-                              1.49 periodendauer · 1.50 axay_winkelbeschl ·
-                              1.51 arat_winkelbeschl
-                            kreis_spiral (ISO)   1.57 omega_vektor · 1.58 zentripetalkreuz ·
-                              1.59 alpha_omega
-                            grundbegriffe (2D)   1.1 grundbegriffe  (Kapitel 1.1 — eigene
-                              --gk-*-Tokenfamilie statt der kapitelgebundenen --kb-*-
-                              Vektorfarben, daher DREI eigene Zweige: Hell in
-                              aspekt_grundbegriffe.css, Dunkel in darkmode.css, CVD in
-                              aspekt_paletten.css. Aliase gibt es hier keine, und die
-                              CVD-Selektoren sind spezifischer als der Darkmode-Block,
-                              also gewinnt Dunkel+CVD ohne Zusatzregel.)
-                          aspekt_kreisbahn.js (1.38) additionally exports the generic toggles
-                          (toggle_aspekt/close_aspekt_overlay/toggle_analyse/toggle_panel_left)
-                          reused by ALL figures via main.js binding, and is the binding OPTICAL
-                          reference — "like 1.38" means pixel-identical, not "similar".
-src/figures/aspekt_*.css   optics derived from kreisbewegung/styles.css, scoped to .aspekt-figur
-                          (shared aspekt_kreisbahn.css for all + per-figure aspekt_<name>.css);
-                          --kb-lw/--kb-fs tokens on .aspekt-figur scale line widths / fonts ×1.5
-                          (kernsim + diagram only — varphi label and Bedienung/Analyse excluded;
-                          arrow tips stay fixed via ARROW_LEN + userSpaceOnUse markers).
-src/figures/aspekt_paletten.css   wählbare Vektor-Farbpaletten (CVD): 4 Override-
-                          Blöcke `:root[data-palette="deuter|tritan"][data-darkmode="0|1"]
-                          .aspekt-figur, … #gc10` setzen alle 20 --kb-*-Tokens (WERT +
-                          ALIAS — darkmode.css entkoppelt die Aliase direkt, sonst gewänne
-                          im Dark+CVD-Fall der Darkmode-Alias). Normal = kein Override
-                          (Quellen-Palette bzw. darkmode.css). Verifiziert mit
-                          cvd_check.mjs (s. INTERAKTIVE_ASPEKT_FIGUREN.md).
-src/figures/playback.js   shared auto-stop playback helpers (isAtAutoStopEnd,
-                          resetOnPlayAfterAutoStop) for animated aspekt figures.
-```
-
-**Aspekt figures are dispatched, not factory-built:** `main.js::ASPEKT_FACTORIES`
-maps `data-aspekt` → `buildXFig`; `init_aspekt_figuren()` runs each before
-`init_numbering()`, `label_aspekt_figuren()` transfers the static figure's
-"Abb. 1.n" (via `data-figref`) into the interactive caption after numbering. The
-"physics section" (formulas beside a figure) has two paths — a static
-`.formula-box` in the template (default; both current figures) or a dynamic
-`.physik-list` filled from `window.eq_latex` (captured pre-Typeset by
-`chapters.js::captureEqLatex` from every `\label`ed equation) when a figure
-carries `data-eqs="…"` and no static box. Runbook: `INTERAKTIVE_ASPEKT_FIGUREN.md`.
-
-Dependency graph is acyclic: `core` ← `transform` ← `factory`; `core` ← `pages` ← `ui`,`shell`,`numbering`; `chapters` ← `core` (only `reload_mathjax`); `core`,`ui`,`pages`,`shell` ← `print`; everything ← `main`. `update_all` (core) dispatches via `window.updateN` instead of importing figure modules, which is what keeps the graph cycle-free — figure modules are side-effect-imported by `main.js` so their `window` registration runs before `init()`. `shell.js` never imports `ui.js`/`print.js`; it communicates page changes via a `pagechange` `CustomEvent` on `document` rather than a direct import, so `print.js` can depend on both `pages.js` and `shell.js` without a cycle. `numbering.js` similarly never imports `core.js`'s `reload_mathjax()`; it exposes `window.renumber_equations` instead (`core.js` → `window.renumber_equations` at runtime, not an import), avoiding a `core`→`numbering`→`pages`→`core` cycle.
-
-### Central event binding (data-action)
-There are **no inline `oninput`/`onclick` handlers**. `index.html` marks elements with `data-action` (+ `data-fig`, optional `data-arg`, `data-event="change"` for `<select>`/radio). `main.js` attaches one delegated listener each for `click`/`input`/`change` and dispatches to the function or to `fig_call(prefix, fig, arg)` → `window[prefix+fig]`. `make_static()` injects `data-action="zoom"` so the delegated binder covers static-mode zoom buttons too. `data-action="goto_page"` + `data-arg="<page-id>"` (used by the rail, the TOC accordion, and ad-hoc in-prose cross-reference links) navigates via `shell.js::goto_page` → `pages.js::showPage`.
-
-### Chapter pagination (one subsection per page)
-Chapter prose now lives one file per chapter in `chapters/ch_NN_*.html` (loaded + flattened into `#paper` by `src/chapters.js::loadChapters()` before `paginate()` runs — BACKLOG.md P1b, done). `pages.js::paginate()` then groups `#paper`'s DOM at runtime into `.chapter-page` units, one per `.inhaltsverzeichnis` heading (h2 = chapter intro, h3 = subsection) plus its associated `<section>`, and shows exactly one at a time (`display:none` on the rest). Grouping walks from each heading to its `<section>` rather than assuming a fixed nesting, and a second pass (`foldStraySiblings`) folds any loose top-level content between sections into the preceding page — the hand-authored markup has a few such stray siblings (e.g. a `.zusammenfassung` box sitting after a `</section>` and before the next heading) that would otherwise stay visible on every page. Print (`print.js::print_page`) calls `showAllPagesForPrint()` before cloning `#container` so the printed output contains every subsection, not just the active one.
-
-### Chapter app shell (header, rail, marginalia, TOC)
-`#header` is one merged 64px bar (branding eyebrow/title, a divider, the breadcrumb + "Seite x/y" progress from `shell.js::init_shell()`, a subtle `#header_pagenav` Zurück/Weiter pager top-right whose `data-action="chapter_prev/next"` mirror the bottom `.chapter-pagenav` and whose disabled state `shell.js::renderPrevNext()` keeps in sync with it, the existing toolbar/text-size/width-mode/darkmode controls, and a hamburger that only shows below the tablet breakpoint) — deliberately one bar, not two stacked ones, matching the imported Claude Design mockup's single-app-bar structure. The left rail (on-page landmarks for the active page, generated from highlight-box titles and figure `data-title`s; a chapter mini-nav listing sibling h3 pages) is `position: sticky` so it stays docked while a long subsection scrolls — note `#content` must never get `overflow` other than `visible`, or sticky breaks on this descendant (hit once already, see the comment on `#content` in `styles.css`). The right marginalia column moves — not clones — the active page's `.anmerkung` boxes into a side card list; `shell.js::restoreMarginalia()` puts them back before printing. Below the tablet breakpoint (`@media (max-width: 1024px)`, the project's first responsive CSS, BACKLOG.md P2) the rail/marginalia columns hide and the same rail content renders into a slide-in drawer instead, toggled via `data-action="toggle_drawer"`. The TOC (`ui.js::generate_toc()`/`toc()`, opened via the existing `data-action="toc"` toolbar button) is a full-screen view (not an overlay panel) sized to match `#content`'s bounds, with its own search input (`ui.js::toc_filter()`) and a real accordion built generically from the page registry — one group per h2 chapter, nested h3 links, current chapter/page highlighted — so a future chapter needs zero TOC code changes, just another `.inhaltsverzeichnis` h2 in its own future `chapters/ch_NN.html`. `#header` hides while the TOC is open (`body.toc-open`) since the TOC screen has its own bar — one bar per view, never two.
-
-### Interactive figures (the factory pattern + collapsible cards)
-Each interactive figure is a numbered container `<div id="gcN" class="grafik-container">` (N ∈ {1,3,31,32,4,5,51,6,8,9,10}) holding an inline `<svg id="svgN">` plus range sliders `id="rangeN_*"` (gc10/Kreisbewegung uses `kb_`-prefixed ids instead, see below). The 7 animated 3D-circle figures (3/31/32/5/51/6/8) are built via `createFigure({id, render, step, wrap, condition, snap, clear?})` in `figures/factory.js`, which owns all shared boilerplate: a `requestAnimationFrame` loop with a ~10 ms accumulator (replacing recursive `setTimeout(...,10)`), a reentry guard, slider snap, φ-wrap + revolution counter (`state.n`), a **cached** static circle `p3d` (rebuilt only when radius/z change, not per frame), the koord transform + foreignObject copies, and the φ-span block. Each `fig_NN.js` supplies only the figure-specific hooks. The 2D arcs (gc1/gc9) and the radio image-swap (gc4) are small standalone modules. The factory exposes `updateN`/`animateN`/`clearN` on `window` (the binder + `update_all` consume those names — the `N` suffix remains the HTML↔JS contract).
-
-Every `.grafik-container` — factory-built or not — is wrapped by `figures/panels.js::init_figure_panels()` into a collapsible card: collapsed by default (title + short description + "Simulation öffnen" button, sourced from `data-title`/`data-desc` attributes on the container), expanding in place to the full interactive figure on click (`data-action="toggle_panel"`). This replaced the former sticky/scaled two-column layout (`splitter.js`, removed) once figures moved into the one-subsection-per-page reading flow, where a scroll-pinned companion column no longer makes sense.
-
-A deliberately-preserved legacy bug: `fig_5.js`'s gc51 `>6.27` wrap increments **gc5's** revolution counter (`fig5.state.n++`) instead of gc51's — kept for behavior parity, flagged in the code.
-
-### Static vs. interactive mode
-`interaktiv` (exported `let` in `core.js`) switches the whole document between interactive SVG figures and static images. When false, `make_static()` overwrites each `gcN` container's `innerHTML` with a `<img class="grafik">` from `bilder/` (plus a zoom button) and re-typesets MathJax. gc10 (Kreisbewegung) has no static-image equivalent and is deliberately left interactive even in static mode — not full parity with the other figures, documented inline in `core.js`. Two easter-egg toggles are hidden in the *Kontakt* box: clicking the disguised letters "Fa**ll**" calls `test()` (flips `interaktiv` and re-runs `make_static()` — the only runtime way to enter static mode without a code change), and "**tt**" in "bitte" calls `reload_mathjax()` to re-render all formulas.
-
-### 3D → 2D projection
-`to2d(d3, perspective)` projects a 3D point `[x,y,z]` to 2D screen coords; `perspective` ∈ {1,2,3,4} selects the view, driven by the per-figure `selectN` dropdown (read in each render). `transform_line` / `transform_polyline` apply it to SVG elements. Not all figures use 3D; gc1/gc9 are pure 2D polar plots.
-
-### Highlight boxes, TOC, print, QR, zoom, darkmode
-- `generate_highlight_boxes()` finds every element with one of the classes `lernziel`, `motivation`, `wiederholung`, `beispiel`, `zusammenfassung`, `aufgabe`, `anmerkung` and injects an icon (`src/assets/*.svg`) plus a capitalized title before its original content. To add a new box type, add a `[class, icon]` entry to the `boxes` array.
-- TOC is generated at runtime by `generate_toc()` as an accordion from `pages.js`'s page registry, itself built from every element carrying class `inhaltsverzeichnis` (the `<h2>`/`<h3>` section headings) — see "Chapter app shell" above.
-- Print flow: `init_print()` (toolbar "Drucken") opens the current URL with `?print=true` in a new tab; `check_print()` detects the param and calls `print_page()`, which clones `#container` into `#print_container`, strips zoom buttons, and generates a QR code (via the vendored qrjs2) per `gcN` linking back to `?g=gcN`. `from_qr()` handles the reverse: arriving via a QR link deep-zooms the target figure.
-- `zoom(parent_gc)` clones a figure into the `#zoom` overlay and scales it to fit the viewport; `close_zoom()` tears down and re-runs `update_all()`.
-- Darkmode is toggled by `toggle_darkmode()` enabling/disabling the `darkmode.css` `<link>` (id `darkmode_stylesheet`).
-
-## Conventions and gotchas
-
-- **README bei Stand-Wechsel nachziehen (Nutzervorgabe, ab 2026-07-30)**: die Repo-`README.md` (Abschnitt „Was drin ist (Arbeitsstand)") muss bei **jeder inhaltlichen Stand-Änderung** nachgezogen werden — neue/entfernte interaktive Figur, neuer Motor, neues Kapitel/Themenkomplex, geänderte Figuren-/Fragment-/TK-Zahlen. Im selben Arbeitszyklus als **eigener kleiner `docs(readme):`-Commit** (nicht wochenlang aufschieben); die Änderung steht auf GitHub erst, wenn sie nach `main` gemergt/ gepusht ist (Pushen/Mergen nur auf ausdrückliche Freigabe, s.u.).
-- **Versionierung `#header_version` (Nutzervorgabe, ab v1.15.1)**: **immer dreistellig** `MAJOR.MINOR.PATCH` (alle drei Stellen werden geschrieben, auch die `0`). **Neuer Abschnitt / größeres Feature → MINOR-Stelle +1, PATCH auf 0** (`1.15.2 → 1.16.0 → 1.17.0 …`), **Kleinänderung (Fix, Text/Optik-Anpassung, Doku) → PATCH-Stelle +1** (`1.16.0 → 1.16.1 → 1.16.2 …`). MAJOR bleibt vorerst `1`. Die Version steht als einzige Quelle in `index.html` (`#header_version`) und wird pro Commit-Einheit passend zur Änderungsart mitgezogen. (Historisch bis v1.15 wurde die MINOR-Stelle auch für Kleinänderungen genutzt und zweistellig geschrieben; die dreistellige, feinere Stufung gilt erst *ab jetzt*.)
-- **No build / tooling baseline (decided v1.6)**: the project stays **no-build, no package manager** by deliberate decision (revisit trigger = full ~400-page scale, multiple co-authors, or noticeable load times). Chapter fragments are fetched at runtime over HTTPS (GitHub Pages); `file://` double-click is not supported (no fetch). The zero-dependency tooling baseline is **`.editorconfig`** at the repo root — editors with EditorConfig support read it automatically, no install needed. Prettier/ESLint/TypeScript are intentionally deferred to a future light Vite/esbuild build (see BACKLOG.md item 64); do not add a `package.json` or linter config in the meantime.
-- **Accessibility (v1.6)**: `<html lang="de">` is set. All toolbar controls (Inhaltsverzeichnis/Drucken/Kontakt), the darkmode toggle, and every zoom button (including the ones `make_static()` generates for static-mode figures) are real `<button type="button">` with `aria-label`s — keyboard-focusable, Enter-activatable. There are no inline `on*` handlers (see "Central event binding"). CSS button resets (`.navbar_button`, `.darkmode_icon`, `.zoom_button`) strip browser defaults so existing background/icon styles survive.
-- **Safari foreignObject workaround (kept v1.6)**: `core.js::safari_bug()` UA-sniffs Safari and adds a `.fixed` class (150px margin shift) to `.fo_inner` elements to compensate for Safari mis-positioning HTML text inside SVG `<foreignObject>`. This is a *rendering* quirk, not a missing API, so `@supports` cannot detect it — UA sniff is the pragmatic fallback, documented inline. Revisit if a CSS-only fix for foreignObject becomes known. Non-Safari browsers are unchanged (no `.fixed`).
-- **Responsive scope (v1.6)**: **Desktop/Tablet-only by decision** — no phone support. The viewport meta (`width=device-width, initial-scale=1`) is correct; the only responsive breakpoint is `@media (max-width: 1024px)` (tablet), which swaps the left rail + right marginalia for a slide-in drawer. Do not add phone-targeted CSS without revisiting that decision.
-- **Width mode + print decoupling**: `core.js::set_width_mode` (schmal/normal/breit) sets inline `width` on `#content`, inline `--paper-max-width` on `#paper`, persists to `localStorage`, and sets `<html data-width-mode="…">` — the **CSS signal** for mode-dependent rules (always select via `:root[data-width-mode="…"]`, never JS classes; aspekt figures scope theirs with `:not(.aspekt-im-overlay)` so the overlay layout wins). Text scaling (`core.js::metrics_for_level`/`apply_text_size`, 5 steps) exposes two scales on `#paper`: `--paper-font-size`/`-line-height` for prose and `--paper-graphics-scale`/`-line-scale` (gentler) for UI/SVG text. **Print must decouple from the width mode**: `print.js::print_page` strips the inline `#content` width and `#paper` `--paper-max-width` from the clone (they'd win by inline specificity and the printout would track the screen mode); the print column is a fixed 700 px in `styles.css`, with `#fff` backgrounds to save toner.
-- **Einstellungen-Popover + wählbare Farbpaletten (v1.24/v1.25)**: Textgröße, Ansichtsbreite und Farbpalette sitzen im Einstellungen-Popover (`#settings`, Zahnrad in `#toolbar`; `core.js::toggle_settings`/`close_settings`, Escape schließt), alle drei persistiert (`skript_text_level`/`skript_width_mode`/`skript_palette`). Die Palette (`core.js::set_palette`/`init_palette`) setzt `<html data-palette="normal|deuter|tritan">`; Normal = Quellen-Palette (kein Override), Deuteranopie/Tritanopie = CVD-Overrides in `aspekt_paletten.css`, deren Hell/Dunkel-Zweig an `<html data-darkmode="0|1">` hängt — ein rein additives Wurzel-Signal, das `toggle_darkmode` (toggelt weiterhin den `<link>`) synchron hält, sonst gäbe es für die Overrides keinen Hell/Dunkel-Selektor. **Kein Re-Render nötig** — Custom Properties kaskadieren, `var(--kb-…)` in SVG `stroke`/`fill` löst automatisch neu auf. Bildunterschriften folgen der Palette: Farb-Worte als `farbwort`-Spans setzt `aspekt_kreisbahn.js::apply_farbwoerter` pro Palette × Hell/Dunkel, Einfärbungen laufen über `.kb-sw-<tok>`-Klassen; statische `nur-druck`-figcaptions + `bilder/*.png` bleiben fix. **Die Standard-Palette folgt den STATISCHEN Abbildungen** (Wiedererkennungswert, Nutzervorgabe v1.27) — Hauptvektoren aus den `\textcolor[HTML]{…}` der Bildunterschriften, Szenen-Objekte aus den gezeichneten Farben der Quell-SVGs; welche Quellfarben bewusst NICHT übernommen wurden und warum, steht begründet im Kopf von `aspekt_kreisbahn.css`. Folge: die Quellen-Palette ist unter Deuteranopie prinzipiell nicht trennscharf, deshalb misst der Prüfer sie nur als INFO. Prüfwerkzeuge in `.claude/skills/interaktive-aspekt-figur/scripts/`: `cvd_check.mjs` (Brettel + ΔE76, Exit-Code nur aus den vier CVD-Paletten) und `caption_farbwort_check.mjs` (Struktur der Caption-Farbwörter).
-- **MathJax equation numbering (v1.7)**: equations are numbered by MathJax, not by `numbering.js` — `tex.tags:'ams'` in the inline config in `index.html` plus `tagformat.number`. **A loaded extension is not an enabled one**: `[tex]/tagformat` and `[tex]/color` must appear *both* in `loader.load` *and* in `tex.packages: {'[+]': […]}`, otherwise tags silently fall back to `(1)` and `\textcolor` doesn't render. The section prefix is **dynamic**, not a hard-coded constant: `numbering.js::renumber_equations()` walks `getPages()` after the first typeset and builds `eq_tag_map[laufendeNr] = sectionPrefix(page) + '.' + lokal`, where `sectionPrefix` reads the section number off each page's title (`1.4.3 …` → `1.4`, `0.2.1 …` → `0.2`); the second MathJax pass renders those tags. A new section therefore needs no numbering change — the prefix comes from its page titles.
-- **Cross-references: the resolver is the single source of the descriptor (v1.19)**: `numbering.js` resolves four xref anchor types and each emits the *full* label — `data-ref-fig` → `"Abbildung N"`, `data-ref-sec` → `"Abschnitt N"`, `data-ref-eq` → `"(N)"`, `data-ref-box` → `"Beispiel N"` (or the box's type, keyed by the target box's stable `id`). **The prose must NOT repeat that descriptor** — write `im <a data-ref-sec>`, not `im Abschnitt <a data-ref-sec>` (the latter renders "im Abschnitt Abschnitt N"), and `Formel <a data-ref-eq>`, not `Formel (<a data-ref-eq>)`. A corpus-wide sweep in v1.19 removed 80 such duplicated descriptors (17 sec / 25 fig / 38 eq across 7 chapters); the doubling was invisible to the verification harnesses because they check numbers, not surrounding words. Verify rendered xrefs in a real browser (grep the page text for `"Abschnitt Abschnitt"`, `"Abbildung Abbildung"`, `((`), not just the numbers.
-- **Keep the box class lists in sync**: the v0.13 box types `bemerkung`/`wichtig` were added in v1.7, and *five* independent places enumerate box classes — `core.js::generate_highlight_boxes` (icons), `numbering.js::BOX_LABELS` (titles), `styles.css` (the card look + the 50px icon gutter), the `mjx-container[display="true"]` "no box-in-box" rule, and `shell.js::landmarksFor` (left rail). Missing one is silent: a box without the CSS rule loses its frame *and* its icon escapes into the rail. When adding a type, grep all five.
-- **Figure sizing follows v0.13**: each `<img class="grafik">` inside `figure.abbildung` carries an inline `style="width:xx%"` taken from the source's `\includegraphics[width=0.8\textwidth]` (they range 0.25–0.99), and sub-figure containers carry the `\begin{subfigure}{0.48\textwidth}` outer width. This is necessary because the legacy `.grafik { width:100% }` rule would otherwise stretch every image to the column and upscale small diagrams past their native resolution — `#paper figure.abbildung > img.grafik { width:auto }` neutralizes it. The two TikZ figures are rendered via standalone `pdflatex` + `pdftocairo -png -r 300` (sources not kept in the repo, only the PNGs in `bilder/`).
-- **MathJax note**: `reload_mathjax()` uses the MathJax **v3** API (`MathJax.typesetPromise()`, guarded for when MathJax isn't loaded yet). It re-renders all formulas and is wired to the "tt" easter egg in the Kontakt box and to `make_static()`. (Earlier this called the v2 `MathJax.Hub.Queue(...)` API, which was a no-op under v3 — fixed.)
-- Content and code comments are in German; match the surrounding language when editing prose or comments.
-- **Commit in kleinen Schritten (kleinschrittig commiten — Nutzervorgabe)**: Änderungen werden **pro logischer Einheit** als eigener kleiner Commit abgegeben, nicht als ein großer Sammel-Commit. Eine logische Einheit = ein Feature/Aspekt/Fix samt seinen Dateien. Vor jedem Commit die betroffenen Dateien gezielt `git add`-en, eine knappe deutsche Commit-Message schreiben (Co-Authored-By-Footer nicht vergessen), dann den nächsten. **Nicht pushen/mergen ohne ausdrückliche Nutzungs­freigabe** — Committen ja (in kleinen Schritten), Pushen nur auf Aufforderung. Diese Regel gilt für JEDEN Aufruf in diesem Repo.
-- Only edit `InteraktivesSkript_WIP/`. `Input/` is read-only reference material — never modify it (the frozen baseline now lives at `Input/InteraktivesSkript_legacy/`). Within WIP, `Archiv/` is a historical copy and should likewise be left alone.
+| Datei | Inhalt |
+|---|---|
+| `InteraktivesSkript_WIP/CLAUDE.md` | Ordneraufbau der Site, Runbook-Übersicht, „kein Build"-Entscheidung |
+| `InteraktivesSkript_WIP/chapters/CLAUDE.md` | Fragment-Konvention, Nummerierung + Offsets, MathJax-Gleichungsnummern, Querverweis-Deskriptoren, Bildgrößen |
+| `InteraktivesSkript_WIP/src/CLAUDE.md` | Modul-Layout, Dependency-Graph, `data-action`-Binder, Paginierung, App-Shell, Druck/QR/Zoom/Darkmode, Breiten-Modus, A11y, Safari-Workaround |
+| `InteraktivesSkript_WIP/src/figures/CLAUDE.md` | Fabrik-Muster, die vier Figuren-Motoren, Aspekt-Figuren + Dispatch, Farbpaletten/CVD |
+| `DOKUMENTATION.md` | Index **aller** Dokus mit „lies das, wenn …" |
+| `BACKLOG.md` | Modernisierungsplan + Zielarchitektur, Arbeitsvorrat |
+| `README.md` | öffentliche Projektbeschreibung + Arbeitsstand |
