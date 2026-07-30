@@ -30,8 +30,7 @@ nächstliegenden Konsumenten.
 | `InteraktivesSkript_WIP/MIGRATION_v0.13_nach_HTML.md` | Runbook Kapitelmigration: Counter-Scopes, Asset-Pipeline (PDF/TikZ→PNG), LaTeX→HTML-Makro-Mapping, MathJax-Konfiguration, Querverweise, drei Prüf-Harnesse, **Katalog von 13 realen Fallstricken**, Checkliste | ein weiteres Kapitel aus `Input/v0.13/` migriert wird — **vorher lesen**, die meisten Fallen sind still |
 | `InteraktivesSkript_WIP/INTERAKTIVE_ASPEKT_FIGUREN.md` | Runbook Aspekt-Figur: die drei Eröffnungsregeln, Konzept, Schritt für Schritt, **Katalog von 26 realen Fallstricken**, Checkliste | eine interaktive Figur gebaut oder erweitert wird — **vorher lesen** |
 | `InteraktivesSkript_WIP/CHANGES_aspekt_1.38_1.40_und_grundgeruest.md` | Änderungshistorie seit der ersten (Singleton-)Aspekt-Figur | verstanden werden muss, *warum* eine Aspekt-Struktur so aussieht |
-| `InteraktivesSkript_WIP/VERIFIKATION_kapitel_1.4.md` | phasenweiser Prüfplan mit Abnahmekriterien (Kapitel 1.4) | ein migriertes Kapitel geprüft wird |
-| `InteraktivesSkript_WIP/VERIFIKATION_kapitel_1.1.md` | dito für Kapitel 1.1 | dito |
+| (Skill `v013-verifikation`) | phasenweiser Prüfplan mit Abnahmekriterien, kapitelagnostisch (inkl. Browser-Phasen Stufe 5) | ein migriertes Kapitel geprüft wird — pro-Kapitel-**Ergebnis** steht im jeweiligen Backlog-Item (P3/P12) + Fragmentkopf, nicht in einer eigenen Datei |
 | `InteraktivesSkript_WIP/QUELLEN_FEHLER.md` | Verzeichnis der Tipp-/Sprach-/Sachfehler in `Input/v0.13/` + die Konvention „1:1 übernehmen, nicht still korrigieren" und je Fund der Ist-Zustand im WIP (**erhalten** / **korrigiert**) | etwas in der Quelle falsch aussieht, oder entschieden wird, ob ein Fehler übernommen oder behoben wird |
 | `InteraktivesSkript_WIP/src/vendor/README.md` | Herkunft, Lizenz und Prüfsumme von qrjs2 + warum es nicht per CDN kommt | die Vendor-Bibliothek angefasst oder aktualisiert wird |
 

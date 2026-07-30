@@ -34,7 +34,7 @@ nicht bearbeiten.
 | `MIGRATION_v0.13_nach_HTML.md` | nächsten Abschnitt aus `Input/v0.13/` migrieren |
 | `INTERAKTIVE_ASPEKT_FIGUREN.md` | eine interaktive Aspekt-Figur bauen |
 | `CHANGES_aspekt_1.38_1.40_und_grundgeruest.md` | Änderungshistorie der Aspekt-Figuren |
-| `VERIFIKATION_kapitel_1.4.md`, `VERIFIKATION_kapitel_1.1.md` | Prüfpläne je migriertem Kapitel |
+| (Skill `v013-verifikation`) | migriertes Kapitel prüfen — Prüfplan kapitelagnostisch; pro-Kapitel-Ergebnis im jeweiligen Backlog-Item + Fragmentkopf |
 | `QUELLEN_FEHLER.md` | Fehler in der v0.13-Quelle selbst |
 | `src/vendor/README.md` | Herkunft/Lizenz/Prüfsumme von qrjs2 |
 

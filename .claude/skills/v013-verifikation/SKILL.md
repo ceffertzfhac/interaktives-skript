@@ -83,15 +83,47 @@ grep -o 'src="bilder/[^"]*"' InteraktivesSkript_WIP/chapters/ch_NN.html |
 ## Stufe 5 — Nur im Browser
 
 Diese Punkte kann **kein** Harness abdecken; sie müssen von einem Menschen
-angesehen werden (oder per Chrome-Integration, falls verbunden):
+angesehen werden (oder per Chrome-Integration, falls verbunden). Prüfphasen in
+dieser Reihenfolge (kapitelagnostisch; die kapitelspezifischen **Soll**werte
+kommen aus Stufe 1):
 
-- **Formel-Tags**: erscheinen sie als `(1.4.1)` oder als `(1)`? Bei `(1)` ist
-  `tagformat` per `loader.load` geladen, aber nicht in `tex.packages`
-  aktiviert. **Dieser Fehler ist offline unsichtbar.**
-- `\textcolor` sichtbar farbig?
-- Bildgrößen plausibel, nichts unscharf hochskaliert?
-- Layout: keine Kollisionen mit Schiene/Toolbar, keine leere Spalte?
-- Darkmode lesbar, Druckfluss (`?print=true`) vollständig?
+1. **Rauchtest & Laden** — Seite öffnen, Konsole beobachten: keine 404 (insbes.
+   `chapters/ch_NN.html`, `src/numbering.js`, `bilder/*`), keine JS-Fehler.
+2. **Inhaltsparität vs. v0.13** — das PDF (Abschnitt X) neben der WIP-Seite
+   öffnen. Pro Unterabschnitt Stichproben: Prosa wortgleich, alle h3-Titel
+   vorhanden & nummeriert, Boxen-Texte und -Reihenfolge gleich.
+   Konvertierungs-Sonderfälle prüfen: `\SI` als `n\,\mathrm{unit}`, deutsche
+   Dezimalkommata `{,}`, `\point`/`\textcolor` korrekt umgesetzt.
+3. **Formel-Tags** — erscheinen sie als `(X.Y.n)` oder als `(n)`? Bei `(n)` ist
+   `tagformat` per `loader.load` geladen, aber nicht in `tex.packages`
+   aktiviert. **Dieser Fehler ist offline unsichtbar.** `\ref`-Querverweise
+   lösen zu klickbaren Links mit korrekter Nummer auf (nicht „??").
+4. **Abbildungen & SVGs** — fortlaufend, in DOM/Lesereihenfolge, keine Lücke/
+   Doppelung; hardcodierte Abbildungsnummern in der Prosa stimmen mit der
+   tatsächlichen Zählung. Inline-SVGs (falls vorhanden) skalieren korrekt
+   (`max-width:100%`/`height:auto`), Pfeilspitzen/Labels und Unicode-Math lesbar.
+5. **Pagination & Navigation** — durch alle Seiten blättern (Weiter/Zurück,
+   Kapitel-Mini-Nav, Schiene): jede Seite zeigt nur ihren `<section>`-Inhalt,
+   keine verlorenen Sibling-Elemente (`foldStraySiblings` greift, z. B. eine
+   Zusammenfassungs-Box nach `</section>`). Hash/Deep-Link auf eine Seite
+   setzen, reload — gleiche Seite aktiv, Breadcrumb + „Seite x/y" korrekt.
+6. **Druckfluss** — Toolbar „Drucken" → neuer Tab `?print=true`: enthält **alle**
+   Unterabschnitte (nicht nur die aktive Seite), Formel-Tag-Nummerierung erhalten,
+   keine abgeschnittenen SVGs, Marginalia restauriert. *(QR-Codes erzeugt
+   `print.js` pro interaktivem Pendant — rein statische Kapitel ohne Aspekt-Figur
+   haben erwartungsgemäß keine.)*
+7. **TOC & Querverweise** — Inhaltsverzeichnis: Accordion mit Kapitel-Gruppe +
+   verschachtelten h3-Links, aktive Seite hervorgehoben, Suche filtert. Prose-
+   `#`-Links / `data-action="goto_page"` springen zur Zielseite.
+8. **Responsive / Darkmode** — Fenster < 1024px (Tablet): Schiene/Marginalia
+   versteckt, Drawer über ☰, keine Phone-CSS. Darkmode umschalten: kein
+   Kontrast-Bruch, inline-SVGs + Boxen bleiben lesbar. Safari-foreignObject-Check
+   nur falls Safari verfügbar (`.fo_inner`-Verschiebung nur in Safari über
+   `.fixed`).
+
+Konzentriert zusätzlich sichten: `\textcolor` sichtbar farbig? Bildgrößen
+plausibel (nichts unscharf hochskaliert)? Layout ohne Kollisionen mit Schiene/
+Toolbar und ohne leere Spalte?
 
 ## Stufe 6 — CSS und JS auf Selbstverletzung prüfen
 

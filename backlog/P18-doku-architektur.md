@@ -33,7 +33,7 @@ Information darf verloren gehen** — sie darf nur umsortiert/umorganisiert werd
    - „the 15 interactive aspect figures" — im Code sind es **16**
      (`ASPEKT_FACTORIES`, inkl. `bus_weg_zeit`); Abschnitt „What this is" sagt
      im selben Dokument **14**.
-   - `QUELLEN_FEHLER.md` und `VERIFIKATION_kapitel_1.1.md` sind nirgends erwähnt.
+   - `QUELLEN_FEHLER.md` und `VERIFIKATION_kapitel_1.1.md` sind nirgends erwähnt. *(Letztere in P19-3 aufgelöst → Skill `v013-verifikation` + Backlog-Items.)*
 4. **Duplikate**: Der numbering-Block (2,2 KB) steht fast wörtlich als
    Kopfkommentar in `src/numbering.js`; die Motor-Absätze stehen in den jeweiligen
    `*/runtime.js`; Aspekt-Details stehen im Kopf jeder `aspekt_*.js` **und** im
@@ -121,6 +121,9 @@ Pflichtkontext pro Turn ≈ **11–12k → ~3k Token**; Backlog-Zugriff **33k �
   Aspekt-Figuren, `QUELLEN_FEHLER.md` + `VERIFIKATION_kapitel_1.1.md` erwähnen. *(S)*
   — erledigt 2026-07-30 in ba0fee8/ce73e16. Die Zahl „16" wurde nicht korrigiert,
   sondern durch einen Zeiger auf `ASPEKT_FACTORIES` **ersetzt** (Mengen-Regel).
+  `VERIFIKATION_kapitel_1.1.md` ist in P19-3 (2026-07-30) aufgelöst worden —
+  der Plan ging in den Skill `v013-verifikation` Stufe 5, das Ergebnis in den
+  Fragmentkopf + P12-A1; die damalige Erwähnung ist entfallen.
   `README.md` war bereits korrekt (16 Figuren, vier Motoren) — nur `CLAUDE.md`
   war veraltet.
 - [x] **P18-1 Umzugstabelle** Absatz → Ziel erstellen. *(S)* — 43 Einheiten,

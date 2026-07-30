@@ -86,9 +86,10 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   Unterabschnitte, Gl. 1.1.1–1.1.99, Abb. 1.1–1.20, Beispiele 1.1.x,
   Zusammenfassung 1.1. Kein Offset am h2 (erster Abschnitt mit Abb/Zus — startet
   lueckenlos bei 1.1; die 1.2/1.3-Luecke ueberspringt das 1.4-h2 mit 37/3). Alle
-  21 referenzierten Bilder vorhanden. Verifikation Stufe 1–4/6 deckungsgleich
-  mit PDF; **Stufe 5 (Browser-Sicht) offen — Freigabe ausstehend**. Interaktiv
-  (P12-E1) bleibt offen.
+  21 referenzierten Bilder vorhanden. Verifikation Stufe 1–6 deckungsgleich mit
+  PDF; **Stufe 5 (Browser-Sicht) freigegeben 2026-07-24 ("ist ok")** —
+  Verifikation-Ergebnis (Gl-Spannen pro Unterabschnitt, bewusste Abweichungen)
+  im Fragmentkopf `ch_01_01_kinematik.html`. Interaktiv (P12-E1) bleibt offen.
 - [x] **P12-A2 1.2 Dynamik – Impuls und Kraft** — 12 Subsections, 10 Abb.
   (`pskript_mech_dyn_kraft_impuls_gmni_v3.tex`, 74 KB). Kandidaten: `atwood_simulation`,
   `3massen_umlenkrollen_simulation`. *(L)* — migriert 2026-07-25 (Branch

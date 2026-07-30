@@ -8,8 +8,9 @@ Der zugehörige Code liegt in `../src/` (s. `../src/CLAUDE.md`), speziell
 `../MIGRATION_v0.13_nach_HTML.md` — vor Beginn lesen.** Die meisten der dort
 katalogisierten 13 realen Fallstricke sind still (falsche-aber-konsistente
 Nummerierung, ein Bild, das ein PDF mit `.png`-Endung ist, ein geladenes, aber
-nicht aktiviertes MathJax-Paket). Prüfplan nach der Migration:
-`../VERIFIKATION_kapitel_1.4.md` bzw. `../VERIFIKATION_kapitel_1.1.md`.
+nicht aktiviertes MathJax-Paket). Prüfplan nach der Migration: Skill
+`v013-verifikation` (kapitelagnostisch, Stufe 1–6; das pro-Kapitel-Ergebnis
+steht im jeweiligen Backlog-Item + Fragmentkopf, nicht in einer eigenen Datei).
 Fehler der Quelle selbst: `../QUELLEN_FEHLER.md`.
 
 ## Konvention
