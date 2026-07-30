@@ -34,7 +34,7 @@ die Links hier zeigen auf den Pfad.
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |
 | [P7 — Kapitel 0 („Grundlagen") migrieren](backlog/P7-kapitel-0-grundlagen.md) | 9/1 | Migration erledigt; QR-Druck + Druck-Auswahl-Dropdown waren schon code-complete (Backlog stale); offen nur noch der Sim-Link (URL-Mapping nötig) |
 | [P3 — Offene Punkte aus der Verifikation Kapitel 1.4](backlog/P3-verifikation-kapitel-1.4.md) | 16/1 | offen nur noch die Browser-Phasen (Wort-für-Wort gegen PDF, Druck, Sicht) |
-| [P19 — Doku-Hygiene: Restbefunde aus dem Review nach P18](backlog/P19-doku-hygiene.md) | 0/8 | schlafendes `gcN`-System in der Doku unmarkiert, Tatsachen an drei Orten, O(n)-Prüfpläne, fehlender Drift-Wächter |
+| [P19 — Doku-Hygiene: Restbefunde aus dem Review nach P18](backlog/P19-doku-hygiene.md) | 5/7 | P19-1..4 erledigt (`gcN` als abgelöst markiert, eine Quelle je Tatsache, Verifikations-O(n)-Muster aufgelöst, Drift-Wächter `doku_drift_check.py`); offen nur noch P19-5 Beobachtungsposten (`src/CLAUDE.md`-Größe, `CHANGES`-Rolle — triggert bei >20 KB) |
 
 ### Erledigt
 

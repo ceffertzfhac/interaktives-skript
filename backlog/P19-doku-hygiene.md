@@ -40,10 +40,14 @@ Legacy-Referenz verschieben und die Doku darauf reduzieren)? Die Planung in
 **P12-E** baut neue interaktive Figuren durchweg als **Aspekt-Figuren**, nicht
 über die `gcN`-Fabrik — das spricht für „abgelöst".
 
-- [ ] **P19-1a** Entscheidung einholen: schlafend-mit-Rückkehr vs. abgelöst.
-- [ ] **P19-1b** Danach die vier Stellen oben entsprechend kennzeichnen oder
-  entschlacken. **Nicht vorher** — solange die Entscheidung offen ist, wäre
-  Löschen Informationsverlust.
+- [x] **P19-1a** Entscheidung einholen: schlafend-mit-Rückkehr vs. abgelöst. —
+  entschieden 2026-07-30: **abgelöst** (P12-E baut neue Figuren durchweg als
+  Aspekt-Figuren; die Vorlagen-Kaskade nutzt die `gcN`-Fabrik nicht).
+- [x] **P19-1b** Danach die vier Stellen oben entsprechend kennzeichnen oder
+  entschlacken. — umgesetzt in C1 (`a12ef1a`): die vier Stellen (Motoren-Tabelle
+  `kreisbewegung`, „Klassische Figuren", „Static vs. interactive mode",
+  „3D → 2D projection") mit `> **Abgelöst seit v1.7**`-Blöcken markiert; Inhalt
+  als Legacy-Referenz stehen gelassen (kein Informationsverlust).
 
 ---
 
@@ -56,11 +60,16 @@ Grund bleibt: Runbook und verschachtelte `CLAUDE.md` überlappen thematisch
 (Paletten/CVD, Vorlagen-Kaskade, Motorwahl), ohne dass abgegrenzt wäre, wer die
 Quelle ist.
 
-- [ ] **P19-2** Abgrenzung festschreiben und umsetzen: **`CLAUDE.md` = was gilt**
+- [x] **P19-2** Abgrenzung festschreiben und umsetzen: **`CLAUDE.md` = was gilt**
   (Regel, Vertrag, Zeiger), **Runbook = wie man es macht** (Schritte,
   Fallstricke), **Code-Kommentar = warum es so ist** (Begründung am Objekt).
   Zahlen/Aufzählungen gehören an **genau eine** dieser Stellen, die anderen
-  verlinken. Betroffen sind mindestens Paletten/CVD und die Vorlagen-Kaskade.
+  verlinken. — umgesetzt in C2 (`1ba5f70`): Abgrenzung als Blockquote im
+  `src/figures/CLAUDE.md`-Kopf festgeschrieben; Paletten/CVD (`--kb-*`-Werte →
+  `aspekt_kreisbahn.css`-Kopf, CVD-Mechanik → `aspekt_paletten.css`-Kopf, Wie →
+  Runbook §4), Vorlagen-Kaskade + „wie 1.38 = pixelgleich" (→ Runbook §0a) und
+  Motorwahl auf je eine Quelle reduziert; Inkonsistenz 3-vs-4-Motoren im
+  Runbook-Entscheidungsbaum behoben (`bus_weg_zeit` figur-only).
 
 ---
 
@@ -70,11 +79,17 @@ Heute zwei Dateien (1.1, 1.4), Ziel sind **15+ Kapitel** — das ergibt 15+
 Prüfplan-Dateien im WIP-Wurzelverzeichnis, jede zusätzlich mit einer Zeile in
 `DOKUMENTATION.md`. Genau das Muster, das P18 abgeschafft hat.
 
-- [ ] **P19-3** Trennen in (a) **einen** generischen Prüfplan (Phasen +
+- [x] **P19-3** Trennen in (a) **einen** generischen Prüfplan (Phasen +
   Abnahmekriterien, kapitelunabhängig — gehört zum Skill `v013-verifikation`)
   und (b) das **Ergebnisprotokoll je Kapitel**, das an den Ort seines Gegenstands
   gehört: Kopfkommentar des Fragments oder das zugehörige Backlog-Item.
-  `DOKUMENTATION.md` bekommt dann eine Zeile statt N.
+  `DOKUMENTATION.md` bekommt dann eine Zeile statt N. — umgesetzt in C3
+  (`75a76af`): generischer Prüfplan als 8-Phasen-Browser-Checkliste in den Skill
+  `v013-verifikation` Stufe 5 gewandelt; pro-Kapitel-Ergebnis in Backlog-Items
+  (P3 für 1.4, P12-A1 für 1.1) + Fragmentkopf `ch_01_01_kinematik.html`;
+  `VERIFIKATION_kapitel_1.4.md`/`_1.1.md` gelöscht; DOKU/CLAUDE-Verweise
+  umgeleitet. Dabei Drift behoben: P12-A1 sagte „Stufe 5 offen", tatsächlich
+  2026-07-24 freigegeben.
 
 ---
 
