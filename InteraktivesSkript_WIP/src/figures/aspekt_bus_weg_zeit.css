@@ -138,8 +138,8 @@
    (ResizeObserver, s. aspekt_bus_weg_zeit.js) und ueberlaesst width:auto dem
    viewBox-Verhaeltnis 220:404. Die intrinsic width/height-Attribute am SVG
    (220×404) sind Fallback und geben width:auto eine definite Grundlage.
-   Im Schmal-Modus (Stapelung) hat die Straße ihre eigene Hoehe (s. unten) —
-   die JS-Sync greift dann nicht (flex-direction:column). */
+   Im Schmal-Modus bleibt die Figur ZEILE (Ausnahme zur Stapelregel, s. der
+   Breiten-Modi-Block unten) — die JS-Sync greift dort ebenfalls. */
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .aspekt-main .aspekt-scene {
     flex: 0 0 auto; padding: 0; min-width: 0;
 }
@@ -177,24 +177,36 @@
 }
 
 /* ── Breiten-Modi (Vorbild aspekt_winkel_zeit.css) ───────────────────────────
-   Normal: Szene | Diagramm in Zeile. Schmal: gestapelt. Breit: Zeile mit mehr
-   Hoehe. Overlay (Lupe): Zeile, an Viewport-Hoehe gedeckelt. */
+   Normal: Szene | Diagramm in Zeile. Schmal: ZEILE (Ausnahme, s. u. — nicht
+   gestapelt). Breit: Zeile mit mehr Hoehe. Overlay (Lupe): Zeile, an Viewport-
+   Hoehe gedeckelt. */
 
-/* Schmal-Modus: Szene und Diagramm UNTEREINANDER (gestapelt). */
+/* Schmal-Modus: AUSNAHME zur Stapelregel — Szene und Diagramm bleiben
+   NEBENEINANDER (nicht gestapelt). Die vertikale Straße und die Ordinate des
+   x(t)-Diagramms müssen in Position UND Skala korrespondieren (Bus-Ort auf der
+   Straße ↔ Kurven-Ordinate); Stapeln (Straße über Diagramm) bricht diese
+   Positions-Achsen-Korrespondenz. Gleiches Muster wird beim vertikalen
+   Federpendel (P17) wiederkehren — sonst sehr selten. Das ist der begründete
+   Ausnahmefall zur allgemeinen Regel (Einzeldiagramm darf Breite bevorzugen,
+   Gestapeltes/Vollbreites wächst mit der Spalte). Weil das Layout eine Zeile
+   bleibt, greift die JS-Höhen-Sync (s. aspekt_bus_weg_zeit.js) wie im Normal-/
+   Breit-Modus und hält Straße und Ordinate auf derselben Skala. */
 :root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-main-content {
-    flex-direction: column;
+    flex-direction: row;   /* nicht column — Ausnahme, s. o. */
 }
 :root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-scene {
     flex: 0 0 auto;
 }
 :root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-main-content .aspekt-graph {
-    flex: 1 1 auto;
+    flex: 1 1 auto; min-width: 0;
 }
+/* Straße: Hoehe per JS-Sync auf die Diagrammhoehe (wie Normal/Breit); width:auto
+   loest das viewBox-Verhaeltnis 220:404 -> schmales Band neben dem Diagramm. */
 :root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-svg {
-    height: 30vh; width: auto; max-width: 100%; margin: 0 auto;
+    height: auto; width: auto; max-width: none; margin: 0;
 }
 :root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="bus_weg_zeit"] .aspekt-graph-svg {
-    height: auto; max-height: 40vh; width: 92%; margin: 0 auto;
+    height: auto; max-height: 42vh; width: 100%; margin: 0;
 }
 
 /* Breit-Modus: Diagramm hoeher (Szene stretcht per height:100% mit). */

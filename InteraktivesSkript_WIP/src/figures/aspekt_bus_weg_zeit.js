@@ -353,9 +353,11 @@ export function buildBusWegZeitFig(fig) {
     //    entspricht. CSS stretch/aspect-ratio scheitern daran (s. CSS-Kommentar),
     //    daher hier per JS: Diagramm-Hoehe messen, Straßen-SVG-height setzen,
     //    width:auto loest das viewBox-Verhaeltnis 220:404. Ein ResizeObserver
-    //    fängt Modus-Wechsel, Lupe und Viewport-Aenderung ab. Im Schmal-Modus
-    //    (flex-direction:column, Straße gestapelt) hat die Straße ihre eigene
-    //    Hoehe (CSS) -> inline-height loeschen, nicht syncen.
+    //    fängt Modus-Wechsel, Lupe und Viewport-Aenderung ab. Der Schmal-Modus
+    //    der Inline-Figur ist eine ZEILE (Ausnahme zur Stapelregel, s. CSS) ->
+    //    Sync greift. Nur das Lupe-Overlay im Schmal-Modus stapelt (CSS
+    //    .aspekt-im-overlay + schmal -> column); dort loeschen wir die inline-
+    //    Hoehe und lassen die CSS-Hoehe greifen, statt zu syncen.
     const streetSvg = ge(p + 'street_svg');
     const graphSvg = ge(p + 'graph_svg');
     const mainContent = scene.querySelector('.aspekt-main-content');
