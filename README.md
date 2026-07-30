@@ -33,7 +33,8 @@ mitlaufen. Entstanden für die Physik-Vorlesung im Fachbereich 8 der
 - **16 interaktive Aspekt-Figuren** auf vier Motoren: `kreisbewegung`
   (2D, Abb. 1.38–1.51), `kreis_spiral` (ISO-3D, Abb. 1.57–1.59),
   `grundbegriffe` (2D, Abb. 1.1) und `bus_weg_zeit` (Abb. 1.2) — mit Reglern,
-  Ablaufsteuerung, Analyse-Werten und Vergleichskurven.
+  Ablaufsteuerung, Analyse-Werten und Vergleichskurven; je Figur ein Link zur
+  zugehörigen vollständigen Stand-alone-Simulation.
 - **Lesekomfort**: Kapitelnavigation mit Seitenfortschritt, Inhaltsverzeichnis
   mit Suche, drei Spaltenbreiten, fünf Textgrößen, Dunkelmodus, wählbare
   Farbpaletten (auch CVD).
