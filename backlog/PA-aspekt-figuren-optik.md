@@ -179,7 +179,7 @@ Zuweisung per Freigabe-Tipp.
   gedeckelt → homogen. Folge-Regel v1.31.19: Einzeldiagramm darf Breite
   bevorzugen (s. P-AF-7). *(S, nur Analyse)*
 
-- [ ] **P-AF-7: Pause-Button echtes Pause-Design.** Die Aspekt-Runbar
+- [x] **P-AF-7: Pause-Button echtes Pause-Design.** Die Aspekt-Runbar
   (`data-act="stop"`, mittlerer der Start/Stop/Reset-Knöpfe) ist semantisch
   eine **Pause**, kein Stop: `stop()` hält an Ort (nur `playing=false;
   cancelAnimationFrame`, kein `curT=0`), `start()` setzt an `curT` fort,
@@ -194,5 +194,16 @@ Zuweisung per Freigabe-Tipp.
   alpha_omega, bus_weg_zeit. Vorher pro Figur prüfen, ob `stop()` wirklich
   halten (→ Pause) oder zurücksetzen (→ Stop bleibt korrekt) bedeutet — nur
   erstere umbauen. Außerdem prüfen, ob die gc10-Kreisbewegung-Sim
-  (playBtn/pauseBtn) dasselbe Quadrat trägt. *(S–M)*
+  (playBtn/pauseBtn) dasselbe Quadrat trägt. *(S–M)* — *Fix (v1.31.21):
+  verifiziert — in allen 14 Dateien ist `stop()` reines Halten (`playing=false;
+  cancelAnimationFrame; rafId=null`, kein `curT=0`) und `start()` setzt an `curT`
+  fort (kein `curT=0` im Start-Body) → überall Pause-Semantik. Icon: Stop-Quadrat
+  (`<rect x=7 y=7 w=10 h=10>`) ersetzt durch zwei Pause-Balken (`<rect x=7.5 y=5.5
+  w=3.4 h=13 rx=1.5>` + `<rect x=13.1 y=5.5 w=3.4 h=13 rx=1.5>`), `aria-label`/
+  `title` „Stop" → „Pause" (13× „Pause: Ablauf anhalten", bus_weg_zeit „Pause:
+  anhalten"). `data-act="stop"` als internes Action-Key bewusst unverändert
+  (Verkabelung in allen Figuren bleibt). gc10-Kreisbewegung-Sim: `pause_btn`
+  nur noch im schlafenden Motor referenziert (state.js), kein live-Markup mehr
+  seit v1.7 (kein `gcN`-Container) — nichts zu ändern. Pro Datei genau 1 Zeile
+  geändert (14/14), `node --check` sauber.*
 
