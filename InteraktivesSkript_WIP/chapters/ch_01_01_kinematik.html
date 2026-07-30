@@ -390,10 +390,12 @@
         \end{equation}
 
         <p>Das setzen wir in die Gleichung \(y(t)\) ein und erhalten:</p>
-        \begin{multline}
-        y(x)=-\frac{1}{2}\cdot g \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right)^2 + v_0\cdot \sin{(\alpha)} \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right) + h_0 \\
-        =  -\frac{1}{2}\cdot\left( \frac{g}{v_0^2\cdot \cos^2{(\alpha)}}\right)\cdot x^2 + \tan{(\alpha)}\cdot x+ h_0
-        \end{multline}
+        \begin{equation}
+        \begin{split}
+        y(x)&=-\frac{1}{2}\cdot g \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right)^2 + v_0\cdot \sin{(\alpha)} \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right) + h_0 \\
+        &= -\frac{1}{2}\cdot\left( \frac{g}{v_0^2\cdot \cos^2{(\alpha)}}\right)\cdot x^2 + \tan{(\alpha)}\cdot x+ h_0
+        \end{split}
+        \end{equation}
 
         <p>Wir sehen: Die Flug<strong>bahn</strong> eines Objektes, das schräg geworfen wurde, ist auch eine Parabel! Machen Sie sich klar: diese Parabel ist eine andere Parabel als die Parabel der Komponente \(y(t)\). Das eine (die Bahn) beschreibt den zeitunabhängigen Verlauf der Flugkurve (vergl. Spur im Schnee) durch den Raum, das andere (die y-Komponente) beschreibt den zeitlichen Verlauf der Höhe über dem Boden.</p>
 
@@ -701,10 +703,12 @@
         \left(\begin{matrix} -\sin{(\frac{2\pi}{T}t)} \\ \cos{(\frac{2\pi}{T} t)} \end{matrix} \right)
         \end{equation}
         <p>Wir hatten oben stehend schon besprochen, dass der Geschwindigkeitsvektor tangential zu Bahn steht. Das können wir am Beispiel der Kreisbahn besonders gut überprüfen: Der Vektor \(\vec s(t)\) zeigt immer vom Ursprung zum Ort des Objektes, also zu einem Punkt der Kreisbahn. Die Mathematik sagt uns: die Tangente an den Kreis steht immer senkrecht zu diesem Vektor. Wir müssen also nun überprüfen, ob die Vektoren \(\vec s(t)\) und \(\vec v(t)\) senkrecht zueinander stehen. Das können wir mit Hilfe des Skalarproduktes überprüfen, denn zwei Vektoren<span class="fussnote">...wobei keiner von beiden der Nullvektor ist.</span> stehen gerade dann senkrecht (orthogonal) zueinander, wenn das Skalarprodukt null ist.</p>
-        \begin{multline}
-        \vec s(t) \cdot \vec v(t) = \left(\begin{matrix}R\cdot \cos{(\frac{2\pi}{T}t)} \\R \cdot \sin{(\frac{2\pi}{T} t)} \end{matrix} \right) \cdot \frac{2 \cdot \pi \cdot R}{T} \cdot
-        \left(\begin{matrix} -\sin{(\frac{2\pi}{T}t)} \\ \cos{(\frac{2\pi}{T} t)} \end{matrix} \right)\\ =\frac{2 \cdot \pi \cdot R}{T} \cdot \left( -\sin(...)\cos(...) + \sin(...) \cos(...) \right) =0  \quad\text{✓}
-        \end{multline}
+        \begin{equation}
+        \begin{split}
+        \vec s(t) \cdot \vec v(t) &= \left(\begin{matrix}R\cdot \cos{(\frac{2\pi}{T}t)} \\R \cdot \sin{(\frac{2\pi}{T} t)} \end{matrix} \right) \cdot \frac{2 \cdot \pi \cdot R}{T} \cdot
+        \left(\begin{matrix} -\sin{(\frac{2\pi}{T}t)} \\ \cos{(\frac{2\pi}{T} t)} \end{matrix} \right)\\ &=\frac{2 \cdot \pi \cdot R}{T} \cdot \left( -\sin(...)\cos(...) + \sin(...) \cos(...) \right) =0  \quad\text{✓}
+        \end{split}
+        \end{equation}
         <p>Wie vermutet steht also der Vektor der Geschwindigkeit tangential zur Bahnkurve.</p>
     </div>
 
@@ -742,13 +746,17 @@
         \vec v_0=\left(\begin{matrix} v_{0,x} \\  v_{0,y} \end{matrix}\right)
         \end{equation}
         <p>Die Strecke ermitteln wir, indem wir Komponentenweise integrieren:</p>
-        \begin{multline}
-        v_x(t)=v_{0,x} \quad \Rightarrow \\  x(t)= \int\limits^t_0 v_x(\tau) \,\text{d}\tau+x_0 =\int\limits^t_0 v_{0,x} \,\text{d}\tau+x_0 = \left[ v_{0,x}\cdot \tau \right]^t_0+x_0=v_{0,x}\cdot t+x_0
-        \end{multline}
+        \begin{equation}
+        \begin{split}
+        v_x(t)&=v_{0,x} \quad \Rightarrow \\  x(t)&= \int\limits^t_0 v_x(\tau) \,\text{d}\tau+x_0 =\int\limits^t_0 v_{0,x} \,\text{d}\tau+x_0 = \left[ v_{0,x}\cdot \tau \right]^t_0+x_0=v_{0,x}\cdot t+x_0
+        \end{split}
+        \end{equation}
         <p>und</p>
-        \begin{multline}
-        v_y(t)=-g \cdot t+v_{0,y}\quad \Rightarrow \\ y(t)= \int\limits^t_0 (-g \cdot \tau + v_{0,y}) \,\text{d}\tau+y_0 = \left[ -\frac{g}{2} \cdot \tau^2 + v_{0,y}\cdot \tau \right]^t_0+y_0\\=-\frac{1}{2}\cdot g \cdot t^2 + v_{0,y}\cdot t+y_0
-        \end{multline}
+        \begin{equation}
+        \begin{split}
+        v_y(t)&=-g \cdot t+v_{0,y}\quad \Rightarrow \\ y(t)&= \int\limits^t_0 (-g \cdot \tau + v_{0,y}) \,\text{d}\tau+y_0 = \left[ -\frac{g}{2} \cdot \tau^2 + v_{0,y}\cdot \tau \right]^t_0+y_0\\&=-\frac{1}{2}\cdot g \cdot t^2 + v_{0,y}\cdot t+y_0
+        \end{split}
+        \end{equation}
         <p>Fügen wir nun die Komponenten zusammen, um den Vektor der Strecke zu erhalten:</p>
         \begin{equation}
         \vec{s}(t)=\left(\begin{matrix} v_{0,x} \cdot t +x_0 \\ -\frac{1}{2}\cdot g t^2 + v_{0,y} \cdot t + y_0\end{matrix}\right)
