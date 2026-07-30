@@ -1624,19 +1624,44 @@ Pflichtkontext pro Turn ≈ **11–12k → ~3k Token**; Backlog-Zugriff **33k �
 
 ### Sub-Tasks
 
-- [ ] **P18-0 Faktenkorrekturen zuerst** (unabhängig vom Umbau nötig): vierter
+- [x] **P18-0 Faktenkorrekturen zuerst** (unabhängig vom Umbau nötig): vierter
   Motor `bus_weg_zeit`, `src/center.js`, `src/footnotes.js`, 16 statt 15/14
   Aspekt-Figuren, `QUELLEN_FEHLER.md` + `VERIFIKATION_kapitel_1.1.md` erwähnen. *(S)*
-- [ ] **P18-1 Umzugstabelle** Absatz → Ziel erstellen und abnehmen lassen. *(S)*
-- [ ] **P18-2 Nested CLAUDE.md** anlegen (`WIP/`, `WIP/src/`, `WIP/src/figures/`),
-  Inhalte verschieben, Duplikate erst nach Zielprüfung streichen. *(M)*
-- [ ] **P18-3 Wurzel-`CLAUDE.md`** auf Klasse A + Wegweiser-Tabelle eindampfen. *(S)*
-- [ ] **P18-4 `DOKUMENTATION.md`** als Doku-Index mit „lies das, wenn …"-Spalte. *(S)*
-- [ ] **P18-5 Verlustkontrolle** (Satz-für-Satz-Abgleich gegen `git show HEAD:CLAUDE.md`). *(S)*
+  — erledigt 2026-07-30 in ba0fee8/ce73e16. Die Zahl „16" wurde nicht korrigiert,
+  sondern durch einen Zeiger auf `ASPEKT_FACTORIES` **ersetzt** (Mengen-Regel).
+  `README.md` war bereits korrekt (16 Figuren, vier Motoren) — nur `CLAUDE.md`
+  war veraltet.
+- [x] **P18-1 Umzugstabelle** Absatz → Ziel erstellen. *(S)* — 43 Einheiten,
+  jede mit genau einem Ziel; dazu die Liste der bewussten Streichungen mit
+  Fundstelle der verbleibenden Quelle.
+- [x] **P18-2 Nested CLAUDE.md** anlegen, Inhalte verschieben, Duplikate erst nach
+  Zielprüfung streichen. *(M)* — ba0fee8; **vier** statt drei Dateien: `chapters/`
+  bekam eine eigene, weil `WIP/CLAUDE.md` bei *jeder* WIP-Arbeit mitlädt und der
+  Nummerierungs-/Querverweis-Block dort den Effekt zunichte gemacht hätte.
+- [x] **P18-3 Wurzel-`CLAUDE.md`** auf Klasse A + Wegweiser-Tabelle eindampfen. *(S)*
+  — 7b299ff, 41,9 KB → 7,6 KB (−82 %).
+- [x] **P18-4 `DOKUMENTATION.md`** als Doku-Index mit „lies das, wenn …"-Spalte. *(S)*
+  — ce73e16.
+- [x] **P18-5 Verlustkontrolle** gegen `git show 41df9ff:CLAUDE.md`. *(S)* —
+  mechanisch statt satzweise: 363 harte Bezeichner (Code-Spans, Pfade,
+  `--css`-Tokens, Funktionsnamen, Versionen) extrahiert und in der Vereinigung
+  der neuen Dateien gesucht. 17 Fehltreffer, davon 16 Zitier-/Präfix-/Umbruch-
+  Artefakte (verifiziert), **eine echte Lücke** (Fragment→Themenkomplex-
+  Zuordnung) → durch einen Reproduktions-Grep in `chapters/CLAUDE.md` geschlossen.
 - [ ] **P18-6 BACKLOG-Split**: Index + `backlog/PNN-*.md` + `BACKLOG_ARCHIV.md`
-  für erledigte Items. Separat vom CLAUDE.md-Umbau machbar. *(M)*
+  für erledigte Items. Separat vom CLAUDE.md-Umbau machbar. **Offen — der
+  größere verbliebene Hebel** (123 KB ≈ 33k Token bei jedem Backlog-Zugriff). *(M)*
 - [ ] **P18-7 Skills/Runbooks** auf die neuen Pfade verweisen lassen (die vier
-  `SKILL.md` referenzieren heute CLAUDE.md-Abschnitte namentlich). *(S)*
+  `SKILL.md` referenzieren heute CLAUDE.md-Abschnitte namentlich, z. B.
+  `v013-kapitel-migration` auf „Versionierung" und „CLAUDE.md ergänzen, falls
+  sich Architektur oder Konventionen geändert haben" — Letzteres muss jetzt auf
+  die **zuständige** verschachtelte Datei zeigen). Offen. *(S)*
+
+### Nebenbefund beim Umbau
+
+`aspekt_paletten.css` sagt im Kopfkommentar „Jeder Block setzt WERT- UND
+ALIAS-Token (**18** gesamt)"; gezählt sind es **20** `--kb-*` je Block (plus 5
+`--gk-*`). `CLAUDE.md` sagte korrekt 20. Kommentar-Korrektur offen.
 
 ---
 
