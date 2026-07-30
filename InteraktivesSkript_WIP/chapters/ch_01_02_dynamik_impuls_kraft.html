@@ -548,7 +548,11 @@
     <p>Die Strecke erhalten wir dann durch erneute Integration</p>
 
     \begin{equation}
-    x(t)=\int\limits_{0}^t v_x(\tau)\text{d}\tau + x_{x,0} = \int\limits_{0}^t (g \cdot \sin \alpha  \cdot \tau + v_{x,0}) \text{d}\tau + x_{0} = \frac{1}{2}g \cdot \sin \alpha \cdot t^2 + v_{x,0} \cdot t + x_0
+    \begin{split}
+    x(t)&=\int\limits_{0}^t v_x(\tau)\text{d}\tau + x_{x,0} \\
+    &= \int\limits_{0}^t (g \cdot \sin \alpha  \cdot \tau + v_{x,0}) \text{d}\tau + x_{0} \\
+    &= \frac{1}{2}g \cdot \sin \alpha \cdot t^2 + v_{x,0} \cdot t + x_0
+    \end{split}
     \end{equation}
 
     <p>Die Bewegung eines Objektes, welches auf einer schiefen Ebene rutscht, ist also eine gleichförmig beschleunigte Bewegung, wobei die Beschleunigung und damit auch die Endgeschwindigkeit vom Neigungswinkel abhängt. Hierbei ist interessant zu sehen, dass die beiden Grenzfälle \(\alpha=0^\circ\) und \(\alpha=90^\circ\) zu einer unbeschleunigten Bewegung bzw. zum freien Fall führen. Im ersten Fall verschwindet durch \(\sin(0^\circ)=0\) der Beschleunigungsterm und das Objekt behält seine Anfangsgeschwindigkeit bei. Im zweiten Fall erhält man wegen \(\sin(90^\circ)=1\) eine Formel, die zu der des freien Falls identisch ist.</p>
@@ -689,7 +693,11 @@
         <p>mit unbekanntem \(\vert \vec F_N \vert\).</p>
         <p>Die Kiste kann sich nur entlang der schiefen Ebene bewegen, hat also eine Beschleunigung nur in \(x\)-Richtung. In \(y\)-Richtung muss die Summe der Kräfte null sein, da die Kiste nicht in die schiefe Ebene einsinken kann. Daraus folgt:</p>
         \begin{equation}
-        \begin{pmatrix}  m\cdot a_x \\ 0 \end{pmatrix} = \vec F_\text{ges}= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_S \vert \cdot \begin{pmatrix} 1 \\ 0  \end{pmatrix}+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix}  - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \begin{split}
+        \begin{pmatrix}  m\cdot a_x \\ 0 \end{pmatrix} &= \vec F_\text{ges} \\
+        &= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_S \vert \cdot \begin{pmatrix} 1 \\ 0  \end{pmatrix}+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix} \\
+        &\quad - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \end{split}
         \end{equation}
 
         <p>Aus der \(y\)-Komponente folgt:</p>
