@@ -20,7 +20,8 @@
    "normal" bekommt KEINEN Override-Block: hier gilt die Quellen-Palette bzw.
    im Darkmode darkmode.css.
 
-   Jeder Block setzt WERT- UND ALIAS-Token (18 gesamt): weil darkmode.css die
+   Jeder Block setzt WERT- UND ALIAS-Token (20 --kb-*, dazu 5 --gk-* fuer die
+   Kapitel-1.1-Figur = 25 je Block): weil darkmode.css die
    Alias-Token direkt setzt, müsste sonst im Dark+CVD-Fall der Darkmode-Alias-
    Wert gewinnen. Spezifität (0,4,0) schlägt sowohl Default (0,1,0) als auch
    darkmode.css (0,1,0). #gc10 wird mitgeführt (Forward-Compat, parity mit

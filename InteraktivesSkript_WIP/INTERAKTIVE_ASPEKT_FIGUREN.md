@@ -293,7 +293,7 @@ auf `.aspekt-figur` statt `#gc10` gescopt — in zwei Dateien:
   Auswahl-Signal `<html data-palette="normal|deuter|tritan">` (gesetzt in
   `core.js::set_palette`, persistiert in `skript_palette`), Hell/Dunkel-Zweig an
   `<html data-darkmode="0|1">` (rein additives Signal, das `toggle_darkmode`
-  synchron hält). Jeder Block setzt **alle 18 --kb-*-Tokens** (WERT + ALIAS —
+  synchron hält). Jeder Block setzt **alle 20 --kb-*-Tokens** (WERT + ALIAS —
   `darkmode.css` entkoppelt die Aliase direkt, sonst gewänne im Dark+CVD-Fall
   der Darkmode-Alias). Normal = kein Override. **Kein Re-Render nötig**: die
   Custom-Properties kaskandieren, SVG `stroke`/`fill` via `var()` werden
