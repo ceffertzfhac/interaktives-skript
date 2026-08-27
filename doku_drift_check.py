@@ -104,14 +104,18 @@ def check_chapter_keys_subset() -> None:
 
 # === Check 3: Motor-Ordner == Motoren-Tabelle in figures/CLAUDE.md ==========
 
-EXPECTED_MOTORS = {"bus_weg_zeit", "grundbegriffe", "kreis_spiral", "kreisbewegung"}
+EXPECTED_MOTORS = {"bus_weg_zeit", "federpendel", "grundbegriffe", "kreis_spiral",
+                   "kreisbewegung"}
 
 
 def check_motors() -> None:
     dirs = {p.name for p in FIGURES.iterdir() if p.is_dir()}
     text = read(FIGURES_CLAUDE)
     # Motoren-Tabelle: Zeilen der Form | `kreisbewegung/` | …
-    section = re.search(r"## Die vier Motoren(.*?)(\n## |\Z)", text, re.S)
+    # Ueberschrift bewusst OHNE Zahl ("Die Motoren"): sonst muss sie bei jedem
+    # weiteren Motor umbenannt werden — und mit ihr dieser Regex (P18: Mengen
+    # nicht in Prosa zaehlen).
+    section = re.search(r"## Die Motoren(.*?)(\n## |\Z)", text, re.S)
     table_names = set(re.findall(r"`([a-z_]+)/`", section.group(1))) if section else set()
     if not (dirs == table_names == EXPECTED_MOTORS):
         fail("Check 3 (Motoren): Ordner=%s · Tabelle=%s · erwartet=%s"
