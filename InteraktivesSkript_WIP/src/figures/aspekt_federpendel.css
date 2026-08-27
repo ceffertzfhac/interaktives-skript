@@ -1,0 +1,216 @@
+/* aspekt_federpendel.css — Optik der Federpendel-Aspekt-Figur (Abschnitt 3.1.5,
+   „Horizontales Feder-Masse-System"). Panel-/Slider-/Legenden-/Analyse-/Lupe-/
+   Caption-Regeln, die Graph-STRUKTUR (Hintergrund, Gitter, Achsen, Skalen,
+   Titel, Hover) und das Overlay kommen unveraendert aus aspekt_kreisbahn.css
+   (geladen), weil diese Figur ebenfalls .aspekt-figur ist. Hier stehen NUR:
+   die szenen-eigenen Farben der Stand-alone-Sim (Input/Simulationen/
+   Project_federpendel_simulation/css/styles.css), das gestapelte Layout
+   (Szene UEBER Diagramm) und die Ueberschreibung der Kapitel-1.4-Vektorregeln.
+
+   EIGENE PALETTE: aspekt_kreisbahn.css definiert die Kapitel-1.4-Vektorfarben
+   (--kb-r grau, --kb-vel orange, …) und erklaert dort ausdruecklich, dass ein
+   anderes Kapitel eine EIGENE Palette definieren darf. Kapitel 3 tut das hier:
+   die Szene uebernimmt die Farbrollen der Stand-alone-Sim (--fp-*), nicht die
+   der Kreisbewegungs-Abbildungen. Die --kb-Basistokens (surface/text/border/
+   accent/graph-bg) bleiben gemeinsam — sie sind Seiten-, nicht Kapitelsache. */
+
+.aspekt-figur[data-aspekt="federpendel"] {
+    /* Vorlage css/styles.css + shared design-system (Hell-Werte).
+       --fp-surface3 = Ankerflaeche, --fp-sp = Auslenkung (Ortsvektor + x(t)-
+       Kurve; in der Vorlage --c-sp). Das --kb-*-Set liefert alles Uebrige. */
+    --fp-surface3: #eceef5;
+    --fp-sp: #222222;
+    /* Vektor-Strichstaerke: die Vorlage zeichnet 2,5 px (nicht die 4 px der
+       Kapitel-1.4-Regel). ×--kb-lw ergibt 3,75 px — passend zur ×1,5 skalierten
+       Pfeilspitze (18,75 px lang, s. Marker-Kommentar in aspekt_federpendel.js). */
+    --kb-vec-hw: 2.5px;
+}
+
+/* ── Szene: Anker, Referenzlinien, Feder, Masse — Farben 1:1 aus der Vorlage.
+   IDs sind pro Instanz prefixt (fp<n>_, s. federpendel/runtime.js) -> Suffix-
+   Selektoren, gescopt unter .aspekt-scene. Strichstaerken ueber --kb-lw
+   mitskaliert wie in allen Aspekt-Figuren; NICHT skaliert wird die Feder — ihre
+   Staerke haengt von k ab und wird vom JS als Attribut gesetzt (dort ist der
+   Faktor eingerechnet), CSS wuerde den dynamischen Wert ueberschreiben. ───── */
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="anchor_object"] {
+    fill: var(--fp-surface3); stroke: var(--kb-border2); stroke-width: calc(1px * var(--kb-lw));
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="surface"] {
+    stroke: var(--kb-text); stroke-width: calc(2px * var(--kb-lw));
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="equilibrium_line"] {
+    stroke: var(--kb-text2); stroke-width: calc(1.5px * var(--kb-lw));
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="unstretched_length_line"],
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="min_pos_line"],
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="max_pos_line"] {
+    stroke: var(--kb-text3); stroke-width: calc(1px * var(--kb-lw));
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="spring"] {
+    stroke: var(--kb-text2); fill: none;
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="mass"] {
+    fill: var(--kb-accent); stroke: var(--kb-text); stroke-width: calc(1px * var(--kb-lw));
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene .ref-label {
+    fill: var(--kb-text2); font-family: var(--kb-font);
+    font-size: calc(12px * var(--kb-text-scale) * var(--kb-fs));
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene .ref-label.eq-label {
+    fill: var(--kb-text); font-size: calc(14px * var(--kb-text-scale) * var(--kb-fs));
+}
+
+/* ── Vektoren: nur der Ortsvektor ist sichtbar (er IST die Auslenkung x); v und
+   a sind ausgeblendet, ihre Regeln stehen der Vollstaendigkeit halber hier —
+   eine spaetere Figur (3.1.9) schaltet sie ohne CSS-Aenderung frei. Die
+   Kapitel-1.4-Regeln in aspekt_kreisbahn.css sind weniger spezifisch
+   (.aspekt-figur .aspekt-scene […] = 0,2,1) und werden hier ueberschrieben
+   (0,3,1). Strichstaerke bleibt die zentrale --kb-vec-hw-Regel. ──────────── */
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="position_vector"]     { stroke: var(--fp-sp); }
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="velocity_vector"]     { stroke: var(--kb-vel); }
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="acceleration_vector"] { stroke: var(--kb-acc); }
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="arrowhead-pos"] polygon { fill: var(--fp-sp); }
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="arrowhead-vel"] polygon { fill: var(--kb-vel); }
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="arrowhead-acc"] polygon { fill: var(--kb-acc); }
+
+/* Achsenpfeil der Szene (x-Achse unter der Masse). markerUnits bleibt
+   „strokeWidth" — setupScene() kuerzt diese Linie nicht, die Spitze skaliert
+   also korrekt mit der Strichstaerke mit (s. aspekt_federpendel.js). */
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="x_axis_arrow"],
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="y_axis_arrow"] {
+    stroke: var(--kb-text); stroke-width: calc(1.5px * var(--kb-lw));
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-scene [id$="arrowhead"] polygon { fill: var(--kb-text); }
+
+/* ── Diagramm: Kurve und Punkt in der Sim-Akzentfarbe (Vorlage #graph_line /
+   #graph_point). Die Vergleichskurve gestrichelt + duenner, gleiche Farbe. ── */
+.aspekt-figur[data-aspekt="federpendel"] [id$="graph_line"]  { stroke: var(--kb-accent); }
+.aspekt-figur[data-aspekt="federpendel"] [id$="graph_point"] { fill: var(--kb-accent); }
+.aspekt-figur[data-aspekt="federpendel"] [id$="graph_prev_line"] {
+    fill: none; stroke: var(--kb-accent); stroke-opacity: .5;
+    stroke-width: calc(1.5px * var(--kb-lw)); stroke-dasharray: 6,4;
+    pointer-events: none;
+}
+.aspekt-figur[data-aspekt="federpendel"] [id$="graph-arrowhead"] polygon { fill: var(--kb-text); }
+
+/* ── Legenden-Farbfelder dieser Figur (die zentralen data-c-Werte gehoeren zur
+   Kapitel-1.4-Palette). ─────────────────────────────────────────────────── */
+.aspekt-figur[data-aspekt="federpendel"] .legend-swatch[data-c="fp-mass"]   { background: var(--kb-accent); }
+.aspekt-figur[data-aspekt="federpendel"] .legend-swatch[data-c="fp-spring"] { background: var(--kb-text2); height: 3px; }
+.aspekt-figur[data-aspekt="federpendel"] .legend-swatch[data-c="fp-x"]      { background: var(--fp-sp); height: 4px; }
+.aspekt-figur[data-aspekt="federpendel"] .legend-swatch[data-c="fp-ref"] {
+    background: repeating-linear-gradient(90deg, var(--kb-text3) 0 4px, transparent 4px 7px); height: 2px;
+}
+
+/* ── Mittel-Spalte: Szene UEBER dem Diagramm (Spalte) in ALLEN Breiten-Modi.
+   Anders als 1.39/1.41 (Zeile): das horizontale Feder-Masse-System ist ein
+   breites Band (viewBox 600×225, Aspect 2,67) — nebeneinander wuerde es auf
+   Streichholzhoehe schrumpfen. Die Stand-alone-Sim stapelt aus demselben Grund
+   (render.js::setupScene entfernt im horizontalen Aufbau layout-side). ───── */
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-main {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-main-content {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-runbar {
+    position: sticky;
+    top: 0;
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 8px;
+    background: var(--kb-surface);
+    border-bottom: none;
+    box-shadow: none;
+}
+/* Zeitanzeige der Vorlage (.time-label) neben den Ablauf-Knoepfen. */
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-fp-time {
+    font-family: var(--kb-font-mono);
+    font-size: calc(12px * var(--kb-text-scale));
+    color: var(--kb-text2);
+    white-space: nowrap;
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-main-content .aspekt-scene { padding: 4px 8px 0; }
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-main-content .aspekt-graph { padding: 0 8px 8px; min-width: 0; }
+/* Das Szenen-SVG ist ein breites Band -> volle Breite statt der zentralen
+   460-px-Deckelung (die gilt fuer die quadratischen Kreisbahn-Szenen).
+   HOEHEN-DECKELUNG: gestapelt addieren sich Szene und Diagramm, die Figur wird
+   also von sich aus hoeher als die nebeneinander gesetzten (1.39: 657 px,
+   1.41: 533 px bei 1400x950 gemessen). Ohne Deckelung kam sie auf 940 px und
+   fuellte den Bildschirm allein aus. 26vh + 36vh halten sie in derselben
+   Groessenordnung wie die uebrigen Aspekt-Figuren; beide SVGs tragen
+   preserveAspectRatio="xMidYMid meet", skalieren also seitenverhaeltnistreu
+   und zentrieren sich in der gedeckelten Box. */
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-svg {
+    display: block; width: 100%; height: auto; max-width: none; max-height: 26vh;
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-graph-svg {
+    display: block; width: 100%; height: auto; max-width: none; max-height: 36vh;
+    margin: 0 auto;
+}
+
+/* ── Ablauf-Knoepfe (Start/Stop/Reset als Pictogramme) — wie 1.39/1.41. ──── */
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-btn-row { display: flex; gap: 6px; }
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-btn.aspekt-btn-icon {
+    flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border2); border-radius: 6px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-btn.aspekt-btn-icon:hover {
+    color: var(--kb-accent); border-color: var(--kb-accent);
+}
+.aspekt-figur[data-aspekt="federpendel"] .aspekt-btn.aspekt-btn-icon svg {
+    width: 15px; height: 15px; display: block;
+}
+
+/* ── Tempo-Pills (Slow-Mo analog zur Vorlage: 1× … ⅛×) ─────────────────── */
+.aspekt-figur[data-aspekt="federpendel"] .speed-pills { display: flex; gap: 5px; }
+.aspekt-figur[data-aspekt="federpendel"] .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: calc(11.5px * var(--kb-text-scale, 1));
+    color: var(--kb-text2); cursor: pointer; transition: all .15s;
+    position: relative; -webkit-user-select: none; user-select: none;
+}
+.aspekt-figur[data-aspekt="federpendel"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+.aspekt-figur[data-aspekt="federpendel"] .speed-pill.active {
+    background: color-mix(in srgb, var(--kb-accent) 12%, transparent);
+    border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
+}
+
+/* ── Schmal-Modus: bleibt gestapelt (ist es ohnehin), nur flacher, damit Szene
+   UND Diagramm gleichzeitig auf den Bildschirm passen. Die Werte MUESSEN unter
+   den Grundwerten (26vh/36vh) liegen: schmal ist die breitere Lesespalte, die
+   SVGs werden dort von sich aus hoeher (Breite × festes Seitenverhaeltnis).
+   Mit 24vh/40vh war die Figur im Schmal-Modus hoeher als im Normal-Modus. ── */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="federpendel"] .aspekt-svg { max-height: 22vh; }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="federpendel"] .aspekt-graph-svg { max-height: 32vh; }
+
+/* ── Overlay (Lupe): ebenfalls gestapelt, an die Viewport-Hoehe gedeckelt.
+   Spezifischer als die allgemeine Overlay-Regel in aspekt_kreisbahn.css. ─── */
+.aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-main { flex-direction: column; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-main-content { flex-direction: column; align-items: stretch; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-main-content .aspekt-scene { padding: 8px 12px 0; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-main-content .aspekt-graph { padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-svg {
+    width: 100%; height: auto; max-width: none; max-height: 32vh;
+}
+.aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-graph-svg {
+    width: 100%; height: auto; max-width: none; max-height: 46vh;
+}
+
+/* Zoom + schmal: Platz priorisieren — einspaltig, Analyse-Leiste aus, kompakter
+   (gleiche Massnahme wie in aspekt_weg_zeit.css). */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-body { display: block; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-panel-left {
+    width: auto; border-right: none; border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-panel-right { display: none; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-runbar { padding: 6px 8px; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-svg { max-height: min(24vh, 200px); }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="federpendel"] .aspekt-graph-svg { max-height: min(42vh, 360px); }
