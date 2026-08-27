@@ -150,7 +150,7 @@ const VARIANTS = [
 
 const PANEL_RIGHT = `
 <div class="aspekt-panel aspekt-panel-right">
-  <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" title="Analyse ein-/ausklappen">
+  <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" data-tip="Analyse ein-/ausklappen">
     <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
     <span class="ph-label">Analyse</span>
   </button>
@@ -189,7 +189,7 @@ export function buildGrundbegriffeFig(fig) {
     lupe.className = 'aspekt-lupe';
     lupe.dataset.action = 'toggle_aspekt';
     lupe.setAttribute('aria-label', 'Figur vergrößern');
-    lupe.title = 'Vergrößern';
+    lupe.dataset.tip = 'Figur vergrößern';
     lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
     scene.querySelector('.aspekt-scene').appendChild(lupe);
 

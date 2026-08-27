@@ -141,7 +141,7 @@ const PANEL_LEFT = `
 // über window.eq_latex/label — das ist die Form, die vor „Physik raus" stand).
 const PANEL_RIGHT = `
 <div class="aspekt-panel aspekt-panel-right">
-  <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" title="Analyse ein-/ausklappen">
+  <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" data-tip="Analyse ein-/ausklappen">
     <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
     <span class="ph-label">Analyse</span>
   </button>
@@ -444,7 +444,10 @@ function setLupeZustand(btn, offen) {
     btn.innerHTML = offen ? LUPE_ICON_ZU : LUPE_ICON_AUF;
     btn.setAttribute('aria-label', offen ? 'Vergrößerung schließen' : 'Figur vergrößern');
     btn.setAttribute('aria-expanded', offen ? 'true' : 'false');
-    btn.title = offen ? 'Schließen' : 'Vergrößern';
+    // Tooltip statt title (P20): der Text muss mit dem Zustand wandern, sonst
+    // steht im Overlay noch "Figur vergrößern".
+    btn.dataset.tip = offen ? 'Vergrößerung schließen' : 'Figur vergrößern';
+    btn.removeAttribute('title');
 }
 
 function openOverlay(fig) {

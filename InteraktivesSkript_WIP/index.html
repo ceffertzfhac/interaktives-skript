@@ -98,10 +98,10 @@
     </head>
     <body>
         <div id="header">
-            <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation">☰</button>
+            <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation" data-tip="Kapitelnavigation">☰</button>
             <div id="header_brand">
                 <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
-                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.33.13</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
+                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.34.1</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
                      (Nutzervorgabe). Details im Kontakt-Kasten und in DISCLAIMER.md. --><span id="header_prototyp" title="Prototyp: Umsetzung und Inhalte sind vorlaeufig und ungeprueft">Prototyp</span></span>
                 <span id="header_author">Prof. Dr. rer. nat. C. Effertz</span>
             </div>
@@ -111,7 +111,7 @@
                  der frueher danebenstehende Button "Inhaltsverzeichnis"
                  entfaellt. Sie ist das einzige flexible Element im Header und
                  kuerzt als erstes per Ellipse. -->
-            <button type="button" class="chapter-crumb" data-action="toc" aria-label="Inhaltsverzeichnis öffnen">
+            <button type="button" class="chapter-crumb" data-action="toc" aria-label="Inhaltsverzeichnis öffnen" data-tip="Inhaltsverzeichnis">
                 <!-- Listen-Pictogramm statt Chevron: der Klick oeffnet das
                      Inhaltsverzeichnis, nicht ein Aufklappmenue. -->
                 <svg class="crumb-toc-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -139,8 +139,8 @@
                  Papier (data-action=chapter_prev/next, s. main.js/shell.js);
                  shell.js::renderPrevNext setzt die disabled-Zustaende mit. -->
             <div id="header_pagenav" role="navigation" aria-label="Seitennavigation">
-                <button type="button" id="header_prev_btn" class="pagenav-btn" data-action="chapter_prev" aria-label="Vorherige Seite" title="Vorherige Seite (Zurück)">‹</button>
-                <button type="button" id="header_next_btn" class="pagenav-btn" data-action="chapter_next" aria-label="Nächste Seite" title="Nächste Seite (Weiter)">›</button>
+                <button type="button" id="header_prev_btn" class="pagenav-btn" data-action="chapter_prev" aria-label="Vorherige Seite" data-tip="Vorherige Seite">‹</button>
+                <button type="button" id="header_next_btn" class="pagenav-btn" data-action="chapter_next" aria-label="Nächste Seite" data-tip="Nächste Seite">›</button>
             </div>
 
             <!-- Rechter Bedien-Cluster: nur noch Aktionen als Symbole plus der
@@ -149,16 +149,16 @@
                  Darkmode-Schalter. Feste Breite, damit nur die Krume schrumpft. -->
             <div id="header_controls">
                 <div id="toolbar">
-                    <button type="button" class="icon_button" data-action="toggle_print_menu" title="Drucken" aria-label="Drucken">
+                    <button type="button" class="icon_button" data-action="toggle_print_menu" aria-label="Drucken" data-tip="Drucken" data-tip-desc="Wählt den Umfang: Alles, Themenkomplex, Kapitel oder Abschnitt">
                         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 8V3h10v5M7 18H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 15h10v6H7z"/></svg>
                     </button>
-                    <button type="button" class="icon_button" data-action="kontakt" title="Kontakt" aria-label="Kontakt">
+                    <button type="button" class="icon_button" data-action="kontakt" aria-label="Kontakt" data-tip="Kontakt">
                         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg>
                     </button>
-                    <button type="button" class="icon_button" data-action="toggle_settings" title="Einstellungen" aria-label="Einstellungen">
+                    <button type="button" class="icon_button" data-action="toggle_settings" aria-label="Einstellungen" data-tip="Einstellungen" data-tip-desc="Textgröße, Ansichtsbreite und Farbpalette">
                         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
                     </button>
-                    <button type="button" class="icon_button" data-action="toggle_darkmode" title="Darkmode umschalten" aria-label="Darkmode umschalten">
+                    <button type="button" class="icon_button" data-action="toggle_darkmode" aria-label="Darkmode umschalten" data-tip="Dunkelmodus umschalten">
                         <img src="src/assets/darkmode.png" alt="" class="darkmode_glyph">
                     </button>
                 </div>
@@ -193,17 +193,17 @@
                 <div class="settings_section">
                     <div class="settings_section_label">Textgröße</div>
                     <div id="text_size_controls" aria-label="Textgröße">
-                        <button type="button" id="text_size_minus" class="text_size_button" data-action="adjust_text_size" data-step="-1">A-</button>
+                        <button type="button" id="text_size_minus" class="text_size_button" data-action="adjust_text_size" data-step="-1" data-tip="Text kleiner">A-</button>
                         <span id="text_size_status">2/5</span>
-                        <button type="button" id="text_size_plus" class="text_size_button" data-action="adjust_text_size" data-step="1">A+</button>
+                        <button type="button" id="text_size_plus" class="text_size_button" data-action="adjust_text_size" data-step="1" data-tip="Text größer">A+</button>
                     </div>
                 </div>
                 <div class="settings_section">
                     <div class="settings_section_label">Ansichtsbreite</div>
                     <div id="width_mode_controls" aria-label="Ansichtsbreite">
-                        <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="schmal" title="Schmale Textspalte">Schmal</button>
-                        <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="normal" title="Normale Textspalte">Normal</button>
-                        <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="breit" title="Extrabreite Textspalte">Breit</button>
+                        <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="schmal">Schmal</button>
+                        <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="normal">Normal</button>
+                        <button type="button" class="width_mode_button" data-action="set_width_mode" data-mode="breit">Breit</button>
                     </div>
                 </div>
             </div>
@@ -241,7 +241,7 @@
                     </div>
                     <input type="search" id="toc_search" class="toc_search" placeholder="Kapitel oder Abschnitt suchen…" autocomplete="off" data-action="toc_search">
                     <div id="toc_position" class="toc_position"></div>
-                    <button type="button" id="toc_close_btn" class="toc_close_btn" data-action="toc" aria-label="Inhaltsverzeichnis schließen">✕</button>
+                    <button type="button" id="toc_close_btn" class="toc_close_btn" data-action="toc" aria-label="Inhaltsverzeichnis schließen" data-tip="Schließen">✕</button>
                 </div>
                 <div id="toc_content"></div>
             </div>
