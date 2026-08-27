@@ -51,7 +51,16 @@ function setzen(html) {
     for (const item of doc.math) {
         anzahl++;
         const mml = visitor.visitTree(item.root);
-        for (const m of mml.matchAll(/<mtd[^>]*>\s*<mtext[^>]*>\(([^)<]*)\)<\/mtext>/g)) tags.push(m[1]);
+        // NUR echte Gleichungsnummern: die stehen in der Label-Zelle einer
+        // <mlabeledtr>. Ohne diese Einschraenkung zaehlt jede Tabellenzelle
+        // mit, deren \text{} in Klammern steht -- z. B. die Prosa-Anmerkung
+        // \text{(Weg von A nach B)} in (1.3.61) oder
+        // \text{(unabhaengig vom konkreten Weg ...)} in (2.2.52). Beide
+        // wurden frueher nur zufaellig NICHT gezaehlt, weil ein \quad davor
+        // ein <mspace/> einschob, an dem das \s* scheiterte; nach dem
+        // Entfernen des \quad meldete das Skript prompt eine Gleichung zu
+        // viel (SUMME 79 statt 78) -- eine Regression, die es gar nicht gab.
+        for (const m of mml.matchAll(/<mlabeledtr[^>]*>\s*<mtd[^>]*>\s*<mtext[^>]*>\(([^)<]*)\)<\/mtext>/g)) tags.push(m[1]);
     }
     const out = adaptor.outerHTML(adaptor.body(doc.document));
     return { tags, anzahl, fehler: out.match(/data-mjx-error="[^"]*"/g) || [], roh: out };
