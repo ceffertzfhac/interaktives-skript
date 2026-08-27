@@ -26,7 +26,6 @@ die Links hier zeigen auf den Pfad.
 |---|---|---|
 | [P12 — Komplett-Integration aller noch fehlenden v0.13-Inhalte](backlog/P12-restliche-v013-inhalte.md) | 18/20 | Rest-Skript: TK 1 fehlende Sections, TK 2/3, Quasi-Content (Vorwort, Index), interaktive Figuren je Abschnitt, Asset-Pipeline, Pro-Abschnitt-Verifikation |
 | [P13 — Text- & Formel-Marker für Studierende](backlog/P13-marker-und-notizbuch.md) | 0/16 | 4 Farben, persistent; plus begleitendes Notizbuch (P13-N) |
-| [P20 — Hover-Erklärungen für Icon-Bedienelemente](backlog/P20-hover-tooltips.md) | 4/1 | Baustein + Migration stehen (116 Elemente, 0 Rest-`title`); offen nur die Sichtprüfung |
 | [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 1/10 | zwei neue Motoren (freier Fall, schräger Wurf) + 8 Aspekt-Figuren |
 | [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 0/4 | Abb. 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten, 1.8 Federpendel |
 | [P15 — Weiße Hintergründe aus Nicht-Foto-Abbildungen entfernen](backlog/P15-weisse-hintergruende.md) | 0/7 | Darkmode-Verträglichkeit der statischen Bilder |
@@ -49,6 +48,7 @@ die Links hier zeigen auf den Pfad.
 | [P9 — Schiene gefenstert](backlog/P9-schiene-gefenstert.md) | 3/0 | Vorgänger + aktives Kapitel + Nachfolger |
 | [P10 — Fortschrittsleiste in der Top-Bar](backlog/P10-fortschrittsleiste.md) | 2/0 | je nach Platz kürzen/strecken |
 | [P11 — Schmaler Header (≤ 1024 px)](backlog/P11-schmaler-header.md) | 2/0 | Brand verdichten + Width-Buttons S/M/L |
+| [P20 — Hover-Erklärungen für Icon-Bedienelemente](backlog/P20-hover-tooltips.md) | 5/0 | `src/tooltip.js` löst `title` ab; 116 Elemente, Hover **und** Tastaturfokus |
 | [P14 — Formel-Überstand je Width-Modus](backlog/P14-formel-ueberstand.md) | 5/0 | Mess-Werkzeug (Stufe 4b) + Behebung; 0 Übersteher in allen Modi, gegen Spalte und Boxrand |
 | [P18 — Dokumentations-Architektur context-freundlich umbauen](backlog/P18-doku-architektur.md) | 8/0 | Wurzel-`CLAUDE.md` −82 %, Subsystem-Doku in verschachtelte `CLAUDE.md`, Doku-Index, Backlog-Split |
 | [P-Aspekt-Figuren — Optik & Interaktion (Kap. 1.4)](backlog/PA-aspekt-figuren-optik.md) | 12/0 | ω-Regler, kapitelkonsistente CVD-Palette, Stoppuhr, Vektorstrichstärken-Regel, neue Figuren 1.46–1.51, Pause-Design in der Runbar |

@@ -1,6 +1,8 @@
 <!-- Teil von ../BACKLOG.md (Index). Nicht umbenennen: der Index verlinkt diesen Pfad. -->
 ## P20 — Hover-Erklärungen für Icon-Bedienelemente (Tooltips)
 
+**ABGESCHLOSSEN 2026-08-27 (v1.34.1)** — alle fünf Sub-Tasks erledigt.
+
 Eingetragen 2026-08-27 nach Nutzervorgabe: „ich hätte gerne an den relevanten
 Stellen Hover-Overlays nach Webdesign-Best-Practice, sowas wie *zur Stand-alone-
 Grafik*". Anlass war der Sim-Link (↗) an den Aspekt-Figuren, dessen Zweck ohne
@@ -124,8 +126,10 @@ Body-Element braucht zusätzlich `@media print { display: none }`.
   `title` wie entschieden ersatzlos entfernt. `aria-label` unverändert. *(M)*
 - [x] **P20-3 Zustandswechsel** — `setLupeZustand()` setzt `data-tip` mit:
   „Figur vergrößern" ↔ „Vergrößerung schließen". *(S)*
-- [~] **P20-4 Prüfung** — automatisiert bestanden (s. „Prüfergebnis"). **Sicht
-  (Stufe 5) durch den Nutzer steht aus.** *(M)*
+- [x] **P20-4 Prüfung** — automatisiert bestanden (s. „Prüfergebnis"); Sicht
+  (Stufe 5) durch den Nutzer erfolgt 2026-08-27. Aus ihr kamen zwei
+  Korrekturen, beide in v1.34.1: der Tooltip lag im Lupe-Overlay dahinter
+  (z-index), und die Zeiten waren zu träge. *(M)*
 
 ### Prüfergebnis (automatisiert, 2026-08-27, v1.34.0)
 
