@@ -108,9 +108,9 @@ Body-Element braucht zusätzlich `@media print { display: none }`.
 
 ### Sub-Tasks
 
-- [ ] **P20-0 Abstimmung** — Texte je Knopf festlegen (kurzer Titel, optionale
-  Beschreibung), und ob Beschreibungen überhaupt gewünscht sind oder ein
-  einzeiliger Tooltip genügt. *(S)*
+- [x] **P20-0 Abstimmung** — erledigt 2026-08-27. Nutzervorgabe: **einzeilig,
+  wo es geht; zweizeilig nur, wo nötig.** Texte s. Abschnitt „Die Texte" unten.
+  *(S)*
 - [ ] **P20-1 Baustein** — `src/tooltip.js` (Portal, Delay, Flip-Positionierung,
   Escape/Scroll/Pointerdown, `aria-describedby`, `title`-Entfernung) + CSS-Block
   mit den vorhandenen Tokens. Verdrahtung in `main.js::init()`. *(M)*
@@ -122,6 +122,65 @@ Body-Element braucht zusätzlich `@media print { display: none }`.
   kein clippender Vorfahr), gibt es kein verbliebenes `title` an einem
   `data-tip`-Element, ist im Druck-Klon keiner sichtbar. Sicht (Stufe 5) durch
   den Nutzer. *(M)*
+
+### Die Texte (P20-0, entschieden 2026-08-27)
+
+Regel: **einzeilig**. Eine zweite Zeile bekommt nur, wo die Kurzform eine echte
+Frage offen lässt — bei einem Ziel außerhalb der Seite oder wenn hinter dem
+Knopf ein Menü statt einer direkten Aktion steckt. Das trifft auf **drei** von
+siebzehn zu.
+
+**Aspekt-Figuren**
+
+| Element | Zeile 1 | Zeile 2 |
+|---|---|---|
+| Sim-Link ↗ | Stand-alone-Simulation | Öffnet die vollständige Simulation in einem neuen Tab |
+| Lupe (zu) | Figur vergrößern | — |
+| Lupe (offen) | Vergrößerung schließen | — |
+| Start ▶ | Abspielen | — |
+| Pause ⏸ | Pause | — |
+| Reset ↺ | Auf Anfang zurücksetzen | — |
+| Kopf „Bedienung" | Bedienung ein-/ausklappen | — |
+| Kopf „Analyse" | Analyse ein-/ausklappen | — |
+
+Der Sim-Link ist der einzige Knopf, der die Seite verlässt — genau der Fall,
+für den die zweite Zeile gedacht ist (und der Auslöser dieses Items).
+
+**Shell-Toolbar**
+
+| Element | Zeile 1 | Zeile 2 |
+|---|---|---|
+| Inhaltsverzeichnis | Inhaltsverzeichnis | — |
+| Drucken | Drucken | Wählt den Umfang: Alles, Themenkomplex, Kapitel oder Abschnitt |
+| Kontakt | Kontakt | — |
+| Einstellungen | Einstellungen | Textgröße, Ansichtsbreite und Farbpalette |
+| Dunkelmodus | Dunkelmodus umschalten | — |
+| Pager ‹ (Kopf) | Vorherige Seite | — |
+| Pager › (Kopf) | Nächste Seite | — |
+| ☰ Kapitelnavigation | Kapitelnavigation | — |
+| ✕ (TOC schließen) | Schließen | — |
+| A− / A+ | Text kleiner / Text größer | — |
+
+Zweizeilig sind **Drucken** (dahinter liegt ein Menü mit vier Umfängen, nicht
+der direkte Druck) und **Einstellungen** (ein Zahnrad für drei unabhängige
+Einstellungen).
+
+**Bewusst OHNE Tooltip** — sie tragen eine sichtbare Beschriftung, ein Tooltip
+würde sie nur wiederholen:
+
+- Farbpalette (`Normal` / `Rot-Grün-Sichtig` / `Blau-Gelb-Sichtig`)
+- Ansichtsbreite (`Schmal` / `Normal` / `Breit`) — **hier zusätzlich das
+  vorhandene `title` ersatzlos entfernen**, es sagt nichts, was das Label nicht
+  schon sagt.
+- Druck-Umfang im Menü (`Alles` / `Themenkomplex` / `Kapitel` / `Abschnitt`)
+- Untere Seitennavigation (`‹ Zurück` / `Weiter ›`)
+
+**Schreibweise:** Infinitiv für Aktionen („Abspielen", „Schließen"), Substantiv
+für Ansichten („Inhaltsverzeichnis", „Kontakt") — wie die bestehenden
+`aria-label`. Die `aria-label` bleiben unverändert; sie dürfen länger sein als
+der Tooltip (z. B. „Start: automatischen Ablauf abspielen").
+
+---
 
 ### Nicht in diesem Item
 
