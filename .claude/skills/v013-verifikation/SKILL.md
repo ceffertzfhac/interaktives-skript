@@ -23,7 +23,7 @@ MathJax-Gleichungsnummern, Querverweis-Deskriptoren): `InteraktivesSkript_WIP/ch
 ## Vorbereitung
 
 ```bash
-npm install --prefix /tmp mathjax-full jsdom     # einmalig, ~30 s
+npm install --prefix /tmp mathjax-full jsdom playwright-core   # einmalig, ~30 s
 cd InteraktivesSkript_WIP && python3 -m http.server 8000 &
 ```
 
@@ -79,6 +79,32 @@ grep -o 'src="bilder/[^"]*"' InteraktivesSkript_WIP/chapters/ch_NN.html |
   while read r; do printf '%s %s\n' "$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8000/$r")" "$r"; done |
   grep -v '^200'
 ```
+
+## Stufe 4b — Überstände über den Schreibbereich (echter Browser)
+
+```bash
+node .claude/skills/v013-verifikation/scripts/formel_ueberstand.mjs \
+     --url=http://localhost:8000/index.html
+```
+
+Misst in headless Chromium **je Breiten-Modus** (schmal/normal/breit), welche
+Elemente über die sichtbare Textspalte (`#content` abzüglich `padding-right`)
+hinausragen — Formeln (Display und inline), Gleichungsnummern, Tabellen,
+Bilder, Boxen. Bei Display-Gleichungen wird getrennt ausgewiesen, ob nur die
+**Nummer** übersteht oder der **Formelkörper** (`[nur die Nummer]`).
+
+Gemeldet wird je Kette nur das äußerste Element. `--ohne-figuren` blendet die
+absichtlich breiten `.aspekt-figur`-Container aus, `--max=0` zeigt alle Treffer,
+`--json=<pfad>` schreibt das vollständige Ergebnis. **Exit-Code 1**, sobald ein
+Modus Übersteher hat — damit taugt der Aufruf als Gate (BACKLOG P14-4).
+
+Das Skript führt vor der Messung einen **Selbsttest** aus (absichtlich zu
+breites Element einhängen und wiederfinden) und bricht mit Exit-Code 2 ab, wenn
+der fehlschlägt: „0 Übersteher" soll nicht von einer kaputten Messung kommen
+können.
+
+**Grenze:** misst Geometrie, nicht Optik. Ob eine umgebrochene Formel *gut
+aussieht*, entscheidet weiterhin Stufe 5.
 
 ## Stufe 5 — Nur im Browser
 
