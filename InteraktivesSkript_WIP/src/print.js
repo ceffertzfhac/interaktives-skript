@@ -141,15 +141,27 @@ export function print_page() {
     for(let i=0;i<gc.length;i++){
         create_qr(gc[i], gc[i].id);
     }
-    // QR pro Aspekt-Figur (Option B): der QR sitzt auf der interaktiven Figur
-    // selbst — der Druck zeigt diese Vektor-Figur, nicht mehr das statische
-    // .nur-druck-PNG (das unsichtbar bleibt, s. aspekt_kreisbahn.css). Der QR
-    // linkt zurueck auf ?g=<aspekt-figur-id>. data-figref wird hier nicht mehr
-    // gebraucht (label_aspekt_figuren/Nummerierung nutzen es weiter).
+    // QR pro Aspekt-Figur (Option B): der Druck zeigt die interaktive Figur als
+    // Vektor-SVG, nicht mehr das statische .nur-druck-PNG (das unsichtbar
+    // bleibt, s. aspekt_kreisbahn.css). Der QR linkt zurueck auf
+    // ?g=<aspekt-figur-id>. data-figref wird hier nicht mehr gebraucht
+    // (label_aspekt_figuren/Nummerierung nutzen es weiter).
+    //
+    // Der QR wird NEBEN die Figur gehaengt, nicht hinein: `.aspekt-figur` traegt
+    // `position:relative; overflow:hidden` (aspekt_kreisbahn.css) und hat den
+    // absolut positionierten QR angeschnitten — gemessen lagen 121 px ueber der
+    // Grafik und 85 px wurden weggeschnitten, ein angeschnittener Code ist nicht
+    // mehr scanbar. Deshalb Figur + QR als Zeile (.qr_row), Anordnung wie im
+    // Legacy (QR rechts neben der Grafik), aber ohne dessen festes left:528px,
+    // das aus der 700-px-Druckspalte stammte.
     pc.querySelectorAll(".aspekt-figur").forEach(af => {
         const linkId = af.id;
         if (!linkId) return;
-        create_qr(af, linkId);
+        const row = document.createElement("div");
+        row.setAttribute("class", "qr_row");
+        af.parentNode.insertBefore(row, af);
+        row.appendChild(af);
+        create_qr(row, linkId);
     });
 
     document.body.setAttribute("style","background-color:#fff;margin-top:0px;margin-left:100px;");

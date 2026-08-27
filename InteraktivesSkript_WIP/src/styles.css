@@ -950,6 +950,31 @@ line, ellipse, polyline, circle {
     border-radius: 3px;
 }
 
+/* Druck: Figur und QR nebeneinander (Anordnung wie im Legacy).
+   Der QR ist GESCHWISTER der Figur, nicht ihr Kind — `.aspekt-figur` hat
+   `position:relative; overflow:hidden`, wodurch der absolut positionierte QR
+   angeschnitten wurde (gemessen: 121 px ueber der Grafik, 85 px abgeschnitten;
+   ein angeschnittener Code ist nicht scanbar). Das feste `left:528px` unten
+   stammt aus der 700-px-Legacy-Druckspalte und passt zur breiteren WIP-Spalte
+   nicht mehr — hier wird es durch das Flex-Layout ersetzt, statt eine neue
+   Magic Number zu setzen. Die Figur schrumpft, der QR behaelt seine Breite. */
+#print_container .qr_row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+#print_container .qr_row > .aspekt-figur { flex: 1 1 auto; min-width: 0; }
+#print_container .qr_row > .qr_container {
+    position: static;
+    flex: 0 0 150px;
+    width: 150px;
+    top: auto;
+    left: auto;
+    margin-top: 4px;
+}
+
 .qr_title {
     overflow-wrap: break-word;
     font-size: 70%;
