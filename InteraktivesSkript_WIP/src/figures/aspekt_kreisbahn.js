@@ -207,9 +207,7 @@ export function buildKreisbahnFig(fig) {
     lupe.type = 'button';
     lupe.className = 'aspekt-lupe';
     lupe.dataset.action = 'toggle_aspekt';
-    lupe.setAttribute('aria-label', 'Figur vergrößern');
-    lupe.title = 'Vergrößern';
-    lupe.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
+    setLupeZustand(lupe, false);
     (scene.querySelector('.aspekt-runbar') || scene.querySelector('.aspekt-scene')).appendChild(lupe);
 
     // Bildunterschrift aus data-caption aufbauen (die statische Abbildung
@@ -433,6 +431,22 @@ export function buildKreisbahnFig(fig) {
 // ── Lupe: Overlay ueber dem Skript (GENERISCH, alle Aspekt-Figuren) ────────────
 let overlayReturn = null;
 
+// Die Lupe oeffnet UND schliesst das Overlay. Solange beide Zustaende dasselbe
+// Symbol tragen, ist das nicht lesbar (Nutzerhinweis): im Overlay wird deshalb
+// ein Schliessen-Kreuz daraus, samt passendem aria-label und title. Das Icon
+// muss ein reines Strich-SVG bleiben — `.aspekt-lupe svg` setzt fill:none und
+// stroke:currentColor (aspekt_kreisbahn.css:427).
+const LUPE_ICON_AUF = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M21 21l-5.2-5.2"/></svg>';
+const LUPE_ICON_ZU  = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>';
+
+function setLupeZustand(btn, offen) {
+    if (!btn) return;
+    btn.innerHTML = offen ? LUPE_ICON_ZU : LUPE_ICON_AUF;
+    btn.setAttribute('aria-label', offen ? 'Vergrößerung schließen' : 'Figur vergrößern');
+    btn.setAttribute('aria-expanded', offen ? 'true' : 'false');
+    btn.title = offen ? 'Schließen' : 'Vergrößern';
+}
+
 function openOverlay(fig) {
     const content = ge('content');
     const back = document.createElement('div');
@@ -450,6 +464,7 @@ function openOverlay(fig) {
     // s. main.js::init_aspekt_figuren) -- im Zoom bleibt es beim bisherigen
     // Verhalten (aufgeklappt), daher hier immer aufklappen.
     setPanelsExpanded(fig, true);
+    setLupeZustand(fig.querySelector('.aspekt-lupe'), true);
     wrap.appendChild(fig);
     back.appendChild(wrap);
     document.body.appendChild(back);
@@ -466,6 +481,7 @@ function closeOverlay() {
         overlayReturn.parent.insertBefore(fig, overlayReturn.next);
         // Zurueck im Fliesstext -> wieder auf den Default (eingeklappt).
         setPanelsExpanded(fig, false);
+        setLupeZustand(fig.querySelector('.aspekt-lupe'), false);
       fig.dispatchEvent(new CustomEvent('aspekt-overlay-toggled', { detail: { open: false } }));
     }
     back.remove();
