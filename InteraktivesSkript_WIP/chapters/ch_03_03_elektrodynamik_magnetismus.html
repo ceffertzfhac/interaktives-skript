@@ -249,7 +249,10 @@
         \end{equation}
         <p>Setzen wir die gegebenen Werte ein, so erhalten wir:</p>
         \begin{equation}
-            \vec{F}_{BA,\text{ges}} = \frac{1{,}2566\cdot 10^{-6}\,\mathrm{\frac{kg \cdot m}{s^2\cdot A^2}}}{2\pi} \cdot \frac{1{,}0\,\mathrm{A} \cdot 1{,}0\,\mathrm{A}}{1{,}0\,\mathrm{m}} \cdot 1{,}0\,\mathrm{m} = 2{,}0\cdot 10^{-7}\,\mathrm{N}
+        \begin{split}
+            \vec{F}_{BA,\text{ges}} &amp;= \frac{1{,}2566\cdot 10^{-6}\,\mathrm{\frac{kg \cdot m}{s^2\cdot A^2}}}{2\pi} \cdot \frac{1{,}0\,\mathrm{A} \cdot 1{,}0\,\mathrm{A}}{1{,}0\,\mathrm{m}} \cdot 1{,}0\,\mathrm{m} \\
+            &amp;= 2{,}0\cdot 10^{-7}\,\mathrm{N}
+        \end{split}
         \end{equation}
 
         <p>Das ist die ursprüngliche Definition des Ampere: Zwei parallele Leiter, die \(1{,}0\,\mathrm{m}\) voneinander entfernt sind, üben eine Kraft von \(2{,}0\cdot 10^{-7}\,\mathrm{N}\) pro Meter Länge aufeinander aus, wenn sie jeweils einen Strom von \(1{,}0\,\mathrm{A}\) führen.</p>
@@ -325,7 +328,10 @@
         \end{equation}
         <p>Somit ist die magnetische Induktion in Vektorform gegeben durch:</p>
         \begin{equation}
-            \vec{B}_A(\vec r) = B_A(R) \cdot \begin{pmatrix} -\sin(\varphi) \\ \cos(\varphi) \\ 0 \end{pmatrix} = \frac{\mu_0}{2\pi} \cdot I_A \cdot \frac{1}{R} \cdot \begin{pmatrix} -\sin(\varphi) \\ \cos(\varphi) \\ 0 \end{pmatrix}
+        \begin{split}
+            \vec{B}_A(\vec r) &amp;= B_A(R) \cdot \begin{pmatrix} -\sin(\varphi) \\ \cos(\varphi) \\ 0 \end{pmatrix} \\
+            &amp;= \frac{\mu_0}{2\pi} \cdot I_A \cdot \frac{1}{R} \cdot \begin{pmatrix} -\sin(\varphi) \\ \cos(\varphi) \\ 0 \end{pmatrix}
+        \end{split}
         \end{equation}
 
         <p>Durch Bildung des Skalarprodukts mit dem Ortsvektor \(\vec r\) können Sie sich davon überzeugen, dass die magnetische Induktion tatsächlich tangential zu einem Kreis um den Leiter zeigt:</p>
@@ -368,7 +374,7 @@
         \end{equation}
         <p>Nun setzen wir die Zahlenwerte und Vektoren ein. Der Vorfaktor fasst alle Skalare zusammen:</p>
         \begin{align}
-            \vec{F}_{L,AB} &amp;= \frac{1{,}2566\cdot 10^{-6} \, \mathrm{N/A^2} \cdot 1{,}00\cdot 10^3\,\mathrm{A} \cdot 1{,}602\cdot 10^{-19}\,\mathrm{C}}{2\pi \cdot 5{,}0\,\mathrm{m^2}} \\[6pt]
+            \vec{F}_{L,AB} &amp;= \frac{1{,}2566\cdot 10^{-6} \, \mathrm{N/A^2} \cdot 1{,}00\cdot 10^3\,\mathrm{A}}{2\pi \cdot 5{,}0\,\mathrm{m^2}} \cdot 1{,}602\cdot 10^{-19}\,\mathrm{C} \\[6pt]
             &amp;\quad \cdot \left[ \left( \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \mathrm{\frac{m}{s}} \right) \times \left( \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \times \begin{pmatrix} 1{,}0 \\ -2{,}0 \\ 3{,}0 \end{pmatrix} \mathrm{m} \right) \right]
         \end{align}
         <p>Wir berechnen zunächst das innere Kreuzprodukt (B-Feld-Richtung):</p>

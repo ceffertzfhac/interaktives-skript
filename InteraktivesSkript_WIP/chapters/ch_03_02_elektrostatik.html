@@ -131,13 +131,16 @@
 
         <p>Die Coulomb-Kraft, die das Elektron auf das Proton ausübt, beträgt:</p>
         \begin{align}
-            F_C &amp;= k_C \frac{|q_e| |q_p|}{r^2} = \left(8{,}9875 \cdot 10^9 \, \mathrm{N\,m^2/C^2}\right) \frac{(1{,}602 \cdot 10^{-19} \, \mathrm{C})^2}{(1{,}00 \cdot 10^{-6} \, \mathrm{m})^2} \\[6pt]&amp;= 2{,}30 \cdot 10^{-16} \,\mathrm{N}.
+            F_C &amp;= k_C \frac{|q_e| |q_p|}{r^2} \notag \\[6pt]
+            &amp;= \left(8{,}9875 \cdot 10^9 \, \mathrm{N\,m^2/C^2}\right) \frac{(1{,}602 \cdot 10^{-19} \, \mathrm{C})^2}{(1{,}00 \cdot 10^{-6} \, \mathrm{m})^2} \\[6pt]&amp;= 2{,}30 \cdot 10^{-16} \,\mathrm{N}.
         \end{align}
         <p>Die Coulomb-Kraft ist anziehend, da die Ladungen entgegengesetzt sind.</p>
 
         <p>Die Gravitationskraft, die das Elektron auf das Proton ausübt, beträgt:</p>
         \begin{align}
-            F_G &amp;= G \frac{m_e m_p}{r^2} \\[6pt] &amp;= \left(6{,}67430 \cdot 10^{-11} \, \mathrm{N\,m^2/kg^2}\right) \frac{(9{,}109 \cdot 10^{-31} \, \mathrm{kg})(1{,}673 \cdot 10^{-27} \, \mathrm{kg})}{(1{,}00 \cdot 10^{-6} \, \mathrm{m})^2} \\[6pt] &amp;= 1{,}02 \cdot 10^{-47} \, \mathrm{N}.
+            F_G &amp;= G \frac{m_e m_p}{r^2} \\[6pt]
+            &amp;= \left(6{,}67430 \cdot 10^{-11} \, \mathrm{N\,m^2/kg^2}\right) \\[6pt]
+            &amp;\quad \cdot \frac{(9{,}109 \cdot 10^{-31} \, \mathrm{kg})(1{,}673 \cdot 10^{-27} \, \mathrm{kg})}{(1{,}00 \cdot 10^{-6} \, \mathrm{m})^2} \notag \\[6pt] &amp;= 1{,}02 \cdot 10^{-47} \, \mathrm{N}.
         \end{align}
         <p>Die Gravitationskraft ist ebenfalls anziehend, da Massen immer anziehend wirken.</p>
 
@@ -229,7 +232,10 @@
 
         <p>Das Gesamtfeld \(\vec{E}_{\text{res}}\) ist die Summe der Vektoren: \(\vec{E}_{\text{res}} = \vec{E}_1 + \vec{E}_2\). Aus Symmetriegründen heben sich die \(x\)-Komponenten auf, da \(E_1\) nach rechts oben und \(E_2\) im gleichen Winkel nach links oben zeigt:</p>
         \begin{equation}
-            E_{x,\text{res}} = E_0 \cdot \cos(60^\circ) + E_0 \cdot \cos(120^\circ) = E_0 \cdot (0{,}5 - 0{,}5) = 0
+        \begin{split}
+            E_{x,\text{res}} &amp;= E_0 \cdot \cos(60^\circ) + E_0 \cdot \cos(120^\circ) \\
+            &amp;= E_0 \cdot (0{,}5 - 0{,}5) = 0
+        \end{split}
         \end{equation}
         <p>Die \(y\)-Komponenten addieren sich:</p>
         \begin{equation}
@@ -282,11 +288,14 @@
     \end{equation}
     <p>Die Gesamtfeldstärke am Punkt \(P\) ergibt sich aus der Überlagerung (Superposition) der beiden Felder:</p>
     \begin{equation}
-        \vec{E}(s) = \vec{E_+}(s,h) + \vec{E_-}(s,h) = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q}{s^3} \begin{pmatrix}
+    \begin{split}
+        \vec{E}(s) &amp;= \vec{E_+}(s,h) + \vec{E_-}(s,h) = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q}{s^3} \begin{pmatrix}
             -d \\ 0
-        \end{pmatrix} = \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q d}{s^3} \begin{pmatrix}
+        \end{pmatrix} \\
+        &amp;= \frac{1}{4 \pi \varepsilon_0} \cdot \frac{Q d}{s^3} \begin{pmatrix}
             -1 \\ 0
         \end{pmatrix}
+    \end{split}
     \end{equation}
 
     <p>Da \(s\) und \(h\) voneinander abhängen, brauchen wir nur noch eine Variable, um das elektrische Feld auszudrücken.</p>

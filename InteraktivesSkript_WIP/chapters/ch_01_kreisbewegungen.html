@@ -299,7 +299,10 @@
     <p>Der Betrag der Bahngeschwindigkeit ist also gegeben durch</p>
 
     \begin{equation}
-    |\vec{v}(t)| = \sqrt{\left[-\omega(t) \cdot R \cdot \sin(\varphi(t))\right]^2 + \left[\omega(t) \cdot R \cdot \cos(\varphi(t))\right]       ^2} = |\omega(t)| \cdot R
+    \begin{split}
+    |\vec{v}(t)| &amp;= \sqrt{\left[-\omega(t) \cdot R \cdot \sin(\varphi(t))\right]^2 + \left[\omega(t) \cdot R \cdot \cos(\varphi(t))\right]       ^2}\\
+    &amp;= |\omega(t)| \cdot R
+    \end{split}
     \label{eq_kreisbahn_bahngeschwindigkeit_betrag}
     \end{equation}
 
@@ -341,7 +344,8 @@
         R\cdot \cos(\varphi(t)) \\
         R\cdot \sin(\varphi(t))
         \end{pmatrix}\\[6pt]
-        &amp;= R^2\cdot \omega(t) \cdot \left(-\sin(\varphi(t))\cdot \cos(\varphi(t)) + \cos(\varphi(t))\cdot \sin(\varphi(t))\right) = 0
+        &amp;= R^2\cdot \omega(t) \cdot \left(-\sin(\varphi(t))\cdot \cos(\varphi(t)) + \cos(\varphi(t))\cdot \sin(\varphi(t))\right) \notag\\[6pt]
+        &amp;= 0
         \label{eq_kreisbahn_skalarprodukt}
         \end{align}
     </div>
@@ -409,7 +413,10 @@
     <p>Schauen wir uns dazu nochmal die Formel <a class="xref" data-ref-eq="eq_kreisbahn_beschleunigung"></a> an. In dieser Formel tritt die erste Ableitung der Winkelgeschwindigkeit \(\dot \omega(t)\) auf. Diese ist natürlich nur dann nicht null, wenn sich die Winkelgeschwindigkeit \(\omega(t)\) ändert. Ändert sich die Winkelgeschwindigkeit \(\omega(t)\), so sprechen wir von einer <strong>Winkelbeschleunigung</strong>. Die Winkelbeschleunigung ist definiert als:</p>
 
     \begin{equation}
-    \text{Winkelbeschleunigung} = \frac{\text{Änderung der Winkelgeschwindigkeit}}{\text{dafür benötigte Zeit}}
+    \begin{split}
+    \text{Winkelbeschleunigung} \\
+    &amp;= \frac{\text{Änderung der Winkelgeschwindigkeit}}{\text{dafür benötigte Zeit}}
+    \end{split}
     \end{equation}
 
     <p>Das Formelzeichen für die Winkelbeschleunigung ist \(\alpha\)<span class="fussnote">Das ist der kleine griechische Buchstabe „alpha".</span>. Die Einheit der Winkelbeschleunigung ist \(\left[\alpha\right]=\mathrm{s}^{-2}\). Ist die Winkelbeschleunigung konstant, so ist sie einfach gegeben durch</p>
@@ -455,7 +462,11 @@
         <p>berechnen. Die Winkelbeschleunigung der Trommel beträgt also \(1{,}397\,\mathrm{s}^{-2}\).</p>
         <p>Die Winkelgeschwindigkeit \(\omega(t)\) der Trommel erhalten wir nun, indem wir einmal über die konstante Winkelbeschleunigung \(\alpha(t)\) integrieren:</p>
         \begin{equation}
-        \omega(t) = \omega_0 + \int_0^t \alpha(\tau) \, \mathrm{d}\tau = 0 + \int_0^t 1{,}397\,\mathrm{s}^{-2} \, \mathrm{d}\tau = 1{,}397\,\mathrm{s}^{-2} \cdot t
+        \begin{split}
+        \omega(t) &amp;= \omega_0 + \int_0^t \alpha(\tau) \, \mathrm{d}\tau\\
+        &amp;= 0 + \int_0^t 1{,}397\,\mathrm{s}^{-2} \, \mathrm{d}\tau\\
+        &amp;= 1{,}397\,\mathrm{s}^{-2} \cdot t
+        \end{split}
         \end{equation}
         <p>Den Winkel \(\varphi(t)\) in Abhängigkeit der Zeit \(t\) erhalten wir, indem wir die Winkelgeschwindigkeit \(\omega(t)\) nochmal nach der Zeit \(t\) integrieren:</p>
         \begin{align}
@@ -627,7 +638,11 @@
         \end{equation}
         <p>Der Betrag der Zentripetalbeschleunigung ist also gegeben durch</p>
         \begin{equation}
-        |\vec{a}_\text{Zentripetal}| = \omega^2 \cdot R = \left(\frac{2\pi}{86400\,\mathrm{s}}\right)^2 \cdot 6{,}37\cdot 10^3\,\mathrm{km} = 0{,}0337\,\mathrm{m}/\mathrm{s}^{2}
+        \begin{split}
+        |\vec{a}_\text{Zentripetal}| &amp;= \omega^2 \cdot R\\
+        &amp;= \left(\frac{2\pi}{86400\,\mathrm{s}}\right)^2 \cdot 6{,}37\cdot 10^3\,\mathrm{km}\\
+        &amp;= 0{,}0337\,\mathrm{m}/\mathrm{s}^{2}
+        \end{split}
         \end{equation}
         <p>Verglichen mit der Erdbeschleunigung \(g \approx 9{,}81\,\mathrm{m}/\mathrm{s}^{2}\) ist die Zentripetalbeschleunigung am Äquator also nur ein Bruchteil der Erdbeschleunigung. Die Erdanziehungskraft reicht also locker aus, um die Zentripetalbeschleunigung zu erzeugen, die benötigt wird, damit eine Person auf dem Äquator sich mit der Erde mitdreht.</p>
     </div>
@@ -1057,10 +1072,13 @@
     <p>Nun wollen wir den Zusammenhang zwischen der vektoriellen Winkelbeschleunigung \(\vec \alpha(t)\) und der Bahnbeschleunigung \(\vec a(t)\) untersuchen. Wir hatten im <a class="xref" data-ref-sec="p-1-4-5">Abschnitt 1.4.5</a> die Bahnbeschleunigung \(\vec a(t)\) in zwei Komponenten zerlegt:</p>
 
     \begin{equation}
-    \vec a(t) = \vec a_\text{Tangential}(t) + \vec a_\text{ZP}(t)= \alpha(t) \cdot R \cdot \begin{pmatrix}
+    \begin{split}
+    \vec a(t) &amp;= \vec a_\text{Tangential}(t) + \vec a_\text{ZP}(t)\\
+    &amp;= \alpha(t) \cdot R \cdot \begin{pmatrix}
     - \sin(\varphi(t)) \\
     \cos(\varphi(t))
     \end{pmatrix}+\vec a_\text{ZP}(t)
+    \end{split}
     \end{equation}
 
     <p>Die Zentripetalbeschleunigung \(\vec a_\text{ZP}(t)\) hatten wir schon im <a class="xref" data-ref-sec="p-1-4-3">Abschnitt 1.4.3</a> genauer untersucht. Wir widmen uns nun dem anderen Term, der Tangentialbeschleunigung \(\vec a_\text{Tangential}(t)\). Wir bedienen uns dabei einer Analogie: für den Zusammenhang zwischen Bahngeschwindigkeit \(\vec v(t)\) und der Winkelgeschwindigkeit \(\vec \omega(t)\) haben wir gefunden:</p>
