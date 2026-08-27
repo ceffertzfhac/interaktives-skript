@@ -36,6 +36,14 @@
  *                    Ueberstand absteigend). 0 = alle. Default 25.
  *   --ohne-figuren   .aspekt-figur-Container ausklammern (die sind absichtlich
  *                    breit und uebertoenen sonst die Formel-Treffer).
+ *   --gegen=<was>    Referenzrand: `content` (Textspalte, Default) oder `box`
+ *                    (Innenrand der umgebenden Highlight-Box, sonst Textspalte).
+ *                    `box` ist strenger -- eine Nummer, die aus dem farbigen
+ *                    Kasten ragt, faellt auf, auch wenn sie die Spalte nie
+ *                    erreicht. Gilt NUR fuer Formeln: Absaetze und Boxtitel
+ *                    fuellen ihre Box bis zum Innenrand und wuerden sonst
+ *                    reihenweise als Uebersteher gemeldet (126 statt 3).
+ *                    Gemessen 2026-08-27: content 1 Treffer, box 3.
  *   --json=<pfad>    Vollstaendiges Ergebnis zusaetzlich als JSON ablegen.
  *
  * GEMESSEN WIRD DIE TINTE, NICHT DIE CONTAINER-BOX. Die `mjx-container`-Box
@@ -44,9 +52,12 @@
  * "Treffer" lagen sogar 2,6 bzw. 48,1 px INNERHALB der Spalte. Wer gegen den
  * Container misst, jagt Gespenster (gleiche Falle wie in figur_screenshot.mjs).
  *
- * NICHT umgesetzt: die Trennung "nur die Nummer" vs. "Formelkoerper"
- * (P14-Kriterium a gegen b) -- s. Kommentar an der Fundstelle im Code.
- * Stattdessen wird die am weitesten rechts liegende ZEILE der Formel benannt.
+ * NUMMER UND KOERPER WERDEN GETRENNT GEMESSEN (P14-Kriterium a gegen b).
+ * MathJax markiert den Nummern-Teilbaum mit `data-labels="true"`; die
+ * `eq-<nummer>`-id am zugehoerigen mtd stammt aus der tagformat.id-
+ * Konfiguration der Seite. Die VORFAHREN der Nummer zaehlen nicht zum
+ * Koerper -- ihre Box umschliesst die Nummer mit, sonst messen beide
+ * denselben Rand. Ausgabe: `(1.1.57)  [NUR die Nummer]` bzw. `[Formelkoerper]`.
  *
  * Referenzrand ist die SICHTBARE TEXTSPALTE: `#content`-Rand abzueglich
  * padding-right (P14-0 Frage 1, so entschieden). `#paper` wird je Treffer
@@ -73,6 +84,13 @@ const modi = String(opt('mode', 'schmal,normal,breit')).split(',').filter(Boolea
 const tol = Number(opt('tol', 1));
 const max = Number(opt('max', 25));
 const ohneFiguren = !!opt('ohne-figuren');
+// Referenzrand: 'content' = Textspalte (P14-0-Entscheidung, Default),
+// 'box' = Innenrand der umgebenden Highlight-Box, falls es eine gibt.
+// 'box' ist STRENGER und entspricht dem, was man sieht: eine Nummer, die
+// aus dem farbigen Kasten ragt, faellt auf, auch wenn sie die Textspalte
+// nie erreicht.
+const gegen = String(opt('gegen', 'content'));
+if (!['content', 'box'].includes(gegen)) { console.error(`--gegen: 'content' oder 'box', nicht '${gegen}'`); process.exit(2); }
 const jsonOut = opt('json');
 
 const PW_PATH = process.env.PLAYWRIGHT_PREFIX || '/tmp/node_modules';
@@ -122,7 +140,7 @@ async function messen(mode) {
     if (!gesetzt) { fehler.push(`Width-Button fuer "${mode}" nicht gefunden`); return null; }
     await page.waitForTimeout(400);
 
-    return page.evaluate(async ({ tol, ohneFiguren }) => {
+    return page.evaluate(async ({ tol, ohneFiguren, gegen }) => {
         const content = document.getElementById('content');
         const paper = document.getElementById('paper');
         if (!content) return { fehlt: true };
@@ -135,10 +153,25 @@ async function messen(mode) {
         window.relayout_eq_numbers?.();
         await new Promise(r => setTimeout(r, 300));
 
-        const cs = getComputedStyle(content);
+        const innenRand = (el) => {
+            const r = el.getBoundingClientRect(), c = getComputedStyle(el);
+            return r.right - parseFloat(c.paddingRight || 0) - parseFloat(c.borderRightWidth || 0);
+        };
         const cRect = content.getBoundingClientRect();
-        const limit = cRect.right - parseFloat(cs.paddingRight || 0);
+        const limit = innenRand(content);
         const pLimit = paper ? paper.getBoundingClientRect().right : limit;
+        // Bei --gegen=box entscheidet der Innenrand der umgebenden Box.
+        const BOX = '.lernziel, .beispiel, .bemerkung, .wichtig, .aufgabe, .zusammenfassung';
+        // Der Boxrand ist nur fuer FORMELN die sinnvolle Grenze. Absaetze,
+        // Boxtitel und Tabellen fuellen ihre Box definitionsgemaess bis zum
+        // Innenrand aus -- gegen ihn gemessen meldet die Vollinventur sie
+        // reihenweise als "Uebersteher" (gemessen: 126 statt 3).
+        const grenzeFuer = (el) => {
+            if (gegen !== 'box') return limit;
+            if (el.tagName.toLowerCase() !== 'mjx-container') return limit;
+            const b = el.closest(BOX);
+            return b ? innenRand(b) : limit;
+        };
 
         const artVon = (el) => {
             const t = el.tagName.toLowerCase();
@@ -225,7 +258,7 @@ async function messen(mode) {
             // Teile einer Formel nicht einzeln bewerten -- die Formel als
             // Ganzes wird ueber ihre Ink-Box beurteilt.
             if (el.closest('mjx-container') && el.tagName.toLowerCase() !== 'mjx-container') continue;
-            if (rechtsKante(el) > limit + tol) ueber.add(el);
+            if (rechtsKante(el) > grenzeFuer(el) + tol) ueber.add(el);
         }
 
         const treffer = [];
@@ -236,6 +269,7 @@ async function messen(mode) {
             if (ohneFiguren && art === 'figur') continue;
             const r = el.getBoundingClientRect();
             const kante = rechtsKante(el);
+            const grenze = grenzeFuer(el);
 
             // Was genau ragt heraus -- die Nummer oder der Formelkoerper?
             let anteil = null;
@@ -243,10 +277,10 @@ async function messen(mode) {
                 const t = teileVon(el);
                 anteil = {
                     gleichung: t.eqId,
-                    nummerUeberstand: isFinite(t.nummer) ? +(t.nummer - limit).toFixed(1) : null,
-                    koerperUeberstand: isFinite(t.koerper) ? +(t.koerper - limit).toFixed(1) : null,
-                    nurNummer: isFinite(t.nummer) && t.nummer > limit + tol
-                               && !(isFinite(t.koerper) && t.koerper > limit + tol)
+                    nummerUeberstand: isFinite(t.nummer) ? +(t.nummer - grenze).toFixed(1) : null,
+                    koerperUeberstand: isFinite(t.koerper) ? +(t.koerper - grenze).toFixed(1) : null,
+                    nurNummer: isFinite(t.nummer) && t.nummer > grenze + tol
+                               && !(isFinite(t.koerper) && t.koerper > grenze + tol)
                 };
             }
 
@@ -255,8 +289,9 @@ async function messen(mode) {
                 tag: el.tagName.toLowerCase(),
                 id: el.id || '',
                 klasse: (el.className && typeof el.className === 'string' ? el.className : '').slice(0, 40),
-                ueberstand: +(kante - limit).toFixed(1),
-                ueberstandContainer: +(r.right - limit).toFixed(1),
+                ueberstand: +(kante - grenze).toFixed(1),
+                ueberstandContainer: +(r.right - grenze).toFixed(1),
+                box: (el.closest(BOX)?.className) || null,
                 ueberstandPaper: +(kante - pLimit).toFixed(1),
                 breite: +r.width.toFixed(1),
                 text: (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
@@ -274,7 +309,7 @@ async function messen(mode) {
             seiten: seiten.length,
             treffer
         };
-    }, { tol, ohneFiguren });
+    }, { tol, ohneFiguren, gegen });
 }
 
 // Positivkontrolle: ein bewusst zu breites Element einhaengen und pruefen, dass

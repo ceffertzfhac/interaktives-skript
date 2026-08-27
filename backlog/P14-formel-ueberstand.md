@@ -133,10 +133,29 @@ also gar nicht.
 **Offen (P14-0 Frage 2):** Nummer-Platzierung korrigieren (z. B. `min-width`
 der Gleichungs-svg innerhalb von Highlight-Boxen deckeln) oder tolerieren.
 
-**Noch nicht gemessen:** das Werkzeug prueft gegen `#content`, nicht gegen den
-Innenrand der jeweiligen Highlight-Box. Nummern, die aus einer `.beispiel`-Box
-ragen ohne die Textspalte zu erreichen, faellt es daher nicht auf — optisch
-waere das der auffaelligere Fall.
+### Nachmessung gegen die Boxinnenraender (2026-08-27)
+
+`--gegen=box` nachgeruestet. Ergebnis: **es ist ein Muster, kein Einzelfall.**
+
+| Gleichung | Nummer ragt aus der Box | Koerper | Box | Abschnitt |
+|---|---|---|---|---|
+| (1.1.57) | **+64,6 px** | −6,2 | `beispiel` | 1.1.10 Geschwindigkeit |
+| (1.4.24) | **+50,4 px** | −20,7 | `bemerkung` | 1.4.2 Geschwindigkeit auf der Kreisbahn |
+| (1.2.71) | **+4,9 px** | −66,6 | `beispiel` | 1.2.8 Aufgaben loesen mit Kraeften |
+
+Alle drei: **nur die Nummer**, alle im schmal-Modus, alle in einer
+Highlight-Box. **Kein einziger Formelkoerper** ragt irgendwo heraus — weder
+gegen die Textspalte noch gegen eine Box, in keinem Modus. Von 955
+Display-Formeln liegen 360 in einer Box; betroffen sind die drei breitesten.
+
+Gegen `#content` gemessen faellt nur (1.1.57) auf (+11,6 px) — die anderen
+beiden ragen aus ihrer Box, erreichen die Textspalte aber nicht. Der
+Boxrand ist also der Rand, der optisch zaehlt.
+
+**Konsequenz fuer P14-3:** die Loesung ist eine CSS-Regel fuer Gleichungen in
+Highlight-Boxen (die `min-width` der Gleichungs-`svg` im schmal-Modus
+deckeln), keine Handkorrektur an drei Formeln. `split`-Umbrueche im Koerper
+helfen hier grundsaetzlich nicht — der Koerper passt ja.
 
 ### KORREKTUR zur ersten Messung (gleicher Tag)
 

@@ -104,6 +104,11 @@ ist die Zeilenbox und ragt regelmäßig weit über die Glyphen hinaus: bei
 „Treffer" der ersten Fassung lagen sogar 2,6 bzw. 48,1 px *innerhalb* der
 Spalte. Gegen den Container gemessen jagt man Gespenster.
 
+`--gegen=box` misst Formeln gegen den Innenrand der umgebenden Highlight-Box
+statt gegen die Textspalte — der Rand, der optisch zählt. Nur für Formeln:
+Absätze und Boxtitel füllen ihre Box definitionsgemäß aus und würden sonst
+reihenweise gemeldet (126 statt 3).
+
 Gemeldet wird je Kette nur das äußerste Element. `--ohne-figuren` blendet die
 absichtlich breiten `.aspekt-figur`-Container aus, `--max=0` zeigt alle Treffer,
 `--json=<pfad>` schreibt das vollständige Ergebnis. **Exit-Code 1**, sobald ein
