@@ -30,9 +30,10 @@ mitlaufen. Entstanden für die Physik-Vorlesung im Fachbereich 8 der
   Kreisbahnen), **TK 2** Elektromagnetismus, **TK 3** Schwingungen & Wellen —
   Formeln in LaTeX-Satz (MathJax), Beispiel-, Bemerkungs- und
   Zusammenfassungs-Boxen.
-- **16 interaktive Aspekt-Figuren** auf vier Motoren: `kreisbewegung`
+- **16 interaktive Aspekt-Figuren** auf fünf Motoren: `kreisbewegung`
   (2D, Abb. 1.38–1.51), `kreis_spiral` (ISO-3D, Abb. 1.57–1.59),
-  `grundbegriffe` (2D, Abb. 1.1) und `bus_weg_zeit` (Abb. 1.2) — mit Reglern,
+  `grundbegriffe` (2D, Abb. 1.1), `bus_weg_zeit` (Abb. 1.2) und
+  `federpendel` (harmonische Schwingung; portiert, erste Figur folgt) — mit Reglern,
   Ablaufsteuerung, Analyse-Werten und Vergleichskurven; je Figur ein Link zur
   zugehörigen vollständigen Stand-alone-Simulation.
 - **Lesekomfort**: Kapitelnavigation mit Seitenfortschritt, Inhaltsverzeichnis
