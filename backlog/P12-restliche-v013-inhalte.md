@@ -247,7 +247,51 @@ pro Figur anhand Runbook-Vorlagenhierarchie [[feedback-vorlagen-hierarchie]].*
 - [ ] **P12-E3** 1.5.13 Rollbewegung: `rolling_bodies` (in ch_02 nachrüsten). *(M)*
 - [ ] **P12-E4** 1.7: `stoss`. *(M)*
 - [ ] **P12-E5** 2.3: `lorentz_force`. *(M)*
-- [ ] **P12-E6** 3.1: `federpendel`. *(M)*
+- [~] **P12-E6** 3.1: `federpendel`. *(M)*
+
+  **Stufe 1 erledigt 2026-08-27 (`e31dcbd`): Motor portiert** nach
+  `src/figures/federpendel/` (constants/state/physics/render/runtime, 1225 Z.).
+  Libs aus `../kreisbewegung/lib/`, alle sechs Exporte passen 1:1. Die Seite ist
+  unveraendert — **kein Modul importiert den Motor**, ein Wiedereinstieg ist also
+  verlustfrei.
+
+  **Mit dem Nutzer entschieden (2026-08-27), vor dem Weiterbauen NICHT neu fragen:**
+  - **Aspekt:** Auslenkung *x(t)* — Szene + EIN Graph. Vorlage ist damit
+    `aspekt_winkel_zeit.js` (Play/Pause + ein Graph), nicht `aspekt_weg_zeit.js`.
+  - **Bedienung:** Play/Pause mit Auto-Stopp (Runbar + Tempo-Radios),
+    plus Regler Amplitude *A*, Masse *m*, Federkonstante *k*.
+  - **Formeln:** dynamisch via `data-eqs` aus dem Kapiteltext, kein statischer
+    `.formula-box`-Block (nicht mischen — der statische gewinnt sonst).
+  - **Platzierung: Abschnitt 3.1.5, OHNE Abbildungsnummer.** 3.1.5 hat in v0.13
+    keine Abbildung; es wird auch keine erfunden. Der Platzhalter bekommt daher
+    **kein `data-figref`** — `label_aspekt_figuren()` ueberspringt ihn dann
+    sauber (`querySelectorAll('.aspekt-figur[data-figref]')`), und die
+    Abbildungszaehlung des Kapitels bleibt exakt wie v0.13 (4 Abbildungen).
+    Das ist die erste Aspekt-Figur ohne statisches Pendant.
+  - **Modus:** `store.oscillationMode = 'horizontal'` (die Sim kann auch
+    `'vertical'` — das ist der Hebel fuer eine spaetere 3.1.6-Figur).
+
+  **Fallstrick, der beim Sondieren aufgefallen ist:** `fig-feder_masse_schwingung`
+  liegt in **3.1.1**, nicht in 3.1.5, und zeigt ein **vertikales** Pendel. Ein
+  `data-figref` darauf haette der Figur eine fremde Nummer vererbt — die
+  Nummerierung laeuft in Seitenreihenfolge (`numbering.js::numberImages`).
+
+  **DOM-Vertrag** (ermittelt mit `dom_vertrag.mjs`, im Skelett als `kb_`-IDs
+  schreiben und per `.replace(/kb_/g, prefix)` prefixen):
+  *Kern-Szene:* `anchor_object`, `center_area`, `equilibrium_line/_label`,
+  `main_svg`, `mass`, `max_pos_line/_label`, `min_pos_line/_label`,
+  `pos0_label`, `position_vector`, `velocity_vector`, `acceleration_vector`,
+  `spring`, `surface`, `toggle_position_vector`, `toggle_velocity_vector`,
+  `toggle_acceleration_vector`, `unstretched_length_line/_label`,
+  `x_axis_arrow`, `x_axis_label_text`, `y_axis_arrow`, `y_axis_label_text`.
+  *Stubs (versteckt, muessen aber existieren):* `graph_svg`, `live_t`, `live_v`,
+  `live_a`, `live_ekin`, `live_epot`, `live_etot`.
+
+  **Stufe 2 (offen):** `aspekt_federpendel.js` aus der Vorlage + `.css`,
+  Skelett mit den IDs oben, Platzhalter in `ch_04_01_schwingungen.html`
+  (Abschnitt 3.1.5), Import + `ASPEKT_FACTORIES`-Eintrag in `main.js`,
+  `<link>` in `index.html`. Danach `figur_smoke.mjs --init=buildFederpendelFig`,
+  `dom_harness.mjs` (Nummerierung unveraendert?) und Browser-Sicht.
 - [ ] **P12-E7** 3.2: `wellen` (nach P12-C2-Klärung). *(M)*
 - [ ] **P12-E8** Hilfs-Sims: `ableitung`, `lineal`, `kreis_spiralbewegung` —
   Zuordnung prüfen. *(S)*
