@@ -56,10 +56,62 @@ import { buildBusWegZeitFig } from './figures/aspekt_bus_weg_zeit.js';
 // Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
 const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig };
 
+// Stand-alone-Simulationen je Aspekt-Figur (P7-Rest, Nutzervorgabe 2026-07-30).
+// Die Sims leben unter SIM_BASE (die Index-Datei dort listet alle 16); eine
+// Aspekt-Figur linkt auf die Stand-alone-Sim ihres Motors — das „volle" Pendant
+// zur interaktiven Aspekt-Figur. bus_weg_zeit ist figur-only (keine passende
+// Sim, s. aspekt_bus_weg_zeit.js) -> kein Eintrag, dort erscheint kein Sim-Button.
+const SIM_BASE = 'https://ceffertzfhac.github.io/Projects_InteraktiveSimulation/';
+const ASPEKT_SIM_URLS = {
+    // kreisbewegung-Motor -> „Ebene Kreisbewegung"
+    'kreisbahn': SIM_BASE + 'sim_kreisbewegung/index.html',
+    'weg-zeit':  SIM_BASE + 'sim_kreisbewegung/index.html',
+    'winkel-zeit': SIM_BASE + 'sim_kreisbewegung/index.html',
+    'vxvy-zeit': SIM_BASE + 'sim_kreisbewegung/index.html',
+    'axay-zeit': SIM_BASE + 'sim_kreisbewegung/index.html',
+    'betragv-zeit': SIM_BASE + 'sim_kreisbewegung/index.html',
+    'betrag-a-zeit': SIM_BASE + 'sim_kreisbewegung/index.html',
+    'omega-zeit': SIM_BASE + 'sim_kreisbewegung/index.html',
+    'periodendauer': SIM_BASE + 'sim_kreisbewegung/index.html',
+    // kreis_spiral-Motor -> „Kreis- und Spiralbewegung"
+    'axay-winkelbeschl': SIM_BASE + 'sim_kreis_spiralbewegung/index.html',
+    'arat-winkelbeschl': SIM_BASE + 'sim_kreis_spiralbewegung/index.html',
+    'omega-vektor': SIM_BASE + 'sim_kreis_spiralbewegung/index.html',
+    'zentripetalkreuz': SIM_BASE + 'sim_kreis_spiralbewegung/index.html',
+    'alpha-omega': SIM_BASE + 'sim_kreis_spiralbewegung/index.html',
+    // grundbegriffe-Motor -> „Grundbegriffe der Kinematik"
+    'grundbegriffe': SIM_BASE + 'sim_grundbegriffe_kinematik/index.html',
+    // bus_weg_zeit: figur-only, keine Stand-alone-Sim -> kein Eintrag
+};
+
 function init_aspekt_figuren() {
     document.querySelectorAll('.aspekt-figur[data-aspekt]').forEach(fig => {
         const build = ASPEKT_FACTORIES[fig.dataset.aspekt];
         if (build) build(fig);
+        // Sim-Link (↗ im Kasten) zur Stand-alone-Sim, neben der Lupe (gleicher
+        // Anker: runbar wenn vorhanden, sonst .aspekt-scene — wie die Lupe selbst
+        // in jeder Factory eingehaengt). Externer Link in neuem Tab; nur wenn ein
+        // URL-Eintrag existiert (bus_weg_zeit hat keinen).
+        const simUrl = ASPEKT_SIM_URLS[fig.dataset.aspekt];
+        if (simUrl) {
+            const lupe = fig.querySelector('.aspekt-lupe');
+            const anchor = (lupe && lupe.parentElement) || fig.querySelector('.aspekt-runbar') || fig;
+            const a = document.createElement('a');
+            a.className = 'aspekt-simlink';
+            a.href = simUrl;
+            a.target = '_blank'; a.rel = 'noopener noreferrer';
+            a.setAttribute('aria-label', 'Zur Stand-alone-Simulation');
+            a.title = 'Stand-alone-Simulation öffnen';
+            a.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+            if (lupe) {
+                // In der Runbar drueckt der Sim-Link per margin-left:auto das
+                // Cluster nach rechts; die Lupe rueckt mit 8 px Abstand hinter.
+                if (anchor.classList.contains('aspekt-runbar')) lupe.style.marginLeft = '8px';
+                lupe.before(a);
+            } else {
+                anchor.appendChild(a);
+            }
+        }
         // Linkes Bedienfeld einklappbar (seitlich): Kopf-Taste ins linke Panel
         // setzen — spart Platz fuer Simulation/Diagramm. Generisch fuer jede
         // .aspekt-figur (s. toggle_panel_left in aspekt_kreisbahn.js).

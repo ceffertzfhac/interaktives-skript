@@ -141,19 +141,15 @@ export function print_page() {
     for(let i=0;i<gc.length;i++){
         create_qr(gc[i], gc[i].id);
     }
-    // QR pro Aspekt-Figur: das interaktive Pendant (bildschirmseitig,
-    // .nur-bildschirm) verweist per data-figref auf das statische Druckbild
-    // (.nur-druck <figure id="fig-…">). Im Druck erscheint dieses Bild; der QR
-    // wird daran angehaengt und linkt zurueck auf ?g=<aspekt-figur-id>. Nur
-    // Abbildungen MIT interaktivem Pendant bekommen einen QR.
+    // QR pro Aspekt-Figur (Option B): der QR sitzt auf der interaktiven Figur
+    // selbst — der Druck zeigt diese Vektor-Figur, nicht mehr das statische
+    // .nur-druck-PNG (das unsichtbar bleibt, s. aspekt_kreisbahn.css). Der QR
+    // linkt zurueck auf ?g=<aspekt-figur-id>. data-figref wird hier nicht mehr
+    // gebraucht (label_aspekt_figuren/Nummerierung nutzen es weiter).
     pc.querySelectorAll(".aspekt-figur").forEach(af => {
         const linkId = af.id;
-        const figref = af.dataset.figref;
-        if (!linkId || !figref) return;
-        const staticFig = figref && CSS.escape
-            ? pc.querySelector("#" + CSS.escape(figref))
-            : pc.getElementById(figref);
-        if (staticFig) create_qr(staticFig, linkId);
+        if (!linkId) return;
+        create_qr(af, linkId);
     });
 
     document.body.setAttribute("style","background-color:#fff;margin-top:0px;margin-left:100px;");

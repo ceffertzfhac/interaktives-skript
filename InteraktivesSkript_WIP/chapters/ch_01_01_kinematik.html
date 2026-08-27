@@ -9,7 +9,17 @@
      Weg-Zeit-Diagramm rechts, 3565x1800, ~2:1). Die Datei fehlte zunaechst in
      PSkriptBilder (weg_zeit_diagramm_perfekt.pdf/_final.svg sind NUR die
      Diagrammhaelfte); der Autor hat das Original 2026-07-24 in den Quellen-Repo
-     nachgetragen, von dort uebernommen. -->
+     nachgetragen, von dort uebernommen.
+     Verifikation (2026-07-24 nach Skill v013-verifikation, Stufe 1-6,
+     freigegeben "ist ok"): Gl. 1.1.1-1.1.99 deckungsgleich pro Unterabschnitt
+     (1.1.4=3, 1.1.5=1, 1.1.7=16, 1.1.8=10, 1.1.9=4, 1.1.10=33, 1.1.11=9,
+     1.1.12=23); Abb. 1.1-1.20 lueckenlos, dann Sprung auf 1.38 (1.2/1.3 belegen
+     1.21-1.37, 1.4-Offset 37); Beispiele 1.1.1-1.1.17 (17); Zusammenfassung 1.1;
+     Querverweise 30 fig/8 sec/37 eq alle aufgeloest; 41 Fussnoten, 0 nicht
+     umgewandelt. Bewusste Abweichungen von v0.13: \bbspe (Plural "Beispiele")
+     -> einzelne beispiel-Box (1.1.1, 1.1.3); Doppel-Label formel_freierfall4
+     (Quell-Bug) -> formel_freierfall_fallzeit disambiguiert; Quell-Artefakt
+     "code/Code" in der Zusammenfassung uebersprungen. -->
 
 
 <section>
@@ -76,7 +86,10 @@
     <p>Daher nutzt man in der Physik für Ortsangaben im Allgemeinen <strong>Ortsvektoren</strong> oder Koordinaten. Diese haben die Einheit Meter und als Formelzeichen z.&nbsp;B. \(s, x, y, z, \vec s, \vec x, \vec r\).</p>
 
     \begin{equation}
-    \text{Ort:}\quad \text{Formelzeichen:}\,s, x, y, z, \vec s, \vec x,  \vec r \quad \text{Einheit der Komponenten:}\, \left[ s_i\right]=\mathrm{m}
+    \begin{split}
+    \text{Ort:}\quad \text{Formelzeichen:}\,&amp;s, x, y, z, \vec s, \vec x,  \vec r \\
+    &amp;\quad \text{Einheit der Komponenten:}\, \left[ s_i\right]=\mathrm{m}
+    \end{split}
     \end{equation}
 
     <p>Welchen Buchstaben genau wir für den Ortsvektor verwenden, ist Geschmackssache und hängt oft vom persönlichen Geschmack ab.</p>
@@ -88,7 +101,10 @@
     <p>Dabei ist der <strong>Abstandsvektor</strong> wie folgt definiert:</p>
 
     \begin{equation}
-    \text{Abstandsvektor:}\quad \Delta \vec s_{BA}=\vec s_B - \vec s_A=-\Delta \vec s_{AB} \quad \text{Einheit:}\,\left[\Delta \vec s_{BA}\right]=\mathrm{m}
+    \begin{split}
+    \text{Abstandsvektor:}\quad &amp;\Delta \vec s_{BA}=\vec s_B - \vec s_A=-\Delta \vec s_{AB} \\
+    &amp;\quad \text{Einheit:}\,\left[\Delta \vec s_{BA}\right]=\mathrm{m}
+    \end{split}
     \end{equation}
 
     \begin{equation}
@@ -129,7 +145,10 @@
     <p>Verweilt ein Objekt nicht an einem Ort, sondern nimmt es einen bestimmten, aber nicht unbedingt geraden oder kurzen, Verlauf von einem Ort \(A\) zu einem Ort \(B\) (wobei \(A\) und \(B\) auch derselbe Ort sein können, z.&nbsp;B. bei einer geschlossenen Kreisbahn), so sprechen wir von einer Strecke. Die Änderung des Ortes hängt dann von einem Parameter ab, hierbei wählt man typischer- und praktischerweise meist die Zeit. Die Strecke \(\vec s(t)\) bezeichnet dann eine Schar<span class="fussnote">Im Gegensatz zur <em>Menge</em>, die eine feste Sammlung von Elementen darstellt, ist eine <em>Schar</em> eine Familie von Objekten, die von einem Parameter abhängt.</span> von Punkten, die nacheinander von einem Objekt mit ansteigender Zeit durchlaufen werden.</p>
 
     \begin{equation}
-    \text{Strecke:}\quad \text{Formelzeichen:}\,\vec s(t) \quad \text{Einheit der Komponenten:}\, \left[ s_i\right]= \mathrm{m}
+    \begin{split}
+    \text{Strecke:}\quad \text{Formelzeichen:}\,&amp;\vec s(t) \\
+    &amp;\quad \text{Einheit der Komponenten:}\, \left[ s_i\right]= \mathrm{m}
+    \end{split}
     \end{equation}
 
     <p>Die Strecke ist meist ein dreidimensionaler Vektor, welcher von der Zeit \(t\) abhängt. Setzt man unterschiedliche Werte von \(t\), so erhält man verschiedene Ortsvektoren, die jeweils zu dem Punkt \(P(\vec s(t))\) zeigen, an dem sich das Objekt zum Zeitpunkt \(t\) befindet. Welche Werte für \(t\) eingesetzt werden können, hängt von der spezifischen Bewegung ab, wie wir später noch behandeln werden.</p>
@@ -219,7 +238,10 @@
         <p>Mit Formel <a class="xref" data-ref-eq="formel_freierfall_fallzeit"></a> können wir nun z.&nbsp;B. abschätzen, dass ein aus einer Höhe von \(20\,\mathrm{m}\) fallen gelassener Stein eine Fallzeit von ungefähr \(2\,\mathrm{s}\) hat.</p>
 
         \begin{equation}
-        t= \sqrt{\frac{2\cdot h_0}{g}} = \sqrt{\frac{2\cdot 20\,\mathrm{m}}{9{,}81\,\mathrm{m/s^2}}} \approx \sqrt{\frac{40\,\mathrm{m}}{10\,\mathrm{m/s^2}}} = \sqrt{4{,}0\,\mathrm{s^2}} =2{,}0\,\mathrm{s}
+        \begin{split}
+        t&amp;= \sqrt{\frac{2\cdot h_0}{g}} = \sqrt{\frac{2\cdot 20\,\mathrm{m}}{9{,}81\,\mathrm{m/s^2}}} \\
+        &amp;\approx \sqrt{\frac{40\,\mathrm{m}}{10\,\mathrm{m/s^2}}} = \sqrt{4{,}0\,\mathrm{s^2}} =2{,}0\,\mathrm{s}
+        \end{split}
         \end{equation}
 
         <p>Warum haben wir beim Auflösen der quadratischen Gleichung <a class="xref" data-ref-eq="formel_freierfall4a"></a> nur die positive Lösung genommen? Mathematisch gesehen wäre auch \(-\sqrt{\frac{2\cdot h_0}{g}}\) eine korrekte Lösung der Gleichung gewesen. Da das Objekt jedoch erst bei \(t=0\) seine Bewegung beginnt und wir uns in der Physik darauf geeinigt haben, dass die Zeit in positive Richtung läuft, kann nur \(+\sqrt{\frac{2\cdot h_0}{g}}\) die richtige Antwort auf unsere Fragestellung sein.</p>
@@ -380,10 +402,13 @@
         \end{equation}
 
         <p>Das setzen wir in die Gleichung \(y(t)\) ein und erhalten:</p>
-        \begin{multline}
-        y(x)=-\frac{1}{2}\cdot g \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right)^2 + v_0\cdot \sin{(\alpha)} \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right) + h_0 \\
-        =  -\frac{1}{2}\cdot\left( \frac{g}{v_0^2\cdot \cos^2{(\alpha)}}\right)\cdot x^2 + \tan{(\alpha)}\cdot x+ h_0
-        \end{multline}
+        \begin{equation}
+        \begin{split}
+        y(x)&=-\frac{1}{2}\cdot g \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right)^2 \\
+        &\quad + v_0\cdot \sin{(\alpha)} \cdot \left(\frac{x}{v_0\cdot \cos{(\alpha)}}\right) + h_0 \\
+        &= -\frac{1}{2}\cdot\left( \frac{g}{v_0^2\cdot \cos^2{(\alpha)}}\right)\cdot x^2 + \tan{(\alpha)}\cdot x+ h_0
+        \end{split}
+        \end{equation}
 
         <p>Wir sehen: Die Flug<strong>bahn</strong> eines Objektes, das schräg geworfen wurde, ist auch eine Parabel! Machen Sie sich klar: diese Parabel ist eine andere Parabel als die Parabel der Komponente \(y(t)\). Das eine (die Bahn) beschreibt den zeitunabhängigen Verlauf der Flugkurve (vergl. Spur im Schnee) durch den Raum, das andere (die y-Komponente) beschreibt den zeitlichen Verlauf der Höhe über dem Boden.</p>
 
@@ -521,7 +546,11 @@
 
     <p>Die allgemeine Definition der Geschwindigkeit ist also:</p>
     \begin{equation}
-    \text{Geschwindigkeit:} \quad v(t)=\lim_{\Delta t\rightarrow 0}\frac{\Delta x}{\Delta t}=\frac{\text{d}x(t)}{\text{d}t}=\dot{x}(t) \quad \text{Einheit:} \, [v] = \mathrm{m/s}
+    \begin{split}
+    \text{Geschwindigkeit:} \quad v(t)&amp;=\lim_{\Delta t\rightarrow 0}\frac{\Delta x}{\Delta t} \\
+    &amp;=\frac{\text{d}x(t)}{\text{d}t}=\dot{x}(t) \\
+    \text{Einheit:} \, &amp; [v] = \mathrm{m/s}
+    \end{split}
     \end{equation}
 
     <p>Anders gesagt: Die Geschwindigkeit eines Objektes zu einem bestimmten Zeitpunkt entspricht der Steigung der Kurve, die die Bewegung im Orts-Zeit-Diagramm beschreibt, zu diesem Zeitpunkt. Die Geschwindigkeit lässt sich also rechnerisch bestimmen aus der Ableitung der Strecke nach der Zeit; oder aber zeichnerisch, indem man in dem Punkt im Ort-Zeit-Diagramm, zu dem man die Geschwindigkeit bestimmen möchte, eine Tangente an die Kurve legt und die Steigung der Tangente bestimmt.</p>
@@ -577,12 +606,19 @@
     <p>oder</p>
 
     \begin{equation}
-    \text{Geschwindigkeit in 3-D:}\quad  \vec{v}(t)=\left( \begin{matrix}v_x(t)\\v_y(t)\\v_z(t)\end{matrix}\right) \quad \text{Einheit:}\, [\vec v]=\mathrm{m/s}
+    \begin{split}
+    \text{Geschwindigkeit in 3-D:}\quad  \vec{v}(t)=\left( \begin{matrix}v_x(t)\\v_y(t)\\v_z(t)\end{matrix}\right) \\
+    \text{Einheit:}\, [\vec v]=\mathrm{m/s}
+    \end{split}
     \end{equation}
     <p>mit</p>
 
     \begin{equation}
-    v_x(t)=\frac{\text{d}x(t)}{\text{d}t}=\dot{x}(t)\quad v_y(t)=\frac{\text{d}y(t)}{\text{d}t}=\dot{y}(t)\quad v_z(t)=\frac{\text{d}z(t)}{\text{d}t}=\dot{z}(t)
+    \begin{split}
+    v_x(t)&amp;=\frac{\text{d}x(t)}{\text{d}t}=\dot{x}(t) \\
+    v_y(t)&amp;=\frac{\text{d}y(t)}{\text{d}t}=\dot{y}(t) \\
+    v_z(t)&amp;=\frac{\text{d}z(t)}{\text{d}t}=\dot{z}(t)
+    \end{split}
     \end{equation}
 
     <p>Das bedeutet: bei Bewegungen, die nicht entlang einer Achse verlaufen und bei denen die Stecke \(\vec s(t)\) ein mehrdimensionaler Vektor ist, ist auch die Geschwindigkeit ein Vektor. Die Komponenten des Vektors sind dabei die Ableitungen der Komponenten der Strecke nach der Zeit.</p>
@@ -691,10 +727,15 @@
         \left(\begin{matrix} -\sin{(\frac{2\pi}{T}t)} \\ \cos{(\frac{2\pi}{T} t)} \end{matrix} \right)
         \end{equation}
         <p>Wir hatten oben stehend schon besprochen, dass der Geschwindigkeitsvektor tangential zu Bahn steht. Das können wir am Beispiel der Kreisbahn besonders gut überprüfen: Der Vektor \(\vec s(t)\) zeigt immer vom Ursprung zum Ort des Objektes, also zu einem Punkt der Kreisbahn. Die Mathematik sagt uns: die Tangente an den Kreis steht immer senkrecht zu diesem Vektor. Wir müssen also nun überprüfen, ob die Vektoren \(\vec s(t)\) und \(\vec v(t)\) senkrecht zueinander stehen. Das können wir mit Hilfe des Skalarproduktes überprüfen, denn zwei Vektoren<span class="fussnote">...wobei keiner von beiden der Nullvektor ist.</span> stehen gerade dann senkrecht (orthogonal) zueinander, wenn das Skalarprodukt null ist.</p>
-        \begin{multline}
-        \vec s(t) \cdot \vec v(t) = \left(\begin{matrix}R\cdot \cos{(\frac{2\pi}{T}t)} \\R \cdot \sin{(\frac{2\pi}{T} t)} \end{matrix} \right) \cdot \frac{2 \cdot \pi \cdot R}{T} \cdot
-        \left(\begin{matrix} -\sin{(\frac{2\pi}{T}t)} \\ \cos{(\frac{2\pi}{T} t)} \end{matrix} \right)\\ =\frac{2 \cdot \pi \cdot R}{T} \cdot \left( -\sin(...)\cos(...) + \sin(...) \cos(...) \right) =0  \quad\text{✓}
-        \end{multline}
+        \begin{equation}
+        \begin{split}
+        \vec s(t) \cdot \vec v(t) &= \left(\begin{matrix}R\cdot \cos{(\frac{2\pi}{T}t)} \\R \cdot \sin{(\frac{2\pi}{T} t)} \end{matrix} \right) \cdot \frac{2 \cdot \pi \cdot R}{T} \\
+        &\quad \cdot \left(\begin{matrix} -\sin{(\frac{2\pi}{T}t)} \\ \cos{(\frac{2\pi}{T} t)} \end{matrix} \right)\\
+        &=\frac{2 \cdot \pi \cdot R}{T} \cdot \left( -\sin(...)\cos(...) \right. \\
+        &\qquad \left. + \sin(...) \cos(...) \right) \\
+        &=0  \quad\text{✓}
+        \end{split}
+        \end{equation}
         <p>Wie vermutet steht also der Vektor der Geschwindigkeit tangential zur Bahnkurve.</p>
     </div>
 
@@ -732,13 +773,20 @@
         \vec v_0=\left(\begin{matrix} v_{0,x} \\  v_{0,y} \end{matrix}\right)
         \end{equation}
         <p>Die Strecke ermitteln wir, indem wir Komponentenweise integrieren:</p>
-        \begin{multline}
-        v_x(t)=v_{0,x} \quad \Rightarrow \\  x(t)= \int\limits^t_0 v_x(\tau) \,\text{d}\tau+x_0 =\int\limits^t_0 v_{0,x} \,\text{d}\tau+x_0 = \left[ v_{0,x}\cdot \tau \right]^t_0+x_0=v_{0,x}\cdot t+x_0
-        \end{multline}
+        \begin{equation}
+        \begin{split}
+        v_x(t)&=v_{0,x} \quad \Rightarrow \\  x(t)&= \int\limits^t_0 v_x(\tau) \,\text{d}\tau+x_0 \\
+        &=\int\limits^t_0 v_{0,x} \,\text{d}\tau+x_0 \\
+        &= \left[ v_{0,x}\cdot \tau \right]^t_0+x_0=v_{0,x}\cdot t+x_0
+        \end{split}
+        \end{equation}
         <p>und</p>
-        \begin{multline}
-        v_y(t)=-g \cdot t+v_{0,y}\quad \Rightarrow \\ y(t)= \int\limits^t_0 (-g \cdot \tau + v_{0,y}) \,\text{d}\tau+y_0 = \left[ -\frac{g}{2} \cdot \tau^2 + v_{0,y}\cdot \tau \right]^t_0+y_0\\=-\frac{1}{2}\cdot g \cdot t^2 + v_{0,y}\cdot t+y_0
-        \end{multline}
+        \begin{equation}
+        \begin{split}
+        v_y(t)&=-g \cdot t+v_{0,y}\quad \Rightarrow \\ y(t)&= \int\limits^t_0 (-g \cdot \tau + v_{0,y}) \,\text{d}\tau+y_0 \\
+        &= \left[ -\frac{g}{2} \cdot \tau^2 + v_{0,y}\cdot \tau \right]^t_0+y_0\\&=-\frac{1}{2}\cdot g \cdot t^2 + v_{0,y}\cdot t+y_0
+        \end{split}
+        \end{equation}
         <p>Fügen wir nun die Komponenten zusammen, um den Vektor der Strecke zu erhalten:</p>
         \begin{equation}
         \vec{s}(t)=\left(\begin{matrix} v_{0,x} \cdot t +x_0 \\ -\frac{1}{2}\cdot g t^2 + v_{0,y} \cdot t + y_0\end{matrix}\right)
@@ -772,7 +820,11 @@
     <p>Die Geschwindigkeit, mit der sich der Abstand der beiden Objekte mit der Zeit ändert, nennen wir <strong>Relativgeschwindigkeit</strong> \(\vec v_\text{rel}\). Analog zur „normalen" Geschwindigkeit kann die Relativgeschwindigkeit durch ableiten nach \(t\) ermittelt werden:</p>
 
     \begin{equation}
-    \vec v_\text{rel}= \frac{\mathrm{d}}{\mathrm{d}t}\,(\Delta \vec s_{AB}(t))=\frac{\mathrm{d}}{\mathrm{d}t}\,\left(\vec s_A(t) - \vec s_B(t)\right)=\frac{\mathrm{d}\vec s_A(t)}{\mathrm{d}t}-\frac{\mathrm{d}\vec s_B(t)}{\mathrm{d}t}=\vec v_A(t)- \vec v_B(t) \label{kinematik_vrel}
+    \begin{split}
+    \vec v_\text{rel}&amp;= \frac{\mathrm{d}}{\mathrm{d}t}\,(\Delta \vec s_{AB}(t))=\frac{\mathrm{d}}{\mathrm{d}t}\,\left(\vec s_A(t) - \vec s_B(t)\right) \\
+    &amp;=\frac{\mathrm{d}\vec s_A(t)}{\mathrm{d}t}-\frac{\mathrm{d}\vec s_B(t)}{\mathrm{d}t}=\vec v_A(t)- \vec v_B(t)
+    \end{split}
+    \label{kinematik_vrel}
     \end{equation}
     <p>Man sieht: die Geschwindigkeit, mit der sich der Abstand ändert, ist gerade gleich der vektoriellen Differenz der Geschwindigkeit der einzelnen Objekte. Hierbei ist auf die Reihenfolge der Subtraktion zu achten: \(\vec v_A(t) - \vec v_B(t)\) liefert die Geschwindigkeit, mit der sich \(A\) relativ zu \(B\) bewegt, \(\vec v_B(t) - \vec v_A(t)\) ist die Geschwindigkeit, mit der sich \(B\) relativ zu \(A\) bewegt.</p>
 
@@ -844,7 +896,11 @@
 
     <p>Analog zur Geschwindigkeit sollte Sie diese Grenzwertbildung wieder an die Mathematik erinnern. Sie bedeutet: Bilde ein Steigungsdreieck mit Ordinatenabschnitt \(\Delta v\) und Abszissenabschnitt \(\Delta t\) an die Kurve \(v(t)\) und zwar so, dass \(\Delta t\) winzig klein wird. Dann entspricht \(\lim_{\Delta t \rightarrow 0}\frac{\Delta v}{\Delta t}\) gerade der Steigung der Kurve \(v(t)\) (zu einem bestimmten Zeitpunkt \(t\)). Die Definition der Beschleunigung ist also:</p>
     \begin{equation}
-    \text{Beschleunigung:} \quad a(t)=\lim_{\Delta t\rightarrow 0}\frac{\Delta v}{\Delta t}=\frac{\text{d}v(t)}{\text{d}t}=\dot{v}(t)=\ddot{x}(t) \quad \text{Einheit:} \, [a] = \mathrm{m/s^2}
+    \begin{split}
+    \text{Beschleunigung:} \quad a(t)&amp;=\lim_{\Delta t\rightarrow 0}\frac{\Delta v}{\Delta t} \\
+    &amp;=\frac{\text{d}v(t)}{\text{d}t}=\dot{v}(t)=\ddot{x}(t) \\
+    \text{Einheit:} \, &amp; [a] = \mathrm{m/s^2}
+    \end{split}
     \end{equation}
     <p>Anders gesagt: die Beschleunigung eines Objektes zu einem bestimmten Zeitpunkt entspricht der Steigung der \(v(t)\)-Kurve im Geschwindigkeits-Zeit-Diagramm. Daher lässt sich die Beschleunigung auf mehrere Weisen bestimmen: als Ableitung der Funktion \(v(t)\) oder als Steigung der Tangenten an die \(v(t)\)-Kurve im Geschwindigkeits-Zeit-Diagramm.</p>
 
@@ -878,7 +934,10 @@
     <p>oder</p>
 
     \begin{equation}
-    \text{Beschleunigung in 3-D:}\quad  \vec{a}(t)=\left( \begin{matrix}a_x(t)\\a_y(t)\\a_z(t)\end{matrix}\right) \quad \text{Einheit:}\, [\vec a]=\mathrm{m/s^2}
+    \begin{split}
+    \text{Beschleunigung in 3-D:}\quad  \vec{a}(t)=\left( \begin{matrix}a_x(t)\\a_y(t)\\a_z(t)\end{matrix}\right) \\
+    \text{Einheit:}\, [\vec a]=\mathrm{m/s^2}
+    \end{split}
     \end{equation}
     <p>mit</p>
 
@@ -892,7 +951,10 @@
 
     <p>Da die Beschleunigung der Steigung der \(v(t)\)-Kurve im Geschwindigkeit-Zeit-Diagramm entspricht, bedeutet das auch: eine gleichmäßig beschleunigte Bewegung lässt sich im Geschwindigkeit-Zeit-Diagramm als Gerade darstellen. Da eine Gerade jedoch eine konstante Steigung hat, ist es bei einer Geraden egal, wo man ein Steigungsdreieck zeichnet und wie groß es ist: das Ergebnis wird immer dasselbe sein. Daher kann man im Spezialfall der gleichmäßig beschleunigten Bewegung die Beschleunigung errechnen durch:</p>
     \begin{equation}
-    \text{Spezialfall: gleichmäßig beschleunigte Bewegung:}\, a=\frac{\Delta v}{\Delta t}=\text{konst.}
+    \begin{split}
+    \text{Spezialfall: gleichmäßig beschleunigte Bewegung:} \\
+    \, a=\frac{\Delta v}{\Delta t}=\text{konst.}
+    \end{split}
     \end{equation}
 
     <div class="beispiel" data-title="Die Beschleunigung des senkrechten Wurfes">
@@ -978,7 +1040,10 @@
         \end{align*}
         <p>Der Beschleunigungsvektor ist also:</p>
         \begin{equation}
-        \vec a(t) =\left( \begin{matrix} -\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \cos{(\frac{2\pi}{T}t)} \\ -\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \sin{(\frac{2\pi}{T}t)}  \end{matrix}\right)=-\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \left( \begin{matrix} \cos{(\frac{2\pi}{T}t)} \\ \sin{(\frac{2\pi}{T}t)}  \end{matrix}\right)
+        \begin{split}
+        \vec a(t) &amp;=\left( \begin{matrix} -\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \cos{(\frac{2\pi}{T}t)} \\ -\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \sin{(\frac{2\pi}{T}t)}  \end{matrix}\right) \\
+        &amp;=-\frac{(2 \cdot \pi)^2 \cdot R}{T^2} \cdot \left( \begin{matrix} \cos{(\frac{2\pi}{T}t)} \\ \sin{(\frac{2\pi}{T}t)}  \end{matrix}\right)
+        \end{split}
         \end{equation}
         <p>Nun können wir noch untersuchen, wie die Vektoren \(\vec s(t)\), \(\vec v(t)\) und \(\vec a(t)\) zueinander stehen.</p>
         <ul>
@@ -992,7 +1057,10 @@
         \end{equation}
         <p>Damit kann man z.&nbsp;B. der Frage nachgehen, wie stark die Erde zur Sonne hin beschleunigt wird. Die Erde bewegt sich auf einer Kreisbahn um die Sonne mit der Umlaufzeit \(T=1\,\mathrm{Jahr}\) und dem Radius \(R=1{,}50\cdot 10^{8}\,\mathrm{km}\). Damit beträgt die Beschleunigung der Erde zur Sonne hin:</p>
         \begin{equation}
-        |\vec a(t)|=\frac{(2 \cdot \pi)^2 \cdot R}{T^2}=\frac{(2 \cdot \pi)^2 \cdot 1{,}50\cdot 10^{11}\,\mathrm{m}}{(3{,}15576\cdot 10^{7}\,\mathrm{s})^2} \approx 0{,}00595\,\mathrm{m/s^2} \approx 77{,}1\,\mathrm{km/h^2}
+        \begin{split}
+        |\vec a(t)|&=\frac{(2 \cdot \pi)^2 \cdot R}{T^2}=\frac{(2 \cdot \pi)^2 \cdot 1{,}50\cdot 10^{11}\,\mathrm{m}}{(3{,}15576\cdot 10^{7}\,\mathrm{s})^2} \\
+        &\approx 0{,}00595\,\mathrm{m/s^2} \approx 77{,}1\,\mathrm{km/h^2}
+        \end{split}
         \end{equation}
     </div>
 

@@ -33,7 +33,8 @@ mitlaufen. Entstanden für die Physik-Vorlesung im Fachbereich 8 der
 - **16 interaktive Aspekt-Figuren** auf vier Motoren: `kreisbewegung`
   (2D, Abb. 1.38–1.51), `kreis_spiral` (ISO-3D, Abb. 1.57–1.59),
   `grundbegriffe` (2D, Abb. 1.1) und `bus_weg_zeit` (Abb. 1.2) — mit Reglern,
-  Ablaufsteuerung, Analyse-Werten und Vergleichskurven.
+  Ablaufsteuerung, Analyse-Werten und Vergleichskurven; je Figur ein Link zur
+  zugehörigen vollständigen Stand-alone-Simulation.
 - **Lesekomfort**: Kapitelnavigation mit Seitenfortschritt, Inhaltsverzeichnis
   mit Suche, drei Spaltenbreiten, fünf Textgrößen, Dunkelmodus, wählbare
   Farbpaletten (auch CVD).
@@ -68,8 +69,9 @@ python3 -m http.server 8000
 | `InteraktivesSkript_WIP/chapters/` | 17 HTML-Fragmente (TK 0–3), zur Laufzeit eingehängt |
 | `InteraktivesSkript_WIP/src/` | ES-Module: `main.js` + Kern, Seiten, Shell, Druck, `figures/` (4 Motoren + 16 Aspekt-Figuren) |
 | `InteraktivesSkript_WIP/bilder/` | statische Abbildungen (auch Druck-Fallback) |
-| `BACKLOG.md` | Roadmap und offene Punkte |
-| `CLAUDE.md` | Architektur- und Konventionsübersicht für die Weiterentwicklung |
+| `BACKLOG.md` | Roadmap und offene Punkte (Index; ein Item je Datei in `backlog/`) |
+| `DOKUMENTATION.md` | Index aller Dokus mit „lies das, wenn …" — der Einstieg |
+| `CLAUDE.md` | Arbeitsregeln + Wegweiser; die Subsystem-Details stehen in je einer `CLAUDE.md` neben dem Code (`chapters/`, `src/`, `src/figures/`) |
 
 ## Technik
 

@@ -116,9 +116,12 @@ tex: { packages: {'[+]': ['tagformat', 'color']}, tags: 'ams', tagformat: {…} 
 loader: { load: ['[tex]/tagformat', '[tex]/color'] }
 ```
 
-Kommt ein **zweiter Abschnitt** ins WIP, muss `tagformat.number` das Präfix pro
-Seite ermitteln statt der heutigen Konstante — sonst ist dort jede Formel falsch
-nummeriert. (Offener Punkt in `BACKLOG.md`.)
+Das Präfix wird **pro Seite** ermittelt, nicht als Konstante gesetzt:
+`numbering.js::renumber_equations()` liest es via `sectionPrefix` aus dem
+Seitentitel (`1.4.3 …` → `1.4`, `0.2.1 …` → `0.2`), ein zweiter MathJax-Lauf
+setzt die Tags. Ein neuer Abschnitt braucht daher **keine** Änderung hier.
+(Erledigt und verifiziert 2026-07-24, s. `backlog/P12-restliche-v013-inhalte.md`
+→ P12-0a; Details in `InteraktivesSkript_WIP/chapters/CLAUDE.md`.)
 
 ## Schritt 6 — Querverweise
 
@@ -165,8 +168,15 @@ abgeschlossen.
 
 - Version im Header (`index.html`, `#header_version`) hochziehen, **immer
   dreistellig**: **neuer Abschnitt → MINOR +1, PATCH auf 0** (`1.15.2 → 1.16.0`),
-  **Kleinänderung → PATCH +1** (`1.16.0 → 1.16.1`). Schema s. CLAUDE.md „Versionierung".
-- `CLAUDE.md` ergänzen, falls sich Architektur oder Konventionen geändert haben.
+  **Kleinänderung → PATCH +1** (`1.16.0 → 1.16.1`). Schema s. Wurzel-`CLAUDE.md`,
+  Abschnitt „Arbeitsregeln" → Versionierung.
+- Doku ergänzen, falls sich Architektur oder Konventionen geändert haben — **in
+  der zuständigen verschachtelten `CLAUDE.md`, nicht in der Wurzel**:
+  `InteraktivesSkript_WIP/chapters/CLAUDE.md` (Fragment-Konvention, Nummerierung,
+  Querverweise, Bildgrößen), `…/src/CLAUDE.md` (Module, Shell, Druck),
+  `…/src/figures/CLAUDE.md` (Figuren, Motoren, Paletten). Die Wurzel-`CLAUDE.md`
+  bleibt bewusst klein — dort nur Arbeitsregeln und der Wegweiser. Übersicht:
+  `DOKUMENTATION.md`.
 - Bewusste Abweichungen von v0.13 dokumentieren (Runbook, Abschnitt 13).
 - Auf eigenem Branch arbeiten und **hochfrequent committen** — pro logischer
   Einheit einen Commit mit Begründung, nicht am Ende einen großen.

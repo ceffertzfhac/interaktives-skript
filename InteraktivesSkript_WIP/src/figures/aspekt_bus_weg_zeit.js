@@ -131,7 +131,7 @@ const RUNBAR = `
 <div class="aspekt-runbar" role="group" aria-label="Ablaufsteuerung">
   <div class="aspekt-btn-row">
     <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="start" aria-label="Start: Fahrtverlauf abspielen" title="Start"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5 L19 12 L8 19 Z" fill="currentColor"/></svg></button>
-    <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="stop" aria-label="Stop: anhalten" title="Stop"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/></svg></button>
+    <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="stop" aria-label="Pause: anhalten" title="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7.5" y="5.5" width="3.4" height="13" rx="1.5" fill="currentColor"/><rect x="13.1" y="5.5" width="3.4" height="13" rx="1.5" fill="currentColor"/></svg></button>
     <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="reset" aria-label="Reset: auf Anfang zurücksetzen" title="Reset"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.74 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4z" fill="currentColor"/></svg></button>
   </div>
 </div>`;
@@ -353,9 +353,11 @@ export function buildBusWegZeitFig(fig) {
     //    entspricht. CSS stretch/aspect-ratio scheitern daran (s. CSS-Kommentar),
     //    daher hier per JS: Diagramm-Hoehe messen, Straßen-SVG-height setzen,
     //    width:auto loest das viewBox-Verhaeltnis 220:404. Ein ResizeObserver
-    //    fängt Modus-Wechsel, Lupe und Viewport-Aenderung ab. Im Schmal-Modus
-    //    (flex-direction:column, Straße gestapelt) hat die Straße ihre eigene
-    //    Hoehe (CSS) -> inline-height loeschen, nicht syncen.
+    //    fängt Modus-Wechsel, Lupe und Viewport-Aenderung ab. Der Schmal-Modus
+    //    der Inline-Figur ist eine ZEILE (Ausnahme zur Stapelregel, s. CSS) ->
+    //    Sync greift. Nur das Lupe-Overlay im Schmal-Modus stapelt (CSS
+    //    .aspekt-im-overlay + schmal -> column); dort loeschen wir die inline-
+    //    Hoehe und lassen die CSS-Hoehe greifen, statt zu syncen.
     const streetSvg = ge(p + 'street_svg');
     const graphSvg = ge(p + 'graph_svg');
     const mainContent = scene.querySelector('.aspekt-main-content');

@@ -426,6 +426,24 @@
 .aspekt-figur .aspekt-lupe:hover { color: var(--kb-accent); border-color: var(--kb-accent); }
 .aspekt-figur .aspekt-lupe svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 
+/* ── Sim-Link (↗ im Kasten): externer Link zur Stand-alone-Sim, neben der Lupe
+   (gleicher Anker: .aspekt-runbar wenn vorhanden, sonst .aspekt-scene). Optik
+   1:1 wie die Lupe (Icon-Button 32×32, Rahmen, Surface). Außerhalb der Runbar
+   absolut oben rechts mit 48 px Versatz (links der Lupe); in der Runbar im
+   Flex-Fluss, per margin-left:auto rechtsbündig, Lupe folgt mit 8 px (main.js
+   setzt den Inline-Abstand an der Lupe). a statt button: semantisch ein Link. */
+.aspekt-figur .aspekt-simlink {
+    position: absolute; top: 8px; right: 48px; z-index: 8;
+    width: 32px; height: 32px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border); border-radius: 8px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+    text-decoration: none;
+}
+.aspekt-figur .aspekt-runbar .aspekt-simlink { position: static; margin-left: auto; }
+.aspekt-figur .aspekt-simlink:hover { color: var(--kb-accent); border-color: var(--kb-accent); }
+.aspekt-figur .aspekt-simlink svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
 /* ── Bildunterschrift (uebernimmt die Rolle von Abb. 1.38 am Bildschirm) ── */
 .aspekt-figur .aspekt-caption {
     padding: 10px 14px 12px; font-size: 0.85em; line-height: 1.45;
@@ -574,9 +592,25 @@ body.aspekt-overlay-open { overflow: hidden; }
     :root[data-width-mode] .aspekt-figur:not(.aspekt-im-overlay) .aspekt-panel-left { border-right: none; }
 }
 
-/* Legacy-Muster: interaktive Figur am Bildschirm, statisches Bild im Druck. */
+/* Option B (Nutzervorgabe 2026-07-30): der Druck zeigt die interaktive
+   Vektor-Figur (skalierbar, knackscharf), kein PNG-Swap mehr. Das .nur-druck-
+   <figure>-Geschwister bleibt im DOM (display:none) — label_aspekt_figuren()
+   überträgt dessen "Abb. 1.n" via data-figref in die interaktive Beschriftung,
+   und die Nummerierung braucht es; sichtbar wird es nirgends mehr. */
 .abbildung.nur-druck { display: none; }
-@media print {
-    .aspekt-figur.nur-bildschirm { display: none; }
-    .abbildung.nur-druck { display: block; }
-}
+
+/* Chrome im Druck verstecken — gescoped auf #print_container, denn das ist am
+   Bildschirm das Druck-Vorsichtsbild und muss konsistent zum Ausdruck sein
+   (@media print greift am Bildschirm nicht, würde das Vorsichtsbild verfehlen).
+   Gedruckt wird nur Szene + Diagramm + Beschriftung; Lupe, Sim-Link, Ablauf-
+   leiste, Bedienung (panel-left) UND Analyse (panel-right) entfallen — Analyse
+   ist im inline-Lesefluss ohnehin per Default ausgeblendet (:459) und würde
+   mit seinen MathJax-Formeln neuen Formel-Überstand im Druck erzeugen. */
+#print_container .aspekt-figur .aspekt-lupe,
+#print_container .aspekt-figur .aspekt-simlink,
+#print_container .aspekt-figur .aspekt-runbar,
+#print_container .aspekt-figur .aspekt-panel-left,
+#print_container .aspekt-figur .aspekt-panel-right { display: none !important; }
+#print_container .aspekt-figur .aspekt-body { display: block; }
+#print_container .aspekt-figur .aspekt-main,
+#print_container .aspekt-figur .aspekt-scene { width: 100%; max-width: none; }

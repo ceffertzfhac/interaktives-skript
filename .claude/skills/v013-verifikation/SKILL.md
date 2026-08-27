@@ -6,7 +6,8 @@ description: Ein migriertes Kapitel des interaktiven Skripts gegen das v0.13-PDF
 # Verifikation eines migrierten Kapitels
 
 Hintergrund und Fallstricke: `InteraktivesSkript_WIP/MIGRATION_v0.13_nach_HTML.md`,
-Abschnitte 10 und 11.
+Abschnitte 10 und 11. Die Regeln, gegen die geprüft wird (Zähler-Scopes, Offsets,
+MathJax-Gleichungsnummern, Querverweis-Deskriptoren): `InteraktivesSkript_WIP/chapters/CLAUDE.md`.
 
 ## Der zentrale Denkfehler, den dieses Skill verhindern soll
 
@@ -22,7 +23,7 @@ Abschnitte 10 und 11.
 ## Vorbereitung
 
 ```bash
-npm install --prefix /tmp mathjax-full jsdom     # einmalig, ~30 s
+npm install --prefix /tmp mathjax-full jsdom playwright-core   # einmalig, ~30 s
 cd InteraktivesSkript_WIP && python3 -m http.server 8000 &
 ```
 
@@ -79,18 +80,92 @@ grep -o 'src="bilder/[^"]*"' InteraktivesSkript_WIP/chapters/ch_NN.html |
   grep -v '^200'
 ```
 
+## Stufe 4b — Überstände über den Schreibbereich (echter Browser)
+
+```bash
+node .claude/skills/v013-verifikation/scripts/formel_ueberstand.mjs \
+     --url=http://localhost:8000/index.html
+```
+
+Misst in headless Chromium **je Breiten-Modus** (schmal/normal/breit), welche
+Elemente über die sichtbare Textspalte (`#content` abzüglich `padding-right`)
+hinausragen — Formeln (Display und inline), Tabellen, Bilder, Boxen.
+
+Bei Gleichungen wird **Nummer und Formelkörper getrennt** gemessen (P14-Kriterium
+a gegen b) und die Gleichungsnummer mit ausgegeben:
+`(1.1.57)  [NUR die Nummer]` bzw. `[Formelkörper]`. Grundlage ist der von
+MathJax mit `data-labels="true"` markierte Teilbaum; die `eq-<nummer>`-id
+stammt aus der `tagformat.id`-Konfiguration der Seite. Wichtig: die **Vorfahren**
+der Nummer zählen nicht zum Körper — ihre Box umschließt die Nummer mit.
+
+**Gemessen wird die Tinte, nicht die Container-Box.** Die `mjx-container`-Box
+ist die Zeilenbox und ragt regelmäßig weit über die Glyphen hinaus: bei
+(1.1.57) meldet sie +87,3 px, gezeichnet sind +11,6 px — zwei weitere
+„Treffer" der ersten Fassung lagen sogar 2,6 bzw. 48,1 px *innerhalb* der
+Spalte. Gegen den Container gemessen jagt man Gespenster.
+
+`--gegen=box` misst Formeln gegen den Innenrand der umgebenden Highlight-Box
+statt gegen die Textspalte — der Rand, der optisch zählt. Nur für Formeln:
+Absätze und Boxtitel füllen ihre Box definitionsgemäß aus und würden sonst
+reihenweise gemeldet (126 statt 3).
+
+Gemeldet wird je Kette nur das äußerste Element. `--ohne-figuren` blendet die
+absichtlich breiten `.aspekt-figur`-Container aus, `--max=0` zeigt alle Treffer,
+`--json=<pfad>` schreibt das vollständige Ergebnis. **Exit-Code 1**, sobald ein
+Modus Übersteher hat — damit taugt der Aufruf als Gate (BACKLOG P14-4).
+
+Das Skript führt vor der Messung einen **Selbsttest** aus (absichtlich zu
+breites Element einhängen und wiederfinden) und bricht mit Exit-Code 2 ab, wenn
+der fehlschlägt: „0 Übersteher" soll nicht von einer kaputten Messung kommen
+können.
+
+**Grenze:** misst Geometrie, nicht Optik. Ob eine umgebrochene Formel *gut
+aussieht*, entscheidet weiterhin Stufe 5.
+
 ## Stufe 5 — Nur im Browser
 
 Diese Punkte kann **kein** Harness abdecken; sie müssen von einem Menschen
-angesehen werden (oder per Chrome-Integration, falls verbunden):
+angesehen werden (oder per Chrome-Integration, falls verbunden). Prüfphasen in
+dieser Reihenfolge (kapitelagnostisch; die kapitelspezifischen **Soll**werte
+kommen aus Stufe 1):
 
-- **Formel-Tags**: erscheinen sie als `(1.4.1)` oder als `(1)`? Bei `(1)` ist
-  `tagformat` per `loader.load` geladen, aber nicht in `tex.packages`
-  aktiviert. **Dieser Fehler ist offline unsichtbar.**
-- `\textcolor` sichtbar farbig?
-- Bildgrößen plausibel, nichts unscharf hochskaliert?
-- Layout: keine Kollisionen mit Schiene/Toolbar, keine leere Spalte?
-- Darkmode lesbar, Druckfluss (`?print=true`) vollständig?
+1. **Rauchtest & Laden** — Seite öffnen, Konsole beobachten: keine 404 (insbes.
+   `chapters/ch_NN.html`, `src/numbering.js`, `bilder/*`), keine JS-Fehler.
+2. **Inhaltsparität vs. v0.13** — das PDF (Abschnitt X) neben der WIP-Seite
+   öffnen. Pro Unterabschnitt Stichproben: Prosa wortgleich, alle h3-Titel
+   vorhanden & nummeriert, Boxen-Texte und -Reihenfolge gleich.
+   Konvertierungs-Sonderfälle prüfen: `\SI` als `n\,\mathrm{unit}`, deutsche
+   Dezimalkommata `{,}`, `\point`/`\textcolor` korrekt umgesetzt.
+3. **Formel-Tags** — erscheinen sie als `(X.Y.n)` oder als `(n)`? Bei `(n)` ist
+   `tagformat` per `loader.load` geladen, aber nicht in `tex.packages`
+   aktiviert. **Dieser Fehler ist offline unsichtbar.** `\ref`-Querverweise
+   lösen zu klickbaren Links mit korrekter Nummer auf (nicht „??").
+4. **Abbildungen & SVGs** — fortlaufend, in DOM/Lesereihenfolge, keine Lücke/
+   Doppelung; hardcodierte Abbildungsnummern in der Prosa stimmen mit der
+   tatsächlichen Zählung. Inline-SVGs (falls vorhanden) skalieren korrekt
+   (`max-width:100%`/`height:auto`), Pfeilspitzen/Labels und Unicode-Math lesbar.
+5. **Pagination & Navigation** — durch alle Seiten blättern (Weiter/Zurück,
+   Kapitel-Mini-Nav, Schiene): jede Seite zeigt nur ihren `<section>`-Inhalt,
+   keine verlorenen Sibling-Elemente (`foldStraySiblings` greift, z. B. eine
+   Zusammenfassungs-Box nach `</section>`). Hash/Deep-Link auf eine Seite
+   setzen, reload — gleiche Seite aktiv, Breadcrumb + „Seite x/y" korrekt.
+6. **Druckfluss** — Toolbar „Drucken" → neuer Tab `?print=true`: enthält **alle**
+   Unterabschnitte (nicht nur die aktive Seite), Formel-Tag-Nummerierung erhalten,
+   keine abgeschnittenen SVGs, Marginalia restauriert. *(QR-Codes erzeugt
+   `print.js` pro interaktivem Pendant — rein statische Kapitel ohne Aspekt-Figur
+   haben erwartungsgemäß keine.)*
+7. **TOC & Querverweise** — Inhaltsverzeichnis: Accordion mit Kapitel-Gruppe +
+   verschachtelten h3-Links, aktive Seite hervorgehoben, Suche filtert. Prose-
+   `#`-Links / `data-action="goto_page"` springen zur Zielseite.
+8. **Responsive / Darkmode** — Fenster < 1024px (Tablet): Schiene/Marginalia
+   versteckt, Drawer über ☰, keine Phone-CSS. Darkmode umschalten: kein
+   Kontrast-Bruch, inline-SVGs + Boxen bleiben lesbar. Safari-foreignObject-Check
+   nur falls Safari verfügbar (`.fo_inner`-Verschiebung nur in Safari über
+   `.fixed`).
+
+Konzentriert zusätzlich sichten: `\textcolor` sichtbar farbig? Bildgrößen
+plausibel (nichts unscharf hochskaliert)? Layout ohne Kollisionen mit Schiene/
+Toolbar und ohne leere Spalte?
 
 ## Stufe 6 — CSS und JS auf Selbstverletzung prüfen
 

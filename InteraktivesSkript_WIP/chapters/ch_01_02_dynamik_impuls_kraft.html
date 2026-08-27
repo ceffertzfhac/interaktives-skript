@@ -45,7 +45,10 @@
     <p>Manchmal kommt es vor, dass auch das betrachtete Objekt seine Masse mit der Zeit ändert (z.&nbsp;B. eine Rakete). Dann muss die Definition des Impulses noch allgemeiner gefasst werden. Die allgemeinste Definition des Impulses ist daher:</p>
 
     \begin{equation}
-    \text{Impuls:}\quad \text{Formelzeichen:}\, \vec p(t)= m(t) \cdot \vec v(t) \quad \text{Einheit:}\, [\vec p]=\mathrm{kg\,m/s}
+    \begin{split}
+    \text{Impuls:}\quad &\text{Formelzeichen:}\, \vec p(t)= m(t) \cdot \vec v(t) \\
+    &\text{Einheit:}\, [\vec p]=\mathrm{kg\,m/s}
+    \end{split}
     \end{equation}
 
     <p>Beachten Sie: da die Geschwindigkeit im Allgemeinen ein Vektor ist, ist auch der Impuls im Allgemeinen ein Vektor. Wenn allerdings das betrachtete Objekt eine Bewegung nur entlang einer Achse vollführt, so kann die Geschwindigkeit als Skalar geschrieben werden; in diesem Spezialfall ist es auch erlaubt, den Impuls als Skalar zu schreiben.</p>
@@ -136,7 +139,8 @@
         <p>Wenden wir das Gesetz <a class="xref" data-ref-eq="dyn_kraft_aus_impuls"></a> auf dieses Beispiel an, um die Kraft zu ermitteln, die auf ein senkrecht geworfenes Objekt wirkt, erhalten wir:</p>
 
         \begin{align}
-        F = \frac{\mathrm{d}}{\mathrm{d}t}\,p(t)=\frac{\mathrm{d}}{\mathrm{d}t}\,\left(m \cdot \left( v_0 - g \cdot t \right) \right)=m \frac{\mathrm{d}}{\mathrm{d}t}\,\left( v_0 - g \cdot t \right)=-m \cdot g
+        F &amp;= \frac{\mathrm{d}}{\mathrm{d}t}\,p(t)=\frac{\mathrm{d}}{\mathrm{d}t}\,\left(m \cdot \left( v_0 - g \cdot t \right) \right) \notag \\
+        &amp;= m \frac{\mathrm{d}}{\mathrm{d}t}\,\left( v_0 - g \cdot t \right)=-m \cdot g
         \end{align}
 
         <p>Wie wir später sehen werden, ist diese Kraft die <strong>Gewichtskraft</strong>, die in der Nähe der Erdoberfläche auf ein Objekt der Masse \(m\) wirkt.</p>
@@ -167,7 +171,10 @@
         <p>Zum Zeitpunkt \(t=0\) ruht ein Koffer im Ursprung eines zweidimensionalen Koordinatensystems. Vier Personen beginnen nun mit konstanten Kräften an ihm zu zerren. Wie groß ist die Gesamtkraft und die Impulsänderung? Die Kräfte sind:</p>
 
         \begin{equation}
-        \vec{F}_1=\left(\begin{matrix} 10 \\20\end{matrix} \right) \mathrm{N};\quad \vec{F}_2=\left(\begin{matrix} 20 \\-30\end{matrix} \right) \mathrm{N};\quad \vec{F}_3=\left(\begin{matrix} 0 \\40\end{matrix} \right) \mathrm{N}; \quad \vec{F}_4=\left(\begin{matrix} -30 \\-30 \end{matrix} \right) \mathrm{N}
+        \begin{split}
+        &amp;\vec{F}_1=\left(\begin{matrix} 10 \\20\end{matrix} \right) \mathrm{N};\quad \vec{F}_2=\left(\begin{matrix} 20 \\-30\end{matrix} \right) \mathrm{N}; \\
+        &amp;\vec{F}_3=\left(\begin{matrix} 0 \\40\end{matrix} \right) \mathrm{N}; \quad \vec{F}_4=\left(\begin{matrix} -30 \\-30 \end{matrix} \right) \mathrm{N}
+        \end{split}
         \end{equation}
 
         <p>Zunächst muss die Gesamtkraft errechnet werden, indem die Vektorsumme gebildet wird:</p>
@@ -206,15 +213,24 @@
         \begin{equation} \vec c = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}.\end{equation}
         <p>Wie groß sind diese Komponenten? Die Komponente in Richtung des Vektors \(\vec a\) ist die Projektion des Kraftvektors auf den Vektor \(\vec a\). Diese Projektion kann mit Hilfe des Skalarprodukts berechnet werden:</p>
         \begin{equation}
-        \vec F_a = \frac{\vec F_\mathrm{ges} \cdot \vec a}{\vec a \cdot \vec a} \cdot \vec a = \frac{\begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}}{\begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} = \frac{80}{2} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} = \begin{pmatrix} 40 \\ 40 \\ 0 \end{pmatrix} \mathrm{N}
+        \begin{split}
+        \vec F_a &amp;= \frac{\vec F_\mathrm{ges} \cdot \vec a}{\vec a \cdot \vec a} \cdot \vec a = \frac{\begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}}{\begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} \\
+        &amp;= \frac{80}{2} \cdot \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} = \begin{pmatrix} 40 \\ 40 \\ 0 \end{pmatrix} \mathrm{N}
+        \end{split}
         \end{equation}
         <p>Der Vektor senkrecht zu \(\vec b\) lässt sich analog berechnen:</p>
         \begin{equation}
-        \vec F_b = \frac{\vec F_\mathrm{ges} \cdot \vec b}{\vec b \cdot \vec b} \cdot \vec b = \frac{\begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix}}{\begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix}} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} = \frac{20}{2} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} = \begin{pmatrix} -10 \\ 10 \\ 0 \end{pmatrix} \mathrm{N}
+        \begin{split}
+        \vec F_b &amp;= \frac{\vec F_\mathrm{ges} \cdot \vec b}{\vec b \cdot \vec b} \cdot \vec b = \frac{\begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix}}{\begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix}} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} \\
+        &amp;= \frac{20}{2} \cdot \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} = \begin{pmatrix} -10 \\ 10 \\ 0 \end{pmatrix} \mathrm{N}
+        \end{split}
         \end{equation}
         <p>Da die Vektoren \(\vec a\), \(\vec b\) und \(\vec c\) eine Basis des dreidimensionalen Raumes bilden, ist die Komponente in Richtung \(\vec c\):</p>
         \begin{equation}
-        \vec F_c = \vec F_\mathrm{ges} - \vec F_a - \vec F_b = \begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} - \begin{pmatrix} 40 \\ 40 \\ 0 \end{pmatrix} - \begin{pmatrix} -10 \\ 10 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \\ -25 \end{pmatrix} \mathrm{N}.
+        \begin{split}
+        \vec F_c &amp;= \vec F_\mathrm{ges} - \vec F_a - \vec F_b = \begin{pmatrix} 30 \\ 50 \\ -25 \end{pmatrix} - \begin{pmatrix} 40 \\ 40 \\ 0 \end{pmatrix} - \begin{pmatrix} -10 \\ 10 \\ 0 \end{pmatrix} \\
+        &amp;= \begin{pmatrix} 0 \\ 0 \\ -25 \end{pmatrix} \mathrm{N}.
+        \end{split}
         \end{equation}
     </div>
 </section>
@@ -306,7 +322,10 @@
     <p>Das <strong>Gewicht</strong> einer Masse ist jedoch eine Kraft, die z.&nbsp;B. davon abhängt, auf welchem Planeten sich die Masse befindet. Die Gewichtskraft oder das Gewicht, beide Begriffe können synonym verwendet werden, errechnet sich aus der Masse eines Objektes multipliziert mit einem Faktor, der davon abhängt, wie stark die jeweilige Masse an einem bestimmten Ort in Richtung Erd-/Planetenmittelpunkt gezogen wird. Im Allgemeinen nennt man daher den Faktor <strong>Ortsfaktor</strong>, auf der Erde sprechen wir jedoch von der <strong>Erdbeschleunigung</strong>. Diesen Faktor bezeichnen wir in der Physik mit \(g\):</p>
 
     \begin{equation}
-    \textbf{Ortsfaktor/ Erdbeschleunigung:}\quad \text{Formelzeichen:}\, g\quad \text{Einheit:} [g]=\mathrm{m/s^2}
+    \begin{split}
+    \textbf{Ortsfaktor/ Erdbeschleunigung:}\quad &amp;\text{Formelzeichen:}\, g \\
+    &amp;\text{Einheit:} [g]=\mathrm{m/s^2}
+    \end{split}
     \end{equation}
 
     <p>Die Erdbeschleunigung hat also, wie schon der Name andeutet, die Dimension einer Beschleunigung.</p>
@@ -322,7 +341,10 @@
     <p>Damit haben wir die Definition der Gewichtskraft:</p>
 
     \begin{equation}
-    \textbf{Gewichtskraft:}\quad \text{Formelzeichen:}\, \vec F_G=m \cdot \vec g  \quad \text{Einheit:} [F_G]=\mathrm{N}
+    \begin{split}
+    \textbf{Gewichtskraft:}\quad &amp;\text{Formelzeichen:}\, \vec F_G=m \cdot \vec g \\
+    &amp;\text{Einheit:} [F_G]=\mathrm{N}
+    \end{split}
     \end{equation}
 
     <h4>Die Federkraft</h4>
@@ -331,7 +353,10 @@
     <p>Die Kraft, die eine gestauchte Feder auf ein Objekt ausübt, kann mit Hilfe des <strong>Hooke'schen Gesetz</strong><span class="fussnote">Nach Robert Hooke, Universalgelehrter, Stadtvermesser und Architekt, 1635-1703</span> errechnet werden:</p>
 
     \begin{equation}
-    \textbf{Federkraft:}\quad \text{Formelzeichen:}\,  F_F=-k \cdot \Delta s \quad \text{Einheit:} [F_F]=\mathrm{N}
+    \begin{split}
+    \textbf{Federkraft:}\quad &amp;\text{Formelzeichen:}\,  F_F=-k \cdot \Delta s \\
+    &amp;\text{Einheit:} [F_F]=\mathrm{N}
+    \end{split}
     \end{equation}
 
     <p>In diesem Gesetz ist \(k\) die <strong>Federkonstante</strong>, welche von der Beschaffenheit der Feder abhängt, und \(\Delta s\) die Dehnung der Feder gegenüber der Ruhelage, also der Weg zwischen der Ruhelage der Feder und der Position, an der sich das Ende der Feder zu einem bestimmten Zeitpunkt befindet.</p>
@@ -353,7 +378,10 @@
     <p>Da eine Kraft im Allgemeinen ein Vektor ist, kann man die Federkraft auch als Vektor schreiben. Das erreicht man, indem man die Dehnung der Feder gegenüber der Ruhelage als Vektor \(\vec \Delta s\) ausdrückt, womit wir das Hooke'schen Gesetz schreiben können als:</p>
 
     \begin{equation}
-    \textbf{Federkraft:}\quad \text{Formelzeichen:}\,  \vec F_F=-k \cdot \Delta \vec s \quad \text{Einheit:} [F_F]=\mathrm{N}
+    \begin{split}
+    \textbf{Federkraft:}\quad &amp;\text{Formelzeichen:}\,  \vec F_F=-k \cdot \Delta \vec s \\
+    &amp;\text{Einheit:} [F_F]=\mathrm{N}
+    \end{split}
     \end{equation}
 
     <p>Bei vielen Aufgaben, bei denen Federn eine Rolle spielen<span class="fussnote">Jedoch nicht bei allen</span>, müssen wir nur eine Achse betrachten, in diesen Fällen genügt es, die skalare Version des Hooke'schen Gesetzes zu nutzen.</p>
@@ -398,7 +426,8 @@
 
         <p>Wir subtrahieren nun die Gleichung <a class="xref" data-ref-eq="dyn_bsp_federkraft1"></a> von Gleichung <a class="xref" data-ref-eq="dyn_bsp_federkraft2"></a>:</p>
         \begin{align}
-        (-k (\Delta z_0 + \Delta z_1) - (m_0+m_1)\cdot g) - (-k \Delta z_0-m_0\cdot g) &amp;= 0 \\[6pt]
+        (-k (\Delta z_0 + \Delta z_1) - (m_0+m_1)\cdot g) \notag \\
+        - (-k \Delta z_0-m_0\cdot g) &amp;= 0 \\[6pt]
         \Leftrightarrow -k \cdot \Delta z_1-m_1 \cdot g &amp;= 0 \nonumber
         \end{align}
         <p>Diese Formel besagt, was wir schon im Abschnitt zum Hooke'schen Gesetz diskutiert haben: Dehnt man eine schon gedehnte Feder weiter, so erhält man eine zusätzliche Kraft, die man nach dem Hooke'schen Gesetz errechnen kann.</p>
@@ -542,13 +571,20 @@
     <p>Die Geschwindigkeit erhalten wir durch Integration:</p>
 
     \begin{equation}
-    v_x(t)=\int\limits_{0}^t a_x(\tau)\text{d}\tau + v_{x,0} = \int\limits_{0}^t (g\cdot \sin \alpha )\text{d}\tau + v_{x,0} = g\cdot \sin \alpha \cdot t + v_{x,0}
+    \begin{split}
+    v_x(t)&amp;=\int\limits_{0}^t a_x(\tau)\text{d}\tau + v_{x,0} = \int\limits_{0}^t (g\cdot \sin \alpha )\text{d}\tau + v_{x,0} \\
+    &amp;= g\cdot \sin \alpha \cdot t + v_{x,0}
+    \end{split}
     \end{equation}
 
     <p>Die Strecke erhalten wir dann durch erneute Integration</p>
 
     \begin{equation}
-    x(t)=\int\limits_{0}^t v_x(\tau)\text{d}\tau + x_{x,0} = \int\limits_{0}^t (g \cdot \sin \alpha  \cdot \tau + v_{x,0}) \text{d}\tau + x_{0} = \frac{1}{2}g \cdot \sin \alpha \cdot t^2 + v_{x,0} \cdot t + x_0
+    \begin{split}
+    x(t)&=\int\limits_{0}^t v_x(\tau)\text{d}\tau + x_{x,0} \\
+    &= \int\limits_{0}^t (g \cdot \sin \alpha  \cdot \tau + v_{x,0}) \text{d}\tau + x_{0} \\
+    &= \frac{1}{2}g \cdot \sin \alpha \cdot t^2 + v_{x,0} \cdot t + x_0
+    \end{split}
     \end{equation}
 
     <p>Die Bewegung eines Objektes, welches auf einer schiefen Ebene rutscht, ist also eine gleichförmig beschleunigte Bewegung, wobei die Beschleunigung und damit auch die Endgeschwindigkeit vom Neigungswinkel abhängt. Hierbei ist interessant zu sehen, dass die beiden Grenzfälle \(\alpha=0^\circ\) und \(\alpha=90^\circ\) zu einer unbeschleunigten Bewegung bzw. zum freien Fall führen. Im ersten Fall verschwindet durch \(\sin(0^\circ)=0\) der Beschleunigungsterm und das Objekt behält seine Anfangsgeschwindigkeit bei. Im zweiten Fall erhält man wegen \(\sin(90^\circ)=1\) eine Formel, die zu der des freien Falls identisch ist.</p>
@@ -636,7 +672,10 @@
         <p>Die Kräftebilanz ist also:</p>
 
         \begin{equation}
-        \vec F_\text{ges}= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_K \vert \cdot \begin{pmatrix} \cos \beta \\ \sin \beta  \end{pmatrix}+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix}  - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \begin{split}
+        \vec F_\text{ges}&amp;= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_K \vert \cdot \begin{pmatrix} \cos \beta \\ \sin \beta  \end{pmatrix} \\
+        &amp;+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix}  - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \end{split}
         \end{equation}
         <p>mit unbekanntem \(\vert \vec F_K \vert\) und \(\vert \vec F_N \vert\).</p>
 
@@ -663,8 +702,9 @@
 
         <p>Setzen wir dieses Ergebnis in die erste Gleichung ein, erhalten wir:</p>
         \begin{align}
-        - m \cdot g \cdot \sin \alpha + \vert \vec F_K \vert \cos \beta - \mu_G \cdot (m \cdot g \cdot \cos \alpha - \vert \vec F_K \vert \sin \beta)  =  0 \\[6pt]
-        \Leftrightarrow \vert \vec F_K \vert = m \cdot g \frac{\sin \alpha + \mu_G \cdot \cos \alpha }{\cos \beta + \mu_G \sin \beta}
+        - m \cdot g \cdot \sin \alpha + \vert \vec F_K \vert \cos \beta \notag \\
+        - \mu_G \cdot (m \cdot g \cdot \cos \alpha - \vert \vec F_K \vert \sin \beta)  &amp;=  0 \\[6pt]
+        \Leftrightarrow \vert \vec F_K \vert &amp;= m \cdot g \frac{\sin \alpha + \mu_G \cdot \cos \alpha }{\cos \beta + \mu_G \sin \beta}
         \end{align}
 
         <p>Wir können eine kurze Plausibilitätsüberprüfung machen: Je steiler der Hang ist, desto größer muss die Kraft sein, mit der ich ziehe. Je flacher das Seil gehalten wird (\(\beta \to 0\)), desto kleiner wird die benötigte Zugkraft, da der Nenner maximal wird (\(\cos\beta \to 1\)).</p>
@@ -684,12 +724,19 @@
         <p>Wir wählen das Koordinatensystem so, dass die \(x\)-Achse parallel zur schiefen Ebene mit der positiven Richtung bergan und die \(y\)-Achse senkrecht dazu mit der positiven Richtung gen Himmel zeigt. In diesem Koordinatensystem haben die Seilkraft und die Reibungskraft nur eine Komponente entlang der schiefen Ebene, also in der positive bzw. negative \(x\)-Richtung. Die Gewichtskraft kann in eine Komponente entlang der schiefen Ebene und eine senkrecht zur schiefen Ebene zerlegt werden. Die Normalkraft wirkt nur senkrecht zur schiefen Ebene, also in \(y\)-Richtung.</p>
         <p>Die Kräftebilanz ist also:</p>
         \begin{equation}
-        \vec F_\text{ges}= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_S \vert \cdot \begin{pmatrix} 1 \\ 0  \end{pmatrix}+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix}  - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \begin{split}
+        \vec F_\text{ges}&amp;= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_S \vert \cdot \begin{pmatrix} 1 \\ 0  \end{pmatrix} \\
+        &amp;+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix}  - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \end{split}
         \end{equation}
         <p>mit unbekanntem \(\vert \vec F_N \vert\).</p>
         <p>Die Kiste kann sich nur entlang der schiefen Ebene bewegen, hat also eine Beschleunigung nur in \(x\)-Richtung. In \(y\)-Richtung muss die Summe der Kräfte null sein, da die Kiste nicht in die schiefe Ebene einsinken kann. Daraus folgt:</p>
         \begin{equation}
-        \begin{pmatrix}  m\cdot a_x \\ 0 \end{pmatrix} = \vec F_\text{ges}= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_S \vert \cdot \begin{pmatrix} 1 \\ 0  \end{pmatrix}+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix}  - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \begin{split}
+        \begin{pmatrix}  m\cdot a_x \\ 0 \end{pmatrix} &= \vec F_\text{ges} \\
+        &= m \cdot g \cdot \begin{pmatrix} - \sin \alpha \\ -\cos \alpha  \end{pmatrix}+ \vert \vec F_S \vert \cdot \begin{pmatrix} 1 \\ 0  \end{pmatrix}+ \vert \vec F_N \vert \begin{pmatrix} 0 \\ 1 \end{pmatrix} \\
+        &\quad - \mu_G \vert \vec F_N \vert \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+        \end{split}
         \end{equation}
 
         <p>Aus der \(y\)-Komponente folgt:</p>
@@ -714,13 +761,16 @@
         <p>Wir erhalten</p>
         \begin{align}
         a_x &amp;= - g \cdot \left( \sin \alpha + \mu_G \cdot \cos \alpha \right) + \frac{\vert \vec F_S \vert}{m} \\[6pt]
-        v_x(t) &amp;= -g \cdot \left( \sin \alpha + \mu_G \cdot \cos \alpha \right) \cdot t + \frac{\vert \vec F_S \vert}{m} \cdot t + v_{x,0} \\[6pt]
-        x(t) &amp;= -\frac{1}{2} g \cdot \left( \sin \alpha + \mu_G \cdot \cos \alpha \right) \cdot t^2 + \frac{\vert \vec F_S \vert}{m} \cdot t^2 + v_{x,0} \cdot t + x_0
+        v_x(t) &amp;= -g \cdot \left( \sin \alpha + \mu_G \cdot \cos \alpha \right) \cdot t + \frac{\vert \vec F_S \vert}{m} \cdot t \notag \\
+        &amp;\quad + v_{x,0} \\[6pt]
+        x(t) &amp;= -\frac{1}{2} g \cdot \left( \sin \alpha + \mu_G \cdot \cos \alpha \right) \cdot t^2 + \frac{\vert \vec F_S \vert}{m} \cdot t^2 \notag \\
+        &amp;\quad + v_{x,0} \cdot t + x_0
         \end{align}
         <p>sowie \(y(t)=0\), \(v_y(t)=0\) und \(a_y=0\).</p>
         <p>Um nun Zahlenwerte einsetzen zu können, müssen wir Annahmen zu den Anfangsbedingungen machen. Wir nehmen an, dass die Kiste aus dem Ruhezustand losgelassen wird, also \(v_{x,0}=0\) und \(x_0=0\) gilt. Dann erhalten wir:</p>
         \begin{align}
-        a_x &amp;= - 9{,}81\,\mathrm{m/s^2} \cdot \left( \sin 20^\circ + 0{,}33 \cdot \cos 20^\circ \right) + \frac{10\,\mathrm{N}}{0{,}1\,\mathrm{kg}} = 88\,\mathrm{m/s^2} \\[6pt]
+        a_x &amp;= - 9{,}81\,\mathrm{m/s^2} \cdot \left( \sin 20^\circ + 0{,}33 \cdot \cos 20^\circ \right) + \frac{10\,\mathrm{N}}{0{,}1\,\mathrm{kg}} \notag \\
+        &amp;= 88\,\mathrm{m/s^2} \\[6pt]
         v_x(t) &amp;=  88\,\mathrm{m/s^2} \cdot t \\[6pt]
         x(t) &amp;=  \frac{1}{2} \cdot 88\,\mathrm{m/s^2} \cdot t^2 = 44\,\mathrm{m/s^2} \cdot t^2
         \end{align}
@@ -864,7 +914,10 @@
     \end{equation}
     <p>Setzen wir dies in die Gleichung für die Schwerpunktbeschleunigung ein, erhalten wir:</p>
     \begin{equation}
-    M_\text{ges} \cdot \vec{a}_S = \sum_{i=1}^n \left( \vec{F}_{i, \text{ext}} + \sum_{j=1, j\neq i}^n \vec{F}_{ij} \right) = \sum_{i=1}^n \vec{F}_{i, \text{ext}} + \sum_{i=1}^n \sum_{j=1, j\neq i}^n \vec{F}_{ij}
+    \begin{split}
+    M_\text{ges} \cdot \vec{a}_S &amp;= \sum_{i=1}^n \left( \vec{F}_{i, \text{ext}} + \sum_{j=1, j\neq i}^n \vec{F}_{ij} \right) \\
+    &amp;= \sum_{i=1}^n \vec{F}_{i, \text{ext}} + \sum_{i=1}^n \sum_{j=1, j\neq i}^n \vec{F}_{ij}
+    \end{split}
     \end{equation}
     <p>Die Summe über alle äußeren Kräfte ist einfach die resultierende äußere Gesamtkraft \(\vec F_\text{ges, ext}\). Betrachten wir nun die Doppelsumme über die inneren Kräfte. Nach dem dritten Newton'schen Gesetz (Actio=Reactio) gilt für jedes Paar von Teilchen \((i,j)\): \(\vec F_{ij} = -\vec F_{ji}\). In der Doppelsumme kommt jede dieser Paarwechselwirkungen zweimal vor, einmal als \(\vec F_{ij}\) und einmal als \(\vec F_{ji}\). Ihre Summe ist daher immer null: \(\vec F_{ij} + \vec F_{ji} = \vec 0\). Die Summe über <em>alle</em> inneren Kräfte ist somit ebenfalls null:</p>
     \begin{equation}
