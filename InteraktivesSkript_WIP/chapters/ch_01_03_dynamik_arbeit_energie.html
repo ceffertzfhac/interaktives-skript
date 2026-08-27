@@ -44,7 +44,10 @@
     </blockquote>
 
     \begin{equation}
-    \text{Arbeit:}\quad \text{Formelzeichen:}\, W \quad \text{Einheit:}\,[W]=\mathrm{kg\,m^2/s^2}=\mathrm{J}\quad\text{(Joule)}
+    \begin{split}
+    \text{Arbeit:}\quad \text{Formelzeichen:}\, W \\
+    \text{Einheit:}\,[W]=\mathrm{kg\,m^2/s^2}=\mathrm{J}\quad\text{(Joule)}
+    \end{split}
     \end{equation}
 
     <p>Spricht man von einer Arbeit, so sollte man immer auch die Kraft erwähnen, welche die Arbeit verrichtet; daher ist die Angabe einer Arbeit ohne die zugehörige Kraft physikalisch nicht sinnvoll.</p>
@@ -123,7 +126,12 @@
         <p>Die Arbeit soll berechnet werden. Die eleganteste Methode ist die direkte Anwendung der Skalarprodukt-Definition:</p>
 
         \begin{equation}
-        W = \vec F \cdot \Delta \vec s = \begin{pmatrix} 40\,\mathrm{N} \\ 30\,\mathrm{N} \end{pmatrix}\cdot  \begin{pmatrix} 5{,}0\,\mathrm{m}  \\ 0 \end{pmatrix} = (40\,\mathrm{N} \cdot 5{,}0\,\mathrm{m}) + (30\,\mathrm{N} \cdot 0) = 200\,\mathrm{J}
+        \begin{split}
+        W &amp;= \vec F \cdot \Delta \vec s \\
+        &amp;= \begin{pmatrix} 40\,\mathrm{N} \\ 30\,\mathrm{N} \end{pmatrix}\cdot  \begin{pmatrix} 5{,}0\,\mathrm{m}  \\ 0 \end{pmatrix} \\
+        &amp;= (40\,\mathrm{N} \cdot 5{,}0\,\mathrm{m}) + (30\,\mathrm{N} \cdot 0) \\
+        &amp;= 200\,\mathrm{J}
+        \end{split}
         \end{equation}
 
         <p>Alternativ können wir auch mit den Kraftkomponenten argumentieren. Für die Arbeit ist nur die Kraftkomponente relevant, die parallel zum Weg wirkt. Da der Weg rein horizontal (in x-Richtung) verläuft, ist dies die x-Komponente der Kraft:</p>
@@ -156,7 +164,11 @@
         \end{equation}
         <p>Es gilt also:</p>
         \begin{equation}
-        \cos(\alpha) = \frac{\vec F \cdot \vec s}{\vert \vec F \vert \cdot \vert \vec s \vert}  = \frac{40 \cdot 3 + 30 \cdot 4}{\sqrt{40^2 + 30^2} \cdot \sqrt{3{,}0^2 + 4{,}0^2}} = \frac{240}{50 \cdot 5{,}0} = \frac{24}{25} = 0{,}96
+        \begin{split}
+        \cos(\alpha) &amp;= \frac{\vec F \cdot \vec s}{\vert \vec F \vert \cdot \vert \vec s \vert} \\
+        &amp;= \frac{40 \cdot 3 + 30 \cdot 4}{\sqrt{40^2 + 30^2} \cdot \sqrt{3{,}0^2 + 4{,}0^2}} \\
+        &amp;= \frac{240}{50 \cdot 5{,}0} = \frac{24}{25} = 0{,}96
+        \end{split}
         \end{equation}
         \begin{equation}
         \Rightarrow \alpha = \arccos(0{,}96) = 0{,}28 = 16^\circ
@@ -171,7 +183,10 @@
         \end{equation}
         <p>Wir können die Richtigkeit der Zerlegung überprüfen, in dem wir den Betrag des ursprünglichen Kraftvektors mit dem Betrag des zerlegten Kraftvektors vergleichen:</p>
         \begin{align}
-        \sqrt{F_\parallel^2 + F_\perp^2} = \sqrt{48^2 + 14^2} = \sqrt{2304 + 196} = \sqrt{2500} = 50 \\[6pt]= \sqrt{1600+900}=\sqrt{40^2 + 30^2} = \vert \vec F \vert
+        \sqrt{F_\parallel^2 + F_\perp^2} &amp;= \sqrt{48^2 + 14^2} \notag \\
+        &amp;= \sqrt{2304 + 196} \notag \\
+        &amp;= \sqrt{2500} = 50 \\
+        &amp;= \sqrt{1600+900}=\sqrt{40^2 + 30^2} = \vert \vec F \vert
         \end{align}
         <p>Nun brauchen wir noch den Betrag der Verschiebung:</p>
         \begin{equation}
@@ -234,7 +249,12 @@
         <p>Die Arbeit ist also:</p>
 
         \begin{equation}
-        W= \int \limits_{x_1}^{0}\left(-k \cdot x \right) \text{d}x= \left[ - \frac{1}{2}\cdot k \cdot x^2 \right]_{x_1}^{0}=0 - \left( - \frac{1}{2}\cdot k \cdot x_1^2\right)= \frac{1}{2}\cdot k\cdot  x_1^2
+        \begin{split}
+        W &amp;= \int \limits_{x_1}^{0}\left(-k \cdot x \right) \text{d}x \\
+        &amp;= \left[ - \frac{1}{2}\cdot k \cdot x^2 \right]_{x_1}^{0} \\
+        &amp;= 0 - \left( - \frac{1}{2}\cdot k \cdot x_1^2\right) \\
+        &amp;= \frac{1}{2}\cdot k\cdot  x_1^2
+        \end{split}
         \end{equation}
 
         <p>Beachten Sie: bei diesem Vorgang wird die Masse beschleunigt, während sich die Höhe der Masse über dem Erdboden nicht ändert.</p>
@@ -409,7 +429,11 @@
         <p>Damit wird die Leistung (wir dürfen die Formel anwenden, da Geschwindigkeit und Kraft konstant sind):</p>
 
         \begin{equation}
-        P=60\,\mathrm{N}\cdot \begin{pmatrix}\cos(60^\circ)\\ \sin(60^\circ) \end{pmatrix}\cdot  \begin{pmatrix} 1{,}0\,\mathrm{m/s}\\0 \end{pmatrix}= 60\,\mathrm{N}\cdot \cos(60^\circ)\cdot 1{,}0\,\mathrm{m/s}= 30\,\mathrm{W}
+        \begin{split}
+        P &amp;= 60\,\mathrm{N}\cdot \begin{pmatrix}\cos(60^\circ)\\ \sin(60^\circ) \end{pmatrix}\cdot  \begin{pmatrix} 1{,}0\,\mathrm{m/s}\\0 \end{pmatrix} \\
+        &amp;= 60\,\mathrm{N}\cdot \cos(60^\circ)\cdot 1{,}0\,\mathrm{m/s} \\
+        &amp;= 30\,\mathrm{W}
+        \end{split}
         \end{equation}
     </div>
 </section>
@@ -483,7 +507,12 @@
     \end{equation}
     <p>Die verrichtete Arbeit \(W\) ist das Zeitintegral der Leistung. Um die Arbeit zu finden, die benötigt wird, um das Objekt von Ruhe (\(v=0\)) auf die Endgeschwindigkeit \(v\) zu beschleunigen, integrieren wir über die Zeit des Vorgangs:</p>
     \begin{equation}
-    W = \int P(t) \, dt = \int \frac{d}{dt}\left(\frac{1}{2} m v^2\right) dt = \frac{1}{2} m v^2 - \frac{1}{2} m (0)^2 = \frac{1}{2} m v^2
+    \begin{split}
+    W &amp;= \int P(t) \, dt \\
+    &amp;= \int \frac{d}{dt}\left(\frac{1}{2} m v^2\right) dt \\
+    &amp;= \frac{1}{2} m v^2 - \frac{1}{2} m (0)^2 \\
+    &amp;= \frac{1}{2} m v^2
+    \end{split}
     \end{equation}
     <p>Die durch einen Beschleunigungsvorgang von \(0\) auf \(\vec v\) im Objekt gespeicherte Energie ist also:</p>
     \begin{equation}
@@ -559,7 +588,8 @@
     \begin{equation}
     \begin{split}
     \text{Potentielle Energie:}\quad E_\text{pot} &= -W_{BA} \\
-    &= -\int\limits_A^B \vec F_\text{konservativ} \cdot \text{d}\vec s \quad \text{(Weg von A nach B)}
+    &= -\int\limits_A^B \vec F_\text{konservativ} \cdot \text{d}\vec s \\
+    &\quad \text{(Weg von A nach B)}
     \end{split}
     \label{formel_dyn_epot1}
     \end{equation}
@@ -598,18 +628,32 @@
         <p>Die Erdanziehungskraft verrichtet die Arbeit:</p>
 
         \begin{equation}
-        W_{BA}=\int\limits_{h_A}^{h_B}( -m\cdot g)\text{d}s=-m\cdot g \cdot (h_B - h_A)=-m\cdot g \cdot \Delta h
+        \begin{split}
+        W_{BA} &amp;= \int\limits_{h_A}^{h_B}( -m\cdot g)\text{d}s \\
+        &amp;= -m\cdot g \cdot (h_B - h_A) \\
+        &amp;= -m\cdot g \cdot \Delta h
+        \end{split}
         \end{equation}
 
         <p>Daher erhält das Objekt durch diesen Vorgang die potentielle Energie:</p>
         \begin{equation}
-        E_{\text{pot},BA}=-W_{BA}=-\int\limits_{h_A}^{h_B}( -m\cdot g)\text{d}s=m\cdot g \cdot (h_B - h_A)=m\cdot g \cdot \Delta h
+        \begin{split}
+        E_{\text{pot},BA} &amp;= -W_{BA} \\
+        &amp;= -\int\limits_{h_A}^{h_B}( -m\cdot g)\text{d}s \\
+        &amp;= m\cdot g \cdot (h_B - h_A) \\
+        &amp;= m\cdot g \cdot \Delta h
+        \end{split}
         \end{equation}
 
         <p>Allerdings ist zu beachten: das Objekt befand sich ja schon auf einer Höhe \(h_A\) über dem Erdboden. Da muss es ja auch irgendwie hingekommen sein. Wie das passiert ist, wissen wir nicht, wir wissen aber, dass die Bewegung gegen die Erdanziehungskraft passiert ist, somit das Objekt schon durch diesen Vorgang potentielle Energie erhalten hat, nämlich:</p>
 
         \begin{equation}
-        E_{\text{pot},A0}=-W_{A0}=-\int\limits_{0}^{h_A}( -m\cdot g)\text{d}s=m\cdot g \cdot (h_A - 0)=m\cdot g \cdot h_A
+        \begin{split}
+        E_{\text{pot},A0} &amp;= -W_{A0} \\
+        &amp;= -\int\limits_{0}^{h_A}( -m\cdot g)\text{d}s \\
+        &amp;= m\cdot g \cdot (h_A - 0) \\
+        &amp;= m\cdot g \cdot h_A
+        \end{split}
         \end{equation}
 
         <p>\(E_{\text{pot},BA}\) gibt mir nur die Energie, die die Kiste potentiell wieder abgeben (umwandeln) kann, wenn Sie sich zurück von \(B\) nach \(A\) bewegt. Bewegt sich die Kiste dann von \(A\) zurück zum Erdboden \(0\), kann sie zusätzlich noch \(E_{\text{pot},A0}\) abgeben. Insgesamt kann die Kiste somit auf dem Weg von \(B\) zum Erdboden \(0\) die folgende potentielle Energie wieder abgeben:</p>
@@ -622,7 +666,12 @@
 
         <p>Dann müssen wir für den Weg von \(B\) nach \(0\) rechnen:</p>
         \begin{equation}
-        \Delta E_{\text{pot},0B}=-W_{0B}=-\int\limits_{h_B}^{0}( -m\cdot g)\text{d}s=m\cdot g \cdot (0 - h_B)=- m\cdot g \cdot h_B
+        \begin{split}
+        \Delta E_{\text{pot},0B} &amp;= -W_{0B} \\
+        &amp;= -\int\limits_{h_B}^{0}( -m\cdot g)\text{d}s \\
+        &amp;= m\cdot g \cdot (0 - h_B) \\
+        &amp;= - m\cdot g \cdot h_B
+        \end{split}
         \end{equation}
 
         <p>Die Änderung der potentiellen Energie für diesen Weg ist also negativ. Das bedeutet, dass potentielle Energie in eine andere Form (z.&nbsp;B. kinetische Energie) umgewandelt wurde. Ist die Änderung der potentiellen Energie positiv, so bedeutet das, dass von außen (durch eine äußere Kraft) erst wieder Energie „reingesteckt", also Arbeit verrichtet werden muss, um den Vorgang umzukehren.</p>
@@ -635,7 +684,13 @@
 
         <p>Errechnen wir zunächst die Arbeit, die von außen verrichtet werden muss \(W_a\)<span class="fussnote">a für außen</span>. Die äußere Kraft \(F_a\) muss der Federkraft \(F_F=-kx\) entgegenwirken, also \(F_a = -F_F = kx\).</p>
         \begin{equation}
-        W_{a,-d0}=\int\limits_0^{-d}F_a(x) \text{d}x=\int\limits_0^{-d} kx \text{d}x = \left[ \frac{1}{2} kx^2 \right]_0^{-d} = \frac{1}{2}k(-d)^2 - 0 = \frac{1}{2}kd^2
+        \begin{split}
+        W_{a,-d0} &amp;= \int\limits_0^{-d}F_a(x) \text{d}x \\
+        &amp;= \int\limits_0^{-d} kx \text{d}x \\
+        &amp;= \left[ \frac{1}{2} kx^2 \right]_0^{-d} \\
+        &amp;= \frac{1}{2}k(-d)^2 - 0 \\
+        &amp;= \frac{1}{2}kd^2
+        \end{split}
         \end{equation}
 
         <p>Die Arbeit, die die Federkraft verrichtet, ist:</p>
