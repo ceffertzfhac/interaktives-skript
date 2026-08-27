@@ -2082,3 +2082,53 @@ input[type="range"]::-moz-range-track {
     color: var(--teal-darker);
     text-decoration-thickness: 2px;
 }
+
+/* ── Tooltips (BACKLOG P20) ────────────────────────────────────────────────
+   Hover-/Fokus-Erklärung für Bedienelemente ohne sichtbare Beschriftung,
+   angebunden über data-tip (s. src/tooltip.js — dort auch das Warum).
+   Die Sprechblase liegt an document.body, NICHT im Auslöser: .aspekt-figur
+   trägt overflow:hidden und würde sie abschneiden (derselbe Mechanismus, der
+   den QR-Code im Druck halbiert hat). Farben ausschließlich aus den
+   vorhandenen Tokens, damit Darkmode und die CVD-Paletten ohne eigenen Zweig
+   mitlaufen. */
+.tooltip {
+    position: fixed;
+    z-index: 100;
+    max-width: 260px;
+    padding: 7px 10px;
+    background: var(--surface);
+    color: var(--ink-2);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    box-shadow: 0 4px 14px rgba(24, 27, 33, 0.13);
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    line-height: 1.35;
+    pointer-events: none;      /* nie im Weg: der Zeiger geht hindurch */
+    opacity: 0;
+    transition: opacity 120ms ease-out;
+}
+.tooltip.tooltip-sichtbar { opacity: 1; }
+.tooltip-titel { display: block; font-weight: 600; color: var(--ink); }
+/* Die zweite Zeile ist die Ausnahme (P20-0) und tritt entsprechend zurück. */
+.tooltip-desc { display: block; margin-top: 2px; color: var(--ink-3); font-size: 0.95em; }
+.tooltip.tooltip-zweizeilig { max-width: 300px; }
+
+/* Zeiger-Dreieck; --tooltip-pfeil setzt tooltip.js auf die Mitte des
+   Auslösers, weil die Blase am Viewport-Rand geklemmt wird und dann nicht
+   mehr mittig über ihm sitzt. */
+.tooltip::after {
+    content: "";
+    position: absolute;
+    left: var(--tooltip-pfeil, 50%);
+    margin-left: -5px;
+    border: 5px solid transparent;
+}
+.tooltip[data-seite="oben"]::after { top: 100%; border-top-color: var(--border-2); }
+.tooltip[data-seite="unten"]::after { bottom: 100%; border-bottom-color: var(--border-2); }
+
+@media (prefers-reduced-motion: reduce) {
+    .tooltip { transition: none; }
+}
+/* Im Ausdruck hat eine Hover-Erklärung nichts verloren. */
+@media print { .tooltip { display: none !important; } }

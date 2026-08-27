@@ -18,6 +18,7 @@ import { init_numbering, resolve_eq_refs } from './numbering.js';
 import { loadChapters, typesetAfterLoad } from './chapters.js';
 import { init_center } from './center.js';
 import { init_footnotes, toggle_footnote } from './footnotes.js';
+import { init_tooltips } from './tooltip.js';
 import { toggle_aspekt, close_aspekt_overlay, toggle_analyse, toggle_panel_left, buildKreisbahnFig, apply_farbwoerter } from './figures/aspekt_kreisbahn.js';
 import { buildWegZeitFig } from './figures/aspekt_weg_zeit.js';
 import { buildWinkelZeitFig } from './figures/aspekt_winkel_zeit.js';
@@ -101,7 +102,8 @@ function init_aspekt_figuren() {
             a.href = simUrl;
             a.target = '_blank'; a.rel = 'noopener noreferrer';
             a.setAttribute('aria-label', 'Zur Stand-alone-Simulation');
-            a.title = 'Stand-alone-Simulation öffnen';
+            a.dataset.tip = 'Stand-alone-Simulation';
+            a.dataset.tipDesc = 'Öffnet die vollständige Simulation in einem neuen Tab';
             a.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
             if (lupe) {
                 // In der Runbar drueckt der Sim-Link per margin-left:auto das
@@ -125,7 +127,7 @@ function init_aspekt_figuren() {
             hdr.className = 'panel-header panel-header-left';
             hdr.dataset.action = 'toggle_panel_left';
             hdr.setAttribute('aria-expanded', 'false');
-            hdr.title = 'Bedienfeld ein-/ausklappen';
+            hdr.dataset.tip = 'Bedienung ein-/ausklappen';
             hdr.innerHTML = '<span class="ph-label">Bedienung</span>' +
                 '<svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4 L8 8 L13 12"/><path d="M8 4 L3 8 L8 12"/></svg>';
             pl.prepend(hdr);
@@ -343,6 +345,9 @@ async function init() {
     init_shell();
     // Auto-Zentrierung des Papierbereichs (nach init_shell, Layout steht);
     // center.js staffelt selbst per rAF, damit der Überlauf messbar ist.
+    // Tooltips zuletzt: der Listener haengt delegiert an document und deckt
+    // damit auch alles ab, was init_aspekt_figuren() erst zur Laufzeit baut.
+    init_tooltips();
     init_center();
     // Injizierte Formeln re-typesetzen, sobald MathJax bereit ist (Gate wie
     // numbering.js). renumber laeuft ueber reload_mathjax mit.

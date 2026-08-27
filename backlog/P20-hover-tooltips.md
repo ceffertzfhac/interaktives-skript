@@ -111,17 +111,38 @@ Body-Element braucht zusätzlich `@media print { display: none }`.
 - [x] **P20-0 Abstimmung** — erledigt 2026-08-27. Nutzervorgabe: **einzeilig,
   wo es geht; zweizeilig nur, wo nötig.** Texte s. Abschnitt „Die Texte" unten.
   *(S)*
-- [ ] **P20-1 Baustein** — `src/tooltip.js` (Portal, Delay, Flip-Positionierung,
-  Escape/Scroll/Pointerdown, `aria-describedby`, `title`-Entfernung) + CSS-Block
-  mit den vorhandenen Tokens. Verdrahtung in `main.js::init()`. *(M)*
-- [ ] **P20-2 Migration** — `title=` → `data-tip=` an den vier Orten oben;
-  `aria-label` unangetastet lassen. *(M)*
-- [ ] **P20-3 Zustandswechsel** — Lupe: Tooltip-Text folgt dem Zustand. *(S)*
-- [ ] **P20-4 Prüfung** — automatisiert: erscheint der Tooltip bei Hover **und**
-  bei Fokus, wird er nirgends abgeschnitten (Rechteck vollständig im Viewport,
-  kein clippender Vorfahr), gibt es kein verbliebenes `title` an einem
-  `data-tip`-Element, ist im Druck-Klon keiner sichtbar. Sicht (Stufe 5) durch
-  den Nutzer. *(M)*
+- [x] **P20-1 Baustein** — `src/tooltip.js` (Portal an `document.body`, Delay
+  400/100 ms mit warmem Fenster, Flip-Positionierung mit Viewport-Klemmung und
+  Pfeil, Escape/Scroll/Resize/Pointerdown schließen, `aria-describedby` nur
+  solange sichtbar, `title`-Entfernung beim ersten Anzeigen) + CSS-Block in
+  `styles.css` aus den vorhandenen Tokens. Verdrahtet in `main.js::init()`,
+  delegiert an `document` — deckt damit auch die zur Laufzeit gebauten Figuren
+  ohne Nachverdrahtung ab. *(M)*
+- [x] **P20-2 Migration** — 116 Elemente tragen `data-tip`, **0** ein
+  verbliebenes `title`. Shell: 11 Knöpfe; Figuren: Lupe (16), Sim-Link (15),
+  Ablaufsteuerung (14×3), Panel-Köpfe (16+16). Bei der Ansichtsbreite wurde das
+  `title` wie entschieden ersatzlos entfernt. `aria-label` unverändert. *(M)*
+- [x] **P20-3 Zustandswechsel** — `setLupeZustand()` setzt `data-tip` mit:
+  „Figur vergrößern" ↔ „Vergrößerung schließen". *(S)*
+- [~] **P20-4 Prüfung** — automatisiert bestanden (s. „Prüfergebnis"). **Sicht
+  (Stufe 5) durch den Nutzer steht aus.** *(M)*
+
+### Prüfergebnis (automatisiert, 2026-08-27, v1.34.0)
+
+| Prüfung | Ergebnis |
+|---|---|
+| Elemente mit `data-tip` | 116 |
+| davon mit verbliebenem `title` | **0** |
+| davon ohne zugänglichen Namen | 0 |
+| zweizeilig (`data-tip-desc`) | 17 = 2 Toolbar + 15 Sim-Links |
+| Hover: Text korrekt, im Viewport, nicht abgeschnitten | 9/9 |
+| Tastaturfokus zeigt Tooltip + setzt `aria-describedby` | ja |
+| Lupe: Text folgt dem Zustand | ja (auf/zu/wieder auf) |
+| Druck (`?print=true`, `media: print`) | kein Tooltip, 0 im Klon |
+| Konsolenfehler | keine |
+
+15 Sim-Links bei 16 Figuren ist korrekt — `bus_weg_zeit` hat keine Quell-Sim
+(s. `src/figures/CLAUDE.md`).
 
 ### Die Texte (P20-0, entschieden 2026-08-27)
 
