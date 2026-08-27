@@ -140,6 +140,14 @@ Body-Element braucht zusätzlich `@media print { display: none }`.
 | Lupe: Text folgt dem Zustand | ja (auf/zu/wieder auf) |
 | Druck (`?print=true`, `media: print`) | kein Tooltip, 0 im Klon |
 | Konsolenfehler | keine |
+| Tooltip über dem Lupe-Overlay | ja (z-index 1100 > 1000, `elementFromPoint` liefert den Tooltip) |
+
+**Nachtrag v1.34.1:** in der ersten Fassung lag der Tooltip im Overlay
+*hinter* der Figur — `.tooltip` hatte `z-index: 100`, `.aspekt-overlay-back`
+hat 1000 (`aspekt_kreisbahn.css:563`). Beide hängen an `document.body`, liegen
+also im selben Stapelkontext, der Wert entschied direkt. Auf 1100 angehoben.
+Zeiten nach Sichtprüfung gestrafft: 400/100 ms → **250/60 ms**, Überblendung
+120 → 90 ms.
 
 15 Sim-Links bei 16 Figuren ist korrekt — `bus_weg_zeit` hat keine Quell-Sim
 (s. `src/figures/CLAUDE.md`).

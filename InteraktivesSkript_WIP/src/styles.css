@@ -2093,7 +2093,11 @@ input[type="range"]::-moz-range-track {
    mitlaufen. */
 .tooltip {
     position: fixed;
-    z-index: 100;
+    /* Über dem Lupe-Overlay (.aspekt-overlay-back: z-index 1000,
+       aspekt_kreisbahn.css). Beide haengen an document.body, liegen also im
+       selben Stapelkontext — der Wert entscheidet direkt. Bei 100 lag der
+       Tooltip im Overlay hinter der Figur. */
+    z-index: 1100;
     max-width: 260px;
     padding: 7px 10px;
     background: var(--surface);
@@ -2106,7 +2110,7 @@ input[type="range"]::-moz-range-track {
     line-height: 1.35;
     pointer-events: none;      /* nie im Weg: der Zeiger geht hindurch */
     opacity: 0;
-    transition: opacity 120ms ease-out;
+    transition: opacity 90ms ease-out;
 }
 .tooltip.tooltip-sichtbar { opacity: 1; }
 .tooltip-titel { display: block; font-weight: 600; color: var(--ink); }

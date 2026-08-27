@@ -25,8 +25,8 @@
 // vorhandenes `title` wird beim ersten Anzeigen entfernt, sonst erscheint der
 // OS-Tooltip zusätzlich.
 
-const ZEIGEN_MS = 400;   // Verzögerung vor dem Einblenden
-const BLENDEN_MS = 100;  // Nachlauf beim Verlassen
+const ZEIGEN_MS = 250;   // Verzögerung vor dem Einblenden
+const BLENDEN_MS = 60;   // Nachlauf beim Verlassen
 const WARM_MS = 500;     // "warmes" Fenster: der nächste Tooltip kommt sofort
 const ABSTAND = 8;       // Luft zwischen Auslöser und Sprechblase
 const RAND = 8;          // Mindestabstand zum Viewport-Rand
