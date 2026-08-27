@@ -109,25 +109,38 @@ damit **kein Herausragen** mehr auftritt.
 
 | Modus | Spalte | Uebersteher |
 |---|---|---|
-| schmal | 1000 px | **4** |
+| schmal | 1000 px | **1** |
 | normal | 1280 px | 0 |
 | breit | 1800 px | 0 |
 
-Alle Reste liegen im **schmal**-Modus; normal und breit sind sauber.
+Von 955 Display-Formeln uebersteht **genau eine**, nur im schmal-Modus:
 
-| Ueberstand | Art | Fundstelle | Formel |
+| Ueberstand | Fundstelle | Quelle |
+|---|---|---|
+| +11,6 px | (1.1.57), Abschnitt 1.1.10 „Geschwindigkeit", Seite 24/137, Zeile 1 von 8 | `chapters/ch_01_01_kinematik.html:732` |
+
+Das ist die erste Zeile des `split`-Blocks (Z. 730–735): das Skalarprodukt
+\(\vec s(t)\cdot\vec v(t)\), Spaltenvektor mal `\frac{2\pi R}{T}`.
+11,6 px sind wenig — vor einer Behebung ist zu entscheiden, ob das ueberhaupt
+stoert (P14-0 Frage 2).
+
+### KORREKTUR zur ersten Messung (gleicher Tag)
+
+Die erste Fassung des Werkzeugs meldete **4** Uebersteher und daraus abgeleitet
+ein „Muster: Skalarprodukte mit ausgeschriebenen Spaltenvektoren". **Das war
+falsch.** Gemessen wurde die `mjx-container`-Box (= Zeilenbox), nicht die
+gezeichnete Tinte:
+
+| Formel | Container | Tinte | tatsaechlich |
 |---|---|---|---|
-| +87,3 px | Display | 1.1.10 Geschwindigkeit | (1.1.57) Skalarprodukt \(\vec s\cdot\vec v\) mit ausgeschriebenen Spaltenvektoren |
-| +73,0 px | Display | 1.4.2 Geschwindigkeit auf der Kreisbahn | (1.4.24) Skalarprodukt \(\vec v\cdot\vec r\), gleiche Bauart |
-| +27,5 px | Display | 1.2.8 Aufgaben loesen mit Kraeften | (1.2.71)/(1.2.72) Kraeftegleichgewicht schiefe Ebene |
-| +2,2 px | inline (Teil) | 1.4.7 Winkelaenderung als Vektor | \((\theta)\) — Grenzfall, evtl. Toleranzfrage |
+| (1.1.57) | +87,3 px | 1611,6 | **+11,6 px — echt** |
+| (1.4.24) | +73,0 px | 1597,4 | −2,6 px — innerhalb |
+| (1.2.71/72) | +27,5 px | 1551,9 | −48,1 px — innerhalb |
+| inline (θ), 1.4.7 | +2,2 px | — | Teil-Element, faellt mit der Ink-Regel weg |
 
-**Muster:** die drei echten Reste sind **Skalarprodukte mit voll
-ausgeschriebenen Spaltenvektoren** — `split` hilft dort nicht, weil die
-Zeile schon aus einem einzigen unteilbaren Produktterm besteht. Fuer diese
-Klasse braucht es eine andere Strategie als bei Batch 1–3 (P14-0 Frage 2):
-Umbruch vor dem `=`, `\displaystyle`-Verzicht, modussensitive Skalierung
-oder Umstellung auf Komponentenschreibweise.
+Behoben in `5ef3444`. Merksatz (steht schon im Kopf von
+`figur_screenshot.mjs`, wurde hier trotzdem uebersehen): **wenn messen, dann
+die INK-Box, nicht den Container.**
 
 ### Bekannte Grenzen des Werkzeugs
 
