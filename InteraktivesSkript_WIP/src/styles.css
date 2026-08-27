@@ -964,28 +964,65 @@ line, ellipse, polyline, circle {
     grid-template-areas:
         "figur   figur"
         "caption qr";
-    column-gap: 14px;
     align-items: start;
+    /* Der Rahmen sitzt an der ZEILE, nicht mehr an der Figur: Figur,
+       Bildunterschrift und QR lesen sich dadurch als EIN Abbildungsblock.
+       Vorher trug die .aspekt-figur den Rahmen — als die Caption fuer das
+       zweispaltige Layout aus ihr herausgehoben wurde, stand sie ausserhalb
+       des Kastens und las sich wie Fliesstext. */
+    background: var(--kb-surface, #fff);
+    border: 1px solid var(--kb-border, #e3e1d7);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 0 20px;
     page-break-inside: avoid;
     break-inside: avoid;
 }
-/* Figur ueber die volle Spaltenbreite, Caption und QR zweispaltig darunter.
-   Zuvor standen Figur+Caption links und der QR rechts daneben — dabei blieb
-   fuer die Grafik zu wenig Breite (533 statt 756 px). */
-#print_container .qr_row > .aspekt-figur { grid-area: figur; min-width: 0; }
+#print_container .qr_row > .aspekt-figur {
+    grid-area: figur;
+    min-width: 0;
+    border: none;          /* Rahmen liegt jetzt an .qr_row */
+    border-radius: 0;
+    margin: 0;
+}
+/* Bildunterschrift: durchgehende Haarlinie ueber die volle Breite trennt sie
+   von der Grafik und bindet sie zugleich an sie — dieselbe Rolle, die der
+   border-top am Bildschirm hat. Kein flaechiger Hintergrund (Toner, s. P7). */
 #print_container .qr_row > .aspekt-caption {
     grid-area: caption;
     min-width: 0;
-    border-top: none;   /* die Trennlinie gehoert zur Figur, nicht hierher */
-    padding-left: 0;
+    border-top: 1px solid var(--kb-border, #e3e1d7);
+    padding: 10px 14px 12px 14px;
+    /* Typografie hier ausdruecklich wiederholen: die Regeln in
+       aspekt_kreisbahn.css sind als `.aspekt-figur .aspekt-caption` gescopt und
+       greifen nicht mehr, seit die Caption fuer das zweispaltige Layout aus der
+       Figur herausgehoben wird — sie rendert sonst in Groesse UND Farbe exakt
+       wie Fliesstext (gemessen: 16px/#181b21 in beiden Faellen). Werte
+       absichtlich wie bei den statischen Abbildungen (figure.abbildung >
+       figcaption), damit beide Abbildungsarten im Druck gleich aussehen. */
+    font-size: 0.9em;
+    line-height: 1.45;
+    color: var(--ink-3);
+    text-align: left;
+}
+#print_container .qr_row > .aspekt-caption .fig-label {
+    font-weight: 600;
+    color: var(--ink-2);
 }
 #print_container .qr_row > .qr_container {
     grid-area: qr;
     position: static;
-    width: 150px;
     top: auto;
     left: auto;
-    margin-top: 4px;
+    width: 150px;
+    /* Fortsetzung derselben Haarlinie + senkrechte Trennung zur Caption;
+       der eigene Kasten des QR entfaellt, er wuerde im Rahmen doppeln. */
+    border: none;
+    border-top: 1px solid var(--kb-border, #e3e1d7);
+    border-left: 1px solid var(--kb-border, #e3e1d7);
+    border-radius: 0;
+    padding: 10px 14px 12px 14px;
+    margin: 0;
 }
 
 .qr_title {
