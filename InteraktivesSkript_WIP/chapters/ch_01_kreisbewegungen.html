@@ -340,11 +340,13 @@
         \vec{v}(t) \cdot \vec r(t) &amp;= R\cdot \omega(t) \cdot \begin{pmatrix}
         -\sin(\varphi(t)) \\
         \cos(\varphi(t))
-        \end{pmatrix} \cdot \begin{pmatrix}
+        \end{pmatrix} \notag\\[6pt]
+        &amp;\quad \cdot \begin{pmatrix}
         R\cdot \cos(\varphi(t)) \\
         R\cdot \sin(\varphi(t))
         \end{pmatrix}\\[6pt]
-        &amp;= R^2\cdot \omega(t) \cdot \left(-\sin(\varphi(t))\cdot \cos(\varphi(t)) + \cos(\varphi(t))\cdot \sin(\varphi(t))\right) \notag\\[6pt]
+        &amp;= R^2\cdot \omega(t) \cdot \left(-\sin(\varphi(t))\cdot \cos(\varphi(t)) \right. \notag\\[6pt]
+        &amp;\qquad \left. + \cos(\varphi(t))\cdot \sin(\varphi(t))\right) \notag\\[6pt]
         &amp;= 0
         \label{eq_kreisbahn_skalarprodukt}
         \end{align}
