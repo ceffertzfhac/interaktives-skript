@@ -29,7 +29,7 @@ die Links hier zeigen auf den Pfad.
 | [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 1/10 | zwei neue Motoren (freier Fall, schräger Wurf) + 8 Aspekt-Figuren |
 | [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 0/4 | Abb. 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten, 1.8 Federpendel |
 | [P15 — Weiße Hintergründe aus Nicht-Foto-Abbildungen entfernen](backlog/P15-weisse-hintergruende.md) | 0/7 | Darkmode-Verträglichkeit der statischen Bilder |
-| [P14 — Formel-Überstand je Width-Modus](backlog/P14-formel-ueberstand.md) | 0/5 | schmal/normal/breit prüfen und beheben |
+| [P14 — Formel-Überstand je Width-Modus](backlog/P14-formel-ueberstand.md) | 3/2 | Werkzeug + Inventur stehen; normal/breit sauber, 4 Reste im schmal-Modus |
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |
 | [P3 — Offene Punkte aus der Verifikation Kapitel 1.4](backlog/P3-verifikation-kapitel-1.4.md) | 16/1 | offen nur noch die Browser-Phasen (Wort-für-Wort gegen PDF, Druck, Sicht) |

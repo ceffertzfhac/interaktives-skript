@@ -1,8 +1,9 @@
 <!-- Teil von ../BACKLOG.md (Index). Nicht umbenennen: der Index verlinkt diesen Pfad. -->
 ## P14 — Formel-Überstand je Width-Modus prüfen & beheben (schmal/normal/breit)
 
-Eingetragen 2026-07-24 nach Nutzervorgabe (Feature-Wunsch, **nur aufgenommen,
-noch nicht umgesetzt**). Das Dokument soll in **allen Width-Modi**
+Eingetragen 2026-07-24 nach Nutzervorgabe. **Stand 2026-08-27:** P14-0 geklaert,
+P14-1 Werkzeug gebaut, P14-2 Inventur gelaufen; P14-3 zu grossen Teilen erledigt
+(drei Behebungs-Batches), P14-4 offen (s. „Ergebnisse“ am Ende). Das Dokument soll in **allen Width-Modi**
 (schmal/normal/breit, s. `core.js::set_width_mode`) nach **Kandidaten-
 Formeln** durchsucht werden, die über den Rand des **Schreibbereichs**
 (`#paper` / `#content`) **herausragen** — **insbesondere, wenn die
@@ -74,19 +75,72 @@ damit **kein Herausragen** mehr auftritt.
    das Tag-Layout anzupassen. Vorab klären, ob Tags überhaupt umbrechen
    dürfen.
 
-**Sub-Tasks (Aufwand Schätzung — erst nach Klärung verlässlich):**
-- [ ] **P14-0 Klärung** — die 6 offenen Fragen mit Nutzer klären
-  (insb. Behebungs-Strategie & Inventur-Werkzeug-Dauerhaftigkeit),
-  Ergebnis hier festhalten. *(M)*
-- [ ] **P14-1 Inventur-Werkzeug** — headless-Chromium-Messung pro
-  Width-Modus, listet Übersteher (Formel + Tag). *(M)*
-- [ ] **P14-2 Inventur** — alle Kapitel/Modi durchmessen, Kandidaten-
-  Liste erstellen (Markdown-Tabelle), mit Nutzer abstimmen. *(M)*
-- [ ] **P14-3 Behebung** — pro Kandidat modussensitive Regel
-  (data-Merkmal + `:root[data-width-mode=…]`-CSS); Einzelfall n. P14-0. *(L)*
-- [ ] **P14-4 Verifikation** — Inventur-Werkzeug wiederholt: 0
-  Übersteher in allen Modi; DOM-Harness (keine Seiten-/Nummern-
-  Regression); Sicht (Stufe 5, Freigabe „JA"). *(M)*
+**Sub-Tasks (Aufwand Schaetzung — erst nach Klaerung verlaesslich):**
+- [x] **P14-0 Klaerung** — mit dem Nutzer entschieden (2026-08-27):
+  1. **Rand = `#content` abzueglich `padding-right`** (die sichtbare
+     Textspalte, wandert mit dem Width-Modus). `#paper` wird je Treffer
+     mitgemessen, entscheidet aber nicht ueber den Verstoss.
+  3. **Werkzeug bleibt dauerhaft** im Verifikations-Skill (P14-4 verlangt
+     eine Wiederholungsmessung, jedes neue Kapitel bringt neue Formeln).
+  4. **Vollinventur**: alle Formeln (display **und** inline), Gleichungs-
+     nummern, Tabellen, Bilder, Boxen, sonstige Blockelemente.
+  Offen geblieben, weil erst bei der Behebung relevant: Frage 2 (Strategie
+  je Kandidat), 5 (Darkmode) und 6 (Druckspalte 700 px). *(M)*
+- [x] **P14-1 Inventur-Werkzeug** —
+  `.claude/skills/v013-verifikation/scripts/formel_ueberstand.mjs`
+  (headless Chromium, je Breiten-Modus, Stufe 4b im Skill). Meldet je Kette
+  nur das aeusserste Element; bei Display-Gleichungen getrennt, ob nur die
+  **Nummer** oder der **Formelkoerper** uebersteht. Exit-Code 1 bei
+  Uebersteigern (Gate), Exit-Code 2 bei fehlgeschlagenem Selbsttest. *(M)*
+- [x] **P14-2 Inventur** — gelaufen auf v1.33.3, Ergebnis unten. *(M)*
+- [~] **P14-3 Behebung** — drei Batches erledigt (7d38da8, 9a30a6c sowie
+  4a0d3ac + 1960fbc: 48 `split`-Bloecke in 10 Kapiteln). **4 Reste offen**,
+  alle im schmal-Modus — s. Tabelle. Strategie je Rest ist noch zu
+  entscheiden (P14-0 Frage 2). *(L)*
+- [ ] **P14-4 Verifikation** — `formel_ueberstand.mjs` erneut: 0 Uebersteher
+  in allen Modi (Exit-Code 0); DOM-Harness (keine Seiten-/Nummern-
+  Regression); Sicht (Stufe 5, Freigabe „JA“). *(M)*
 
 ---
 
+## Ergebnisse
+
+### Inventur 2026-08-27 (v1.33.3, Vollinventur, Toleranz 1 px)
+
+| Modus | Spalte | Uebersteher |
+|---|---|---|
+| schmal | 1000 px | **4** |
+| normal | 1280 px | 0 |
+| breit | 1800 px | 0 |
+
+Alle Reste liegen im **schmal**-Modus; normal und breit sind sauber.
+
+| Ueberstand | Art | Fundstelle | Formel |
+|---|---|---|---|
+| +87,3 px | Display | 1.1.10 Geschwindigkeit | (1.1.57) Skalarprodukt \(\vec s\cdot\vec v\) mit ausgeschriebenen Spaltenvektoren |
+| +73,0 px | Display | 1.4.2 Geschwindigkeit auf der Kreisbahn | (1.4.24) Skalarprodukt \(\vec v\cdot\vec r\), gleiche Bauart |
+| +27,5 px | Display | 1.2.8 Aufgaben loesen mit Kraeften | (1.2.71)/(1.2.72) Kraeftegleichgewicht schiefe Ebene |
+| +2,2 px | inline (Teil) | 1.4.7 Winkelaenderung als Vektor | \((\theta)\) — Grenzfall, evtl. Toleranzfrage |
+
+**Muster:** die drei echten Reste sind **Skalarprodukte mit voll
+ausgeschriebenen Spaltenvektoren** — `split` hilft dort nicht, weil die
+Zeile schon aus einem einzigen unteilbaren Produktterm besteht. Fuer diese
+Klasse braucht es eine andere Strategie als bei Batch 1–3 (P14-0 Frage 2):
+Umbruch vor dem `=`, `\displaystyle`-Verzicht, modussensitive Skalierung
+oder Umstellung auf Komponentenschreibweise.
+
+### Bekannte Grenzen des Werkzeugs
+
+- Misst **Geometrie, nicht Optik**: ob ein Umbruch gut aussieht, bleibt
+  Stufe 5.
+- Der Viewport ist 2200 px breit, damit der breit-Modus (1800 px) ohne
+  Horizontal-Scroll messbar ist. Bei einem echten Fenster < 1800 px greift
+  `center.js` mit Horizontal-Scroll — dieser Fall ist **nicht** abgedeckt.
+
+### Nebenbefund (nicht Teil von P14)
+
+`window.relayout_eq_numbers` wird in `core.js` zweimal aufgerufen
+(Z. 318 und 369, beide guarded), ist aber **nirgends in `src/` definiert** —
+der Hook laeuft nie. Entweder nachruesten oder die toten Aufrufe entfernen.
+
+---
