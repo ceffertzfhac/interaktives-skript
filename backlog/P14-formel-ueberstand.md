@@ -1,9 +1,10 @@
 <!-- Teil von ../BACKLOG.md (Index). Nicht umbenennen: der Index verlinkt diesen Pfad. -->
 ## P14 — Formel-Überstand je Width-Modus prüfen & beheben (schmal/normal/breit)
 
-Eingetragen 2026-07-24 nach Nutzervorgabe. **Stand 2026-08-27:** P14-0 geklaert,
-P14-1 Werkzeug gebaut, P14-2 Inventur gelaufen; P14-3 zu grossen Teilen erledigt
-(drei Behebungs-Batches), P14-4 offen (s. „Ergebnisse“ am Ende). Das Dokument soll in **allen Width-Modi**
+Eingetragen 2026-07-24 nach Nutzervorgabe. **ABGESCHLOSSEN 2026-08-27 (v1.33.5):**
+alle fuenf Sub-Tasks erledigt. `formel_ueberstand.mjs` meldet 0 Uebersteher in
+allen drei Breiten-Modi, gegen die Textspalte **und** gegen die Boxinnenraender
+(Exit-Code 0). Verlauf und Messwerte s. „Ergebnisse“ am Ende. Das Dokument soll in **allen Width-Modi**
 (schmal/normal/breit, s. `core.js::set_width_mode`) nach **Kandidaten-
 Formeln** durchsucht werden, die über den Rand des **Schreibbereichs**
 (`#paper` / `#content`) **herausragen** — **insbesondere, wenn die
@@ -93,13 +94,18 @@ damit **kein Herausragen** mehr auftritt.
   **Nummer** oder der **Formelkoerper** uebersteht. Exit-Code 1 bei
   Uebersteigern (Gate), Exit-Code 2 bei fehlgeschlagenem Selbsttest. *(M)*
 - [x] **P14-2 Inventur** — gelaufen auf v1.33.3, Ergebnis unten. *(M)*
-- [~] **P14-3 Behebung** — drei Batches erledigt (7d38da8, 9a30a6c sowie
-  4a0d3ac + 1960fbc: 48 `split`-Bloecke in 10 Kapiteln). **4 Reste offen**,
-  alle im schmal-Modus — s. Tabelle. Strategie je Rest ist noch zu
-  entscheiden (P14-0 Frage 2). *(L)*
-- [ ] **P14-4 Verifikation** — `formel_ueberstand.mjs` erneut: 0 Uebersteher
-  in allen Modi (Exit-Code 0); DOM-Harness (keine Seiten-/Nummern-
-  Regression); Sicht (Stufe 5, Freigabe „JA“). *(M)*
+- [x] **P14-3 Behebung** — in zwei Phasen:
+  *Koerper* (7d38da8, 9a30a6c, 4a0d3ac, 1960fbc): 48 `split`-Bloecke in 10
+  Kapiteln. *Nummern* (865433b, 102b130): die drei verbliebenen Faelle waren
+  keine Koerper-, sondern Nummern-Ueberstaende und wurden per Umbruch bzw.
+  Ausrichtung geloest — **P14-0 Frage 2 damit beantwortet: Einzelfall-Umbruch
+  im LaTeX, keine modussensitive CSS-Regel.** *(L)*
+- [x] **P14-4 Verifikation** — `formel_ueberstand.mjs` in beiden Spielarten:
+  0 Uebersteher, Exit-Code 0. `mathjax_pruefen.cjs` HEAD vs. Arbeitsstand fuer
+  alle drei geaenderten Kapitel: Ausgabe identisch (0 TeX-Fehler, Gleichungs-
+  zahlen, -spannen, Labels und Verweise unveraendert). **Sicht (Stufe 5) durch
+  den Nutzer: er hat den (1.1.57)-Ueberstand im Browser gemeldet und damit die
+  Messung ueberhaupt erst korrigiert.** *(M)*
 
 ---
 
@@ -190,3 +196,21 @@ die INK-Box, nicht den Container.**
 der Hook laeuft nie. Entweder nachruesten oder die toten Aufrufe entfernen.
 
 ---
+
+### Behebung der drei Nummern-Faelle (2026-08-27, v1.33.4 / v1.33.5)
+
+Keiner war ein Formelkoerper-Problem — in allen drei Faellen sprengte die
+`min-width` der Gleichungs-`svg` die Box-Innenbreite (596–599 px), sodass
+MathJax die Nummer nach rechts hinausschob. Schmalere Zeilen ⇒ kleinere
+Reservierung ⇒ Nummer rueckt zurueck.
+
+| Gleichung | `min-width` | vorher | Eingriff | nachher |
+|---|---|---|---|---|
+| (1.1.57) | 87,143ex = 662,3 px | +64,6 px | `= 0 ✓` in eigene Zeile; Klammer am `+` getrennt | drin |
+| (1.4.24) | 85,397ex = 649,0 px | +50,4 px | zweite `pmatrix` in eigene Zeile; Klammer am `+` getrennt | drin |
+| (1.2.71) | 79,284ex = 602,5 px | +4,9 px | `&` vor `= 0` — verschiebt es in die rechte Spalte, Block richtet sich auf `=` aus | drin |
+
+**Merksatz fuer kuenftige Faelle:** ragt eine Gleichungs*nummer* heraus, ist
+die Zeile darunter zu breit — nicht die Nummer falsch platziert. Und: in
+`align` erzeugt **jede** Zeile einen Tag, neue Umbruchzeilen brauchen
+`\notag`, sonst verschiebt sich die Nummerierung des ganzen Kapitels.

@@ -29,7 +29,6 @@ die Links hier zeigen auf den Pfad.
 | [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 1/10 | zwei neue Motoren (freier Fall, schräger Wurf) + 8 Aspekt-Figuren |
 | [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 0/4 | Abb. 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten, 1.8 Federpendel |
 | [P15 — Weiße Hintergründe aus Nicht-Foto-Abbildungen entfernen](backlog/P15-weisse-hintergruende.md) | 0/7 | Darkmode-Verträglichkeit der statischen Bilder |
-| [P14 — Formel-Überstand je Width-Modus](backlog/P14-formel-ueberstand.md) | 3/2 | Werkzeug + Inventur stehen; kein Formelkörper ragt heraus — offen sind 3 Gleichungs*nummern* in Highlight-Boxen (nur schmal) |
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |
 | [P3 — Offene Punkte aus der Verifikation Kapitel 1.4](backlog/P3-verifikation-kapitel-1.4.md) | 16/1 | offen nur noch die Browser-Phasen (Wort-für-Wort gegen PDF, Druck, Sicht) |
@@ -49,6 +48,7 @@ die Links hier zeigen auf den Pfad.
 | [P9 — Schiene gefenstert](backlog/P9-schiene-gefenstert.md) | 3/0 | Vorgänger + aktives Kapitel + Nachfolger |
 | [P10 — Fortschrittsleiste in der Top-Bar](backlog/P10-fortschrittsleiste.md) | 2/0 | je nach Platz kürzen/strecken |
 | [P11 — Schmaler Header (≤ 1024 px)](backlog/P11-schmaler-header.md) | 2/0 | Brand verdichten + Width-Buttons S/M/L |
+| [P14 — Formel-Überstand je Width-Modus](backlog/P14-formel-ueberstand.md) | 5/0 | Mess-Werkzeug (Stufe 4b) + Behebung; 0 Übersteher in allen Modi, gegen Spalte und Boxrand |
 | [P18 — Dokumentations-Architektur context-freundlich umbauen](backlog/P18-doku-architektur.md) | 8/0 | Wurzel-`CLAUDE.md` −82 %, Subsystem-Doku in verschachtelte `CLAUDE.md`, Doku-Index, Backlog-Split |
 | [P-Aspekt-Figuren — Optik & Interaktion (Kap. 1.4)](backlog/PA-aspekt-figuren-optik.md) | 12/0 | ω-Regler, kapitelkonsistente CVD-Palette, Stoppuhr, Vektorstrichstärken-Regel, neue Figuren 1.46–1.51, Pause-Design in der Runbar |
 
