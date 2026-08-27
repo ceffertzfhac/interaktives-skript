@@ -49,9 +49,6 @@ python3 -m http.server 8000
 # open http://localhost:8000/
 ```
 
-Es gibt nichts zu bauen, zu linten oder zu testen. Eine Änderung prüft man,
-indem man die Seite neu lädt und die betroffene Figur bedient.
-
 ## Repository layout
 
 - `InteraktivesSkript_WIP/` — **the working copy. All edits go here.** This is
@@ -68,15 +65,12 @@ indem man die Seite neu lädt und die betroffene Figur bedient.
     site as of the split. Do not edit; it exists for reference/diffing against
     WIP. Started byte-identical to WIP. *(The legacy `src/script.js` — the whole
     app in one 2787-line file — lives only here now.)*
-  - `Input/v0.13/` — LaTeX source of the **complete target script**
-    (`Physik_pskript_v0.13.tex` + compiled `.pdf` + per-chapter `.tex` files)
-    spanning all 15+ chapters (Mechanics, EM, Schwingungen, Wellen, Gravitation,
-    Stöße, …). This is the content target the WIP is being scaled toward.
-  - `Input/Simulationen/` — 16 standalone simulation projects (Atwood,
-    Federpendel, freier Fall, Kreisbewegung, Wellen, Lorentz-force, schiefer
-    Wurf, …) — candidate source material for future interactive figures. Welche
-    davon bereits als Figuren-Motor portiert sind (und mit welchen
-    Port-Änderungen), steht in `InteraktivesSkript_WIP/src/figures/CLAUDE.md`.
+  - `Input/v0.13/` — LaTeX source of the **complete target script** (`.tex` +
+    compiled `.pdf`). This is the content target the WIP is being scaled toward.
+  - `Input/Simulationen/` — standalone simulation projects; candidate source
+    material for future interactive figures. Welche davon bereits als
+    Figuren-Motor portiert sind (und mit welchen Port-Änderungen), steht in
+    `InteraktivesSkript_WIP/src/figures/CLAUDE.md`.
 
 ## Arbeitsregeln (Nutzervorgaben — gelten bei JEDEM Aufruf)
 
