@@ -959,16 +959,29 @@ line, ellipse, polyline, circle {
    nicht mehr — hier wird es durch das Flex-Layout ersetzt, statt eine neue
    Magic Number zu setzen. Die Figur schrumpft, der QR behaelt seine Breite. */
 #print_container .qr_row {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "figur   figur"
+        "caption qr";
+    column-gap: 14px;
+    align-items: start;
     page-break-inside: avoid;
     break-inside: avoid;
 }
-#print_container .qr_row > .aspekt-figur { flex: 1 1 auto; min-width: 0; }
+/* Figur ueber die volle Spaltenbreite, Caption und QR zweispaltig darunter.
+   Zuvor standen Figur+Caption links und der QR rechts daneben — dabei blieb
+   fuer die Grafik zu wenig Breite (533 statt 756 px). */
+#print_container .qr_row > .aspekt-figur { grid-area: figur; min-width: 0; }
+#print_container .qr_row > .aspekt-caption {
+    grid-area: caption;
+    min-width: 0;
+    border-top: none;   /* die Trennlinie gehoert zur Figur, nicht hierher */
+    padding-left: 0;
+}
 #print_container .qr_row > .qr_container {
+    grid-area: qr;
     position: static;
-    flex: 0 0 150px;
     width: 150px;
     top: auto;
     left: auto;

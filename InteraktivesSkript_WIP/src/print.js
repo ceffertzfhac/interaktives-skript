@@ -161,6 +161,13 @@ export function print_page() {
         row.setAttribute("class", "qr_row");
         af.parentNode.insertBefore(row, af);
         row.appendChild(af);
+        // Die Bildunterschrift wandert aus der Figur eine Ebene hoch, damit die
+        // Figur die volle Spaltenbreite bekommt und Caption + QR zweispaltig
+        // DARUNTER stehen (statt Figur+Caption links, QR rechts — dabei blieb
+        // fuer die Grafik zu wenig Breite). Nur im Druck-Klon; am Bildschirm
+        // bleibt die Caption, wo sie ist.
+        const cap = af.querySelector(".aspekt-caption");
+        if (cap) row.appendChild(cap);
         create_qr(row, linkId);
     });
 
