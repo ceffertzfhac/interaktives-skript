@@ -115,14 +115,28 @@ damit **kein Herausragen** mehr auftritt.
 
 Von 955 Display-Formeln uebersteht **genau eine**, nur im schmal-Modus:
 
-| Ueberstand | Fundstelle | Quelle |
-|---|---|---|
-| +11,6 px | (1.1.57), Abschnitt 1.1.10 „Geschwindigkeit", Seite 24/137, Zeile 1 von 8 | `chapters/ch_01_01_kinematik.html:732` |
+| Ueberstand | was genau | Fundstelle | Quelle |
+|---|---|---|---|
+| +11,6 px | **nur die NUMMER**, nicht der Koerper | (1.1.57), Abschnitt 1.1.10, Seite 24/137 | `chapters/ch_01_01_kinematik.html:730-735` |
 
-Das ist die erste Zeile des `split`-Blocks (Z. 730–735): das Skalarprodukt
-\(\vec s(t)\cdot\vec v(t)\), Spaltenvektor mal `\frac{2\pi R}{T}`.
-11,6 px sind wenig — vor einer Behebung ist zu entscheiden, ob das ueberhaupt
-stoert (P14-0 Frage 2).
+**Es ist kein Formel-Problem, sondern ein Nummern-Problem.** Der Formelkoerper
+endet 59,2 px *innerhalb* der Spalte; allein die Gleichungsnummer ragt 11,6 px
+hinaus. Vom Nutzer im Browser so gesehen und bestaetigt (2026-08-27).
+
+**Ursache:** die Formel steht in einer `<div class="beispiel">`-Box (Z. 715).
+MathJax reserviert dem `svg` `min-width: 87.143ex` und richtet die Nummer am
+rechten Rand dieser Reservierung aus — die liegt weiter rechts als der
+Innenrand der Box und als die Textspalte. `split`-Umbrueche im Formelkoerper
+aendern daran nichts; die drei Behebungs-Batches greifen fuer diesen Fall
+also gar nicht.
+
+**Offen (P14-0 Frage 2):** Nummer-Platzierung korrigieren (z. B. `min-width`
+der Gleichungs-svg innerhalb von Highlight-Boxen deckeln) oder tolerieren.
+
+**Noch nicht gemessen:** das Werkzeug prueft gegen `#content`, nicht gegen den
+Innenrand der jeweiligen Highlight-Box. Nummern, die aus einer `.beispiel`-Box
+ragen ohne die Textspalte zu erreichen, faellt es daher nicht auf — optisch
+waere das der auffaelligere Fall.
 
 ### KORREKTUR zur ersten Messung (gleicher Tag)
 

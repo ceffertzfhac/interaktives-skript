@@ -89,9 +89,14 @@ node .claude/skills/v013-verifikation/scripts/formel_ueberstand.mjs \
 
 Misst in headless Chromium **je Breiten-Modus** (schmal/normal/breit), welche
 Elemente über die sichtbare Textspalte (`#content` abzüglich `padding-right`)
-hinausragen — Formeln (Display und inline), Tabellen, Bilder, Boxen. Bei
-Display-Gleichungen wird zusätzlich die am weitesten rechts liegende **Zeile**
-benannt (`[Zeile 1/8]`), damit man im Quelltext nicht suchen muss.
+hinausragen — Formeln (Display und inline), Tabellen, Bilder, Boxen.
+
+Bei Gleichungen wird **Nummer und Formelkörper getrennt** gemessen (P14-Kriterium
+a gegen b) und die Gleichungsnummer mit ausgegeben:
+`(1.1.57)  [NUR die Nummer]` bzw. `[Formelkörper]`. Grundlage ist der von
+MathJax mit `data-labels="true"` markierte Teilbaum; die `eq-<nummer>`-id
+stammt aus der `tagformat.id`-Konfiguration der Seite. Wichtig: die **Vorfahren**
+der Nummer zählen nicht zum Körper — ihre Box umschließt die Nummer mit.
 
 **Gemessen wird die Tinte, nicht die Container-Box.** Die `mjx-container`-Box
 ist die Zeilenbox und ragt regelmäßig weit über die Glyphen hinaus: bei

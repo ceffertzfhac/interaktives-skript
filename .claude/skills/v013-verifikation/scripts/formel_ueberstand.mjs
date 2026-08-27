@@ -181,15 +181,39 @@ async function messen(mode) {
         // die niemand sieht (gemessen: Container +87 px, Tinte +11,6 px; zwei
         // weitere "Treffer" lagen 2,6 bzw. 48,1 px INNERHALB der Spalte).
         // Fuer alles ausser MathJax ist die Elementbox die Tinte.
+        // Die GLEICHUNGSNUMMER ist ein eigener Teilbaum: MathJax markiert ihn
+        // mit `data-labels="true"`, und dank der tagformat.id-Konfiguration
+        // traegt ihr mtd die id `eq-<nummer>`. Nummer und Formelkoerper werden
+        // deshalb getrennt vermessen -- P14-Kriterium (a) gegen (b).
+        const maxRechts = (nodes) => {
+            let r = -Infinity;
+            for (const g of nodes) {
+                const b = g.getBoundingClientRect();
+                if (b.width > 0 && b.height > 0) r = Math.max(r, b.right);
+            }
+            return r;
+        };
+        const teileVon = (el) => {
+            const alleG = [...el.querySelectorAll('g[data-mml-node]')];
+            const nummerG = alleG.filter(g => g.closest('[data-labels="true"]'));
+            // Nicht nur die Nummer selbst ausschliessen, sondern auch ihre
+            // VORFAHREN: deren Box umschliesst die Nummer mit, sonst misst der
+            // "Koerper" genau denselben Rand wie die Nummer.
+            const koerperG = alleG.filter(g => !g.closest('[data-labels="true"]')
+                                            && !g.querySelector('[data-labels="true"]'));
+            const idEl = el.querySelector('[id^="eq-"]');
+            return {
+                nummer: maxRechts(nummerG),
+                koerper: maxRechts(koerperG),
+                eqId: idEl ? idEl.id.replace(/^eq-/, '') : null
+            };
+        };
         const rechtsKante = (el) => {
             if (el.tagName.toLowerCase() !== 'mjx-container') {
                 return el.getBoundingClientRect().right;
             }
-            let r = -Infinity;
-            for (const g of el.querySelectorAll('g[data-mml-node]')) {
-                const b = g.getBoundingClientRect();
-                if (b.width > 0 && b.height > 0) r = Math.max(r, b.right);
-            }
+            const t = teileVon(el);
+            const r = Math.max(t.nummer, t.koerper);
             return isFinite(r) ? r : el.getBoundingClientRect().right;
         };
 
@@ -213,27 +237,16 @@ async function messen(mode) {
             const r = el.getBoundingClientRect();
             const kante = rechtsKante(el);
 
-            // NICHT UMGESETZT: "ragt nur die Nummer heraus oder der Koerper?"
-            // (P14-Kriterium a vs. b). In der SVG-Ausgabe tragen die Gruppen
-            // keinen Text (Glyphen sind <path>), und die Nummer ist auch
-            // strukturell nicht sauber greifbar: die `mlabeledtr` enthaelt
-            // hier genau EIN `mtd`, waehrend die ueberstehende Tinte in einer
-            // anderen Zeile derselben `mtable` sitzt. Eine Heuristik, die
-            // still nie ausloest, waere schlechter als keine -- deshalb wird
-            // stattdessen die AM WEITESTEN RECHTS liegende Zeile ausgewiesen.
-            let zeile = null;
-            if (art === 'formel-display') {
-                let best = null;
-                for (const tr of el.querySelectorAll('g[data-mml-node="mtr"], g[data-mml-node="mlabeledtr"]')) {
-                    const b = tr.getBoundingClientRect();
-                    if (b.width <= 0) continue;
-                    if (!best || b.right > best.right) best = b;
-                }
-                if (best) zeile = {
-                    nr: [...el.querySelectorAll('g[data-mml-node="mtr"], g[data-mml-node="mlabeledtr"]')]
-                        .findIndex(t => t.getBoundingClientRect().right === best.right) + 1,
-                    von: [...el.querySelectorAll('g[data-mml-node="mtr"], g[data-mml-node="mlabeledtr"]')].length,
-                    ueberstand: +(best.right - limit).toFixed(1)
+            // Was genau ragt heraus -- die Nummer oder der Formelkoerper?
+            let anteil = null;
+            if (art === 'formel-display' || art === 'formel-inline') {
+                const t = teileVon(el);
+                anteil = {
+                    gleichung: t.eqId,
+                    nummerUeberstand: isFinite(t.nummer) ? +(t.nummer - limit).toFixed(1) : null,
+                    koerperUeberstand: isFinite(t.koerper) ? +(t.koerper - limit).toFixed(1) : null,
+                    nurNummer: isFinite(t.nummer) && t.nummer > limit + tol
+                               && !(isFinite(t.koerper) && t.koerper > limit + tol)
                 };
             }
 
@@ -248,7 +261,7 @@ async function messen(mode) {
                 breite: +r.width.toFixed(1),
                 text: (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
                 ...kontextVon(el),
-                ...(zeile ? { zeile } : {})
+                ...(anteil ? { anteil } : {})
             });
         }
 
@@ -309,7 +322,9 @@ for (const m of modi) {
     e.treffer.forEach(t => { nach[t.art] = (nach[t.art] || 0) + 1; });
     console.log('  nach Art: ' + Object.entries(nach).map(([k, v]) => `${k} ${v}`).join(', '));
     for (const t of zeigen) {
-        const z = t.zeile ? `  [Zeile ${t.zeile.nr}/${t.zeile.von}]` : '';
+        const a = t.anteil;
+        const z = a ? (a.gleichung ? `  (${a.gleichung})` : '') +
+                      (a.nurNummer ? '  [NUR die Nummer]' : (a.koerperUeberstand > 0 ? '  [Formelkörper]' : '')) : '';
         console.log(`   +${String(t.ueberstand).padStart(7)} px  ${t.art.padEnd(20)} ${t.ueberschrift || t.seite}${z}`);
         if (t.seite) console.log(`              ${t.seite}`);
         if (t.text) console.log(`              ${t.text}`);
