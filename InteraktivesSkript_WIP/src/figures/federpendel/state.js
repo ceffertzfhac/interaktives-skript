@@ -1,0 +1,169 @@
+'use strict'
+
+// state.js — Zustand + DOM-Cache des Federpendel-Motors (BACKLOG P12-E6).
+//
+// Portiert aus der Stand-alone-Sim. EINZIGE strukturelle Port-Aenderung:
+// store.idPrefix + q(id) = getElementById(idPrefix + id), damit mehrere
+// Figuren auf einer Seite unabhaengig sind (Muster wie kreisbewegung/,
+// grundbegriffe/, bus_weg_zeit/ — Begruendung in runtime.js).
+import { PIXELS_PER_METER } from './constants.js'
+
+// ── Mutierbarer Zustand (einzige Quelle für alle veränderlichen Werte) ───────
+export const store = {
+  idPrefix: 'fp_',       // runtime.js setzt 'fp<n>_' — s. dortiger Kopfkommentar
+
+  // Parameter
+  m: 2.0,                // Masse (kg)
+  k: 40,                 // Federkonstante (N/m)
+  amplitude: 0.8,        // Anfangsauslenkung (m)
+  oscillationMode: 'horizontal', // 'horizontal' | 'vertical'
+  graphType: 'pos_t',    // 'pos_t' | 'v_t' | 'a_t' | 'ekin' | 'epot' | 'eges' | 'ecomposite'
+  speedFactor: 1.0,
+  currentPixelsPerMeter: PIXELS_PER_METER, // B5: im vertikalen Modus dynamisch geclampt
+
+  // Abgeleitet
+  omega: 0,              // Kreisfrequenz (rad/s)
+  T: Infinity,           // Periodendauer (s)
+
+  // Timing
+  visualTime: 0,         // Visualisationszeit (s) — läuft immer, treibt Physik (Phase) durchgehend
+  timingOffset: 0,       // B21: visualTime-Wert beim Klick auf "Zeitmessung starten" —
+                          // angezeigte/gemessene Zeit = visualTime - timingOffset (startet bei 0),
+                          // während Physik-Lookups (interpolateAt) weiterhin die absolute
+                          // visualTime nutzen — sonst Phasensprung im Diagramm beim Start.
+  isManualTiming: false,
+  isTimingStarted: false,
+  isDigitalDisplay: false,
+
+  // Animation
+  aniFrameId: null,
+  lastFrameTime: 0,
+  currentMassRenderSize: 60,
+  centers: null,         // { animCenterX, animCenterY, springAttachX, springAttachY }
+
+  // Precompute-Zeitreihen
+  tData: [],
+  xData: [],
+  vData: [],
+  aData: [],
+  ekData: [],      // I7: Kinetische Energie pro Zeitschritt
+  epData: [],      // I7: Potentielle Energie pro Zeitschritt
+  egesData: [],    // I7: Gesamtenergie pro Zeitschritt (konstant = ½kA²)
+  axisLimits: {},
+
+  // Hover-Werte (I13.1): einzige Diagramm-Instanz, daher kein Slot-Schlüssel.
+  graphScale: null,
+  hoverActive: false,
+  hoverLocalX: null,
+}
+
+// ── DOM-Cache ────────────────────────────────────────────────────────────────
+export const DOM = {}
+
+// Port-Aenderung gegenueber der Stand-alone-Sim: die IDs sind pro Figur
+// prefixt (fp0_, fp1_, …), damit mehrere Instanzen auf derselben Seite
+// unabhaengig sind. Identisch zu kreisbewegung/state.js.
+const q = id => document.getElementById(store.idPrefix + id)
+
+export function initDOM() {
+  // SVG-Container
+  DOM.mainSvg = q('main_svg')
+  DOM.centerArea = q('center_area')
+
+  // Anker & Referenzlinien
+  DOM.anchorObject = q('anchor_object')
+  DOM.surface = q('surface')
+  DOM.equilibriumLine = q('equilibrium_line')
+  DOM.equilibriumLabel = q('equilibrium_label')
+  DOM.unstretchedLine = q('unstretched_length_line')
+  DOM.unstretchedLabel = q('unstretched_length_label')
+  DOM.minPosLine = q('min_pos_line')
+  DOM.maxPosLine = q('max_pos_line')
+  DOM.minPosLabel = q('min_pos_label')
+  DOM.maxPosLabel = q('max_pos_label')
+  DOM.spring = q('spring')
+  DOM.mass = q('mass')
+  DOM.positionVector = q('position_vector')
+  DOM.velocityVector = q('velocity_vector')
+  DOM.accelerationVector = q('acceleration_vector')
+  DOM.xAxisArrow = q('x_axis_arrow')
+  DOM.xAxisLabelText = q('x_axis_label_text')
+  DOM.yAxisArrow = q('y_axis_arrow')
+  DOM.yAxisLabelText = q('y_axis_label_text')
+
+  // Stoppuhr
+  DOM.stopwatch = q('stopwatch')
+  DOM.stopwatchCircle = q('stopwatch_circle')
+  DOM.stopwatchMarks = q('stopwatch_marks')
+  DOM.subdial = q('subdial')
+  DOM.subdialMarks = q('subdial_marks')
+  DOM.mainHand = q('stopwatch_main_hand')
+  DOM.subHand = q('stopwatch_sub_hand')
+  DOM.digitalDisplayGroup = q('digital_display_group')
+
+  // Manuelle Zeitmessung
+  DOM.startTimingContainer = q('start_timing_container')
+  DOM.startTimingButton = q('start_timing_button')
+
+  // Graph
+  DOM.graphSvg = q('graph_svg')
+  DOM.gridGroup = q('grid_group')
+  DOM.graphTitle = q('graph_title')
+  DOM.graphLine = q('graph_line')
+  DOM.graphLineB = q('graph_line_b')
+  DOM.graphLineC = q('graph_line_c')
+  DOM.graphPoint = q('graph_point')
+  DOM.graphPointB = q('graph_point_b')
+  DOM.graphPointC = q('graph_point_c')
+  DOM.graphSelect = q('graph_select')
+
+  // Hover-Werte (I13.1)
+  DOM.graphHitRect = q('graph_hit_rect')
+  DOM.hoverLine = q('graph_hover_line')
+  DOM.hoverPoint = q('graph_hover_point')
+  DOM.hoverPointB = q('graph_hover_point_b')
+  DOM.hoverPointC = q('graph_hover_point_c')
+  DOM.hoverTooltip = q('graph_hover_tooltip')
+  DOM.hoverTooltipBg = q('graph_hover_tooltip_bg')
+  DOM.hoverTooltipText = q('graph_hover_tooltip_text')
+
+  // Slider & Toggles
+  DOM.massSlider = q('mass_slider')
+  DOM.kSlider = q('k_slider')
+  DOM.pos0Slider = q('pos0_slider')
+  DOM.massValue = q('mass_value')
+  DOM.kValue = q('k_value')
+  DOM.pos0Value = q('pos0_value')
+  DOM.pos0Label = q('pos0_label')
+  DOM.orientationRadios = document.querySelectorAll('input[name="orientation"]')
+  DOM.speedRadios = document.querySelectorAll('input[name="speed"]')
+  DOM.togPosition = q('toggle_position_vector')
+  DOM.togVelocity = q('toggle_velocity_vector')
+  DOM.togAcceleration = q('toggle_acceleration_vector')
+  DOM.togManualTiming = q('toggle_manual_timing')
+
+  // Topbar
+  DOM.playBtn = q('play_btn')
+  DOM.pauseBtn = q('pause_btn')
+  DOM.resetBtn = q('reset_btn')
+  DOM.exportDiagram = q('export_diagram_btn')
+  DOM.exportAll = q('export_all_btn')
+  DOM.themeToggle = q('theme_toggle')
+
+  // Layout
+  DOM.appLayout = q('app_layout')
+  DOM.analysisToggle = q('analysis_toggle')
+  DOM.timeLabel = q('time_label')
+
+  // Live-Panel
+  DOM.liveT = q('live_t')
+  DOM.liveX = q('live_x')
+  DOM.liveV = q('live_v')
+  DOM.liveA = q('live_a')
+  DOM.liveTper = q('live_T')
+  DOM.liveOmega = q('live_omega')
+  DOM.liveF = q('live_f')
+  DOM.liveEkin = q('live_ekin')
+  DOM.liveEpot = q('live_epot')
+  DOM.liveEtot = q('live_etot')
+}
