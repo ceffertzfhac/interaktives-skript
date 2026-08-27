@@ -1023,6 +1023,12 @@ line, ellipse, polyline, circle {
     border-radius: 0;
     padding: 10px 14px 12px 14px;
     margin: 0;
+    /* Die senkrechte Trennlinie soll bis zur Unterkante des Blocks laufen.
+       Die Zeile richtet ihre Zellen mit `align-items: start` aus, dadurch waere
+       die Zelle nur so hoch wie ihr Inhalt und die Linie endete mitten im
+       Block, sobald die Caption laenger ist als der QR-Teil. `stretch` zieht
+       die Zelle auf die volle Hoehe der Spur. */
+    align-self: stretch;
 }
 
 .qr_title {
