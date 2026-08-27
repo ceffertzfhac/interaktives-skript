@@ -38,6 +38,16 @@
  *                    breit und uebertoenen sonst die Formel-Treffer).
  *   --json=<pfad>    Vollstaendiges Ergebnis zusaetzlich als JSON ablegen.
  *
+ * GEMESSEN WIRD DIE TINTE, NICHT DIE CONTAINER-BOX. Die `mjx-container`-Box
+ * ist die Zeilenbox und ragt regelmaessig weit ueber die Glyphen hinaus: bei
+ * (1.1.57) meldet sie +87,3 px, gezeichnet sind +11,6 px; zwei weitere
+ * "Treffer" lagen sogar 2,6 bzw. 48,1 px INNERHALB der Spalte. Wer gegen den
+ * Container misst, jagt Gespenster (gleiche Falle wie in figur_screenshot.mjs).
+ *
+ * NICHT umgesetzt: die Trennung "nur die Nummer" vs. "Formelkoerper"
+ * (P14-Kriterium a gegen b) -- s. Kommentar an der Fundstelle im Code.
+ * Stattdessen wird die am weitesten rechts liegende ZEILE der Formel benannt.
+ *
  * Referenzrand ist die SICHTBARE TEXTSPALTE: `#content`-Rand abzueglich
  * padding-right (P14-0 Frage 1, so entschieden). `#paper` wird je Treffer
  * mitgemessen und ausgegeben, entscheidet aber nicht ueber den Verstoss.
@@ -157,10 +167,30 @@ async function messen(mode) {
                 if (h) break;
             }
             if (!h && seite) h = seite.querySelector('h1,h2,h3,h4');
+            // .chapter-page traegt keine id (pages.js vergibt keine) -- der
+            // Index in der Seitenfolge ist die brauchbare Adresse.
             return {
-                seite: seite ? (seite.id || '') : '',
+                seite: seite ? `Seite ${seiten.indexOf(seite) + 1}/${seiten.length}` : '',
                 ueberschrift: h ? h.textContent.trim().slice(0, 70) : ''
             };
+        };
+
+        // INK-BOX statt Container-Box bei MathJax. Die `mjx-container`-Box ist
+        // die ZEILENBOX und ragt regelmaessig deutlich ueber die gezeichneten
+        // Glyphen hinaus -- gegen sie gemessen meldet das Skript Ueberstaende,
+        // die niemand sieht (gemessen: Container +87 px, Tinte +11,6 px; zwei
+        // weitere "Treffer" lagen 2,6 bzw. 48,1 px INNERHALB der Spalte).
+        // Fuer alles ausser MathJax ist die Elementbox die Tinte.
+        const rechtsKante = (el) => {
+            if (el.tagName.toLowerCase() !== 'mjx-container') {
+                return el.getBoundingClientRect().right;
+            }
+            let r = -Infinity;
+            for (const g of el.querySelectorAll('g[data-mml-node]')) {
+                const b = g.getBoundingClientRect();
+                if (b.width > 0 && b.height > 0) r = Math.max(r, b.right);
+            }
+            return isFinite(r) ? r : el.getBoundingClientRect().right;
         };
 
         const ueber = new Set();
@@ -168,7 +198,10 @@ async function messen(mode) {
         for (const el of alle) {
             const r = el.getBoundingClientRect();
             if (r.width <= 0 || r.height <= 0) continue;          // unsichtbar
-            if (r.right > limit + tol) ueber.add(el);
+            // Teile einer Formel nicht einzeln bewerten -- die Formel als
+            // Ganzes wird ueber ihre Ink-Box beurteilt.
+            if (el.closest('mjx-container') && el.tagName.toLowerCase() !== 'mjx-container') continue;
+            if (rechtsKante(el) > limit + tol) ueber.add(el);
         }
 
         const treffer = [];
@@ -178,22 +211,30 @@ async function messen(mode) {
             const art = artVon(el);
             if (ohneFiguren && art === 'figur') continue;
             const r = el.getBoundingClientRect();
+            const kante = rechtsKante(el);
 
-            // Bei Display-Gleichungen zusaetzlich trennen: ragt nur die
-            // Nummer (mlabeledtr-Label) heraus oder der Formelkoerper?
-            let tag = null;
+            // NICHT UMGESETZT: "ragt nur die Nummer heraus oder der Koerper?"
+            // (P14-Kriterium a vs. b). In der SVG-Ausgabe tragen die Gruppen
+            // keinen Text (Glyphen sind <path>), und die Nummer ist auch
+            // strukturell nicht sauber greifbar: die `mlabeledtr` enthaelt
+            // hier genau EIN `mtd`, waehrend die ueberstehende Tinte in einer
+            // anderen Zeile derselben `mtable` sitzt. Eine Heuristik, die
+            // still nie ausloest, waere schlechter als keine -- deshalb wird
+            // stattdessen die AM WEITESTEN RECHTS liegende Zeile ausgewiesen.
+            let zeile = null;
             if (art === 'formel-display') {
-                const lab = el.querySelector('mjx-labels, [data-mml-node="mlabeledtr"] > mjx-mtd:last-child');
-                if (lab) {
-                    const lr = lab.getBoundingClientRect();
-                    const koerper = [...el.querySelectorAll('mjx-math, mjx-mtable')]
-                        .reduce((m, n) => Math.max(m, n.getBoundingClientRect().right), 0);
-                    tag = {
-                        tagUeberstand: +(lr.right - limit).toFixed(1),
-                        koerperUeberstand: +(koerper - limit).toFixed(1),
-                        nurTag: koerper <= limit + tol
-                    };
+                let best = null;
+                for (const tr of el.querySelectorAll('g[data-mml-node="mtr"], g[data-mml-node="mlabeledtr"]')) {
+                    const b = tr.getBoundingClientRect();
+                    if (b.width <= 0) continue;
+                    if (!best || b.right > best.right) best = b;
                 }
+                if (best) zeile = {
+                    nr: [...el.querySelectorAll('g[data-mml-node="mtr"], g[data-mml-node="mlabeledtr"]')]
+                        .findIndex(t => t.getBoundingClientRect().right === best.right) + 1,
+                    von: [...el.querySelectorAll('g[data-mml-node="mtr"], g[data-mml-node="mlabeledtr"]')].length,
+                    ueberstand: +(best.right - limit).toFixed(1)
+                };
             }
 
             treffer.push({
@@ -201,12 +242,13 @@ async function messen(mode) {
                 tag: el.tagName.toLowerCase(),
                 id: el.id || '',
                 klasse: (el.className && typeof el.className === 'string' ? el.className : '').slice(0, 40),
-                ueberstand: +(r.right - limit).toFixed(1),
-                ueberstandPaper: +(r.right - pLimit).toFixed(1),
+                ueberstand: +(kante - limit).toFixed(1),
+                ueberstandContainer: +(r.right - limit).toFixed(1),
+                ueberstandPaper: +(kante - pLimit).toFixed(1),
                 breite: +r.width.toFixed(1),
                 text: (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
                 ...kontextVon(el),
-                ...(tag ? { nummer: tag } : {})
+                ...(zeile ? { zeile } : {})
             });
         }
 
@@ -267,8 +309,9 @@ for (const m of modi) {
     e.treffer.forEach(t => { nach[t.art] = (nach[t.art] || 0) + 1; });
     console.log('  nach Art: ' + Object.entries(nach).map(([k, v]) => `${k} ${v}`).join(', '));
     for (const t of zeigen) {
-        const nur = t.nummer?.nurTag ? '  [nur die Nummer]' : '';
-        console.log(`   +${String(t.ueberstand).padStart(7)} px  ${t.art.padEnd(20)} ${t.ueberschrift || t.seite}${nur}`);
+        const z = t.zeile ? `  [Zeile ${t.zeile.nr}/${t.zeile.von}]` : '';
+        console.log(`   +${String(t.ueberstand).padStart(7)} px  ${t.art.padEnd(20)} ${t.ueberschrift || t.seite}${z}`);
+        if (t.seite) console.log(`              ${t.seite}`);
         if (t.text) console.log(`              ${t.text}`);
     }
     // Nicht verschweigen, was --max abgeschnitten hat.

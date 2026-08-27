@@ -89,9 +89,15 @@ node .claude/skills/v013-verifikation/scripts/formel_ueberstand.mjs \
 
 Misst in headless Chromium **je Breiten-Modus** (schmal/normal/breit), welche
 Elemente über die sichtbare Textspalte (`#content` abzüglich `padding-right`)
-hinausragen — Formeln (Display und inline), Gleichungsnummern, Tabellen,
-Bilder, Boxen. Bei Display-Gleichungen wird getrennt ausgewiesen, ob nur die
-**Nummer** übersteht oder der **Formelkörper** (`[nur die Nummer]`).
+hinausragen — Formeln (Display und inline), Tabellen, Bilder, Boxen. Bei
+Display-Gleichungen wird zusätzlich die am weitesten rechts liegende **Zeile**
+benannt (`[Zeile 1/8]`), damit man im Quelltext nicht suchen muss.
+
+**Gemessen wird die Tinte, nicht die Container-Box.** Die `mjx-container`-Box
+ist die Zeilenbox und ragt regelmäßig weit über die Glyphen hinaus: bei
+(1.1.57) meldet sie +87,3 px, gezeichnet sind +11,6 px — zwei weitere
+„Treffer" der ersten Fassung lagen sogar 2,6 bzw. 48,1 px *innerhalb* der
+Spalte. Gegen den Container gemessen jagt man Gespenster.
 
 Gemeldet wird je Kette nur das äußerste Element. `--ohne-figuren` blendet die
 absichtlich breiten `.aspekt-figur`-Container aus, `--max=0` zeigt alle Treffer,
