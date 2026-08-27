@@ -55,8 +55,8 @@ konkreten Stelle im Skript zu bauen. Referenz-Implementierungen:
 > `bw<n>_`) ist **figur-only** — keine Stand-alone-Sim, kein Auswahlziel für eine
 > neue Figur; strukturell auf `grundbegriffe/` modelliert. Der Entscheidungsbaum
 > oben gilt für die **drei portierten** Motoren; `bus_weg_zeit` existiert nur für
-> die eine Bus-Figur (Abb. 1.2). Inventar + Provenienz aller vier Motoren:
-> `src/figures/CLAUDE.md` „Die vier Motoren".
+> die eine Bus-Figur (Abb. 1.2). Inventar + Provenienz aller Motoren:
+> `src/figures/CLAUDE.md` „Die Motoren".
 
 Geschrieben als **Runbook**: erst Konzept & Architektur, dann Schritt für
 Schritt, dann der Katalog der real aufgetretenen Fallstricke (der wertvollste

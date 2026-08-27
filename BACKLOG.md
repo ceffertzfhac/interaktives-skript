@@ -24,7 +24,7 @@ die Links hier zeigen auf den Pfad.
 
 | Item | Sub-Tasks | Worum es geht |
 |---|---|---|
-| [P12 — Komplett-Integration aller noch fehlenden v0.13-Inhalte](backlog/P12-restliche-v013-inhalte.md) | 18/20 | Rest-Skript: TK 1 fehlende Sections, TK 2/3, Quasi-Content (Vorwort, Index), interaktive Figuren je Abschnitt, Asset-Pipeline, Pro-Abschnitt-Verifikation |
+| [P12 — Komplett-Integration aller noch fehlenden v0.13-Inhalte](backlog/P12-restliche-v013-inhalte.md) | 20/18 | Prosa vollständig (114/114 Unterabschnitte); offen: interaktive Figuren je Abschnitt, Quasi-Content, Asset-Pipeline, Verifikation |
 | [P13 — Text- & Formel-Marker für Studierende](backlog/P13-marker-und-notizbuch.md) | 0/16 | 4 Farben, persistent; plus begleitendes Notizbuch (P13-N) |
 | [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 1/10 | zwei neue Motoren (freier Fall, schräger Wurf) + 8 Aspekt-Figuren |
 | [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 0/4 | Abb. 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten, 1.8 Federpendel |

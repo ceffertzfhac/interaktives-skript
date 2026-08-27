@@ -8,17 +8,30 @@ nur die heutigen ~3 migrierten Abschnitte. Struktur des PDFs (aus
 `Physik_pskript_v0.13.toc`): **4 Themenkomplexe** (`\chapter` 0–3) ·
 **23 Sections** (`\section`) · **114 Subsections** (`\subsection`).
 
-**Ist-Stand WIP (verifiziert 2026-07-24):**
-- **TK 0 Grundlagen** — ✅ komplett migriert (`ch_00_grundlagen.html`, 0.0–0.6, s. P7).
-- **TK 1 Mechanik** — 1.4 ✅ (`ch_01`), **1.5 ✅** (`ch_02`, 1.5.1–1.5.14 **vollständig**
-  incl. 1.5.13 Rollbewegung mit 73 Gl. — *P4 ist veraltet, s. P12-0e*).
-  **Fehlt:** 1.0, 1.1, 1.2, 1.3, 1.6, 1.7, 1.8.
-- **TK 2 Elektromagnetismus** — ❌ komplett fehlt (2.0–2.3).
-- **TK 3 Schwingungen und Wellen** — ❌ komplett fehlt (3.1 Schwingungen; 3.2 Wellen
-  ist in v0.13 *selbst* nur ein **207-Byte-Stub** — `pskript_sw_wellen.tex` ist
-  praktisch leer, s. P12-Wellen).
-- **Quasi-Content** — ❌ Vorwort (`pskript_preface_v1_gmni`), Stichwort-Index
-  (S.399, generiert), „Abbildungen und interaktive Animationen"-Übersicht (S.ii).
+**Ist-Stand WIP — AKTUALISIERT 2026-08-27 (v1.34.1).** *Die vorherige Angabe
+war vom 24.07. und listete TK 2, TK 3 und sieben TK-1-Sections als fehlend; das
+ist seit den Migrationen dazwischen ueberholt.* Reproduzieren:
+`grep -o 'data-chapter="[^"]*"' InteraktivesSkript_WIP/index.html`
+
+**Die Prosa-Migration ist vollstaendig.** 17 Fragmente, **114 Unterabschnitte —
+exakt die 114 Subsections des v0.13-TOC**.
+
+| TK | Sections | Unterabschnitte | Aspekt-Figuren |
+|---|---|---|---|
+| 0 Grundlagen | 0.0 | 5 | 0 |
+| 1 Mechanik | 1.0–1.8 (alle 9) | 69 | 16 |
+| 2 Elektromagnetismus | 2.0–2.3 (alle 4) | 31 | 0 |
+| 3 Schwingungen und Wellen | 3.0–3.2 (alle 3) | 9 | 0 |
+
+3.2 Wellen ist migriert, enthaelt aber keine Unterabschnitte — die v0.13-Quelle
+ist selbst nur ein 207-Byte-Hinweis („im WS 2025/26 nicht behandelt"). Mehr gibt
+es nicht zu holen, s. P12-C2.
+
+**Was daraus folgt:** der Schwerpunkt von P12 hat sich verschoben. Offen sind
+nicht mehr Kapitel, sondern **interaktive Figuren** (P12-E), **Quasi-Content**
+(P12-D) und die **Verifikation** (P12-G). Die Figuren sind dabei sehr ungleich
+verteilt: von 16 liegen **14 allein in Abschnitt 1.4** und 2 in 1.1 — **13 der
+17 Abschnitte haben gar keine.**
 
 **Runbooks:** Prosa-Migration pro Abschnitt nach `MIGRATION_v0.13_nach_HTML.md`
 bzw. Skill **v013-kapitel-migration**; interaktive Aspekt-Figuren nach
@@ -199,14 +212,19 @@ ergänzen oder neue `ch_01b_*`/nach Topic splitten — vor P12-A1 entscheiden.*
   Fragment-Header + MIGRATION-Runbook Abschnitt 13). Kein Offset (3.0 verbraucht
   0 Abb/Zus; Kapitel-3-Zaehler starten bei 0). **Stufe 5 (Browser-Sicht) offen —
   Freigabe ausstehend**. Kein Interaktiv-Kandidat.
-- [ ] **P12-C1 3.1 Schwingungen** — 9 Subsections, 0 Abb.
+- [x] **P12-C1 3.1 Schwingungen** — 9 Subsections, 0 Abb.
   (`pskript_sw_schwingungen.tex`, 42 KB). Kandidat: `federpendel_simulation`. *(L)*
-- [ ] **P12-C2 3.2 Wellen** — `pskript_sw_wellen.tex` = **207 Byte Stub** — in v0.13
+  *Erledigt (Stand 2026-08-27 verifiziert): `ch_04_01_schwingungen.html`,
+  9 Unterabschnitte, 39 KB, 67 nummerierte Gleichungen.*
+- [x] **P12-C2 3.2 Wellen** — `pskript_sw_wellen.tex` = **207 Byte Stub** — in v0.13
   *selbst* kein Inhalt. **Nutzervorgabe (2026-07-24): Platzhalter erstellen.** Bei
   der TK-3-Migration wird 3.2 als sichtbarer Platzhalter-Standort angelegt (Section-
   Heading + Hinweis „Inhalt folgt / in v0.13 nicht enthalten"), nicht leer gelassen.
   `wellen_simulation` liegt bereit — später als interaktive Figur (P12-E7)
   einbinden, sobald der Inhalt steht. *(M)*
+  *Erledigt: `ch_04_02_wellen.html` gibt den Hinweis der Quelle wieder.
+  Die 207 Byte SIND der gesamte Inhalt von `pskript_sw_wellen.tex` — hier
+  ist nichts nachzutragen, solange v0.13 nichts nachliefert.*
 
 ### P12-D — Quasi-Content
 
@@ -229,7 +247,51 @@ pro Figur anhand Runbook-Vorlagenhierarchie [[feedback-vorlagen-hierarchie]].*
 - [ ] **P12-E3** 1.5.13 Rollbewegung: `rolling_bodies` (in ch_02 nachrüsten). *(M)*
 - [ ] **P12-E4** 1.7: `stoss`. *(M)*
 - [ ] **P12-E5** 2.3: `lorentz_force`. *(M)*
-- [ ] **P12-E6** 3.1: `federpendel`. *(M)*
+- [~] **P12-E6** 3.1: `federpendel`. *(M)*
+
+  **Stufe 1 erledigt 2026-08-27 (`e31dcbd`): Motor portiert** nach
+  `src/figures/federpendel/` (constants/state/physics/render/runtime, 1225 Z.).
+  Libs aus `../kreisbewegung/lib/`, alle sechs Exporte passen 1:1. Die Seite ist
+  unveraendert — **kein Modul importiert den Motor**, ein Wiedereinstieg ist also
+  verlustfrei.
+
+  **Mit dem Nutzer entschieden (2026-08-27), vor dem Weiterbauen NICHT neu fragen:**
+  - **Aspekt:** Auslenkung *x(t)* — Szene + EIN Graph. Vorlage ist damit
+    `aspekt_winkel_zeit.js` (Play/Pause + ein Graph), nicht `aspekt_weg_zeit.js`.
+  - **Bedienung:** Play/Pause mit Auto-Stopp (Runbar + Tempo-Radios),
+    plus Regler Amplitude *A*, Masse *m*, Federkonstante *k*.
+  - **Formeln:** dynamisch via `data-eqs` aus dem Kapiteltext, kein statischer
+    `.formula-box`-Block (nicht mischen — der statische gewinnt sonst).
+  - **Platzierung: Abschnitt 3.1.5, OHNE Abbildungsnummer.** 3.1.5 hat in v0.13
+    keine Abbildung; es wird auch keine erfunden. Der Platzhalter bekommt daher
+    **kein `data-figref`** — `label_aspekt_figuren()` ueberspringt ihn dann
+    sauber (`querySelectorAll('.aspekt-figur[data-figref]')`), und die
+    Abbildungszaehlung des Kapitels bleibt exakt wie v0.13 (4 Abbildungen).
+    Das ist die erste Aspekt-Figur ohne statisches Pendant.
+  - **Modus:** `store.oscillationMode = 'horizontal'` (die Sim kann auch
+    `'vertical'` — das ist der Hebel fuer eine spaetere 3.1.6-Figur).
+
+  **Fallstrick, der beim Sondieren aufgefallen ist:** `fig-feder_masse_schwingung`
+  liegt in **3.1.1**, nicht in 3.1.5, und zeigt ein **vertikales** Pendel. Ein
+  `data-figref` darauf haette der Figur eine fremde Nummer vererbt — die
+  Nummerierung laeuft in Seitenreihenfolge (`numbering.js::numberImages`).
+
+  **DOM-Vertrag** (ermittelt mit `dom_vertrag.mjs`, im Skelett als `kb_`-IDs
+  schreiben und per `.replace(/kb_/g, prefix)` prefixen):
+  *Kern-Szene:* `anchor_object`, `center_area`, `equilibrium_line/_label`,
+  `main_svg`, `mass`, `max_pos_line/_label`, `min_pos_line/_label`,
+  `pos0_label`, `position_vector`, `velocity_vector`, `acceleration_vector`,
+  `spring`, `surface`, `toggle_position_vector`, `toggle_velocity_vector`,
+  `toggle_acceleration_vector`, `unstretched_length_line/_label`,
+  `x_axis_arrow`, `x_axis_label_text`, `y_axis_arrow`, `y_axis_label_text`.
+  *Stubs (versteckt, muessen aber existieren):* `graph_svg`, `live_t`, `live_v`,
+  `live_a`, `live_ekin`, `live_epot`, `live_etot`.
+
+  **Stufe 2 (offen):** `aspekt_federpendel.js` aus der Vorlage + `.css`,
+  Skelett mit den IDs oben, Platzhalter in `ch_04_01_schwingungen.html`
+  (Abschnitt 3.1.5), Import + `ASPEKT_FACTORIES`-Eintrag in `main.js`,
+  `<link>` in `index.html`. Danach `figur_smoke.mjs --init=buildFederpendelFig`,
+  `dom_harness.mjs` (Nummerierung unveraendert?) und Browser-Sicht.
 - [ ] **P12-E7** 3.2: `wellen` (nach P12-C2-Klärung). *(M)*
 - [ ] **P12-E8** Hilfs-Sims: `ableitung`, `lineal`, `kreis_spiralbewegung` —
   Zuordnung prüfen. *(S)*

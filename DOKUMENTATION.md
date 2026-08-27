@@ -21,7 +21,7 @@ nächstliegenden Konsumenten.
 | `InteraktivesSkript_WIP/CLAUDE.md` | Ordneraufbau der Site, Runbook-Übersicht, „kein Build"-Entscheidung | irgendetwas in der Arbeitskopie ansteht |
 | `InteraktivesSkript_WIP/chapters/CLAUDE.md` | Fragment-Konvention (O(1)), Nummerierung + Offsets, MathJax-Gleichungsnummern, Querverweis-Deskriptoren, Bildgrößen | Kapitel-Prosa geschrieben/migriert wird, Nummern oder Verweise zweifelhaft sind |
 | `InteraktivesSkript_WIP/src/CLAUDE.md` | Modul-Layout, Dependency-Graph, `data-action`-Binder, Paginierung, App-Shell, statisch/interaktiv, 3D→2D, Druck/QR/Zoom/Darkmode, Breiten-Modus, A11y, Safari-Workaround | irgendein JS/CSS geändert wird |
-| `InteraktivesSkript_WIP/src/figures/CLAUDE.md` | Fabrik-Muster, die vier Motoren, Aspekt-Figuren + Dispatch, Optik-Tokens, Farbpaletten/CVD | an einer Figur gearbeitet wird |
+| `InteraktivesSkript_WIP/src/figures/CLAUDE.md` | Fabrik-Muster, die Motoren, Aspekt-Figuren + Dispatch, Optik-Tokens, Farbpaletten/CVD | an einer Figur gearbeitet wird |
 
 ## C — auf Abruf (Runbooks)
 

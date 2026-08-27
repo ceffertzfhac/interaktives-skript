@@ -18,7 +18,7 @@ ersten (Singleton-)Version: `../../CHANGES_aspekt_1.38_1.40_und_grundgeruest.md`
 
 1. **Motor zuerst wählen** — der Entscheidungsbaum (Kreis-/Spiralbahn? liegt
    etwas auf der Drehachse? beliebige Bahnkurve?) steht im Runbook-Block
-   „Motor-Wahl". Inventar + Provenienz der vier Motoren: s. u. „Die vier Motoren".
+   „Motor-Wahl". Inventar + Provenienz aller Motoren: s. u. „Die Motoren".
 2. **Eine bestehende Figur kopieren und feature-gaten, nie von Grund auf
    schreiben.** Die ganze Vorlagen-Kaskade (worin suchen, in welcher Reihenfolge,
    mit Begründung) steht im Runbook §0a — dort nachlesen, bevor eine Figur
@@ -46,7 +46,7 @@ panels.js     init_figure_panels()/toggle_panel() — verpackt JEDEN .grafik-con
 playback.js   gemeinsame Auto-Stopp-Helfer (isAtAutoStopEnd,
               resetOnPlayAfterAutoStop) für animierte Aspekt-Figuren
 aspekt_<name>.js/.css   die interaktiven Aspekt-Figuren, je ein Modul + ein CSS
-<motor>/      die vier Motoren (s. u.)
+<motor>/      die Motoren (s. u.)
 ```
 
 ### Klassische Figuren (Fabrik-Muster + einklappbare Karten)
@@ -92,10 +92,10 @@ gewandert sind, wo eine scroll-fixierte Begleitspalte keinen Sinn mehr ergibt.
 > erhöht **gc5s** Umdrehungszähler (`fig5.state.n++`) statt gc51s — aus
 > Verhaltenstreue beibehalten, im Code markiert.
 
-## Die vier Motoren
+## Die Motoren
 
 Ein „Motor" ist eine portierte Stand-alone-Simulation, die mehrere Aspekt-Figuren
-gemeinsam antreiben. Alle vier kapseln `store`/`DOM` als Modul-Singletons und
+gemeinsam antreiben. Alle kapseln `store`/`DOM` als Modul-Singletons und
 geben über `runtime.js::createRuntime()` jeder Figur einen isolierten Zustand +
 eindeutigen ID-Prefix; `withStore(fn)` nutzt den Singleton nur als
 Scratch-Buffer während eines synchronen Zeichnens und stellt den vorherigen
@@ -109,10 +109,11 @@ bleibt.
 | `kreisbewegung/` | 2D-Draufsicht | `kb_` (Default) | erste Portierung; die gc10-Standalone-Sim ruht seit v1.7 (s. „Klassische Figuren"), der Motor lebt über die Aspekt-Figuren weiter |
 | `kreis_spiral/` | ISO-3D (`projectISO`) mit sichtbarer **Rotationsachse** | `ks<n>_` | ω und α leben auf der Achse — in der 2D-Draufsicht unmöglich. Bringt α, Ebenenhöhe h und den Spiralmodus nativ mit |
 | `grundbegriffe/` | 2D-x-y-Diagramm, **beliebige** feste Bahnkurve x(t)/y(t) | `gk<n>_` | beide anderen können nur Kreis-/Spiralbahnen. Erster **zeitloser** Motor: kein rAF, kein Play/Pause, keine `show*`-Flags sondern `store.toggles`, Schalter-mit-Hover-Erklärung statt Slidern — **daher keine Vorlage für eine Kreisbewegungs-Figur** |
+| `federpendel/` | Feder-Masse-Szene + t-Diagramm, harmonische Schwingung | `fp<n>_` | erster Motor außerhalb der Kreis-/Bahnthematik. Bringt die Zeitreihen für x, v, a **und die Energien** (Ek/Ep/Eges) mit, damit 3.1.9 ohne zweiten Port folgen kann; kann `oscillationMode` horizontal **und** vertikal |
 | `bus_weg_zeit/` | Straßenszene + t-x-Diagramm, stückweise x(t) | `bw<n>_` | figur-only, keine passende Stand-alone-Sim; strukturell auf `grundbegriffe/` modelliert. `store.t` ist ein SKALARer Zeitcursor (kein tA/tB-Paar) — ein Cursor steuert Bus und Kurvenpunkt synchron |
 
 Gemeinsame Bausteine: `kreisbewegung/lib/{format,hover,svg-text,ticks,vectors}.js`
-werden von **allen** Motoren wiederverwendet (die drei späteren importieren aus
+werden von **allen** Motoren wiederverwendet (die späteren importieren aus
 `../kreisbewegung/lib/`). Der `kreisbewegung`-Motor ist mehrdateilich
 (`constants/state/physics/render/ui.js`), die anderen kommen ohne eigenes
 `ui.js` aus.
