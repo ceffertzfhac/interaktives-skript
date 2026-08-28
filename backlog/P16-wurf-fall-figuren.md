@@ -223,6 +223,11 @@ mitbetrifft.
   gezaehlt sind. Dank der Vorzeichenkonvention aus v1.37.1 unterscheiden sich
   die vier nur im Vorzeichen des g-Terms und im h0-Term — der v0-Term bleibt
   ueberall `+v0 t`. Nachgerechnet gegen die laufenden Figuren.
+  **Nachtrag 4 (Nutzervorgabe 2026-08-28):** Abb. 1.5-1.7 stehen jetzt am ENDE
+  der Beispielbox, nach Abb. 1.4 ueberleitet ein neuer Absatz (Aussehen UND
+  Formel haengen vom Koordinatensystem ab, eine Parabel bleibt es immer).
+  Abbildungsnummern unveraendert. Abweichung von v0.13 -> BACKLOG P21.
+
   **Nachtrag 3 (Konsistenzpruefung auf Nutzerwunsch + Vorgabe** *„starte alle
   captions mit einer kurzen Erklaerung des Koordinatensystems"*)**, v1.37.3:**
   23 Parameterkombinationen (h0, v0, je fuenf Zeitpunkte bis zur Flugzeit) in
@@ -240,6 +245,13 @@ mitbetrifft.
      Fliesstext). Jetzt haben alle fuenf dieselbe Karte; der Querverweis der
      Fussnote haelt die Verbindung zur Quelle (geprueft: 1.3 -> (1.1.9),
      1.4-1.7 -> (1.1.16), beide zeigen auf die richtige Gleichung).
+  **Stufe 5 (Sicht) erledigt** (Nutzerfreigabe 2026-08-28, Screenshots von 1.4,
+  1.6 und 1.7 in normal + Lupe): EIN Fehler gefunden und behoben (v1.37.4) —
+  bei nach unten zeigender Achse mit Nullpunkt am Erdboden (Abb. 1.6) lagen
+  Achsenpfeil und Label der Szenen-Miniatur unterhalb des Ausschnitts und
+  fehlten; Ausschnitt jetzt 515 statt 480 hoch, nachgemessen fuer alle fuenf.
+  Rest unauffaellig: Formelkarte, Querverweis, Live-Analyse, Vorzeichen-Hinweis
+  und die nach unten laufenden Kurven sitzen richtig.
   Ausserdem beginnen jetzt ALLE fuenf Bildunterschriften mit dem
   Koordinatensystem und uebersetzen die Ausgangslage hinein: „startet 20,0 m
   ueber dem Erdboden (Regler h0), in diesem Koordinatensystem also bei y = 0;
