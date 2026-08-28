@@ -10,6 +10,13 @@
 //  2. updatePhysicsFormulas() sucht die Formelvarianten ueber store.idPrefix
 //     statt dokumentweit — sonst schalten mehrere Figuren auf einer Seite
 //     einander die Formeln um.
+//  3. Die Pfeilspitzen-Marker werden ueber url(id) = url(#<idPrefix><id>)
+//     referenziert statt ueber die festen Dokument-IDs #arrowhead / #arrow-y
+//     der Stand-alone-Sim. Dort gibt es genau EIN Marker-Paar im Dokument; im
+//     Skript traegt jede Figur ihr eigenes, prefixtes <defs> — eine feste
+//     Referenz zeigte auf das Marker-Set der ERSTEN Figur der Seite (bzw. ins
+//     Leere, wenn diese Figur nicht gebaut ist) und die Achsenpfeile blieben
+//     unsichtbar. Gleiches Muster wie bus_weg_zeit/render.js::url().
 import { G, PIXELS_PER_METER, GROUND_PX, BALL_X,
          WATCH_CX, WATCH_CY, WATCH_R, SDIAL_CX, SDIAL_CY, SDIAL_R,
          GRAPH_W, GRAPH_H, GRAPH_H_STACKED, PIXELS_PER_VEL, PIXELS_PER_ACC, VEL_THRESHOLD } from './constants.js'
@@ -21,6 +28,9 @@ import { getNiceTick, tAxisStep } from '../kreisbewegung/lib/ticks.js'
 export { fmt }
 
 const NS = 'http://www.w3.org/2000/svg'
+
+// PORT-AENDERUNG 3 (s. Kopfkommentar): Marker-Referenz mit Instanz-Prefix.
+const url = id => `url(#${store.idPrefix}${id})`
 
 function el(tag, attrs) {
   const e = document.createElementNS(NS, tag)
@@ -78,7 +88,7 @@ export function drawYAxisDisplay() {
 
   DOM.yAxisDisplay.appendChild(el('line', {
     x1: ax, y1: yOrig, x2: ax, y2: yEnd,
-    class: 'yad-line', 'stroke-width': 1.5, 'marker-end': 'url(#arrow-y)',
+    class: 'yad-line', 'stroke-width': 1.5, 'marker-end': url('arrow-y'),
   }))
   const t0 = el('text', { x: ax + 5, y: yOrig + 4, 'text-anchor': 'start', class: 'yad-text' })
   t0.textContent = '0'
@@ -194,8 +204,8 @@ function drawGraphSlot({ slot, gridEl, lineEl, pointEl, titleEl, type, graphHeig
   }
 
   // Achsen
-  gridEl.appendChild(el('line', { x1: x0, y1: y0, x2: GRAPH_W - 5, y2: y0,    class: 'axis-line', 'stroke-width': 2, 'marker-end': 'url(#arrowhead)' }))
-  gridEl.appendChild(el('line', { x1: x0, y1: graphHeight - 5, x2: x0, y2: 5, class: 'axis-line', 'stroke-width': 2, 'marker-end': 'url(#arrowhead)' }))
+  gridEl.appendChild(el('line', { x1: x0, y1: y0, x2: GRAPH_W - 5, y2: y0,    class: 'axis-line', 'stroke-width': 2, 'marker-end': url('arrowhead') }))
+  gridEl.appendChild(el('line', { x1: x0, y1: graphHeight - 5, x2: x0, y2: 5, class: 'axis-line', 'stroke-width': 2, 'marker-end': url('arrowhead') }))
 
   // Achsenbeschriftung
   const tlX = el('text', { x: GRAPH_W / 2, y: y0 + 32, 'text-anchor': 'middle', class: 'axis-label' })
