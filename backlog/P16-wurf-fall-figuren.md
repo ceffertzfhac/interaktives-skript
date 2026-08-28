@@ -72,6 +72,43 @@ Vorbilder prüfen): (1) nächste Aspekt-Figur *nach Interaktionsmuster, nicht Th
   `freier_fall` für 1.3/1.4–1.7/1.19, Motor B `schraeger_wurf` für 1.9/1.14/
   1.18a/b/1.20.
 
+**Bearbeitungsreihenfolge entschieden 2026-08-28 (Nutzervorgabe:** *„ich wuerde
+mich gerne an der Reihenfolge im Skript orientieren, und im Anschluss an die
+,Busfahrt' weiter machen"*)**:** Abgearbeitet wird **entlang der Abbildungs-
+reihenfolge in `ch_01_01_kinematik.html`**, nicht nach Motor oder Aufwand. Die
+Busfahrt ist **Abb. 1.2**; der Faden laeuft also ab **Abb. 1.3** weiter. Die
+Reihenfolge spannt P16 **und** P17 — die Items bleiben getrennt, die Queue ist
+gemeinsam:
+
+| Abb. | `fig-…`-ID | Item | Motor | Motor da? |
+|---|---|---|---|---|
+| 1.3 | `freierfall_1` | P16-3 | A `freier_fall` | nein → P16-1 |
+| 1.4–1.7 | `senkrechter_wurf_1…4` | P16-4 | A | nein → P16-1 |
+| 1.8 | `feder_masse_pendel_kinematik` | **P17-3** | `federpendel` | **ja** (P12-E6) |
+| 1.9 | `schraeger_wurf` | P16-6 | B `schraeger_wurf` | nein → P16-2 |
+| 1.10 | `kreisbewegung_1` | **P17-2** | `kreisbewegung` | **ja** |
+| 1.11–1.13 | `rutsche`, `schraubenbahn`, `spur_im_schnee` | — | — | bleiben statisch (P17-Entscheidung) |
+| 1.14 | `bahnkurve_schraeger_wurf` | P16-7 | B | nein |
+| 1.15 | `…unterschied_durchschnitt_momentan` | **P17-1** | `ableitung` | nein |
+| 1.16–1.17 | `…tachometer`, `…vorwaerts_rueckwaerts` | — | — | bleiben statisch |
+| 1.18 | `…tangentiale_geschwindigkeit_schraeger_wurf` | P16-8 | B | nein |
+| 1.19 | `…zeit_diagramm_senkr_wurf` | P16-5 | A | nein |
+| 1.20 | `…zeit_diagramm_schraeger_wurf` | P16-9 | B | nein |
+
+**Naechster Schritt ist damit P16-1 (Motor A portieren), dann P16-3 (Abb. 1.3).**
+Motor A allein schaltet 1.3 **und** 1.4–1.7 frei, deckt in dieser Reihenfolge
+also die ersten fuenf Abbildungen am Stueck ab.
+
+**Beim Aufstellen der Reihenfolge aufgefallen (2026-08-28):**
+- **Abb. 1.18 ist EINE `<figure>` mit ZWEI `<img>`** (`…_schraeger_wurf.png` +
+  `…_2.png` nebeneinander), also *eine* Abbildungsnummer. P16-8 plant dort „2
+  separate Figuren (1:1)" — beide haetten per `data-figref` dieselbe Nummer
+  „Abb. 1.18". Vor P16-8 zu klaeren: zwei Figuren mit geteilter Nummer, eine
+  Figur mit Koordinatensystem-Umschalter (widerspricht dem 1:1-Beschluss), oder
+  a/b-Suffix in der Beschriftung.
+- **P17-3 ist billiger geworden:** der `federpendel`-Motor ist seit P12-E6
+  portiert, P17-3 ist damit *(M — nur Figur)* statt *(L — Motor + Figur)*.
+
 ### Sub-Tasks
 
 - [x] **P16-0 Klärung** — Granularität: **1:1 pro Abbildung** (keine Konsolidierung);

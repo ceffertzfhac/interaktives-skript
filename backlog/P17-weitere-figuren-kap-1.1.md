@@ -46,12 +46,19 @@ pixel-identisch.**
   `fig-feder_masse_pendel_kinematik` interaktiv nachbauen: harmonische s(t) =
   y₀·cos(2πt/T), Slider Amplitude y₀ + Periodendauer T; nicht-parabolische
   Bewegung als Kontrast zu den Wurf-/Fall-Parabeln (P16). **Motor:
-  `federpendel_simulation` neu portieren** (`src/figures/federpendel/`, reuse
-  `../kreisbewegung/lib/*`; **deckt auch P12-E6 / Kap. 3.1 Schwingungen** — einmal
-  portieren, zwei Verwender). *(L — Motor + Figur)*
+  `federpendel` ist seit P12-E6 (2026-08-27) bereits portiert** unter
+  `src/figures/federpendel/` — kein neuer Motor mehr noetig, nur die Aspekt-Figur
+  per `createRuntime()`. Erste Verwenderin ist die Figur in Abschnitt 3.1.5;
+  hier kaeme die zweite Instanz dazu. *(M — nur Figur; war (L — Motor + Figur))*
 - [ ] **P17-4 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag, `node --check`, Smoke, Nummerierung (keine Regression), CVD-Palette
   (P-AF-2), Stufe 5 (Sicht) nur nach Freigabe „JA" [[feedback-screenshot-freigabe]]. *(M)*
+
+**Bearbeitungsreihenfolge (2026-08-28):** P17-1..3 werden **nicht am Stueck**
+abgearbeitet, sondern an ihrer Position in der Abbildungsreihenfolge von Kap. 1.1,
+verzahnt mit P16 — die gemeinsame Queue steht in
+[P16](P16-wurf-fall-figuren.md) („Bearbeitungsreihenfolge"). Reihenfolge dort:
+1.8 = P17-3, 1.10 = P17-2, 1.15 = P17-1.
 
 **Querverweis:** P17-2 (1.10) und P16 (Wurf/Fall) nutzen beide `kreisbewegung`- bzw.
 die Wurf-Motoren per `createRuntime()` — die Motoren bleiben Singleton, jede
