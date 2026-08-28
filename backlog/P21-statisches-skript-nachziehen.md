@@ -53,7 +53,10 @@ Status: `offen` · `entschieden: bewusst` (bleibt dauerhaft, mit Begründung) ·
 
 #### P21-A1 · Reihenfolge: Abb. 1.5–1.7 ans Ende der Beispielbox
 
-- **Status:** offen · *2026-08-28* · HTML: `chapters/ch_01_01_kinematik.html`,
+- **Status:** **entschieden 2026-08-28: nachziehen** (folgt der Grundsatzregel
+  aus A3 — der Zusatz der interaktiven Fassung wird ins Druckskript übernommen;
+  bei abweichendem Wunsch hier überschreiben). Umsetzung offen → P21-2.
+  *2026-08-28* · HTML: `chapters/ch_01_01_kinematik.html`,
   Beispielbox „Freier Fall und senkrechter Wurf"
 - **Abweichung:** in v0.13 stehen die vier Wurf-Abbildungen unmittelbar
   hintereinander (`fig:senkrechter_wurf_start` … `_abstieg`, Zeilen ~219–245).
@@ -69,7 +72,8 @@ Status: `offen` · `entschieden: bewusst` (bleibt dauerhaft, mit Begründung) ·
 
 #### P21-A2 · Neuer überleitender Absatz nach Abb. 1.4
 
-- **Status:** offen · *2026-08-28* · gehört sachlich zu A1
+- **Status:** **entschieden 2026-08-28: nachziehen** (Grundsatzregel, s. A3) ·
+  *2026-08-28* · gehört sachlich zu A1
 - **Abweichung:** das WIP hat nach der ersten Wurf-Abbildung einen Absatz, den
   v0.13 nicht hat.
 - **Zu tun:** direkt nach dem `\end{figure}` von `fig:senkrechter_wurf_start`
@@ -87,65 +91,84 @@ Status: `offen` · `entschieden: bewusst` (bleibt dauerhaft, mit Begründung) ·
   \ref{fig:senkrechter_wurf_abstieg}.
   ```
 
-#### P21-A3 · Bildunterschriften der interaktiven Figuren (Abb. 1.3–1.7)
+#### P21-A3 · Didaktischer Zusatz der interaktiven Figuren (Abb. 1.3–1.7)
 
-- **Status:** offen, Entscheidung nötig · *2026-08-28*
-- **Abweichung:** die Unterschriften der **interaktiven** Figuren beginnen mit
-  einer Erklärung des Koordinatensystems und übersetzen die Ausgangslage hinein;
-  ihre Zahlenwerte laufen mit den Reglern mit. Die gedruckten Unterschriften
-  (`.nur-druck` im HTML) sind unverändert v0.13.
-- **Zu tun — nur der gedruckt sinnvolle Teil** (Sonderregel oben): den
-  einleitenden Satz je Abbildung voranstellen, Muster (hier ↓/Abwurfpunkt =
-  `fig:senkrechter_wurf_abstieg`):
+*Zusammengefasst 2026-08-28 aus den früheren Einträgen A3 (Bildunterschriften)
+und A4 (drei zusätzliche Gleichungen): beides ist dieselbe Frage — **wie viel
+von dem, was die interaktive Figur zusätzlich sagt, gehört ins Druckskript?** —
+und beides sollte gemeinsam entschieden werden, weil dieselbe Frage bei jeder
+weiteren interaktiven Figur wiederkommt. Der frühere A5 ist jetzt A4.*
 
-  ```latex
-  \textbf{Koordinatensystem:} die $y$-Achse steht senkrecht auf dem Erdboden und
-  zeigt nach unten, ihr Nullpunkt liegt im Abwurfpunkt. Das Objekt startet
-  \SI{20}{\meter} über dem Erdboden, in diesem Koordinatensystem also bei $y=0$;
-  der Erdboden liegt bei $y=+\SI{20}{\meter}$.
-  ```
+- **Status:** **entschieden 2026-08-28: BEIDES nachziehen** (Nutzerentscheidung) —
+  (a) der erklärende Koordinatensystem-Satz kommt in die vier gedruckten
+  Unterschriften, (b) die drei umgerechneten Gleichungen kommen **unnummeriert**
+  zu den Abbildungen. Begründung der Wahl: Papier und Bildschirm sollen dasselbe
+  lehren; unnummeriert kostet die Aufnahme nichts an der Zählung. **Die
+  Entscheidung gilt als Grundsatzregel für alle künftigen interaktiven Figuren**
+  (s. `chapters/CLAUDE.md`). Umsetzung offen → P21-2.
+- **Gemeinsamer Kern:** die interaktiven Figuren zu 1.3–1.7 erklären zwei Dinge,
+  die im Druckskript fehlen — (a) in welchem Koordinatensystem man sich gerade
+  befindet und wo Abwurfpunkt und Erdboden darin liegen, (b) wie die
+  Bewegungsgleichung in genau diesem System lautet. Im Druck steht dazu nur die
+  Gleichung des Systems „↑/Boden"; die drei anderen Abbildungen stehen ohne
+  Formel da, und ihre Unterschriften nennen die Achsenwahl nur in einem
+  Nebensatz.
 
-  Richtung/Nullpunkt je Abbildung anpassen; Startkoordinate und Bodenlage sind
-  bei Nullpunkt Erdboden gerade vertauscht ($y=\pm h_0$ bzw. $y=0$).
-- **Nicht nachziehen:** alles Interaktive — „der Zeit-Regler \(t\) …", „diese
-  Bildunterschrift läuft mit", die Farbnennung „rote Kurve" (die gedruckten
-  Bilder sind graustufig bzw. eigenständig eingefärbt), die mitlaufenden Werte.
-- **Nebenbefund:** die v0.13-Unterschriften der vier Wurf-Abbildungen sagen
-  „losgelassen", obwohl mit \(v_0\) geworfen wird → als Quellfehler in
-  `QUELLEN_FEHLER.md` (1.1, Nr. 5) erfasst; beim Nachziehen gleich mitkorrigieren.
+**(a) Bildunterschriften.** Interaktiv beginnt jede Unterschrift mit dem
+Koordinatensystem und übersetzt die Ausgangslage hinein; die Zahlenwerte laufen
+mit den Reglern mit. Gedruckt (`.nur-druck`) sind sie unverändert v0.13.
+Nachzuziehen wäre — **nur der gedruckt sinnvolle Teil** (Sonderregel oben) — der
+einleitende Satz, Muster für ↓/Abwurfpunkt (`fig:senkrechter_wurf_abstieg`):
 
-#### P21-A4 · Drei zusätzliche Bewegungsgleichungen (Abb. 1.5–1.7)
+```latex
+\textbf{Koordinatensystem:} die $y$-Achse steht senkrecht auf dem Erdboden und
+zeigt nach unten, ihr Nullpunkt liegt im Abwurfpunkt. Das Objekt startet
+\SI{20}{\meter} über dem Erdboden, in diesem Koordinatensystem also bei $y=0$;
+der Erdboden liegt bei $y=+\SI{20}{\meter}$.
+```
 
-- **Status:** offen, Entscheidung nötig · *2026-08-28*
-- **Abweichung:** v0.13 gibt für den Wurf nur die Gleichung des Systems
-  „↑/Boden" an (`formel_senkrechterwurf1`). Das interaktive Skript zeigt in jeder
-  der vier Figuren die Gleichung **ihres** Koordinatensystems, unnummeriert in
-  der Physik-Karte.
-- **Zu tun (empfohlen: unnummeriert einsetzen):** zu den drei verschobenen
-  Abbildungen jeweils die passende Gleichung ergänzen —
+Richtung/Nullpunkt je Abbildung anpassen; bei Nullpunkt Erdboden sind
+Startkoordinate und Bodenlage gerade vertauscht ($y=\pm h_0$ bzw. $y=0$).
+**Nicht nachziehen:** „der Zeit-Regler \(t\) …", „diese Bildunterschrift läuft
+mit", die Farbnennung „rote Kurve", die mitlaufenden Werte.
+*Nebenbefund:* die v0.13-Unterschriften sagen „losgelassen", obwohl mit \(v_0\)
+geworfen wird → `QUELLEN_FEHLER.md` (1.1, Nr. 5), beim Nachziehen mitkorrigieren.
 
-  ```latex
-  % y nach oben, Nullpunkt im Abwurfpunkt (fig:senkrechter_wurf_aufstieg)
-  \[ y(t) = -\tfrac{1}{2}\,g\,t^2 + v_0\,t \]
-  % y nach unten, Nullpunkt am Erdboden   (fig:senkrechter_wurf_umkehr)
-  \[ y(t) = +\tfrac{1}{2}\,g\,t^2 + v_0\,t - h_0 \]
-  % y nach unten, Nullpunkt im Abwurfpunkt (fig:senkrechter_wurf_abstieg)
-  \[ y(t) = +\tfrac{1}{2}\,g\,t^2 + v_0\,t \]
-  ```
+**(b) Die drei umgerechneten Gleichungen.** Zu den drei verschobenen Abbildungen
+jeweils die Gleichung ihres Systems, **unnummeriert** einsetzen:
 
-  \(v_0\) ist dabei **in der Achse der jeweiligen Abbildung** gezählt (bei nach
-  unten zeigender Achse ist der Wurf nach oben also \(v_0<0\)); nur so bleibt der
-  \(v_0\)-Term in allen vier Varianten `+v_0 t` und es kippen ausschließlich der
-  \(g\)- und der \(h_0\)-Term. Diese Zählweise gehört in den Fließtext, wenn die
-  Gleichungen aufgenommen werden.
-- **Achtung, Kostenpunkt:** als **nummerierte** `equation` verschieben die drei
-  jede folgende Gleichungsnummer in Abschnitt 1.1 (bis zu 99) — und damit auch
-  die Nummern im interaktiven Skript, das seine Zählung aus derselben
-  Reihenfolge ableitet. Unnummeriert (`\[…\]`) kostet die Aufnahme nichts.
+```latex
+% y nach oben, Nullpunkt im Abwurfpunkt  (fig:senkrechter_wurf_aufstieg)
+\[ y(t) = -\tfrac{1}{2}\,g\,t^2 + v_0\,t \]
+% y nach unten, Nullpunkt am Erdboden    (fig:senkrechter_wurf_umkehr)
+\[ y(t) = +\tfrac{1}{2}\,g\,t^2 + v_0\,t - h_0 \]
+% y nach unten, Nullpunkt im Abwurfpunkt (fig:senkrechter_wurf_abstieg)
+\[ y(t) = +\tfrac{1}{2}\,g\,t^2 + v_0\,t \]
+```
 
-#### P21-A5 · Abschnittsnummern 3.0 / 3.1 / 3.2 (TK 3)
+\(v_0\) ist **in der Achse der jeweiligen Abbildung** gezählt (bei nach unten
+zeigender Achse ist der Wurf nach oben also \(v_0<0\)); nur so bleibt der
+\(v_0\)-Term überall `+v_0 t` und es kippen ausschließlich der \(g\)- und der
+\(h_0\)-Term. Diese Zählweise gehört in den Fließtext, wenn die Gleichungen
+aufgenommen werden.
+**Kostenpunkt:** als **nummerierte** `equation` verschieben die drei jede
+folgende Gleichungsnummer in Abschnitt 1.1 (bis zu 99) — und damit auch die
+Nummern im interaktiven Skript, das seine Zählung aus derselben Reihenfolge
+ableitet. Unnummeriert (`\[…\]`) kostet die Aufnahme nichts.
 
-- **Status:** offen · *2026-07 entstanden, 2026-08-28 nachgetragen* · HTML:
+**Zur Entscheidung stehen** (a) und (b) je einzeln, und ob die Antwort als
+**Grundsatzregel** für alle künftigen interaktiven Figuren gilt — dann entfällt
+die Frage pro Figur, und neue Einträge werden gleich mit der richtigen
+Voreinstellung angelegt.
+
+#### P21-A4 · Abschnittsnummern 3.0 / 3.1 / 3.2 (TK 3)
+
+*(vormals A5; A3 und A4 wurden zusammengefasst.)*
+
+- **Status:** **entschieden 2026-08-28: nachziehen** — hier ist es kein Zusatz,
+  sondern ein Quellfehler; die Korrektur im Master bringt beide Fassungen ohne
+  weiteres Zutun zur Deckung. Umsetzung offen → P21-2. ·
+  *2026-07 entstanden, 2026-08-28 nachgetragen* · HTML:
   `ch_04_00_einleitung.html`, `ch_04_01_schwingungen.html`
 - **Abweichung:** v0.13 nummeriert die Einleitung fälschlich als „3.1" und
   „Schwingungen" ebenfalls als „3.1" (Dublette). Das WIP führt die offensichtlich
@@ -190,10 +213,12 @@ des Fragments.
 
 ### Sub-Tasks
 
-- [ ] **P21-1 Entscheidung je Abweichung** — für A1–A5 festlegen: nachziehen
-  oder dauerhaft bewusst abweichen (mit Begründung). Bei A3/A4 lohnt eine
-  **Grundsatzentscheidung** statt einer Einzelfallprüfung, weil dieselbe Frage
-  bei jeder weiteren interaktiven Figur wiederkommt. *(S)*
+- [x] **P21-1 Entscheidung je Abweichung** *(S)* — **erledigt 2026-08-28**:
+  A1–A4 alle „nachziehen"; A3 (didaktischer Zusatz: Unterschriften **und**
+  Gleichungen) zusätzlich als **Grundsatzregel** für alle künftigen interaktiven
+  Figuren festgelegt und in `chapters/CLAUDE.md` verankert. Damit ist die Frage
+  nicht mehr pro Figur zu stellen; neue Einträge entstehen mit dieser
+  Voreinstellung.
 - [ ] **P21-2 Angleichung im LaTeX-Repo** — die entschiedenen Punkte in
   `Project_Script` umsetzen (die Einträge oben sind so geschrieben, dass sie
   direkt abgearbeitet werden können), `Input/v0.13` per `git pull` aktualisieren,

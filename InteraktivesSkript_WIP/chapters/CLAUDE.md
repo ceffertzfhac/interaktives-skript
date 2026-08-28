@@ -79,6 +79,20 @@ interaktiven Figuren gehören nicht ins Druckskript; ein erklärender Satz (z. B
 zum Koordinatensystem) sehr wohl. Der Eintrag sagt beides: was übernommen wird
 und was bewusst nicht.
 
+**Grundsatzregel „didaktischer Zusatz"** (Nutzerentscheidung 2026-08-28, gilt
+für ALLE künftigen interaktiven Figuren — deshalb ist die Frage nicht mehr pro
+Figur zu stellen): Was eine interaktive Figur an Erklärung mitbringt, **wird ins
+Druckskript nachgezogen**, und zwar
+- der **erklärende Teil der Bildunterschrift** (z. B. „in welchem
+  Koordinatensystem sind wir, wo liegen Bezugspunkte darin") — die interaktiven
+  Teile nicht (s. Sonderregel oben);
+- **zusätzliche Gleichungen unnummeriert** (`\[…\]`, nicht `equation`). Eine
+  nummerierte Gleichung würde jede folgende Nummer des Abschnitts verschieben —
+  und damit auch die des interaktiven Skripts, das seine Zählung aus derselben
+  Reihenfolge ableitet.
+Der P21-Eintrag wird entsprechend gleich mit Status „entschieden: nachziehen"
+angelegt; nur eine bewusste Ausnahme braucht noch eine Rückfrage.
+
 **Fehler der Vorlage selbst** (Tippfehler, Sachfehler, falsche Nummern in v0.13)
 gehören **nicht** hierher, sondern in `../QUELLEN_FEHLER.md`; dort ist auch
 geregelt, dass eine Korrektur nur gemeinsam in Quelle *und* WIP erfolgt. Beide
