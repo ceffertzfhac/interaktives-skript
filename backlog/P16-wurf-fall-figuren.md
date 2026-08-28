@@ -95,11 +95,13 @@ gemeinsam:
 | 1.19 | `…zeit_diagramm_senkr_wurf` | P16-5 | A | nein |
 | 1.20 | `…zeit_diagramm_schraeger_wurf` | P16-9 | B | nein |
 
-**Stand 2026-08-28: P16-1 (Motor A) und P16-3 (Abb. 1.3) sind erledigt.
-Naechster Schritt ist P16-4 (Abb. 1.4–1.7, senkrechter Wurf, vier Achsen-
-Konfigurationen)** — derselbe Motor, vier separate Figuren; als Vorlage dient
-`aspekt_freier_fall.js` (dort `v0` freischalten und je Figur eine andere
-`yAxisConfig` setzen).
+**Stand 2026-08-28: P16-1 (Motor A), P16-3 (Abb. 1.3) und P16-4 (Abb. 1.4–1.7)
+sind erledigt — die ersten fuenf Abbildungen des Kapitels laufen.** Naechster
+Schritt in der Abbildungsreihenfolge ist **Abb. 1.8** (P17-3, Federpendel-Motor
+steht bereits), danach **Abb. 1.9** und damit P16-2 (Motor B portieren).
+P16-5 (Abb. 1.19, v-t) ist dagegen billig geworden: derselbe Motor, dieselbe
+Fabrik — dort waere nur der Diagrammtyp 'geschw' statt 'weg' zu setzen und der
+v-Pfeil einzuschalten.
 
 **Beim Bau von P16-3 aufgefallen (2026-08-28) — betrifft Kapitel 1.1 als
 Ganzes:** die Kurvenfarbe firebrick (#b22222), die Abb. 1.2 aus ihrer
@@ -173,8 +175,29 @@ mitbetrifft.
   SKALIERTEN Schrift bemessen. Rest unauffaellig: Bildunterschrift traegt
   „Abb. 1.3", Physik-Formel aus `data-eqs` gesetzt, Live-Analyse plausibel
   (t = 1,00 s -> y = 5,09 m), Farbwort „rote" in Kurvenfarbe.
-- [ ] **P16-4 Aspekt-Figuren Abb. 1.4–1.7** — senkrechter Wurf s-t, 4 Y-Achsen-
-  Konfigs (Motor A); **4 separate Figuren** (1:1, je eigene Achs-Konfig). *(M–L)*
+- [x] **P16-4 Aspekt-Figuren Abb. 1.4–1.7** *(M–L)* — **erledigt 2026-08-28**:
+  vier Platzhalter `aspekt-senkrechter-wurf-1…4` in `ch_01_01_kinematik.html`,
+  je eigene Motor-Instanz (ff1_…ff4_) und eigene Abbildungsnummer; statische
+  Abbildungen auf `.nur-druck`. Startwerte aus v0.13: h₀ = 20 m, v₀ = 10 m/s
+  nach oben, beide als Regler (v₀ von −10 bis 10 m/s: nach oben, nach unten,
+  freier Fall). v1.37.0.
+  **Architektur-Entscheidung:** die vier Figuren teilen sich mit Abb. 1.3 EINE
+  Fabrik (`aspekt_freier_fall.js`); was sie unterscheidet (Achsenwahl, v₀, h₀),
+  steht als `data-achse`/`data-v0`/`data-h0` am Platzhalter. Fünf Module wären
+  fünfmal derselbe Code gewesen — die 1:1-Granularität bleibt trotzdem gewahrt
+  (eigene Figur, eigene Instanz, eigene Nummer, KEIN Umschalter innerhalb einer
+  Figur). `ASPEKT_FACTORIES` bildet `freier-fall` und `senkrechter-wurf` auf
+  dieselbe Fabrik ab; das Stylesheet ist auf `data-motor="freier_fall"` gescopt
+  statt auf den Aspekt-Namen. Als Regel in `src/figures/CLAUDE.md` festgehalten.
+  Port-Aenderung am Motor (mitgeliefert): `store.posChar` — v0.13 nennt die
+  Achse in ALLEN vier Varianten `y`, die Stand-alone-Sim schriebe bei Nullpunkt
+  im Abwurfpunkt `s`. Betrifft Achsen-Miniatur, Diagramm-Achse, Diagrammtitel.
+  Geprueft: `figur_smoke.mjs`, `node --check`, `dom_harness.mjs`
+  (Abbildungsnummern unveraendert), Headless-Chromium ohne Konsolenfehler —
+  fuenf unabhaengige Instanzen auf einer Seite, Flugzeit 3,28 s und Scheitelhoehe
+  25,10 m in allen vier Varianten gleich, Ortswert bei t = 1 s korrekt je
+  Koordinatensystem (+25,09 / +5,09 / −25,09 / −5,09 m), Bildunterschriften
+  tragen Abb. 1.4–1.7. Stufe 5 (Sicht) steht aus.
 - [ ] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
 - [ ] **P16-6 Aspekt-Figur Abb. 1.9** — schräger Wurf: Flugbahn + 2× s-t x/y
   (Motor B). *(M)*
