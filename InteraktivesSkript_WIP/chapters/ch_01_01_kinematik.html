@@ -19,7 +19,14 @@
      umgewandelt. Bewusste Abweichungen von v0.13: \bbspe (Plural "Beispiele")
      -> einzelne beispiel-Box (1.1.1, 1.1.3); Doppel-Label formel_freierfall4
      (Quell-Bug) -> formel_freierfall_fallzeit disambiguiert; Quell-Artefakt
-     "code/Code" in der Zusammenfassung uebersprungen. -->
+     "code/Code" in der Zusammenfassung uebersprungen.
+     Abweichung 2026-08-28 (Nutzervorgabe, BACKLOG P21): in der Beispielbox
+     "Freier Fall und senkrechter Wurf" stehen Abb. 1.5-1.7 jetzt am ENDE der
+     Box statt unmittelbar hinter Abb. 1.4, und nach Abb. 1.4 steht ein
+     ueberleitender Absatz dazu, dass Aussehen UND Formel vom Koordinatensystem
+     abhaengen. Abbildungsnummern bleiben unveraendert (relative Reihenfolge
+     erhalten, keine andere Abbildung dazwischen). Das Druckskript ist
+     entsprechend nachzuziehen -> P21. -->
 
 
 <section>
@@ -272,6 +279,21 @@
             <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt auf dem Erdboden.</figcaption>
         </figure>
 
+        <!-- ZUSATZ gegenueber v0.13 (Nutzervorgabe 2026-08-28): ueberleitender
+             Absatz + die drei uebrigen Koordinatensysteme ans Ende der Box.
+             In v0.13 stehen Abb. 1.4-1.7 unmittelbar hintereinander; hier
+             traegt Abb. 1.4 den Gedanken zuerst allein, und 1.5-1.7 folgen
+             gesammelt am Schluss als Gegenueberstellung. Das statische Skript
+             ist entsprechend nachzuziehen (BACKLOG P21). -->
+        <p>Sowohl das <strong>Aussehen</strong> des Weg-Zeit-Diagramms als auch die <strong>Formel</strong>, mit der wir die Bewegung beschreiben, hängen von der Wahl des Koordinatensystems ab. Eine Parabel bleibt die Kurve dabei immer — aber ob sie nach oben oder nach unten geöffnet ist, wo ihr Scheitelpunkt liegt und wo sie die Zeitachse schneidet, entscheidet erst die Wahl von Achsenrichtung und Nullpunkt. Am Ende dieses Beispiels ist dieselbe Bewegung mit denselben Zahlenwerten deshalb noch einmal in den drei übrigen Koordinatensystemen dargestellt, siehe <a class="xref" data-ref-fig="fig-senkrechter_wurf_2"></a> bis <a class="xref" data-ref-fig="fig-senkrechter_wurf_4"></a>.</p>
+
+        <p>Das Ort-Zeit-Diagramm wird wieder die Form einer Parabel annehmen, siehe <a class="xref" data-ref-fig="fig-senkrechter_wurf_1"></a> bis <a class="xref" data-ref-fig="fig-senkrechter_wurf_4"></a>, allerdings liegt das Maximum (oder Minimum, bei einer anderen Wahl der Richtung der Achse) nun nicht mehr bei \(t=0\), sondern ist zu einem anderen Zeitpunkt zu finden. Das ist logisch, denn das Objekt wird sich durch die Anfangsgeschwindigkeit (die wir zunächst mal als in unserem Koordinatensystem positiv annehmen, d.h. das Objekt wird nach oben geworfen) zunächst nach oben bewegen, dann das Maximum seiner Flugkurve erreichen und dann <strong>nach unten</strong> fallen. Mit Formel <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> können wir also verschiedene Dinge über die Bewegung des Objektes erfahren, z.&nbsp;B. wann das Objekt seinen höchsten Punkt erreicht (hierzu müssen Sie das Maximum bestimmen), wann das Objekt auf dem Boden aufkommt (hierzu müssen Sie die Nullstelle bei \(t>0\) finden), und so weiter.</p>
+
+        <p>Einige Erkenntnisse können wir sogar gewinnen, indem wir nicht rechnen, sondern uns nur die Form der Gleichung ansehen. Da die Gleichung <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> mathematisch gesehen eine Parabel ist, können wir z.&nbsp;B. auf Basis unseres Wissens über Parabeln aus der Mathematik direkt folgern, dass die Zeit, die vergeht vom Start der Bewegung (Abwurf) bis zum höchsten Punkt der Flugkurve immer genau so lange ist, wie die Zeit vom höchsten Punkt der Flugkurve bis zu dem Punkt, an dem das Objekt wieder auf seiner Anfangshöhe angekommen ist.</p>
+
+        <!-- Dieselbe Bewegung in den drei uebrigen Koordinatensystemen
+             (verschoben ans Ende der Box, s. Kommentar oben). -->
+
         <div class="aspekt-figur nur-bildschirm" id="aspekt-senkrechter-wurf-2" data-aspekt="senkrechter-wurf" data-motor="freier_fall" data-achse="up_start" data-h0="20" data-v0="10" data-title="Senkrechter Wurf: Weg-Zeit-Diagramm, die Achse zeigt nach oben und hat ihren Nullpunkt auf der H&ouml;he des Abwurfpunktes (interaktiv)" data-figref="fig-senkrechter_wurf_2" data-caption="<strong>Koordinatensystem:</strong> die \(y\)-Achse steht senkrecht auf dem Erdboden und zeigt nach oben, ihr Nullpunkt liegt im Abwurfpunkt &mdash; die kleine Achsenskizze in der Szene zeigt beides. Weg-Zeit-Diagramm des senkrechten Wurfs: das Objekt startet <span class=&quot;ff-wert&quot; data-wert=&quot;h0&quot;>20,0 m</span> &uuml;ber dem Erdboden (Regler \(h_0\)), in diesem Koordinatensystem also bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;ystart&quot;>0</span>; der Erdboden liegt bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;yboden&quot;>&minus;20,0 m</span>. Abgeworfen wird mit der Anfangsgeschwindigkeit \(v_0 =\) <span class=&quot;ff-wert&quot; data-wert=&quot;v0&quot;>10 m/s</span> &mdash; in diesem Koordinatensystem hei&szlig;t das: <span class=&quot;ff-wert&quot; data-wert=&quot;richtung&quot;>nach oben geworfen</span>. Interaktiv: der Zeit-Regler \(t\) oder die Wiedergabe l&auml;sst das Objekt fliegen; die <span class=&quot;ff-sw-fall&quot;>rote</span> Kurve \(y(t)\) entsteht dabei Punkt f&uuml;r Punkt aus der Bewegung. Die Regler \(h_0\) und \(v_0\) &auml;ndern Abwurfh&ouml;he und Anfangsgeschwindigkeit &mdash; diese Bildunterschrift l&auml;uft mit. Dieselbe Bewegung sieht in den vier Koordinatensystemen von <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_1&quot;></a> bis <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_4&quot;></a> unterschiedlich aus."></div>
 
         <figure class="abbildung nur-druck" id="fig-senkrechter_wurf_2">
@@ -292,10 +314,6 @@
             <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_4.png" alt="">
             <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach unten und hat ihren Nullpunkt auf der Höhe des Abwurfpunktes.</figcaption>
         </figure>
-
-        <p>Das Ort-Zeit-Diagramm wird wieder die Form einer Parabel annehmen, siehe <a class="xref" data-ref-fig="fig-senkrechter_wurf_1"></a> bis <a class="xref" data-ref-fig="fig-senkrechter_wurf_4"></a>, allerdings liegt das Maximum (oder Minimum, bei einer anderen Wahl der Richtung der Achse) nun nicht mehr bei \(t=0\), sondern ist zu einem anderen Zeitpunkt zu finden. Das ist logisch, denn das Objekt wird sich durch die Anfangsgeschwindigkeit (die wir zunächst mal als in unserem Koordinatensystem positiv annehmen, d.h. das Objekt wird nach oben geworfen) zunächst nach oben bewegen, dann das Maximum seiner Flugkurve erreichen und dann <strong>nach unten</strong> fallen. Mit Formel <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> können wir also verschiedene Dinge über die Bewegung des Objektes erfahren, z.&nbsp;B. wann das Objekt seinen höchsten Punkt erreicht (hierzu müssen Sie das Maximum bestimmen), wann das Objekt auf dem Boden aufkommt (hierzu müssen Sie die Nullstelle bei \(t>0\) finden), und so weiter.</p>
-
-        <p>Einige Erkenntnisse können wir sogar gewinnen, indem wir nicht rechnen, sondern uns nur die Form der Gleichung ansehen. Da die Gleichung <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> mathematisch gesehen eine Parabel ist, können wir z.&nbsp;B. auf Basis unseres Wissens über Parabeln aus der Mathematik direkt folgern, dass die Zeit, die vergeht vom Start der Bewegung (Abwurf) bis zum höchsten Punkt der Flugkurve immer genau so lange ist, wie die Zeit vom höchsten Punkt der Flugkurve bis zu dem Punkt, an dem das Objekt wieder auf seiner Anfangshöhe angekommen ist.</p>
     </div>
 
     <div class="beispiel" id="bsp-feder-masse-pendel" data-title="Feder-Masse-Pendel">
