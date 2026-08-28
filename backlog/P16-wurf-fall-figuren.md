@@ -163,7 +163,16 @@ mitbetrifft.
   Fallzeit 1,43 s bei 10 m bzw. 2,26 s bei 25 m, Kugel landet exakt auf dem
   Boden, Kurve waechst auf 173 Stuetzstellen und springt bei `h0`-Wechsel auf
   0 zurueck, Layout in schmal/normal/breit + Lupe ohne Ueberlauf, Dunkelmodus
-  dreht Haus/Lineal/Gitter korrekt. Stufe 5 (Sicht) steht aus.
+  dreht Haus/Lineal/Gitter korrekt.
+  **Stufe 5 (Sicht) erledigt** (Nutzerfreigabe 2026-08-28, Screenshots in
+  schmal/normal/breit + Lupe + Dunkelmodus): dabei EIN Fehler gefunden und
+  behoben (v1.36.1) — der Diagrammtitel war in jedem Modus oben angeschnitten,
+  weil der obere Rand des Diagramm-SVG an den Rohwerten der Sim bemessen war,
+  die Beschriftungen aber ueber `--kb-fs` 1,5-fach skalieren. Lehre fuer die
+  Folgefiguren desselben Motors: bei eigenem Diagramm-SVG die Raender an der
+  SKALIERTEN Schrift bemessen. Rest unauffaellig: Bildunterschrift traegt
+  „Abb. 1.3", Physik-Formel aus `data-eqs` gesetzt, Live-Analyse plausibel
+  (t = 1,00 s -> y = 5,09 m), Farbwort „rote" in Kurvenfarbe.
 - [ ] **P16-4 Aspekt-Figuren Abb. 1.4–1.7** — senkrechter Wurf s-t, 4 Y-Achsen-
   Konfigs (Motor A); **4 separate Figuren** (1:1, je eigene Achs-Konfig). *(M–L)*
 - [ ] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
