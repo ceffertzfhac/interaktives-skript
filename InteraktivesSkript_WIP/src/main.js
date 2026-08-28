@@ -55,12 +55,17 @@ import { buildBusWegZeitFig } from './figures/aspekt_bus_weg_zeit.js';
 // Pendant: 3.1.5 hat in v0.13 keine Abbildung, der Platzhalter traegt daher
 // kein data-figref und bleibt unnummeriert (s. aspekt_federpendel.js).
 import { buildFederpendelFig } from './figures/aspekt_federpendel.js';
+// Abb. 1.3 (1.1.7 „Die Strecke") — freier Fall, Weg-Zeit-Diagramm. Erste Figur
+// des SECHSTEN Motors (src/figures/freier_fall/): vertikale Fallszene + t-
+// Diagramm mit waehlbarer Achsenkonvention; hier auf den freien Fall (v0=0) und
+// die v0.13-Achsenwahl von Abb. 1.3 (y nach oben, Null am Boden) gegatet.
+import { buildFreierFallFig } from './figures/aspekt_freier_fall.js';
 
 // Aspekt-Figuren: jede .aspekt-figur wird ueber data-aspekt einer Factory
 // zugeordnet, die ihre EIGENE Motor-Instanz (Prefix + storeInstance) baut
 // (s. kreisbewegung/runtime.js) -> beliebig viele Figuren, auch auf derselben
 // Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
-const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig, 'federpendel': buildFederpendelFig };
+const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig, 'federpendel': buildFederpendelFig, 'freier-fall': buildFreierFallFig };
 
 // Stand-alone-Simulationen je Aspekt-Figur (P7-Rest, Nutzervorgabe 2026-07-30).
 // Die Sims leben unter SIM_BASE (die Index-Datei dort listet alle 16); eine
@@ -89,6 +94,8 @@ const ASPEKT_SIM_URLS = {
     'grundbegriffe': SIM_BASE + 'sim_grundbegriffe_kinematik/index.html',
     // federpendel-Motor -> „Federpendel"
     'federpendel': SIM_BASE + 'sim_federpendel/index.html',
+    // freier_fall-Motor -> „Freier Fall / Senkrechter Wurf"
+    'freier-fall': SIM_BASE + 'sim_freier_fall/index.html',
     // bus_weg_zeit: figur-only, keine Stand-alone-Sim -> kein Eintrag
 };
 
