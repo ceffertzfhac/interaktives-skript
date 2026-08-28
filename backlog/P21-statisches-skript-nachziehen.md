@@ -161,9 +161,31 @@ ableitet. Unnummeriert (`\[…\]`) kostet die Aufnahme nichts.
 die Frage pro Figur, und neue Einträge werden gleich mit der richtigen
 Voreinstellung angelegt.
 
-#### P21-A4 · Abschnittsnummern 3.0 / 3.1 / 3.2 (TK 3)
+#### P21-A5 · Bildunterschrift Abb. 1.8 (Feder-Masse-Pendel)
 
-*(vormals A5; A3 und A4 wurden zusammengefasst.)*
+- **Status:** **entschieden 2026-08-28: nachziehen** (Grundsatzregel aus A3) ·
+  *2026-08-28* · HTML: `chapters/ch_01_01_kinematik.html`, Beispielbox
+  „Feder-Masse-Pendel"
+- **Abweichung:** die Unterschrift der **interaktiven** Abb. 1.8 beginnt — wie
+  die übrigen Kapitel-1.1-Figuren — mit dem Koordinatensystem und nennt die
+  Werte als mitlaufende Größen. Die gedruckte Unterschrift ist unverändert v0.13.
+- **Zu tun:** in `pskript_mech_kinematik_gmni_v4.tex` der Unterschrift von
+  `fig:feder_masse_pendel_kinematik` voranstellen:
+
+  ```latex
+  \textbf{Koordinatensystem:} die $y$-Achse zeigt entlang der Bewegungsrichtung
+  der Masse nach oben, ihr Nullpunkt liegt in der Ruhelage -- die Masse schwingt
+  also zwischen $y=+y_0$ und $y=-y_0$ hin und her.
+  ```
+
+  **Nicht nachziehen:** Regler-/Wiedergabe-Hinweise, „diese Bildunterschrift
+  läuft mit", „Letzte Kurve behalten" und die mitlaufenden Zahlenwerte.
+- **Kein Eintrag nötig für die Formelkarte der Figur:** sie zeigt Formel
+  \ref{formel_feder_masse_pendel} des Fließtextes, also nichts Zusätzliches.
+
+#### P21-A6 · Abschnittsnummern 3.0 / 3.1 / 3.2 (TK 3)
+
+*(vormals A5, dann A4; A3 und A4 wurden zusammengefasst, danach kam A5 dazu.)*
 
 - **Status:** **entschieden 2026-08-28: nachziehen** — hier ist es kein Zusatz,
   sondern ein Quellfehler; die Korrektur im Master bringt beide Fassungen ohne

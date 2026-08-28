@@ -41,15 +41,35 @@ pixel-identisch.**
   Aspekt-Figur per `createRuntime()`, kein neuer Motor. Vorlagen-Hierarchie:
   `aspekt_weg_zeit` (gestapelte x/y) + `aspekt_kreisbahn` (Bahn) kombinieren.
   *(M — nur Figur)*
-- [ ] **P17-3 Aspekt-Figur Abb. 1.8 — Feder-Masse-Pendel** (Unterabschnitt 1.1.7
-  „Die Strecke", Beispiel Feder-Masse-Pendel). Statisches
-  `fig-feder_masse_pendel_kinematik` interaktiv nachbauen: harmonische s(t) =
-  y₀·cos(2πt/T), Slider Amplitude y₀ + Periodendauer T; nicht-parabolische
-  Bewegung als Kontrast zu den Wurf-/Fall-Parabeln (P16). **Motor:
-  `federpendel` ist seit P12-E6 (2026-08-27) bereits portiert** unter
-  `src/figures/federpendel/` — kein neuer Motor mehr noetig, nur die Aspekt-Figur
-  per `createRuntime()`. Erste Verwenderin ist die Figur in Abschnitt 3.1.5;
-  hier kaeme die zweite Instanz dazu. *(M — nur Figur; war (L — Motor + Figur))*
+- [x] **P17-3 Aspekt-Figur Abb. 1.8 — Feder-Masse-Pendel** — **erledigt
+  2026-08-28 (v1.38.0)**: `data-aspekt="federpendel-kinematik"` auf DERSELBEN
+  Fabrik wie die Figur zu 3.1.5 (`aspekt_federpendel.js` ist damit ein
+  Familien-Modul, s. Regel in `src/figures/CLAUDE.md`); Unterschiede als
+  data-Attribute am Platzhalter: `data-aufbau="vertikal"`, `data-regler="T"`,
+  `data-y0`, `data-periode`.
+  **Kern der Aspekt-Reduktion:** in 1.1.7 gibt es weder Masse noch
+  Federkonstante — das Skript gibt dort y(t)=y₀·cos(2πt/T). Die Figur dreht die
+  Rechnung des Motors deshalb um: T ist der Regler, m bleibt fest (1 kg) und
+  k = m(2π/T)² folgt daraus. Die m/k-abhaengige Optik (Massengroesse,
+  Federstaerke) laeuft in dieser Variante bewusst NICHT mit, und die Hilfslinie
+  „Feder entspannt" ist ausgeblendet (sie zeigt die statische Dehnung durch die
+  Gewichtskraft — Dynamik, nicht Kinematik). T-Bereich 0,8-2,5 s: ein vertikales
+  Federpendel haengt mit wachsender Periodendauer zwangslaeufig weiter durch
+  (δL = g(T/2π)²), oberhalb skaliert der Motor die Szene sichtbar kleiner.
+  Geprueft: Smoke, `node --check`, `dom_harness` (88 Abbildungen unveraendert),
+  Headless-Chromium ohne Konsolenfehler — T-Regler und Live-Analyse stimmen
+  ueberein (1,70 s), Formelkarte zeigt die Fliesstext-Formel, Szene und Diagramm
+  stehen als zwei Hochformate buendig nebeneinander.
+  **Regression beim Umbau gefunden und behoben:** das Stylesheet ist jetzt auf
+  `data-motor="federpendel"` gescopt (beide Figuren sehen gleich aus); der
+  3.1.5-Platzhalter brauchte dieses Attribut nachgetragen, sonst verlor die
+  bestehende Figur ihr komplettes Styling. Nachgemessen: 3.1.5 steht wieder
+  gestapelt mit ihren alten Maßen.
+  *Urspruengliche Aufgabenbeschreibung (2026-07-30): harmonische
+  s(t) = y₀·cos(2πt/T), Slider Amplitude y₀ + Periodendauer T; nicht-parabolische
+  Bewegung als Kontrast zu den Wurf-/Fall-Parabeln (P16). Motor `federpendel`
+  seit P12-E6 portiert — nur die Aspekt-Figur, kein neuer Motor.* *(M)*
+
 - [ ] **P17-4 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag, `node --check`, Smoke, Nummerierung (keine Regression), CVD-Palette
   (P-AF-2), Stufe 5 (Sicht) nur nach Freigabe „JA" [[feedback-screenshot-freigabe]]. *(M)*

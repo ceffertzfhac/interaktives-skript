@@ -25,10 +25,10 @@ die Links hier zeigen auf den Pfad.
 | Item | Sub-Tasks | Worum es geht |
 |---|---|---|
 | [P12 — Komplett-Integration aller noch fehlenden v0.13-Inhalte](backlog/P12-restliche-v013-inhalte.md) | 21/17 | Prosa vollständig (114/114 Unterabschnitte); offen: interaktive Figuren je Abschnitt, Quasi-Content, Asset-Pipeline, Verifikation |
-| [P21 — Druckskript und interaktives Skript synchron halten](backlog/P21-statisches-skript-nachziehen.md) | 0/4 offen | **Pflichtregister:** jede inhaltliche Abweichung des WIP von v0.13 bekommt hier einen abhakbaren Eintrag (Regel in der Wurzel-`CLAUDE.md`) |
+| [P21 — Druckskript und interaktives Skript synchron halten](backlog/P21-statisches-skript-nachziehen.md) | 0/6 offen | **Pflichtregister:** jede inhaltliche Abweichung des WIP von v0.13 bekommt hier einen abhakbaren Eintrag (Regel in der Wurzel-`CLAUDE.md`) |
 | [P13 — Text- & Formel-Marker für Studierende](backlog/P13-marker-und-notizbuch.md) | 0/16 | 4 Farben, persistent; plus begleitendes Notizbuch (P13-N) |
 | [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 4/7 | Motor A + Abb. 1.3–1.7 stehen; offen: Motor B + 5 Aspekt-Figuren, als Nächstes Abb. 1.9 |
-| [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 0/4 | Abb. 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten, 1.8 Federpendel |
+| [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 1/3 | Abb. 1.8 steht; offen: 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten |
 | [P15 — Weiße Hintergründe aus Nicht-Foto-Abbildungen entfernen](backlog/P15-weisse-hintergruende.md) | 0/7 | Darkmode-Verträglichkeit der statischen Bilder |
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |
