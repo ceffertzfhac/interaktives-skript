@@ -79,6 +79,11 @@
     --gk-dba:  #D55E00;
     --gk-dab:  #009E73;
     --gk-weg:  #0072B2;
+    /* Kapitel-1.1-Bewegungsfarbe (Abb. 1.2 + 1.3-1.7, s. aspekt_kreisbahn.css):
+       Zinnoberrot der Okabe-Ito-Reihe — unter Deuteranopie die
+       rot-naechste noch klar erkennbare Farbe; dieselbe, die Abb. 1.1 fuer
+       ihren "roten" Vektor nutzt (--gk-dba). */
+    --k11-kurve: #D55E00;
 }
 
 /* ── Deuteranopia (Rot-Grün) — Dunkel ───────────────────────────────────── */
@@ -112,6 +117,10 @@
     --gk-dba:  #D55E00;
     --gk-dab:  #009E73;
     --gk-weg:  #56B4E9;
+    /* Kapitel-1.1-Bewegungsfarbe (Abb. 1.2 + 1.3-1.7, s. aspekt_kreisbahn.css):
+       wie hell — der Wert traegt auf dem dunklen Diagrammgrund
+       4,6:1 und bleibt damit ueber der 3:1-Schwelle fuer Grafik. */
+    --k11-kurve: #D55E00;
 }
 
 /* ── Tritanopia (Blau-Gelb) — Hell ──────────────────────────────────────── */
@@ -149,6 +158,10 @@
     --gk-dba:  #c0392b;
     --gk-dab:  #5fb88a;
     --gk-weg:  #0e6b52;
+    /* Kapitel-1.1-Bewegungsfarbe (Abb. 1.2 + 1.3-1.7, s. aspekt_kreisbahn.css):
+       unter Tritanopie ist die Rot/Gruen-Achse intakt, das Rot
+       bleibt also rot; derselbe Wert wie --gk-dba dieser Palette. */
+    --k11-kurve: #c0392b;
 }
 
 /* ── Tritanopia (Blau-Gelb) — Dunkel ────────────────────────────────────── */
@@ -183,4 +196,8 @@
     --gk-dba:  #e05a4a;
     --gk-dab:  #7fd4b0;
     --gk-weg:  #2f9c78;
+    /* Kapitel-1.1-Bewegungsfarbe (Abb. 1.2 + 1.3-1.7, s. aspekt_kreisbahn.css):
+       aufgehellte Variante fuer den dunklen Grund, wie --gk-dba
+       dieser Palette. */
+    --k11-kurve: #e05a4a;
 }

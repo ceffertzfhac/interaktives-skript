@@ -30,15 +30,18 @@
    Eigene Tokenfamilie --ff-* (wie --bw-* / --gk-* in 1.1), NICHT die
    --kb-*-Vektorpalette von Kapitel 1.4.
 
-   KEIN Dunkel-Zweig in darkmode.css noetig: die neutralen Flaechen (Haus,
-   Lineal) sind ueber color-mix aus --kb-text/--kb-surface abgeleitet und drehen
-   mit dem Darkmode-Override dieser Tokens automatisch mit; firebrick bleibt wie
-   in Abb. 1.2 in beiden Modi stehen. KEINE CVD-Overrides — ein einziger
-   Farbvektor, alles andere neutral. */
+   Die Bewegungsfarbe selbst ist NICHT figur-eigen: sie kommt aus dem
+   gemeinsamen Kapitel-1.1-Token --k11-kurve (definiert in aspekt_kreisbahn.css)
+   und variiert ueber Hell/Dunkel und die beiden CVD-Paletten. So zeigen Abb.
+   1.2 und Abb. 1.3-1.7 in jedem Modus garantiert dieselbe Farbe.
+   Die neutralen Flaechen (Haus, Lineal) sind ueber color-mix aus
+   --kb-text/--kb-surface abgeleitet und drehen mit dem Darkmode-Override dieser
+   Tokens automatisch mit — dafuer braucht es hier keinen eigenen Zweig. */
 
 /* ── Farb-Palette (eigene --ff-*-Tokenfamilie, Kapitel 1.1) ────────────────── */
 .aspekt-figur[data-motor="freier_fall"] {
-    --ff-fall: #b22222;      /* firebrick — Kugel UND Kurve y(t) (s. o.) */
+    --ff-fall: var(--k11-kurve);  /* Kugel UND Kurve y(t) — die gemeinsame
+                                     Kapitel-1.1-Bewegungsfarbe (s. o.) */
     --ff-vel: #2060d0;       /* v-Pfeil  — aus, s. aspekt_freier_fall.js; die
                                 Tokens stehen fuer Abb. 1.19 (v-t) bereit */
     --ff-acc: #c03030;       /* a-Pfeil  — aus, s. o. */

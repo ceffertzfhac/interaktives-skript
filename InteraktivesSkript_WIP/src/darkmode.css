@@ -241,6 +241,14 @@ input[type="range"]::-moz-range-track {
     --kb-traj: #9aa3b8;   /* Vorlage --c-traj */
     --kb-graph-bg: #161925;  /* Vorlage --graph-bg (dunkles Navy) */
     --kb-grid-line: #262c42; /* Vorlage --grid-line */
+    /* Kapitel-1.1-Bewegungsfarbe (bewegtes Objekt + seine Weg-Zeit-Kurve in
+       Abb. 1.2 und 1.3-1.7, s. aspekt_kreisbahn.css). Das Hell-Firebrick
+       #b22222 erreichte auf dem dunklen Diagrammgrund #161925 nur rund 1,6:1 —
+       fuer eine gezeichnete Linie zu wenig (3:1 waeren noetig). Aufgehellt auf
+       das Rot, das dieser Darkmode ohnehin fuehrt (--kb-acc), damit die Figuren
+       des Kapitels nicht ein eigenes Rot einfuehren: 6,9:1 auf dem Diagrammgrund
+       und immer noch dieselbe Farbfamilie wie im Hellmodus. */
+    --k11-kurve: #ff7777;
 }
 /* Farb-Palette der Federpendel-Figur (Abschnitt 3.1.5, --fp-*, s.
    aspekt_federpendel.css): eigene Tokenfamilie, daher eigener Dunkel-Zweig.

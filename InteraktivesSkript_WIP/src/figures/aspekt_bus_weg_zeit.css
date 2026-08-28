@@ -13,13 +13,21 @@
    (Wiedererkennungswert; Linie 42). Haltestellen-/Ereignislinien sind neutral.
    Eigene Tokens Praefix --bw-* (Kapitel 1.1, wie --gk-* bei Abb. 1.1).
 
-   KEINE CVD-Overrides (wie aspekt_grundbegriffe.css: Kapitel-1.1-eigene Tokens,
-   Standard-Palette folgt der statischen Abbildung; firebrick ist der einzige
-   Farbvektor, Haltestellen-/Ereignis-/Ableselinien neutral -> CVD unkritisch). */
+   PALETTEN (seit 2026-08-28): die Kurvenfarbe kommt aus dem gemeinsamen Token
+   --k11-kurve und variiert ueber Hell/Dunkel und die beiden CVD-Paletten
+   (s. aspekt_kreisbahn.css / darkmode.css / aspekt_paletten.css). Vorher stand
+   hier ein fester firebrick-Wert, der im Darkmode auf dem dunklen Diagrammgrund
+   nur rund 1,6:1 Kontrast erreichte. Alles uebrige der Figur ist neutral, es
+   gibt also keine zweite Farbe, von der sich die Kurve abheben muesste — die
+   Paletten regeln hier reine Sichtbarkeit, nicht Unterscheidbarkeit. */
 
 /* ── Farb-Palette Kapitel 1.1 (eigene --bw-*-Tokenfamilie) ─────────────────── */
 .aspekt-figur[data-aspekt="bus_weg_zeit"] {
-    --bw-kurve: #b22222;        /* firebrick — Ort x(t), Linie 42, Bus, Ableselinien */
+    --bw-kurve: var(--k11-kurve);  /* Ort x(t), Linie 42, Bus, Ableselinien — die
+                                      gemeinsame Kapitel-1.1-Bewegungsfarbe
+                                      (definiert in aspekt_kreisbahn.css, dort
+                                      auch Dunkel- und CVD-Varianten). Hell:
+                                      firebrick #b22222 aus dem Notebook. */
     --bw-halt: #8c8c8c;         /* Halt-Segmente (nur bei Halt/Fahrt-Toggle) */
     --bw-haltestelle: #555555;  /* Haltestellen-Pfosten/Schild/Linien */
     --bw-ereignis: #9a9a9a;     /* Ereignislinien (Ankunft/Abfahrt, gepunktet) */
