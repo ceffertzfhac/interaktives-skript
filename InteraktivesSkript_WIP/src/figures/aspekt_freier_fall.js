@@ -172,6 +172,14 @@ const BEWEGUNGSGLEICHUNG = {
     down_start:  'y(t) = +\\tfrac{1}{2}\\,g\\,t^2 + v_0\\,t',
 };
 
+// Freier Fall (v0 = 0 fest): derselbe Satz ohne den v0-Term — das ist genau die
+// Formel des Fliesstextes an dieser Stelle.
+const BEWEGUNGSGLEICHUNG_FALL = 'y(t) = -\\tfrac{1}{2}\\,g\\,t^2 + h_0';
+
+// Quell-Gleichung des Fliesstextes je Figurentyp (fuer den Querverweis in der
+// Fussnote der Formelkarte).
+const QUELLFORMEL = { fall: 'formel_freierfall4', wurf: 'formel_senkrechterwurf1' };
+
 // Konfiguration einer Figur aus ihrem Platzhalter lesen (s. Kopfkommentar).
 function leseKonfig(fig) {
     const achse = ACHSEN_TEXT[fig.dataset.achse] ? fig.dataset.achse : 'up_ground';
@@ -303,7 +311,7 @@ ${cfg.v0Regler ? `    <div class="slider-label">Anfangsgeschw. \\(v_0\\)</div>
       <input id="ff_v0_slider" type="range" min="${V0_MIN}" max="${V0_MAX}" step="${V0_STEP}" value="${cfg.v0}">
       <span class="slider-val" id="ff_v0_value"></span>
     </div>
-    <div class="ff-hinweis">In diesem Koordinatensystem: \\(v_0>0\\) heißt <em>${cfg.direction === 'down' ? 'nach unten' : 'nach oben'}</em>, \\(v_0<0\\) heißt <em>${cfg.direction === 'down' ? 'nach oben' : 'nach unten'}</em>, \\(v_0=0\\) ist der freie Fall.</div>` : ''}
+    <div class="ff-hinweis">In diesem Koordinatensystem: \\(v_0>0\\) heißt <em>${cfg.direction === 'down' ? 'nach unten' : 'nach oben'}</em>, \\(v_0&lt;0\\) heißt <em>${cfg.direction === 'down' ? 'nach oben' : 'nach unten'}</em>, \\(v_0=0\\) ist der freie Fall.</div>` : ''}
   </div>
   <div class="panel-section">
     <div class="panel-label">Ablauf</div>
@@ -349,10 +357,15 @@ const RUNBAR = `
 
 // ── Rechtes Analyse-Panel ───────────────────────────────────────────────────
 // Die Wertzellen tragen die MOTOR-IDs (live_*) — updateScene()/updateKennwerte()
-// fuellen sie direkt, kein eigener Label-Code. KEINE statische .formula-box:
-// die Physik-Sektion kommt dynamisch aus dem Kapiteltext (data-eqs ->
-// main.js::fill_physik_panels). Beides zugleich ginge nicht — ein statischer
-// Block gewinnt und data-eqs bliebe wirkungslos.
+// fuellen sie direkt, kein eigener Label-Code.
+// Die Physik-Sektion ist eine STATISCHE Formelkarte, in allen fuenf Figuren
+// gleich gebaut: der Fliesstext gibt nur je eine Gleichung fuer den freien Fall
+// und fuer den Wurf an (beide y nach oben, Null am Boden) — die drei anderen
+// Koordinatensysteme muss die Figur selbst liefern, und dann sollen alle fuenf
+// gleich aussehen und gleich erklaert sein. Der Querverweis in der Fussnote
+// haelt die Verbindung zur Quelle. (data-eqs -> main.js::fill_physik_panels
+// waere die Alternative, kann aber nur eine Gleichung aus dem Text zeigen; ein
+// statischer Block gewinnt ohnehin gegen data-eqs, beides zugleich geht nicht.)
 // Die Scheitelhoehe steht bewusst „ueber dem Boden" da: updateKennwerte()
 // liefert sie als physikalische Hoehe, NICHT in der Achsenkonvention der Figur
 // (in 1.6/1.7 waere der Anzeigewert negativ bzw. verschoben). So ist die Zeile
@@ -374,16 +387,19 @@ ${cfg.wurf ? `        <div class="analysis-cell key">Scheitelhöhe über Boden</
             : `        <div class="analysis-cell key">Fallzeit \\(t_{\\mathrm{fall}}\\)</div>         <div class="analysis-cell val" id="ff_live_tfall"></div>`}
       </div>
     </div>
-${cfg.wurf ? `    <div class="panel-section">
+    <div class="panel-section">
       <div class="panel-label">Physik</div>
       <div class="formula-box">
         <div class="formula-box-cap">Bewegungsgleichung in diesem Koordinatensystem</div>
-        <div>\\[${BEWEGUNGSGLEICHUNG[cfg.achse]}\\]</div>
+        <div>\\[${cfg.wurf ? BEWEGUNGSGLEICHUNG[cfg.achse] : BEWEGUNGSGLEICHUNG_FALL}\\]</div>
         <div class="ff-formel-note">${cfg.achse === 'up_ground'
-            ? 'Das ist Formel <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> des Fließtextes.'
-            : 'Formel <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> des Fließtextes, umgerechnet auf dieses Koordinatensystem.'} \\(h_0\\) ist die Abwurfhöhe über dem Erdboden, \\(v_0\\) zählt in der Achse dieser Abbildung — beides so wie die Regler links.</div>
+            ? `Das ist Formel <a class="xref" data-ref-eq="${cfg.wurf ? QUELLFORMEL.wurf : QUELLFORMEL.fall}"></a> des Fließtextes.`
+            : `Formel <a class="xref" data-ref-eq="${QUELLFORMEL.wurf}"></a> des Fließtextes, umgerechnet auf dieses Koordinatensystem.`} Sie gilt vom Abwurf bis zum Aufschlag, also für \\(0 \\le t \\le t_{\\mathrm{fall}}\\).</div>
+        <div class="ff-formel-note">${cfg.origin === 'start'
+            ? `\\(h_0\\) steht nicht in der Gleichung — der Nullpunkt der Achse liegt ja im Abwurfpunkt. Der Regler \\(h_0\\) bestimmt hier nur, wie hoch der Abwurfpunkt über dem Erdboden liegt und damit, wann der Boden erreicht ist.`
+            : `\\(h_0\\) ist die Abwurfhöhe über dem Erdboden; weil der Nullpunkt der Achse ebenfalls auf dem Erdboden liegt, ist \\(h_0\\) hier zugleich die Startkoordinate.`}${cfg.wurf ? ` \\(v_0\\) zählt in der Achse dieser Abbildung, also so wie der Regler links.` : ''}</div>
       </div>
-    </div>` : ''}
+    </div>
   </div>
 </div>`;
 
@@ -470,17 +486,31 @@ export function buildFreierFallFig(fig) {
     const wertSpans = [...(scene.querySelectorAll('.aspekt-caption [data-wert]'))];
     function updateCaptionWerte() {          // inside withStore aufrufen
         if (!wertSpans.length) return;
+        // Echtes Minuszeichen (U+2212) statt Bindestrich — die Werte stehen im
+        // Fliesstext der Unterschrift, nicht in einer Tabelle.
+        const zahl = (v, dez) => fmt(v, dez).replace('-', '\u2212');
+        // Lage von Abwurfpunkt und Erdboden IN DER ACHSE DIESER FIGUR
+        // (Nutzervorgabe 2026-08-28: „bei 1.7 … aus einer Hoehe von 20 m ueber
+        // dem Erdboden, in diesem Koordinatensystem bedeutet das y = 0"). Ohne
+        // diese Uebersetzung liest sich „Hoehe h0 = 20 m" so, als stuende der
+        // Abwurfpunkt in JEDEM System bei 20 — er steht aber nur dann dort,
+        // wenn der Nullpunkt auf dem Erdboden liegt.
+        const vorz = store.yAxisConfig.direction === 'up' ? 1 : -1;
         const werte = {
             // schmales geschuetztes Leerzeichen zwischen Zahl und Einheit:
             // die Unterschrift bricht um, Zahl und Einheit duerfen dabei nicht
             // auseinandergerissen werden.
-            h0: `${fmt(store.h0, 1)}\u00a0m`,
+            h0: `${zahl(store.h0, 1)}\u00a0m`,
             // v0 in der Achse der Figur (Regler), Richtung aus dem
             // physikalischen Vorzeichen — s. Kopfkommentar.
-            v0: `${fmt(v0Achse(store.v0), 0)}\u00a0m/s`,
+            v0: `${zahl(v0Achse(store.v0), 0)}\u00a0m/s`,
             richtung: store.v0 > 0 ? 'nach oben geworfen'
                     : store.v0 < 0 ? 'nach unten geworfen'
                     : 'ohne Anfangsgeschwindigkeit losgelassen, also im freien Fall',
+            ystart: cfg.origin === 'start' ? '0'
+                    : `${vorz > 0 ? '+' : '\u2212'}${zahl(store.h0, 1)}\u00a0m`,
+            yboden: cfg.origin === 'ground' ? '0'
+                    : `${vorz > 0 ? '\u2212' : '+'}${zahl(store.h0, 1)}\u00a0m`,
         };
         wertSpans.forEach(el => {
             const v = werte[el.dataset.wert];
