@@ -95,9 +95,22 @@ gemeinsam:
 | 1.19 | `…zeit_diagramm_senkr_wurf` | P16-5 | A | nein |
 | 1.20 | `…zeit_diagramm_schraeger_wurf` | P16-9 | B | nein |
 
-**Naechster Schritt ist damit P16-1 (Motor A portieren), dann P16-3 (Abb. 1.3).**
-Motor A allein schaltet 1.3 **und** 1.4–1.7 frei, deckt in dieser Reihenfolge
-also die ersten fuenf Abbildungen am Stueck ab.
+**Stand 2026-08-28: P16-1 (Motor A) und P16-3 (Abb. 1.3) sind erledigt.
+Naechster Schritt ist P16-4 (Abb. 1.4–1.7, senkrechter Wurf, vier Achsen-
+Konfigurationen)** — derselbe Motor, vier separate Figuren; als Vorlage dient
+`aspekt_freier_fall.js` (dort `v0` freischalten und je Figur eine andere
+`yAxisConfig` setzen).
+
+**Beim Bau von P16-3 aufgefallen (2026-08-28) — betrifft Kapitel 1.1 als
+Ganzes:** die Kurvenfarbe firebrick (#b22222), die Abb. 1.2 aus ihrer
+matplotlib-Quelle mitbringt und die Abb. 1.3 fuer Kugel + Kurve uebernimmt,
+erreicht auf dem dunklen Diagramm-Grund des Darkmodes (--kb-graph-bg #161925)
+nur rund **1,6:1** Kontrast (fuer grafische Elemente waeren 3:1 noetig). Beide
+Figuren haben bewusst KEINEN Dunkel-Zweig fuer diesen Token. Zu entscheiden:
+Kapitel 1.1 bekommt fuer den Darkmode eine aufgehellte Kurvenfarbe (dann fuer
+**beide** Figuren zugleich, sonst reisst die Kapitel-Konsistenz), oder es bleibt
+wie es ist. Nicht im Alleingang geaendert, weil es die bestehende Abb. 1.2
+mitbetrifft.
 
 **Beim Aufstellen der Reihenfolge aufgefallen (2026-08-28):**
 - **Abb. 1.18 ist EINE `<figure>` mit ZWEI `<img>`** (`…_schraeger_wurf.png` +
@@ -131,9 +144,26 @@ also die ersten fuenf Abbildungen am Stueck ab.
 - [ ] **P16-2 Motor B portieren** — `src/figures/schraeger_wurf/{constants,physics,render,state,runtime}.js`,
   Precompute-then-interpolate, reuse `../kreisbewegung/lib/*` inkl. vectors,
   `initSchraegerWurf()` aus `main.js::init()`. *(L)*
-- [ ] **P16-3 Aspekt-Figur Abb. 1.3** — Freier Fall s-t (Motor A). Copy &
-  feature-gate nächstes Weg-Zeit-Template; `data-aspekt` + `data-figref`,
-  Registrierung `main.js::ASPEKT_FACTORIES`. *(M)*
+- [x] **P16-3 Aspekt-Figur Abb. 1.3** *(M)* — **erledigt 2026-08-28**:
+  `src/figures/aspekt_freier_fall.{js,css}`, `data-aspekt="freier-fall"`,
+  `data-figref="fig-freierfall_1"`, `data-eqs="formel_freierfall4"`; statische
+  Abbildung auf `.nur-druck`; Registrierung in `main.js::ASPEKT_FACTORIES` +
+  `ASPEKT_SIM_URLS` (`sim_freier_fall`), CSS-`<link>` in `index.html`, v1.36.0.
+  Vorlage: `aspekt_bus_weg_zeit.js` (Abb. 1.2 — dieselbe Zeitcursor-Bedienung,
+  unmittelbarer Nachbar im Abschnitt) plus Gate-Muster aus `aspekt_federpendel.js`.
+  Gating: `v0=0` fest (freier Fall), `yAxisConfig` up/ground fest, EIN Diagramm
+  ('weg'), v-/a-Pfeil aus, einziger Parameter-Regler `h0`.
+  Port-Aenderung am Motor noetig (mitgeliefert): `render.js` referenziert die
+  Pfeilspitzen-Marker jetzt ueber `url(#<idPrefix>…)` statt ueber die festen
+  Dokument-IDs `#arrowhead`/`#arrow-y` der Stand-alone-Sim — sonst zeigen die
+  Achsenpfeile jeder zweiten Figur ins Leere.
+  Geprueft: `figur_smoke.mjs` (alle Schritte fehlerfrei), `node --check` auf
+  allen geaenderten Modulen, `dom_harness.mjs` (Abbildungsnummern unveraendert:
+  88 Abbildungen, gleiche Luecken), Headless-Chromium ohne Konsolenfehler —
+  Fallzeit 1,43 s bei 10 m bzw. 2,26 s bei 25 m, Kugel landet exakt auf dem
+  Boden, Kurve waechst auf 173 Stuetzstellen und springt bei `h0`-Wechsel auf
+  0 zurueck, Layout in schmal/normal/breit + Lupe ohne Ueberlauf, Dunkelmodus
+  dreht Haus/Lineal/Gitter korrekt. Stufe 5 (Sicht) steht aus.
 - [ ] **P16-4 Aspekt-Figuren Abb. 1.4–1.7** — senkrechter Wurf s-t, 4 Y-Achsen-
   Konfigs (Motor A); **4 separate Figuren** (1:1, je eigene Achs-Konfig). *(M–L)*
 - [ ] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
