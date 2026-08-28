@@ -1,8 +1,25 @@
-// aspekt_federpendel.js — interaktive Aspekt-Figur zu Abschnitt 3.1.5
-// („Horizontales Feder-Masse-System"). Zeigt links das horizontale Feder-Masse-
-// System (Anker, Feder, Masse, Ruhelage, Umkehrpunkte, Auslenkungsvektor) und
-// darunter das Auslenkungs-Zeit-Diagramm x(t) — die harmonische Schwingung
-// x(t) = x₀·cos(ω t) mit ω = √(k/m).
+// aspekt_federpendel.js — interaktive Aspekt-Figuren des federpendel-Motors.
+// EINE Fabrik fuer zwei sehr verschiedene Skriptstellen (Regel „eine Fabrik darf
+// mehrere Abbildungen tragen", s. figures/CLAUDE.md); was sie unterscheidet,
+// steht als data-Attribut am Platzhalter im Kapitel:
+//
+//   Abschnitt 3.1.5 „Horizontales Feder-Masse-System" (ohne Attribute)
+//     horizontaler Aufbau, Regler m / k / x₀ — die DYNAMIK-Sicht: die
+//     Schwingungsdauer ENTSTEHT aus Masse und Federkonstante (ω = √(k/m)).
+//   Abb. 1.8 in 1.1.7 „Die Strecke"  (data-aufbau="vertikal" data-regler="T")
+//     vertikaler Aufbau, Regler y₀ / T — die KINEMATIK-Sicht: das Skript gibt
+//     dort y(t) = y₀·cos(2π t/T) und kennt weder Masse noch Federkonstante
+//     (die kommen erst in Kapitel 3). Genau deshalb duerfen dort keine m/k-
+//     Regler stehen: T ist der Parameter, nicht sein Ergebnis.
+//
+//   data-aufbau="vertikal"   -> store.oscillationMode='vertical'
+//   data-regler="T"          -> T-Regler statt m/k; intern m = 1 kg fest und
+//                               k = m·(2π/T)², damit der Motor rechnen kann
+//   data-y0="<m>" / data-periode="<s>"  -> Startwerte
+//
+// Links das Feder-Masse-System (Anker, Feder, Masse, Ruhelage, Umkehrpunkte,
+// Auslenkungsvektor), daneben bzw. darunter das Auslenkungs-Zeit-Diagramm — die
+// harmonische Schwingung.
 //
 // KEINE ABBILDUNGSNUMMER (bewusst): Abschnitt 3.1.5 hat in v0.13 keine
 // Abbildung, und es wird auch keine erfunden. Der Platzhalter im Kapitel traegt
@@ -73,6 +90,36 @@ import { ge } from '../core.js';
 const T_AUTO = 8;
 const M_DEFAULT = 2.0, K_DEFAULT = 40, POS0_DEFAULT = 0.8;
 const M_STEP = 0.1, K_STEP = 1, POS0_STEP = 0.05;
+
+// ── Kinematik-Variante (Abb. 1.8): Regler sind Amplitude und Periodendauer ───
+// Der Motor rechnet ueber m und k; T ist bei ihm ein Ergebnis. Fuer die
+// Kinematik-Sicht wird das umgedreht: die Masse steht fest, die
+// Federkonstante folgt aus der eingestellten Periodendauer.
+//   T = 2π√(m/k)  ->  k = m·(2π/T)²
+// Der so gerechnete k-Wert verlaesst die Reglergrenzen der Stand-alone-Sim
+// (K_MIN/K_MAX) — das ist unschaedlich, weil er hier nicht aus einem Regler
+// kommt und die m/k-abhaengige Optik in dieser Variante bewusst nicht mitlaeuft
+// (s. applyMassAndSpringLook).
+// T-Bereich: 0,8…2,5 s. Nach oben begrenzt, weil ein vertikales Federpendel mit
+// der Periodendauer zwangslaeufig auch weiter durchhaengt (δL = m·g/k = g(T/2π)²
+// — das ist Physik, kein Darstellungsfehler): bei T = 2,5 s sind das schon
+// 1,55 m, und der Motor skaliert die Szene dann sichtbar kleiner, damit alles
+// ins Bild passt. Bis 2,5 s bleibt dieser Effekt unauffaellig.
+const T_MIN = 0.8, T_MAX = 2.5, T_STEP_SLIDER = 0.05, T_DEFAULT_KIN = 1.7;
+const M_FIX_KIN = 1.0;                       // kg — fest, s. o.
+const Y0_DEFAULT_KIN = 1.0;                  // m — Vorgabe der statischen Abb. 1.8
+
+// Konfiguration einer Figur aus ihrem Platzhalter lesen (s. Kopfkommentar).
+function leseKonfig(fig) {
+    const reglerT = fig.dataset.regler === 'T';
+    return {
+        modus: fig.dataset.aufbau === 'vertikal' ? 'vertical' : 'horizontal',
+        reglerT,
+        kinematik: reglerT,                  // Lesbarkeit an den Verwendungsstellen
+        y0: parseFloat(fig.dataset.y0 || (reglerT ? Y0_DEFAULT_KIN : POS0_DEFAULT)),
+        T: parseFloat(fig.dataset.periode || T_DEFAULT_KIN),
+    };
+}
 
 // Strichstaerken-Skalierung der Szene: dieselbe wie --kb-lw in
 // aspekt_kreisbahn.css. Die Federstaerke haengt (wie in der Stand-alone-Sim)
@@ -171,16 +218,22 @@ const SVG_GRAPH = `
 //    Motor-ID kb_pos0_label: setupScene() schreibt sie selbst
 //    („Anfangsauslenkung x₀:" bzw. „…y₀:" je Aufbau) — eine Quelle, kein
 //    doppelt gepflegter Text.
-const PANEL_LEFT = `
+const panelLeft = (cfg) => `
 <div class="aspekt-panel aspekt-panel-left">
   <div class="panel-section">
     <div class="panel-label">Parameter</div>
     <div class="slider-label" id="kb_pos0_label"></div>
     <div class="slider-row">
-      <input id="kb_pos0_slider" type="range" min="${POS0_MIN}" max="${POS0_MAX}" step="${POS0_STEP}" value="${POS0_DEFAULT}">
+      <input id="kb_pos0_slider" type="range" min="${cfg.kinematik ? 0.1 : POS0_MIN}" max="${POS0_MAX}" step="${POS0_STEP}" value="${cfg.y0}">
       <span class="slider-val" id="kb_pos0_value"></span>
     </div>
-    <div class="slider-label">Masse \\(m\\)</div>
+${cfg.reglerT ? `    <div class="slider-label">Periodendauer \\(T\\)</div>
+    <div class="slider-row">
+      <input id="kb_T_slider" type="range" min="${T_MIN}" max="${T_MAX}" step="${T_STEP_SLIDER}" value="${cfg.T}">
+      <span class="slider-val" id="kb_T_value"></span>
+    </div>
+    <div class="fp-hinweis">\\(T\\) ist die Zeit für eine vollständige Hin- und Herbewegung. Warum die Masse überhaupt schwingt und wovon \\(T\\) abhängt, kommt später — hier ist \\(T\\) einfach eine Eigenschaft der Bewegung.</div>`
+: `    <div class="slider-label">Masse \\(m\\)</div>
     <div class="slider-row">
       <input id="kb_mass_slider" type="range" min="${MASS_MIN}" max="${MASS_MAX}" step="${M_STEP}" value="${M_DEFAULT}">
       <span class="slider-val" id="kb_mass_value"></span>
@@ -189,7 +242,7 @@ const PANEL_LEFT = `
     <div class="slider-row">
       <input id="kb_k_slider" type="range" min="${K_MIN}" max="${K_MAX}" step="${K_STEP}" value="${K_DEFAULT}">
       <span class="slider-val" id="kb_k_value"></span>
-    </div>
+    </div>`}
   </div>
   <div class="panel-section">
     <div class="panel-label">Tempo</div>
@@ -203,9 +256,9 @@ const PANEL_LEFT = `
   <div class="panel-section">
     <div class="panel-label">Legende</div>
     <div class="legend-grid">
-      <div class="legend-swatch" data-c="fp-mass"></div>  <div class="legend-label">Masse \\(m\\)</div>
-      <div class="legend-swatch" data-c="fp-spring"></div><div class="legend-label">Feder \\(k\\)</div>
-      <div class="legend-swatch" data-c="fp-x"></div>     <div class="legend-label">Auslenkung \\(x\\)</div>
+      <div class="legend-swatch" data-c="fp-mass"></div>  <div class="legend-label">Masse</div>
+      <div class="legend-swatch" data-c="fp-spring"></div><div class="legend-label">Feder</div>
+      <div class="legend-swatch" data-c="fp-x"></div>     <div class="legend-label">Auslenkung \\(${cfg.modus === 'vertical' ? 'y' : 'x'}\\)</div>
       <div class="legend-swatch" data-c="fp-ref"></div>   <div class="legend-label">Ruhelage, Umkehrpunkte</div>
     </div>
   </div>
@@ -235,7 +288,7 @@ const RUNBAR = `
 //    KEINE .formula-box: die Physik-Sektion kommt dynamisch aus dem Kapiteltext
 //    (data-eqs -> main.js::fill_physik_panels). Beides zugleich ginge nicht —
 //    ein statischer Block gewinnt und data-eqs bliebe wirkungslos.
-const PANEL_RIGHT = `
+const panelRight = (cfg) => `
 <div class="aspekt-panel aspekt-panel-right">
   <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" data-tip="Analyse ein-/ausklappen">
     <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
@@ -246,22 +299,31 @@ const PANEL_RIGHT = `
       <div class="panel-label">Live-Analyse</div>
       <div class="analysis-grid">
         <div class="analysis-cell key">Zeit \\(t\\)</div>              <div class="analysis-cell val" id="kb_live_t"></div>
-        <div class="analysis-cell key">Auslenkung \\(x\\)</div>        <div class="analysis-cell val" id="kb_live_x"></div>
+        <div class="analysis-cell key">Auslenkung \\(${cfg.modus === 'vertical' ? 'y' : 'x'}\\)</div>        <div class="analysis-cell val" id="kb_live_x"></div>
         <div class="analysis-cell key">Periodendauer \\(T\\)</div>     <div class="analysis-cell val" id="kb_live_T"></div>
-        <div class="analysis-cell key">Kreisfrequenz \\(\\omega\\)</div><div class="analysis-cell val" id="kb_live_omega"></div>
-        <div class="analysis-cell key">Frequenz \\(f\\)</div>          <div class="analysis-cell val" id="kb_live_f"></div>
+${cfg.kinematik ? '' : `        <div class="analysis-cell key">Kreisfrequenz \\(\\omega\\)</div><div class="analysis-cell val" id="kb_live_omega"></div>
+        <div class="analysis-cell key">Frequenz \\(f\\)</div>          <div class="analysis-cell val" id="kb_live_f"></div>`}
       </div>
     </div>
+${cfg.kinematik ? `    <div class="panel-section">
+      <div class="panel-label">Physik</div>
+      <div class="formula-box">
+        <div class="formula-box-cap">Weg-Zeit-Gesetz der Schwingung</div>
+        <div>\\[ y(t) = y_0 \\cdot \\cos\\!\\left(\\frac{2\\pi}{T}\\,t\\right) \\]</div>
+        <div class="fp-formel-note">Das ist Formel <a class="xref" data-ref-eq="formel_feder_masse_pendel"></a> des Fließtextes. \\(y_0\\) ist die Auslenkung, mit der die Masse losgelassen wird, \\(T\\) die Dauer einer vollständigen Hin- und Herbewegung — beides die Regler links. Anders als beim Fall und beim Wurf ist diese Kurve <em>keine</em> Parabel: die Bewegung wiederholt sich.</div>
+      </div>
+    </div>` : ''}
   </div>
 </div>`;
 
 // -- Versteckte Stubs: Groessen ausserhalb des Aspekts (v, a, Energien) und die
 //    Vektor-Checkboxen, ueber die dieser Motor die Sichtbarkeit gatet (er kennt
 //    keine show*-Flags). Ortsvektor an, v/a aus — s. Kopfkommentar.
-const HIDDEN_STUB = `
+const hiddenStub = (cfg) => `
 <div style="display:none">
   <span id="kb_live_v"></span><span id="kb_live_a"></span>
   <span id="kb_live_ekin"></span><span id="kb_live_epot"></span><span id="kb_live_etot"></span>
+  ${cfg.kinematik ? '<span id="kb_live_omega"></span><span id="kb_live_f"></span>' : ''}
   <input type="checkbox" id="kb_toggle_position_vector" checked>
   <input type="checkbox" id="kb_toggle_velocity_vector">
   <input type="checkbox" id="kb_toggle_acceleration_vector">
@@ -276,6 +338,7 @@ export function buildFederpendelFig(fig) {
     if (fig.dataset.built) return;
     fig.dataset.built = '1';
 
+    const cfg = leseKonfig(fig);
     const rt = createRuntime();
     const p = rt.prefix;
 
@@ -288,12 +351,12 @@ export function buildFederpendelFig(fig) {
     // wird zu name="fp<n>_speed", sonst greifen zwei Figuren auf derselben
     // Seite in dieselbe Radio-Gruppe (bekannter Fallstrick).
     scene.innerHTML = (
-      `<div class="aspekt-body">${PANEL_LEFT}` +
+      `<div class="aspekt-body">${panelLeft(cfg)}` +
       `<div class="aspekt-main">${RUNBAR}` +
       `<div class="aspekt-main-content" id="kb_center_area">` +
       `<div class="aspekt-scene">${SVG_SCENE}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH}</div></div></div>` +
-      `${PANEL_RIGHT}</div>${HIDDEN_STUB}`
+      `${panelRight(cfg)}</div>${hiddenStub(cfg)}`
     ).replace(/kb_/g, p);
     rt.bindDom();
 
@@ -319,8 +382,22 @@ export function buildFederpendelFig(fig) {
         body.appendChild(cap);
     }
 
+    // -- Mitlaufende Werte in der Bildunterschrift (Kapitel-1.1-Konvention, s.
+    //    aspekt_freier_fall.js): Zahl und Einheit als Text im Span, das Symbol
+    //    bleibt statisches LaTeX — MathJax setzt die Unterschrift nur einmal.
+    const wertSpans = [...(scene.querySelectorAll('.aspekt-caption [data-wert]'))];
+    function updateCaptionWerte() {          // inside withStore aufrufen
+        if (!wertSpans.length) return;
+        const werte = { y0: `${fmt(store.amplitude, 2)}\u00a0m`, T: `${fmt(store.T, 2)}\u00a0s` };
+        wertSpans.forEach(el => {
+            const v = werte[el.dataset.wert];
+            if (v !== undefined) el.textContent = v;
+        });
+    }
+
     // Per-Instanz-Regler + Zustand (Closure, nicht Modul-Ebene).
     const sl_pos0 = ge(p + 'pos0_slider'), sl_m = ge(p + 'mass_slider'), sl_k = ge(p + 'k_slider');
+    const sl_T = ge(p + 'T_slider');          // nur in der Kinematik-Variante
     const kb_keep = ge(p + 'keep');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let sceneCenters = null;
@@ -399,6 +476,11 @@ export function buildFederpendelFig(fig) {
     //    Beides ist unmittelbar aspekt-relevant: die Regler m und k werden so
     //    auch in der Szene sichtbar, nicht nur ueber die Schwingungsdauer.
     function applyMassAndSpringLook() {
+        // Kinematik-Variante: Masse und Federkonstante kommen dort nicht vor
+        // (s. Kopfkommentar). Die Optik bleibt konstant — eine Feder, die beim
+        // Ziehen am Periodendauer-Regler sichtbar steifer wird, wuerde einen
+        // Mechanismus behaupten, den der Abschnitt gar nicht behandelt.
+        if (cfg.kinematik) return;
         const tm = (store.m - MASS_MIN) / (MASS_MAX - MASS_MIN);
         store.currentMassRenderSize = MIN_MASS_SIZE + tm * (INITIAL_MASS_SIZE - MIN_MASS_SIZE);
         const massEl = ge(p + 'mass');
@@ -422,8 +504,9 @@ export function buildFederpendelFig(fig) {
     // -- Reglerwerte (deutsches Dezimalkomma via fmt aus dem Motor). -----------
     function updateSliderLabels() {
         ge(p + 'pos0_value').textContent = fmt(store.amplitude, 2) + ' m';
-        ge(p + 'mass_value').textContent = fmt(store.m, 1) + ' kg';
-        ge(p + 'k_value').textContent = fmt(store.k, 0) + ' N/m';
+        if (sl_m) ge(p + 'mass_value').textContent = fmt(store.m, 1) + ' kg';
+        if (sl_k) ge(p + 'k_value').textContent = fmt(store.k, 0) + ' N/m';
+        if (sl_T) ge(p + 'T_value').textContent = fmt(store.T, 2) + ' s';
     }
 
     // -- Rebuild: Parameter aus den Reglern -> Datenreihe neu, Szene neu
@@ -436,7 +519,7 @@ export function buildFederpendelFig(fig) {
         rt.withStore(() => {
             if (paramChange) { stop(); curT = 0; }
             Object.assign(store, {
-                oscillationMode: 'horizontal',   // 'vertical' waere der Hebel fuer 3.1.6
+                oscillationMode: cfg.modus,      // 'vertical' traegt Abb. 1.8 und spaeter 3.1.6
                 graphType: 'pos_t',
                 isDigitalDisplay: false,
                 isManualTiming: false,
@@ -444,8 +527,15 @@ export function buildFederpendelFig(fig) {
                 timingOffset: 0,
             });
             store.amplitude = parseFloat(sl_pos0.value);
-            store.m = parseFloat(sl_m.value);
-            store.k = parseFloat(sl_k.value);
+            if (cfg.reglerT) {
+                // Kinematik-Sicht: T ist der Regler, m/k sind nur Rechengroessen
+                // des Motors (s. Kopfkommentar).
+                store.m = M_FIX_KIN;
+                store.k = M_FIX_KIN * Math.pow((2 * Math.PI) / parseFloat(sl_T.value), 2);
+            } else {
+                store.m = parseFloat(sl_m.value);
+                store.k = parseFloat(sl_k.value);
+            }
             recomputeDerived();
             precomputeRange(T_AUTO);
             if (curT > T_AUTO) curT = T_AUTO;
@@ -454,6 +544,7 @@ export function buildFederpendelFig(fig) {
             updateKennwerte();
             draw(curT);
             updateSliderLabels();
+            updateCaptionWerte();
         });
     }
 
@@ -471,7 +562,8 @@ export function buildFederpendelFig(fig) {
         }
         rebuild(true);
     }
-    [sl_pos0, sl_m, sl_k].forEach(inp => {
+    [sl_pos0, sl_m, sl_k, sl_T].forEach(inp => {
+        if (!inp) return;                     // je Variante existiert nur ein Teil
         inp.addEventListener('input', onInput);
         inp.addEventListener('change', () => { paramGesture = false; });
     });
