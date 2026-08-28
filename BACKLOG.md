@@ -32,6 +32,7 @@ die Links hier zeigen auf den Pfad.
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |
 | [P3 — Offene Punkte aus der Verifikation Kapitel 1.4](backlog/P3-verifikation-kapitel-1.4.md) | 16/1 | offen nur noch die Browser-Phasen (Wort-für-Wort gegen PDF, Druck, Sicht) |
+| [P5 — Bekannte Fehler (Interaktivität / Shell)](backlog/P5-bekannte-fehler.md) | 1/1 | offen: Formeln im Fliesstext fehlen sporadisch (Boxen bleiben da) — MathJax-Ladewettlauf, Messbefehl hinterlegt |
 | [P19 — Doku-Hygiene: Restbefunde aus dem Review nach P18](backlog/P19-doku-hygiene.md) | 5/7 | P19-1..4 erledigt (`gcN` als abgelöst markiert, eine Quelle je Tatsache, Verifikations-O(n)-Muster aufgelöst, Drift-Wächter `doku_drift_check.py`); offen nur noch P19-5 Beobachtungsposten (`src/CLAUDE.md`-Größe, `CHANGES`-Rolle — triggert bei >20 KB) |
 
 ### Erledigt
@@ -42,7 +43,6 @@ die Links hier zeigen auf den Pfad.
 | [P1 — Struktur & Token-Effizienz](backlog/P1-struktur-token-effizienz.md) | 9/0 | Modularisierung, Figuren-Fabrik, Globals einfrieden |
 | [P2 — Aktualität, Responsivität, A11y](backlog/P2-aktualitaet-responsiv-a11y.md) | 8/0 | Tablet-Breakpoint, echte Buttons, `lang`, Safari-Workaround |
 | [P4 — Abschnitt 1.5 fertig migrieren](backlog/P4-abschnitt-1.5-migrieren.md) | 13/0 | v0.13 „Dynamik der Drehbewegung und Rotation starrer Körper" |
-| [P5 — Bekannte Fehler (Interaktivität / Shell)](backlog/P5-bekannte-fehler.md) | 1/0 | Schiene zeigte beim ersten Laden nur den Box-Typ |
 | [P7 — Kapitel 0 („Grundlagen") migrieren](backlog/P7-kapitel-0-grundlagen.md) | 10/0 | Migration + QR-Druck + Druck-Auswahl-Dropdown + Sim-Link zur Stand-alone-Sim je Aspekt-Figur |
 | [P8 — Inhaltsverzeichnis: 3-stufige Hierarchie](backlog/P8-inhaltsverzeichnis-hierarchie.md) | 6/0 | Themenkomplex → Kapitel → Abschnitt |
 | [P9 — Schiene gefenstert](backlog/P9-schiene-gefenstert.md) | 3/0 | Vorgänger + aktives Kapitel + Nachfolger |
