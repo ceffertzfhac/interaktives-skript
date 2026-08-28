@@ -30,10 +30,10 @@ mitlaufen. Entstanden für die Physik-Vorlesung im Fachbereich 8 der
   Kreisbahnen), **TK 2** Elektromagnetismus, **TK 3** Schwingungen & Wellen —
   Formeln in LaTeX-Satz (MathJax), Beispiel-, Bemerkungs- und
   Zusammenfassungs-Boxen.
-- **22 interaktive Aspekt-Figuren** auf sechs Motoren: `kreisbewegung`
+- **23 interaktive Aspekt-Figuren** auf sechs Motoren: `kreisbewegung`
   (2D, Abb. 1.38–1.51), `kreis_spiral` (ISO-3D, Abb. 1.57–1.59),
   `grundbegriffe` (2D, Abb. 1.1), `bus_weg_zeit` (Abb. 1.2),
-  `federpendel` (harmonische Schwingung, Abschnitt 3.1.5) und `freier_fall`
+  `federpendel` (harmonische Schwingung, Abb. 1.8 und Abschnitt 3.1.5) und `freier_fall`
   (freier Fall und senkrechter Wurf, Abb. 1.3–1.7) — mit Reglern,
   Ablaufsteuerung, Analyse-Werten und Vergleichskurven; je Figur ein Link zur
   zugehörigen vollständigen Stand-alone-Simulation.
@@ -69,7 +69,7 @@ python3 -m http.server 8000
 | `InteraktivesSkript_WIP/` | **die Site** — hier finden alle Änderungen statt |
 | `InteraktivesSkript_WIP/index.html` | Grundgerüst (Kopfleiste, Overlays, Kapitel-Platzhalter) |
 | `InteraktivesSkript_WIP/chapters/` | 17 HTML-Fragmente (TK 0–3), zur Laufzeit eingehängt |
-| `InteraktivesSkript_WIP/src/` | ES-Module: `main.js` + Kern, Seiten, Shell, Druck, `figures/` (6 Motoren + 22 Aspekt-Figuren) |
+| `InteraktivesSkript_WIP/src/` | ES-Module: `main.js` + Kern, Seiten, Shell, Druck, `figures/` (6 Motoren + 23 Aspekt-Figuren) |
 | `InteraktivesSkript_WIP/bilder/` | statische Abbildungen (auch Druck-Fallback) |
 | `BACKLOG.md` | Roadmap und offene Punkte (Index; ein Item je Datei in `backlog/`) |
 | `DOKUMENTATION.md` | Index aller Dokus mit „lies das, wenn …" — der Einstieg |
