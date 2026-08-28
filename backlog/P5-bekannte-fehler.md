@@ -29,6 +29,18 @@
   jsdelivr) staerker als auf localhost. Live Server ist hier nicht der
   ausschlaggebende Unterschied.
 
+  **Neuer Beleg (2026-08-28, headless Chromium):** beim Bauen von P16-3/P16-4
+  trat in etwa jedem fuenften Seitenaufruf genau EIN Konsolenfehler auf —
+  `TypeError: Cannot read properties of null (reading 'replaceChild')`, ohne
+  Bezug zu einer Aspekt-Figur (er tritt auch ohne Interaktion auf, und die
+  Figuren bauen sich vollstaendig). `replaceChild` steht in keinem Projekt-
+  Modul (`grep` ueber `src/`), kommt also aus MathJax selbst: es ersetzt beim
+  Typesetten den Quelltext-Knoten durch den gerenderten — laeuft dabei ein
+  zweiter, ueberlappender Durchgang, ist der Elternknoten schon weg. Das ist
+  genau der oben vermutete Wettlauf, jetzt mit Fehlermeldung. Reproduktion:
+  Seite mehrfach mit `waitUntil:'networkidle'` laden und `page.on('pageerror')`
+  mitschreiben.
+
   **Beim naechsten Auftreten in der Konsole ausfuehren** (trennt die
   Hypothesen in einem Schritt — gerendert vs. Quelltext vs. MathJax-Zustand):
   ```js

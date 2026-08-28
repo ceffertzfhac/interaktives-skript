@@ -223,10 +223,32 @@ mitbetrifft.
   gezaehlt sind. Dank der Vorzeichenkonvention aus v1.37.1 unterscheiden sich
   die vier nur im Vorzeichen des g-Terms und im h0-Term — der v0-Term bleibt
   ueberall `+v0 t`. Nachgerechnet gegen die laufenden Figuren.
-  **Offen/zu entscheiden:** Abb. 1.3 holt ihre Formel weiterhin dynamisch aus
-  dem Fliesstext (`data-eqs`) und sieht dadurch anders aus als die vier
-  Wurf-Figuren mit ihrer Formelkarte. Vereinheitlichen (1.3 ebenfalls als
-  Karte) oder so lassen?
+  **Nachtrag 3 (Konsistenzpruefung auf Nutzerwunsch + Vorgabe** *„starte alle
+  captions mit einer kurzen Erklaerung des Koordinatensystems"*)**, v1.37.3:**
+  23 Parameterkombinationen (h0, v0, je fuenf Zeitpunkte bis zur Flugzeit) in
+  allen fuenf Figuren gegen die Formel der Physik-Karte nachgerechnet —
+  Abweichung 0,00 m, Flugzeit und Scheitelhoehe ebenfalls exakt. Gefunden und
+  behoben wurden drei Inkonsistenzen der ERKLAERUNGEN (nicht der Rechnung):
+  1. Die Fussnote nannte \(h_0\) auch dort, wo es in der Gleichung gar nicht
+     vorkommt (1.5/1.7, Nullpunkt im Abwurfpunkt). Jetzt sagt sie dort
+     ausdruecklich, dass \(h_0\) nicht in der Gleichung steht und der Regler
+     nur bestimmt, wann der Boden erreicht ist.
+  2. Der Gueltigkeitsbereich fehlte: die Gleichung gilt bis zum Aufschlag
+     (\(0 \le t \le t_\mathrm{fall}\)) — danach liegt das Objekt am Boden,
+     und genau dort klemmt der Motor die Kurve ab.
+  3. Abb. 1.3 hatte als einzige keine Formelkarte (Formel dynamisch aus dem
+     Fliesstext). Jetzt haben alle fuenf dieselbe Karte; der Querverweis der
+     Fussnote haelt die Verbindung zur Quelle (geprueft: 1.3 -> (1.1.9),
+     1.4-1.7 -> (1.1.16), beide zeigen auf die richtige Gleichung).
+  Ausserdem beginnen jetzt ALLE fuenf Bildunterschriften mit dem
+  Koordinatensystem und uebersetzen die Ausgangslage hinein: „startet 20,0 m
+  ueber dem Erdboden (Regler h0), in diesem Koordinatensystem also bei y = 0;
+  der Erdboden liegt bei y = +20,0 m" (Beispiel 1.7, Nutzervorgabe). Auch diese
+  Koordinaten laufen mit den Reglern mit.
+  Geprueft und in Ordnung befunden: Vorzeichen-Hinweiszeile je Achse,
+  Flugzeit/Scheitelhoehe als bewusst physikalische (achsenunabhaengige) Groessen
+  mit entsprechender Beschriftung, `getDisplayV` liefert bereits die
+  Achsenkomponente (damit ist Abb. 1.19 vorbereitet), Achsenname y ueberall.
 - [ ] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
 - [ ] **P16-6 Aspekt-Figur Abb. 1.9** — schräger Wurf: Flugbahn + 2× s-t x/y
   (Motor B). *(M)*
