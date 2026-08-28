@@ -124,6 +124,17 @@
 .aspekt-figur[data-motor="freier_fall"] .ff-achse mjx-container,
 .aspekt-figur[data-motor="freier_fall"] .ff-hinweis mjx-container { display: inline !important; }
 
+/* Mitlaufende Werte in der Bildunterschrift (h0, v0, Wurfrichtung — von
+   aspekt_freier_fall.js::updateCaptionWerte gefuellt). Halbfett + Tabellen-
+   ziffern: der Lesende soll sehen, dass das die Groessen sind, die er gerade
+   verstellt, ohne dass die Unterschrift bunt wird (Farbe ist den Farbwoertern
+   vorbehalten). Tabellenziffern verhindern, dass der Text bei jedem
+   Reglerschritt leicht springt. */
+.aspekt-figur[data-motor="freier_fall"] .aspekt-caption .ff-wert {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
 /* Farb-Worte in der Bildunterschrift (analog .bw-sw-* bei Abb. 1.2). */
 .aspekt-figur[data-motor="freier_fall"] .ff-sw-fall { color: var(--ff-fall); }
 

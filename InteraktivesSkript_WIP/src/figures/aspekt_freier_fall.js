@@ -24,6 +24,9 @@
 //   data-achse="up_ground|up_start|down_ground|down_start"   (Vorgabe up_ground)
 //   data-v0="<m/s>"   vorhanden -> v0-Regler mit diesem Startwert
 //                     fehlt     -> v0 = 0 fest, reiner freier Fall
+//                     ACHTUNG: der Wert steht IM KOORDINATENSYSTEM DER FIGUR
+//                     (s. u. „Vorzeichen von v0"), fuer 1.6/1.7 also -10 fuer
+//                     denselben Wurf nach oben, den 1.4/1.5 mit +10 zeigen.
 //   data-h0="<m>"     Startwert der Fallhoehe (Vorgabe 10)
 //
 // und eine weitere Variante desselben Motors kostet EINE Zeile HTML. Die
@@ -48,6 +51,23 @@
 //   * Achsenname 'y' in allen fuenf Figuren (store.posChar) — v0.13 benennt die
 //     Achse auch dann y, wenn ihr Nullpunkt im Abwurfpunkt liegt; die
 //     Stand-alone-Sim schriebe dort 's'. S. PORT-AENDERUNG 4 in render.js.
+//
+// VORZEICHEN VON v0 (Abweichung von der Stand-alone-Sim, bewusst):
+// Der Motor rechnet intern IMMER physikalisch (y nach oben, v0 > 0 = nach
+// oben) und rechnet erst beim Anzeigen um. Die Sim zeigt ihren v0-Regler
+// deshalb ebenfalls physikalisch — auch dann, wenn die gewaehlte Achse nach
+// unten zeigt. In den Abbildungen 1.6/1.7 stuende dort also „v0 = 10 m/s" an
+// einer nach UNTEN gerichteten Achse, auf der ein Wurf nach oben negativ ist:
+// die angezeigte Zahl widerspraeche dem Koordinatensystem der eigenen Figur,
+// waehrend das Diagramm daneben (Ort, Kurve) sehr wohl in dieser Achse
+// beschriftet ist. Genau die Vorzeichen sind aber der LEHRINHALT des
+// Abschnitts. Regler und Bildunterschrift sprechen hier deshalb die Achse der
+// jeweiligen Figur: bei nach unten zeigender Achse wird der Reglerwert beim
+// Setzen negiert (und beim Anzeigen wieder), sodass derselbe Wurf nach oben in
+// 1.4/1.5 als v0 = +10 m/s und in 1.6/1.7 als v0 = -10 m/s erscheint — dieselbe
+// Bewegung, andere Vorzeichen, was der Abschnitt zeigen will. Die Richtungs-
+// angabe in der Bildunterschrift kommt dagegen aus dem PHYSIKALISCHEN
+// Vorzeichen und bleibt darum in allen vier Figuren dieselbe Aussage.
 //
 // VORLAGE (Kaskade, s. INTERAKTIVE_ASPEKT_FIGUREN.md §0a):
 //   1. Interaktionsmuster „Szene | Weg-Zeit-Diagramm, EIN Zeitcursor aus Regler
@@ -260,7 +280,7 @@ ${cfg.v0Regler ? `    <div class="slider-label">Anfangsgeschw. \\(v_0\\)</div>
       <input id="ff_v0_slider" type="range" min="${V0_MIN}" max="${V0_MAX}" step="${V0_STEP}" value="${cfg.v0}">
       <span class="slider-val" id="ff_v0_value"></span>
     </div>
-    <div class="ff-hinweis">\\(v_0>0\\): nach oben geworfen &middot; \\(v_0<0\\): nach unten &middot; \\(v_0=0\\): freier Fall</div>` : ''}
+    <div class="ff-hinweis">In diesem Koordinatensystem: \\(v_0>0\\) heißt <em>${cfg.direction === 'down' ? 'nach unten' : 'nach oben'}</em>, \\(v_0<0\\) heißt <em>${cfg.direction === 'down' ? 'nach oben' : 'nach unten'}</em>, \\(v_0=0\\) ist der freie Fall.</div>` : ''}
   </div>
   <div class="panel-section">
     <div class="panel-label">Ablauf</div>
@@ -401,6 +421,45 @@ export function buildFreierFallFig(fig) {
         scene.querySelector('.aspekt-body').appendChild(cap);
     }
 
+    // -- Mitlaufende Werte in der Bildunterschrift (Nutzervorgabe 2026-08-28:
+    //    „die Caption muss sich mit der Regelung anpassen"). Die Unterschrift
+    //    darf keine Zahl behaupten, die der Lesende gerade verstellt hat: h0
+    //    und v0 sind Regler, also stehen dort <span data-wert="…"> statt fester
+    //    Zahlen, die rebuild() nachzieht.
+    //    WARUM PLAIN TEXT UND NICHT LATEX: MathJax setzt die Unterschrift EINMAL
+    //    (typesetAfterLoad); ein spaeter geaenderter \(…\)-Ausdruck wuerde nicht
+    //    neu gesetzt, und pro Reglerschritt neu zu typesetten waere teuer und
+    //    wuerde flackern. Das SYMBOL bleibt darum LaTeX und statisch
+    //    („\(h_0 =\)"), nur Zahl + Einheit sind Text im Span.
+    //    Die Richtungsangabe ist ebenfalls dynamisch: bei v0 < 0 wird nicht
+    //    geworfen, sondern nach unten gestossen, bei v0 = 0 ist es freier Fall —
+    //    eine feste Formulierung „nach oben" waere dann schlicht falsch.
+    const wertSpans = [...(scene.querySelectorAll('.aspekt-caption [data-wert]'))];
+    function updateCaptionWerte() {          // inside withStore aufrufen
+        if (!wertSpans.length) return;
+        const werte = {
+            // schmales geschuetztes Leerzeichen zwischen Zahl und Einheit:
+            // die Unterschrift bricht um, Zahl und Einheit duerfen dabei nicht
+            // auseinandergerissen werden.
+            h0: `${fmt(store.h0, 1)}\u00a0m`,
+            // v0 in der Achse der Figur (Regler), Richtung aus dem
+            // physikalischen Vorzeichen — s. Kopfkommentar.
+            v0: `${fmt(v0Achse(store.v0), 0)}\u00a0m/s`,
+            richtung: store.v0 > 0 ? 'nach oben geworfen'
+                    : store.v0 < 0 ? 'nach unten geworfen'
+                    : 'ohne Anfangsgeschwindigkeit losgelassen, also im freien Fall',
+        };
+        wertSpans.forEach(el => {
+            const v = werte[el.dataset.wert];
+            if (v !== undefined) el.textContent = v;
+        });
+    }
+
+    // Vorzeichen-Umrechnung zwischen Regler (Achse der Figur) und Motor
+    // (physikalisch, y nach oben) — s. Kopfkommentar „Vorzeichen von v0".
+    // Selbstinvers, deshalb genuegt eine Funktion fuer beide Richtungen.
+    const v0Achse = v => (cfg.direction === 'down' ? -v : v);
+
     // Per-Instanz-Regler + Zustand (Closure, nicht Modul-Ebene).
     const sl_h0 = ge(p + 'h0_slider'), sl_t = ge(p + 't_slider');
     const sl_v0 = cfg.v0Regler ? ge(p + 'v0_slider') : null;
@@ -459,7 +518,7 @@ export function buildFreierFallFig(fig) {
                 yAxisConfig: { direction: cfg.direction, origin: cfg.origin },
             });
             store.h0 = parseFloat(sl_h0.value);
-            store.v0 = sl_v0 ? parseFloat(sl_v0.value) : 0;
+            store.v0 = sl_v0 ? v0Achse(parseFloat(sl_v0.value)) : 0;
             tFall = flightTime();
 
             // Haus: reicht bis 1,8 m unter die Abwurfhoehe (Standhoehe des
@@ -476,7 +535,8 @@ export function buildFreierFallFig(fig) {
             updateKennwerte();
 
             ge(p + 'h0_value').textContent = `${fmt(store.h0, 1)} m`;
-            if (sl_v0) ge(p + 'v0_value').textContent = `${fmt(store.v0, 0)} m/s`;
+            if (sl_v0) ge(p + 'v0_value').textContent = `${fmt(v0Achse(store.v0), 0)} m/s`;
+            updateCaptionWerte();
         });
         sl_t.max = String(tFall.toFixed(2));
         draw(curT);
