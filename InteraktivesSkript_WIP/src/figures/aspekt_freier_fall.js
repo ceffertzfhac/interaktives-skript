@@ -1,19 +1,39 @@
-// aspekt_freier_fall.js — interaktive Aspekt-Figur zu Abbildung 1.3
-// (1.1.7 „Die Strecke", Beispielbox „Freier Fall und senkrechter Wurf").
-// Links die Fallszene (Haus, Strichmaennchen, Kugel, Hoehenskala, Stoppuhr und
-// die kleine y-Achsen-Miniatur), rechts das Weg-Zeit-Diagramm y(t): waehrend
-// die Kugel faellt, WAECHST die Parabel im Diagramm mit. Genau das ist der
-// Aspekt der Abbildung — „das zugehoerige Weg-Zeit-Diagramm" zu der Bewegung,
-// die daneben stattfindet.
+// aspekt_freier_fall.js — interaktive Aspekt-Figuren des freier_fall-Motors
+// in Abschnitt 1.1.7 („Die Strecke", Beispielbox „Freier Fall und senkrechter
+// Wurf"): EINE Fabrik fuer die ganze Abbildungsfamilie.
 //
-// ASPEKT-GATING (granulare Reduktion, BACKLOG P16-3; der Motor kann deutlich
-// mehr, s. u.):
-//   * v0 = 0 FEST -> reiner freier Fall. Der senkrechte Wurf (v0 ≠ 0) gehoert
-//     zu Abb. 1.4-1.7 (P16-4), nicht hierher.
-//   * yAxisConfig = {direction:'up', origin:'ground'} FEST — genau die Wahl,
-//     die die Bildunterschrift von Abb. 1.3 beschreibt („die Achse zeigt nach
-//     oben und hat ihren Nullpunkt auf dem Erdboden"). Die drei anderen
-//     Konfigurationen sind der Aspekt von Abb. 1.5-1.7.
+//   Abb. 1.3  freier Fall,       y↑, Null Erdboden     (h0 = 10 m, v0 = 0 fest)
+//   Abb. 1.4  senkrechter Wurf,  y↑, Null Erdboden     (h0 = 20 m, v0 = 10 m/s)
+//   Abb. 1.5  senkrechter Wurf,  y↑, Null Abwurfpunkt
+//   Abb. 1.6  senkrechter Wurf,  y↓, Null Erdboden
+//   Abb. 1.7  senkrechter Wurf,  y↓, Null Abwurfpunkt
+//
+// Links die Fallszene (Haus, Strichmaennchen, Kugel, Hoehenskala, Stoppuhr und
+// die kleine Achsen-Miniatur), rechts das Weg-Zeit-Diagramm y(t): waehrend die
+// Kugel faellt bzw. fliegt, WAECHST die Kurve im Diagramm mit. Genau das ist
+// der Aspekt dieser Abbildungen — „das zugehoerige Weg-Zeit-Diagramm" zu der
+// Bewegung, die daneben stattfindet.
+//
+// WARUM EINE FABRIK FUER FUENF FIGUREN (und nicht fuenf Module):
+// 1.4-1.7 zeigen ausdruecklich DIESELBE Bewegung in vier Koordinatensystemen —
+// sie unterscheiden sich einzig in `yAxisConfig`, 1.3 zusaetzlich in v0 und h0.
+// Fuenf Module waeren fuenfmal derselbe Code; die Skalierbarkeitsvorgabe des
+// Projekts (eine Figur = O(1) Dateien, kleine Token-Kosten) verlangt hier das
+// Gegenteil: die Unterschiede stehen als DATEN am Platzhalter im Kapitel
+//
+//   data-achse="up_ground|up_start|down_ground|down_start"   (Vorgabe up_ground)
+//   data-v0="<m/s>"   vorhanden -> v0-Regler mit diesem Startwert
+//                     fehlt     -> v0 = 0 fest, reiner freier Fall
+//   data-h0="<m>"     Startwert der Fallhoehe (Vorgabe 10)
+//
+// und eine weitere Variante desselben Motors kostet EINE Zeile HTML. Die
+// 1:1-Granularitaet des Skripts bleibt davon unberuehrt: jede Abbildung hat
+// weiterhin ihre eigene Figur mit eigener Motor-Instanz und eigener
+// Abbildungsnummer — es gibt bewusst KEINEN Achsen-Umschalter INNERHALB einer
+// Figur (Nutzerentscheidung 2026-07-30, s. BACKLOG P16-0).
+//
+// ASPEKT-GATING (granulare Reduktion; der Motor kann deutlich mehr):
+//   * Achsenkonfiguration je Figur FEST — sie IST der Aspekt von 1.4-1.7.
 //   * Nur EIN Diagramm, Typ 'weg' (isStacked=false, graphType1='weg'). v-t ist
 //     der Aspekt von Abb. 1.19, a-t kommt in 1.1 gar nicht vor.
 //   * v- und a-Vektor AUS. Dieser Motor kennt keine show*-Flags — updateScene()
@@ -22,9 +42,12 @@
 //     aspekt_federpendel.js). An dieser Skriptstelle sind Geschwindigkeit und
 //     Beschleunigung noch nicht eingefuehrt: der Text sagt ausdruecklich, dass
 //     ueber die Bedeutung des Vorfaktors g „erst spaeter" gesprochen wird.
-//   * Einziger Parameter-Regler: h0. Er ist die Groesse, mit der der Fliesstext
-//     unmittelbar weiterrechnet (Fallzeit t = sqrt(2h0/g), Beispiel 20 m ≈ 2 s)
-//     — deshalb steht die Fallzeit auch im Analyse-Panel.
+//     (v0 ist davon unberuehrt — der Wurf BRAUCHT die Anfangsgeschwindigkeit,
+//     der Text fuehrt sie an dieser Stelle als Parameter ein.)
+//   * Regler: h0 immer, v0 nur bei den Wurf-Figuren.
+//   * Achsenname 'y' in allen fuenf Figuren (store.posChar) — v0.13 benennt die
+//     Achse auch dann y, wenn ihr Nullpunkt im Abwurfpunkt liegt; die
+//     Stand-alone-Sim schriebe dort 's'. S. PORT-AENDERUNG 4 in render.js.
 //
 // VORLAGE (Kaskade, s. INTERAKTIVE_ASPEKT_FIGUREN.md §0a):
 //   1. Interaktionsmuster „Szene | Weg-Zeit-Diagramm, EIN Zeitcursor aus Regler
@@ -41,8 +64,8 @@
 //      ui.js (nicht portiert) ist nur die Bedienlogik nachgebaut, die eine
 //      Aspekt-Figur ueberhaupt braucht (resetSim -> rebuild(), animate() ->
 //      frame()).
-//   3. Statische Abb. 1.3 (bilder/freierfall_1.png): h0 = 10 m als Vorgabewert,
-//      y-Achse nach oben mit Nullpunkt Erdboden, Parabelast bis zum Aufschlag.
+//   3. Statische Abbildungen (bilder/freierfall_1.png, senkrechter_wurf_1..4):
+//      Startwerte h0 und v0, Achsenwahl je Figur, Parabelast bis zum Aufschlag.
 //
 // BEWUSSTE ABWEICHUNGEN (sonst gelten sie spaeter als Fehler):
 //   * Die Kurve WAECHST mit der Zeit, sie steht nicht von Anfang an komplett da
@@ -52,17 +75,22 @@
 //     anders als in Abb. 1.2, wo die Kurve die GEGEBENE Messkurve ist und
 //     deshalb dauerhaft steht.
 //   * KEINE Vergleichskurve („letzte Kurve behalten") wie bei 1.41/Federpendel.
-//     h0 skaliert hier BEIDE Achsen (die Zeitachse laeuft bis zur Fallzeit),
-//     eine eingefrorene Kurve muesste also mitskaliert werden und wuerde die
-//     Achsen der neuen aufspannen. Fuer den Vergleich zweier Fallhoehen ist das
-//     eine eigene Ausbaustufe, kein Teil dieser Figur.
+//     h0 und v0 skalieren hier BEIDE Achsen (die Zeitachse laeuft bis zur
+//     Flugzeit), eine eingefrorene Kurve muesste also mitskaliert werden und
+//     wuerde die Achsen der neuen aufspannen. Der Vergleich zweier Wuerfe waere
+//     eine eigene Ausbaustufe.
 //   * Abspieltempo-Vorgabe 1× wie in der Sim: ein Fall aus 10 m dauert 1,4 s.
 //     Wer genauer hinsehen will, hat ½×/¼×/⅛× einen Klick entfernt.
+//   * Die Szene bleibt ueber alle Reglerwerte gleich skaliert (feste viewBox der
+//     Sim): bei h0 = 10 m steht die Kugel im unteren Drittel. Mitskalieren
+//     wuerde bei jedem h0-Zug die Bildgroesse umrechnen und die Hoehenskala
+//     entwerten — sie ist der Massstab, an dem man h0 ABLESEN soll.
 //
 // TECHNIK: kein eigener Zeichencode. Der Motor (src/figures/freier_fall/,
 // BACKLOG P16-1) zeichnet Szene UND Diagramm; diese Datei baut Skelett,
 // Bedienung und Verdrahtung. Alle Motor-Aufrufe laufen inside rt.withStore(...)
-// (Per-Instanz-Isolation, s. freier_fall/runtime.js). Anders als federpendel/
+// (Per-Instanz-Isolation, s. freier_fall/runtime.js) — auf der Seite stehen
+// fuenf Instanzen dieses Motors nebeneinander. Anders als federpendel/
 // schraeger_wurf rechnet dieser Motor NICHT vorab durch, sondern zeichnet aus
 // progressiv wachsenden Zeitreihen (store.t_data & Co.) — der Zeit-Regler
 // erzeugt sie deshalb bei jedem Wert neu (sampleTo(), s. u.).
@@ -80,14 +108,41 @@ import { ge } from '../core.js';
 // Reglergrenzen der Stand-alone-Sim (1,8 m = Koerpergroesse des
 // Strichmaennchens, darunter stuende es nicht mehr auf dem Haus).
 const H0_MIN = 1.8, H0_MAX = 25, H0_STEP = 0.1, H0_DEFAULT = 10;
+const V0_MIN = -10, V0_MAX = 10, V0_STEP = 1;
 const T_STEP = 0.01;
 
-// Abtastweite der Kurve. Bei der groessten Fallhoehe (25 m -> t_fall ≈ 2,26 s)
-// sind das rund 270 Stuetzstellen — die komplette Reihe darf also bei JEDEM
-// Reglerwert neu erzeugt werden, ohne dass es sich lohnt, inkrementell
-// anzuhaengen (die Sim tut das, weil sie nur vorwaerts laeuft; ein Zeit-Regler
-// muss auch rueckwaerts koennen).
+// Abtastweite der Kurve. Bei der laengsten Flugzeit (h0 = 25 m, v0 = 10 m/s ->
+// t_fall ≈ 3,5 s) sind das rund 420 Stuetzstellen — die komplette Reihe darf
+// also bei JEDEM Reglerwert neu erzeugt werden, ohne dass es sich lohnt,
+// inkrementell anzuhaengen (die Sim tut das, weil sie nur vorwaerts laeuft; ein
+// Zeit-Regler muss auch rueckwaerts koennen).
 const SAMPLE_DT = 1 / 120;
+
+// Klartext der vier Achsenkonfigurationen fuer das Bedienfeld. Sie stehen dort
+// als TEXT, nicht als Umschalter: welche Achse gilt, ist je Abbildung fest
+// (s. Kopfkommentar) — die Zeile sagt dem Lesenden nur, in welchem der vier
+// Koordinatensysteme er sich gerade befindet.
+const ACHSEN_TEXT = {
+    up_ground:   '\\(y\\) zeigt nach oben, Nullpunkt am Erdboden',
+    up_start:    '\\(y\\) zeigt nach oben, Nullpunkt am Abwurfpunkt',
+    down_ground: '\\(y\\) zeigt nach unten, Nullpunkt am Erdboden',
+    down_start:  '\\(y\\) zeigt nach unten, Nullpunkt am Abwurfpunkt',
+};
+
+// Konfiguration einer Figur aus ihrem Platzhalter lesen (s. Kopfkommentar).
+function leseKonfig(fig) {
+    const achse = ACHSEN_TEXT[fig.dataset.achse] ? fig.dataset.achse : 'up_ground';
+    const [direction, origin] = achse.split('_');
+    const hatV0 = fig.dataset.v0 !== undefined && fig.dataset.v0 !== '';
+    return {
+        achse, direction, origin,
+        achseText: ACHSEN_TEXT[achse],
+        h0: parseFloat(fig.dataset.h0 || H0_DEFAULT),
+        v0: hatV0 ? parseFloat(fig.dataset.v0) : 0,
+        v0Regler: hatV0,          // Wurf-Figuren: v0 einstellbar; freier Fall: fest 0
+        wurf: hatV0,              // steuert Beschriftungen (Ort statt Hoehe, Flugzeit)
+    };
+}
 
 // ── Szene (links) ───────────────────────────────────────────────────────────
 // Aufbau, Geometrie und Z-Ordnung 1:1 aus der Stand-alone-Sim; weggelassen sind
@@ -187,18 +242,25 @@ const SVG_GRAPH = `
 </svg>`;
 
 // ── Linkes Bedien-Panel ─────────────────────────────────────────────────────
-// h0-Regler und seine Wertanzeige tragen die MOTOR-IDs (h0_slider/h0_value):
-// so bleibt die Zuordnung zum Motor sichtbar, gefuellt werden sie hier.
-// Der Zeit-Regler ist figur-eigen (die Sim hat keinen — sie laeuft nur ab).
-const PANEL_LEFT = `
+// h0-/v0-Regler und ihre Wertanzeigen tragen die MOTOR-IDs (h0_slider/h0_value,
+// v0_slider/v0_value): so bleibt die Zuordnung zum Motor sichtbar, gefuellt
+// werden sie hier. Der Zeit-Regler ist figur-eigen (die Sim hat keinen — sie
+// laeuft nur ab). Der v0-Block entfaellt bei der Freier-Fall-Figur.
+const panelLeft = (cfg) => `
 <div class="aspekt-panel aspekt-panel-left">
   <div class="panel-section">
     <div class="panel-label">Parameter</div>
-    <div class="slider-label">Fallhöhe \\(h_0\\)</div>
+    <div class="slider-label">${cfg.wurf ? 'Abwurfhöhe' : 'Fallhöhe'} \\(h_0\\)</div>
     <div class="slider-row">
-      <input id="ff_h0_slider" type="range" min="${H0_MIN}" max="${H0_MAX}" step="${H0_STEP}" value="${H0_DEFAULT}">
+      <input id="ff_h0_slider" type="range" min="${H0_MIN}" max="${H0_MAX}" step="${H0_STEP}" value="${cfg.h0}">
       <span class="slider-val" id="ff_h0_value"></span>
     </div>
+${cfg.v0Regler ? `    <div class="slider-label">Anfangsgeschw. \\(v_0\\)</div>
+    <div class="slider-row">
+      <input id="ff_v0_slider" type="range" min="${V0_MIN}" max="${V0_MAX}" step="${V0_STEP}" value="${cfg.v0}">
+      <span class="slider-val" id="ff_v0_value"></span>
+    </div>
+    <div class="ff-hinweis">\\(v_0>0\\): nach oben geworfen &middot; \\(v_0<0\\): nach unten &middot; \\(v_0=0\\): freier Fall</div>` : ''}
   </div>
   <div class="panel-section">
     <div class="panel-label">Ablauf</div>
@@ -218,6 +280,10 @@ const PANEL_LEFT = `
     </div>
   </div>
   <div class="panel-section">
+    <div class="panel-label">Koordinatensystem</div>
+    <div class="ff-achse">${cfg.achseText}</div>
+  </div>
+  <div class="panel-section">
     <div class="panel-label">Legende</div>
     <div class="legend-grid">
       <div class="legend-swatch" data-c="ff-fall"></div><div class="legend-label">Kugel und Kurve \\(y(t)\\)</div>
@@ -231,7 +297,7 @@ const PANEL_LEFT = `
 const RUNBAR = `
 <div class="aspekt-runbar" role="group" aria-label="Ablaufsteuerung">
   <div class="aspekt-btn-row">
-    <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="start" aria-label="Start: Fall abspielen" data-tip="Abspielen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5 L19 12 L8 19 Z" fill="currentColor"/></svg></button>
+    <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="start" aria-label="Start: Bewegung abspielen" data-tip="Abspielen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5 L19 12 L8 19 Z" fill="currentColor"/></svg></button>
     <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="stop" aria-label="Pause: anhalten" data-tip="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7.5" y="5.5" width="3.4" height="13" rx="1.5" fill="currentColor"/><rect x="13.1" y="5.5" width="3.4" height="13" rx="1.5" fill="currentColor"/></svg></button>
     <button type="button" class="aspekt-btn aspekt-btn-icon" data-act="reset" aria-label="Reset: auf Anfang zurücksetzen" data-tip="Auf Anfang zurücksetzen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.74 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4z" fill="currentColor"/></svg></button>
   </div>
@@ -244,7 +310,11 @@ const RUNBAR = `
 // die Physik-Sektion kommt dynamisch aus dem Kapiteltext (data-eqs ->
 // main.js::fill_physik_panels). Beides zugleich ginge nicht — ein statischer
 // Block gewinnt und data-eqs bliebe wirkungslos.
-const PANEL_RIGHT = `
+// Die Scheitelhoehe steht bewusst „ueber dem Boden" da: updateKennwerte()
+// liefert sie als physikalische Hoehe, NICHT in der Achsenkonvention der Figur
+// (in 1.6/1.7 waere der Anzeigewert negativ bzw. verschoben). So ist die Zeile
+// in allen vier Koordinatensystemen dieselbe wahre Aussage.
+const panelRight = (cfg) => `
 <div class="aspekt-panel aspekt-panel-right">
   <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" data-tip="Analyse ein-/ausklappen">
     <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
@@ -254,22 +324,26 @@ const PANEL_RIGHT = `
     <div class="panel-section">
       <div class="panel-label">Live-Analyse</div>
       <div class="analysis-grid">
-        <div class="analysis-cell key">Zeit \\(t\\)</div>                       <div class="analysis-cell val" id="ff_live_t"></div>
-        <div class="analysis-cell key">Höhe \\(y(t)\\)</div>                    <div class="analysis-cell val" id="ff_live_y"></div>
-        <div class="analysis-cell key">Fallzeit \\(t_{\\mathrm{fall}}\\)</div>  <div class="analysis-cell val" id="ff_live_tfall"></div>
+        <div class="analysis-cell key">Zeit \\(t\\)</div>                              <div class="analysis-cell val" id="ff_live_t"></div>
+        <div class="analysis-cell key">${cfg.wurf ? 'Ort' : 'Höhe'} \\(y(t)\\)</div>   <div class="analysis-cell val" id="ff_live_y"></div>
+${cfg.wurf ? `        <div class="analysis-cell key">Scheitelhöhe über Boden</div>          <div class="analysis-cell val" id="ff_live_ymax"></div>
+        <div class="analysis-cell key">Flugzeit \\(t_{\\mathrm{fall}}\\)</div>         <div class="analysis-cell val" id="ff_live_tfall"></div>`
+            : `        <div class="analysis-cell key">Fallzeit \\(t_{\\mathrm{fall}}\\)</div>         <div class="analysis-cell val" id="ff_live_tfall"></div>`}
       </div>
     </div>
   </div>
 </div>`;
 
-// Versteckte Stubs: Groessen ausserhalb des Aspekts (v, a, Steighoehe,
-// Auftreffgeschwindigkeit) und die zwei Checkboxen, ueber die dieser Motor die
-// Vektor-Sichtbarkeit gatet (er kennt keine show*-Flags). Beide OHNE checked —
-// v- und a-Pfeil bleiben aus, s. Kopfkommentar.
-const HIDDEN_STUB = `
+// Versteckte Stubs: Groessen ausserhalb des Aspekts (v, a, Auftreffgeschwindig-
+// keit, bei der Fall-Figur zusaetzlich die Scheitelhoehe = h0) und die zwei
+// Checkboxen, ueber die dieser Motor die Vektor-Sichtbarkeit gatet (er kennt
+// keine show*-Flags). Beide OHNE checked — v- und a-Pfeil bleiben aus, s.
+// Kopfkommentar. Der Motor schreibt in alle diese Elemente unbedingt; fehlt
+// eins, gibt es einen Null-Zugriff (Runbook-Fallstrick #1).
+const hiddenStub = (cfg) => `
 <div style="display:none">
-  <span id="ff_live_v"></span><span id="ff_live_a"></span>
-  <span id="ff_live_ymax"></span><span id="ff_live_vimpact"></span>
+  <span id="ff_live_v"></span><span id="ff_live_a"></span><span id="ff_live_vimpact"></span>
+  ${cfg.wurf ? '' : '<span id="ff_live_ymax"></span>'}
   <input type="checkbox" id="ff_tog_vel">
   <input type="checkbox" id="ff_tog_acc">
 </div>`;
@@ -278,11 +352,12 @@ const HIDDEN_STUB = `
 // (toggle_analyse) sind GENERIC in aspekt_kreisbahn.js definiert und in main.js
 // verdrahtet — diese Figur nutzt sie unveraendert mit (DRY).
 
-// ── Factory: baut EINE Freier-Fall-Aspekt-Figur mit eigener Motor-Instanz ────
+// ── Factory: baut EINE Figur der Familie mit eigener Motor-Instanz ───────────
 export function buildFreierFallFig(fig) {
     if (fig.dataset.built) return;
     fig.dataset.built = '1';
 
+    const cfg = leseKonfig(fig);
     const rt = createRuntime();
     const p = rt.prefix;
 
@@ -294,13 +369,14 @@ export function buildFreierFallFig(fig) {
     // gesamte Skelett, Marker-Referenzen (url(#ff_arrow-vel)) eingeschlossen.
     // Die Tempo-Radios muessen mitprefixt werden (name="ff_speed" ->
     // name="ff0_speed"), sonst fasst der Browser die Radios zweier Figuren auf
-    // derselben Seite zu EINER Auswahlgruppe zusammen (Fallstrick #14).
+    // derselben Seite zu EINER Auswahlgruppe zusammen (Fallstrick #14) — in
+    // diesem Abschnitt stehen FUENF Figuren dieses Motors untereinander.
     scene.innerHTML = (
-      `<div class="aspekt-body">${PANEL_LEFT}` +
+      `<div class="aspekt-body">${panelLeft(cfg)}` +
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH}</div></div></div>` +
-      `${PANEL_RIGHT}</div>${HIDDEN_STUB}`
+      `${panelRight(cfg)}</div>${hiddenStub(cfg)}`
     ).replace(/ff_/g, p);
     rt.bindDom();
 
@@ -327,14 +403,15 @@ export function buildFreierFallFig(fig) {
 
     // Per-Instanz-Regler + Zustand (Closure, nicht Modul-Ebene).
     const sl_h0 = ge(p + 'h0_slider'), sl_t = ge(p + 't_slider');
+    const sl_v0 = cfg.v0Regler ? ge(p + 'v0_slider') : null;
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
     let curT = 0;          // Laufzeit (s)
-    let tFall = 0;         // Fallzeit zur aktuellen Fallhoehe (s)
+    let tFall = 0;         // Flugzeit zur aktuellen Parameterwahl (s)
     let speedFactor = 1.0;
 
     // -- Zeitreihe fuer 0 … t erzeugen. Der Motor zeichnet die Kurve aus
     //    store.t_data & Co. und setzt den Kurvenpunkt auf den LETZTEN Eintrag —
-    //    die Reihe endet also genau bei t, und die Parabel waechst mit der
+    //    die Reihe endet also genau bei t, und die Kurve waechst mit der
     //    Bewegung. Die Sim haengt pro Frame einen Punkt an; hier wird die Reihe
     //    komplett neu erzeugt, weil der Zeit-Regler auch rueckwaerts darf.
     //    Gespeichert werden ANZEIGE-Werte (getDisplayY/V/A) — genau wie in der
@@ -366,22 +443,23 @@ export function buildFreierFallFig(fig) {
         ge(p + 't_value').textContent = `${fmt(curT)} s`;
     }
 
-    // -- Rebuild: Fallhoehe aus dem Regler -> Szene neu aufbauen, Zeitachse des
-    //    Reglers auf die neue Fallzeit setzen. `paramChange` = der Aufruf kommt
-    //    vom h0-Regler, der die KURVENFORM aendert: dann springt die Laufzeit
-    //    auf 0 zurueck und der Ablauf stoppt, damit der neue Fall von vorn
-    //    beginnt (Fallstrick #20, Bedienkonvention der Stand-alone-Sims).
-    //    Reihenfolge und Aufrufe wie resetSim() der Sim-ui.js.
+    // -- Rebuild: Parameter aus den Reglern -> Szene neu aufbauen, Zeitachse des
+    //    Reglers auf die neue Flugzeit setzen. `paramChange` = der Aufruf kommt
+    //    von einem Regler, der die KURVENFORM aendert (h0 oder v0): dann springt
+    //    die Laufzeit auf 0 zurueck und der Ablauf stoppt, damit die neue
+    //    Bewegung von vorn beginnt (Fallstrick #20, Bedienkonvention der
+    //    Stand-alone-Sims). Reihenfolge und Aufrufe wie resetSim() der Sim-ui.js.
     function rebuild(paramChange = false) {
         rt.withStore(() => {
             if (paramChange) { stop(); curT = 0; }
             Object.assign(store, {
-                v0: 0,                     // freier Fall — s. Kopfkommentar
                 graphType1: 'weg',
                 isStacked: false,
-                yAxisConfig: { direction: 'up', origin: 'ground' },
+                posChar: 'y',                  // v0.13 nennt die Achse immer y
+                yAxisConfig: { direction: cfg.direction, origin: cfg.origin },
             });
             store.h0 = parseFloat(sl_h0.value);
+            store.v0 = sl_v0 ? parseFloat(sl_v0.value) : 0;
             tFall = flightTime();
 
             // Haus: reicht bis 1,8 m unter die Abwurfhoehe (Standhoehe des
@@ -398,13 +476,14 @@ export function buildFreierFallFig(fig) {
             updateKennwerte();
 
             ge(p + 'h0_value').textContent = `${fmt(store.h0, 1)} m`;
+            if (sl_v0) ge(p + 'v0_value').textContent = `${fmt(store.v0, 0)} m/s`;
         });
         sl_t.max = String(tFall.toFixed(2));
         draw(curT);
     }
 
-    // Fallhoehe: schrubben stoppt den Ablauf und setzt ihn auf den Anfang.
-    sl_h0.addEventListener('input', () => rebuild(true));
+    // Parameter-Regler: schrubben stoppt den Ablauf und setzt ihn auf den Anfang.
+    [sl_h0, sl_v0].forEach(s => s && s.addEventListener('input', () => rebuild(true)));
     // Zeit: schrubben stoppt die Wiedergabe und zeichnet direkt (wie Abb. 1.2).
     sl_t.addEventListener('input', () => { stop(); draw(parseFloat(sl_t.value)); });
 
@@ -429,7 +508,7 @@ export function buildFreierFallFig(fig) {
     }
     function start() {
         if (playing) return;
-        resetOnPlayAfterAutoStop(curT, tFall, reset);   // am Boden -> neu fallen
+        resetOnPlayAfterAutoStop(curT, tFall, reset);   // am Boden -> neu starten
         playing = true;
         lastTs = 0;
         rafId = requestAnimationFrame(frame);
