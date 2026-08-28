@@ -131,16 +131,21 @@ const SVG_SCENE = `
 // Plotbereich (drawGraphSlot rechnet in 0…GRAPH_W × 0…graphHeight). Die
 // Stand-alone-Sim setzt diese Gruppe mit translate(400,40) neben die Szene im
 // GEMEINSAMEN SVG; hier hat das Diagramm ein eigenes SVG, also braucht es einen
-// eigenen Rand: links 50 px fuer die y-Marken und die gedrehte Achsen-
-// beschriftung (x0−40), oben 35 px fuer den Diagrammtitel (y=−22).
+// eigenen Rand. Er ist an der SKALIERTEN Schrift bemessen, nicht an den
+// Rohwerten der Sim: --kb-fs vergroessert alle Diagramm-Beschriftungen um 1,5
+// (s. aspekt_kreisbahn.css), der Titel steht also nicht 15 px, sondern gut
+// 22 px hoch ueber der Grundlinie y=−22 -> 48 px oben (mit 40 px war er in
+// jedem Breiten-Modus oben angeschnitten, im Screenshot aufgefallen).
+// Links entsprechend 56 px fuer die y-Marken und die gedrehte
+// Achsenbeschriftung bei x0−40.
 // Die beiden gestapelten Slots sind reine DOM-Vertrags-Stubs: updateGraphs()
 // fasst sie unbedingt an, gezeichnet wird in sie nur bei isStacked (hier nie).
 const SVG_GRAPH = `
-<svg id="ff_graph_svg" viewBox="0 0 550 475" preserveAspectRatio="xMidYMid meet" class="aspekt-graph-svg">
+<svg id="ff_graph_svg" viewBox="0 0 560 495" preserveAspectRatio="xMidYMid meet" class="aspekt-graph-svg">
   <defs>
     <marker id="ff_arrowhead" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
   </defs>
-  <g id="ff_graph_group_single" transform="translate(50, 35)">
+  <g id="ff_graph_group_single" transform="translate(56, 48)">
     <g id="ff_grid_group"></g>
     <polyline id="ff_graph_line" fill="none" stroke-width="2" points=""/>
     <circle id="ff_graph_point" r="5" visibility="hidden"/>
