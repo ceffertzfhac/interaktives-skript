@@ -201,10 +201,19 @@ function leseKonfig(fig) {
 // Farbattribute (CSS setzt sie, s. aspekt_freier_fall.css).
 // Der Ausschnitt ist der Szenen-Teil ihrer viewBox (0 0 900 500): x 20…360
 // (Lineal x=45, Haus 80…160, Kugel x=136, y-Achsen-Miniatur x=180, Stoppuhr
-// 208…352), y 0…480 (Erdboden bei 440). Das Lineal reicht rechnerisch ueber den
+// 208…352), y 0…500 (Erdboden bei 440). Das Lineal reicht rechnerisch ueber den
 // oberen Rand hinaus und wird dort beschnitten — wie in der Sim.
+// Die HOEHE geht ueber die 500 der Sim hinaus: bei nach unten zeigender Achse
+// mit Nullpunkt am Erdboden (Abb. 1.6) zeichnet drawYAxisDisplay() den
+// Achsenpfeil von 440 abwaerts bis 470 und setzt sein LABEL — um 90 Grad
+// gedreht — mittig auf y = 487. Bei der hier 1,5-fach skalierten Schrift
+// (--kb-fs) ist das Label rund 45 px lang und reicht damit bis etwa 509. Die
+// Sim schneidet es bei 500 selbst leicht an; hier sind es 515, damit es
+// vollstaendig steht. Im Screenshot aufgefallen (mit 480 fehlte sogar der
+// Pfeil); in den drei anderen Achsenkonfigurationen liegt die Miniatur weiter
+// oben und faellt nicht auf.
 const SVG_SCENE = `
-<svg id="ff_main_svg" viewBox="20 0 340 480" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
+<svg id="ff_main_svg" viewBox="20 0 340 515" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <defs>
     <marker id="ff_arrow-y" markerWidth="15" markerHeight="10.5" refX="0" refY="5.25" orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
     <marker id="ff_arrow-vel" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
