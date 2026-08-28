@@ -38,6 +38,39 @@ grep -o 'data-chapter="[^"]*"\|data-tk-num="[^"]*"\|data-tk-title="[^"]*"' index
 Die Prosa ist **statisch**; Interaktivität kommt figurweise dazu
 (s. `../src/figures/CLAUDE.md`).
 
+## Abweichungen von v0.13 — Pflichtdokumentation
+
+Die Wurzel-`CLAUDE.md` verlangt: **jede inhaltliche Abweichung des WIP von
+`Input/v0.13/` zieht einen abhakbaren Eintrag in
+`backlog/P21-statisches-skript-nachziehen.md` nach sich**, weil Druckskript und
+interaktives Skript synchron bleiben müssen. Hier steht, was das praktisch heißt.
+
+**Was zählt als inhaltliche Abweichung** (P21-pflichtig): Reihenfolge von
+Abbildungen/Absätzen geändert · Text ergänzt, gekürzt oder umformuliert ·
+Bildunterschrift inhaltlich erweitert · Formel ergänzt, die die Quelle nicht hat ·
+Abschnitts-/Abbildungsnummerierung weicht ab · eine Aussage steht nur in einer
+der beiden Fassungen.
+
+**Was nicht zählt** (nur Fragmentkopf, kein P21-Eintrag): rein
+darstellungsbedingte Übersetzungen, bei denen der Sachtext unverändert bleibt —
+ein LaTeX-Konstrukt ohne HTML-Entsprechung (`\bbspe`-Plural → einzelne Boxen,
+`siunitx` aufgelöst), ein Verweis-Deskriptor, den der Resolver liefert, ein
+disambiguiertes Doppel-Label. Im Zweifel eintragen: ein überflüssiger Eintrag
+kostet eine Zeile, ein fehlender kostet die Synchronität.
+
+**Drei Stellen, jedes Mal:**
+1. **Kopfkommentar des Fragments** — *was* geändert wurde und warum (steht beim
+   Inhalt, wird beim Lesen der Datei gefunden).
+2. **Eintrag in P21** — Datum, Stelle, Abweichung, was im Druckskript zu tun ist
+   (die Sammlung fürs Nachziehen; einzeln abhakbar).
+3. **Commit-Message** — nennt die Abweichung und verweist auf P21.
+
+**Fehler der Vorlage selbst** (Tippfehler, Sachfehler, falsche Nummern in v0.13)
+gehören **nicht** hierher, sondern in `../QUELLEN_FEHLER.md`; dort ist auch
+geregelt, dass eine Korrektur nur gemeinsam in Quelle *und* WIP erfolgt. Beide
+Register verfolgen dasselbe Ziel — die beiden Fassungen dürfen nicht
+auseinanderlaufen.
+
 Jedes Fragment trägt einen Kopfkommentar mit seiner Quelldatei und jeder
 bewussten Abweichung von v0.13. **Dort — nicht hier — stehen die
 abschnittsspezifischen Fakten**, damit diese Datei nicht mit jedem migrierten
