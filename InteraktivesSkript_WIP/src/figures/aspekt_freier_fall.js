@@ -149,6 +149,29 @@ const ACHSEN_TEXT = {
     down_start:  '\\(y\\) zeigt nach unten, Nullpunkt am Abwurfpunkt',
 };
 
+// Bewegungsgleichung JE KOORDINATENSYSTEM (Nutzervorgabe 2026-08-28: „die
+// Physik-Sektion muss noch an die unterschiedlichen Koordinatensysteme
+// angepasst werden"). Der Fliesstext gibt nur die Variante up_ground an
+// (Formel formel_senkrechterwurf1, y nach oben, Null am Boden) — die anderen
+// drei entstehen daraus durch dieselbe Umrechnung, die auch der Motor beim
+// Anzeigen macht (getDisplayY): Achse nach unten -> Vorzeichenwechsel, Null im
+// Abwurfpunkt -> h0 faellt weg.
+//
+//   y_phys(t) = h0 + v0·t − ½g t²                       (physikalisch)
+//   Anzeige   = ±(y_phys − {0 | h0})                    (Achse x Nullpunkt)
+//
+// Der v0-Term bleibt in allen vier Varianten „+v0·t", weil v0 hier in der Achse
+// DER JEWEILIGEN FIGUR gezaehlt wird (s. „Vorzeichen von v0" oben) — genau das
+// macht den Satz lesbar: es kippen nur das Vorzeichen des g-Terms und das von
+// h0. Nachgerechnet gegen die laufenden Figuren bei t = 1 s, v0 = ±10 m/s,
+// h0 = 20 m: +25,09 / +5,09 / −25,09 / −5,09 m.
+const BEWEGUNGSGLEICHUNG = {
+    up_ground:   'y(t) = -\\tfrac{1}{2}\\,g\\,t^2 + v_0\\,t + h_0',
+    up_start:    'y(t) = -\\tfrac{1}{2}\\,g\\,t^2 + v_0\\,t',
+    down_ground: 'y(t) = +\\tfrac{1}{2}\\,g\\,t^2 + v_0\\,t - h_0',
+    down_start:  'y(t) = +\\tfrac{1}{2}\\,g\\,t^2 + v_0\\,t',
+};
+
 // Konfiguration einer Figur aus ihrem Platzhalter lesen (s. Kopfkommentar).
 function leseKonfig(fig) {
     const achse = ACHSEN_TEXT[fig.dataset.achse] ? fig.dataset.achse : 'up_ground';
@@ -351,6 +374,16 @@ ${cfg.wurf ? `        <div class="analysis-cell key">Scheitelhöhe über Boden</
             : `        <div class="analysis-cell key">Fallzeit \\(t_{\\mathrm{fall}}\\)</div>         <div class="analysis-cell val" id="ff_live_tfall"></div>`}
       </div>
     </div>
+${cfg.wurf ? `    <div class="panel-section">
+      <div class="panel-label">Physik</div>
+      <div class="formula-box">
+        <div class="formula-box-cap">Bewegungsgleichung in diesem Koordinatensystem</div>
+        <div>\\[${BEWEGUNGSGLEICHUNG[cfg.achse]}\\]</div>
+        <div class="ff-formel-note">${cfg.achse === 'up_ground'
+            ? 'Das ist Formel <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> des Fließtextes.'
+            : 'Formel <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> des Fließtextes, umgerechnet auf dieses Koordinatensystem.'} \\(h_0\\) ist die Abwurfhöhe über dem Erdboden, \\(v_0\\) zählt in der Achse dieser Abbildung — beides so wie die Regler links.</div>
+      </div>
+    </div>` : ''}
   </div>
 </div>`;
 

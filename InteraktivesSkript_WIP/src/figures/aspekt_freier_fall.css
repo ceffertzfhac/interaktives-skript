@@ -135,6 +135,14 @@
     font-variant-numeric: tabular-nums;
 }
 
+/* Fussnote unter der Bewegungsgleichung im Physik-Block: woher die Formel
+   kommt und wie ihre Groessen gezaehlt sind. */
+.aspekt-figur[data-motor="freier_fall"] .ff-formel-note {
+    font-size: calc(11px * var(--kb-text-scale));
+    color: var(--kb-text3); line-height: 1.5; margin-top: 2px;
+}
+.aspekt-figur[data-motor="freier_fall"] .ff-formel-note mjx-container { display: inline !important; }
+
 /* Farb-Worte in der Bildunterschrift (analog .bw-sw-* bei Abb. 1.2). */
 .aspekt-figur[data-motor="freier_fall"] .ff-sw-fall { color: var(--ff-fall); }
 
