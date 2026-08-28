@@ -50,12 +50,17 @@ import { buildGrundbegriffeFig } from './figures/aspekt_grundbegriffe.js';
 // Straßenszene mit wanderndem Bus statt einer Bahnkurve; strukturmodelliert
 // auf grundbegriffe/, s. Kopfkommentar von aspekt_bus_weg_zeit.js.
 import { buildBusWegZeitFig } from './figures/aspekt_bus_weg_zeit.js';
+// Abschnitt 3.1.5 „Horizontales Feder-Masse-System" — erste Figur des FUENFTEN
+// Motors (src/figures/federpendel/) und erste Aspekt-Figur OHNE statisches
+// Pendant: 3.1.5 hat in v0.13 keine Abbildung, der Platzhalter traegt daher
+// kein data-figref und bleibt unnummeriert (s. aspekt_federpendel.js).
+import { buildFederpendelFig } from './figures/aspekt_federpendel.js';
 
 // Aspekt-Figuren: jede .aspekt-figur wird ueber data-aspekt einer Factory
 // zugeordnet, die ihre EIGENE Motor-Instanz (Prefix + storeInstance) baut
 // (s. kreisbewegung/runtime.js) -> beliebig viele Figuren, auch auf derselben
 // Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
-const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig };
+const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig, 'federpendel': buildFederpendelFig };
 
 // Stand-alone-Simulationen je Aspekt-Figur (P7-Rest, Nutzervorgabe 2026-07-30).
 // Die Sims leben unter SIM_BASE (die Index-Datei dort listet alle 16); eine
@@ -82,6 +87,8 @@ const ASPEKT_SIM_URLS = {
     'alpha-omega': SIM_BASE + 'sim_kreis_spiralbewegung/index.html',
     // grundbegriffe-Motor -> „Grundbegriffe der Kinematik"
     'grundbegriffe': SIM_BASE + 'sim_grundbegriffe_kinematik/index.html',
+    // federpendel-Motor -> „Federpendel"
+    'federpendel': SIM_BASE + 'sim_federpendel/index.html',
     // bus_weg_zeit: figur-only, keine Stand-alone-Sim -> kein Eintrag
 };
 

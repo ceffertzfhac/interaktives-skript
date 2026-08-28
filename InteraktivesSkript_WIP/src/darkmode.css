@@ -242,6 +242,15 @@ input[type="range"]::-moz-range-track {
     --kb-graph-bg: #161925;  /* Vorlage --graph-bg (dunkles Navy) */
     --kb-grid-line: #262c42; /* Vorlage --grid-line */
 }
+/* Farb-Palette der Federpendel-Figur (Abschnitt 3.1.5, --fp-*, s.
+   aspekt_federpendel.css): eigene Tokenfamilie, daher eigener Dunkel-Zweig.
+   Werte 1:1 aus dem Dunkel-Set der Stand-alone-Vorlage (--surface3 / --c-sp).
+   Der Ortsvektor kehrt sich mit dem Grund um (fast schwarz -> fast weiss) —
+   er ist in der Vorlage bewusst neutral, nicht bunt. */
+.aspekt-figur[data-aspekt="federpendel"] {
+    --fp-surface3: #212633;
+    --fp-sp: #f0f0f0;
+}
 /* Farb-Palette der Kapitel-1.1-Figur (Abb. 1.1, --gk-*, s.
    aspekt_grundbegriffe.css): eigene Tokenfamilie, daher eigener Dunkel-Zweig.
    Werte 1:1 aus dem body.dark-Block der Stand-alone-Sim, mit derselben
