@@ -198,6 +198,35 @@ mitbetrifft.
   25,10 m in allen vier Varianten gleich, Ortswert bei t = 1 s korrekt je
   Koordinatensystem (+25,09 / +5,09 / −25,09 / −5,09 m), Bildunterschriften
   tragen Abb. 1.4–1.7. Stufe 5 (Sicht) steht aus.
+  **Nachtrag (Nutzerfeedback 2026-08-28,** *„in der caption von 1.4 bis 1.7 steht
+  hard gecodet die anfangsgeschwidigkeit sowie die starthöhe … noch schöner: die
+  caption muss sich mit der reglung anpassen"*)**, v1.37.1:** die Bildunterschrift
+  laeuft jetzt mit den Reglern mit (`<span data-wert="h0|v0|richtung">`, gefuellt
+  von `updateCaptionWerte()`); das Symbol bleibt LaTeX und statisch, nur Zahl,
+  Einheit und Richtungswort sind Text — MathJax setzt die Unterschrift nur
+  einmal, ein spaeter geaenderter Formelausdruck wuerde nicht neu gesetzt.
+  Dabei fiel ein **inhaltlicher Fehler** auf: der v0-Regler zeigte den
+  PHYSIKALISCHEN Wert (y nach oben), auch in 1.6/1.7, deren Achse nach unten
+  zeigt — dort stand „v0 = 10 m/s" an einer Achse, auf der ein Wurf nach oben
+  negativ ist, waehrend Ort und Kurve derselben Figur sehr wohl in dieser Achse
+  beschriftet sind. Regler und Unterschrift sprechen jetzt die Achse der
+  jeweiligen Figur (Umrechnung beim Setzen); derselbe Wurf nach oben steht in
+  1.4/1.5 als +10 m/s und in 1.6/1.7 als −10 m/s — genau der Vorzeichen-Effekt,
+  den der Abschnitt zeigen will. Die Hinweiszeile unter dem Regler nennt die
+  Bedeutung des Vorzeichens je Achse.
+  **Nachtrag 2 (Nutzerfeedback 2026-08-28,** *„die ,physik' sektion muss noch an
+  die unterschiedlichen koordinatensysteme angepasst werden bis 1.4 bis 1.7"*)**,
+  v1.37.2:** alle vier Figuren zeigten die Gleichung des Fliesstextes, die nur
+  fuer 1.4 gilt. Jede Figur bringt jetzt die Gleichung ihres Koordinatensystems
+  mit (`BEWEGUNGSGLEICHUNG` je `data-achse`), als statische `.formula-box` mit
+  Querverweis auf die Fliesstext-Formel und einer Zeile dazu, wie h0 und v0
+  gezaehlt sind. Dank der Vorzeichenkonvention aus v1.37.1 unterscheiden sich
+  die vier nur im Vorzeichen des g-Terms und im h0-Term — der v0-Term bleibt
+  ueberall `+v0 t`. Nachgerechnet gegen die laufenden Figuren.
+  **Offen/zu entscheiden:** Abb. 1.3 holt ihre Formel weiterhin dynamisch aus
+  dem Fliesstext (`data-eqs`) und sieht dadurch anders aus als die vier
+  Wurf-Figuren mit ihrer Formelkarte. Vereinheitlichen (1.3 ebenfalls als
+  Karte) oder so lassen?
 - [ ] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
 - [ ] **P16-6 Aspekt-Figur Abb. 1.9** — schräger Wurf: Flugbahn + 2× s-t x/y
   (Motor B). *(M)*
