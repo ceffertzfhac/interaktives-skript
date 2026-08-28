@@ -156,6 +156,18 @@ nicht aufgezählt): maßgeblich sind `main.js::ASPEKT_FACTORIES` (Zuordnung
 `data-aspekt` → Fabrik) und der **Kopfkommentar jedes `aspekt_*.js`**, der seine
 eigene Vorlage und jede Abweichung davon benennt.
 
+**Eine Fabrik darf mehrere Abbildungen tragen.** Wenn sich Abbildungen NUR in
+Parametern unterscheiden (Ausgangswerte, Koordinatenwahl) und sonst identisch
+sind, bekommt jede weiterhin ihre eigene Figur mit eigener Motor-Instanz und
+eigener Nummer (1:1-Granularität), aber **nicht** ihr eigenes Modul: die
+Unterschiede stehen als `data-*` am Platzhalter im Kapitel, `ASPEKT_FACTORIES`
+bildet mehrere `data-aspekt`-Namen auf dieselbe Fabrik ab, und eine weitere
+Variante kostet eine Zeile HTML statt einer Moduldatei. Ein Umschalter INNERHALB
+einer Figur wäre etwas anderes und ist nicht gemeint. Teilen sich solche Figuren
+auch das Aussehen, teilen sie sich ihr Stylesheet über
+`.aspekt-figur[data-motor="<motor>"]` statt über den Aspekt-Namen — sonst stünde
+derselbe Regelsatz mehrfach da.
+
 `aspekt_kreisbahn.js` (Abb. 1.38) exportiert zusätzlich die generischen Toggles
 (`toggle_aspekt` / `close_aspekt_overlay` / `toggle_analyse` /
 `toggle_panel_left`), die ALLE Figuren über die Bindung in `main.js`
