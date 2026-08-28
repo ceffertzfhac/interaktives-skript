@@ -103,16 +103,30 @@ P16-5 (Abb. 1.19, v-t) ist dagegen billig geworden: derselbe Motor, dieselbe
 Fabrik — dort waere nur der Diagrammtyp 'geschw' statt 'weg' zu setzen und der
 v-Pfeil einzuschalten.
 
-**Beim Bau von P16-3 aufgefallen (2026-08-28) — betrifft Kapitel 1.1 als
-Ganzes:** die Kurvenfarbe firebrick (#b22222), die Abb. 1.2 aus ihrer
-matplotlib-Quelle mitbringt und die Abb. 1.3 fuer Kugel + Kurve uebernimmt,
-erreicht auf dem dunklen Diagramm-Grund des Darkmodes (--kb-graph-bg #161925)
-nur rund **1,6:1** Kontrast (fuer grafische Elemente waeren 3:1 noetig). Beide
-Figuren haben bewusst KEINEN Dunkel-Zweig fuer diesen Token. Zu entscheiden:
-Kapitel 1.1 bekommt fuer den Darkmode eine aufgehellte Kurvenfarbe (dann fuer
-**beide** Figuren zugleich, sonst reisst die Kapitel-Konsistenz), oder es bleibt
-wie es ist. Nicht im Alleingang geaendert, weil es die bestehende Abb. 1.2
-mitbetrifft.
+**Beim Bau von P16-3 aufgefallen, am 2026-08-28 entschieden und umgesetzt
+(v1.37.5):** die Kurvenfarbe firebrick (#b22222) erreichte auf dem dunklen
+Diagrammgrund des Darkmodes nur rund **1,6:1** Kontrast (fuer grafische Elemente
+waeren 3:1 noetig). Nutzervorgabe: *„gerne ueber die drei farbmodi variieren und
+gut sichtbar machen, aber nicht zu aufdringlich, optische konsistenz
+weitestgehend sicherstellen"*. Umgesetzt als **ein gemeinsames Kapitel-1.1-Token
+`--k11-kurve`** auf `.aspekt-figur` (aspekt_kreisbahn.css): Abb. 1.2
+(`--bw-kurve`) und Abb. 1.3-1.7 (`--ff-fall`) verweisen per `var()` darauf und
+koennen dadurch nicht mehr auseinanderlaufen — vorher standen zwei gleiche
+Hex-Werte in zwei Dateien. Werte je Modus (nachgemessen im Browser, Kontrast
+gegen den jeweiligen Diagrammgrund):
+
+| Modus | Wert | Kontrast |
+|---|---|---|
+| normal hell | `#b22222` firebrick (Quelle Abb. 1.2) | 6,7:1 |
+| normal dunkel | `#ff7777` (das Rot, das dieser Darkmode ohnehin fuehrt) | 6,8:1 |
+| deuter hell/dunkel | `#D55E00` (wie `--gk-dba` derselben Palette) | 3,9 / 4,5:1 |
+| tritan hell | `#c0392b` | 5,4:1 |
+| tritan dunkel | `#e05a4a` | 4,8:1 |
+
+Geprueft: in allen sechs Modi zeigen Buskurve, Bus-Icon, Fallkugel und
+Fall-Kurve denselben Wert; `cvd_check.mjs` laeuft durch (Spiegel um das Token
+ergaenzt, Ein-Farb-Sets abgefangen — die Figuren haben nur EINE Farbe, dort ist
+allein der Kontrast die Pruefung).
 
 **Beim Aufstellen der Reihenfolge aufgefallen (2026-08-28):**
 - **Abb. 1.18 ist EINE `<figure>` mit ZWEI `<img>`** (`…_schraeger_wurf.png` +
