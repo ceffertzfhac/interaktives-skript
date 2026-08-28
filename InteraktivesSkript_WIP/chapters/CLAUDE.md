@@ -65,6 +65,20 @@ kostet eine Zeile, ein fehlender kostet die Synchronität.
    (die Sammlung fürs Nachziehen; einzeln abhakbar).
 3. **Commit-Message** — nennt die Abweichung und verweist auf P21.
 
+**Maßstab für den P21-Eintrag:** *jemand, der nicht dabei war, muss ihn im
+`.tex` umsetzen können, ohne jemanden zu fragen.* Also **Zieldatei** unter
+`Input/v0.13/` nennen, die **Stelle** über ein LaTeX-Label oder einen Anker
+festmachen (nicht über Zeilennummern — die verschieben sich) und den
+einzusetzenden **Text wörtlich** hinschreiben, nicht bloß beschreiben. Eine
+Beschreibung wie „Absatz ergänzt" ist als Eintrag wertlos.
+
+**Sonderregel Bildunterschriften** (Nutzervorgabe): dokumentiert wird die
+Abweichung vollständig, **nachgezogen aber nur, was im statischen Skript
+sinnvoll ist**. Regler-Hinweise, mitlaufende Zahlenwerte und Farbnennungen der
+interaktiven Figuren gehören nicht ins Druckskript; ein erklärender Satz (z. B.
+zum Koordinatensystem) sehr wohl. Der Eintrag sagt beides: was übernommen wird
+und was bewusst nicht.
+
 **Fehler der Vorlage selbst** (Tippfehler, Sachfehler, falsche Nummern in v0.13)
 gehören **nicht** hierher, sondern in `../QUELLEN_FEHLER.md`; dort ist auch
 geregelt, dass eine Korrektur nur gemeinsam in Quelle *und* WIP erfolgt. Beide
