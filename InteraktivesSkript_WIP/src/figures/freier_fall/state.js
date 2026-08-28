@@ -32,6 +32,15 @@ export const store = {
   // direction 'up'|'down' x origin 'ground'|'start'.
   yAxisConfig: { direction: 'up', origin: 'ground' },
 
+  // PORT-AENDERUNG (P16-4): Name der Ortsachse. null = Verhalten der
+  // Stand-alone-Sim (sie schreibt 's', sobald der Nullpunkt im Abwurfpunkt
+  // liegt, sonst 'y'). v0.13 nennt die Achse in ALLEN vier Varianten
+  // ausdruecklich 'y' ("die Achse senkrecht zum Erdboden haben wir mit y
+  // benannt" — auch in Abb. 1.5/1.7 mit Nullpunkt am Abwurfpunkt). Die
+  // Aspekt-Figuren setzen daher posChar='y'; gelesen von render.js an den
+  // drei Beschriftungsstellen (Achsen-Miniatur, Diagramm-Achse, Diagrammtitel).
+  posChar: null,
+
   // Progressiv wachsende Zeitreihen (kein Vorab-Precompute, s. physics.js)
   t_data: [], y_data: [], v_data: [], a_data: [],
 

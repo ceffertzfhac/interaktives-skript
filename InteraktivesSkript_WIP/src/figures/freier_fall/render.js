@@ -10,6 +10,8 @@
 //  2. updatePhysicsFormulas() sucht die Formelvarianten ueber store.idPrefix
 //     statt dokumentweit — sonst schalten mehrere Figuren auf einer Seite
 //     einander die Formeln um.
+//  4. store.posChar (P16-4): Name der Ortsachse, s. state.js. Ohne den Wert
+//     bleibt es beim Verhalten der Quelle.
 //  3. Die Pfeilspitzen-Marker werden ueber url(id) = url(#<idPrefix><id>)
 //     referenziert statt ueber die festen Dokument-IDs #arrowhead / #arrow-y
 //     der Stand-alone-Sim. Dort gibt es genau EIN Marker-Paar im Dokument; im
@@ -31,6 +33,10 @@ const NS = 'http://www.w3.org/2000/svg'
 
 // PORT-AENDERUNG 3 (s. Kopfkommentar): Marker-Referenz mit Instanz-Prefix.
 const url = id => `url(#${store.idPrefix}${id})`
+
+// PORT-AENDERUNG 4 (s. Kopfkommentar): Name der Ortsachse. store.posChar
+// gewinnt, sonst die Regel der Quelle (Nullpunkt im Abwurfpunkt -> 's').
+const posChar = () => store.posChar || (store.yAxisConfig.origin === 'start' ? 's' : 'y')
 
 function el(tag, attrs) {
   const e = document.createElementNS(NS, tag)
@@ -96,7 +102,7 @@ export function drawYAxisDisplay() {
 
   const tipY  = direction === 'up' ? yEnd - 17 : yEnd + 17
   const angle = direction === 'up' ? -90 : 90
-  const axCh  = (graphType === 'weg' && origin === 'start') ? 's' : 'y'
+  const axCh  = graphType === 'weg' ? posChar() : 'y'
   const tl = el('text', {
     x: ax + 20, y: tipY,
     transform: `rotate(${angle} ${ax + 20} ${tipY})`,
@@ -148,7 +154,7 @@ function drawGraphSlot({ slot, gridEl, lineEl, pointEl, titleEl, type, graphHeig
     const yMaxPhys = h0 + (v0 > 0 ? v0 * v0 / (2 * G) : 0)
     const d0 = getDisplayY(0), dM = getDisplayY(yMaxPhys)
     vMin = Math.min(d0, dM); vMax = Math.max(d0, dM)
-    yLabel = yAxisConfig.origin === 'start' ? 's / m' : 'y / m'
+    yLabel = `${posChar()} / m`
   } else if (type === 'geschw') {
     const vEnd = v0 - G * tMax
     const dV0 = getDisplayV(v0), dVe = getDisplayV(vEnd)
@@ -216,7 +222,7 @@ function drawGraphSlot({ slot, gridEl, lineEl, pointEl, titleEl, type, graphHeig
   gridEl.appendChild(tlY)
 
   // Diagrammtitel
-  const posSymbol = yAxisConfig.origin === 'start' ? 's(t)' : 'y(t)'
+  const posSymbol = `${posChar()}(t)`
   const titles = { weg: `Weg-Zeit ${posSymbol}`, geschw: 'Geschw.-Zeit v(t)', beschl: 'Beschl.-Zeit a(t)' }
   setGraphTitle(titleEl, titles[type] || '')
 
