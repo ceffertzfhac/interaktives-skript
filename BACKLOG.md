@@ -26,7 +26,7 @@ die Links hier zeigen auf den Pfad.
 |---|---|---|
 | [P12 — Komplett-Integration aller noch fehlenden v0.13-Inhalte](backlog/P12-restliche-v013-inhalte.md) | 21/17 | Prosa vollständig (114/114 Unterabschnitte); offen: interaktive Figuren je Abschnitt, Quasi-Content, Asset-Pipeline, Verifikation |
 | [P13 — Text- & Formel-Marker für Studierende](backlog/P13-marker-und-notizbuch.md) | 0/16 | 4 Farben, persistent; plus begleitendes Notizbuch (P13-N) |
-| [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 1/10 | zwei neue Motoren (freier Fall, schräger Wurf) + 8 Aspekt-Figuren |
+| [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 2/9 | Motor A steht; offen: Motor B + 8 Aspekt-Figuren, als Nächstes Abb. 1.3 |
 | [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 0/4 | Abb. 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten, 1.8 Federpendel |
 | [P15 — Weiße Hintergründe aus Nicht-Foto-Abbildungen entfernen](backlog/P15-weisse-hintergruende.md) | 0/7 | Darkmode-Verträglichkeit der statischen Bilder |
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |

@@ -114,9 +114,20 @@ also die ersten fuenf Abbildungen am Stueck ab.
 - [x] **P16-0 Klärung** — Granularität: **1:1 pro Abbildung** (keine Konsolidierung);
   Motor-Wahl: **beide Motoren** (A + B). Vorlagen-Hierarchie pro Figur bei
   Umsetzung festgelegt. *(S)* — entschieden 2026-07-30.
-- [ ] **P16-1 Motor A portieren** — `src/figures/freier_fall/{constants,physics,render,state,runtime}.js`,
-  reuse `../kreisbewegung/lib/*`, `initFreierFall()` aus `main.js::init()`,
-  PORT-AENDERUNG-Marker. *(L)*
+- [x] **P16-1 Motor A portieren** *(L)* — **erledigt 2026-08-28 (`b09b851`)**:
+  `src/figures/freier_fall/{constants,physics,state,render,runtime}.js`, 772 Z.,
+  lib aus `../kreisbewegung/lib/`. PORT-AENDERUNGEN im Code markiert: `idPrefix`
+  + `q()` (`ff<n>_`), lib-Pfade, `updatePhysicsFormulas()` prefix-gebunden, die
+  Radio-Gruppen (`speed`/`diagram_mode`) ueber den Prefix im `name` statt
+  dokumentweit (sonst fasst der Browser sie zu EINER Auswahlgruppe zusammen),
+  ungenutzter letzter Parameter von `renderHoverTooltip` entfaellt. `ui.js` der
+  Sim **nicht** portiert (Theme/CSV-Export/Akkordeon) — wie bei `federpendel`
+  bringt die Aspekt-Figur ihre Bedienung selbst mit. Kein
+  `initFreierFall()` in `main.js`: seit v1.7 gibt es keinen Stand-alone-
+  Init-Pfad mehr, Motoren laufen ausschliesslich ueber `createRuntime()`.
+  Geprueft: `node --check` auf allen fuenf Modulen, Importe aufloesbar (11
+  render- + 6 physics-Exporte), zwei Instanzen mit getrennten Prefixen und
+  getrennter `yAxisConfig`. Noch nicht verdrahtet — Seite unveraendert.
 - [ ] **P16-2 Motor B portieren** — `src/figures/schraeger_wurf/{constants,physics,render,state,runtime}.js`,
   Precompute-then-interpolate, reuse `../kreisbewegung/lib/*` inkl. vectors,
   `initSchraegerWurf()` aus `main.js::init()`. *(L)*

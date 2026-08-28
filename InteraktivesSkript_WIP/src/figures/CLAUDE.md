@@ -110,6 +110,7 @@ bleibt.
 | `kreis_spiral/` | ISO-3D (`projectISO`) mit sichtbarer **Rotationsachse** | `ks<n>_` | ω und α leben auf der Achse — in der 2D-Draufsicht unmöglich. Bringt α, Ebenenhöhe h und den Spiralmodus nativ mit |
 | `grundbegriffe/` | 2D-x-y-Diagramm, **beliebige** feste Bahnkurve x(t)/y(t) | `gk<n>_` | beide anderen können nur Kreis-/Spiralbahnen. Erster **zeitloser** Motor: kein rAF, kein Play/Pause, keine `show*`-Flags sondern `store.toggles`, Schalter-mit-Hover-Erklärung statt Slidern — **daher keine Vorlage für eine Kreisbewegungs-Figur** |
 | `federpendel/` | Feder-Masse-Szene + t-Diagramm, harmonische Schwingung | `fp<n>_` | erster Motor außerhalb der Kreis-/Bahnthematik. Bringt die Zeitreihen für x, v, a **und die Energien** (Ek/Ep/Eges) mit, damit 3.1.9 ohne zweiten Port folgen kann; kann `oscillationMode` horizontal **und** vertikal |
+| `freier_fall/` | vertikale Szene + t-Diagramm(e), 1D-Fall/Wurf | `ff<n>_` | erster Motor mit **wählbarer Achsenkonvention**: `yAxisConfig` (Richtung hoch/runter × Nullpunkt Boden/Abwurfpunkt) rechnet erst beim Anzeigen um, wodurch eine einzige Bewegungsgleichung die vier v0.13-Varianten Abb. 1.4–1.7 trägt. `v0` als Vorzeichenparameter deckt freien Fall **und** senkrechten Wurf ab; zwei Diagramm-Slots (`single`/`top`/`bottom`) statt einem |
 | `bus_weg_zeit/` | Straßenszene + t-x-Diagramm, stückweise x(t) | `bw<n>_` | figur-only, keine passende Stand-alone-Sim; strukturell auf `grundbegriffe/` modelliert. `store.t` ist ein SKALARer Zeitcursor (kein tA/tB-Paar) — ein Cursor steuert Bus und Kurvenpunkt synchron |
 
 Gemeinsame Bausteine: `kreisbewegung/lib/{format,hover,svg-text,ticks,vectors}.js`
@@ -124,6 +125,8 @@ dieses Repos — wurde nach `kreisbewegung/lib/` mitportiert);
 `kreis_spiral` ← `Project_kreis_spiralbewegung_simulation/` (UI/Topbar und
 `export-image.js` der Sim wurden nicht gebraucht);
 `grundbegriffe` ← `Project_grundbegriffe_kinematik_simulation`;
+`freier_fall` ← `Project_freier_fall_simulation` (dessen `ui.js` — Theme,
+CSV-Export, Akkordeon — wurde nicht gebraucht);
 `bus_weg_zeit` hat keine Quell-Sim.
 
 `kreisbewegung` nutzt **nicht** `factory.js` — sein Interaktionsmodell
