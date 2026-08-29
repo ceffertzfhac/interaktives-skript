@@ -573,7 +573,7 @@ export function updateGraph(time, offset = 0, showCurrent = true) {
 
   // Titel (als letztes SVG-Kind, oberhalb Plot-Bereich, zentriert pro Format)
   DOM.graphTitle.setAttribute('x', graphW / 2)
-  setGraphTitle(DOM.graphTitle, graphTitles[store.graphType])
+  setGraphTitle(DOM.graphTitle, graphTitles[store.oscillationMode][store.graphType])
 
   // Daten-Polylinien bis zum aktuellen Zeitpunkt (I7: je Linie im Typ-Config).
   // store.tData ist absolut indiziert; Punkte vor dem Messstart (< offset)

@@ -82,6 +82,25 @@
 }
 .aspekt-figur[data-motor="federpendel"] .aspekt-scene [id$="arrowhead"] polygon { fill: var(--kb-text); }
 
+/* ── Vokabel-Bruecke zur Stand-alone-Sim ─────────────────────────────────────
+   render.js faerbt die Diagrammkurven INLINE mit den Token-Namen der Sim
+   (`le.style.stroke = 'var(--accent)'`, s. GRAPH_LINES). Diese Namen kommen aus
+   der design-system.css der Sim, die nicht mitportiert wurde — im Skript waren
+   sie also undefiniert. Folge: die Deklaration ist "invalid at computed-value
+   time", `stroke` faellt auf den ererbten Wert zurueck (none) und DIE KURVE WAR
+   UNSICHTBAR — in beiden Figuren dieses Motors, seit dem Port. Gefunden beim
+   Sichten von Abb. 1.8 (P17-3).
+   Statt den Motor umzuschreiben, liefert die Figur hier das fehlende Vokabular;
+   inline gesetzte var()-Namen loesen dann gegen diese Definitionen auf. Die
+   Energiefarben braucht heute keine Figur — sie stehen fuer 3.1.9 bereit, damit
+   dieselbe Falle nicht ein zweites Mal zuschnappt. */
+.aspekt-figur[data-motor="federpendel"] {
+    --accent: var(--kb-accent);
+    --c-ekin: var(--kb-at);      /* fuer 3.1.9; dort ggf. praezisieren */
+    --c-epot: var(--kb-ar);
+    --c-etot: var(--kb-text2);
+}
+
 /* ── Diagramm: Kurve und Punkt in der Sim-Akzentfarbe (Vorlage #graph_line /
    #graph_point). Die Vergleichskurve gestrichelt + duenner, gleiche Farbe. ── */
 .aspekt-figur[data-motor="federpendel"] [id$="graph_line"]  { stroke: var(--kb-accent); }
