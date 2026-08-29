@@ -76,11 +76,20 @@ in dieser Zeit gern „Seite reagiert nicht").
   Durchgang über alle Seiten — die Nummerierung muss also entweder vorab aus dem
   Quelltext (nicht aus dem gesetzten DOM) kommen oder pro Seite nachgezogen
   werden. Vor der Umsetzung entwerfen; gehört fachlich zu P1 (Architektur).
-- [ ] **P22-4 Gegenmessung an der veröffentlichten Fassung** *(S)* — steht noch
-  aus: die Messung oben stammt von `main` (v1.34.1). P22-1/-2 liegen auf
-  `Backlog_items` und sind noch nicht nach `main` gemerged/gepusht — erst danach
-  lässt sich der Effekt live nachmessen. Lokal gemessen: 28 kB Bilder beim
-  Start statt 38 MB.
+- [x] **P22-4 Gegenmessung an der veröffentlichten Fassung** *(S)* — **erledigt
+  2026-08-29**, nach Merge nach `main` und erfolgreichem Pages-Build (v1.38.2),
+  zwei saubere Läufe:
+
+  | Messgröße | vorher (v1.34.1) | nachher (v1.38.2) |
+  |---|---|---|
+  | Übertragene Daten | 38,9 MB | **1,5–1,8 MB** |
+  | Anfragen | 205 | 121–123 |
+  | Prosa sichtbar | 1,6 s | 1,7–3,0 s |
+  | Formeln gesetzt | 13,1 s | 11,9–12,7 s (unverändert → P22-3) |
+
+  Größter Einzelposten ist jetzt MathJax selbst (`tex-svg.js`, 617 kB), das
+  größte Bild 191 kB. Ein dritter Lauf zeigte 36 s für die Formeln — Ausreißer
+  durch Last auf dem Messrechner, die beiden sauberen Läufe liegen bei 12 s.
   *(ursprünglich:)* nach jeder Stufe dieselbe Messung wiederholen
   (Skript im Scratchpad: `live_perf.mjs`; misst Übertragungsvolumen, Zeit bis
   Prosa/Formeln/Figuren) und die Tabelle oben fortschreiben.
