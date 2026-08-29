@@ -97,6 +97,11 @@ export function print_page() {
 
     var pc = ge("print_container");
     pc.innerHTML = ge("container").innerHTML;
+    // Kapitelbilder tragen loading="lazy" (BACKLOG P22-1, s. chapters.js): im
+    // Ausdruck muessen aber auch die Bilder der Seiten erscheinen, die am
+    // Bildschirm nie sichtbar waren. Im Klon daher zurueck auf eager — der
+    // Browser holt sie dann sofort, noch bevor der Druckdialog rendert.
+    pc.querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
     show("print_container");
     show("print_instruction");
     hide("container");

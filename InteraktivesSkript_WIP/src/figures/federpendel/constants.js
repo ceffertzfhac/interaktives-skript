@@ -85,14 +85,22 @@ export const graphOptions = {
 }
 
 // Kurze Titel je Graph-Typ (TextContent, letztes Symbol kursiv via setGraphTitle)
-export const graphTitles = {
-  pos_t:      'Auslenkung vs. Zeit x(t)',
+// PORT-AENDERUNG (P17-3): Titel JE AUFBAU, so wie graphAxisLabels darunter.
+// Die Quelle fuehrt nur einen Satz Titel und schreibt deshalb auch im
+// vertikalen Aufbau „x(t)", waehrend die Achse daneben korrekt mit y
+// beschriftet ist — in Abb. 1.8 standen beide Schreibweisen nebeneinander.
+// Es unterscheidet sich nur pos_t; v/a/Energie sind achsenunabhaengig benannt.
+const _titelBasis = {
   v_t:        'Geschwindigkeit vs. Zeit v(t)',
   a_t:        'Beschleunigung vs. Zeit a(t)',
   ekin:       'Kinetische Energie E_kin(t)',
   epot:       'Potentielle Energie E_pot(t)',
   eges:       'Gesamtenergie E_ges(t)',
   ecomposite: 'Energie (E_kin, E_pot, E_ges)',
+}
+export const graphTitles = {
+  horizontal: { pos_t: 'Auslenkung vs. Zeit x(t)', ..._titelBasis },
+  vertical:   { pos_t: 'Auslenkung vs. Zeit y(t)', ..._titelBasis },
 }
 
 // Y-Achsenlabel je Typ (für setAxisLabel: „Größe / Einheit")

@@ -19,7 +19,14 @@
      umgewandelt. Bewusste Abweichungen von v0.13: \bbspe (Plural "Beispiele")
      -> einzelne beispiel-Box (1.1.1, 1.1.3); Doppel-Label formel_freierfall4
      (Quell-Bug) -> formel_freierfall_fallzeit disambiguiert; Quell-Artefakt
-     "code/Code" in der Zusammenfassung uebersprungen. -->
+     "code/Code" in der Zusammenfassung uebersprungen.
+     Abweichung 2026-08-28 (Nutzervorgabe, BACKLOG P21): in der Beispielbox
+     "Freier Fall und senkrechter Wurf" stehen Abb. 1.5-1.7 jetzt am ENDE der
+     Box statt unmittelbar hinter Abb. 1.4, und nach Abb. 1.4 steht ein
+     ueberleitender Absatz dazu, dass Aussehen UND Formel vom Koordinatensystem
+     abhaengen. Abbildungsnummern bleiben unveraendert (relative Reihenfolge
+     erhalten, keine andere Abbildung dazwischen). Das Druckskript ist
+     entsprechend nachzuziehen -> P21. -->
 
 
 <section>
@@ -214,7 +221,13 @@
         \begin{equation}y(t)= -\frac{1}{2}\cdot g \cdot t^2 + h_0 \label{formel_freierfall4}\end{equation}
         <p>beschrieben und das zugehörige Weg-Zeit-Diagramm ist in <a class="xref" data-ref-fig="fig-freierfall_1"></a> dargestellt.</p>
 
-        <figure class="abbildung" id="fig-freierfall_1">
+        <!-- Interaktive Aspekt-Figur zu Abb. 1.3 (BACKLOG P16-3). Sie ERSETZT am
+             Bildschirm die statische Abbildung, die als .nur-druck-Fallback direkt
+             darunter stehen bleibt (und ueber data-figref die Abbildungsnummer
+             liefert — deshalb muessen beide beieinander stehen). -->
+        <div class="aspekt-figur nur-bildschirm" id="aspekt-freier-fall" data-aspekt="freier-fall" data-motor="freier_fall" data-achse="up_ground" data-h0="10" data-title="Freier Fall: Weg-Zeit-Diagramm (interaktiv)" data-figref="fig-freierfall_1" data-caption="<strong>Koordinatensystem:</strong> die \(y\)-Achse steht senkrecht auf dem Erdboden und zeigt nach oben, ihr Nullpunkt liegt auf dem Erdboden &mdash; die kleine Achsenskizze in der Szene zeigt beides. Weg-Zeit-Diagramm des freien Falls: das Objekt wird aus der H&ouml;he <span class=&quot;ff-wert&quot; data-wert=&quot;h0&quot;>10,0 m</span> &uuml;ber dem Erdboden (Regler \(h_0\)) losgelassen, in diesem Koordinatensystem also bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;ystart&quot;>+10,0 m</span>; der Erdboden liegt bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;yboden&quot;>0</span>. Interaktiv: der Zeit-Regler \(t\) oder die Wiedergabe l&auml;sst die Kugel fallen; die <span class=&quot;ff-sw-fall&quot;>rote</span> Kurve \(y(t)\) entsteht dabei Punkt f&uuml;r Punkt aus der Bewegung. Der Regler \(h_0\) &auml;ndert die Fallh&ouml;he &mdash; Bildunterschrift und Fallzeit im Analysefeld laufen mit."></div>
+
+        <figure class="abbildung nur-druck" id="fig-freierfall_1">
             <img class="grafik" style="width:85%" src="bilder/freierfall_1.png" alt="">
             <figcaption>Weg-Zeit-Diagramm des freien Falls. Das Objekt wird aus der Höhe \(h_0=10\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt auf dem Erdboden.</figcaption>
         </figure>
@@ -252,29 +265,55 @@
         y(t)=- \frac{1}{2}\cdot g \cdot t^2 +v_0 \cdot t + h_0 \label{formel_senkrechterwurf1}
         \end{equation}
 
-        <figure class="abbildung" id="fig-senkrechter_wurf_1">
+        <!-- Interaktive Aspekt-Figuren zu Abb. 1.4-1.7 (BACKLOG P16-4): dieselbe
+             Bewegung (Abwurf aus 20 m mit 10 m/s nach oben) in den VIER
+             Koordinatensystemen des Abschnitts. Eine Figur je Abbildung
+             (1:1-Beschluss) — alle vier laufen auf derselben Fabrik, die ihre
+             Achsenwahl aus data-achse liest (s. aspekt_freier_fall.js). Die
+             statischen Abbildungen bleiben als .nur-druck-Fallback direkt
+             darunter stehen und liefern ueber data-figref die Nummer. -->
+        <div class="aspekt-figur nur-bildschirm" id="aspekt-senkrechter-wurf-1" data-aspekt="senkrechter-wurf" data-motor="freier_fall" data-achse="up_ground" data-h0="20" data-v0="10" data-title="Senkrechter Wurf: Weg-Zeit-Diagramm, die Achse zeigt nach oben und hat ihren Nullpunkt auf dem Erdboden (interaktiv)" data-figref="fig-senkrechter_wurf_1" data-caption="<strong>Koordinatensystem:</strong> die \(y\)-Achse steht senkrecht auf dem Erdboden und zeigt nach oben, ihr Nullpunkt liegt auf dem Erdboden &mdash; die kleine Achsenskizze in der Szene zeigt beides. Weg-Zeit-Diagramm des senkrechten Wurfs: das Objekt startet <span class=&quot;ff-wert&quot; data-wert=&quot;h0&quot;>20,0 m</span> &uuml;ber dem Erdboden (Regler \(h_0\)), in diesem Koordinatensystem also bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;ystart&quot;>+20,0 m</span>; der Erdboden liegt bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;yboden&quot;>0</span>. Abgeworfen wird mit der Anfangsgeschwindigkeit \(v_0 =\) <span class=&quot;ff-wert&quot; data-wert=&quot;v0&quot;>10 m/s</span> &mdash; in diesem Koordinatensystem hei&szlig;t das: <span class=&quot;ff-wert&quot; data-wert=&quot;richtung&quot;>nach oben geworfen</span>. Interaktiv: der Zeit-Regler \(t\) oder die Wiedergabe l&auml;sst das Objekt fliegen; die <span class=&quot;ff-sw-fall&quot;>rote</span> Kurve \(y(t)\) entsteht dabei Punkt f&uuml;r Punkt aus der Bewegung. Die Regler \(h_0\) und \(v_0\) &auml;ndern Abwurfh&ouml;he und Anfangsgeschwindigkeit &mdash; diese Bildunterschrift l&auml;uft mit. Dieselbe Bewegung sieht in den vier Koordinatensystemen von <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_1&quot;></a> bis <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_4&quot;></a> unterschiedlich aus."></div>
+
+        <figure class="abbildung nur-druck" id="fig-senkrechter_wurf_1">
             <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_1.png" alt="">
             <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt auf dem Erdboden.</figcaption>
         </figure>
 
-        <figure class="abbildung" id="fig-senkrechter_wurf_2">
-            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_2.png" alt="">
-            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt auf der Höhe des Abwurfpunktes.</figcaption>
-        </figure>
-
-        <figure class="abbildung" id="fig-senkrechter_wurf_3">
-            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_3.png" alt="">
-            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach unten und hat ihren Nullpunkt auf der Höhe des Erdbodens.</figcaption>
-        </figure>
-
-        <figure class="abbildung" id="fig-senkrechter_wurf_4">
-            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_4.png" alt="">
-            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach unten und hat ihren Nullpunkt auf der Höhe des Abwurfpunktes.</figcaption>
-        </figure>
+        <!-- ZUSATZ gegenueber v0.13 (Nutzervorgabe 2026-08-28): ueberleitender
+             Absatz + die drei uebrigen Koordinatensysteme ans Ende der Box.
+             In v0.13 stehen Abb. 1.4-1.7 unmittelbar hintereinander; hier
+             traegt Abb. 1.4 den Gedanken zuerst allein, und 1.5-1.7 folgen
+             gesammelt am Schluss als Gegenueberstellung. Das statische Skript
+             ist entsprechend nachzuziehen (BACKLOG P21). -->
+        <p>Sowohl das <strong>Aussehen</strong> des Weg-Zeit-Diagramms als auch die <strong>Formel</strong>, mit der wir die Bewegung beschreiben, hängen von der Wahl des Koordinatensystems ab. Eine Parabel bleibt die Kurve dabei immer — aber ob sie nach oben oder nach unten geöffnet ist, wo ihr Scheitelpunkt liegt und wo sie die Zeitachse schneidet, entscheidet erst die Wahl von Achsenrichtung und Nullpunkt. Am Ende dieses Beispiels ist dieselbe Bewegung mit denselben Zahlenwerten deshalb noch einmal in den drei übrigen Koordinatensystemen dargestellt, siehe <a class="xref" data-ref-fig="fig-senkrechter_wurf_2"></a> bis <a class="xref" data-ref-fig="fig-senkrechter_wurf_4"></a>.</p>
 
         <p>Das Ort-Zeit-Diagramm wird wieder die Form einer Parabel annehmen, siehe <a class="xref" data-ref-fig="fig-senkrechter_wurf_1"></a> bis <a class="xref" data-ref-fig="fig-senkrechter_wurf_4"></a>, allerdings liegt das Maximum (oder Minimum, bei einer anderen Wahl der Richtung der Achse) nun nicht mehr bei \(t=0\), sondern ist zu einem anderen Zeitpunkt zu finden. Das ist logisch, denn das Objekt wird sich durch die Anfangsgeschwindigkeit (die wir zunächst mal als in unserem Koordinatensystem positiv annehmen, d.h. das Objekt wird nach oben geworfen) zunächst nach oben bewegen, dann das Maximum seiner Flugkurve erreichen und dann <strong>nach unten</strong> fallen. Mit Formel <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> können wir also verschiedene Dinge über die Bewegung des Objektes erfahren, z.&nbsp;B. wann das Objekt seinen höchsten Punkt erreicht (hierzu müssen Sie das Maximum bestimmen), wann das Objekt auf dem Boden aufkommt (hierzu müssen Sie die Nullstelle bei \(t>0\) finden), und so weiter.</p>
 
         <p>Einige Erkenntnisse können wir sogar gewinnen, indem wir nicht rechnen, sondern uns nur die Form der Gleichung ansehen. Da die Gleichung <a class="xref" data-ref-eq="formel_senkrechterwurf1"></a> mathematisch gesehen eine Parabel ist, können wir z.&nbsp;B. auf Basis unseres Wissens über Parabeln aus der Mathematik direkt folgern, dass die Zeit, die vergeht vom Start der Bewegung (Abwurf) bis zum höchsten Punkt der Flugkurve immer genau so lange ist, wie die Zeit vom höchsten Punkt der Flugkurve bis zu dem Punkt, an dem das Objekt wieder auf seiner Anfangshöhe angekommen ist.</p>
+
+        <!-- Dieselbe Bewegung in den drei uebrigen Koordinatensystemen
+             (verschoben ans Ende der Box, s. Kommentar oben). -->
+
+        <div class="aspekt-figur nur-bildschirm" id="aspekt-senkrechter-wurf-2" data-aspekt="senkrechter-wurf" data-motor="freier_fall" data-achse="up_start" data-h0="20" data-v0="10" data-title="Senkrechter Wurf: Weg-Zeit-Diagramm, die Achse zeigt nach oben und hat ihren Nullpunkt auf der H&ouml;he des Abwurfpunktes (interaktiv)" data-figref="fig-senkrechter_wurf_2" data-caption="<strong>Koordinatensystem:</strong> die \(y\)-Achse steht senkrecht auf dem Erdboden und zeigt nach oben, ihr Nullpunkt liegt im Abwurfpunkt &mdash; die kleine Achsenskizze in der Szene zeigt beides. Weg-Zeit-Diagramm des senkrechten Wurfs: das Objekt startet <span class=&quot;ff-wert&quot; data-wert=&quot;h0&quot;>20,0 m</span> &uuml;ber dem Erdboden (Regler \(h_0\)), in diesem Koordinatensystem also bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;ystart&quot;>0</span>; der Erdboden liegt bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;yboden&quot;>&minus;20,0 m</span>. Abgeworfen wird mit der Anfangsgeschwindigkeit \(v_0 =\) <span class=&quot;ff-wert&quot; data-wert=&quot;v0&quot;>10 m/s</span> &mdash; in diesem Koordinatensystem hei&szlig;t das: <span class=&quot;ff-wert&quot; data-wert=&quot;richtung&quot;>nach oben geworfen</span>. Interaktiv: der Zeit-Regler \(t\) oder die Wiedergabe l&auml;sst das Objekt fliegen; die <span class=&quot;ff-sw-fall&quot;>rote</span> Kurve \(y(t)\) entsteht dabei Punkt f&uuml;r Punkt aus der Bewegung. Die Regler \(h_0\) und \(v_0\) &auml;ndern Abwurfh&ouml;he und Anfangsgeschwindigkeit &mdash; diese Bildunterschrift l&auml;uft mit. Dieselbe Bewegung sieht in den vier Koordinatensystemen von <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_1&quot;></a> bis <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_4&quot;></a> unterschiedlich aus."></div>
+
+        <figure class="abbildung nur-druck" id="fig-senkrechter_wurf_2">
+            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_2.png" alt="">
+            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt auf der Höhe des Abwurfpunktes.</figcaption>
+        </figure>
+
+        <div class="aspekt-figur nur-bildschirm" id="aspekt-senkrechter-wurf-3" data-aspekt="senkrechter-wurf" data-motor="freier_fall" data-achse="down_ground" data-h0="20" data-v0="-10" data-title="Senkrechter Wurf: Weg-Zeit-Diagramm, die Achse zeigt nach unten und hat ihren Nullpunkt auf der H&ouml;he des Erdbodens (interaktiv)" data-figref="fig-senkrechter_wurf_3" data-caption="<strong>Koordinatensystem:</strong> die \(y\)-Achse steht senkrecht auf dem Erdboden und zeigt nach unten, ihr Nullpunkt liegt auf dem Erdboden &mdash; die kleine Achsenskizze in der Szene zeigt beides. Weg-Zeit-Diagramm des senkrechten Wurfs: das Objekt startet <span class=&quot;ff-wert&quot; data-wert=&quot;h0&quot;>20,0 m</span> &uuml;ber dem Erdboden (Regler \(h_0\)), in diesem Koordinatensystem also bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;ystart&quot;>&minus;20,0 m</span>; der Erdboden liegt bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;yboden&quot;>0</span>. Abgeworfen wird mit der Anfangsgeschwindigkeit \(v_0 =\) <span class=&quot;ff-wert&quot; data-wert=&quot;v0&quot;>&minus;10 m/s</span> &mdash; in diesem Koordinatensystem hei&szlig;t das: <span class=&quot;ff-wert&quot; data-wert=&quot;richtung&quot;>nach oben geworfen</span>. Interaktiv: der Zeit-Regler \(t\) oder die Wiedergabe l&auml;sst das Objekt fliegen; die <span class=&quot;ff-sw-fall&quot;>rote</span> Kurve \(y(t)\) entsteht dabei Punkt f&uuml;r Punkt aus der Bewegung. Die Regler \(h_0\) und \(v_0\) &auml;ndern Abwurfh&ouml;he und Anfangsgeschwindigkeit &mdash; diese Bildunterschrift l&auml;uft mit. Dieselbe Bewegung sieht in den vier Koordinatensystemen von <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_1&quot;></a> bis <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_4&quot;></a> unterschiedlich aus."></div>
+
+        <figure class="abbildung nur-druck" id="fig-senkrechter_wurf_3">
+            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_3.png" alt="">
+            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach unten und hat ihren Nullpunkt auf der Höhe des Erdbodens.</figcaption>
+        </figure>
+
+        <div class="aspekt-figur nur-bildschirm" id="aspekt-senkrechter-wurf-4" data-aspekt="senkrechter-wurf" data-motor="freier_fall" data-achse="down_start" data-h0="20" data-v0="-10" data-title="Senkrechter Wurf: Weg-Zeit-Diagramm, die Achse zeigt nach unten und hat ihren Nullpunkt auf der H&ouml;he des Abwurfpunktes (interaktiv)" data-figref="fig-senkrechter_wurf_4" data-caption="<strong>Koordinatensystem:</strong> die \(y\)-Achse steht senkrecht auf dem Erdboden und zeigt nach unten, ihr Nullpunkt liegt im Abwurfpunkt &mdash; die kleine Achsenskizze in der Szene zeigt beides. Weg-Zeit-Diagramm des senkrechten Wurfs: das Objekt startet <span class=&quot;ff-wert&quot; data-wert=&quot;h0&quot;>20,0 m</span> &uuml;ber dem Erdboden (Regler \(h_0\)), in diesem Koordinatensystem also bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;ystart&quot;>0</span>; der Erdboden liegt bei \(y =\) <span class=&quot;ff-wert&quot; data-wert=&quot;yboden&quot;>+20,0 m</span>. Abgeworfen wird mit der Anfangsgeschwindigkeit \(v_0 =\) <span class=&quot;ff-wert&quot; data-wert=&quot;v0&quot;>&minus;10 m/s</span> &mdash; in diesem Koordinatensystem hei&szlig;t das: <span class=&quot;ff-wert&quot; data-wert=&quot;richtung&quot;>nach oben geworfen</span>. Interaktiv: der Zeit-Regler \(t\) oder die Wiedergabe l&auml;sst das Objekt fliegen; die <span class=&quot;ff-sw-fall&quot;>rote</span> Kurve \(y(t)\) entsteht dabei Punkt f&uuml;r Punkt aus der Bewegung. Die Regler \(h_0\) und \(v_0\) &auml;ndern Abwurfh&ouml;he und Anfangsgeschwindigkeit &mdash; diese Bildunterschrift l&auml;uft mit. Dieselbe Bewegung sieht in den vier Koordinatensystemen von <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_1&quot;></a> bis <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_4&quot;></a> unterschiedlich aus."></div>
+
+        <figure class="abbildung nur-druck" id="fig-senkrechter_wurf_4">
+            <img class="grafik" style="width:85%" src="bilder/senkrechter_wurf_4.png" alt="">
+            <figcaption>Weg-Zeit-Diagramm des senkrechten Wurfs mit einer Anfangsgeschwindigkeit von \(10\,\mathrm{m/s}\) nach oben. Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) losgelassen. Die Achse senkrecht zum Erdboden haben wir mit \(y\) benannt, die Achse zeigt nach unten und hat ihren Nullpunkt auf der Höhe des Abwurfpunktes.</figcaption>
+        </figure>
     </div>
 
     <div class="beispiel" id="bsp-feder-masse-pendel" data-title="Feder-Masse-Pendel">
@@ -287,7 +326,14 @@
 
         <p>Dabei ist \(y_0\) die maximale Auslenkung der Masse aus ihrer Ruhelage, \(T\) die Zeit, die die Masse für eine komplette Hin- und Herbewegung braucht (die sogenannte Periodendauer).</p>
 
-        <figure class="abbildung" id="fig-feder_masse_pendel_kinematik">
+        <!-- Interaktive Aspekt-Figur zu Abb. 1.8 (BACKLOG P17-3). Zweite Figur des
+             federpendel-Motors, hier in der KINEMATIK-Sicht: vertikaler Aufbau,
+             Regler Amplitude + Periodendauer (Masse und Federkonstante kommen
+             erst in Kapitel 3). Statische Abbildung bleibt als .nur-druck
+             darunter und liefert ueber data-figref die Nummer. -->
+        <div class="aspekt-figur nur-bildschirm" id="aspekt-federpendel-kinematik" data-aspekt="federpendel-kinematik" data-motor="federpendel" data-aufbau="vertikal" data-regler="T" data-y0="1.0" data-periode="1.7" data-title="Feder-Masse-Pendel: Weg-Zeit-Diagramm (interaktiv)" data-figref="fig-feder_masse_pendel_kinematik" data-caption="<strong>Koordinatensystem:</strong> die \(y\)-Achse zeigt entlang der Bewegungsrichtung der Masse nach oben, ihr Nullpunkt liegt in der Ruhelage &mdash; die Masse schwingt also zwischen \(y=+y_0\) und \(y=-y_0\) hin und her. Weg-Zeit-Diagramm eines Feder-Masse-Pendels: die Masse wird um <span class=&quot;ff-wert&quot; data-wert=&quot;y0&quot;>1,00 m</span> aus der Ruhelage ausgelenkt und dann losgelassen; f&uuml;r eine vollst&auml;ndige Hin- und Herbewegung braucht sie die Periodendauer \(T =\) <span class=&quot;ff-wert&quot; data-wert=&quot;T&quot;>1,70 s</span>. Interaktiv: der Zeit-Regler \(t\) oder die Wiedergabe l&auml;sst die Masse schwingen; die Kurve \(y(t)\) entsteht dabei Punkt f&uuml;r Punkt aus der Bewegung. Die Regler \(y_0\) und \(T\) &auml;ndern Auslenkung und Schwingungsdauer &mdash; diese Bildunterschrift l&auml;uft mit. &bdquo;Letzte Kurve behalten&ldquo; l&auml;sst den vorherigen Verlauf zum Vergleich stehen. Anders als beim freien Fall und beim Wurf (<a class=&quot;xref&quot; data-ref-fig=&quot;fig-freierfall_1&quot;></a> bis <a class=&quot;xref&quot; data-ref-fig=&quot;fig-senkrechter_wurf_4&quot;></a>) ist diese Kurve keine Parabel: die Bewegung wiederholt sich."></div>
+
+        <figure class="abbildung nur-druck" id="fig-feder_masse_pendel_kinematik">
             <img class="grafik" style="width:99%" src="bilder/feder_masse_pendel_kinematik.png" alt="">
             <figcaption>Weg-Zeit-Diagramm eines Feder-Masse-Pendels. Die Masse wird aus der Ruhelage um \(y_0=1\,\mathrm{m}\) ausgelenkt und dann losgelassen. Die Achse entlang der Bewegungsrichtung der Masse haben wir mit \(y\) benannt, die Achse zeigt nach oben und hat ihren Nullpunkt in der Ruhelage der Masse. Die Periodendauer der Bewegung ist \(T\approx 1{,}7\,\mathrm{s}\).</figcaption>
         </figure>
@@ -334,7 +380,7 @@
 
     <div class="beispiel" data-title="Die Schraubenbewegung">
         <figure class="abbildung" id="fig-rutsche">
-            <img class="grafik" style="width:40%" src="bilder/rutsche.png" alt="">
+            <img class="grafik" style="width:40%" src="bilder/rutsche.jpg" alt="">
             <figcaption>Den Weg, den eine Person auf einer Wendeltreppe oder auf einer schraubenförmigen Rutsche zurücklegt, kann (näherungsweise) durch eine Schraubenbahn beschrieben werden. Bildquelle: „Rutsche am Pyramidenkogel, Woerthersee, Kaernten" by ChristianeWien is licensed with CC BY 2.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/2.0/</figcaption>
         </figure>
 

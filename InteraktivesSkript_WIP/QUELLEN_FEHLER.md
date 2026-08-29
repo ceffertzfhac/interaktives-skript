@@ -84,6 +84,7 @@ Quelle: `pskript_mech_kinematik_gmni_v4.tex` · WIP: `ch_01_01_kinematik.html`
 | 2 | T | 320 | „ein Kind auf einer **schräubenförmigen** Rutsche" | „ä" statt „au" | schraubenförmigen | erhalten |
 | 3 | T | 562 | „(gepunktete Linie), die **offensichtilch** positiv ist" | Buchstabendreher | offensichtlich | erhalten |
 | 4 | T | 626 | „vom … Koordinatensystems **abhänt**" | „g" fehlt | abhängt | erhalten |
+| 5 | S | 222, 229, 236, 243 | Bildunterschriften der vier Wurf-Abbildungen: „Das Objekt wird aus der Höhe \(h_0=20\,\mathrm{m}\) **losgelassen**" | Das Objekt wird nicht losgelassen, sondern mit \(v_0=10\,\mathrm{m/s}\) nach oben **geworfen** — dieselbe Unterschrift nennt die Anfangsgeschwindigkeit im Satz davor. Wortlaut aus der Freier-Fall-Unterschrift übernommen (Zeile 184), wo er richtig ist. | „abgeworfen" (oder „geworfen") | **korrigiert** in den interaktiven Bildunterschriften (dort „abgeworfen"); die statischen `.nur-druck`-Unterschriften sind unverändert v0.13 |
 
 ### 1.2 Dynamik: Impuls und Kraft
 

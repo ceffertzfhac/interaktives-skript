@@ -113,6 +113,19 @@
     --kb-vy:  var(--kb-ry);     /* v_y: war rot #c03030 → grün (y=grün) */
     --kb-ay:  var(--kb-ry);     /* a_y: war orange #e0782d → grün (y=grün; war
                                    Kollision mit v orange in 1.50) */
+    /* ── Kapitel-1.1-Token (NICHT Teil der 1.4-Vektorpalette oben) ──────────
+       Die Farbe des bewegten Objekts UND seiner Weg-Zeit-Kurve in Kapitel 1.1.
+       Sie steht hier, weil sich zwei Figurenfamilien sie teilen (Abb. 1.2
+       Busfahrt: --bw-kurve; Abb. 1.3-1.7 Fall/Wurf: --ff-fall) und ein Token
+       auf dem gemeinsamen Vorfahren .aspekt-figur der einzige Weg ist, dass
+       beide garantiert dieselbe Farbe zeigen — zwei getrennte Werte waeren
+       zwangslaeufig irgendwann auseinandergelaufen. Die beiden Familien-Tokens
+       verweisen per var() hierher; ueberschrieben wird immer NUR dieses Token
+       (darkmode.css, aspekt_paletten.css), nie die Verweise.
+       Quelle des Hellwerts: firebrick #b22222 aus dem matplotlib-Notebook der
+       statischen Abb. 1.2 (die Fall-Abbildungen sind graustufig, geben also
+       keine Farbe vor — s. Kopf von aspekt_freier_fall.css). */
+    --k11-kurve: #b22222;
     --kb-r-sm: 6px;
     --kb-font: var(--font-ui, 'IBM Plex Sans', system-ui, sans-serif);
     --kb-font-mono: var(--font-mono, 'IBM Plex Mono', monospace);

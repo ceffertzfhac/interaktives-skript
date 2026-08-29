@@ -1,0 +1,273 @@
+/* aspekt_freier_fall.css — Optik ALLER Aspekt-Figuren des freier_fall-Motors
+   (Abb. 1.3 freier Fall sowie 1.4-1.7 senkrechter Wurf; spaeter 1.19 v-t).
+   Ergaenzung zu aspekt_kreisbahn.css, das die GEMEINSAMEN
+   Regeln aller Aspekt-Figuren traegt (Panel/Slider/Legende/Analyse/Lupe/
+   Overlay/Breiten-Modi/Caption + Gitter-, Achsen-, Titel- und Hover-Optik des
+   Diagramms). Hier steht nur, was diese Figur zusaetzlich braucht: ihre
+   Farb-Tokens, die Szenen-Klassen des Motors, Ablaufleiste + Tempo-Pills und
+   das Layout Szene|Diagramm (Vorbild aspekt_bus_weg_zeit.css).
+
+   IDs sind pro Instanz prefixt (ff0_, ff1_, …) -> durchgehend Suffix-Selektoren
+   ([id$="ball"]), nie feste #ff_-IDs.
+
+   GESCOPT AUF DEN MOTOR, nicht auf einen Aspekt-Namen: die Platzhalter dieser
+   Familie tragen data-motor="freier_fall" (zusaetzlich zu ihrem data-aspekt).
+   Sie sehen alle gleich aus — es ist derselbe Motor, dieselbe Szene, dasselbe
+   Diagramm; sie unterscheiden sich nur in Achsenwahl und Startwerten (s.
+   aspekt_freier_fall.js). Ein Scope je Aspekt-Name haette dieselben ~60 Regeln
+   zweimal gebraucht. Regel daraus: Figuren, die sich EINEN Motor UND das
+   Aussehen teilen, teilen sich ihr Stylesheet ueber data-motor.
+
+   PALETTE — Herleitung, weil die uebliche Quelle hier ausfaellt: die statische
+   Abb. 1.3 (bilder/freierfall_1.png) ist GRAUSTUFIG, sie gibt keine Farbe vor
+   (CLAUDE.md v1.27: „Die Standard-Palette folgt den STATISCHEN Abbildungen" —
+   greift nur, wo die Abbildung faerbt). Massgeblich ist deshalb die
+   Nachbarabbildung desselben Abschnitts: Abb. 1.2 (Busfahrt) faerbt das
+   BEWEGTE OBJEKT und SEINE Weg-Zeit-Kurve gemeinsam firebrick (#b22222, aus dem
+   matplotlib-Notebook der Quelle). Diese Figur uebernimmt das eins zu eins —
+   Kugel und y(t)-Kurve teilen die Farbe. Damit gilt in Kapitel 1.1: dieselbe
+   Farbe fuer das Objekt und die Kurve, die es zeichnet.
+   Eigene Tokenfamilie --ff-* (wie --bw-* / --gk-* in 1.1), NICHT die
+   --kb-*-Vektorpalette von Kapitel 1.4.
+
+   Die Bewegungsfarbe selbst ist NICHT figur-eigen: sie kommt aus dem
+   gemeinsamen Kapitel-1.1-Token --k11-kurve (definiert in aspekt_kreisbahn.css)
+   und variiert ueber Hell/Dunkel und die beiden CVD-Paletten. So zeigen Abb.
+   1.2 und Abb. 1.3-1.7 in jedem Modus garantiert dieselbe Farbe.
+   Die neutralen Flaechen (Haus, Lineal) sind ueber color-mix aus
+   --kb-text/--kb-surface abgeleitet und drehen mit dem Darkmode-Override dieser
+   Tokens automatisch mit — dafuer braucht es hier keinen eigenen Zweig. */
+
+/* ── Farb-Palette (eigene --ff-*-Tokenfamilie, Kapitel 1.1) ────────────────── */
+.aspekt-figur[data-motor="freier_fall"] {
+    --ff-fall: var(--k11-kurve);  /* Kugel UND Kurve y(t) — die gemeinsame
+                                     Kapitel-1.1-Bewegungsfarbe (s. o.) */
+    --ff-vel: #2060d0;       /* v-Pfeil  — aus, s. aspekt_freier_fall.js; die
+                                Tokens stehen fuer Abb. 1.19 (v-t) bereit */
+    --ff-acc: #c03030;       /* a-Pfeil  — aus, s. o. */
+    --ff-building: color-mix(in srgb, var(--kb-text) 12%, var(--kb-surface));
+    --ff-ruler-bg: color-mix(in srgb, var(--kb-text) 6%, var(--kb-surface));
+    --ff-ruler-stroke: var(--kb-border2);
+}
+
+/* ── Szene: Haus, Boden, Kugel ─────────────────────────────────────────────── */
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="building"] { fill: var(--ff-building); }
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="ground-line"] {
+    stroke: var(--kb-text); stroke-width: calc(2px * var(--kb-lw, 1));
+}
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="ball"] { fill: var(--ff-fall); }
+
+/* Strichmaennchen auf dem Dach. */
+.aspekt-figur[data-motor="freier_fall"] .sf-line,
+.aspekt-figur[data-motor="freier_fall"] .sf-head { stroke: var(--kb-text); fill: none; }
+
+/* Hoehenskala (Lineal) am linken Rand. */
+.aspekt-figur[data-motor="freier_fall"] .ruler-bg {
+    fill: var(--ff-ruler-bg); stroke: var(--ff-ruler-stroke);
+}
+.aspekt-figur[data-motor="freier_fall"] .ruler-tick { stroke: var(--kb-text2); }
+.aspekt-figur[data-motor="freier_fall"] .ruler-text {
+    fill: var(--kb-text2); font-family: var(--kb-font);
+    font-size: calc(11px * var(--kb-text-scale) * var(--kb-fs));
+}
+
+/* y-Achsen-Miniatur (Richtung + Nullpunkt der gewaehlten Achse). */
+.aspekt-figur[data-motor="freier_fall"] .yad-line { stroke: var(--kb-text); }
+.aspekt-figur[data-motor="freier_fall"] .yad-text {
+    fill: var(--kb-text); font-family: var(--kb-font);
+    font-size: calc(12px * var(--kb-text-scale) * var(--kb-fs));
+}
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="arrow-y"] polygon { fill: var(--kb-text); }
+
+/* Stoppuhr (Zifferblatt, Marken, Zeiger) — sie macht die Abszisse des
+   Diagramms in der Szene sichtbar. */
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="sw-face"],
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="sd-face"] {
+    fill: var(--kb-surface); stroke: var(--kb-text);
+}
+.aspekt-figur[data-motor="freier_fall"] .sw-mark { stroke: var(--kb-text); }
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="sw_main_hand"] { stroke: var(--kb-text); }
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="sw_sub_hand"] { stroke: var(--ff-fall); }
+
+/* Vektoren: in dieser Figur dauerhaft ausgeblendet (s. Kopfkommentar des
+   Moduls). Die Regeln stehen hier, damit Abb. 1.19 sie nur einschalten muss. */
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="vel_vector"] { stroke: var(--ff-vel); }
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="acc_vector"] { stroke: var(--ff-acc); }
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="arrow-vel"] polygon { fill: var(--ff-vel); }
+.aspekt-figur[data-motor="freier_fall"] .aspekt-scene [id$="arrow-acc"] polygon { fill: var(--ff-acc); }
+
+/* ── Diagramm: Achsenpfeil + Kurve + Kurvenpunkt ───────────────────────────── */
+.aspekt-figur[data-motor="freier_fall"] .aspekt-graph [id$="arrowhead"] polygon { fill: var(--kb-text); }
+.aspekt-figur[data-motor="freier_fall"] [id$="graph_line"] {
+    stroke: var(--ff-fall); stroke-width: calc(2px * var(--kb-lw, 1));
+    fill: none; stroke-linejoin: round; stroke-linecap: round;
+}
+.aspekt-figur[data-motor="freier_fall"] [id$="graph_point"] {
+    fill: var(--ff-fall); stroke: var(--kb-surface); stroke-width: 2;
+}
+.aspekt-figur[data-motor="freier_fall"] .graph-hover-point { stroke: var(--ff-fall); }
+
+/* ── Legenden-Farbflecke (Bedienpanel) ─────────────────────────────────────── */
+.aspekt-figur[data-motor="freier_fall"] .legend-swatch[data-c="ff-fall"]  { background: var(--ff-fall); }
+.aspekt-figur[data-motor="freier_fall"] .legend-swatch[data-c="ff-ruler"] {
+    background: var(--ff-ruler-bg); border: 1px solid var(--ff-ruler-stroke);
+}
+
+/* Koordinatensystem-Zeile im Bedienfeld: TEXT, kein Umschalter — welche Achse
+   gilt, ist je Abbildung fest (1:1-Beschluss, s. aspekt_freier_fall.js). Dazu
+   die Vorzeichen-Erlaeuterung unter dem v0-Regler. */
+.aspekt-figur[data-motor="freier_fall"] .ff-achse,
+.aspekt-figur[data-motor="freier_fall"] .ff-hinweis {
+    font-size: calc(11.5px * var(--kb-text-scale));
+    color: var(--kb-text2); line-height: 1.45;
+}
+.aspekt-figur[data-motor="freier_fall"] .ff-hinweis {
+    color: var(--kb-text3); margin-top: 4px;
+}
+.aspekt-figur[data-motor="freier_fall"] .ff-achse mjx-container,
+.aspekt-figur[data-motor="freier_fall"] .ff-hinweis mjx-container { display: inline !important; }
+
+/* Mitlaufende Werte in der Bildunterschrift (h0, v0, Wurfrichtung — von
+   aspekt_freier_fall.js::updateCaptionWerte gefuellt). Halbfett + Tabellen-
+   ziffern: der Lesende soll sehen, dass das die Groessen sind, die er gerade
+   verstellt, ohne dass die Unterschrift bunt wird (Farbe ist den Farbwoertern
+   vorbehalten). Tabellenziffern verhindern, dass der Text bei jedem
+   Reglerschritt leicht springt. */
+.aspekt-figur[data-motor="freier_fall"] .aspekt-caption .ff-wert {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Fussnote unter der Bewegungsgleichung im Physik-Block: woher die Formel
+   kommt und wie ihre Groessen gezaehlt sind. */
+.aspekt-figur[data-motor="freier_fall"] .ff-formel-note {
+    font-size: calc(11px * var(--kb-text-scale));
+    color: var(--kb-text3); line-height: 1.5; margin-top: 2px;
+}
+.aspekt-figur[data-motor="freier_fall"] .ff-formel-note mjx-container { display: inline !important; }
+
+/* Farb-Worte in der Bildunterschrift (analog .bw-sw-* bei Abb. 1.2). */
+.aspekt-figur[data-motor="freier_fall"] .ff-sw-fall { color: var(--ff-fall); }
+
+/* ── Ablaufleiste + Tempo-Pills + Knoepfe (1:1 aus aspekt_bus_weg_zeit.css,
+   auf freier-fall gescopt — diese Klassen sind dort nicht shared). ────────── */
+.aspekt-figur[data-motor="freier_fall"] .aspekt-main {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-motor="freier_fall"] .aspekt-main-content {
+    position: relative;
+    display: flex; flex-direction: row; align-items: flex-start; min-width: 0;
+}
+.aspekt-figur[data-motor="freier_fall"] .aspekt-runbar {
+    position: sticky; top: 0; z-index: 7;
+    display: flex; align-items: center; justify-content: flex-start; gap: 8px;
+    padding: 8px; background: var(--kb-surface); border-bottom: none; box-shadow: none;
+}
+/* Zeitanzeige des Motors (updateScene schreibt „t = …") neben den Knoepfen. */
+.aspekt-figur[data-motor="freier_fall"] .aspekt-ff-time {
+    font-family: var(--kb-font-mono); font-size: calc(12px * var(--kb-text-scale));
+    color: var(--kb-text2); white-space: nowrap;
+}
+
+.aspekt-figur[data-motor="freier_fall"] .aspekt-btn-row { display: flex; gap: 6px; }
+.aspekt-figur[data-motor="freier_fall"] .aspekt-btn.aspekt-btn-icon {
+    flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border2); border-radius: 6px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur[data-motor="freier_fall"] .aspekt-btn.aspekt-btn-icon:hover {
+    color: var(--kb-accent); border-color: var(--kb-accent);
+}
+.aspekt-figur[data-motor="freier_fall"] .aspekt-btn.aspekt-btn-icon svg { width: 15px; height: 15px; display: block; }
+
+.aspekt-figur[data-motor="freier_fall"] .speed-pills { display: flex; gap: 5px; }
+.aspekt-figur[data-motor="freier_fall"] .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: calc(11.5px * var(--kb-text-scale, 1));
+    color: var(--kb-text2); cursor: pointer; transition: all .15s;
+    position: relative; -webkit-user-select: none; user-select: none;
+}
+.aspekt-figur[data-motor="freier_fall"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+.aspekt-figur[data-motor="freier_fall"] .speed-pill.active {
+    background: color-mix(in srgb, var(--kb-accent) 12%, transparent);
+    border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
+}
+
+/* ── Layout Szene | Diagramm ────────────────────────────────────────────────
+   Die Szene ist hochformatig (viewBox 340×480), das Diagramm querformatig
+   (550×475). Beide sind breitengetrieben (width:100%, height:auto): die
+   Flex-Basis der Szene bestimmt also ihre Hoehe, und bei rund einem Drittel der
+   Zeilenbreite stehen Szene und Diagramm etwa gleich hoch. Anders als bei
+   Abb. 1.2 muss KEINE Pixel-Sync laufen — dort korrespondieren Straßenband und
+   Ordinate in derselben Skala, hier hat die Szene ihre eigene Hoehenskala
+   (Lineal) und das Diagramm seine eigene Achse. */
+.aspekt-figur[data-motor="freier_fall"] .aspekt-main .aspekt-scene {
+    flex: 0 0 38%; padding: 0 0 8px 8px; min-width: 0;
+}
+.aspekt-figur[data-motor="freier_fall"] .aspekt-main .aspekt-svg {
+    display: block; width: 100%; height: auto; max-width: none; max-height: 56vh;
+}
+.aspekt-figur[data-motor="freier_fall"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 auto; }
+.aspekt-figur[data-motor="freier_fall"] .aspekt-graph-svg {
+    display: block; width: 100%; height: auto; max-height: 56vh; max-width: none; margin: 0 auto;
+}
+
+/* ── Breiten-Modi (Vorbild aspekt_bus_weg_zeit.css) ─────────────────────────
+   Schmal: gestapelt (Regelfall — die Szene braucht keine Achsen-Korrespondenz
+   zum Diagramm, anders als bei Abb. 1.2, wo das Stapeln ausdruecklich verboten
+   ist). Breit: mehr Hoehe. Overlay: Zeile, an der Viewport-Hoehe gedeckelt. */
+/* align-items der Zeile ist flex-start (Szene und Diagramm sollen oben buendig
+   stehen). In der Spalte wuerde daraus ein Schrumpfen auf die Inhaltsbreite —
+   beide Kaesten muessen die Spalte fuellen, damit ihr Inhalt darin zentriert
+   werden kann. Deshalb hier stretch. */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="freier_fall"] .aspekt-main-content {
+    flex-direction: column; align-items: stretch;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="freier_fall"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto; padding: 0 8px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="freier_fall"] .aspekt-svg {
+    width: auto; height: min(38vh, 340px); max-width: 100%; margin: 0 auto;
+}
+/* Gestapelt wird das Diagramm ueber die HOEHE bemessen (wie die Szene darueber)
+   und mittig gesetzt: mit width:100% + max-height bliebe links und rechts
+   Leerraum stehen, weil preserveAspectRatio den Inhalt einpasst. */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="freier_fall"] .aspekt-graph-svg {
+    width: auto; height: min(40vh, 380px); max-height: none; max-width: 100%; margin: 0 auto;
+}
+
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="freier_fall"] .aspekt-graph-svg { max-height: 62vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="freier_fall"] .aspekt-svg { max-height: 62vh; }
+
+/* Overlay (Lupe): Zeile (Szene | Diagramm), an Viewport-Hoehe gedeckelt. */
+.aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-main { flex-direction: column; }
+.aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-main-content { flex-direction: row; }
+.aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-main-content .aspekt-scene { flex: 0 0 30%; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-main-content .aspekt-graph { flex: 1 1 auto; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-svg {
+    width: 100%; height: auto; max-width: none; max-height: 64vh;
+}
+.aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-graph-svg {
+    width: 100%; height: auto; max-width: none; max-height: 64vh;
+}
+
+/* Zoom + schmal: stapeln + rechte Analyse-Leiste ausblenden (Platz priorisieren). */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-main-content {
+    flex-direction: column; align-items: stretch;   /* s. o. */
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-main-content .aspekt-scene { flex: 0 0 auto; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-main-content .aspekt-graph { flex: 1 1 auto; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-body { display: block; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-panel-left {
+    width: auto; border-right: none; border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-panel-right { display: none; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-runbar { padding: 6px 8px; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-svg {
+    height: min(30vh, 270px); width: auto; max-width: 100%; margin: 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="freier_fall"] .aspekt-graph-svg {
+    height: auto; max-height: min(34vh, 300px); width: 92%; margin: 0 auto;
+}

@@ -41,17 +41,58 @@ pixel-identisch.**
   Aspekt-Figur per `createRuntime()`, kein neuer Motor. Vorlagen-Hierarchie:
   `aspekt_weg_zeit` (gestapelte x/y) + `aspekt_kreisbahn` (Bahn) kombinieren.
   *(M — nur Figur)*
-- [ ] **P17-3 Aspekt-Figur Abb. 1.8 — Feder-Masse-Pendel** (Unterabschnitt 1.1.7
-  „Die Strecke", Beispiel Feder-Masse-Pendel). Statisches
-  `fig-feder_masse_pendel_kinematik` interaktiv nachbauen: harmonische s(t) =
-  y₀·cos(2πt/T), Slider Amplitude y₀ + Periodendauer T; nicht-parabolische
-  Bewegung als Kontrast zu den Wurf-/Fall-Parabeln (P16). **Motor:
-  `federpendel_simulation` neu portieren** (`src/figures/federpendel/`, reuse
-  `../kreisbewegung/lib/*`; **deckt auch P12-E6 / Kap. 3.1 Schwingungen** — einmal
-  portieren, zwei Verwender). *(L — Motor + Figur)*
+- [x] **P17-3 Aspekt-Figur Abb. 1.8 — Feder-Masse-Pendel** — **erledigt
+  2026-08-28 (v1.38.0)**: `data-aspekt="federpendel-kinematik"` auf DERSELBEN
+  Fabrik wie die Figur zu 3.1.5 (`aspekt_federpendel.js` ist damit ein
+  Familien-Modul, s. Regel in `src/figures/CLAUDE.md`); Unterschiede als
+  data-Attribute am Platzhalter: `data-aufbau="vertikal"`, `data-regler="T"`,
+  `data-y0`, `data-periode`.
+  **Kern der Aspekt-Reduktion:** in 1.1.7 gibt es weder Masse noch
+  Federkonstante — das Skript gibt dort y(t)=y₀·cos(2πt/T). Die Figur dreht die
+  Rechnung des Motors deshalb um: T ist der Regler, m bleibt fest (1 kg) und
+  k = m(2π/T)² folgt daraus. Die m/k-abhaengige Optik (Massengroesse,
+  Federstaerke) laeuft in dieser Variante bewusst NICHT mit, und die Hilfslinie
+  „Feder entspannt" ist ausgeblendet (sie zeigt die statische Dehnung durch die
+  Gewichtskraft — Dynamik, nicht Kinematik). T-Bereich 0,8-2,5 s: ein vertikales
+  Federpendel haengt mit wachsender Periodendauer zwangslaeufig weiter durch
+  (δL = g(T/2π)²), oberhalb skaliert der Motor die Szene sichtbar kleiner.
+  Geprueft: Smoke, `node --check`, `dom_harness` (88 Abbildungen unveraendert),
+  Headless-Chromium ohne Konsolenfehler — T-Regler und Live-Analyse stimmen
+  ueberein (1,70 s), Formelkarte zeigt die Fliesstext-Formel, Szene und Diagramm
+  stehen als zwei Hochformate buendig nebeneinander.
+  **Zwei Fehler in der Sicht-Pruefung gefunden und behoben (v1.38.2):**
+  1. **Die Diagrammkurve war unsichtbar — in BEIDEN Figuren dieses Motors, seit
+     dem Port (P12-E6).** `render.js` faerbt die Kurve inline mit
+     `style.stroke = 'var(--accent)'`; dieser Token stammt aus der nicht
+     mitportierten design-system.css der Stand-alone-Sim und war im Skript
+     undefiniert. Eine undefinierte `var()` macht die Deklaration ungueltig,
+     `stroke` faellt auf den ererbten Wert `none` zurueck — Kurve weg, ohne
+     Fehlermeldung. Behoben durch eine Vokabel-Bruecke im Figuren-Scope
+     (`--accent`, `--c-ekin/-epot/-etot` -> `--kb-*`), statt den Motor
+     umzuschreiben; die Energiefarben stehen damit auch fuer 3.1.9 bereit.
+  2. **Diagrammtitel sagte „x(t)" auch im vertikalen Aufbau**, waehrend die
+     Achse daneben korrekt „y" trug. `graphTitles` gibt es jetzt je Aufbau,
+     wie `graphAxisLabels` (PORT-AENDERUNG in constants.js/render.js).
+
+  **Regression beim Umbau gefunden und behoben:** das Stylesheet ist jetzt auf
+  `data-motor="federpendel"` gescopt (beide Figuren sehen gleich aus); der
+  3.1.5-Platzhalter brauchte dieses Attribut nachgetragen, sonst verlor die
+  bestehende Figur ihr komplettes Styling. Nachgemessen: 3.1.5 steht wieder
+  gestapelt mit ihren alten Maßen.
+  *Urspruengliche Aufgabenbeschreibung (2026-07-30): harmonische
+  s(t) = y₀·cos(2πt/T), Slider Amplitude y₀ + Periodendauer T; nicht-parabolische
+  Bewegung als Kontrast zu den Wurf-/Fall-Parabeln (P16). Motor `federpendel`
+  seit P12-E6 portiert — nur die Aspekt-Figur, kein neuer Motor.* *(M)*
+
 - [ ] **P17-4 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag, `node --check`, Smoke, Nummerierung (keine Regression), CVD-Palette
   (P-AF-2), Stufe 5 (Sicht) nur nach Freigabe „JA" [[feedback-screenshot-freigabe]]. *(M)*
+
+**Bearbeitungsreihenfolge (2026-08-28):** P17-1..3 werden **nicht am Stueck**
+abgearbeitet, sondern an ihrer Position in der Abbildungsreihenfolge von Kap. 1.1,
+verzahnt mit P16 — die gemeinsame Queue steht in
+[P16](P16-wurf-fall-figuren.md) („Bearbeitungsreihenfolge"). Reihenfolge dort:
+1.8 = P17-3, 1.10 = P17-2, 1.15 = P17-1.
 
 **Querverweis:** P17-2 (1.10) und P16 (Wurf/Fall) nutzen beide `kreisbewegung`- bzw.
 die Wurf-Motoren per `createRuntime()` — die Motoren bleiben Singleton, jede

@@ -33,6 +33,7 @@ export async function loadChapters() {
             // die LaTeX-Quelle durch den gerenderten mjx-container ersetzt.
             captureEqLatex(html);
             mount.innerHTML = html;
+            markiere_bilder_lazy(mount);
             // Themenkomplex (v0.13-\chapter, 3-stufiges TOC, s. BACKLOG P8)
             // auf jede .inhaltsverzeichnis-Überschrift des Fragments stempeln,
             // GELESEN vom data-chapter-Platzhalter (data-tk-num/-title). Vor dem
@@ -58,6 +59,24 @@ export async function loadChapters() {
             console.warn(`[chapters] Laden von chapters/${id}.html fehlgeschlagen:`, err);
         }
     }));
+}
+
+// Kapitelbilder erst laden, wenn sie gebraucht werden (BACKLOG P22-1).
+// Die Paginierung zeigt immer nur EINE Seite; die uebrigen stehen auf
+// display:none — das verhindert das Laden aber nicht. Ohne loading="lazy" holt
+// der Start daher alle Bilder des Skripts: an der veroeffentlichten Fassung
+// gemessen 38,9 MB in 205 Anfragen. Mit lazy laedt der Browser nur, was im
+// Viewport steht (also die aktive Seite), den Rest beim Blaettern.
+// Zentral hier statt als Attribut in 127 <img>-Tags: so gilt es fuer jedes
+// kuenftige Kapitel automatisch (O(1)-Regel). decoding="async" nimmt das
+// Dekodieren zusaetzlich vom Hauptthread.
+// AUSNAHME Druck: print.js schaltet die Bilder des Klons vor dem Drucken wieder
+// auf eager — sonst blieben nie sichtbare Seiten im Ausdruck leer.
+function markiere_bilder_lazy(wurzel) {
+    wurzel.querySelectorAll('img').forEach(img => {
+        img.loading = 'lazy';
+        img.decoding = 'async';
+    });
 }
 
 // Extrahiert aus dem rohen Kapitel-HTML die LaTeX-Quelle jeder Gleichung mit

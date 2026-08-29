@@ -38,6 +38,67 @@ grep -o 'data-chapter="[^"]*"\|data-tk-num="[^"]*"\|data-tk-title="[^"]*"' index
 Die Prosa ist **statisch**; Interaktivität kommt figurweise dazu
 (s. `../src/figures/CLAUDE.md`).
 
+## Abweichungen von v0.13 — Pflichtdokumentation
+
+Die Wurzel-`CLAUDE.md` verlangt: **jede inhaltliche Abweichung des WIP von
+`Input/v0.13/` zieht einen abhakbaren Eintrag in
+`backlog/P21-statisches-skript-nachziehen.md` nach sich**, weil Druckskript und
+interaktives Skript synchron bleiben müssen. Hier steht, was das praktisch heißt.
+
+**Was zählt als inhaltliche Abweichung** (P21-pflichtig): Reihenfolge von
+Abbildungen/Absätzen geändert · Text ergänzt, gekürzt oder umformuliert ·
+Bildunterschrift inhaltlich erweitert · Formel ergänzt, die die Quelle nicht hat ·
+Abschnitts-/Abbildungsnummerierung weicht ab · eine Aussage steht nur in einer
+der beiden Fassungen.
+
+**Was nicht zählt** (nur Fragmentkopf, kein P21-Eintrag): rein
+darstellungsbedingte Übersetzungen, bei denen der Sachtext unverändert bleibt —
+ein LaTeX-Konstrukt ohne HTML-Entsprechung (`\bbspe`-Plural → einzelne Boxen,
+`siunitx` aufgelöst), ein Verweis-Deskriptor, den der Resolver liefert, ein
+disambiguiertes Doppel-Label. Im Zweifel eintragen: ein überflüssiger Eintrag
+kostet eine Zeile, ein fehlender kostet die Synchronität.
+
+**Drei Stellen, jedes Mal:**
+1. **Kopfkommentar des Fragments** — *was* geändert wurde und warum (steht beim
+   Inhalt, wird beim Lesen der Datei gefunden).
+2. **Eintrag in P21** — Datum, Stelle, Abweichung, was im Druckskript zu tun ist
+   (die Sammlung fürs Nachziehen; einzeln abhakbar).
+3. **Commit-Message** — nennt die Abweichung und verweist auf P21.
+
+**Maßstab für den P21-Eintrag:** *jemand, der nicht dabei war, muss ihn im
+`.tex` umsetzen können, ohne jemanden zu fragen.* Also **Zieldatei** unter
+`Input/v0.13/` nennen, die **Stelle** über ein LaTeX-Label oder einen Anker
+festmachen (nicht über Zeilennummern — die verschieben sich) und den
+einzusetzenden **Text wörtlich** hinschreiben, nicht bloß beschreiben. Eine
+Beschreibung wie „Absatz ergänzt" ist als Eintrag wertlos.
+
+**Sonderregel Bildunterschriften** (Nutzervorgabe): dokumentiert wird die
+Abweichung vollständig, **nachgezogen aber nur, was im statischen Skript
+sinnvoll ist**. Regler-Hinweise, mitlaufende Zahlenwerte und Farbnennungen der
+interaktiven Figuren gehören nicht ins Druckskript; ein erklärender Satz (z. B.
+zum Koordinatensystem) sehr wohl. Der Eintrag sagt beides: was übernommen wird
+und was bewusst nicht.
+
+**Grundsatzregel „didaktischer Zusatz"** (Nutzerentscheidung 2026-08-28, gilt
+für ALLE künftigen interaktiven Figuren — deshalb ist die Frage nicht mehr pro
+Figur zu stellen): Was eine interaktive Figur an Erklärung mitbringt, **wird ins
+Druckskript nachgezogen**, und zwar
+- der **erklärende Teil der Bildunterschrift** (z. B. „in welchem
+  Koordinatensystem sind wir, wo liegen Bezugspunkte darin") — die interaktiven
+  Teile nicht (s. Sonderregel oben);
+- **zusätzliche Gleichungen unnummeriert** (`\[…\]`, nicht `equation`). Eine
+  nummerierte Gleichung würde jede folgende Nummer des Abschnitts verschieben —
+  und damit auch die des interaktiven Skripts, das seine Zählung aus derselben
+  Reihenfolge ableitet.
+Der P21-Eintrag wird entsprechend gleich mit Status „entschieden: nachziehen"
+angelegt; nur eine bewusste Ausnahme braucht noch eine Rückfrage.
+
+**Fehler der Vorlage selbst** (Tippfehler, Sachfehler, falsche Nummern in v0.13)
+gehören **nicht** hierher, sondern in `../QUELLEN_FEHLER.md`; dort ist auch
+geregelt, dass eine Korrektur nur gemeinsam in Quelle *und* WIP erfolgt. Beide
+Register verfolgen dasselbe Ziel — die beiden Fassungen dürfen nicht
+auseinanderlaufen.
+
 Jedes Fragment trägt einen Kopfkommentar mit seiner Quelldatei und jeder
 bewussten Abweichung von v0.13. **Dort — nicht hier — stehen die
 abschnittsspezifischen Fakten**, damit diese Datei nicht mit jedem migrierten

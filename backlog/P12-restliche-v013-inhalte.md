@@ -247,7 +247,7 @@ pro Figur anhand Runbook-Vorlagenhierarchie [[feedback-vorlagen-hierarchie]].*
 - [ ] **P12-E3** 1.5.13 Rollbewegung: `rolling_bodies` (in ch_02 nachrüsten). *(M)*
 - [ ] **P12-E4** 1.7: `stoss`. *(M)*
 - [ ] **P12-E5** 2.3: `lorentz_force`. *(M)*
-- [~] **P12-E6** 3.1: `federpendel`. *(M)*
+- [x] **P12-E6** 3.1: `federpendel`. *(M)* — **erledigt 2026-08-28**
 
   **Stufe 1 erledigt 2026-08-27 (`e31dcbd`): Motor portiert** nach
   `src/figures/federpendel/` (constants/state/physics/render/runtime, 1225 Z.).
@@ -287,11 +287,29 @@ pro Figur anhand Runbook-Vorlagenhierarchie [[feedback-vorlagen-hierarchie]].*
   *Stubs (versteckt, muessen aber existieren):* `graph_svg`, `live_t`, `live_v`,
   `live_a`, `live_ekin`, `live_epot`, `live_etot`.
 
-  **Stufe 2 (offen):** `aspekt_federpendel.js` aus der Vorlage + `.css`,
-  Skelett mit den IDs oben, Platzhalter in `ch_04_01_schwingungen.html`
-  (Abschnitt 3.1.5), Import + `ASPEKT_FACTORIES`-Eintrag in `main.js`,
-  `<link>` in `index.html`. Danach `figur_smoke.mjs --init=buildFederpendelFig`,
-  `dom_harness.mjs` (Nummerierung unveraendert?) und Browser-Sicht.
+  **Stufe 2 erledigt 2026-08-28 (`267568a` + `20ec555`, v1.35.0):**
+  `aspekt_federpendel.js` (563 Z.) + `.css` (216 Z.) nach dem Muster von
+  `aspekt_winkel_zeit.js`, Platzhalter in `ch_04_01_schwingungen.html`
+  (3.1.5, ohne `data-figref`), Import + `ASPEKT_FACTORIES`-Eintrag und
+  Sim-URL in `main.js`, `<link>` in `index.html`, `--fp-*`-Dunkelzweig in
+  `darkmode.css`. Damit 17 Aspekt-Figuren auf fuenf Motoren.
+
+  **Achtung — die beiden Commits gehoeren zusammen:** in `267568a` waren nur
+  die zwei Modul-Dateien gestaged, die Verdrahtung fehlte (stale-Index, wie
+  c9fff3f/a655912) und kam in `20ec555` nach.
+
+  **Geprueft:** `figur_smoke.mjs --init=buildFederpendelFig` fehlerfrei (Bau,
+  3 Regler, Runbar start/stop/reset); `dom_harness.mjs` mit *und* ohne
+  Platzhalter identisch 88 Abbildungen bei gleichen Luecken — die
+  unnummerierte Figur laesst die v0.13-Zaehlung unangetastet.
+
+  **Offen:** Browser-Sicht durch den Nutzer (Optik, Darkmode, MathJax im
+  Caption- und `data-eqs`-Satz) — headless nicht pruefbar.
+
+  **Naechster Schritt in diesem Motor:** 3.1.6 „Vertikales Feder-Masse-System"
+  ueber `store.oscillationMode = 'vertical'` — der DOM-Vertrag oben gilt
+  unveraendert, 3.1.6 hat mit `fig-feder_masse_schwingung` (in 3.1.1) aber
+  ebenfalls kein eigenes statisches Pendant.
 - [ ] **P12-E7** 3.2: `wellen` (nach P12-C2-Klärung). *(M)*
 - [ ] **P12-E8** Hilfs-Sims: `ableitung`, `lineal`, `kreis_spiralbewegung` —
   Zuordnung prüfen. *(S)*

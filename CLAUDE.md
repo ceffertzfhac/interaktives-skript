@@ -101,6 +101,18 @@ python3 -m http.server 8000
   selben Arbeitszyklus als **eigener kleiner `docs(readme):`-Commit** (nicht
   wochenlang aufschieben); auf GitHub steht die Änderung erst nach Merge/Push
   nach `main` (nur auf ausdrückliche Freigabe).
+- **Druckskript und interaktives Skript bleiben synchron** (ab 2026-08-28,
+  Nutzervorgabe: *„die Dokumentation der Abweichungen ist absolut
+  missionskritisch"*). Das WIP **darf** inhaltlich von `Input/v0.13/` abweichen
+  (Reihenfolge, Zusatzabsatz, Bildunterschrift, zusätzliche Formel) — aber
+  **jede solche Abweichung zieht einen abhakbaren Backlog-Eintrag nach sich**
+  (`backlog/P21-statisches-skript-nachziehen.md`), damit das Druckskript später
+  nachgezogen werden kann — von **irgendwem**, nicht nur von dem, der sie
+  gemacht hat: der Eintrag nennt Zieldatei, Stelle und den einzusetzenden Text
+  wörtlich. Ohne diesen Eintrag ist die Änderung **nicht fertig**.
+  Wohin was gehört (Fragmentkopf / P21 / Commit) und was *keine* Abweichung in
+  diesem Sinn ist: `InteraktivesSkript_WIP/chapters/CLAUDE.md`. Fehler der
+  Vorlage selbst laufen weiter über `QUELLEN_FEHLER.md`.
 - **Sprache:** Inhalte und Code-Kommentare sind auf Deutsch; beim Bearbeiten von
   Prosa oder Kommentaren die umgebende Sprache übernehmen.
 

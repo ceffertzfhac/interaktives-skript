@@ -241,6 +241,25 @@ input[type="range"]::-moz-range-track {
     --kb-traj: #9aa3b8;   /* Vorlage --c-traj */
     --kb-graph-bg: #161925;  /* Vorlage --graph-bg (dunkles Navy) */
     --kb-grid-line: #262c42; /* Vorlage --grid-line */
+    /* Kapitel-1.1-Bewegungsfarbe (bewegtes Objekt + seine Weg-Zeit-Kurve in
+       Abb. 1.2 und 1.3-1.7, s. aspekt_kreisbahn.css). Das Hell-Firebrick
+       #b22222 erreichte auf dem dunklen Diagrammgrund #161925 nur rund 1,6:1 —
+       fuer eine gezeichnete Linie zu wenig (3:1 waeren noetig). Aufgehellt auf
+       das Rot, das dieser Darkmode ohnehin fuehrt (--kb-acc), damit die Figuren
+       des Kapitels nicht ein eigenes Rot einfuehren: 6,9:1 auf dem Diagrammgrund
+       und immer noch dieselbe Farbfamilie wie im Hellmodus. */
+    --k11-kurve: #ff7777;
+}
+/* Farb-Palette der Federpendel-Figuren (Abschnitt 3.1.5 und Abb. 1.8, --fp-*,
+   s. aspekt_federpendel.css): eigene Tokenfamilie, daher eigener Dunkel-Zweig.
+   Auf den MOTOR gescopt, nicht auf einen Aspekt-Namen — beide Figuren des
+   Motors sehen gleich aus (s. figures/CLAUDE.md).
+   Werte 1:1 aus dem Dunkel-Set der Stand-alone-Vorlage (--surface3 / --c-sp).
+   Der Ortsvektor kehrt sich mit dem Grund um (fast schwarz -> fast weiss) —
+   er ist in der Vorlage bewusst neutral, nicht bunt. */
+.aspekt-figur[data-motor="federpendel"] {
+    --fp-surface3: #212633;
+    --fp-sp: #f0f0f0;
 }
 /* Farb-Palette der Kapitel-1.1-Figur (Abb. 1.1, --gk-*, s.
    aspekt_grundbegriffe.css): eigene Tokenfamilie, daher eigener Dunkel-Zweig.
