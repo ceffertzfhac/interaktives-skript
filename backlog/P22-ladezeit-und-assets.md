@@ -42,7 +42,11 @@ in dieser Zeit gern „Seite reagiert nicht").
 
 ### Maßnahmen (nach Aufwand/Wirkung gestaffelt)
 
-- [ ] **P22-1 `loading="lazy"` für alle Kapitelbilder** *(S, Wirkung sehr groß)* —
+- [x] **P22-1 `loading="lazy"` für alle Kapitelbilder** *(S)* — **erledigt
+  2026-08-29 (v1.38.1)**: zentral in `chapters.js` beim Injizieren gesetzt
+  (`loading="lazy"` + `decoding="async"`), `print.js` schaltet den Druck-Klon
+  zurück auf `eager`. Gemessen: Bildanfragen beim Start von 127 auf **8**,
+  Bilddaten von ~38 MB auf **70 kB**. *(ursprüngliche Beschreibung:)*
   zentral in JS setzen (nicht in 127 `<img>`-Tags), damit es für künftige Kapitel
   automatisch gilt: nach `loadChapters()`/`paginate()` einmal über
   `#paper img.grafik` laufen. Die Bilder der aktiven Seite lädt der Browser
@@ -50,7 +54,15 @@ in dieser Zeit gern „Seite reagiert nicht").
   Erwartete Wirkung: Startlast von ~39 MB auf die Bilder der ersten Seite.
   Prüfen: Übertragungsvolumen erneut messen, Blättern auf Bildseiten sichten
   (kurzes Nachladen ist hinzunehmen; ggf. die Nachbarseite vorwärmen).
-- [ ] **P22-2 Bilder auf Anzeigegröße bringen** *(M, Wirkung groß)* — Zielbreite
+- [x] **P22-2 Bilder auf Anzeigegröße bringen** *(M)* — **erledigt 2026-08-29**:
+  71 der 123 Bilder auf die doppelte Anzeigebreite verkleinert (aus dem
+  `style="width:NN%"` des jeweiligen `<img>` × 800 px Lesespalte, gedeckelt auf
+  500…1600 px). Drei Dateien wurden zusätzlich umkodiert, weil PNG dort ein
+  Vielfaches kostete: das Weltraumfoto (11,1 MB → JPEG), `rutsche` (1,9 MB →
+  JPEG) und `skript_Bfeldkreisspule` (1,1 MB → 102 kB JPEG; sein Alphakanal war
+  durchgehend deckend). Referenzen mitgezogen, kein `<img>` zeigt ins Leere,
+  alle Dateien vollständig dekodierbar. **`bilder/` 37,5 MB → 10,9 MB.**
+  *(ursprüngliche Beschreibung:)* Zielbreite
   = doppelte Anzeigebreite (Retina), also meist 600–1400 px; Fotos als JPEG/WebP
   statt PNG. Die vier Ausreißer oben zuerst. **Achtung:** dieselben Dateien
   gehen in den Druck (`print.js` klont `#container`) — 1400 px reichen für die
@@ -64,9 +76,18 @@ in dieser Zeit gern „Seite reagiert nicht").
   Durchgang über alle Seiten — die Nummerierung muss also entweder vorab aus dem
   Quelltext (nicht aus dem gesetzten DOM) kommen oder pro Seite nachgezogen
   werden. Vor der Umsetzung entwerfen; gehört fachlich zu P1 (Architektur).
-- [ ] **P22-4 Gegenmessung** *(S)* — nach jeder Stufe dieselbe Messung wiederholen
+- [ ] **P22-4 Gegenmessung an der veröffentlichten Fassung** *(S)* — steht noch
+  aus: die Messung oben stammt von `main` (v1.34.1). P22-1/-2 liegen auf
+  `Backlog_items` und sind noch nicht nach `main` gemerged/gepusht — erst danach
+  lässt sich der Effekt live nachmessen. Lokal gemessen: 28 kB Bilder beim
+  Start statt 38 MB.
+  *(ursprünglich:)* nach jeder Stufe dieselbe Messung wiederholen
   (Skript im Scratchpad: `live_perf.mjs`; misst Übertragungsvolumen, Zeit bis
   Prosa/Formeln/Figuren) und die Tabelle oben fortschreiben.
+
+**Nebenbefund (2026-08-29):** 29 Dateien in `bilder/` sind von keinem Kapitel
+referenziert. Nicht gelöscht — erst prüfen, ob sie zu noch nicht migrierten
+Abschnitten gehören. Eigener kleiner Punkt, wenn P12 dort ankommt.
 
 ### Zusammenhang mit anderen Items
 
