@@ -60,6 +60,20 @@ pixel-identisch.**
   Headless-Chromium ohne Konsolenfehler — T-Regler und Live-Analyse stimmen
   ueberein (1,70 s), Formelkarte zeigt die Fliesstext-Formel, Szene und Diagramm
   stehen als zwei Hochformate buendig nebeneinander.
+  **Zwei Fehler in der Sicht-Pruefung gefunden und behoben (v1.38.2):**
+  1. **Die Diagrammkurve war unsichtbar — in BEIDEN Figuren dieses Motors, seit
+     dem Port (P12-E6).** `render.js` faerbt die Kurve inline mit
+     `style.stroke = 'var(--accent)'`; dieser Token stammt aus der nicht
+     mitportierten design-system.css der Stand-alone-Sim und war im Skript
+     undefiniert. Eine undefinierte `var()` macht die Deklaration ungueltig,
+     `stroke` faellt auf den ererbten Wert `none` zurueck — Kurve weg, ohne
+     Fehlermeldung. Behoben durch eine Vokabel-Bruecke im Figuren-Scope
+     (`--accent`, `--c-ekin/-epot/-etot` -> `--kb-*`), statt den Motor
+     umzuschreiben; die Energiefarben stehen damit auch fuer 3.1.9 bereit.
+  2. **Diagrammtitel sagte „x(t)" auch im vertikalen Aufbau**, waehrend die
+     Achse daneben korrekt „y" trug. `graphTitles` gibt es jetzt je Aufbau,
+     wie `graphAxisLabels` (PORT-AENDERUNG in constants.js/render.js).
+
   **Regression beim Umbau gefunden und behoben:** das Stylesheet ist jetzt auf
   `data-motor="federpendel"` gescopt (beide Figuren sehen gleich aus); der
   3.1.5-Platzhalter brauchte dieses Attribut nachgetragen, sonst verlor die
