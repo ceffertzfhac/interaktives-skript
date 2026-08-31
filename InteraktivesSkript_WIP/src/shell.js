@@ -137,7 +137,38 @@ function landmarksFor(page) {
             });
         }
     });
+    unterscheideGleiche(items);
     return items;
+}
+
+// Mehrere Eintraege einer Seite koennen denselben Kurztitel tragen — die
+// Abbildungen 1.4-1.7 heissen alle "Senkrechter Wurf" und unterscheiden sich
+// erst hinter dem Doppelpunkt, den der Kurztitel abschneidet. Dann bekommen
+// sie (a), (b), … in Dokumentreihenfolge (Nutzervorgabe 2026-08-31: "im falle
+// identischer bezeichnungen wuerde ich mit (a), (b)... arbeiten").
+// Bewusst je SEITE, nicht dokumentweit: die Schiene zeigt immer nur eine Seite,
+// und ein (c) ohne sichtbares (a) daneben waere ratlos machend.
+// Ab dem 27. Gleichnamigen wird durchgezaehlt statt Buchstaben zu erfinden.
+function unterscheideGleiche(items) {
+    // Gruppiert wird nach TYP UND Titel, nicht nur nach Titel: eine
+    // Beispiel-Box und die zugehoerige Figur tragen oft denselben Kurztitel
+    // ("Feder-Masse-Pendel"), sind aber keine Reihe — Piktogramm und Nummer
+    // unterscheiden sie bereits, ein (a)/(b) wuerde eine Abfolge behaupten,
+    // die es nicht gibt.
+    const gruppen = new Map();
+    items.forEach(it => {
+        if (!it.titel) return;
+        const schl = it.typ + '|' + it.titel;
+        if (!gruppen.has(schl)) gruppen.set(schl, []);
+        gruppen.get(schl).push(it);
+    });
+    gruppen.forEach(gruppe => {
+        if (gruppe.length < 2) return;
+        gruppe.forEach((it, i) => {
+            const marke = i < 26 ? String.fromCharCode(97 + i) : String(i + 1);
+            it.titel += ` (${marke})`;
+        });
+    });
 }
 
 function renderRailInto(container, page) {
