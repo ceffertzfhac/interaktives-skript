@@ -282,7 +282,16 @@
 }
 :root[data-width-mode="schmal"] .aspekt-figur[data-aufbau="vertikal"]:not(.aspekt-im-overlay) .aspekt-svg,
 :root[data-width-mode="schmal"] .aspekt-figur[data-aufbau="vertikal"]:not(.aspekt-im-overlay) .aspekt-graph-svg {
-    height: min(44vh, 400px);
+    /* max-height: none ist noetig, nicht kosmetisch: die motorweite Regel oben
+       setzt fuer schmal max-height 22vh (Szene) bzw. 32vh (Diagramm), und ein
+       max-height kappt die height hier stillschweigend. Ohne das kamen von den
+       gewollten 400 px nur 220 bzw. 320 an — die Figur stand in der schmalen
+       Ansicht auf 19 % bzw. 26 % der verfuegbaren Breite, waehrend die
+       Nachbarfigur 1.9 auf 33 % bzw. 61 % kommt (Nutzerbefund 2026-08-31:
+       „im schmal modus ist die darstellung des federpendels unnoetig schmal").
+       Der Lupen-Block unten hatte das max-height bereits aufgehoben, die
+       schmale Ansicht nicht. */
+    height: min(52vh, 470px); max-height: none;
 }
 /* Lupe: mehr Hoehe, weiterhin nebeneinander. */
 .aspekt-figur.aspekt-im-overlay[data-aufbau="vertikal"] .aspekt-main-content { flex-direction: row; }
