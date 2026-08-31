@@ -106,6 +106,32 @@ Abschnitt wächst. Gefundene **v0.13-Quellenfehler** werden ebenfalls im
 betroffenen Fragment dokumentiert (z. B. die doppelte Abschnittsnummer 3.1 in
 `ch_04_00_einleitung.html`), nicht hier.
 
+## Bildunterschriften: über die Sache reden, nicht über die Figur
+
+**Nutzervorgabe 2026-08-31:** *„so was wie ‚die Bildunterschrift läuft mit den
+Reglern mit' unbedingt vermeiden."*
+
+Eine Bildunterschrift beschreibt den **physikalischen Sachverhalt**, nicht die
+Mechanik der Anzeige. Verboten sind Selbstbezüge auf die Unterschrift oder die
+Bedienoberfläche:
+
+- ❌ „— diese Bildunterschrift läuft mit."
+- ❌ „Bildunterschrift und Fallzeit im Analysefeld laufen mit."
+- ❌ „Diese Bildunterschrift läuft mit den Reglern mit."
+
+Dass sich die Werte mit den Reglern ändern, **sieht** der Lesende beim Schieben —
+es aufzuschreiben kostet eine Zeile und erklärt nichts über die Physik. Die
+statische Fassung derselben Abbildung im Druck hat solche Sätze ohnehin nicht,
+und das Druckskript soll mit dem interaktiven synchron bleiben (P21).
+
+Was **bleibt**: die Angabe, welcher Regler welche Größe ändert („Der Regler
+\(h_0\) ändert die Fallhöhe."), und der Hinweis, was man beobachten kann („die
+rote Kurve \(y(t)\) entsteht dabei Punkt für Punkt aus der Bewegung."). Das ist
+eine Aussage über die **Sache**, nicht über die Unterschrift.
+
+Bereinigt wurden dabei sieben Fundstellen in `ch_01_01_kinematik.html`
+(Abb. 1.3–1.9).
+
 ## Nummerierung
 
 `../src/numbering.js::init_numbering()` nummeriert Boxen, Abbildungen und Bilder

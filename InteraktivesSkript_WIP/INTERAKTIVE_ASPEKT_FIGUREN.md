@@ -73,6 +73,13 @@ ersten Anlage (Singleton → Per-Instanz, 2. Figur, Grundgerüst) liegt in
 
 ---
 
+> **Bildunterschrift: nie über sich selbst reden.** Kein „diese Bildunterschrift
+> läuft mit", kein „die Werte im Analysefeld laufen mit" — die Unterschrift
+> beschreibt die *Physik*, nicht die Bedienoberfläche (Nutzervorgabe
+> 2026-08-31). Dass sich Werte mit den Reglern ändern, sieht man beim Schieben.
+> Welcher Regler welche Größe ändert, darf drinstehen. Regel + Beispiele:
+> `chapters/CLAUDE.md`, Abschnitt „Bildunterschriften".
+
 ## 0. Das Konzept (warum es so gebaut ist)
 
 Die Stand-alone-Sims im `Input/`-Ordner sind **sehr umfangreich** (Auto-Play,
