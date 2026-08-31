@@ -2136,3 +2136,62 @@ input[type="range"]::-moz-range-track {
 }
 /* Im Ausdruck hat eine Hover-Erklärung nichts verloren. */
 @media print { .tooltip { display: none !important; } }
+
+/* ── Ladeblende (BACKLOG P23-1) ──────────────────────────────────────────────
+   Verdeckt #paper, bis der Startzustand steht (Fragmente geladen, paginiert,
+   erster MathJax-Lauf durch). Vorher stand rund 5 s lang das ganze Skript
+   unpaginiert mit rohem LaTeX da; welcher Abschnitt oben lag, war
+   Netzwerk-Zufall. Geschaltet wird ausschliesslich aus main.js -- ohne JS
+   bleibt #app_loading [hidden] und #paper sichtbar (kein Blindflug, falls das
+   Modul nicht laedt). */
+.app-loading #paper { visibility: hidden; }
+/* visibility statt display: die Blende darf das Layout nicht veraendern --
+   center.js misst waehrend init() den Ueberlauf von #content, und der
+   Formel-Ueberstand (P14) haengt an denselben Breiten. */
+
+/* :not([hidden]) ist Absicht, nicht Kosmetik: eine id-Regel mit display:grid
+   schlaegt das Browser-Default [hidden]{display:none} (Spezifitaet 1-0-0 gegen
+   0-1-0). Ohne diesen Zusatz bliebe die Blende sichtbar, obwohl das JS sie
+   laengst per el.hidden=true abgeraeumt hat -- genau der Fehler, der beim
+   ersten Testlauf zuschlug. */
+#app_loading:not([hidden]) {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    background: var(--paper-outer, #dedad0);
+}
+#app_loading_inner { text-align: center; max-width: 22rem; padding: 0 1.5rem; }
+#app_loading_inner p {
+    margin: 0.9rem 0 0;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-2, #4c5266);
+}
+#app_loading_bar {
+    height: 3px;
+    border-radius: 999px;
+    background: var(--teal-tint-2, #cdeae8);
+    overflow: hidden;
+}
+#app_loading_bar span {
+    display: block;
+    height: 100%;
+    width: 40%;
+    border-radius: inherit;
+    background: var(--teal, #00b1ac);
+    animation: app_loading_lauf 1.1s ease-in-out infinite;
+}
+@keyframes app_loading_lauf {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(250%); }
+}
+/* Bewegung ist hier reine Dekoration -- wer sie abbestellt hat, bekommt einen
+   ruhenden Balken statt gar keiner Rueckmeldung. */
+@media (prefers-reduced-motion: reduce) {
+    #app_loading_bar span { animation: none; width: 100%; opacity: 0.55; }
+}
+/* Im Ausdruck hat eine Ladeanzeige nichts verloren (der Druck-Tab durchlaeuft
+   denselben init()). */
+@media print { #app_loading { display: none !important; } }

@@ -224,6 +224,45 @@ koordinaten; `perspective` ∈ {1,2,3,4} wählt die Ansicht, gesteuert vom
 > entkommt in die Schiene. Beim Hinzufügen eines Typs alle fünf greppen. (Die
 > v0.13-Typen `bemerkung`/`wichtig` kamen so in v1.7 dazu.)
 
+## Startzustand: Ladeblende und zuletzt gelesene Seite (v1.40/v1.41)
+
+`main.js::init()` legt als Erstes eine **Ladeblende** über `#paper`
+(`#app_loading`, `body.app-loading`) und nimmt sie, wenn der erste
+MathJax-Lauf durch ist (`typesetAfterLoad().finally(...)`; die Funktion liefert
+seither ein Promise). Grund: `chapters.js::loadChapters()` hängt die 17
+Fragmente einzeln ein, sobald ihr `fetch` zurückkommt — dazwischen zeichnet der
+Browser, und bis `paginate()` lief, stand ~5 s lang das *ganze* Skript
+unpaginiert mit rohem LaTeX da, oben derjenige Abschnitt, dessen `fetch`
+zufällig zuerst ankam (BACKLOG P23-1).
+
+Drei Eigenschaften sind Absicht und dürfen nicht wegoptimiert werden:
+
+- **Geschaltet wird aus dem JS, nicht per Klasse im ausgelieferten HTML.** Lädt
+  das Modul nicht, bleibt der Inhalt sichtbar — statt hinter einer Blende, die
+  niemand mehr wegnimmt.
+- **Zwei Notausgänge:** ein 20-s-Timer in `main.js` und ein `.catch` im
+  Typeset-Startlauf. Eine hängende Ladeanzeige ist schlimmer als der Zustand,
+  den sie verdeckt. **Wer die Bedingung zum Aufziehen ändert, braucht weiterhin
+  einen Pfad, der sie in jedem Fehlerfall entfernt.**
+- **`visibility: hidden`, nicht `display: none`** — die Blende darf das Layout
+  nicht verändern: `center.js` misst während `init()` den Überlauf von
+  `#content`, und der Formel-Überstand (P14) hängt an denselben Breiten.
+
+Die Blende nutzt ausschließlich vorhandene Farb-Token (`--paper-outer`,
+`--ink-2`, `--teal-tint-2`, `--teal`), die `darkmode.css` bereits überschreibt —
+deshalb braucht sie **keine** eigene Darkmode-Regel.
+
+**Zuletzt gelesene Seite** (`pages.js`): `showPage()` schreibt die Seiten-Id nach
+`localStorage` (`skript_last_page`, gleiches Muster wie
+`skript_width_mode`/`-palette`/`-text_level`), `paginate()` wählt die Startseite
+in der Rangfolge **`location.hash` → gemerkte Seite → erste Seite** — ein
+ausdrücklich geteilter Link gewinnt immer. Der gemerkte Wert wird gegen das
+Seitenregister geprüft (nach einer Migration zeigt eine alte Id ins Leere), alle
+`localStorage`-Zugriffe sind gekapselt (privates Fenster/Speicher aus wirft),
+und der **Druck-Tab schreibt den Merker nicht** (`?print=true`): er blendet alle
+Seiten ein und springt für den QR-Rückweg ggf. woandershin — das ist kein
+Lesevorgang.
+
 ## Weitere Code-Konventionen
 
 - **Accessibility (v1.6)**: `<html lang="de">` ist gesetzt. Alle

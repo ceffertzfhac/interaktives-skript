@@ -124,15 +124,25 @@ function captureEqLatex(html) {
 // (main.js) klonot die fuer die Aspekt-Figuren relevanten Formeln in deren
 // rechte Seitenleiste -- bewusst ueber window statt per Import, chapters.js
 // soll nur core.js kennen.
+// Liefert ein Promise, das erfuellt, wenn der Startlauf durch ist (auch wenn er
+// scheitert -- s. catch). main.js haengt daran die Ladeblende (BACKLOG P23-1);
+// ohne Rueckgabewert bliebe sie bis zum Notaus-Timer stehen.
 export function typesetAfterLoad() {
-    (function waitForMathJax() {
-        if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
-            window.MathJax.startup.promise
-                .then(reload_mathjax)
-                .then(() => { if (window.resolve_eq_refs) window.resolve_eq_refs(); })
-                .then(() => { if (window.fill_physik_panels) window.fill_physik_panels(); });
-        } else {
-            setTimeout(waitForMathJax, 200);
-        }
-    })();
+    return new Promise(fertig => {
+        (function waitForMathJax() {
+            if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
+                window.MathJax.startup.promise
+                    .then(reload_mathjax)
+                    .then(() => { if (window.resolve_eq_refs) window.resolve_eq_refs(); })
+                    .then(() => { if (window.fill_physik_panels) window.fill_physik_panels(); })
+                    // Ein Fehler im Typeset darf den Aufrufer nicht haengen
+                    // lassen: melden und trotzdem erfuellen -- die Seite ist dann
+                    // zwar unvollstaendig gesetzt, aber lesbar.
+                    .catch(err => console.warn("[chapters] Typeset-Startlauf fehlgeschlagen:", err))
+                    .then(fertig);
+            } else {
+                setTimeout(waitForMathJax, 200);
+            }
+        })();
+    });
 }

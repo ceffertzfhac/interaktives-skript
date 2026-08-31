@@ -116,7 +116,7 @@
             <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation" data-tip="Kapitelnavigation">☰</button>
             <div id="header_brand">
                 <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
-                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.40.0</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
+                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.41.0</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
                      (Nutzervorgabe). Details im Kontakt-Kasten und in DISCLAIMER.md. --><span id="header_prototyp" title="Prototyp: Umsetzung und Inhalte sind vorlaeufig und ungeprueft">Prototyp</span></span>
                 <span id="header_author">Prof. Dr. rer. nat. C. Effertz</span>
             </div>
@@ -239,6 +239,21 @@
         <div id="zoom_overlay" class="hidden" data-action="close_zoom"></div>
         <div id="zoom" class="hidden">
             <div id="zoom_content"></div>
+        </div>
+        <!-- Ladeblende (BACKLOG P23-1). Die Kapitel-Fragmente kommen einzeln per
+             fetch an; bis alle da sind und paginate() + der MathJax-Lauf gelaufen
+             sind, stand hier zuvor rund 5 s lang das GESAMTE Skript unpaginiert
+             und ungesetzt auf dem Schirm -- mit rohem LaTeX, und oben derjenige
+             Abschnitt, dessen fetch zufaellig zuerst zurueckkam.
+             Sichtbar geschaltet wird sie von main.js (nicht hier per Klasse):
+             faellt das JS-Modul aus, bleibt so wenigstens der Inhalt lesbar
+             statt einer ewigen Ladeanzeige. role=status + aria-live meldet den
+             Zustand an Screenreader; #paper traegt solange aria-busy. -->
+        <div id="app_loading" hidden role="status" aria-live="polite">
+            <div id="app_loading_inner">
+                <div id="app_loading_bar"><span></span></div>
+                <p>Skript wird geladen …</p>
+            </div>
         </div>
         <div id="print_instruction" class="hidden">
             <li>Wählen Sie im Browser <b>Datei > Drucken</b>. </li>

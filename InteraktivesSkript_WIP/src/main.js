@@ -4,7 +4,7 @@
 // afterprint-/hashchange-Listener. Module sind defer -> DOM bereit; init()
 // am Modul-Ende ersetzt das ehemalige <body onload="init()">.
 
-import { interaktiv, generate_highlight_boxes, safari_bug, make_static,
+import { ge, interaktiv, generate_highlight_boxes, safari_bug, make_static,
          update_all, toggle_darkmode, test, reload_mathjax, reset, hide,
          init_text_size_controls, adjust_text_size, set_width_mode,
          init_width_mode, toggle_settings, close_settings, set_palette,
@@ -335,7 +335,43 @@ function dispatch_click(e) {
     }
 }
 
+// ── Ladeblende (BACKLOG P23-1) ──────────────────────────────────────────────
+// #paper bleibt verdeckt, bis der Startzustand steht. Bewusst HIER geschaltet
+// und nicht als Klasse im ausgelieferten HTML: laedt das Modul nicht (alter
+// Browser, Netzfehler, Syntaxfehler), bleibt der Inhalt sichtbar statt hinter
+// einer Blende, die niemand mehr wegnimmt.
+const LADEBLENDE_NOTAUS_MS = 20000;
+let ladeblendeNotaus = null;
+
+function ladeblende_an() {
+    const el = ge("app_loading");
+    if (!el) return;
+    document.body.classList.add("app-loading");
+    el.hidden = false;
+    const paper = ge("paper");
+    if (paper) paper.setAttribute("aria-busy", "true");
+    // NOTAUS: was auch immer in init() schiefgeht (fehlendes Fragment,
+    // MathJax-CDN nicht erreichbar, Ausnahme in einer Figur) -- nach dieser
+    // Frist wird die Blende bedingungslos entfernt. Eine Ladeanzeige, die
+    // haengen bleibt, ist schlimmer als der Zustand, den sie verdeckt.
+    ladeblendeNotaus = setTimeout(() => {
+        console.warn("[start] Startzustand nach " + (LADEBLENDE_NOTAUS_MS / 1000) +
+                     " s nicht fertig -- Ladeblende wird trotzdem entfernt.");
+        ladeblende_aus();
+    }, LADEBLENDE_NOTAUS_MS);
+}
+
+function ladeblende_aus() {
+    if (ladeblendeNotaus) { clearTimeout(ladeblendeNotaus); ladeblendeNotaus = null; }
+    const el = ge("app_loading");
+    if (el) el.hidden = true;
+    document.body.classList.remove("app-loading");
+    const paper = ge("paper");
+    if (paper) paper.removeAttribute("aria-busy");
+}
+
 async function init() {
+    ladeblende_an();
     bind_events();
     init_text_size_controls();
     init_width_mode();
@@ -373,7 +409,13 @@ async function init() {
     init_center();
     // Injizierte Formeln re-typesetzen, sobald MathJax bereit ist (Gate wie
     // numbering.js). renumber laeuft ueber reload_mathjax mit.
-    typesetAfterLoad();
+    // Die Ladeblende faellt, wenn dieser Lauf durch ist -- dann steht die
+    // richtige Seite mit gesetzten Formeln da. Frueher (direkt nach paginate())
+    // waere theoretisch moeglich, bringt aber nichts: der Hauptthread ist bis
+    // zum Ende des Typesets ohnehin belegt, es gaebe also nur ein Zwischenbild
+    // mit rohem LaTeX. .catch/.finally, damit ein Fehler im Typeset die Blende
+    // nicht stehen laesst (der Notaus-Timer greift sonst erst nach 20 s).
+    typesetAfterLoad().finally(ladeblende_aus);
     offsetAnchor();
     make_static();
     if(interaktiv) {
