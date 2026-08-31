@@ -306,10 +306,17 @@ in einer Offline-Prüfung mit `AllPackages` **nicht** sichtbar.
 
 Das Präfix war anfangs die Konstante `'1.4.'`. **Seit v1.7 wird es pro Seite
 ermittelt** — `numbering.js::renumber_equations()` liest es via
-`sectionPrefix()` aus dem Seitentitel und lässt einen zweiten MathJax-Lauf die
-Tags setzen. Ein neuer Abschnitt braucht deshalb keine Änderung. (Verifiziert
-2026-07-24 über 1.4-, 1.5- und 0.x-Seiten, s. `backlog/P12-restliche-v013-inhalte.md`
-→ P12-0a.)
+`sectionPrefix()` aus dem Seitentitel. Ein neuer Abschnitt braucht deshalb
+keine Änderung. (Verifiziert 2026-07-24 über 1.4-, 1.5- und 0.x-Seiten, s.
+`backlog/P12-restliche-v013-inhalte.md` → P12-0a.)
+
+**Seit v1.39.0 zählt dieser Schritt aus der LaTeX-Quelle statt aus dem
+gesetzten DOM** und läuft damit *vor* MathJax — den früheren zweiten
+MathJax-Lauf gibt es nicht mehr (BACKLOG P22-3b). Praktische Folge für die
+Migration: **eine nummerierte Umgebung, die der Zähler nicht kennt, verschiebt
+ab dieser Stelle jede Formelnummer des Abschnitts.** Er kennt `equation` und
+`align` (plus `\nonumber`/`\notag` und geschachtelte `\\`). Wer `gather` o. Ä.
+einführt, ergänzt sie in `numbering.js::eq_rows_of_source()`.
 
 ### 5.4 Zeilenabstand mehrzeiliger Formeln
 
