@@ -60,6 +60,24 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// Box-Typ -> Piktogramm. EINE Quelle fuer beide Verbraucher: die Boxen selbst
+// (generate_highlight_boxes, unten) und die Schiene "Auf dieser Seite"
+// (shell.js::landmarksFor, BACKLOG P24). Vorher stand die Liste nur lokal in
+// der Funktion; ein zweiter Verbraucher haette sie abgeschrieben und waere
+// beim naechsten neuen Boxtyp auseinandergelaufen (P18: Mengen an genau einer
+// Stelle). Die Reihenfolge ist die Reihenfolge der Icon-Vergabe im Markup.
+export const BOX_ICONS = {
+    lernziel:         'target.svg',
+    motivation:       'star.svg',
+    wiederholung:     'head.svg',
+    beispiel:         'pen.svg',
+    zusammenfassung:  'noteblock.svg',
+    aufgabe:          'noteblock.svg',
+    anmerkung:        'eye.svg',
+    wichtig:          'star.svg',
+    bemerkung:        'eye.svg',
+};
+
 export function generate_highlight_boxes() {
     // Box-Typen + Icons, an v0.13 (Physik_skript_header_gmni_v3.tex) angelehnt:
     // beispiel=pen, bemerkung=eye, wichtig=star, lernziel=target,
@@ -67,17 +85,7 @@ export function generate_highlight_boxes() {
     // bulb-Icon, das hier nicht vorliegt -> noteblock). motivation/wiederholung/
     // anmerkung bleiben fuer aeltere Fragmente; neuere Kapitel nutzen die
     // v0.13-Namen (beispiel/bemerkung/wichtig/lernziel/aufgabe/zusammenfassung).
-    const boxes = [
-        ["lernziel","target.svg"],
-        ["motivation","star.svg"],
-        ["wiederholung","head.svg"],
-        ["beispiel","pen.svg"],
-        ["zusammenfassung","noteblock.svg"],
-        ["aufgabe","noteblock.svg"],
-        ["anmerkung","eye.svg"],
-        ["wichtig","star.svg"],
-        ["bemerkung","eye.svg"]
-    ];
+    const boxes = Object.entries(BOX_ICONS);
 
     for (let l=0; l < boxes.length; l++) {
         const a = document.getElementsByClassName(boxes[l][0]);

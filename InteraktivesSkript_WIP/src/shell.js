@@ -4,7 +4,7 @@
 // Tablet-Drawer-Variante derselben Rail-Inhalte. Reagiert auf das
 // "pagechange"-Event aus pages.js (keine Abhaengigkeit auf pages.js -> ui.js/
 // core.js bleiben die einzigen Importe, Zyklenfreiheit wie im Rest der App).
-import { ge, show, hide } from './core.js';
+import { ge, show, hide, BOX_ICONS } from './core.js';
 import { getPages, getCurrentIndex, getCurrentPage, showPage } from './pages.js';
 
 // original[el] = {parent, next} -- fuer restoreMarginalia() vor dem Druck.
@@ -65,6 +65,37 @@ function activeSection(sections, page) {
 // "Auf dieser Seite": Sprungmarken zu Highlight-Boxen + Grafiken der aktiven
 // Seite. Highlight-Boxen tragen nach generate_highlight_boxes() bereits einen
 // Titel (.highlight_box_title); Grafiken bekommen ihren Sektionstitel als Label.
+// Piktogramme fuer die beiden Eintragsarten, die KEINE Highlight-Box sind.
+// Inline statt als Datei (Nutzerentscheidung 2026-08-31): sie faerben sich
+// ueber currentColor automatisch mit Darkmode und Palette mit, und es kommt
+// keine zweite Zuordnungsstelle dazu. Die Box-Typen kommen aus core.js::
+// BOX_ICONS — eine Quelle, s. dort.
+const FIG_ICONS = {
+    // Rahmen mit Berg + Sonne: die statische Abbildung.
+    abbildung: '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4">'
+             + '<rect x="1.6" y="2.6" width="12.8" height="10.8" rx="1.6"/>'
+             + '<circle cx="5.6" cy="6.2" r="1.1"/><path d="M2.4 12 L6.4 8.2 L9 10.6 L11 9 L13.6 11.6"/></svg>',
+    // Regler-Schieber: die interaktive Figur (dasselbe Sinnbild wie die Regler
+    // im Bedienfeld).
+    figur:     '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">'
+             + '<path d="M2 4.6h12M2 11.4h12"/><circle cx="6" cy="4.6" r="1.9" fill="currentColor" stroke="none"/>'
+             + '<circle cx="10.6" cy="11.4" r="1.9" fill="currentColor" stroke="none"/></svg>',
+};
+
+// Kurztitel: bis zum ersten Doppelpunkt, Komma oder oeffnenden Klammer.
+// Die data-title der Figuren sind bewusst ganze Saetze (sie dienen zugleich als
+// Tooltip); in der Schiene stuenden sie sonst ueber vier Zeilen — der laengste
+// hatte 131 Zeichen (BACKLOG P24). Der volle Text bleibt im title-Attribut.
+function kurzTitel(text) {
+    if (!text) return '';
+    return text.split(/[:,(]/)[0].trim() || text.trim();
+}
+
+// Ein Schienen-Eintrag: { id, typ, nummer, titel, voll }.
+//   typ    -> Piktogramm (Box-Typ aus BOX_ICONS, sonst 'figur'/'abbildung')
+//   nummer -> "1.4.1" bzw. "Abb. 1.9"; steht vor dem Titel, damit der Bezug
+//             zum Fliesstext und zu Querverweisen erhalten bleibt
+//   titel  -> Kurztitel, per CSS auf zwei Zeilen geklemmt
 function landmarksFor(page) {
     if (!page) return [];
     const items = [];
@@ -79,11 +110,31 @@ function landmarksFor(page) {
     page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .wichtig, .grafik-container, .aspekt-figur').forEach(el => {
         if ([...el.classList].some(c => FIG.has(c))) {
             if (!el.id) return;
-            items.push({ id: el.id, label: el.dataset.title || 'Interaktive Abbildung' });
+            const voll = el.dataset.title || 'Interaktive Abbildung';
+            // Nummer aus der Bildunterschrift: label_aspekt_figuren() traegt
+            // dort "Abb. 1.n" der statischen Abbildung ein (main.js). Laeuft
+            // vor init_shell(), steht hier also schon.
+            const lab = el.querySelector('.aspekt-caption > .fig-label');
+            items.push({
+                id: el.id,
+                typ: el.classList.contains('aspekt-figur') ? 'figur' : 'abbildung',
+                nummer: lab ? lab.textContent.trim() : '',
+                titel: kurzTitel(voll),
+                voll,
+            });
         } else {
             if (!el.id) el.id = page.id + '-landmark-' + (n++);
             const t = el.querySelector('.highlight_box_title');
-            items.push({ id: el.id, label: t ? t.textContent : 'Abschnitt' });
+            const typEl = t && t.querySelector('.hb-type');   // "Beispiel 1.4.1"
+            const nameEl = t && t.querySelector('.hb-name');  // ": Titel"
+            const typ = [...el.classList].find(c => c in BOX_ICONS) || '';
+            // Aus "Beispiel 1.4.1" nur die Nummer: der Typ steckt im Piktogramm.
+            const nummer = typEl ? (typEl.textContent.trim().match(/[\d.]+$/) || [''])[0] : '';
+            const titel = nameEl ? nameEl.textContent.replace(/^[:\s]+/, '').trim() : '';
+            items.push({
+                id: el.id, typ, nummer, titel,
+                voll: t ? t.textContent.trim() : 'Abschnitt',
+            });
         }
     });
     return items;
@@ -111,7 +162,38 @@ function renderRailInto(container, page) {
         marks.forEach(m => {
             const a = document.createElement('a');
             a.href = '#' + m.id;
-            a.textContent = m.label;
+            a.className = 'rail-item';
+            // Der volle Text bleibt als Tooltip erreichbar — die Klemme auf zwei
+            // Zeilen (styles.css) darf nichts unwiederbringlich verstecken.
+            a.title = m.voll;
+
+            const ico = document.createElement('span');
+            ico.className = 'rail-ico';
+            ico.setAttribute('aria-hidden', 'true');
+            if (FIG_ICONS[m.typ]) {
+                ico.innerHTML = FIG_ICONS[m.typ];
+            } else if (BOX_ICONS[m.typ]) {
+                const img = document.createElement('img');
+                img.src = 'src/assets/' + BOX_ICONS[m.typ];
+                img.alt = '';
+                ico.appendChild(img);
+            }
+            a.appendChild(ico);
+
+            const txt = document.createElement('span');
+            txt.className = 'rail-text';
+            if (m.nummer) {
+                const num = document.createElement('span');
+                num.className = 'rail-num';
+                num.textContent = m.nummer;
+                txt.appendChild(num);
+                if (m.titel) txt.appendChild(document.createTextNode(' '));
+            }
+            if (m.titel) txt.appendChild(document.createTextNode(m.titel));
+            // Ohne Nummer UND ohne Titel bliebe der Eintrag leer — dann den
+            // vollen Text nehmen (kommt bei Figuren ohne data-figref vor).
+            if (!m.nummer && !m.titel) txt.textContent = m.voll;
+            a.appendChild(txt);
             nav.appendChild(a);
         });
     }

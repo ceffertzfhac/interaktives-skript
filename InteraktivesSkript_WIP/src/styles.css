@@ -2195,3 +2195,38 @@ input[type="range"]::-moz-range-track {
 /* Im Ausdruck hat eine Ladeanzeige nichts verloren (der Druck-Tab durchlaeuft
    denselben init()). */
 @media print { #app_loading { display: none !important; } }
+
+/* ── Schiene „Auf dieser Seite": Piktogramm + höchstens zwei Zeilen (P24) ────
+   Nutzervorgabe 2026-08-31: der Typ steckt im Piktogramm, daneben Nummer +
+   Kurztitel, geklemmt auf zwei Zeilen. Vorher standen dort ganze Sätze — 29
+   der 135 Einträge über 60 Zeichen, der längste 131. */
+.rail-onpage a.rail-item {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    align-items: start;
+    gap: 8px;
+}
+.rail-ico {
+    display: block; width: 16px; height: 16px;
+    margin-top: 1px;              /* Grundlinie der ersten Textzeile treffen */
+    color: var(--ink-3);
+    flex: 0 0 auto;
+}
+.rail-ico svg, .rail-ico img { display: block; width: 16px; height: 16px; }
+/* Die Box-Icons sind einfarbige SVG-Dateien; im Dunkelmodus wären sie sonst
+   schwarz auf dunklem Grund. Aufhellen statt zweiter Dateisatz. */
+:root[data-darkmode="1"] .rail-ico img { filter: invert(1) brightness(1.6); }
+
+/* Die Klemme ist die eigentliche Vorgabe: künftige Titel sollen nicht wieder
+   ausbrechen, deshalb CSS statt Kürzen im Text. Der volle Text steht im
+   title-Attribut (shell.js). */
+.rail-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.35;
+}
+.rail-num { font-variant-numeric: tabular-nums; color: var(--ink-3); }
+.rail-onpage a.rail-item:hover .rail-ico { color: var(--teal-dark); }
