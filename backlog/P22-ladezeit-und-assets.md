@@ -69,13 +69,41 @@ in dieser Zeit gern „Seite reagiert nicht").
   700-px-Druckspalte auch dort. Quelle der Originale ist `Input/v0.13/
   PSkriptBilder` (bleibt unangetastet), verkleinert wird nur die Kopie in
   `InteraktivesSkript_WIP/bilder/`.
-- [ ] **P22-3 MathJax seitenweise setzen** *(L, Wirkung groß, Risiko mittel)* —
-  beim Start nur die aktive Seite typesetten, den Rest beim Seitenwechsel
-  (`pagechange`-Event gibt es schon). **Fallstrick:** `numbering.js::
-  renumber_equations()` vergibt die Gleichungsnummern aus einem vollständigen
-  Durchgang über alle Seiten — die Nummerierung muss also entweder vorab aus dem
-  Quelltext (nicht aus dem gesetzten DOM) kommen oder pro Seite nachgezogen
-  werden. Vor der Umsetzung entwerfen; gehört fachlich zu P1 (Architektur).
+- [x] **P22-3a MathJax nicht selbst beim Laden setzen lassen** *(S)* —
+  **erledigt 2026-08-31 (v1.38.3)**: `index.html` bekommt
+  `startup: { typeset: false }`. Gemessen wurde, was vorher niemand vermutet
+  hatte: MathJax setzte beim Start das gesamte Dokument von sich aus (ein
+  voller Durchgang), dessen Ergebnis `typesetAfterLoad()` unmittelbar danach
+  per `document.state(0)` wieder verwarf — die 12 s waren also **drei** volle
+  Durchgänge, nicht einer. Formeln gesetzt nach **19,6 s → 14,1 s**.
+- [x] **P22-3b Gleichungsnummern aus der Quelle statt aus dem gesetzten DOM**
+  *(M)* — **erledigt 2026-08-31 (v1.39.0)**: `numbering.js::
+  renumber_equations()` läuft jetzt **vor** dem Typeset (aus
+  `init_numbering()`) und zählt die nummerierten Zeilen aus der LaTeX-Quelle,
+  die solange im DOM-Text steht. Damit entfällt der zweite volle Durchgang,
+  der bis v1.38.2 nur zum Zählen lief. Formeln gesetzt nach **14,1 s →
+  8,2 s**. Der Zähler versteht genau so viel LaTeX, wie über die Zahl der
+  Nummern entscheidet (equation/align nummeriert, Sternvarianten und `\[…\]`
+  nicht, `\nonumber`/`\notag` unterdrückt die Zeile, `\\` in geschachtelten
+  Umgebungen trennt nicht) — **eine weitere nummerierte Umgebung (z. B.
+  `gather`) muss dort ergänzt werden**, sonst verschiebt sich ab dieser Stelle
+  jede Nummer des Abschnitts. Gegengeprüft gegen die DOM-Wahrheit: 947 von 947
+  nummerierten Zeilen auf allen 137 Seiten identisch, alle 91 `\label`-Verweise
+  identisch, 101 Formelverweise aufgelöst, keine Konsolenfehler.
+- [ ] **P22-3c MathJax seitenweise setzen** *(L, Wirkung mittel, Risiko mittel)*
+  — beim Start nur die aktive Seite typesetten, den Rest beim Seitenwechsel
+  (`pagechange`-Event gibt es schon) bzw. in Leerlauf-Häppchen. Der in der
+  ursprünglichen Fassung genannte Fallstrick ist mit P22-3b **weg**: die
+  Nummerierung kommt nicht mehr aus dem gesetzten DOM, sondern vorab aus dem
+  Quelltext, gilt also unabhängig davon, welche Seiten schon gesetzt sind.
+  Offen bleiben zwei Punkte: `resolve_eq_refs()` liest die Formelnummern aus
+  MathJax' `allLabels` — ein Verweis auf eine noch nicht gesetzte Seite fände
+  sein Ziel nicht (Abhilfe: die Labels beim Quell-Zählen gleich mitnehmen,
+  `eq_rows_of_source` liefert sie ohnehin) — und der Druckpfad
+  (`print.js` klont `#container`) braucht vorher ein erzwungenes
+  „alles fertig setzen". Erst angehen, wenn die 8,2 s noch stören; die
+  Größenordnung ist ein Achtel des ursprünglichen Aufwands. Gehört
+  fachlich zu P1 (Architektur).
 - [x] **P22-4 Gegenmessung an der veröffentlichten Fassung** *(S)* — **erledigt
   2026-08-29**, nach Merge nach `main` und erfolgreichem Pages-Build (v1.38.2),
   zwei saubere Läufe:
@@ -93,6 +121,14 @@ in dieser Zeit gern „Seite reagiert nicht").
   *(ursprünglich:)* nach jeder Stufe dieselbe Messung wiederholen
   (Skript im Scratchpad: `live_perf.mjs`; misst Übertragungsvolumen, Zeit bis
   Prosa/Formeln/Figuren) und die Tabelle oben fortschreiben.
+
+- [ ] **P22-5 Gegenmessung von P22-3a/b an der veröffentlichten Fassung** *(S)*
+  — dieselbe Messung wie P22-4, sobald v1.39.0 nach `main` gemerged und der
+  Pages-Build durch ist. Lokal (headless Chromium, `python3 -m http.server`)
+  gemessen: **Formeln gesetzt 19,6 s → 8,2 s**, Prosa sichtbar 18,0 s → 6,6 s;
+  die absoluten Werte liegen lokal höher als live, weil der Messrechner
+  langsamer ist — der Vergleich zählt, nicht der Absolutwert. Erwartung live:
+  ~12 s → ~5 s.
 
 **Nebenbefund (2026-08-29):** 29 Dateien in `bilder/` sind von keinem Kapitel
 referenziert. Nicht gelöscht — erst prüfen, ob sie zu noch nicht migrierten

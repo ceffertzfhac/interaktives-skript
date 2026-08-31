@@ -26,7 +26,7 @@ die Links hier zeigen auf den Pfad.
 |---|---|---|
 | [P12 — Komplett-Integration aller noch fehlenden v0.13-Inhalte](backlog/P12-restliche-v013-inhalte.md) | 21/17 | Prosa vollständig (114/114 Unterabschnitte); offen: interaktive Figuren je Abschnitt, Quasi-Content, Asset-Pipeline, Verifikation |
 | [P21 — Druckskript und interaktives Skript synchron halten](backlog/P21-statisches-skript-nachziehen.md) | 0/6 offen | **Pflichtregister:** jede inhaltliche Abweichung des WIP von v0.13 bekommt hier einen abhakbaren Eintrag (Regel in der Wurzel-`CLAUDE.md`) |
-| [P22 — Ladezeit: Bilder und MathJax beim Seitenstart](backlog/P22-ladezeit-und-assets.md) | 3/1 | Bilder erledigt und live nachgemessen (38,9 MB → 1,6 MB); offen: MathJax setzt beim Start alle Formeln des Skripts (~12 s) |
+| [P22 — Ladezeit: Bilder und MathJax beim Seitenstart](backlog/P22-ladezeit-und-assets.md) | 5/2 | Bilder live nachgemessen (38,9 MB → 1,6 MB), MathJax-Start lokal 19,6 s → 8,2 s (drei volle Durchgänge auf einen reduziert); offen: seitenweises Setzen, Gegenmessung live |
 | [P13 — Text- & Formel-Marker für Studierende](backlog/P13-marker-und-notizbuch.md) | 0/16 | 4 Farben, persistent; plus begleitendes Notizbuch (P13-N) |
 | [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 4/7 | Motor A + Abb. 1.3–1.7 stehen; offen: Motor B + 5 Aspekt-Figuren, als Nächstes Abb. 1.9 |
 | [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 1/3 | Abb. 1.8 steht; offen: 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten |
@@ -34,7 +34,7 @@ die Links hier zeigen auf den Pfad.
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |
 | [P3 — Offene Punkte aus der Verifikation Kapitel 1.4](backlog/P3-verifikation-kapitel-1.4.md) | 16/1 | offen nur noch die Browser-Phasen (Wort-für-Wort gegen PDF, Druck, Sicht) |
-| [P5 — Bekannte Fehler (Interaktivität / Shell)](backlog/P5-bekannte-fehler.md) | 1/1 | offen: Formeln im Fliesstext fehlen sporadisch (Boxen bleiben da) — MathJax-Ladewettlauf, Messbefehl hinterlegt |
+| [P5 — Bekannte Fehler (Interaktivität / Shell)](backlog/P5-bekannte-fehler.md) | 1/1 | offen: Formeln im Fliesstext fehlen sporadisch (Boxen bleiben da) — der vermutete MathJax-Ladewettlauf ist mit P22-3 beseitigt, Beobachtung läuft |
 | [P19 — Doku-Hygiene: Restbefunde aus dem Review nach P18](backlog/P19-doku-hygiene.md) | 5/7 | P19-1..4 erledigt (`gcN` als abgelöst markiert, eine Quelle je Tatsache, Verifikations-O(n)-Muster aufgelöst, Drift-Wächter `doku_drift_check.py`); offen nur noch P19-5 Beobachtungsposten (`src/CLAUDE.md`-Größe, `CHANGES`-Rolle — triggert bei >20 KB) |
 
 ### Erledigt
