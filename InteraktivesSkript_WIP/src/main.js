@@ -66,12 +66,13 @@ import { buildFederpendelFig } from './figures/aspekt_federpendel.js';
 // zeigen hier ZWEI Aspekt-Namen auf dieselbe Fabrik: die Namen benennen den
 // physikalischen Fall (Fall bzw. Wurf), der Code ist derselbe.
 import { buildFreierFallFig } from './figures/aspekt_freier_fall.js';
+import { buildSchraegerWurfFig } from './figures/aspekt_schraeger_wurf.js';
 
 // Aspekt-Figuren: jede .aspekt-figur wird ueber data-aspekt einer Factory
 // zugeordnet, die ihre EIGENE Motor-Instanz (Prefix + storeInstance) baut
 // (s. kreisbewegung/runtime.js) -> beliebig viele Figuren, auch auf derselben
 // Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
-const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig, 'federpendel': buildFederpendelFig, 'federpendel-kinematik': buildFederpendelFig, 'freier-fall': buildFreierFallFig, 'senkrechter-wurf': buildFreierFallFig };
+const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig, 'federpendel': buildFederpendelFig, 'federpendel-kinematik': buildFederpendelFig, 'freier-fall': buildFreierFallFig, 'senkrechter-wurf': buildFreierFallFig, 'schraeger-wurf': buildSchraegerWurfFig };
 
 // Stand-alone-Simulationen je Aspekt-Figur (P7-Rest, Nutzervorgabe 2026-07-30).
 // Die Sims leben unter SIM_BASE (die Index-Datei dort listet alle 16); eine
@@ -104,6 +105,8 @@ const ASPEKT_SIM_URLS = {
     // freier_fall-Motor -> „Freier Fall / Senkrechter Wurf" (beide Aspekt-Namen)
     'freier-fall': SIM_BASE + 'sim_freier_fall/index.html',
     'senkrechter-wurf': SIM_BASE + 'sim_freier_fall/index.html',
+    // schraeger_wurf-Motor -> „Schräger Wurf"
+    'schraeger-wurf': SIM_BASE + 'sim_schraeger_wurf/index.html',
     // bus_weg_zeit: figur-only, keine Stand-alone-Sim -> kein Eintrag
 };
 

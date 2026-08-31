@@ -1,0 +1,122 @@
+/* aspekt_schraeger_wurf.css — Optik der Aspekt-Figur Abb. 1.9 (BACKLOG P16-6).
+
+   Abgeleitet aus aspekt_freier_fall.css (gleiches Kapitel, gleiche
+   Motor-Familie): dieselbe Tokenstruktur, dieselben neutralen Flaechen, nur auf
+   die abweichenden Element-Ids des schraeger_wurf-Motors gescopt. Alles
+   Gemeinsame (Panels, Runbar, Graph-Raster, Overlay, Breiten-Modi) steht in
+   aspekt_kreisbahn.css und gilt hier unveraendert mit.
+
+   Die Bewegungsfarbe ist NICHT figur-eigen: sie kommt aus dem gemeinsamen
+   Kapitel-1.1-Token --k11-kurve (definiert in aspekt_kreisbahn.css) und
+   variiert ueber Hell/Dunkel und die beiden CVD-Paletten. So zeigen Abb. 1.2,
+   1.3-1.7 und 1.9 in jedem Modus garantiert dieselbe Farbe.
+   Die neutralen Flaechen (Haus, Lineale) sind ueber color-mix aus
+   --kb-text/--kb-surface abgeleitet und drehen mit dem Darkmode-Override dieser
+   Tokens automatisch mit — dafuer braucht es hier keinen eigenen Zweig. */
+
+/* ── Farb-Palette (eigene --sw-*-Tokenfamilie, Kapitel 1.1) ────────────────── */
+.aspekt-figur[data-motor="schraeger_wurf"] {
+    --sw-bahn: var(--k11-kurve);  /* Kugel, Flugbahn UND beide Kurven — eine
+                                     Farbe, s. Kopfkommentar des Moduls */
+    --sw-vel: #2060d0;       /* v-Pfeil  — aus, s. aspekt_schraeger_wurf.js; die
+                                Tokens stehen fuer Abb. 1.20 (v-t) bereit */
+    --sw-acc: #c03030;       /* a-Pfeil  — aus, s. o. */
+    --sw-building: color-mix(in srgb, var(--kb-text) 12%, var(--kb-surface));
+    --sw-ruler-bg: color-mix(in srgb, var(--kb-text) 6%, var(--kb-surface));
+    --sw-ruler-stroke: var(--kb-border2);
+}
+
+/* ── Szene: Haus, Boden, Kugel, Flugbahn ──────────────────────────────────── */
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="building"] { fill: var(--sw-building); }
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="ground-line"] {
+    stroke: var(--kb-text); stroke-width: calc(2px * var(--kb-lw, 1));
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="ball"] { fill: var(--sw-bahn); }
+
+/* Flugbahn: die durchgezogene Spur der bisherigen Bewegung. Die eingefrorene
+   Vergleichsbahn ist in dieser Figur aus (s. Modul-Kopf), ihre Regel steht
+   trotzdem hier — Abb. 1.14 wird sie brauchen. */
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="trajectory_line"] {
+    stroke: var(--sw-bahn); stroke-width: calc(2px * var(--kb-lw, 1));
+    fill: none; stroke-linejoin: round; stroke-linecap: round;
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="frozen_trajectory_line"] {
+    stroke: var(--sw-bahn); opacity: 0.3;
+}
+
+/* Strichmaennchen auf dem Dach. */
+.aspekt-figur[data-motor="schraeger_wurf"] .sf-line,
+.aspekt-figur[data-motor="schraeger_wurf"] .sf-head { stroke: var(--kb-text); fill: none; }
+
+/* Hoehenskala (links) und Weitenskala (unter dem Boden). */
+.aspekt-figur[data-motor="schraeger_wurf"] .ruler-bg {
+    fill: var(--sw-ruler-bg); stroke: var(--sw-ruler-stroke);
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .ruler-tick { stroke: var(--kb-text2); }
+.aspekt-figur[data-motor="schraeger_wurf"] .ruler-text {
+    fill: var(--kb-text2); font-family: var(--kb-font);
+    font-size: calc(11px * var(--kb-text-scale) * var(--kb-fs));
+}
+
+/* Achsenkreuz-Miniatur in der Szene (x nach rechts, y nach oben). */
+.aspekt-figur[data-motor="schraeger_wurf"] .acs-line { stroke: var(--kb-text); }
+.aspekt-figur[data-motor="schraeger_wurf"] .acs-text {
+    fill: var(--kb-text); font-family: var(--kb-font);
+    font-size: calc(12px * var(--kb-text-scale) * var(--kb-fs));
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="arrow-coord"] polygon { fill: var(--kb-text); }
+
+/* Zoom-Anzeige: der Massstab aendert sich mit h0/v0/alpha, die Skalen-Angabe
+   muss deshalb sichtbar sein. Dezent, oben links in der Szene. */
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-zoom-text {
+    fill: var(--kb-text3); font-family: var(--kb-font);
+    font-size: calc(10.5px * var(--kb-text-scale) * var(--kb-fs));
+}
+
+/* Stoppuhr (Zifferblatt, Marken, Zeiger) — sie macht die Abszisse der beiden
+   Diagramme in der Szene sichtbar. */
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="stopwatch_circle"],
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="subdial_face"] {
+    fill: var(--kb-surface); stroke: var(--kb-text);
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .sw-mark { stroke: var(--kb-text); }
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="stopwatch_main_hand"] { stroke: var(--kb-text); }
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="stopwatch_sub_hand"] { stroke: var(--sw-bahn); }
+
+/* Vektoren: in dieser Figur dauerhaft ausgeblendet (s. Kopfkommentar des
+   Moduls). Die Regeln stehen hier, damit Abb. 1.20 sie nur einschalten muss. */
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="velocity_vector"],
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="velocity_vector_x"],
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="velocity_vector_y"] { stroke: var(--sw-vel); }
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="acceleration_vector"] { stroke: var(--sw-acc); }
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="arrow-vel"] polygon { fill: var(--sw-vel); }
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="arrow-acc"] polygon { fill: var(--sw-acc); }
+
+/* ── Diagramme: Kurven und Kurvenpunkte in BEIDEN Slots ───────────────────── */
+/* [id$="graph_line"] traefe nur den (hier unbenutzten) Einzel-Slot — die
+   gestapelten heissen graph_line_top/_bottom. Deshalb alle drei nennen. */
+.aspekt-figur[data-motor="schraeger_wurf"] [id$="graph_line"],
+.aspekt-figur[data-motor="schraeger_wurf"] [id$="graph_line_top"],
+.aspekt-figur[data-motor="schraeger_wurf"] [id$="graph_line_bottom"] {
+    stroke: var(--sw-bahn); stroke-width: calc(2px * var(--kb-lw, 1));
+    fill: none; stroke-linejoin: round; stroke-linecap: round;
+}
+.aspekt-figur[data-motor="schraeger_wurf"] [id$="graph_point"],
+.aspekt-figur[data-motor="schraeger_wurf"] [id$="graph_point_top"],
+.aspekt-figur[data-motor="schraeger_wurf"] [id$="graph_point_bottom"] {
+    fill: var(--sw-bahn); stroke: var(--kb-surface); stroke-width: 2;
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .graph-hover-point { stroke: var(--sw-bahn); }
+
+/* ── Legenden-Farbflecke (Bedienpanel) ────────────────────────────────────── */
+.aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-bahn"]  { background: var(--sw-bahn); }
+.aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-ruler"] {
+    background: var(--sw-ruler-bg); border: 1px solid var(--sw-ruler-stroke);
+}
+
+/* Erlaeuterungen unter den Formeln (gleiche Klasse wie bei 1.3-1.7, damit beide
+   Figurenfamilien im selben Abschnitt gleich aussehen). */
+.aspekt-figur[data-motor="schraeger_wurf"] .ff-formel-note {
+    font-size: calc(11.5px * var(--kb-text-scale));
+    color: var(--kb-text3); line-height: 1.45; margin-top: 4px;
+}
