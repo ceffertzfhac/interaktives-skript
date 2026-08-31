@@ -8,10 +8,10 @@ import { ge, interaktiv, generate_highlight_boxes, safari_bug, make_static,
          update_all, toggle_darkmode, test, reload_mathjax, reset, hide,
          init_text_size_controls, adjust_text_size, set_width_mode,
          init_width_mode, toggle_settings, close_settings, set_palette,
-         init_palette } from './core.js';
+         init_palette, typeset_seite } from './core.js';
 import { generate_toc, offsetAnchor, toc, toc_filter, kontakt, close_zoom, zoom, pause } from './ui.js';
 import { init_print, check_print, from_qr, toggle_print_menu, close_print_menu, print_scope } from './print.js';
-import { paginate, showPage } from './pages.js';
+import { paginate, showPage, getCurrentPage } from './pages.js';
 import { init_shell, toggle_drawer, close_drawer, chapter_prev, chapter_next, goto_page } from './shell.js';
 import { init_figure_panels, toggle_panel } from './figures/panels.js';
 import { init_numbering, resolve_eq_refs } from './numbering.js';
@@ -335,6 +335,31 @@ function dispatch_click(e) {
     }
 }
 
+// ── Seitenweises Setzen (BACKLOG P22-3c) ────────────────────────────────────
+// Beim Start wird nur die AKTIVE Seite gesetzt, der Rest beim Blaettern. Vorher
+// lief MathJax ueber alle 137 Seiten, obwohl immer nur eine sichtbar ist.
+//
+// Der Druck-Tab ist ausgenommen: print.js klont #container, und im Ausdruck
+// muessen ALLE Seiten gesetzt sein -- dort bleibt es beim Voll-Lauf
+// (reload_mathjax), der zugleich jede Seite als gesetzt markiert.
+const istDruckTab = new URLSearchParams(location.search).get("print") === "true";
+
+function startlauf() {
+    if (istDruckTab) return reload_mathjax();
+    return typeset_seite(seitenElement(getCurrentPage()));
+}
+
+function seitenElement(page) { return page ? page.el : null; }
+
+// Beim Seitenwechsel die neue Seite nachsetzen. typeset_seite() ist gegen
+// Doppelaufrufe abgesichert (data-typeset am Seitenknoten), der Aufruf darf
+// also bedenkenlos bei jedem Wechsel kommen. Delegiert am document, weil
+// pages.js den Wechsel als CustomEvent meldet (kein Import, s. src/CLAUDE.md).
+document.addEventListener("pagechange", (event) => {
+    if (istDruckTab) return;
+    typeset_seite(seitenElement(event.detail && event.detail.page));
+});
+
 // ── Ladeblende (BACKLOG P23-1) ──────────────────────────────────────────────
 // #paper bleibt verdeckt, bis der Startzustand steht. Bewusst HIER geschaltet
 // und nicht als Klasse im ausgelieferten HTML: laedt das Modul nicht (alter
@@ -415,7 +440,7 @@ async function init() {
     // zum Ende des Typesets ohnehin belegt, es gaebe also nur ein Zwischenbild
     // mit rohem LaTeX. .catch/.finally, damit ein Fehler im Typeset die Blende
     // nicht stehen laesst (der Notaus-Timer greift sonst erst nach 20 s).
-    typesetAfterLoad().finally(ladeblende_aus);
+    typesetAfterLoad(startlauf).finally(ladeblende_aus);
     offsetAnchor();
     make_static();
     if(interaktiv) {

@@ -224,6 +224,41 @@ koordinaten; `perspective` ∈ {1,2,3,4} wählt die Ansicht, gesteuert vom
 > entkommt in die Schiene. Beim Hinzufügen eines Typs alle fünf greppen. (Die
 > v0.13-Typen `bemerkung`/`wichtig` kamen so in v1.7 dazu.)
 
+## Seitenweises Setzen der Formeln (v1.42, BACKLOG P22-3c)
+
+Beim Start setzt MathJax nur die **aktive** Seite, den Rest beim Blättern
+(`main.js` hört auf `pagechange` → `core.js::typeset_seite`). Vorher lief der
+Startlauf über alle 137 Seiten, obwohl immer nur eine sichtbar ist.
+
+Der Kniff steckt im **Versatz**: `tagformat.number()` (`index.html`) bekommt von
+MathJax nur einen laufenden Zähler und schlägt damit in `window.eq_tag_map`
+nach. Ein Teil-Typeset, das stur bei 0 begänne, gäbe der ersten Gleichung der
+Seite die Nummer der ersten Gleichung des *Skripts*. `numbering.js` legt darum
+je Seite ab, wie viele Nummern vor ihr liegen (`window.eq_page_offset`);
+`typeset_seite()` belegt `eq_run_index` damit vor. `data-typeset="1"` am
+Seitenknoten verhindert Doppelläufe.
+
+Vier Dinge hängen daran und dürfen nicht einzeln geändert werden:
+
+- **`typeset_seite()` darf niemals `document.state(0)` oder `texReset()`
+  rufen** — beide wirken dokumentweit und würden die schon gesetzten Seiten
+  wieder zu Quelltext machen bzw. das Label-Register leeren. Der Voll-Lauf
+  (`reload_mathjax`) tut das weiterhin und markiert danach alle Seiten als
+  gesetzt.
+- **Schritt 1 von `renumber_equations()` ist gecacht** (`tagsProSeite`): sobald
+  eine Seite gesetzt ist, ist ihre LaTeX-Quelle weg — ein zweiter Zähllauf
+  würde sie mit *null* Nummern verbuchen und alle folgenden Seiten verschieben.
+- **`resolve_eq_refs()` liest `window.eq_labels`** (aus der Quelle), nicht mehr
+  primär MathJax' `allLabels`: das kennt nur die schon gesetzten Seiten, ein
+  Verweis auf eine nie besuchte Seite fiele sonst aus.
+- **Der Druck-Tab ist ausgenommen** (`?print=true` → `reload_mathjax`): im
+  Ausdruck müssen alle Seiten gesetzt sein.
+
+Gemessen (lokal, kalt, 137 Seiten): Zeit bis zur fertigen Startseite
+**7,70 s → 1,02 s**; 22 stichprobenartig angefahrene Seiten stimmen in allen
+Formelnummern mit dem Voll-Lauf überein, 101 Formelverweise lösen auf, davon
+auch die auf nie besuchte Seiten.
+
 ## Startzustand: Ladeblende und zuletzt gelesene Seite (v1.40/v1.41)
 
 `main.js::init()` legt als Erstes eine **Ladeblende** über `#paper`

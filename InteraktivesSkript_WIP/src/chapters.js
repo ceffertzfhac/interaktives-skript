@@ -189,12 +189,16 @@ function captureEqLatex(html) {
 // Liefert ein Promise, das erfuellt, wenn der Startlauf durch ist (auch wenn er
 // scheitert -- s. catch). main.js haengt daran die Ladeblende (BACKLOG P23-1);
 // ohne Rueckgabewert bliebe sie bis zum Notaus-Timer stehen.
-export function typesetAfterLoad() {
+// startlauf: was gesetzt werden soll, sobald MathJax bereit ist. Ohne Angabe
+// das ganze Dokument (reload_mathjax) -- so laeuft der Druck-Tab. Im normalen
+// Lesebetrieb reicht die aktive Seite (main.js, BACKLOG P22-3c); chapters.js
+// bleibt dafuer bewusst dumm und kennt weiterhin nur core.js.
+export function typesetAfterLoad(startlauf) {
     return new Promise(fertig => {
         (function waitForMathJax() {
             if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
                 window.MathJax.startup.promise
-                    .then(reload_mathjax)
+                    .then(startlauf || reload_mathjax)
                     .then(() => { if (window.resolve_eq_refs) window.resolve_eq_refs(); })
                     .then(() => { if (window.fill_physik_panels) window.fill_physik_panels(); })
                     // Ein Fehler im Typeset darf den Aufrufer nicht haengen

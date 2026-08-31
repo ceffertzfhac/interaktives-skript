@@ -227,41 +227,71 @@ function resolveBoxRefs(boxNumbers) {
 // Rendern an richtig da. Gegen die DOM-Wahrheit geprueft (2026-08-31, alle
 // 17 Fragmente): 947 von 947 nummerierten Zeilen auf allen 137 Seiten
 // identisch, alle 91 \label-Verweise identisch.
+// Schritt 1 wird GECACHT. Grund: seit dem seitenweisen Setzen (P22-3c) ist die
+// LaTeX-Quelle einer bereits gesetzten Seite weg -- ein zweiter Zaehllauf wuerde
+// sie mit null Nummern verbuchen und die Zuordnung aller folgenden Seiten
+// verschieben. Einmal aus der Quelle gelesen, gilt sie fuer die Sitzung.
+let tagsProSeite = null;        // page-id -> ["2.3.14", …]
+
 export function renumber_equations() {
     // Schritt 1 -- die AUTORITATIVEN Nummern je Seite, aus dem Seitenregister:
     // das ist die Reihenfolge des Skripts, unabhaengig davon, was gerade im
     // Dokument steht. "2.3.14" gehoert zu dieser Gleichung, egal ob gerade das
-    // ganze Skript oder nur ihr Abschnitt gedruckt wird.
-    const proSeite = new Map();     // page-id -> ["2.3.14", "2.3.15", …]
-    let section = null, lokal = 0;
-    getPages().forEach((page, i) => {
-        const prefix = sectionPrefix(page, i);
-        if (prefix !== section) { section = prefix; lokal = 0; }
-        proSeite.set(page.id, eq_rows_of_source(page.el.textContent)
-            .map(() => prefix + '.' + (++lokal)));
-    });
-    // Schritt 2 -- daraus die Zuordnung "laufende MathJax-Nummer -> Tag", und
-    // zwar in DOKUMENT-Reihenfolge ueber alle .chapter-page, die tatsaechlich
-    // im Dokument stehen. Der Umweg ist noetig, weil tagformat.number() nur
-    // einen laufenden Zaehler bekommt (s. index.html) und MathJax alles
-    // durchzaehlt, was es findet -- im Druck-Tab also den Klon in
-    // #print_container UND das versteckte Original, und beim Teildruck
-    // ("Was drucken?") einen Klon, aus dem print.js Seiten entfernt hat.
-    // Ein Index, der stur bei 1 beginnt, traefe dann die falsche Seite: der
-    // Abschnittsdruck der Lorentzkraft zeigte 0.1.1 statt 2.3.14.
+    // ganze Skript, nur ihr Abschnitt oder nur ihre Seite gesetzt wird.
+    if (!tagsProSeite || !tagsProSeite.size) {
+        const proSeite = new Map();
+        const etiketten = {};       // \label -> {tag, id}  (fuer resolve_eq_refs)
+        let section = null, lokal = 0;
+        getPages().forEach((page, i) => {
+            const prefix = sectionPrefix(page, i);
+            if (prefix !== section) { section = prefix; lokal = 0; }
+            proSeite.set(page.id, eq_rows_of_source(page.el.textContent).map(zeile => {
+                const tag = prefix + '.' + (++lokal);
+                // \label{…} gleich mitnehmen: beim seitenweisen Setzen kennt
+                // MathJax' eigenes Label-Register nur die schon gesetzten
+                // Seiten -- ein Verweis auf eine noch nicht besuchte Seite
+                // fiele damit aus. Aus der Quelle stehen ALLE Labels sofort
+                // fest. Die id ist die, die tagformat.id in index.html bildet:
+                // 'eq-' + Label (an den gerenderten Element-ids nachgemessen).
+                const m = zeile.match(/\\label\{([^}]+)\}/);
+                if (m) etiketten[m[1]] = { tag: tag, id: 'eq-' + m[1] };
+                return tag;
+            }));
+        });
+        // Nur uebernehmen, wenn ueberhaupt etwas gefunden wurde: ein Aufruf,
+        // der zu spaet kommt (Quelle schon ersetzt), darf eine gueltige
+        // Zuordnung nicht durch eine leere ersetzen.
+        let summe = 0;
+        proSeite.forEach(t => { summe += t.length; });
+        if (summe) { tagsProSeite = proSeite; window.eq_labels = etiketten; }
+    }
+    if (!tagsProSeite) return;
+
+    // Schritt 2 -- daraus die Zuordnung "laufende MathJax-Nummer -> Tag", in
+    // DOKUMENT-Reihenfolge ueber alle .chapter-page, die tatsaechlich im
+    // Dokument stehen. Der Umweg ist noetig, weil tagformat.number() nur einen
+    // laufenden Zaehler bekommt (s. index.html) und MathJax alles durchzaehlt,
+    // was es findet -- im Druck-Tab also den Klon in #print_container UND das
+    // versteckte Original, und beim Teildruck ("Was drucken?") einen Klon, aus
+    // dem print.js Seiten entfernt hat. Ein Index, der stur bei 1 beginnt,
+    // traefe dann die falsche Seite: der Abschnittsdruck der Lorentzkraft
+    // zeigte 0.1.1 statt 2.3.14. Schritt 2 laeuft daher bei JEDEM Aufruf neu.
     const map = [];                 // Index = laufende MathJax-Nummer (ab 1)
+    const versatz = {};             // page-id -> Zahl der Nummern DAVOR
     let laufend = 0;
     document.querySelectorAll('.chapter-page').forEach(el => {
-        const tags = proSeite.get(el.dataset.pageId);
+        const tags = tagsProSeite.get(el.dataset.pageId);
         if (!tags) return;
+        // Versatz je Seite: nur so kann ein Teil-Typeset einer EINZELNEN Seite
+        // den Laufindex richtig vorbelegen, statt bei 1 zu beginnen
+        // (core.js::typeset_seite). Erster Eintrag gewinnt -- im Druck-Tab
+        // steht jede Seiten-Id zweimal im Dokument (Klon + verstecktes
+        // Original), und dort zaehlt der Klon.
+        if (versatz[el.dataset.pageId] === undefined) versatz[el.dataset.pageId] = laufend;
         tags.forEach(t => { map[++laufend] = t; });
     });
-    // Schutz gegen einen Aufruf NACH dem Typeset (Osterei "tt" ->
-    // reload_mathjax): dann ist die Quelle durch die <mjx-container> ersetzt,
-    // eq_rows_of_source faende nichts und wuerde eine gueltige Zuordnung
-    // durch eine leere ersetzen. Eine einmal gebaute Zuordnung bleibt.
-    if (!laufend && window.eq_tag_map && window.eq_tag_map.length) return;
     window.eq_tag_map = map;
+    window.eq_page_offset = versatz;
 }
 
 // Nummerierte Gleichungszeilen eines Quelltextes in Dokumentreihenfolge.
@@ -316,10 +346,17 @@ function split_top_rows(body) {
 export function resolve_eq_refs() {
     const links = document.querySelectorAll('a[data-ref-eq]');
     if (!links.length) return;
-    let labels = null;
-    try {
-        labels = window.MathJax.startup.document.inputJax[0].parseOptions.tags.allLabels;
-    } catch (e) { /* MathJax noch nicht bereit -- spaeterer Aufruf holt das nach */ }
+    // Quelle der Wahrheit sind die beim Zaehlen aus der LaTeX-Quelle
+    // gewonnenen Labels: seit dem seitenweisen Setzen (P22-3c) kennt MathJax'
+    // eigenes Register nur die Gleichungen der bereits gesetzten Seiten -- ein
+    // Verweis auf eine noch nicht besuchte Seite fiele sonst aus. MathJax'
+    // Register bleibt als Rueckfall, falls renumber_equations() nicht lief.
+    let labels = window.eq_labels;
+    if (!labels || !Object.keys(labels).length) {
+        try {
+            labels = window.MathJax.startup.document.inputJax[0].parseOptions.tags.allLabels;
+        } catch (e) { /* MathJax noch nicht bereit -- spaeterer Aufruf holt das nach */ }
+    }
     if (!labels) return;
     links.forEach(a => {
         const info = labels[a.dataset.refEq];

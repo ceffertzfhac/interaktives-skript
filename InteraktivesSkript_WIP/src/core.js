@@ -210,6 +210,32 @@ function typeset_alles() {
     return MathJax.typesetPromise();
 }
 
+// EINE Seite setzen statt des ganzen Dokuments (BACKLOG P22-3c). Der Trick
+// steckt im Versatz: tagformat.number() in index.html zaehlt window.eq_run_index
+// hoch und schlaegt damit in window.eq_tag_map nach. Beginnt ein Teil-Typeset
+// stur bei 0, traegt die erste Gleichung der Seite die Nummer der ERSTEN
+// Gleichung des Skripts. numbering.js legt darum je Seite ab, wie viele Nummern
+// vor ihr liegen (window.eq_page_offset) -- damit landet der Laufindex genau auf
+// den Eintraegen dieser Seite.
+// Bewusst OHNE document.state(0)/texReset(): beide wirken dokumentweit und
+// wuerden die bereits gesetzten Seiten wieder zu Quelltext machen bzw. das
+// Label-Register leeren.
+export function typeset_seite(el) {
+    if (!(window.MathJax && MathJax.typesetPromise) || !el) return Promise.resolve();
+    if (el.dataset.typeset === "1") return Promise.resolve();   // schon gesetzt
+    el.dataset.typeset = "1";
+    const versatz = (window.eq_page_offset || {})[el.dataset.pageId];
+    window.eq_run_index = versatz || 0;
+    return MathJax.typesetPromise([el])
+        .then(() => { if (window.resolve_eq_refs) window.resolve_eq_refs(); })
+        .catch(err => {
+            // Beim Scheitern die Markierung zuruecknehmen, damit ein spaeterer
+            // Besuch der Seite es erneut versucht.
+            el.dataset.typeset = "0";
+            console.warn("[mathjax] Seite " + el.dataset.pageId + " konnte nicht gesetzt werden:", err);
+        });
+}
+
 export function reload_mathjax(){
     if (!(window.MathJax && MathJax.typesetPromise)) return Promise.resolve();
     // EIN Durchgang. Die Zuordnung "laufende Nummer -> 1.4.3" steht schon:
@@ -222,6 +248,9 @@ export function reload_mathjax(){
     // den Fall, dass reload_mathjax() ohne vorheriges init_numbering() laeuft;
     // eine bereits gebaute Zuordnung laesst er unangetastet.
     if (window.renumber_equations) window.renumber_equations();
+    // Voll-Lauf: danach ist JEDE Seite gesetzt -- markieren, damit ein
+    // Seitenwechsel sie nicht ein zweites Mal setzt (BACKLOG P22-3c).
+    document.querySelectorAll('.chapter-page').forEach(el => { el.dataset.typeset = "1"; });
     return typeset_alles().then(() => {
         // Formelverweise (<a data-ref-eq>) zeigen erst nach dem Typeset die
         // richtige Nummer -- MathJax vergibt sie beim Rendern.
