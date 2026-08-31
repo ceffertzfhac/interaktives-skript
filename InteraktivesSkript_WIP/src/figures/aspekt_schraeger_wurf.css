@@ -2,9 +2,16 @@
 
    Abgeleitet aus aspekt_freier_fall.css (gleiches Kapitel, gleiche
    Motor-Familie): dieselbe Tokenstruktur, dieselben neutralen Flaechen, nur auf
-   die abweichenden Element-Ids des schraeger_wurf-Motors gescopt. Alles
-   Gemeinsame (Panels, Runbar, Graph-Raster, Overlay, Breiten-Modi) steht in
-   aspekt_kreisbahn.css und gilt hier unveraendert mit.
+   die abweichenden Element-Ids des schraeger_wurf-Motors gescopt.
+
+   ACHTUNG, das war der Fehler des ersten Anlaufs: aspekt_kreisbahn.css enthaelt
+   NICHT das ganze gemeinsame Layout. Dort stehen nur die Regeln fuer
+   .aspekt-body (Panel | Mitte | Panel) und die Panel-Optik. Die Aufteilung
+   Szene | Diagramm INNERHALB der Mitte, die klebende Ablaufleiste, die
+   Tempo-Pillen und die Knopf-Optik sind PRO FIGURENFAMILIE wiederholt und ueber
+   [data-motor] bzw. [data-aspekt] gescopt. Fehlen sie, stapeln Szene und
+   Diagramm in jedem Breiten-Modus und die Bedienleiste bleibt unformatiert.
+   Wer eine neue Figur anlegt, muss diesen Block mitbringen — er steht unten.
 
    Die Bewegungsfarbe ist NICHT figur-eigen: sie kommt aus dem gemeinsamen
    Kapitel-1.1-Token --k11-kurve (definiert in aspekt_kreisbahn.css) und
@@ -119,4 +126,128 @@
 .aspekt-figur[data-motor="schraeger_wurf"] .ff-formel-note {
     font-size: calc(11.5px * var(--kb-text-scale));
     color: var(--kb-text3); line-height: 1.45; margin-top: 4px;
+}
+
+/* ── Ablaufleiste + Tempo-Pillen + Knoepfe ──────────────────────────────────
+   1:1 aus aspekt_freier_fall.css, auf schraeger_wurf gescopt — diese Klassen
+   sind dort NICHT shared, sondern je Figurenfamilie wiederholt. Genau das
+   Uebersehen dieses Blocks war der erste Anlauf von Abb. 1.9: ohne ihn stapeln
+   Szene und Diagramm in JEDEM Breiten-Modus und die Bedienleiste ist
+   unformatiert. */
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-main {
+    position: relative;
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-main-content {
+    position: relative;
+    display: flex; flex-direction: row; align-items: flex-start; min-width: 0;
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-runbar {
+    position: sticky; top: 0; z-index: 7;
+    display: flex; align-items: center; justify-content: flex-start; gap: 8px;
+    padding: 8px; background: var(--kb-surface); border-bottom: none; box-shadow: none;
+}
+/* Zeitanzeige des Motors (updateScene schreibt „t = …") neben den Knoepfen. */
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-ff-time {
+    font-family: var(--kb-font-mono); font-size: calc(12px * var(--kb-text-scale));
+    color: var(--kb-text2); white-space: nowrap;
+}
+
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-btn-row { display: flex; gap: 6px; }
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-btn.aspekt-btn-icon {
+    flex: 0 0 auto; width: 28px; height: 28px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--kb-border2); border-radius: 6px;
+    background: var(--kb-surface); color: var(--kb-text2); cursor: pointer;
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-btn.aspekt-btn-icon:hover {
+    color: var(--kb-accent); border-color: var(--kb-accent);
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-btn.aspekt-btn-icon svg { width: 15px; height: 15px; display: block; }
+
+.aspekt-figur[data-motor="schraeger_wurf"] .speed-pills { display: flex; gap: 5px; }
+.aspekt-figur[data-motor="schraeger_wurf"] .speed-pill {
+    flex: 1; padding: 5px 0; border: 1px solid var(--kb-border2); border-radius: 20px;
+    background: var(--kb-surface); text-align: center; font-size: calc(11.5px * var(--kb-text-scale, 1));
+    color: var(--kb-text2); cursor: pointer; transition: all .15s;
+    position: relative; -webkit-user-select: none; user-select: none;
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .speed-pill input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+.aspekt-figur[data-motor="schraeger_wurf"] .speed-pill.active {
+    background: color-mix(in srgb, var(--kb-accent) 12%, transparent);
+    border-color: var(--kb-accent); color: var(--kb-accent); font-weight: 700;
+}
+
+/* ── Layout Szene | Diagramm ────────────────────────────────────────────────
+   Wie bei 1.3-1.7: Szene links, Diagramm rechts, beide breitengetrieben
+   (width:100%, height:auto). ABWEICHUNG von der Vorlage, begruendet: das
+   Diagrammfeld traegt hier ZWEI gestapelte Diagramme (viewBox 560x545 statt
+   560x495), ist also hochformatiger. Die Szene bekommt deshalb 34 % statt 38 %
+   der Zeilenbreite — sonst waere sie deutlich niedriger als das Diagramm
+   daneben. */
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-main .aspekt-scene {
+    flex: 0 0 34%; padding: 0 0 8px 8px; min-width: 0;
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-main .aspekt-svg {
+    display: block; width: 100%; height: auto; max-width: none; max-height: 56vh;
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-graph { padding: 0 8px 8px; min-width: 0; flex: 1 1 auto; }
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-graph-svg {
+    display: block; width: 100%; height: auto; max-height: 56vh; max-width: none; margin: 0 auto;
+}
+
+/* ── Breiten-Modi ──────────────────────────────────────────────────────────
+   NUR schmal stapelt (Nutzervorgabe 2026-08-31: „animation neben diagramm
+   ausser schmal"). Breit: mehr Hoehe. align-items in der Spalte auf stretch —
+   in der Zeile ist es flex-start, in der Spalte wuerden die Kaesten sonst auf
+   ihre Inhaltsbreite schrumpfen. */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="schraeger_wurf"] .aspekt-main-content {
+    flex-direction: column; align-items: stretch;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="schraeger_wurf"] .aspekt-main-content .aspekt-scene {
+    flex: 0 0 auto; padding: 0 8px 8px;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="schraeger_wurf"] .aspekt-svg {
+    width: auto; height: min(38vh, 340px); max-width: 100%; margin: 0 auto;
+}
+/* Gestapelt wird das Diagrammfeld ueber die HOEHE bemessen und mittig gesetzt:
+   mit width:100% + max-height bliebe links und rechts Leerraum stehen, weil
+   preserveAspectRatio den Inhalt einpasst. Etwas hoeher als bei 1.3-1.7, weil
+   hier zwei Diagramme uebereinander stehen. */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="schraeger_wurf"] .aspekt-graph-svg {
+    width: auto; height: min(46vh, 430px); max-height: none; max-width: 100%; margin: 0 auto;
+}
+
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="schraeger_wurf"] .aspekt-graph-svg { max-height: 62vh; }
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="schraeger_wurf"] .aspekt-svg { max-height: 62vh; }
+
+/* Overlay (Lupe): Zeile (Szene | Diagramm), an Viewport-Hoehe gedeckelt. */
+.aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-main { flex-direction: column; }
+.aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-main-content { flex-direction: row; }
+.aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-main-content .aspekt-scene { flex: 0 0 28%; padding: 12px; }
+.aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-main-content .aspekt-graph { flex: 1 1 auto; padding: 0 12px 12px; }
+.aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-svg {
+    width: 100%; height: auto; max-width: none; max-height: 64vh;
+}
+.aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-graph-svg {
+    width: 100%; height: auto; max-width: none; max-height: 64vh;
+}
+
+/* Zoom + schmal: stapeln + rechte Analyse-Leiste ausblenden (Platz priorisieren). */
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-main-content {
+    flex-direction: column; align-items: stretch;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-main-content .aspekt-scene { flex: 0 0 auto; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-main-content .aspekt-graph { flex: 1 1 auto; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-body { display: block; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-panel-left {
+    width: auto; border-right: none; border-bottom: 1px solid var(--kb-border);
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-panel-right { display: none; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-runbar { padding: 6px 8px; }
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-svg {
+    height: min(30vh, 270px); width: auto; max-width: 100%; margin: 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-graph-svg {
+    height: auto; max-height: min(40vh, 360px); width: 92%; margin: 0 auto;
 }

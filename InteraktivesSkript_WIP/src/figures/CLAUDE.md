@@ -191,7 +191,11 @@ und keine statische Box hat.
 
 `aspekt_*.css` ist aus `kreisbewegung/styles.css` abgeleitet und auf
 `.aspekt-figur` gescopt (gemeinsames `aspekt_kreisbahn.css` für alle + ein
-`aspekt_<name>.css` je Figur). Die Tokens `--kb-lw` / `--kb-fs` auf
+`aspekt_<name>.css` je Figur). **Das gemeinsame Stylesheet trägt nur die
+Panel-Optik und das `.aspekt-body`-Raster — die Aufteilung Szene | Diagramm,
+die Ablaufleiste, die Tempo-Pillen und die drei Breiten-Modi stehen PRO
+Figurenfamilie im figuren-eigenen Stylesheet** (Fallstrick #27 im Runbook, real
+aufgetreten: eine Figur ohne diesen Block stapelt in jedem Modus). Die Tokens `--kb-lw` / `--kb-fs` auf
 `.aspekt-figur` skalieren Strichstärken und Schriften ×1.5 — **nur** Kernsim und
 Diagramm, ausgenommen sind das φ-Label sowie Bedienung/Analyse; Pfeilspitzen
 bleiben über `ARROW_LEN` + `userSpaceOnUse`-Marker fix.

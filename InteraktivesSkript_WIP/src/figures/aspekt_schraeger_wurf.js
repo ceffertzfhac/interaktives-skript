@@ -462,6 +462,14 @@ export function buildSchraegerWurfFig(fig) {
     }
     function reset() { stop(); t = 0; tSlider.value = '0'; zeichne(); }
 
+    // Tempo-Pillen: der aktive Zustand ist eine KLASSE, nicht :checked — das
+    // <input> liegt unsichtbar im <label> (s. aspekt_freier_fall.css). Ohne
+    // dieses Nachziehen bliebe keine Pille hervorgehoben.
+    speedRadios.forEach(r => r.addEventListener('change', () => {
+        speedRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
+    }));
+    speedRadios.forEach(rr => rr.closest('.speed-pill').classList.toggle('active', rr.checked));
+
     scene.querySelector('.aspekt-runbar').addEventListener('click', (ev) => {
         const b = ev.target.closest('[data-act]');
         if (!b) return;

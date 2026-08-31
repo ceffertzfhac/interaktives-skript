@@ -277,6 +277,22 @@ Für den Wiedererkennungswert werden **Farb-Tokens und Panel-/Slider-/Legenden-/
 Analyse-Regeln** aus der portierten `kreisbewegung/styles.css` **abgeleitet** und
 auf `.aspekt-figur` statt `#gc10` gescopt — in zwei Dateien:
 
+> **Was „gemeinsam" NICHT heißt** (Fallstrick #27, real: Abb. 1.9 im ersten
+> Anlauf). `aspekt_kreisbahn.css` trägt die **Panel-Optik und das
+> `.aspekt-body`-Raster** (Panel | Mitte | Panel) — aber **nicht** die
+> Aufteilung *Szene | Diagramm* innerhalb der Mitte, nicht die klebende
+> Ablaufleiste, nicht die Tempo-Pillen und nicht die Knopf-Optik. Dieser Block
+> (~120 Zeilen: `.aspekt-main`, `.aspekt-main-content`, `.aspekt-runbar`,
+> `.aspekt-btn*`, `.speed-pill*`, `.aspekt-scene`/`.aspekt-graph`-Flex, die drei
+> Breiten-Modi und das Overlay) ist **pro Figurenfamilie wiederholt** und über
+> `[data-motor="…"]` bzw. `[data-aspekt="…"]` gescopt. Wer ihn vergisst, bekommt
+> eine Figur, die in **jedem** Breiten-Modus stapelt statt Szene neben Diagramm
+> zu setzen, mit unformatierter Bedienleiste — und der Smoke-Test merkt davon
+> nichts, weil er nur auf Ausnahmen prüft. **Beim Kopieren einer Vorlage diesen
+> Block immer mitnehmen** und danach die Geometrie in allen drei Modi gegen die
+> Vorlagenfigur messen (Skript-Muster: beide Figuren nebeneinander messen,
+> `scene.right <= graph.left`).
+
 - `aspekt_kreisbahn.css` — **gemeinsame** Aspekt-Optik, geladen für **alle**
   Aspekt-Figuren. UI-Tokens: `--kb-surface*`, `--kb-border*`, `--kb-text*`,
   `--kb-accent (var(--fh,#00b2a9))`, `--kb-text-scale
