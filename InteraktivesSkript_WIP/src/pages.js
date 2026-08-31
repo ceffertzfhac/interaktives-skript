@@ -14,6 +14,25 @@ let pages = []; // [{id, level, title, el, tk}]  tk=null|{num,title}
 let currentIndex = 0;
 let printSavedIndex = null;
 
+// Zuletzt gelesene Seite (BACKLOG P23-2). Gleiches Muster wie die uebrigen
+// Lese-Einstellungen (skript_width_mode/-palette/-text_level in core.js):
+// localStorage, Schluessel mit skript_-Praefix.
+const LAST_PAGE_KEY = "skript_last_page";
+// Im Druck-Tab NICHT mitschreiben: der oeffnet dieselbe Seite mit ?print=true,
+// blendet alles ein und springt fuer den QR-Rueckweg ggf. auf eine andere
+// Seite -- das ist kein Lesevorgang und darf den Merker nicht ueberschreiben.
+const istDruckTab = new URLSearchParams(location.search).get("print") === "true";
+
+// localStorage kann werfen (privates Fenster, Speicher aus, Quota) -- ein
+// Merker darf die Paginierung nie lahmlegen, deshalb beide Zugriffe gekapselt.
+function ladeLetzteSeite() {
+    try { return localStorage.getItem(LAST_PAGE_KEY); } catch (e) { return null; }
+}
+function merkeLetzteSeite(id) {
+    if (istDruckTab) return;
+    try { localStorage.setItem(LAST_PAGE_KEY, id); } catch (e) { /* egal */ }
+}
+
 function slugFor(headingEl, index) {
     const text = headingEl.textContent.trim();
     const m = text.match(/^([0-9]+(?:\.[0-9]+)*)/);
@@ -79,8 +98,19 @@ export function paginate() {
     });
     foldStraySiblings(paper, pages.map(p => p.el));
 
-    const wanted = pages.find(p => p.id === location.hash.replace('#', ''));
+    // Startseite, in dieser Rangfolge (BACKLOG P23-2):
+    //   1. #-Anker in der URL -- ein ausdruecklich geteilter Link gewinnt immer
+    //   2. zuletzt gelesene Seite aus localStorage
+    //   3. erste Seite
+    // Der gespeicherte Wert wird gegen das Seitenregister geprueft: nach einer
+    // Migration (Abschnitt umbenannt/entfallen) zeigt er sonst ins Leere.
+    const ausAnker = pages.find(p => p.id === location.hash.replace('#', ''));
+    const gemerkt = ausAnker ? null : pages.find(p => p.id === ladeLetzteSeite());
+    const wanted = ausAnker || gemerkt;
     currentIndex = wanted ? pages.indexOf(wanted) : 0;
+    // Ohne Anker, aber mit wiederhergestellter Seite: die URL nachziehen, damit
+    // Neuladen/Teilen/Zurueck denselben Zustand treffen wie die Anzeige.
+    if (!ausAnker && gemerkt) history.replaceState(null, '', '#' + gemerkt.id);
     applyVisibility();
 
     window.addEventListener('hashchange', () => {
@@ -114,6 +144,7 @@ export function showPage(id, opts = {}) {
     if (i === -1 || i === currentIndex) return;
     currentIndex = i;
     applyVisibility();
+    merkeLetzteSeite(id);
     if (opts.pushState !== false) {
         history.pushState(null, '', '#' + id);
     }
