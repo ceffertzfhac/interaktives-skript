@@ -138,20 +138,36 @@ in dieser Zeit gern „Seite reagiert nicht").
   **Lehre für künftige Druckprüfungen:** `?print=true` allein deckt den
   Druckpfad nicht ab — die drei Scope-Varianten sind eigene Fälle und müssen
   einzeln geprüft werden.
-- [ ] **P22-3c MathJax seitenweise setzen** *(L, Wirkung mittel, Risiko mittel)*
-  — beim Start nur die aktive Seite typesetten, den Rest beim Seitenwechsel
-  (`pagechange`-Event gibt es schon) bzw. in Leerlauf-Häppchen. Der in der
-  ursprünglichen Fassung genannte Fallstrick ist mit P22-3b **weg**: die
-  Nummerierung kommt nicht mehr aus dem gesetzten DOM, sondern vorab aus dem
-  Quelltext, gilt also unabhängig davon, welche Seiten schon gesetzt sind.
-  Offen bleiben zwei Punkte: `resolve_eq_refs()` liest die Formelnummern aus
-  MathJax' `allLabels` — ein Verweis auf eine noch nicht gesetzte Seite fände
-  sein Ziel nicht (Abhilfe: die Labels beim Quell-Zählen gleich mitnehmen,
-  `eq_rows_of_source` liefert sie ohnehin) — und der Druckpfad
-  (`print.js` klont `#container`) braucht vorher ein erzwungenes
-  „alles fertig setzen". Erst angehen, wenn die 8,2 s noch stören; die
-  Größenordnung ist ein Achtel des ursprünglichen Aufwands. Gehört
-  fachlich zu P1 (Architektur).
+- [x] **P22-3c MathJax seitenweise setzen** *(L)* — **erledigt 2026-08-31
+  (v1.42.0)**: beim Start wird nur die aktive Seite gesetzt, der Rest beim
+  Blättern (`pagechange` → `core.js::typeset_seite`). Der Druck-Tab bleibt beim
+  Voll-Lauf. **Zeit bis zur fertigen Startseite lokal, kalt: 7,70 s → 1,02 s.**
+
+  Die beiden im ursprünglichen Eintrag genannten Fallstricke sind gelöst:
+  - *Nummerierung:* `tagformat.number()` bekommt nur einen laufenden Zähler.
+    `numbering.js` legt daher je Seite ab, wie viele Nummern vor ihr liegen
+    (`window.eq_page_offset`), und `typeset_seite()` belegt `eq_run_index`
+    damit vor. Ohne das trüge die erste Formel jeder Seite die Nummer der
+    ersten Formel des Skripts.
+  - *Verweise:* `resolve_eq_refs()` liest jetzt `window.eq_labels` aus der
+    Quell-Zählung statt MathJax' `allLabels` — das kennt nur die schon
+    gesetzten Seiten.
+
+  Ein dritter Fallstrick kam beim Bauen dazu und steht in `src/CLAUDE.md`:
+  **sobald eine Seite gesetzt ist, ist ihre LaTeX-Quelle weg.** Ein zweiter
+  Zähllauf hätte sie mit null Nummern verbucht und alle folgenden Seiten
+  verschoben — Schritt 1 von `renumber_equations()` ist deshalb gecacht.
+
+  Geprüft: 22 stichprobenartig angefahrene Seiten stimmen in **allen**
+  Formelnummern mit dem Voll-Lauf überein (0 Abweichungen), 101 Formelverweise
+  aufgelöst (auch die auf nie besuchte Seiten), 0 Frames mit sichtbarem rohem
+  LaTeX — weder beim Start noch beim Blättern auf eine Seite mit 32 Formeln.
+
+  **Anmerkung zur Vorhersage:** in der Fassung dieses Eintrags von heute Morgen
+  stand, der Gewinn sei gering, weil zwischen „Prosa sichtbar" und „Formeln
+  gesetzt" nur ~1,6 s lägen. Das war falsch gerechnet — der Voll-Lauf
+  blockierte den Hauptthread durchgehend und verzögerte damit auch alles
+  andere. Der gemessene Gewinn ist ein Vielfaches der Schätzung.
 - [x] **P22-4 Gegenmessung an der veröffentlichten Fassung** *(S)* — **erledigt
   2026-08-29**, nach Merge nach `main` und erfolgreichem Pages-Build (v1.38.2),
   zwei saubere Läufe:

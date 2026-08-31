@@ -1,5 +1,5 @@
 <!-- Teil von ../BACKLOG.md (Index). Nicht umbenennen: der Index verlinkt diesen Pfad. -->
-## P23 — Startzustand: kein Roh-Flash, letzte Seite wiederherstellen
+## P23 — Startzustand: Roh-Flash, letzte Seite, robustes Fragment-Laden
 
 Eingetragen 2026-08-31 nach Nutzermeldung an der veröffentlichten Fassung
 v1.39.1 (*„nach dem Neuladen wird immer erst ungerendert die 0.1 angezeigt und
@@ -48,6 +48,20 @@ letzte Seite, auf der man war, wieder geöffnet ist"*).
   **Beim Umsetzen prüfen:** Druck-Tab und QR-Rückweg setzen die gespeicherte
   Seite nicht ungewollt um; ein leerer/unbekannter gespeicherter Wert (Seite
   existiert nach einer Migration nicht mehr) fällt sauber auf Index 0 zurück.
+
+- [x] **P23-3 Fragment-Laden absichern** *(S)* — **erledigt 2026-08-31
+  (v1.41.1)**, ausgelöst durch einen einzelnen 503 von GitHub Pages bei der
+  Live-Prüfung von v1.41.0. In dem Lauf ging nichts verloren, aber die Stelle
+  war ungesichert: `loadChapters()` fing pro Kapitel ab und schrieb nur ein
+  `console.warn` — ein Fragment, das mit 503 zurückkommt, fehlte **still**, die
+  Seite sah vollständig aus. Jetzt bis zu drei Anläufe mit wachsender Wartezeit
+  (400/800 ms), aber **nicht** bei 404/410 (dauerhaft — ein zweiter Versuch
+  ändert nichts); wiederholt wird bei Netzwerkabbruch und 5xx/408/429.
+  Endgültiges Scheitern zeigt eine sichtbare Box (`role="alert"`) an der Stelle
+  des Kapitels, ohne `.inhaltsverzeichnis`-Klasse, damit `paginate()` daraus
+  keine Seite baut. Geprüft mit erzwungenen Antworten: zweimal 503 dann ok → 3
+  Anfragen, 137 Seiten; dauerhaft 404 → 1 Anfrage, 129 Seiten, eine Fehlerbox;
+  ungestört → 1 Anfrage.
 
 ### Umsetzung (2026-08-31)
 

@@ -26,7 +26,6 @@ die Links hier zeigen auf den Pfad.
 |---|---|---|
 | [P12 — Komplett-Integration aller noch fehlenden v0.13-Inhalte](backlog/P12-restliche-v013-inhalte.md) | 21/17 | Prosa vollständig (114/114 Unterabschnitte); offen: interaktive Figuren je Abschnitt, Quasi-Content, Asset-Pipeline, Verifikation |
 | [P21 — Druckskript und interaktives Skript synchron halten](backlog/P21-statisches-skript-nachziehen.md) | 0/6 offen | **Pflichtregister:** jede inhaltliche Abweichung des WIP von v0.13 bekommt hier einen abhakbaren Eintrag (Regel in der Wurzel-`CLAUDE.md`) |
-| [P22 — Ladezeit: Bilder und MathJax beim Seitenstart](backlog/P22-ladezeit-und-assets.md) | 6/1 | live nachgemessen: 38,9 MB → 0,8–2,8 MB, Formeln gesetzt 13,1 s → 8,3 s (drei volle Typeset-Durchgänge auf einen reduziert); offen nur noch das seitenweise Setzen (P22-3c) |
 | [P13 — Text- & Formel-Marker für Studierende](backlog/P13-marker-und-notizbuch.md) | 0/16 | 4 Farben, persistent; plus begleitendes Notizbuch (P13-N) |
 | [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 4/7 | Motor A + Abb. 1.3–1.7 stehen; offen: Motor B + 5 Aspekt-Figuren, als Nächstes Abb. 1.9 |
 | [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 1/3 | Abb. 1.8 steht; offen: 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten |
@@ -41,7 +40,8 @@ die Links hier zeigen auf den Pfad.
 
 | Item | Sub-Tasks | Worum es ging |
 |---|---|---|
-| [P23 — Startzustand: kein Roh-Flash, letzte Seite wiederherstellen](backlog/P23-startzustand.md) | 2/0 | Ladeblende bis der Startzustand steht (0 Frames mit rohem LaTeX statt ~5 s) + zuletzt gelesene Seite aus `localStorage` |
+| [P22 — Ladezeit: Bilder und MathJax beim Seitenstart](backlog/P22-ladezeit-und-assets.md) | 7/0 | 38,9 MB → 0,8–2,8 MB, drei volle Typeset-Durchgänge auf einen reduziert, dann seitenweises Setzen: Startseite fertig nach 1,0 s statt 7,7 s (lokal) |
+| [P23 — Startzustand: Roh-Flash, letzte Seite, robustes Fragment-Laden](backlog/P23-startzustand.md) | 3/0 | Ladeblende bis der Startzustand steht (0 Frames mit rohem LaTeX statt ~5 s), zuletzt gelesene Seite aus `localStorage`, Wiederholversuch + sichtbarer Fehler beim Fragment-Laden |
 | [P0 — Quick Wins & Risikoreduktion](backlog/P0-quick-wins.md) | 7/0 | kleine, risikoarme Aufräumarbeiten |
 | [P1 — Struktur & Token-Effizienz](backlog/P1-struktur-token-effizienz.md) | 9/0 | Modularisierung, Figuren-Fabrik, Globals einfrieden |
 | [P2 — Aktualität, Responsivität, A11y](backlog/P2-aktualitaet-responsiv-a11y.md) | 8/0 | Tablet-Breakpoint, echte Buttons, `lang`, Safari-Workaround |
