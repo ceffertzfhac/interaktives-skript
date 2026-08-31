@@ -115,6 +115,17 @@ export function print_page() {
     // Klon entfernen. Fehlt scope/page -> alles (Default, bisheriges Verhalten).
     applyPrintScope(pc);
 
+    // Der Klon aendert die Dokumentreihenfolge, aus der MathJax seine laufenden
+    // Gleichungsnummern vergibt: #print_container steht VOR #container, und der
+    // Teildruck hat daraus gerade Seiten entfernt. Die Zuordnung
+    // "laufende Nummer -> 1.4.3" muss deshalb hier neu gebaut werden, nachdem
+    // der Klon seinen endgueltigen Seitenbestand hat und BEVOR MathJax laeuft
+    // (typesetAfterLoad haengt an MathJax.startup.promise, also an einem
+    // Microtask nach dieser synchronen init()-Kette). Ohne das trug der
+    // Abschnittsdruck der Lorentzkraft die Nummern 0.1.1 ff. statt 2.3.14 ff.
+    // window-Bruecke statt Import, s. numbering.js.
+    if (window.renumber_equations) window.renumber_equations();
+
     // Breiten-Modus vom Druck ENTkoppeln (Nutzer-Feedback): set_width_mode
     // setzt Inline-Breiten auf #content (width) und #paper (--paper-max-width);
     // die wandern beim Klonen mit und wuerden per Inline-Spezifitaet die

@@ -287,3 +287,18 @@ koordinaten; `perspective` ∈ {1,2,3,4} wählt die Ansicht, gesteuert vom
   MathJax-internen `replaceChild`-Fehler aus `backlog/P5-bekannte-fehler.md`.
   **Wer hier einen weiteren `typesetPromise()`-Aufruf ergänzt, muss begründen,
   warum er sich nicht mit dem Startlauf überschneidet.**
+- **`eq_tag_map` folgt der DOKUMENT-Reihenfolge, nicht dem Seitenregister
+  (v1.39.1)** — `tagformat.number()` bekommt von MathJax nur einen laufenden
+  Zähler ohne Kontext (s. `index.html`), also muss die Zuordnung „laufende
+  Nummer → 1.4.3" genau der Reihenfolge folgen, in der MathJax die Formeln
+  antrifft. Im **Druck-Tab** ist das nicht das Seitenregister: `print.js`
+  klont `#container` nach `#print_container`, und das steht in `index.html`
+  **vor** `#container` — beim Teildruck („Was drucken?") entfernt
+  `applyPrintScope()` daraus außerdem Seiten. `renumber_equations()` ermittelt
+  deshalb erst die *autoritativen* Nummern je Seite aus dem Register und legt
+  sie dann in Dokumentreihenfolge über alle vorhandenen `.chapter-page`;
+  `print_page()` ruft es nach dem Klonen erneut auf. **Wer eine zweite Kopie
+  des Kapitel-DOM ins Dokument stellt oder Seiten aus einer bestehenden
+  entfernt, muss `window.renumber_equations()` danach aufrufen** — sonst
+  verschieben sich alle Formelnummern (der Abschnittsdruck der Lorentzkraft
+  zeigte so 0.1.1 statt 2.3.14).

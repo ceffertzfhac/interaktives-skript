@@ -228,16 +228,33 @@ function resolveBoxRefs(boxNumbers) {
 // 17 Fragmente): 947 von 947 nummerierten Zeilen auf allen 137 Seiten
 // identisch, alle 91 \label-Verweise identisch.
 export function renumber_equations() {
-    const pages = getPages();
-    const map = [];            // Index = laufende MathJax-Nummer (ab 1)
-    let laufend = 0, section = null, lokal = 0;
-    pages.forEach((page, i) => {
+    // Schritt 1 -- die AUTORITATIVEN Nummern je Seite, aus dem Seitenregister:
+    // das ist die Reihenfolge des Skripts, unabhaengig davon, was gerade im
+    // Dokument steht. "2.3.14" gehoert zu dieser Gleichung, egal ob gerade das
+    // ganze Skript oder nur ihr Abschnitt gedruckt wird.
+    const proSeite = new Map();     // page-id -> ["2.3.14", "2.3.15", …]
+    let section = null, lokal = 0;
+    getPages().forEach((page, i) => {
         const prefix = sectionPrefix(page, i);
         if (prefix !== section) { section = prefix; lokal = 0; }
-        eq_rows_of_source(page.el.textContent).forEach(() => {
-            laufend++; lokal++;
-            map[laufend] = prefix + '.' + lokal;
-        });
+        proSeite.set(page.id, eq_rows_of_source(page.el.textContent)
+            .map(() => prefix + '.' + (++lokal)));
+    });
+    // Schritt 2 -- daraus die Zuordnung "laufende MathJax-Nummer -> Tag", und
+    // zwar in DOKUMENT-Reihenfolge ueber alle .chapter-page, die tatsaechlich
+    // im Dokument stehen. Der Umweg ist noetig, weil tagformat.number() nur
+    // einen laufenden Zaehler bekommt (s. index.html) und MathJax alles
+    // durchzaehlt, was es findet -- im Druck-Tab also den Klon in
+    // #print_container UND das versteckte Original, und beim Teildruck
+    // ("Was drucken?") einen Klon, aus dem print.js Seiten entfernt hat.
+    // Ein Index, der stur bei 1 beginnt, traefe dann die falsche Seite: der
+    // Abschnittsdruck der Lorentzkraft zeigte 0.1.1 statt 2.3.14.
+    const map = [];                 // Index = laufende MathJax-Nummer (ab 1)
+    let laufend = 0;
+    document.querySelectorAll('.chapter-page').forEach(el => {
+        const tags = proSeite.get(el.dataset.pageId);
+        if (!tags) return;
+        tags.forEach(t => { map[++laufend] = t; });
     });
     // Schutz gegen einen Aufruf NACH dem Typeset (Osterei "tt" ->
     // reload_mathjax): dann ist die Quelle durch die <mjx-container> ersetzt,
