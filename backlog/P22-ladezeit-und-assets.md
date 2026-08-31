@@ -104,6 +104,29 @@ in dieser Zeit gern „Seite reagiert nicht").
   — die Zuordnung endete bei 843, alles darüber fiel im Klon auf die laufende
   Nummer zurück. Der Quell-Zähler ist von der Sichtbarkeit unabhängig und
   liefert im Druck-Tab dieselben 947 wie am Bildschirm.
+
+  **Zweiter, schwererer Druckfehler — gefunden bei der Freigabe-Prüfung
+  2026-08-31, behoben in v1.39.1 (Nutzermeldung: *„die nummerierung fängt
+  z. B. beim Abschnitt zur Lorentzkraft wieder bei 0.0.1 an"*).** Betroffen war
+  der **Teildruck** über „Was drucken?" (`scope=abschnitt|kapitel|komplex`),
+  nicht der volle Ausdruck. Reproduktion:
+  `?print=true&scope=abschnitt&page=p-2-3-2` → die 22 Formeln der Seite trugen
+  `0.1.1 … 0.2.10` statt `2.3.14 … 2.3.35`, und die 9 Formelverweise darin
+  `(0.1.9) …` statt `(2.3.22) …`. **Bestand in `dd480dd` genauso** — also kein
+  Zugang von P22-3, sondern ein Altfehler, der erst beim gezielten Prüfen des
+  Druckpfads auffiel. Ursache: `tagformat.number()` bekommt nur einen laufenden
+  Zähler ohne Kontext, und die Zuordnung war auf die Reihenfolge des
+  Seitenregisters gebaut; im Druck-Tab steht aber der Klon in
+  `#print_container` **vor** `#container`, und `applyPrintScope()` entfernt
+  daraus Seiten — der Zähler begann stur bei 1 und traf den Anfang des Skripts.
+  Behebung: `renumber_equations()` ermittelt erst die *autoritativen* Nummern je
+  Seite aus dem Register und legt sie dann in Dokumentreihenfolge über alle
+  vorhandenen `.chapter-page`; `print_page()` ruft es nach dem Klonen erneut
+  auf. Die daraus folgende Regel steht in `src/CLAUDE.md`.
+
+  **Lehre für künftige Druckprüfungen:** `?print=true` allein deckt den
+  Druckpfad nicht ab — die drei Scope-Varianten sind eigene Fälle und müssen
+  einzeln geprüft werden.
 - [ ] **P22-3c MathJax seitenweise setzen** *(L, Wirkung mittel, Risiko mittel)*
   — beim Start nur die aktive Seite typesetten, den Rest beim Seitenwechsel
   (`pagechange`-Event gibt es schon) bzw. in Leerlauf-Häppchen. Der in der
