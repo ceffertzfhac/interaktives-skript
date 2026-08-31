@@ -21,9 +21,7 @@ export async function loadChapters() {
     await Promise.all(mounts.map(async (mount) => {
         const id = mount.dataset.chapter;
         try {
-            const resp = await fetch(`chapters/${id}.html`);
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            const html = await resp.text();
+            const html = await hole_fragment(id);
             // Bevor MathJax die Gleichungs-Umgebungen konsumiert (s.u.), aus dem
             // ROHEN HTML-String die LaTeX-Quelle jeder \label-fuehrenden Gleichung
             // extrahieren — ohne das \label. Das ist die Vorlage fuer die Physik-
@@ -56,9 +54,73 @@ export async function loadChapters() {
             while (mount.firstChild) parent.insertBefore(mount.firstChild, mount);
             parent.removeChild(mount);
         } catch (err) {
-            console.warn(`[chapters] Laden von chapters/${id}.html fehlgeschlagen:`, err);
+            // Endgueltig gescheitert: NICHT still weiterlaufen. Vor dieser
+            // Aenderung blieb nur ein console.warn -- die Seite sah vollstaendig
+            // aus, nur ohne dieses Kapitel, und niemand bemerkte es. Bei 17
+            // Fragmenten unwahrscheinlich, im Zielbild mit 15+ Kapiteln nicht
+            // mehr (BACKLOG P23-3).
+            console.error(`[chapters] Kapitel ${id} konnte nicht geladen werden:`, err);
+            zeige_kapitel_fehler(mount, id, err);
         }
     }));
+}
+
+// Netzwerkfehler sind beim Laden von 17 Fragmenten ueber ein CDN normal --
+// bei der Live-Pruefung von v1.41.0 kam ein einzelner 503 von GitHub Pages.
+// Deshalb bis zu VERSUCHE Anlaeufe mit wachsender Wartezeit.
+// NICHT wiederholt wird bei einer dauerhaften Antwort (404/410 -- das Fragment
+// gibt es schlicht nicht, ein zweiter Versuch aendert daran nichts); wiederholt
+// wird bei Netzwerkabbruch und bei 5xx/408/429, also allem, was voruebergehend
+// sein kann.
+const VERSUCHE = 3;
+const WARTE_MS = 400;          // 400 ms, dann 800 ms
+
+function dauerhaft(status) {
+    return status >= 400 && status < 500 && status !== 408 && status !== 429;
+}
+
+async function hole_fragment(id) {
+    let letzter;
+    for (let versuch = 1; versuch <= VERSUCHE; versuch++) {
+        try {
+            const resp = await fetch(`chapters/${id}.html`);
+            if (resp.ok) return await resp.text();
+            letzter = new Error(`HTTP ${resp.status}`);
+            if (dauerhaft(resp.status)) break;
+        } catch (err) {
+            letzter = err;               // Netzwerkabbruch -- wiederholen
+        }
+        if (versuch < VERSUCHE) {
+            console.warn(`[chapters] ${id}: Versuch ${versuch} fehlgeschlagen (${letzter.message}), neuer Versuch …`);
+            await new Promise(r => setTimeout(r, WARTE_MS * versuch));
+        }
+    }
+    throw letzter;
+}
+
+// Sichtbarer Platzhalter statt einer stillen Luecke. Bewusst schlicht und ohne
+// eigene Klasse aus styles.css: der Fall soll nicht huebsch sein, sondern
+// auffallen -- und er darf nicht davon abhaengen, dass ein Stylesheet geladen
+// hat. Die Ueberschrift traegt KEINE .inhaltsverzeichnis-Klasse, damit
+// paginate() daraus keine Kapitelseite baut und die Nummerierung unberuehrt
+// bleibt.
+function zeige_kapitel_fehler(mount, id, err) {
+    const box = document.createElement('div');
+    box.setAttribute('role', 'alert');
+    box.style.cssText = 'border:2px solid #b00; padding:1rem; margin:1rem 0; ' +
+                        'background:#fff4f4; color:#600;';
+    const t = document.createElement('strong');
+    t.textContent = 'Dieses Kapitel konnte nicht geladen werden.';
+    const p2 = document.createElement('p');
+    p2.style.margin = '0.5rem 0 0';
+    p2.textContent = `chapters/${id}.html — ${err && err.message ? err.message : 'unbekannter Fehler'}. `
+                   + 'Bitte die Seite neu laden. Bleibt der Fehler, fehlt die Datei auf dem Server.';
+    box.appendChild(t);
+    box.appendChild(p2);
+    // An die Stelle des Platzhalters, damit der Hinweis dort steht, wo das
+    // Kapitel hingehoert. mount bleibt hier stehen (kein Flatten) -- er traegt
+    // kein .inhaltsverzeichnis, stoert die Paginierung also nicht.
+    mount.appendChild(box);
 }
 
 // Kapitelbilder erst laden, wenn sie gebraucht werden (BACKLOG P22-1).
