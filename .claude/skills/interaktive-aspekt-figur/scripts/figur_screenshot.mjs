@@ -55,6 +55,7 @@ const url = opt('url', 'http://localhost:8765/index.html');
 const sel = opt('sel');
 const mode = opt('mode');
 const overlay = !!opt('overlay');
+const dark = !!opt('dark');    // --dark: Dunkelmodus vor dem Foto einschalten
 const measure = opt('measure');
 const ink = !!opt('ink');
 const scale = Number(opt('scale', 2));
@@ -99,8 +100,17 @@ await page.waitForFunction(
     .catch(() => fehler.push(`Figur #${figId} wurde nicht gebaut (Modul-Syntaxfehler? s. pageerror)`));
 await page.waitForTimeout(1200);
 
-const info = await page.evaluate(async ({ figId, mode, sets, overlay }) => {
+const info = await page.evaluate(async ({ figId, mode, sets, overlay, dark }) => {
     if (mode) document.documentElement.dataset.widthMode = mode;
+    // Dunkelmodus wie core.js::toggle_darkmode: das <link> freischalten UND das
+    // Wurzel-Signal setzen -- die CVD-Paletten der Figuren verzweigen ueber
+    // data-darkmode, ohne das bliebe die Szene hell auf dunklem Grund.
+    if (dark) {
+        const ds = document.getElementById('darkmode_stylesheet');
+        if (ds) ds.disabled = false;
+        document.documentElement.dataset.darkmode = '1';
+        if (window.apply_farbwoerter) window.apply_farbwoerter();
+    }
     const fig = document.getElementById(figId);
     if (!fig) return { fehlt: true };
     // Nur die Seite der Figur zeigen, sonst steht sie ausserhalb des Viewports.
@@ -124,7 +134,7 @@ const info = await page.evaluate(async ({ figId, mode, sets, overlay }) => {
         if (s) { s.value = v; s.dispatchEvent(new Event('input', { bubbles: true })); }
     }
     return { ok: true };
-}, { figId, mode, sets, overlay });
+}, { figId, mode, sets, overlay, dark });
 if (info.fehlt) { fehler.push(`#${figId} nicht im DOM`); }
 
 await page.waitForTimeout(500);
@@ -173,7 +183,42 @@ const handle = await page.evaluateHandle(({ figId, shotSel }) => {
     return shotSel ? fig.querySelector(shotSel) : fig;
 }, { figId, shotSel });
 const el = handle.asElement();
-if (el) await el.screenshot({ path: out });
+// NICHT el.screenshot() verwenden: in der schmalen Ansicht ist die Figur
+// gestapelt und hoeher als das Sichtfeld; Playwright scrollt sie hinein, die
+// klebende Ablaufleiste (position:sticky) verschiebt sie dabei, das loest den
+// naechsten Scroll aus — "element is not stable", Endlosschleife. Betrifft ALLE
+// Figuren (an 1.4 und 1.9 gleichermassen nachgewiesen, 2026-08-31).
+// Stattdessen: Sichtfeld so hoch machen, dass die Figur ganz hineinpasst, nach
+// oben scrollen und aus einem SEITEN-Screenshot ausschneiden. Damit entfaellt
+// Playwrights Stabilitaetspruefung, und die klebende Leiste sitzt da, wo sie
+// bei Scroll-Position 0 ohnehin sitzt.
+if (el) {
+    const mass = await page.evaluate((figId) => {
+        const f = document.querySelector('.aspekt-im-overlay') || document.getElementById(figId);
+        const r = f.getBoundingClientRect();
+        return { top: r.top + window.scrollY, left: r.left + window.scrollX,
+                 width: r.width, height: r.height };
+    }, figId);
+    const hoehe = Math.min(6000, Math.ceil(mass.height) + 160);
+    if (hoehe > page.viewportSize().height) {
+        await page.setViewportSize({ width: page.viewportSize().width, height: hoehe });
+        await page.waitForTimeout(350);
+    }
+    // An den ANFANG DER FIGUR scrollen, nicht an den Seitenanfang: die Figur
+    // steht mitten im Kapitel, bei scrollTo(0,0) laege sie ausserhalb des
+    // Ausschnitts ("Clipped area is outside the resulting image").
+    const jetzt = await page.evaluate((figId) => {
+        const f = document.querySelector('.aspekt-im-overlay') || document.getElementById(figId);
+        const oben = f.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo(0, Math.max(0, oben - 40));
+        const r = f.getBoundingClientRect();
+        return { x: r.x, y: r.y, width: r.width, height: r.height };
+    }, figId);
+    await page.waitForTimeout(200);
+    await page.screenshot({ path: out, animations: 'disabled', clip: {
+        x: Math.max(0, jetzt.x), y: Math.max(0, jetzt.y),
+        width: Math.max(1, jetzt.width), height: Math.max(1, jetzt.height) } });
+}
 
 console.log(JSON.stringify({ figur: figId, modus: mode || '(unveraendert)', overlay,
     screenshot: el ? out : null, messung, fehler: fehler.length ? fehler : 'keine' }, null, 1));
