@@ -162,6 +162,10 @@ in dieser Zeit gern „Seite reagiert nicht").
   Formelnummern mit dem Voll-Lauf überein (0 Abweichungen), 101 Formelverweise
   aufgelöst (auch die auf nie besuchte Seiten), 0 Frames mit sichtbarem rohem
   LaTeX — weder beim Start noch beim Blättern auf eine Seite mit 32 Formeln.
+  Auch der **QR-Rückweg** (`?g=<figur-id>`) trägt: er springt eine Seite direkt
+  an, ohne dass je geblättert wurde — geprüft mit `?g=aspekt-grundbegriffe`
+  (Seite `p-1-1-3` sichtbar und gesetzt, 15 Formeln, 0 rohes LaTeX, Lupe
+  offen). Druckpfad in allen drei Scope-Varianten unverändert.
 
   **Anmerkung zur Vorhersage:** in der Fassung dieses Eintrags von heute Morgen
   stand, der Gewinn sei gering, weil zwischen „Prosa sichtbar" und „Formeln
