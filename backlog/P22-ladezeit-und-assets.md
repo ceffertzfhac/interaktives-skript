@@ -159,13 +159,41 @@ in dieser Zeit gern „Seite reagiert nicht").
   (Skript im Scratchpad: `live_perf.mjs`; misst Übertragungsvolumen, Zeit bis
   Prosa/Formeln/Figuren) und die Tabelle oben fortschreiben.
 
-- [ ] **P22-5 Gegenmessung von P22-3a/b an der veröffentlichten Fassung** *(S)*
-  — dieselbe Messung wie P22-4, sobald v1.39.0 nach `main` gemerged und der
-  Pages-Build durch ist. Lokal (headless Chromium, `python3 -m http.server`)
-  gemessen: **Formeln gesetzt 19,6 s → 8,2 s**, Prosa sichtbar 18,0 s → 6,6 s;
-  die absoluten Werte liegen lokal höher als live, weil der Messrechner
-  langsamer ist — der Vergleich zählt, nicht der Absolutwert. Erwartung live:
-  ~12 s → ~5 s.
+- [x] **P22-5 Gegenmessung von P22-3a/b an der veröffentlichten Fassung** *(S)*
+  — **erledigt 2026-08-31**, nach Push nach `main` und erfolgreichem
+  Pages-Build (v1.39.1), zwei Läufe ohne Cache:
+
+  | Messgröße | v1.39.1 live |
+  |---|---|
+  | **Formeln gesetzt** | **8,3 / 9,0 s** |
+  | Prosa sichtbar | 6,6 / 7,3 s |
+  | Übertragen | 0,8 / 2,8 MB in 121–123 Anfragen |
+  | Inhalt | 137 Seiten, 4925 Formeln, 947 Nummern, 101 Verweise, 0 offen |
+  | Konsolenfehler / fehlgeschlagene Anfragen | keine |
+
+  **Achtung beim Vergleich mit den Tabellen oben: die „Prosa sichtbar"-Werte
+  von P22-4 und früher stammen aus einem anderen Messskript** (`live_perf.mjs`,
+  nur im Scratchpad, nicht mehr vorhanden) mit unbekannter Definition. Sie sind
+  **nicht** mit den hier gemessenen vergleichbar — ein Vergleich der beiden
+  Zahlenreihen führte bei der Freigabe kurzzeitig zu der falschen Diagnose, die
+  Prosa erscheine jetzt 4 s später. Der einzige belastbare Vergleich ist
+  gleiches Skript / gleiche Maschine, lokal gegen `dd480dd` gemessen:
+  Prosa sichtbar **18,0 s → 6,7 s**, Formeln gesetzt **19,6 s → 8,3 s**.
+
+  **Damit künftige Messungen vergleichbar bleiben, gilt die Definition, nicht
+  das Skript** (ein Skript im Scratchpad überlebt die Sitzung nicht):
+  - *Prosa sichtbar* = erster Zeitpunkt, zu dem in der Seite
+    `document.querySelectorAll('#paper .chapter-page').length > 0` beobachtbar
+    ist (Poll alle 100 ms; blockiert der Hauptthread, verschiebt sich der Wert
+    entsprechend — das ist beabsichtigt, es ist ein Nutzer-erlebter Wert).
+  - *Formeln gesetzt* = erster Zeitpunkt, zu dem die Zahl der
+    `mjx-container` über vier Polls (400 ms) konstant bleibt.
+  - Beides ab `page.goto(..., {waitUntil:'load'})`, Cache aus, ungedrosselt.
+
+  Größter Einzelposten bleibt MathJax selbst (`tex-svg.js`, 617 kB). Die
+  verbleibende Zeit liegt jetzt überwiegend **vor** dem Typeset (Kapitel-Fetch
+  + `init()`), nicht mehr darin: zwischen Prosa und Formeln liegen nur noch
+  ~1,6 s. Wer weiter optimieren will, setzt dort an, nicht an P22-3c.
 
 **Nebenbefund (2026-08-29):** 29 Dateien in `bilder/` sind von keinem Kapitel
 referenziert. Nicht gelöscht — erst prüfen, ob sie zu noch nicht migrierten
