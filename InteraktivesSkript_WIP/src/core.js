@@ -191,17 +191,15 @@ export function test(){
 }
 // MathJax v3 hat kein MathJax.Hub mehr (v2-API). typesetPromise() rendert
 // (bzw. re-rendert) alle Formeln im Dokument; ohne geladenes MathJax no-op.
-// Re-Typeset baut jede <mjx-container> neu auf und wirft damit die von
-// numbering.js injizierten .eq-number-Badges weg -- window.renumber_equations
-// (Bruecke statt Import, s. numbering.js) stellt sie danach wieder her.
 // Vollstaendiges Neu-Setzen. Wichtig: ein blosses typesetPromise() rendert
 // nur NEU hinzugekommene Mathematik -- bereits gesetzte Formeln laesst es
 // unberuehrt. Fuer ein echtes Re-Rendering muss der Dokumentzustand
 // zurueckgesetzt werden (document.state(0)); texReset() setzt zusaetzlich den
 // Gleichungszaehler auf 0, damit die laufenden Nummern wieder bei 1 beginnen
-// und zur Zuordnung aus renumber_equations() passen. Ohne texReset zaehlte
-// der zweite Lauf bei 89 weiter, die Zuordnung griff ins Leere und der zweite
-// Abschnitt lief mit fortlaufenden Nummern statt bei 1.5.1 weiter.
+// und zur Zuordnung window.eq_tag_map passen. Ohne texReset zaehlte ein
+// zweiter Aufruf bei 89 weiter, die Zuordnung griff ins Leere und der zweite
+// Abschnitt lief mit fortlaufenden Nummern statt bei 1.5.1 weiter -- das gilt
+// weiterhin fuer jeden WIEDERHOLTEN Aufruf (Osterei "tt" in "bitte").
 function typeset_alles() {
     // Laufindex fuer tagformat.number (s. index.html) vor jedem Lauf auf null.
     window.eq_run_index = 0;
@@ -214,16 +212,17 @@ function typeset_alles() {
 
 export function reload_mathjax(){
     if (!(window.MathJax && MathJax.typesetPromise)) return Promise.resolve();
+    // EIN Durchgang. Die Zuordnung "laufende Nummer -> 1.4.3" steht schon:
+    // numbering.js::renumber_equations() baut sie aus der LaTeX-Quelle, bevor
+    // MathJax laeuft (window-Bruecke statt Import, s. numbering.js), und
+    // init_numbering() ruft sie in main.js::init() vor typesetAfterLoad() auf.
+    // Bis v1.38.2 lief hier stattdessen ein zweiter voller Durchgang, nur um
+    // die im ersten gesetzten Zeilen zu zaehlen -- 5,4 s Hauptthread ueber dem
+    // ganzen Skript (BACKLOG P22-3b). Der Aufruf hier ist die Absicherung fuer
+    // den Fall, dass reload_mathjax() ohne vorheriges init_numbering() laeuft;
+    // eine bereits gebaute Zuordnung laesst er unangetastet.
+    if (window.renumber_equations) window.renumber_equations();
     return typeset_alles().then(() => {
-        // Nach dem ersten Lauf steht fest, wie viele nummerierte Zeilen auf
-        // welcher Seite liegen -> Zuordnung "laufende Nummer -> 1.4.3" bauen
-        // (window-Bruecke statt Import, s. numbering.js). Aendert sie sich,
-        // ist ein zweiter Lauf noetig, der die Nummern einsetzt; danach ist
-        // sie stabil, also genau ein Nachlauf.
-        if (window.renumber_equations && window.renumber_equations()) {
-            return typeset_alles();
-        }
-    }).then(() => {
         // Formelverweise (<a data-ref-eq>) zeigen erst nach dem Typeset die
         // richtige Nummer -- MathJax vergibt sie beim Rendern.
         if (window.resolve_eq_refs) window.resolve_eq_refs();

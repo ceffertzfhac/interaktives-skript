@@ -274,3 +274,16 @@ koordinaten; `perspective` ∈ {1,2,3,4} wählt die Ansicht, gesteuert vom
   geladen ist). Es rendert alle Formeln neu und hängt am „tt"-Easter-Egg in der
   Kontakt-Box sowie an `make_static()`. (Früher rief das die v2-API
   `MathJax.Hub.Queue(...)`, die unter v3 wirkungslos war — behoben.)
+- **Genau EIN Typeset-Durchgang beim Start (v1.39.0, BACKLOG P22-3)** — das ist
+  eine Leistungs-*und* eine Korrektheitsregel, beide Hälften sind nötig:
+  `index.html` setzt `startup: { typeset: false }` (MathJax soll nicht von sich
+  aus loslaufen; die Kapitel sind zu diesem Zeitpunkt noch gar nicht per `fetch`
+  da), und `numbering.js::renumber_equations()` baut `eq_tag_map` **vor** dem
+  Typeset aus der LaTeX-Quelle statt danach aus dem gesetzten DOM — damit
+  entfällt der zweite Durchgang, der bis v1.38.2 nur zum Zählen lief. Gemessen
+  über das ganze Skript (137 Seiten, 4925 Formeln, headless Chromium):
+  Formeln gesetzt nach **19,6 s → 8,2 s**. Der Nebeneffekt ist der wichtigere:
+  überlappende Durchgänge gibt es nicht mehr, also auch nicht mehr den
+  MathJax-internen `replaceChild`-Fehler aus `backlog/P5-bekannte-fehler.md`.
+  **Wer hier einen weiteren `typesetPromise()`-Aufruf ergänzt, muss begründen,
+  warum er sich nicht mit dem Startlauf überschneidet.**

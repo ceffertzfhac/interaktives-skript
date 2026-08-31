@@ -211,17 +211,22 @@ function resolveBoxRefs(boxNumbers) {
 // nur die laufende Nummer. Ein festes Praefix funktioniert daher nur, solange
 // genau ein Abschnitt im Dokument steht.
 //
-// Zwei Wege wurden verworfen, beide nachgemessen:
+// Drei Wege wurden verworfen, alle nachgemessen:
 //   * \setcounter{equation}{0} im Text -- MathJax ignoriert es stillschweigend.
 //   * tags.reset(0) zwischen Teil-Typesets -- setzt zwar den Zaehler zurueck,
 //     loescht aber allLabels/allIds, womit alle \ref-Verweise verlieren.
+//   * ZWEI Durchgaenge (bis v1.38.2): erst alles setzen, dann je nummerierter
+//     Zeile das von MathJax gesetzte [data-mml-node="mlabeledtr"] zaehlen,
+//     dann alles ein zweites Mal setzen. Korrekt, aber der teuerste denkbare
+//     Weg -- der Zaehl-Durchgang kostete ueber dem ganzen Skript 5,4 s
+//     Hauptthread, nur um 947 Zeilen zu zaehlen (BACKLOG P22-3b).
 //
-// Stattdessen zwei Durchgaenge: Nach dem ersten Typeset steht im DOM je
-// nummerierter Zeile ein [data-mml-node="mlabeledtr"] -- MathJax' eigene
-// Markierung, die auch mehrzeilige align-Umgebungen korrekt einzeln zaehlt.
-// Daraus wird die Zuordnung "laufende Nummer -> 1.4.3" gebaut; ein zweiter
-// Lauf setzt sie ein. Der zweite Lauf aendert die Zeilenzahl nicht, die
-// Zuordnung bleibt gleich -> kein weiterer Durchgang (keine Endlosschleife).
+// Stattdessen wird die Zuordnung VOR dem Typeset aus der LaTeX-QUELLE
+// gebaut: solange MathJax nicht gelaufen ist, steht sie noch im DOM-Text
+// jeder Seite. Ein Durchgang genuegt damit, die Nummern stehen vom ersten
+// Rendern an richtig da. Gegen die DOM-Wahrheit geprueft (2026-08-31, alle
+// 17 Fragmente): 947 von 947 nummerierten Zeilen auf allen 137 Seiten
+// identisch, alle 91 \label-Verweise identisch.
 export function renumber_equations() {
     const pages = getPages();
     const map = [];            // Index = laufende MathJax-Nummer (ab 1)
@@ -229,14 +234,66 @@ export function renumber_equations() {
     pages.forEach((page, i) => {
         const prefix = sectionPrefix(page, i);
         if (prefix !== section) { section = prefix; lokal = 0; }
-        page.el.querySelectorAll('[data-mml-node="mlabeledtr"]').forEach(() => {
+        eq_rows_of_source(page.el.textContent).forEach(() => {
             laufend++; lokal++;
             map[laufend] = prefix + '.' + lokal;
         });
     });
-    const vorher = JSON.stringify(window.eq_tag_map || null);
+    // Schutz gegen einen Aufruf NACH dem Typeset (Osterei "tt" ->
+    // reload_mathjax): dann ist die Quelle durch die <mjx-container> ersetzt,
+    // eq_rows_of_source faende nichts und wuerde eine gueltige Zuordnung
+    // durch eine leere ersetzen. Eine einmal gebaute Zuordnung bleibt.
+    if (!laufend && window.eq_tag_map && window.eq_tag_map.length) return;
     window.eq_tag_map = map;
-    return JSON.stringify(map) !== vorher;   // true -> zweiter Typeset noetig
+}
+
+// Nummerierte Gleichungszeilen eines Quelltextes in Dokumentreihenfolge.
+// Nummeriert wird -- wie in amsmath/v0.13 -- jede Zeile von \begin{equation}
+// und \begin{align}; die Sternvarianten und \[…\] bleiben unnummeriert, und
+// \nonumber/\notag unterdrueckt die Nummer der jeweiligen Zeile.
+// Bewusst ein Zaehler und kein Parser: er muss nur so viel LaTeX verstehen,
+// wie ueber die Zahl der Nummern entscheidet.
+function eq_rows_of_source(text) {
+    const rows = [];
+    const env = /\\begin\{(equation|align)\}([\s\S]*?)\\end\{\1\}/g;
+    let m;
+    while ((m = env.exec(text)) !== null) {
+        const zeilen = m[1] === 'equation' ? [m[2]] : split_top_rows(m[2]);
+        for (const z of zeilen) {
+            if (!z.trim()) continue;                       // leere Schlusszeile
+            if (/\\(nonumber|notag)\b/.test(z)) continue;  // unterdrueckte Nummer
+            rows.push(z);
+        }
+    }
+    return rows;
+}
+
+// Zerlegt einen align-Koerper an den Zeilenumbruechen \\ der OBERSTEN Ebene.
+// Ein \\ innerhalb einer geschachtelten Umgebung (split, pmatrix, cases,
+// array …) gehoert zu deren eigener Zeilenstruktur und trennt hier nicht --
+// daher die Tiefenzaehlung statt eines blossen split('\\\\').
+function split_top_rows(body) {
+    const rows = [];
+    let depth = 0, cur = '', i = 0;
+    while (i < body.length) {
+        if (body.startsWith('\\begin{', i)) {
+            const j = body.indexOf('}', i);
+            if (j > -1) { depth++; cur += body.slice(i, j + 1); i = j + 1; continue; }
+        }
+        if (body.startsWith('\\end{', i)) {
+            const j = body.indexOf('}', i);
+            if (j > -1) { depth--; cur += body.slice(i, j + 1); i = j + 1; continue; }
+        }
+        if (depth === 0 && body.startsWith('\\\\', i)) {
+            let j = i + 2;
+            // optionaler Zeilenabstand \\[6pt]
+            if (body[j] === '[') { const k = body.indexOf(']', j); if (k > -1) j = k + 1; }
+            rows.push(cur); cur = ''; i = j; continue;
+        }
+        cur += body[i]; i++;
+    }
+    rows.push(cur);
+    return rows;
 }
 
 export function resolve_eq_refs() {
@@ -306,6 +363,11 @@ export function init_numbering() {
     resolveSecRefs();
     resolveBoxRefs(boxNumbers);
     resolve_eq_refs();   // greift erst, wenn MathJax fertig ist (s. main.js)
+    // Formelnummern VOR dem Typeset festlegen: renumber_equations() liest die
+    // LaTeX-Quelle, die nur so lange im DOM steht, bis MathJax sie durch die
+    // <mjx-container> ersetzt. main.js::init() ruft init_numbering() vor
+    // typesetAfterLoad() auf — genau dieses Fenster (BACKLOG P22-3b).
+    renumber_equations();
 }
 
 // window-Bruecke statt Import: core.js::reload_mathjax() und chapters.js

@@ -160,12 +160,21 @@ müssen *sowohl* in `loader.load` *als auch* in `tex.packages: {'[+]': […]}`
 stehen, sonst fallen Tags still auf `(1)` zurück und `\textcolor` rendert nicht.
 
 Das Abschnitts-Präfix ist **dynamisch**, keine fest verdrahtete Konstante:
-`numbering.js::renumber_equations()` läuft nach dem ersten Typeset über
-`getPages()` und baut `eq_tag_map[laufendeNr] = sectionPrefix(page) + '.' + lokal`,
-wobei `sectionPrefix` die Abschnittsnummer aus dem Seitentitel liest
-(`1.4.3 …` → `1.4`, `0.2.1 …` → `0.2`); ein zweiter MathJax-Durchgang rendert
-diese Tags. Ein neuer Abschnitt braucht daher **keine** Nummerierungsänderung —
-das Präfix kommt aus seinen Seitentiteln.
+`numbering.js::renumber_equations()` läuft **vor** dem Typeset über `getPages()`
+und baut `eq_tag_map[laufendeNr] = sectionPrefix(page) + '.' + lokal`, wobei
+`sectionPrefix` die Abschnittsnummer aus dem Seitentitel liest (`1.4.3 …` →
+`1.4`, `0.2.1 …` → `0.2`). Gezählt wird dabei aus der **LaTeX-Quelle**, die
+solange im DOM-Text steht, bis MathJax sie ersetzt — deshalb der einzige
+Durchgang, in dem die Nummern von Anfang an stimmen. Ein neuer Abschnitt braucht
+daher **keine** Nummerierungsänderung — das Präfix kommt aus seinen Seitentiteln.
+
+Was der Zähler aus der Quelle liest (v1.39.0): jede Zeile von `\begin{equation}`
+und `\begin{align}` bekommt eine Nummer, die Sternvarianten und `\[…\]` nicht,
+und `\nonumber`/`\notag` unterdrückt die Nummer *ihrer* Zeile. `\\` innerhalb
+einer geschachtelten Umgebung (`split`, `pmatrix`, `cases`, `array`) trennt
+keine Zeile. **Wer eine weitere nummerierte Umgebung einführt** (etwa `gather`),
+muss sie dort ergänzen — sonst verschiebt sich ab dieser Stelle jede Nummer des
+Abschnitts.
 
 ## Querverweise: der Resolver ist die einzige Quelle des Deskriptors (v1.19)
 
