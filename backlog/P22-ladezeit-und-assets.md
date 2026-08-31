@@ -90,6 +90,20 @@ in dieser Zeit gern „Seite reagiert nicht").
   jede Nummer des Abschnitts. Gegengeprüft gegen die DOM-Wahrheit: 947 von 947
   nummerierten Zeilen auf allen 137 Seiten identisch, alle 91 `\label`-Verweise
   identisch, 101 Formelverweise aufgelöst, keine Konsolenfehler.
+
+  **Nebenbefund: ein Fehler im Ausdruck ist damit mit behoben.** Der Vergleich
+  des Druckpfads (`?print=true`) vor und nach der Änderung zeigt im Druckklon
+  je 947 Nummern, aber mit Abschnittspräfix vorher nur **759**, nachher **856**
+  (= Sollwert: 947 minus die 91 Gleichungen mit `\label`, deren Element-Id
+  MathJax aus dem Label statt aus dem Tag bildet). Im alten Stand trugen also
+  **97 Formeln im Ausdruck eine blanke laufende Nummer** — die letzten lauteten
+  `944, 945, 946, 947` statt `3.1.64 … 3.1.67`. Ursache: `print.js::print_page()`
+  klont `#container` nach `#print_container`, **bevor** MathJax gelaufen ist,
+  und versteckt das Original; der alte `renumber_equations()`-Lauf zählte dann
+  `mlabeledtr` in den Seiten des versteckten `#container` und fand dort nur 843
+  — die Zuordnung endete bei 843, alles darüber fiel im Klon auf die laufende
+  Nummer zurück. Der Quell-Zähler ist von der Sichtbarkeit unabhängig und
+  liefert im Druck-Tab dieselben 947 wie am Bildschirm.
 - [ ] **P22-3c MathJax seitenweise setzen** *(L, Wirkung mittel, Risiko mittel)*
   — beim Start nur die aktive Seite typesetten, den Rest beim Seitenwechsel
   (`pagechange`-Event gibt es schon) bzw. in Leerlauf-Häppchen. Der in der
