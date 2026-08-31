@@ -26,7 +26,6 @@ die Links hier zeigen auf den Pfad.
 |---|---|---|
 | [P12 — Komplett-Integration aller noch fehlenden v0.13-Inhalte](backlog/P12-restliche-v013-inhalte.md) | 21/17 | Prosa vollständig (114/114 Unterabschnitte); offen: interaktive Figuren je Abschnitt, Quasi-Content, Asset-Pipeline, Verifikation |
 | [P21 — Druckskript und interaktives Skript synchron halten](backlog/P21-statisches-skript-nachziehen.md) | 0/6 offen | **Pflichtregister:** jede inhaltliche Abweichung des WIP von v0.13 bekommt hier einen abhakbaren Eintrag (Regel in der Wurzel-`CLAUDE.md`) |
-| [P24 — Schiene „Auf dieser Seite“: Piktogramme statt langer Texte](backlog/P24-schiene-piktogramme.md) | 0/6 | 135 Einträge, davon 29 über 60 Zeichen (längster 131) und einer mit rohem LaTeX; gewünscht: Piktogramm je Typ + höchstens zwei Zeilen |
 | [P13 — Text- & Formel-Marker für Studierende](backlog/P13-marker-und-notizbuch.md) | 0/16 | 4 Farben, persistent; plus begleitendes Notizbuch (P13-N) |
 | [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 6/5 | beide Motoren + Abb. 1.3–1.7 und 1.9 stehen; offen: Abb. 1.14, 1.18a/b, 1.19, 1.20 + Verifikation, als Nächstes Abb. 1.14 |
 | [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 1/3 | Abb. 1.8 steht; offen: 1.15 Sekante/Tangente, 1.10 Kreisbewegungs-Komponenten |
@@ -41,6 +40,7 @@ die Links hier zeigen auf den Pfad.
 
 | Item | Sub-Tasks | Worum es ging |
 |---|---|---|
+| [P24 — Schiene „Auf dieser Seite“: Piktogramme statt langer Texte](backlog/P24-schiene-piktogramme.md) | 6/0 | Piktogramm je Typ + Nummer + Kurztitel, auf zwei Zeilen geklemmt; 182 Einträge, davon 0 mit rohem LaTeX und 0 über zwei Zeilen |
 | [P22 — Ladezeit: Bilder und MathJax beim Seitenstart](backlog/P22-ladezeit-und-assets.md) | 7/0 | 38,9 MB → 0,8–2,8 MB, drei volle Typeset-Durchgänge auf einen reduziert, dann seitenweises Setzen: Startseite fertig nach 1,0 s statt 7,7 s (lokal) |
 | [P23 — Startzustand: Roh-Flash, letzte Seite, robustes Fragment-Laden](backlog/P23-startzustand.md) | 3/0 | Ladeblende bis der Startzustand steht (0 Frames mit rohem LaTeX statt ~5 s), zuletzt gelesene Seite aus `localStorage`, Wiederholversuch + sichtbarer Fehler beim Fragment-Laden |
 | [P0 — Quick Wins & Risikoreduktion](backlog/P0-quick-wins.md) | 7/0 | kleine, risikoarme Aufräumarbeiten |

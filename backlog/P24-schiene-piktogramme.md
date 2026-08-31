@@ -42,11 +42,11 @@ wird aber bei jeder weiteren Figur mit Formelzeichen im Titel wieder auftreten.
 
 ### Offene Entscheidungen (vor der Umsetzung klären)
 
-- [ ] **P24-0 Was steht neben dem Piktogramm?** Drei Varianten:
+- [x] **P24-0 Was steht neben dem Piktogramm?** Drei Varianten:
   *(a)* nur die Nummer („1.4.1"), *(b)* Nummer + boxeigener Titel
   („1.4.1 Rollbewegung"), *(c)* nur der Titel. Für Figuren analog
   („Abb. 1.9" bzw. „Abb. 1.9 Schräger Wurf").
-- [ ] **P24-1 Zwei fehlende Piktogramme.** `src/assets/` hat `target`, `pen`,
+- [x] **P24-1 Zwei fehlende Piktogramme.** `src/assets/` hat `target`, `pen`,
   `noteblock`, `star`, `eye`, `head`, `bulb`, `anlage`, `reading` — die
   Box-Typen sind damit abgedeckt (die Zuordnung steht in
   `core.js::generate_highlight_boxes`). Für **Abbildung** und **interaktive
@@ -54,19 +54,55 @@ wird aber bei jeder weiteren Figur mit Formelzeichen im Titel wieder auftreten.
 
 ### Umsetzung (nach den Entscheidungen)
 
-- [ ] **P24-2** `shell.js::landmarksFor` liefert statt eines Labels ein
+- [x] **P24-2** `shell.js::landmarksFor` liefert statt eines Labels ein
   `{typ, nummer, titel}`; `renderRailInto` rendert Piktogramm + Text. Die
   Typ→Icon-Zuordnung gehört an **eine** Stelle — `core.js` hat sie für die
   Boxen schon, sie ist dort zu holen statt neu aufzuschreiben (P18-Regel).
-- [ ] **P24-3** Zweizeilen-Klemme in `styles.css`
+- [x] **P24-3** Zweizeilen-Klemme in `styles.css`
   (`-webkit-line-clamp: 2`), plus `title`-Attribut mit dem vollen Text, damit
   beim Überfahren nichts verlorengeht.
-- [ ] **P24-4** Formelzeichen: entweder im `data-title` vermeiden (Regel wie
+- [x] **P24-4** Formelzeichen: entweder im `data-title` vermeiden (Regel wie
   bei den Bildunterschriften) **oder** die Schiene die Formel setzen lassen.
   Ersteres ist billiger und passt zur Zeile „höchstens zwei Zeilen".
-- [ ] **P24-5** Gegenmessung: erneut über alle 137 Seiten, danach 0 Einträge
+- [x] **P24-5** Gegenmessung: erneut über alle 137 Seiten, danach 0 Einträge
   mit rohem LaTeX und 0 über zwei Zeilen. Das Messskript steht in dieser
   Sitzung im Scratchpad und ist in den Skill zu übernehmen, wenn es bleibt.
+
+### Umsetzung (2026-08-31, v1.44.0–v1.44.2)
+
+Entschieden mit dem Nutzer: **Nummer + Kurztitel** neben dem Piktogramm (die
+Nummer bleibt, sonst geht der Bezug zum Fließtext und zu Querverweisen
+verloren), Piktogramme für Abbildung und interaktive Figur **inline im Code**
+(färben sich über `currentColor` mit Darkmode und Palette, keine zweite
+Zuordnungsstelle). Zwei Nachträge auf Zuruf: gleichnamige Einträge bekommen
+**(a), (b), …**, und **statische Abbildungen** kommen mit hinein — aber nur
+eigenständige, nicht die innerhalb einer Box.
+
+| Messgröße (alle Seiten) | vorher | nachher |
+|---|---|---|
+| Seiten mit Schiene | 58 | 74 |
+| Einträge | 135 | 182 |
+| mit rohem LaTeX | 1 | **0** |
+| über zwei Zeilen | 29 (>60 Zeichen) | **0** |
+| ohne Piktogramm | 135 | **0** |
+| längster Eintrag | 131 Zeichen | 101 |
+
+Drei Entscheidungen, die im Code begründet stehen, weil sie beim ersten Anlauf
+falsch waren:
+- **(a)/(b) je Seite und je TYP**, nicht dokumentweit und nicht nur nach Titel:
+  eine Beispiel-Box und die zugehörige Figur tragen oft denselben Kurztitel,
+  sind aber keine Reihe.
+- **`.nur-druck`-Abbildungen bleiben draußen** — am Bildschirm unsichtbar, ein
+  Eintrag dorthin führte ins Leere.
+- **Kurztitel mit harter Grenze** (90 Zeichen, Wortgrenze): die
+  Zwei-Zeilen-Klemme ist eine *Anzeige*-Regel; ohne sie (älterer Browser,
+  Druck, Vorlese-Werkzeug) stünde der ganze Absatz da.
+
+Gemessen und nicht angesehen (Nutzer: „freigabe zur messung"): alle 12
+Piktogramme auf `p-1-1-7` sind vorhanden und 16×16, keine Überlappung mit dem
+Text, kein Überstand aus dem Rahmen, im Dunkelmodus wechseln die Inline-Symbole
+die Farbe mit und die Datei-Icons bekommen den Aufhell-Filter. **Die optische
+Wirkung der Symbole selbst ist damit nicht beurteilt.**
 
 ### Zusammenhang mit anderen Items
 

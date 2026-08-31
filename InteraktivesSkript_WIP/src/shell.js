@@ -88,7 +88,24 @@ const FIG_ICONS = {
 // hatte 131 Zeichen (BACKLOG P24). Der volle Text bleibt im title-Attribut.
 function kurzTitel(text) {
     if (!text) return '';
-    return text.split(/[:,(]/)[0].trim() || text.trim();
+    // Auch am SATZENDE trennen, nicht nur an Doppelpunkt/Komma/Klammer: die
+    // Beschriftungen der statischen Abbildungen sind ganze Absaetze ohne
+    // Doppelpunkt (laengster gemessener Eintrag 267 Zeichen). Der Punkt zaehlt
+    // nur, wenn ihm mindestens zwei Kleinbuchstaben vorangehen — sonst wuerde
+    // "z. B." mitten im Satz trennen.
+    const m = text.match(/^[\s\S]*?(?=[:,(]|(?<=[a-zäöüß]{2})\.\s)/);
+    let t = (m ? m[0] : text).trim() || text.trim();
+    // Harte Grenze an der Wortgrenze. Die Zwei-Zeilen-Klemme im CSS faengt die
+    // Anzeige ohnehin ab, aber sie ist eine ANZEIGE-Regel: ohne sie (aelterer
+    // Browser, Druck, Vorlese-Werkzeug) stuende der ganze Absatz da. Manche
+    // Beschriftungen sind EIN langer Satz ohne fruehe Interpunktion — der
+    // laengste gemessene hatte 218 Zeichen.
+    const MAX = 90;
+    if (t.length > MAX) {
+        const schnitt = t.lastIndexOf(' ', MAX);
+        t = t.slice(0, schnitt > 40 ? schnitt : MAX).trim() + '…';
+    }
+    return t;
 }
 
 // Ein Schienen-Eintrag: { id, typ, nummer, titel, voll }.
@@ -107,7 +124,32 @@ function landmarksFor(page) {
     // Dokumentreihenfolge, zwei getrennte Durchlaefe haetten erst alle Boxen,
     // dann alle Figuren gelistet — nicht die Reihenfolge im Skript.
     const FIG = new Set(['grafik-container', 'aspekt-figur']);
-    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .wichtig, .grafik-container, .aspekt-figur').forEach(el => {
+    // Statische Abbildungen kommen mit hinein (Nutzervorgabe 2026-08-31), aber
+    // NUR eigenstaendige: steckt die Abbildung in einer Box (Beispiel,
+    // Aufgabe …), ist die Box bereits als Eintrag gelistet — die Abbildung
+    // darin waere ein zweiter Eintrag fuer dieselbe Stelle.
+    const BOX_SEL = '.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .wichtig, .bemerkung, .anmerkung';
+    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .wichtig, .grafik-container, .aspekt-figur, figure.abbildung').forEach(el => {
+        if (el.tagName === 'FIGURE') {
+            // .nur-druck ist am Bildschirm unsichtbar (Druck-Fallback einer
+            // interaktiven Figur) — ein Schienen-Eintrag dorthin fuehrte ins
+            // Leere; die interaktive Figur daneben ist ohnehin gelistet.
+            if (el.classList.contains('nur-druck')) return;
+            if (el.closest(BOX_SEL)) return;
+            if (!el.id) el.id = page.id + '-abb-' + (n++);
+            const cap = el.querySelector('figcaption');
+            const lab = cap && cap.querySelector(':scope > .fig-label');
+            // Beschriftung ohne das vorangestellte "Abb. 1.n"-Label.
+            const voll = cap
+                ? cap.textContent.replace(lab ? lab.textContent : '', '').trim()
+                : 'Abbildung';
+            items.push({
+                id: el.id, typ: 'abbildung',
+                nummer: lab ? lab.textContent.trim() : '',
+                titel: kurzTitel(voll), voll,
+            });
+            return;
+        }
         if ([...el.classList].some(c => FIG.has(c))) {
             if (!el.id) return;
             const voll = el.dataset.title || 'Interaktive Abbildung';
