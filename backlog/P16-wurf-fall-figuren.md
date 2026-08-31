@@ -157,9 +157,20 @@ allein der Kontrast die Pruefung).
   Geprueft: `node --check` auf allen fuenf Modulen, Importe aufloesbar (11
   render- + 6 physics-Exporte), zwei Instanzen mit getrennten Prefixen und
   getrennter `yAxisConfig`. Noch nicht verdrahtet — Seite unveraendert.
-- [ ] **P16-2 Motor B portieren** — `src/figures/schraeger_wurf/{constants,physics,render,state,runtime}.js`,
-  Precompute-then-interpolate, reuse `../kreisbewegung/lib/*` inkl. vectors,
-  `initSchraegerWurf()` aus `main.js::init()`. *(L)*
+- [x] **P16-2 Motor B portieren** *(L)* — **erledigt 2026-08-31 (`43acff8`)**:
+  `src/figures/schraeger_wurf/{constants,physics,state,render,runtime}.js`,
+  1268 Z., lib aus `../kreisbewegung/lib/`. PORT-AENDERUNGEN im Code markiert:
+  `idPrefix` + `q()` (`sw<n>_`), Radio-Gruppen (`speed`/`diagram_mode`) ueber
+  den Prefix im `name`, lib-Pfade. **Neu gegenueber Motor A:**
+  `physics.js::recomputeDerived()` — die Zerlegung von `v0` in `v0x`/`v0y` und
+  die Zoom-Berechnung stehen in der Sim mitten in `ui.js::updateAll()`, und
+  `ui.js` wird nicht portiert; ohne sie liest die Physik `v0x/v0y = 0` und aus
+  jedem schraegen Wurf wuerde ein freier Fall. Kein `initSchraegerWurf()` in
+  `main.js` (seit v1.7 gibt es keinen Stand-alone-Init-Pfad, Motoren laufen nur
+  ueber `createRuntime()`). Geprueft: `node --check` auf allen fuenf Modulen,
+  Importe aufloesbar (19 render- + 12 physics-Exporte), zwei Instanzen mit
+  getrennten Prefixen und eigenen Zeitreihen, Physik gegen Handrechnung
+  deckungsgleich.
 - [x] **P16-3 Aspekt-Figur Abb. 1.3** *(M)* — **erledigt 2026-08-28**:
   `src/figures/aspekt_freier_fall.{js,css}`, `data-aspekt="freier-fall"`,
   `data-figref="fig-freierfall_1"`, `data-eqs="formel_freierfall4"`; statische
@@ -276,8 +287,21 @@ allein der Kontrast die Pruefung).
   mit entsprechender Beschriftung, `getDisplayV` liefert bereits die
   Achsenkomponente (damit ist Abb. 1.19 vorbereitet), Achsenname y ueberall.
 - [ ] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
-- [ ] **P16-6 Aspekt-Figur Abb. 1.9** — schräger Wurf: Flugbahn + 2× s-t x/y
-  (Motor B). *(M)*
+- [x] **P16-6 Aspekt-Figur Abb. 1.9** *(M)* — **erledigt 2026-08-31 (v1.43.0)**:
+  schräger Wurf, Flugbahn + zwei gestapelte Weg-Zeit-Diagramme y(t)/x(t).
+  Erste Figur mit **gestapelten** Diagrammen auf dieser Motor-Familie; Vorlage
+  war `aspekt_freier_fall.js`, neu sind nur der Stapel-Modus und der
+  α-Regler. Aspekt-Gating: Diagrammpaar fest, Achse fest (y↑/Null Erdboden),
+  v- und a-Vektor aus, Vergleichsbahn aus; Regler h0/v0/α + Zeit, mitlaufende
+  Bildunterschrift.
+  **Neuer Fallstrick (im Modulkopf und in `src/figures/CLAUDE.md`):**
+  `updateGraphs()` schaltet Einzel- gegen Stapelmodus über `style.visibility`,
+  nicht über `display` — die gestapelten Gruppen dürfen im Skelett **kein**
+  `display:none` tragen, sonst bleiben sie unsichtbar.
+  Geprüft: Smoke-Test, DOM-Harness (Nummerierung unverändert), im Browser
+  beide Kurven im Gleichschritt wachsend (t=1,2 s: je 73 Punkte), Rückfall auf
+  t=0 bei Parameterwechsel, keine Konsolenfehler, Physik gegen Handrechnung
+  deckungsgleich.
 - [ ] **P16-7 Aspekt-Figur Abb. 1.14** — Bahnkurve y(x) + Schema (Motor B, keine
   Zeitachse → neuer Interaktionsmuster-Zweig). *(M)*
 - [ ] **P16-8 Aspekt-Figuren Abb. 1.18a/b** — Tangentialgeschwindigkeit + v⃗/
