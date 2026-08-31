@@ -104,8 +104,19 @@ const info = await page.evaluate(async ({ figId, mode, sets, overlay }) => {
     const fig = document.getElementById(figId);
     if (!fig) return { fehlt: true };
     // Nur die Seite der Figur zeigen, sonst steht sie ausserhalb des Viewports.
+    // UEBER DIE APP navigieren, nicht per style.display: seit dem seitenweisen
+    // Setzen (BACKLOG P22-3c) typesetzt MathJax eine Seite erst, wenn sie ueber
+    // showPage() aktiv wird und das pagechange-Event feuert. Wer stattdessen
+    // direkt display umschaltet, bekommt eine Seite mit ROHEM LaTeX --
+    // real passiert bei Abb. 1.9 (2026-08-31): der Screenshot zeigte
+    // "\(h_0\)" und sah nach einem Figur-Fehler aus, den es nicht gab.
+    // location.hash ist der Weg, den pages.js selbst abonniert (hashchange).
     const seite = fig.closest('.chapter-page');
-    if (seite) document.querySelectorAll('.chapter-page').forEach(p => { p.style.display = (p === seite ? '' : 'none'); });
+    if (seite && seite.dataset.pageId) {
+        location.hash = '#' + seite.dataset.pageId;
+    } else if (seite) {
+        document.querySelectorAll('.chapter-page').forEach(p => { p.style.display = (p === seite ? '' : 'none'); });
+    }
     if (overlay) { const l = fig.querySelector('.aspekt-lupe'); if (l) l.click(); }
     const ziel = document.querySelector('.aspekt-im-overlay') || fig;
     for (const { k, v } of sets) {
@@ -117,6 +128,26 @@ const info = await page.evaluate(async ({ figId, mode, sets, overlay }) => {
 if (info.fehlt) { fehler.push(`#${figId} nicht im DOM`); }
 
 await page.waitForTimeout(500);
+
+// ERST HIER auf den fertigen MathJax-Satz warten -- die Navigation zur Seite
+// der Figur ist im evaluate oben passiert, und seit dem seitenweisen Setzen
+// (BACKLOG P22-3c) beginnt der Typeset dieser Seite erst danach. Vorher
+// gewartet zu haben half nichts: der Screenshot zeigte die Bildunterschrift als
+// rohes LaTeX ("\(h_0\)") und sah nach einem Figur-Fehler aus, den es nicht
+// gab (real bei Abb. 1.9, 2026-08-31).
+// Fallback ist die feste Wartezeit -- eine Figur ohne Formeln in der
+// Unterschrift erfuellt die Bedingung nie.
+await page.waitForFunction(
+    id => {
+        const f = document.getElementById(id);
+        if (!f) return false;
+        const cap = f.querySelector('.aspekt-caption');
+        if (!cap) return true;
+        return !/\\\(/.test(cap.textContent) || !!cap.querySelector('mjx-container');
+    },
+    figId, { timeout: 10000 })
+    .catch(() => fehler.push('Bildunterschrift nach 10 s nicht gesetzt -- Screenshot zeigt evtl. rohes LaTeX'));
+await page.waitForTimeout(400);
 
 let messung = null;
 if (measure) {

@@ -356,7 +356,7 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
   for (let xv = 0; xv <= xMax + xStep * 1e-6; xv += xStep) {
     const xp = scX(xv)
     gridEl.appendChild(el('line', { x1: xp, y1: padT, x2: xp, y2: padT + plotH, class: 'grid-line' }))
-    const t = el('text', { x: xp, y: y0 + 15, 'text-anchor': 'middle', class: 'tick-label' })
+    const t = el('text', { x: xp, y: y0 + 18, 'text-anchor': 'middle', class: 'tick-label' })
     t.textContent = xv.toFixed(xStep % 1 === 0 ? 0 : 1)
     gridEl.appendChild(t)
   }
@@ -371,7 +371,14 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
   gridEl.appendChild(el('line', { x1: padL, y1: y0, x2: padL + plotW, y2: y0, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': 'url(#arrowhead)' }))
   gridEl.appendChild(el('line', { x1: padL, y1: padT + plotH, x2: padL, y2: padT, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': 'url(#arrowhead)' }))
 
-  const xLab = el('text', { x: padL + plotW / 2, y: y0 + 30, 'text-anchor': 'middle', class: 'axis-label' })
+  // PORT-AENDERUNG (P16-6): Abstand der Achsenbeschriftung von y0+30 auf y0+44,
+  // der Achsenzahlen von y0+15 auf y0+18. Die Werte der Sim sind fuer ihre
+  // UNSKALIERTE Schrift bemessen; die Aspekt-Figuren vergroessern alle
+  // Diagramm-Beschriftungen um --kb-fs = 1,5 (s. aspekt_kreisbahn.css), womit
+  // 15 px Abstand fuer rund 17 px hohe Zeilen nicht reichen — die
+  // Achsenbeschriftung lag dann AUF den Achsenzahlen (im Screenshot von
+  // Abb. 1.9 aufgefallen, 2026-08-31).
+  const xLab = el('text', { x: padL + plotW / 2, y: y0 + 44, 'text-anchor': 'middle', class: 'axis-label' })
   createStyledSvgText(xLab, xLabel)
   gridEl.appendChild(xLab)
 

@@ -108,8 +108,21 @@ const SVG_SCENE = `
     <line id="sw_velocity_vector_y" x1="0" y1="0" x2="0" y2="0" stroke-width="2" marker-end="url(#sw_arrow-vel)" visibility="hidden"/>
     <line id="sw_velocity_vector" x1="0" y1="0" x2="0" y2="0" stroke-width="2.5" marker-end="url(#sw_arrow-vel)" visibility="hidden"/>
     <g id="sw_animation_coord_system"></g>
-    <text id="sw_zoom_text_display" x="24" y="18" class="aspekt-zoom-text"></text>
-    <g id="sw_stopwatch">
+    <!-- Zoom-Anzeige in der freien Luecke zwischen Hoehenlineal (endet rund
+         x=155) und Stoppuhr (beginnt rund x=277). Oben links lag sie auf dem
+         Lineal, oben rechts unter der Uhr — beides im Screenshot aufgefallen. -->
+    <text id="sw_zoom_text_display" x="175" y="16" text-anchor="start" class="aspekt-zoom-text"></text>
+    <!-- Stoppuhr verkleinert in die rechte obere Ecke (Nutzervorgabe 2026-08-31:
+         „der uhr verkleinern, aber immer noch oben rechts in der animation").
+         Der Motor zeichnet Zifferblatt, Marken und Zeiger in ABSOLUTEN
+         Koordinaten um (280,120) mit r=72 — verkleinert wird deshalb ueber eine
+         Transformation der Gruppe, genau wie es die Stand-alone-Sim selbst tut
+         (STOPWATCH_TRANSFORM in constants.js: translate(84,-24) scale(0.595)).
+         Uebernommen ist deren Massstab 0.595; die Verschiebung ist groesser, weil
+         der Wurf anders als der senkrechte Fall die Mitte der Szene fuellt: die
+         Uhr sitzt damit um (320,50) statt um (251,47) und laesst den Bahnscheitel
+         (rund x=234) frei. Ohne das lag die Kugel im Zifferblatt. -->
+    <g id="sw_stopwatch" transform="translate(153, -21) scale(0.595)">
       <circle id="sw_stopwatch_circle" cx="280" cy="120" r="72" stroke-width="2"/>
       <g id="sw_stopwatch_marks"></g>
       <g id="sw_subdial">
