@@ -91,6 +91,17 @@ in dieser Zeit gern „Seite reagiert nicht").
   nummerierten Zeilen auf allen 137 Seiten identisch, alle 91 `\label`-Verweise
   identisch, 101 Formelverweise aufgelöst, keine Konsolenfehler.
 
+  **Sicht-Prüfung gegen das PDF (Nutzer, 2026-08-31): „Formelnummern passen".**
+  Das schließt die eigentliche Lücke der Messung oben: die lief gegen die
+  DOM-Wahrheit, also gegen das, was MathJax vorher selbst gezählt hatte — sie
+  konnte nur zeigen, dass der Quell-Zähler *dasselbe* tut, nicht dass es
+  *richtig* ist. Geprüft wurde die letzte Formel je Abschnitt (0.1 → (0.1.12),
+  0.2 → (0.2.13), 0.3 → (0.3.6), 0.4 → (0.4.6), 1.1 → (1.1.99),
+  1.2 → (1.2.107), 1.3 → (1.3.78), 1.4 → (1.4.88), 1.5 → (1.5.127),
+  1.6 → (1.6.41), 1.7 → (1.7.47), 1.8 → (1.8.31), 2.1 → (2.1.43),
+  2.2 → (2.2.86), 2.3 → (2.3.96), 3.1 → (3.1.67)) — eine Zahl je Abschnitt
+  deckt den ganzen Abschnitt ab, weil ein Zählfehler alles Folgende verschiebt.
+
   **Nebenbefund: ein Fehler im Ausdruck ist damit mit behoben.** Der Vergleich
   des Druckpfads (`?print=true`) vor und nach der Änderung zeigt im Druckklon
   je 947 Nummern, aber mit Abschnittspräfix vorher nur **759**, nachher **856**
