@@ -92,7 +92,20 @@
                 id:    (id)  => 'eq-' + id
               }
             },
-            loader: { load: ['[tex]/tagformat', '[tex]/color', '[tex]/physics'] }
+            loader: { load: ['[tex]/tagformat', '[tex]/color', '[tex]/physics'] },
+            // KEIN Auto-Typeset beim Laden (BACKLOG P22-3a). MathJax setzt sonst
+            // beim Start von sich aus das gesamte Dokument -- ein voller
+            // Durchgang ueber alle ~4900 Formeln (gemessen 5,4 s), dessen
+            // Ergebnis chapters.js::typesetAfterLoad() unmittelbar danach mit
+            // core.js::typeset_alles() (document.state(0)) wieder verwirft.
+            // Die App ruft den Lauf ohnehin selbst auf, sobald die per fetch
+            // injizierten Kapitel stehen -- und nur dann sind die Formeln
+            // ueberhaupt vollstaendig im DOM. Nebenwirkung, die den Ausschlag
+            // gab: der Auto-Lauf konkurrierte mit dem eigenen Lauf um dieselben
+            // Knoten (MathJax-interner "Cannot read properties of null
+            // (reading 'replaceChild')") -- der in P5 vermutete Wettlauf, der
+            // sporadisch Formeln im Fliesstext als Quelltext stehen liess.
+            startup: { typeset: false }
           };
         </script>
         <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-svg.js"></script>
@@ -103,7 +116,7 @@
             <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation" data-tip="Kapitelnavigation">☰</button>
             <div id="header_brand">
                 <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
-                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.38.2</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
+                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.38.3</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
                      (Nutzervorgabe). Details im Kontakt-Kasten und in DISCLAIMER.md. --><span id="header_prototyp" title="Prototyp: Umsetzung und Inhalte sind vorlaeufig und ungeprueft">Prototyp</span></span>
                 <span id="header_author">Prof. Dr. rer. nat. C. Effertz</span>
             </div>
