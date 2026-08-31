@@ -174,6 +174,23 @@ node --input-type=module --check < <figur>.js   # Syntax ALLER geaenderten Modul
 node .claude/skills/v013-verifikation/scripts/dom_harness.mjs InteraktivesSkript_WIP
 ```
 
+**Breiten-Check** (findet stille Klemmen, die der Smoke-Test nicht sieht — die
+Figur funktioniert, sie ist nur zu klein):
+
+```bash
+node .claude/skills/interaktive-aspekt-figur/scripts/breiten_check.mjs
+node .claude/skills/interaktive-aspekt-figur/scripts/breiten_check.mjs --fig=aspekt-weg-zeit
+```
+
+Misst je Breiten-Modus, wie viel der verfügbaren Breite die Figur **gezeichnet**
+belegt. Real gefunden (2026-08-31): Abb. 1.8 stand in der schmalen Ansicht auf
+19 % der Breite, weil ein `max-height` einer motorweiten Regel die `height` der
+figureneigenen Regel still kappte. Zwei Fallen stecken im Kopfkommentar des
+Skripts — beide sind mir zuerst passiert: den Breiten-Modus **über die echten
+Knöpfe** wechseln (nur `data-width-mode` zu setzen lässt die Lesespalte breit),
+und die **gezeichnete** statt der Element-Breite messen (`preserveAspectRatio`
+lässt den Inhalt im Element schrumpfen).
+
 **Selbst im echten Browser prüfen** (headless Chromium — spart Nutzerrunden):
 
 ```bash

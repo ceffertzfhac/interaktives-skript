@@ -73,6 +73,13 @@ ersten Anlage (Singleton → Per-Instanz, 2. Figur, Grundgerüst) liegt in
 
 ---
 
+> **Breiten-Check vor der Abnahme.** `breiten_check.mjs` (Skill-Skripte) misst
+> je Breiten-Modus, wie viel der verfügbaren Breite eine Figur **gezeichnet**
+> belegt. Das findet die Klasse Fehler, die weder Smoke-Test noch DOM-Harness
+> sehen: die Figur funktioniert, sie ist nur zu klein — etwa weil ein
+> `max-height` einer motorweiten Regel die `height` der figureneigenen Regel
+> still kappt (real bei Abb. 1.8: 19 % statt der gewollten Breite).
+
 > **Bildunterschrift: nie über sich selbst reden.** Kein „diese Bildunterschrift
 > läuft mit", kein „die Werte im Analysefeld laufen mit" — die Unterschrift
 > beschreibt die *Physik*, nicht die Bedienoberfläche (Nutzervorgabe
