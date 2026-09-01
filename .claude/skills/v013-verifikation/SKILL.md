@@ -122,6 +122,42 @@ können.
 **Grenze:** misst Geometrie, nicht Optik. Ob eine umgebrochene Formel *gut
 aussieht*, entscheidet weiterhin Stufe 5.
 
+## Stufe 4c — Sprungziele (echter Browser)
+
+```bash
+node .claude/skills/v013-verifikation/scripts/sprung_ziele.mjs \
+     --url=http://localhost:8000/index.html
+```
+
+Klickt in headless Chromium **jeden** Eintrag der Schiene „Auf dieser Seite"
+und jeden Querverweis im Fließtext (`a.xref` auf Abbildung/Box) und misst,
+wo der Sprung landet: Abstand der Ziel-Oberkante zur Unterkante der klebenden
+Kopfleiste. Soll 0…40 px (`ui.js` legt `ANKER_LUFT = 12` an), negativ heißt
+„unter der Kopfleiste verschwunden", groß positiv „zu tief". Ziele am
+Dokumentende sind ausgenommen — dort kappt der Browser den Sprung.
+
+Drei Fallen, die das Skript bewusst behandelt (alle drei waren echte Fehler,
+BACKLOG P5):
+
+- **Versteckte Ziele.** Ein Verweis auf eine `.nur-druck`-Abbildung zeigt auf
+  ein `display:none`-Element; gemessen wird — wie in `main.js` — die
+  interaktive Figur, die sie über `data-figref` ersetzt.
+- **Nachwachsende Bilder.** Die Kapitelbilder laden `lazy` und sind beim
+  Sprung 0 px hoch. Deshalb wird erst nach `--ruhe` (Default 2000 ms)
+  nachgemessen, nicht sofort.
+- **Fensterhöhe.** Der Viewport ist bewusst 1400 × 900 px, also *Lesegröße*:
+  ein zu hohes Fenster verdeckt genau den Fehler, um den es geht (ein Ziel,
+  das höher ist als das Fenster).
+
+Selbsttest wie bei 4b (Exit-Code 2), **Exit-Code 1** bei jedem danebengegangenen
+Sprung. Gegenprobe beim Bau: auf dem Stand *vor* dem Fix (33a9083) meldet das
+Skript für `p-1-2-5` −232 px und für `fig-schraubenbahn` +911 px, also genau
+die vom Nutzer beschriebenen Symptome.
+
+**Zählweise:** die Schiene wird **zweimal** gerendert (Desktop-Spalte und
+Tablet-Schublade), das Skript klickt beide. Die Zahl der gemessenen Sprünge ist
+darum doppelt so groß wie die Zahl der Einträge im Skript.
+
 ## Stufe 5 — Nur im Browser
 
 Diese Punkte kann **kein** Harness abdecken; sie müssen von einem Menschen

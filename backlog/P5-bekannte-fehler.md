@@ -103,10 +103,12 @@
   Position selbst (Chrome verankert den Scroll), was der erste Anlauf als
   „Nutzer scrollt" missdeutete und deshalb zu frueh aufgab. `main.js` lenkt
   Verweise auf unsichtbare Abbildungen ueber `data-figref` auf die interaktive
-  Figur um, die sie ersetzt. *Gegenmessung (headless Chromium, alle 137
-  Seiten): 364 Schienen-Spruenge + 50 Querverweise, **0** danebengegangen (Ziel
-  0–40 px unter der Kopfleiste), 18 Verweise auf versteckte Abbildungen
-  korrekt umgelenkt, 0 Konsolenfehler.*
+  Figur um, die sie ersetzt. *Gegenmessung (`sprung_ziele.mjs`, Stufe 4c im
+  Verifikations-Skill, alle 137 Seiten): 364 Schienen-Spruenge + 50
+  Querverweise, **0** danebengegangen (Ziel 0–40 px unter der Kopfleiste),
+  18 Verweise auf versteckte Abbildungen korrekt umgelenkt, 0
+  Konsolenfehler. Dieselbe Messung auf dem Stand davor (33a9083): −232 px
+  bei „1.2.5 Kraeftezerlegung 2", +911 px bei Abb. 1.12.*
 - [x] **Schienen-Eintrag ist nur ein Wortfragment.** Der Kurztitel (P24)
   trennte an der oeffnenden Klammer — in deutscher Prosa steht die mitten im
   Satz, und Inline-Mathematik ist im Quelltext selbst eine Klammer. Aus
@@ -114,7 +116,8 @@
   v1.44.4, Commit `e58e358`):* Inline-Mathematik wird vor dem Trennen entpackt,
   getrennt wird an Doppelpunkt/Semikolon/Komma/Satzende, ein Bruchstueck unter
   12 Zeichen wird verworfen, harte Grenze 60 statt 90 Zeichen. *Gegenmessung:
-  364 Eintraege auf 74 Seiten, 0 mit rohem LaTeX, 0 ueber zwei Zeilen, 0 ohne
+  182 Eintraege auf 74 Seiten (im DOM 364 — die Schiene wird zweimal
+  gerendert, Desktop-Spalte und Tablet-Schublade), 0 mit rohem LaTeX, 0 ueber zwei Zeilen, 0 ohne
   Piktogramm; laengster Eintrag 84 statt 101 Zeichen.*
 - [x] **Formeln wirken groesser als der Fliesstext.** Gemeldet vom Nutzer
   2026-09-01 (*„formeln und zahlen, die in der formelumgebung stehen[,] sind
