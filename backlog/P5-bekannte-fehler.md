@@ -77,6 +77,58 @@
   allerdings erst in der `.then()`-Kette hinter `reload_mathjax` — also
   nachgelagert, nicht überlappend.
 
+- [x] **Sprungmarken landen nicht am Ziel.** Gemeldet vom Nutzer 2026-08-31:
+  *„1.2.5 Kraeftezerlegung 2 springt zu tief"* und *„auch spruenge ueber
+  marken im text funktionieren nicht zuverlaessig … siehe Abbildung 1.5 bis
+  Abbildung 1.7"*. **Drei getrennte Ursachen**, alle gemessen:
+  1. `main.js` zentrierte das Ziel (`scrollIntoView({block:'center'})`) und zog
+     danach blind 70 px ab. Ein Ziel, das hoeher ist als das Fenster, verliert
+     beim Zentrieren seinen ANFANG nach oben — Oberkante von „Kraeftezerlegung
+     2" 262 px **oberhalb** der Kopfleiste, waehrend 1.2.4 auf derselben Seite
+     134 px darunter lag.
+  2. Verweise auf `.nur-druck`-Abbildungen (der Druck-Fallback einer
+     interaktiven Figur) zielten auf ein `display:none`-Element; dessen
+     `getBoundingClientRect()` ist ein Null-Rechteck, der Sprung landete am
+     Seitenanfang. Betraf die Abbildungen 1.5–1.7.
+  3. Die Kapitelbilder tragen `loading="lazy"` (P22-1) und sind im Moment des
+     Sprungs 0 px hoch. Wachsen sie OBERHALB des Ziels nach, rutscht das Ziel
+     weg — bei Abb. 1.12 um 1547 px, der Sprung landete 375 px zu tief.
+  *Fix (2026-09-01, v1.44.3, Commit `8fb5c01`):* `ui.js::scrollToAnchor` setzt
+  die Oberkante mit der **tatsaechlichen** Kopfhoehe dicht unter die Leiste
+  (`ANKER_LUFT = 12`) und **fasst nach**, solange die Bilder das Layout noch
+  verschieben — getrieben von deren `load`-Ereignis (Erfassungsphase, Fenster
+  2,5 s), nicht von einem festen Zeitpunkt. Abgebrochen wird an den
+  **Eingabe**-Ereignissen (`wheel`/`touchstart`/`keydown`/`mousedown`), nicht
+  an einer veraenderten Scroll-Position: das Nachwachsen verschiebt die
+  Position selbst (Chrome verankert den Scroll), was der erste Anlauf als
+  „Nutzer scrollt" missdeutete und deshalb zu frueh aufgab. `main.js` lenkt
+  Verweise auf unsichtbare Abbildungen ueber `data-figref` auf die interaktive
+  Figur um, die sie ersetzt. *Gegenmessung (headless Chromium, alle 137
+  Seiten): 364 Schienen-Spruenge + 50 Querverweise, **0** danebengegangen (Ziel
+  0–40 px unter der Kopfleiste), 18 Verweise auf versteckte Abbildungen
+  korrekt umgelenkt, 0 Konsolenfehler.*
+- [x] **Schienen-Eintrag ist nur ein Wortfragment.** Der Kurztitel (P24)
+  trennte an der oeffnenden Klammer — in deutscher Prosa steht die mitten im
+  Satz, und Inline-Mathematik ist im Quelltext selbst eine Klammer. Aus
+  „Die \(x\)-Komponente …" wurde der Eintrag „Die". *Fix (2026-09-01,
+  v1.44.4, Commit `e58e358`):* Inline-Mathematik wird vor dem Trennen entpackt,
+  getrennt wird an Doppelpunkt/Semikolon/Komma/Satzende, ein Bruchstueck unter
+  12 Zeichen wird verworfen, harte Grenze 60 statt 90 Zeichen. *Gegenmessung:
+  364 Eintraege auf 74 Seiten, 0 mit rohem LaTeX, 0 ueber zwei Zeilen, 0 ohne
+  Piktogramm; laengster Eintrag 84 statt 101 Zeichen.*
+- [x] **Formeln wirken groesser als der Fliesstext.** Gemeldet vom Nutzer
+  2026-09-01 (*„formeln und zahlen, die in der formelumgebung stehen[,] sind
+  scheinbar groesser als fliesstextbuchstaben und zahlen"*, Modus normal,
+  Stufe 2/5). **Nachgemessen und bestaetigt** (16 px Fliesstext, Median ueber
+  alle Glyphen von p-1-4-2): Ziffer „1" 11,46 px in der Formel gegen 10,50 px
+  im Text (+9 %), Versalhoehe +12 %, x-Hoehe +4 %. **Ursache:** MathJax
+  bemisst sein SVG in `ex` und trifft damit die x-Hoehe der Fliesstextschrift
+  *genau* — aber die TeX-Schrift baut ueber der x-Hoehe hoeher als Source
+  Serif 4. *Fix (2026-09-01, v1.44.5, Commit `a4f4b29`):* `svg: { scale: 0.92 }`
+  in der MathJax-Konfiguration, gewaehlt so, dass die **Ziffern** zur Deckung
+  kommen (aufrecht in beiden Welten, darum der auffaelligste Vergleich).
+  Danach: Ziffer +0,4 %, Versal +3 %, x-Hoehe −0,5 %. `formel_ueberstand.mjs`
+  ueber alle 137 Seiten in allen drei Breiten-Modi: 0 Uebersteher.
+
 
 ---
-
