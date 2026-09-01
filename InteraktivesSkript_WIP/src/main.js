@@ -9,7 +9,7 @@ import { ge, interaktiv, generate_highlight_boxes, safari_bug, make_static,
          init_text_size_controls, adjust_text_size, set_width_mode,
          init_width_mode, toggle_settings, close_settings, set_palette,
          init_palette, typeset_seite } from './core.js';
-import { generate_toc, offsetAnchor, toc, toc_filter, kontakt, close_zoom, zoom, pause } from './ui.js';
+import { generate_toc, offsetAnchor, scrollToAnchor, toc, toc_filter, kontakt, close_zoom, zoom, pause } from './ui.js';
 import { init_print, check_print, from_qr, toggle_print_menu, close_print_menu, print_scope } from './print.js';
 import { paginate, showPage, getCurrentPage } from './pages.js';
 import { init_shell, toggle_drawer, close_drawer, chapter_prev, chapter_next, goto_page } from './shell.js';
@@ -477,16 +477,34 @@ document.addEventListener('click', (event) => {
     // #eq-…) ODER eine Seite, die ihre id nur als data-page-id traegt
     // (Abschnitts-Links #p-1-4-5 -- pages.js setzt kein id-Attribut). Beide
     // Faelle abdecken, sonst navigieren Abschnitts-Links nicht.
-    const target = document.getElementById(id);
+    let target = document.getElementById(id);
+    // Zeigt der Verweis auf eine Abbildung, die am BILDSCHIRM unsichtbar ist
+    // (class="nur-druck" — der Druck-Fallback einer interaktiven Figur), dann
+    // auf die interaktive Figur ausweichen, die sie ersetzt: sie traegt die
+    // Zuordnung als data-figref. Ohne das lieferte getBoundingClientRect() des
+    // versteckten Elements ein Null-Rechteck, und der Sprung landete am
+    // Seitenanfang statt bei der Abbildung (Nutzermeldung 2026-08-31: "auch
+    // spruenge ueber marken im text funktionieren nicht zuverlaessig ... siehe
+    // Abbildung 1.5 bis Abbildung 1.7").
+    if (target && !target.offsetParent && getComputedStyle(target).display === 'none') {
+        const ersatz = document.querySelector('.aspekt-figur[data-figref="' +
+            (window.CSS && CSS.escape ? CSS.escape(id) : id) + '"]');
+        if (ersatz) target = ersatz;
+    }
     const pageEl = (target && target.closest('.chapter-page'))
         || document.querySelector('.chapter-page[data-page-id="' + (window.CSS && CSS.escape ? CSS.escape(id) : id) + '"]');
     if (!target && !pageEl) return;
     event.preventDefault();
     if (pageEl && pageEl.dataset.pageId) showPage(pageEl.dataset.pageId);
     // Ist das Ziel ein Element innerhalb der Seite (nicht die Seite selbst),
-    // dorthin scrollen.
-    if (target && target !== pageEl) target.scrollIntoView({ block: 'center' });
-    offsetAnchor();
+    // dorthin scrollen — mit der Oberkante dicht unter die klebende Kopfleiste
+    // (ui.js::scrollToAnchor). Vorher stand hier scrollIntoView({block:
+    // 'center'}) plus ein blindes offsetAnchor(): das ZENTRIERT das Ziel, und
+    // eine Box, die hoeher ist als das Fenster, verliert dabei ihren Anfang
+    // nach oben aus dem Bild. Betraf beide Sprungarten gleichermassen — die
+    // Schiene ("1.2.5 Kraeftezerlegung 2 springt zu tief") und die
+    // Querverweise im Fliesstext ("siehe Abbildung 1.5").
+    if (target && target !== pageEl) scrollToAnchor(target);
 });
 
 init();

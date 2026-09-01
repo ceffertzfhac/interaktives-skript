@@ -37,7 +37,9 @@ shell.js       chapter app bar (breadcrumb/progress/hamburger), left rail (on-pa
                boxes of the active page), tablet drawer; reacts to pages.js's
                "pagechange" CustomEvent (no import of pages.js internals beyond its API)
 ui.js          toc (full-screen accordion + search filter, built from pages.js's page
-               registry), generate_toc, toc_filter, kontakt, offsetAnchor,
+               registry), generate_toc, toc_filter, kontakt, scrollToAnchor/offsetAnchor
+               (Sprungziel dicht unter die klebende Kopfleiste, mit Nachfassen, solange
+               die lazy geladenen Bilder das Layout noch verschieben),
                toggle_body_scroll, zoom, close_zoom, pause
 numbering.js   init_numbering() — Box-, Abbildungs- und Bildnummerierung auf Basis der
                Seitenregistratur von pages.js; renumber_equations(). Die v0.13-Zähler-

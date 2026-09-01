@@ -302,10 +302,88 @@ export function kontakt() {
     window.scrollTo(0, 0);
 
 }
+// Sprungziele unter der klebenden Kopfleiste positionieren.
+//
+// Vorher: scrollIntoView({block:'center'}) im Klick-Handler plus hier blind
+// 70 px abziehen. Das ging bei kleinen Zielen knapp auf und bei hohen Zielen
+// gar nicht — eine Box, die hoeher ist als das Fenster, wird beim Zentrieren
+// mit ihrem ANFANG aus dem Bild geschoben. Gemessen an 1.2.5
+// "Kraeftezerlegung 2": die Oberkante landete 262 px OBERHALB der Kopfleiste,
+// waehrend 1.2.4 auf derselben Seite 134 px darunter lag (Nutzermeldung
+// 2026-08-31: "springt zu tief").
+//
+// Jetzt wird die Oberkante des Ziels bewusst dicht unter die Kopfleiste
+// gesetzt, mit deren TATSAECHLICHER Hoehe statt der Konstanten 70 (der Kopf
+// ist 64 px hoch und aendert sich mit der Textgroesse).
+const ANKER_LUFT = 12;
+// Wie lange nach dem Sprung noch nachgefasst wird (s.u.). 2,5 s deckt das
+// Nachladen der Bilder auch ueber eine langsame Leitung ab; abgebrochen wird
+// ohnehin, sobald der Nutzer selbst etwas tut.
+const ANKER_FENSTER = 2500;
+let anker_laeuft = null;     // beendet den vorigen Sprung, wenn ein neuer kommt
+
+export function scrollToAnchor(el) {
+    if (!el) return;
+    if (anker_laeuft) anker_laeuft();
+    const kopf = ge("header");
+    const hoehe = () => (kopf ? kopf.getBoundingClientRect().height : 0);
+    const ziel = () => Math.max(0, el.getBoundingClientRect().top + window.scrollY - hoehe() - ANKER_LUFT);
+
+    window.scrollTo(window.scrollX, ziel());
+    // Gemerkt wird die ERREICHTE Position, nicht die gewuenschte: liegt das
+    // Ziel nahe am Dokumentende, kappt der Browser den Sprung.
+    let zuletzt = window.scrollY;
+    let aus = false;
+
+    // NACHFASSEN, weil sich das Layout nach dem Sprung noch aendert: die
+    // Kapitelbilder tragen loading="lazy" (BACKLOG P22-1) und sind im Moment
+    // des Sprungs 0 px hoch. Waechst ein Bild OBERHALB des Ziels, rutscht das
+    // Ziel nach unten und der Sprung landet zu tief — gemessen an Abb. 1.12:
+    // 375 px statt 12 px unter der Kopfleiste, weil die Bilder darueber
+    // zusammen 1547 px nachwuchsen (Nutzermeldung 2026-08-31).
+    const nachfassen = () => {
+        if (aus) return;
+        const neu = ziel();
+        if (Math.abs(neu - zuletzt) < 2) return;   // steht schon richtig
+        window.scrollTo(window.scrollX, neu);
+        zuletzt = window.scrollY;
+    };
+    // Abbruch bei EIGENER Bedienung. Bewusst an den Eingabe-Ereignissen und
+    // nicht an einer veraenderten Scroll-Position: das Nachwachsen der Bilder
+    // verschiebt die Position selbst (Chrome verankert den Scroll), was als
+    // "Nutzer scrollt" missgedeutet wuerde — genau daran scheiterte der erste
+    // Anlauf.
+    const EINGRIFF = ['wheel', 'touchstart', 'keydown', 'mousedown'];
+    let schluss = 0;
+    const beenden = () => {
+        if (aus) return;
+        aus = true;
+        document.removeEventListener('load', nachfassen, true);
+        EINGRIFF.forEach(t => window.removeEventListener(t, beenden, true));
+        clearTimeout(schluss);
+        if (anker_laeuft === beenden) anker_laeuft = null;
+    };
+    // Jedes Bild meldet sich selbst, sobald es seine Hoehe hat — verlaesslicher
+    // als ein fester Zeitpunkt (ein einzelnes setTimeout(400) traf Abb. 1.12
+    // nicht, die Bilder darueber brauchten laenger). load steigt nicht auf,
+    // deshalb in der Erfassungsphase am document.
+    document.addEventListener('load', nachfassen, true);
+    EINGRIFF.forEach(t => window.addEventListener(t, beenden, true));
+    schluss = setTimeout(beenden, ANKER_FENSTER);
+    anker_laeuft = beenden;
+
+    requestAnimationFrame(() => { nachfassen(); requestAnimationFrame(nachfassen); });
+    [120, 400, 900, 1600].forEach(ms => setTimeout(nachfassen, ms));
+}
+
 export function offsetAnchor() {
-    if(location.hash.length !== 0) {
-        window.scrollTo(window.scrollX, window.scrollY - 70);
-    }
+    if (!location.hash || location.hash.length < 2) return;
+    let el = null;
+    try { el = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { /* kaputter Hash */ }
+    // Kein Ziel (z. B. ein Seiten-Hash wie #p-1-2-5, den pages.js verarbeitet)
+    // -> nichts tun. Vorher wurde auch dann gescrollt, was den Seitenwechsel
+    // um 70 px verschob.
+    if (el) scrollToAnchor(el);
 }
 
 export function pause(button) {
