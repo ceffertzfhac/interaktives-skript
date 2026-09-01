@@ -88,19 +88,36 @@ const FIG_ICONS = {
 // hatte 131 Zeichen (BACKLOG P24). Der volle Text bleibt im title-Attribut.
 function kurzTitel(text) {
     if (!text) return '';
+    // Inline-Mathematik entpacken, BEVOR getrennt wird: \(x\)-Komponente ist
+    // im Quelltext eine Klammer, und die Trennung an "(" schnitt mitten hinein
+    // — aus "Die \(x\)-Komponente …" wurde der Eintrag "Die". Der Inhalt
+    // bleibt als Klartext stehen (die Schiene setzt keine Formeln, s. P24).
+    text = text.replace(/\\\(([^]*?)\\\)/g, '$1').replace(/\\[a-zA-Z]+/g, '').trim();
     // Auch am SATZENDE trennen, nicht nur an Doppelpunkt/Komma/Klammer: die
     // Beschriftungen der statischen Abbildungen sind ganze Absaetze ohne
     // Doppelpunkt (laengster gemessener Eintrag 267 Zeichen). Der Punkt zaehlt
     // nur, wenn ihm mindestens zwei Kleinbuchstaben vorangehen — sonst wuerde
     // "z. B." mitten im Satz trennen.
-    const m = text.match(/^[\s\S]*?(?=[:,(]|(?<=[a-zäöüß]{2})\.\s)/);
+    // Getrennt wird an Doppelpunkt, Komma, Semikolon oder Satzende — NICHT an
+    // der oeffnenden Klammer: in deutscher Prosa steht die mitten im Satz
+    // ("Die (physikalische) Bahn eines Objektes …"), und die Trennung dort
+    // ergab den Eintrag "Die". Der Punkt zaehlt nur, wenn ihm mindestens zwei
+    // Kleinbuchstaben vorangehen, sonst traefe es "z. B.".
+    const m = text.match(/^[\s\S]*?(?=[:;,]|(?<=[a-zäöüß]{2})\.\s)/);
     let t = (m ? m[0] : text).trim() || text.trim();
+    // Ein sehr kurzes Bruchstueck sagt nichts — dann lieber den vollen Text
+    // nehmen und ihn unten auf die Laenge kuerzen.
+    if (t.length < 12) t = text.trim();
     // Harte Grenze an der Wortgrenze. Die Zwei-Zeilen-Klemme im CSS faengt die
     // Anzeige ohnehin ab, aber sie ist eine ANZEIGE-Regel: ohne sie (aelterer
     // Browser, Druck, Vorlese-Werkzeug) stuende der ganze Absatz da. Manche
     // Beschriftungen sind EIN langer Satz ohne fruehe Interpunktion — der
     // laengste gemessene hatte 218 Zeichen.
-    const MAX = 90;
+    // 60 statt 90 Zeichen: zwei Zeilen der 220-px-Schiene fassen bei 0,82 em
+    // rund 2 x 30 Zeichen. Mit 90 stand im DOM mehr, als die Klemme je zeigt —
+    // der Rest war unsichtbarer Ballast (und im Druck bzw. Vorlese-Werkzeug
+    // sichtbarer Ballast).
+    const MAX = 60;
     if (t.length > MAX) {
         const schnitt = t.lastIndexOf(' ', MAX);
         t = t.slice(0, schnitt > 40 ? schnitt : MAX).trim() + '…';
