@@ -131,3 +131,4 @@ gezielt öffnen.
 | `DOKUMENTATION.md` | Index **aller** Dokus mit „lies das, wenn …" |
 | `BACKLOG.md` | **Index** des Arbeitsvorrats (ein Satz je Item); Details je Item in `backlog/<item>.md` |
 | `README.md` | öffentliche Projektbeschreibung + Arbeitsstand |
+| `physik-design-system` (iCloud, `…/Physik Home/physik-design-system/`) | gemeinsame Gestaltung der fünf Physik-Lehrmaterialien: `DESIGN_SYSTEM.md` (Ist je Artefakt, `## 4` ist dieses Repo), `KONVERGENZ_ENTSCHEIDUNGEN.md` (Soll). **Bei jeder design-relevanten Änderung — Farbe, Schrift, Icon, Kastenstil — `## 4` dort nachziehen.** |

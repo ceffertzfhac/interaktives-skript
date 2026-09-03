@@ -197,12 +197,19 @@ koordinaten; `perspective` ∈ {1,2,3,4} wählt die Ansicht, gesteuert vom
 
 ## Highlight-Boxen, TOC, Druck, QR, Zoom, Darkmode
 
-- `generate_highlight_boxes()` findet jedes Element mit einer der Klassen
-  `lernziel`, `motivation`, `wiederholung`, `beispiel`, `zusammenfassung`,
-  `aufgabe`, `anmerkung` und injiziert ein Icon (`src/assets/*.svg`) plus einen
+- `generate_highlight_boxes()` findet jedes Element mit einer der Klassen aus
+  `BOX_ICONS` (`lernziel`, `motivation`, `wiederholung`, `beispiel`,
+  `rechenbeispiel`, `zusammenfassung`, `aufgabe`, `anmerkung`, `wichtig`,
+  `bemerkung`) und injiziert ein Icon (`src/assets/*.svg`) plus einen
   großgeschriebenen Titel vor dessen ursprünglichem Inhalt. Für einen neuen
-  Boxtyp einen `[class, icon]`-Eintrag ins `boxes`-Array aufnehmen — **und die
-  vier weiteren Stellen**, s. u.
+  Boxtyp einen Eintrag in `BOX_ICONS` aufnehmen — **und die weiteren
+  Stellen**, s. u.
+  **Die Icon-Zuordnung gehört nicht mehr diesem Repo allein:** maßgeblich ist
+  E1 im `physik-design-system` (ein Piktogramm bedeutet eine Sache, über alle
+  fünf Artefakte), und die SVG-Bibliothek in `assets/` ist nach E3 die Quelle,
+  aus der auch die PDFs der LaTeX-Seite erzeugt werden. Wer hier ein Icon
+  ändert, ändert es für vier Dokumente. Begründungen stehen im Kopf von
+  `BOX_ICONS`.
 - Das TOC wird zur Laufzeit von `generate_toc()` als Akkordeon aus der
   Seitenregistratur von `pages.js` gebaut, die ihrerseits aus jedem Element mit
   der Klasse `inhaltsverzeichnis` entsteht (die `<h2>`/`<h3>`-Überschriften).
@@ -217,14 +224,23 @@ koordinaten; `perspective` ∈ {1,2,3,4} wählt die Ansicht, gesteuert vom
 - Darkmode schaltet `toggle_darkmode()` durch Aktivieren/Deaktivieren des
   `darkmode.css`-`<link>` (id `darkmode_stylesheet`).
 
-> **Box-Klassenlisten synchron halten:** *fünf* unabhängige Stellen zählen
-> Boxklassen auf — `core.js::generate_highlight_boxes` (Icons),
-> `numbering.js::BOX_LABELS` (Titel), `styles.css` (Kartenoptik + die
-> 50-px-Icon-Rinne), die `mjx-container[display="true"]`-Regel „keine Box in der
-> Box" und `shell.js::landmarksFor` (linke Schiene). Eine zu vergessen ist
-> **still**: eine Box ohne CSS-Regel verliert Rahmen *und* Icon, und ihr Icon
-> entkommt in die Schiene. Beim Hinzufügen eines Typs alle fünf greppen. (Die
-> v0.13-Typen `bemerkung`/`wichtig` kamen so in v1.7 dazu.)
+> **Box-Klassenlisten synchron halten:** *sieben* unabhängige Stellen zählen
+> Boxklassen auf — `core.js::BOX_ICONS` (Icons), `numbering.js::BOX_LABELS`
+> (Titel **und** eigener Zähler), in `styles.css` die Kartenoptik samt
+> 50-px-Icon-Rinne, die Ton-/Flächenton-Zuordnung (`--box-accent`/`--box-ton`),
+> die Druckcontainer-Regel und die `mjx-container[display="true"]`-Regel „keine
+> Box in der Box", dazu **zwei** Selektoren in `shell.js::landmarksFor` (die
+> Schiene selbst und `BOX_SEL`, das eigenständige Abbildungen von solchen in
+> Boxen trennt) — und im Dunkelmodus `darkmode.css` (Rahmenfarbe + Flächenton
+> je Typ). Eine zu vergessen ist **still**: eine Box ohne CSS-Regel verliert
+> Rahmen *und* Icon, und ihr Icon entkommt in die Schiene; eine ohne
+> `BOX_LABELS`-Eintrag bekommt keine Nummer. Beim Hinzufügen eines Typs alle
+> greppen. (Die v0.13-Typen `bemerkung`/`wichtig` kamen so in v1.7 dazu,
+> `rechenbeispiel` in v1.47.0.)
+> **Ein eigener Zähler verschiebt fremde Nummern:** `rechenbeispiel` hat 28
+> Kästen aus `beispiel` herausgelöst, also zählt `beispiel` seither anders.
+> Das ist beabsichtigt und im Druckskript genauso — aber wer einen Typ
+> aufteilt, muss die Querverweise (`data-ref-box`) mitprüfen.
 
 ## Seitenweises Setzen der Formeln (v1.42, BACKLOG P22-3c)
 
