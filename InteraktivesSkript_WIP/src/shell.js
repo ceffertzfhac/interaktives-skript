@@ -145,8 +145,8 @@ function landmarksFor(page) {
     // NUR eigenstaendige: steckt die Abbildung in einer Box (Beispiel,
     // Aufgabe …), ist die Box bereits als Eintrag gelistet — die Abbildung
     // darin waere ein zweiter Eintrag fuer dieselbe Stelle.
-    const BOX_SEL = '.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .wichtig, .bemerkung, .anmerkung';
-    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .wichtig, .grafik-container, .aspekt-figur, figure.abbildung').forEach(el => {
+    const BOX_SEL = '.lernziel, .motivation, .wiederholung, .beispiel, .rechenbeispiel, .zusammenfassung, .aufgabe, .wichtig, .bemerkung, .anmerkung';
+    page.el.querySelectorAll('.lernziel, .motivation, .wiederholung, .beispiel, .rechenbeispiel, .zusammenfassung, .aufgabe, .wichtig, .grafik-container, .aspekt-figur, figure.abbildung').forEach(el => {
         if (el.tagName === 'FIGURE') {
             // .nur-druck ist am Bildschirm unsichtbar (Druck-Fallback einer
             // interaktiven Figur) — ein Schienen-Eintrag dorthin fuehrte ins

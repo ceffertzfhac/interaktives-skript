@@ -71,6 +71,7 @@ export const BOX_ICONS = {
     motivation:       'star.svg',
     wiederholung:     'head.svg',
     beispiel:         'pen.svg',
+    rechenbeispiel:   'calculator.svg',
     zusammenfassung:  'noteblock.svg',
     aufgabe:          'noteblock.svg',
     anmerkung:        'eye.svg',

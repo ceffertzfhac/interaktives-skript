@@ -38,6 +38,11 @@ import { getPages } from './pages.js';
 const BOX_LABELS = {
     lernziel: 'Lernziel',
     beispiel: 'Beispiel',
+    // Eigener Zaehler, wie im Druckskript (D5): das Rechenbeispiel ist ein
+    // eigener Typ, kein Untertyp des Beispiels. Folge: die 28 herausgeloesten
+    // Kaesten zaehlen nicht mehr im Beispiel-Zaehler mit, die Beispielnummern
+    // verschieben sich also gegenueber v1.46.x -- genau wie im Druckskript.
+    rechenbeispiel: 'Rechenbeispiel',
     bemerkung: 'Bemerkung',
     wichtig: 'Wichtig',
     aufgabe: 'Aufgabe',
