@@ -34,6 +34,7 @@ die Links hier zeigen auf den Pfad.
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |
 | [P3 — Offene Punkte aus der Verifikation Kapitel 1.4](backlog/P3-verifikation-kapitel-1.4.md) | 16/1 | offen nur noch die Browser-Phasen (Wort-für-Wort gegen PDF, Druck, Sicht) |
 | [P5 — Bekannte Fehler (Interaktivität / Shell)](backlog/P5-bekannte-fehler.md) | 4/1 | offen: Formeln im Fliesstext fehlen sporadisch (Boxen bleiben da) — der vermutete MathJax-Ladewettlauf ist mit P22-3 beseitigt, Beobachtung läuft |
+| [P25 — Restpunkte der Design-Angleichung](backlog/P25-design-angleichung-restpunkte.md) | 0/5 | nach v1.45.0–v1.48.0: Stern-Kollision `motivation`/`wichtig` (E1), vier Kastentypen ohne Aufruf, Web-Entsprechung für `\point` (F3), Icon-Größe und Schatten als benannte Divergenzen |
 | [P19 — Doku-Hygiene: Restbefunde aus dem Review nach P18](backlog/P19-doku-hygiene.md) | 5/7 | P19-1..4 erledigt (`gcN` als abgelöst markiert, eine Quelle je Tatsache, Verifikations-O(n)-Muster aufgelöst, Drift-Wächter `doku_drift_check.py`); offen nur noch P19-5 Beobachtungsposten (`src/CLAUDE.md`-Größe, `CHANGES`-Rolle — triggert bei >20 KB) |
 
 ### Erledigt

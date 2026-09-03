@@ -66,12 +66,48 @@ function capitalizeFirstLetter(string) {
 // der Funktion; ein zweiter Verbraucher haette sie abgeschrieben und waere
 // beim naechsten neuen Boxtyp auseinandergelaufen (P18: Mengen an genau einer
 // Stelle). Die Reihenfolge ist die Reihenfolge der Icon-Vergabe im Markup.
+//
+// MASSGEBLICH IST E1 im physik-design-system, nicht mehr v0.13: ein Piktogramm
+// bedeutet EINE Sache, ueber alle fuenf Artefakte hinweg. Wer hier etwas
+// aendert, aendert es fuer vier Dokumente -- die SVG-Bibliothek in assets/ ist
+// nach E3 die Quelle, aus der auch die PDFs der LaTeX-Seite erzeugt werden.
+//
+// Zwei Zuordnungen sind am 2026-09-03 nachgezogen worden:
+//   beispiel        pen -> lupe      Der Stift bedeutet "schreiben" und las
+//                                    sich nicht als "hier zeigen wir es an
+//                                    einem Fall"; er trug ausserdem
+//                                    artefaktuebergreifend vier Dinge. Die
+//                                    Lupe trifft die Geste. Entschieden im
+//                                    Skript-Lauf nach optischer Pruefung des
+//                                    gesetzten Skripts, hier nur uebernommen.
+//   zusammenfassung noteblock -> reading
+//                                    Das Ringbuch war ein Notbehelf, keine
+//                                    Entscheidung (s. u.); es gehoert nach E1
+//                                    exklusiv "Aufgabe/Uebung". Die lesende
+//                                    Person trifft "rekapitulieren" genau.
+//
+// Die Lupe bedeutet damit ZWEI Dinge: "Beispiel" hier und "Gesucht" in den
+// Musterloesungen. Das ist eine bewusste, in E1 begruendete Ausnahme und KEIN
+// Fehler: die beiden Typen stehen nie im selben Dokument (die Musterloesungen
+// haben keine Beispiel-Kaesten, dieses Skript keine Gesucht-Kaesten), innerhalb
+// jedes Dokuments bleibt die Zuordnung also eindeutig.
+//
+// pen.svg ist dadurch frei und in keinem Artefakt mehr belegt -- ebenso seine
+// Dublette anlage.svg, die trotz ihres Namens keine Bueroklammer ist, sondern
+// eine zweite Fassung des Stifts. Beide bleiben liegen, bis die
+// Praktikumsanleitung nachgezogen hat.
+//
+// OFFEN: motivation teilt sich den Stern mit wichtig. Nach E1 gehoert der
+// Stern "Wichtig" exklusiv (Typ in zwei Artefakten). Solange motivation
+// 0 Aufrufe hat, ist die Kollision latent -- sie ist zu entscheiden, bevor der
+// Typ zum ersten Mal benutzt wird.
 export const BOX_ICONS = {
     lernziel:         'target.svg',
     motivation:       'star.svg',
     wiederholung:     'head.svg',
-    beispiel:         'pen.svg',
-    zusammenfassung:  'noteblock.svg',
+    beispiel:         'lupe.svg',
+    rechenbeispiel:   'calculator.svg',
+    zusammenfassung:  'reading.svg',
     aufgabe:          'noteblock.svg',
     anmerkung:        'eye.svg',
     wichtig:          'star.svg',
@@ -79,12 +115,19 @@ export const BOX_ICONS = {
 };
 
 export function generate_highlight_boxes() {
-    // Box-Typen + Icons, an v0.13 (Physik_skript_header_gmni_v3.tex) angelehnt:
-    // beispiel=pen, bemerkung=eye, wichtig=star, lernziel=target,
-    // aufgabe/zusammenfassung=noteblock (v0.13 nutzt fuer Zusammenfassung ein
-    // bulb-Icon, das hier nicht vorliegt -> noteblock). motivation/wiederholung/
-    // anmerkung bleiben fuer aeltere Fragmente; neuere Kapitel nutzen die
-    // v0.13-Namen (beispiel/bemerkung/wichtig/lernziel/aufgabe/zusammenfassung).
+    // Die Zuordnung steht in BOX_ICONS (oben), samt Begruendung.
+    // motivation/wiederholung/anmerkung bleiben fuer aeltere Fragmente stehen;
+    // sie haben in den 17 Kapiteln null Aufrufe, werden aber bewusst behalten
+    // (Autorentscheidung 2026-09-03) -- .anmerkung traegt ausserdem die
+    // Marginalien-Mechanik in shell.js/print.js.
+    //
+    // Historische Notiz, weil sie in mehreren Dokumenten zitiert wurde: hier
+    // stand, v0.13 nutze fuer die Zusammenfassung ein bulb-Icon, "das hier
+    // nicht vorliegt", weshalb das Ringbuch einspringe. Das stimmte nicht --
+    // bulb.svg liegt seit jeher in assets/ und traegt dasselbe Datum wie die
+    // uebrigen Icons. Der Notbehelf war also vermeidbar. Er ist mit dem
+    // Wechsel auf reading.svg ohnehin erledigt; die Gluehbirne geht nach E1 an
+    // "Hinweis/Ansatz" und bleibt hier vorerst unbenutzt.
     const boxes = Object.entries(BOX_ICONS);
 
     for (let l=0; l < boxes.length; l++) {

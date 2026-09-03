@@ -28,8 +28,8 @@ mitlaufen. Entstanden für die Physik-Vorlesung im Fachbereich 8 der
   `v0.13` transkribiert): **TK 0** Grundlagen, **TK 1** Mechanik (Kinematik,
   Dynamik, Bezugssysteme/Scheinkräfte, Stöße, Gravitation, Drehbewegung/
   Kreisbahnen), **TK 2** Elektromagnetismus, **TK 3** Schwingungen & Wellen —
-  Formeln in LaTeX-Satz (MathJax), Beispiel-, Bemerkungs- und
-  Zusammenfassungs-Boxen.
+  Formeln in LaTeX-Satz (MathJax), Kästen für Beispiel, Rechenbeispiel,
+  Wichtig, Zusammenfassung, Aufgabe und Bemerkung.
 - **24 interaktive Aspekt-Figuren** auf sieben Motoren: `kreisbewegung`
   (2D, Abb. 1.38–1.51), `kreis_spiral` (ISO-3D, Abb. 1.57–1.59),
   `grundbegriffe` (2D, Abb. 1.1), `bus_weg_zeit` (Abb. 1.2),
@@ -41,6 +41,12 @@ mitlaufen. Entstanden für die Physik-Vorlesung im Fachbereich 8 der
 - **Lesekomfort**: Kapitelnavigation mit Seitenfortschritt, Inhaltsverzeichnis
   mit Suche, drei Spaltenbreiten, fünf Textgrößen, Dunkelmodus, wählbare
   Farbpaletten (auch CVD).
+- **Gemeinsame Gestaltung mit dem gedruckten Skript** (seit v1.48.0): dieselben
+  Schriften wie im LaTeX-Satz (TeX Gyre Pagella und Heros — die OpenType-
+  Fassungen von Palatino und Helvetica, selbst gehostet, kein Fremd-CDN), die
+  Rollen-Farbpalette und der Akzentbalken des Kastensystems, die gemeinsame
+  Piktogramm-Bibliothek und das Emblem des Lehr- und Forschungsgebiets im Kopf.
+  Der Soll-Zustand steht im Design-System-Repo `physik-design-system`.
 - **Druckansicht** mit QR-Codes, die vom Papier zurück zur jeweiligen
   interaktiven Grafik führen.
 
@@ -61,7 +67,8 @@ python3 -m http.server 8000
 > **Wichtig:** Die Kapiteltexte werden zur Laufzeit per `fetch()` nachgeladen.
 > Ein Doppelklick auf `index.html` (`file://`) zeigt deshalb nur das leere
 > Grundgerüst — es braucht einen `http(s)`-Server. MathJax kommt von einem CDN,
-> für den Formelsatz ist also eine Internetverbindung nötig.
+> für den Formelsatz ist also eine Internetverbindung nötig; die Schriften
+> liegen dagegen im Repo (`InteraktivesSkript_WIP/src/fonts/`).
 
 ## Aufbau des Repositorys
 

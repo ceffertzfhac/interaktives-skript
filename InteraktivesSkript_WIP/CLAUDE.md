@@ -19,7 +19,11 @@ src/            die ESM-Module (main.js + core/transform/ui/print/pages/shell/
 src/styles.css  Stile; darkmode.css wird geladen, aber `disabled`, und zur
 src/darkmode.css   Laufzeit umgeschaltet
 bilder/         statische Abbildungs-PNGs/-SVGs für den statischen Modus + die Prosa
-src/assets/     SVG/PNG-Icons, die in die Highlight-Boxen injiziert werden
+src/assets/     SVG/PNG-Icons, die in die Highlight-Boxen injiziert werden,
+                plus das Physik-Emblem der Kopfleiste
+src/fonts/      die selbst gehosteten Schriften (TeX Gyre Pagella/Heros, IBM
+                Plex Mono) -- Herkunft, Lizenzen und Pruefsummen in
+                src/fonts/README.md
 Archiv/         ältere Momentaufnahme derselben Site, hier eingebettet
                 (nur Referenz, nicht verlinkt/aktiv) — NICHT bearbeiten
 ```
@@ -37,6 +41,7 @@ nicht bearbeiten.
 | (Skill `v013-verifikation`) | migriertes Kapitel prüfen — Prüfplan kapitelagnostisch; pro-Kapitel-Ergebnis im jeweiligen Backlog-Item + Fragmentkopf |
 | `QUELLEN_FEHLER.md` | Fehler in der v0.13-Quelle selbst |
 | `src/vendor/README.md` | Herkunft/Lizenz/Prüfsumme von qrjs2 |
+| `src/fonts/README.md` | Herkunft/Lizenz/Prüfsummen der Schriften, und warum sie aus TeX Live statt vom CDN kommen |
 
 Vollständiger Doku-Index mit „lies das, wenn …": `../DOKUMENTATION.md`.
 
