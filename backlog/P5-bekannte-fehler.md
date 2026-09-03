@@ -109,6 +109,11 @@
   18 Verweise auf versteckte Abbildungen korrekt umgelenkt, 0
   Konsolenfehler. Dieselbe Messung auf dem Stand davor (33a9083): −232 px
   bei „1.2.5 Kraeftezerlegung 2", +911 px bei Abb. 1.12.*
+  *Nachgemessen 2026-09-03 auf v1.48.0 (Design-Angleichung): **425** Spruenge
+  statt 414, **0** danebengegangen. Die Zahl ist gestiegen, weil
+  `.rechenbeispiel` als eigener Kastentyp 28 zusaetzliche Schienen-Eintraege
+  erzeugt (im DOM doppelt, s. u.). Die Zahlen oben bleiben als Protokoll der
+  Messung vom 2026-09-01 stehen — wer heute nachmisst, bekommt 425.*
 - [x] **Schienen-Eintrag ist nur ein Wortfragment.** Der Kurztitel (P24)
   trennte an der oeffnenden Klammer — in deutscher Prosa steht die mitten im
   Satz, und Inline-Mathematik ist im Quelltext selbst eine Klammer. Aus
