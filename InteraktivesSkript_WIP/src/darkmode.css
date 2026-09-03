@@ -25,7 +25,47 @@
   --teal-ink: #04302f;      /* Text auf hellem --teal-Button (.gc_toggle, .toc_sub_current) -- in beiden Modis dunkel lesbar */
   --teal-tint: #17332f;     /* dunkle Teal-Flaeche (statt light #e3f6f5) */
   --teal-tint-2: #1a3634;
+
+  /* ── Rollenpalette im Dunkelmodus ─────────────────────────────────────────
+     Die in B1 normierten Toene sind fuer WEISSEN Grund gerechnet. Auf #262626
+     traegt Teal-Dark (#00595c, Grauwert 63) nicht mehr -- der Balken waere
+     dunkler als der Rahmen daneben. Die fuenf Toene bekommen deshalb hellere
+     Gegenstuecke, die HUE und REIHENFOLGE behalten:
+
+       Rolle          hell      Grauwert    dunkel    Grauwert
+       demonstrierend #00595c      63       #3f9a9d     127
+       mitrechnend    #3f6b8a      97       #6f9cbd     146
+       nebenbei       #666d80     109       #9ba2b6     162
+       merken, Ziel   #00b1ac     124       #4ad4ce     170
+       selbst loesen  #b08a4a     142       #d9b878     187
+
+     Der Flaechenton folgt derselben Regel wie im Hellen, nur am anderen Ende:
+     B1 setzt den Ton so, dass die Flaeche 8 Grauwerte VOM GRUND wegliegt
+     (255 -> 247). Auf dem dunklen Grund (Grauwert 38) heisst das 38 -> 46,
+     also t = 8 / (Grauwert - 38) statt t = 8 / (255 - Grauwert). Das ist
+     dieselbe Regel, auf den jeweiligen Grund angewandt -- eine Praezisierung
+     von B1, keine Umgehung.
+
+     Die Grauwert-Staffelung ist hier KEINE Bedingung mehr: sie stammt aus dem
+     Schwarzweissdruck, und gedruckt wird nie aus dem Dunkelmodus (print.js
+     setzt die Flaechen ohnehin auf #fff). Die Reihenfolge bleibt trotzdem
+     erhalten, damit beide Modi dieselbe Ordnung zeigen. */
+  --rolle-demo:    #3f9a9d;
+  --rolle-rechnen: #6f9cbd;
+  --rolle-neben:   #9ba2b6;
+  --rolle-merken:  #4ad4ce;
+  --rolle-loesen:  #d9b878;
 }
+/* Flaechentoene fuer den dunklen Grund, s. Herleitung oben. */
+.beispiel        { --box-ton: 9.0%; }
+.rechenbeispiel  { --box-ton: 7.4%; }
+.wichtig,
+.zusammenfassung,
+.lernziel        { --box-ton: 6.1%; }
+.aufgabe         { --box-ton: 5.4%; }
+.anmerkung,
+.motivation, .wiederholung { --box-ton: 6.5%; }
+/* .bemerkung bleibt auch dunkel ohne Flaechenton (s. styles.css). */
 body {
     color:#ddd;
     background-color: #1b1b1b;
@@ -34,10 +74,26 @@ body {
     background-color: var(--bg);
     box-shadow: 0px 0px 18px #000;
 }
-.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung {
-    border: 1px solid #444;
-    background-color: #262626;
-    color:#ccc;
+/* Kaesten im Dunkelmodus: NUR die Textfarbe und der umlaufende Haarrahmen.
+   Akzentbalken und Flaechenton kommen aus styles.css und beziehen ihre Werte
+   aus den Rollentokens oben -- hier darf nichts davon ueberschrieben werden.
+
+   VORHER stand hier `border: 1px solid #444; background-color: #262626;` fuer
+   dieselbe Typenliste. Die border-KURZFORM setzt auch border-left zurueck:
+   damit verloren sieben von neun Typen im Dunkelmodus BEIDES, den Akzentbalken
+   und den Flaechenton (gemessen an .beispiel: border-left 1px #444, Flaeche
+   #262626). .bemerkung und .wichtig fehlten in der Liste und behielten beides
+   -- das Ergebnis war keine Entscheidung, sondern eine unvollstaendige
+   Aufzaehlung. Nach B0 ist der Akzentbalken nicht verhandelbar, also faellt
+   die Kurzform weg; `border-color` trifft nur die drei uebrigen Kanten, weil
+   border-left-color danach aus der laenger stehenden Regel gewinnt --
+   deshalb hier die drei Kanten einzeln. */
+.lernziel, .motivation, .wiederholung, .beispiel, .rechenbeispiel,
+.zusammenfassung, .aufgabe, .anmerkung, .bemerkung, .wichtig {
+    border-top-color: #444;
+    border-right-color: #444;
+    border-bottom-color: #444;
+    color: #ccc;
 }
 #vertical_line {
     border-left: 2px solid #555;
