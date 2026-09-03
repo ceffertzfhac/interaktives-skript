@@ -24,7 +24,7 @@
  * Ausgenommen sind Ziele am DOKUMENTENDE: dort kappt der Browser den Sprung,
  * das Ziel kann seine Sollposition gar nicht erreichen.
  *
- *   npm install --prefix /tmp playwright-core     # Chromium: ~/.cache/ms-playwright
+ *   npm install --prefix /tmp playwright-core     # dazu: npx --prefix /tmp playwright install chromium
  *   cd InteraktivesSkript_WIP && python3 -m http.server 8000 &
  *
  *   node sprung_ziele.mjs
@@ -46,9 +46,16 @@
  *
  * Exit-Code 1, sobald ein Sprung danebengeht (Gate); 2 bei kaputter Messung.
  */
-import { createRequire } from 'module';
-import path from 'path';
 import fs from 'fs';
+import { browserUmgebung } from '../../_lib/browser.mjs';
+
+// Chromium plattformunabhaengig aufloesen (macOS/Linux/Windows,
+// voller Browser oder Headless-Shell) -- eine Quelle fuer alle
+// Skill-Skripte, s. .claude/skills/_lib/browser.mjs.
+let chromium, EXEC;
+try { ({ chromium, executablePath: EXEC } = browserUmgebung()); }
+catch (e) { console.error(e.message); process.exit(2); }
+
 
 const args = process.argv.slice(2);
 const opt = (name, def) => {
@@ -64,17 +71,8 @@ const ruhe = Number(opt('ruhe', 2000));
 const max = Number(opt('max', 25));
 const jsonOut = opt('json');
 
-const PW_PATH = process.env.PLAYWRIGHT_PREFIX || '/tmp/node_modules';
-const require_ = createRequire(path.join(PW_PATH, 'noop.js'));
-let chromium;
-try { ({ chromium } = require_('playwright-core')); }
-catch { console.error('playwright-core fehlt:  npm install --prefix /tmp playwright-core'); process.exit(2); }
 
-const cache = path.join(process.env.HOME, '.cache/ms-playwright');
-const dir = fs.existsSync(cache)
-    ? fs.readdirSync(cache).filter(d => /^chromium-\d+$/.test(d)).sort().pop() : null;
-if (!dir) { console.error(`Kein Chromium in ${cache} (npx playwright install chromium)`); process.exit(2); }
-const browser = await chromium.launch({ executablePath: path.join(cache, dir, 'chrome-linux/chrome') });
+const browser = await chromium.launch({ executablePath: EXEC });
 // Fenster in Lesegroesse, nicht uebergross: ein zu hohes Fenster verdeckt
 // genau den Fehler, um den es hier geht (ein Ziel, das hoeher ist als das
 // Fenster, wird beim Zentrieren nach oben herausgeschoben).

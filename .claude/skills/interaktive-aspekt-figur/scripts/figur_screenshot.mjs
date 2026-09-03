@@ -12,7 +12,7 @@
  * **anschauen schlaegt ausmessen** -- und wenn messen, dann die INK-Box
  * (innerstes <svg>/<g>/getBBox), nicht den Container.
  *
- *   npm install --prefix /tmp playwright-core        # Chromium: ~/.cache/ms-playwright
+ *   npm install --prefix /tmp playwright-core        # dazu: npx --prefix /tmp playwright install chromium
  *   cd InteraktivesSkript_WIP && python3 -m http.server 8765 &
  *
  *   node figur_screenshot.mjs --fig=aspekt-winkel-zeit --out=/tmp/f.png
@@ -39,8 +39,15 @@
  * Syntaxfehler und damit sind ALLE Figuren tot (main.js importiert sie alle als
  * Seiteneffekt) -- dann zuerst `node --input-type=module --check < <modul>.js`.
  */
-import path from 'path';
-import { createRequire } from 'module';
+import { browserUmgebung } from '../../_lib/browser.mjs';
+
+// Chromium plattformunabhaengig aufloesen (macOS/Linux/Windows,
+// voller Browser oder Headless-Shell) -- eine Quelle fuer alle
+// Skill-Skripte, s. .claude/skills/_lib/browser.mjs.
+let chromium, EXEC;
+try { ({ chromium, executablePath: EXEC } = browserUmgebung()); }
+catch (e) { console.error(e.message); process.exit(1); }
+
 
 const args = process.argv.slice(2);
 const opt = (name, dflt = null) => {
@@ -63,19 +70,7 @@ const out = opt('out', `/tmp/aspekt_${figId}.png`);
 const sets = String(opt('set', '')).split(',').filter(Boolean)
     .map(kv => { const [k, v] = kv.split('='); return { k, v }; });
 
-const PW_PATH = process.env.PLAYWRIGHT_PREFIX || '/tmp/node_modules';
-const require_ = createRequire(path.join(PW_PATH, 'noop.js'));
-let chromium;
-try { ({ chromium } = require_('playwright-core')); }
-catch { console.error('playwright-core fehlt:  npm install --prefix /tmp playwright-core'); process.exit(1); }
 
-// Chromium aus dem Playwright-Cache (kein System-Chrome noetig).
-import fs from 'fs';
-const cache = path.join(process.env.HOME, '.cache/ms-playwright');
-const dir = fs.existsSync(cache)
-    ? fs.readdirSync(cache).filter(d => /^chromium-\d+$/.test(d)).sort().pop() : null;
-if (!dir) { console.error(`Kein Chromium in ${cache} (npx playwright install chromium)`); process.exit(1); }
-const EXEC = path.join(cache, dir, 'chrome-linux/chrome');
 
 const browser = await chromium.launch({ executablePath: EXEC });
 const page = await browser.newPage({ viewport: { width: 1600, height: 1100 }, deviceScaleFactor: scale });

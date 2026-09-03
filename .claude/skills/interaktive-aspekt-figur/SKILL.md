@@ -194,7 +194,8 @@ lässt den Inhalt im Element schrumpfen).
 **Selbst im echten Browser prüfen** (headless Chromium — spart Nutzerrunden):
 
 ```bash
-npm install --prefix /tmp playwright-core        # Chromium aus ~/.cache/ms-playwright
+npm install --prefix /tmp playwright-core
+npx --prefix /tmp playwright install chromium     # einmalig, ~95 MB
 cd InteraktivesSkript_WIP && python3 -m http.server 8765 &
 node .claude/skills/interaktive-aspekt-figur/scripts/figur_screenshot.mjs \
      --fig=aspekt-winkel-zeit --sel='svg[id$=main_svg]' --set=ak_t=1.5 --scale=3 --out=/tmp/s.png

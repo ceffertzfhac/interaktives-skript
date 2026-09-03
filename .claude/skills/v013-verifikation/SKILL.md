@@ -24,6 +24,7 @@ MathJax-Gleichungsnummern, Querverweis-Deskriptoren): `InteraktivesSkript_WIP/ch
 
 ```bash
 npm install --prefix /tmp mathjax-full jsdom playwright-core   # einmalig, ~30 s
+npx --prefix /tmp playwright install chromium                  # einmalig, ~95 MB
 cd InteraktivesSkript_WIP && python3 -m http.server 8000 &
 ```
 

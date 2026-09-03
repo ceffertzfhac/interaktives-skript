@@ -21,7 +21,7 @@
  *     werden daher alle Seiten voruebergehend eingeblendet (wie im Druckfluss,
  *     aber ohne `showAllPagesForPrint`, das die Spalte auf 700 px zwingt).
  *
- *   npm install --prefix /tmp playwright-core     # Chromium: ~/.cache/ms-playwright
+ *   npm install --prefix /tmp playwright-core     # dazu: npx --prefix /tmp playwright install chromium
  *   cd InteraktivesSkript_WIP && python3 -m http.server 8765 &
  *
  *   node formel_ueberstand.mjs
@@ -68,9 +68,16 @@
  * Liste). Exit-Code 1, sobald irgendein Modus Uebersteher hat -- damit taugt
  * das Skript als Gate fuer P14-4.
  */
-import path from 'path';
 import fs from 'fs';
-import { createRequire } from 'module';
+import { browserUmgebung } from '../../_lib/browser.mjs';
+
+// Chromium plattformunabhaengig aufloesen (macOS/Linux/Windows,
+// voller Browser oder Headless-Shell) -- eine Quelle fuer alle
+// Skill-Skripte, s. .claude/skills/_lib/browser.mjs.
+let chromium, EXEC;
+try { ({ chromium, executablePath: EXEC } = browserUmgebung()); }
+catch (e) { console.error(e.message); process.exit(2); }
+
 
 const args = process.argv.slice(2);
 const opt = (name, dflt = null) => {
@@ -93,17 +100,7 @@ const gegen = String(opt('gegen', 'content'));
 if (!['content', 'box'].includes(gegen)) { console.error(`--gegen: 'content' oder 'box', nicht '${gegen}'`); process.exit(2); }
 const jsonOut = opt('json');
 
-const PW_PATH = process.env.PLAYWRIGHT_PREFIX || '/tmp/node_modules';
-const require_ = createRequire(path.join(PW_PATH, 'noop.js'));
-let chromium;
-try { ({ chromium } = require_('playwright-core')); }
-catch { console.error('playwright-core fehlt:  npm install --prefix /tmp playwright-core'); process.exit(2); }
 
-const cache = path.join(process.env.HOME, '.cache/ms-playwright');
-const dir = fs.existsSync(cache)
-    ? fs.readdirSync(cache).filter(d => /^chromium-\d+$/.test(d)).sort().pop() : null;
-if (!dir) { console.error(`Kein Chromium in ${cache} (npx playwright install chromium)`); process.exit(2); }
-const EXEC = path.join(cache, dir, 'chrome-linux/chrome');
 
 const browser = await chromium.launch({ executablePath: EXEC });
 // Viewport MUSS breiter sein als die breiteste Spalte (breit = 1800 px), sonst
