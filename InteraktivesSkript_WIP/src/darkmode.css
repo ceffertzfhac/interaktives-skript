@@ -181,6 +181,18 @@ img {
     filter: invert(1) hue-rotate(180deg) saturate(3);
     mix-blend-mode: lighten;
 }
+/* Das Physik-Emblem ist von dieser Sammelregel ausgenommen. Sie ist fuer die
+   GRAUSTRICH-Piktogramme gedacht (#757575 wird hell); auf einem einfarbig
+   minten Logo verschiebt sie die Farbe -- gemessen von #00b1ac auf #2cdbcc.
+   Genau das verbietet G2: die gelieferte Fassung logo_physik.png steht auf
+   #02a3a6 statt auf der CD-Farbe und wurde deshalb verworfen, ein um dasselbe
+   Mass verschobenes Logo waere im Dunkelmodus derselbe Fehler.
+   Mint bleibt unveraendert -- dieselbe Entscheidung wie bei --teal oben
+   ("bleibt, Akzent funktioniert auf dunklem Grund"). */
+#header_logo, #kontakt_logo {
+    filter: none;
+    mix-blend-mode: normal;
+}
 #kontakt {
     background-color: var(--bg);
 }

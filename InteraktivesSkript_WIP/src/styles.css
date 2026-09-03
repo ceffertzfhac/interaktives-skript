@@ -546,6 +546,26 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 }
 #header #chapter_hamburger { display: none; flex-shrink: 0; }
 
+/* Physik-Emblem in der Kopfleiste (G1). 40 px in einer 64 px hohen Leiste --
+   gross genug, um den Zahnkranz zu erkennen, klein genug, um Marke zu bleiben
+   und nicht Bedienelement zu werden. flex-shrink:0, damit ausschliesslich die
+   Krume kuerzt (die ist das einzige flexible Element der Leiste). Der
+   rechte Abstand ist kleiner als der flex-gap der Leiste: Emblem und Wortmarke
+   sind EINE Marke und sollen als Paar lesen, nicht als zwei Elemente. */
+#header_logo {
+    height: 48px;
+    width: auto;
+    flex-shrink: 0;
+    margin-right: -4px;
+    display: block;
+}
+/* Unterhalb des Tablet-Breakpoints uebernimmt der Hamburger den linken Platz;
+   dort tritt das Emblem zurueck, damit die Krume nicht auf eine Ellipse
+   zusammenfaellt. Die Marke traegt dann der Eyebrow-Text. */
+@media (max-width: 1024px) {
+    #header_logo { display: none; }
+}
+
 #header_brand {
     display: flex;
     flex-direction: column;
@@ -800,6 +820,15 @@ body.toc-open #header { display: none; }
 /* Prototyp-/Haftungshinweis im Kontakt-Kasten: kleiner gesetzt als der uebrige
    Text, aber mit deutlicher Abgrenzung nach oben -- er soll gelesen und nicht
    uebersehen werden. */
+/* Emblem im Kontakt-Kasten: groesser als im Kopf (72 statt 48 px), weil es
+   hier nicht neben der Wortmarke steht, sondern die Ansicht eroeffnet.
+   #kontakt ist text-align:center, das Bild zentriert sich also mit. */
+#kontakt_logo {
+    height: 72px;
+    width: auto;
+    display: block;
+    margin: 0 auto 18px;
+}
 .kontakt_hinweis {
     margin: 18px auto 0;
     max-width: 62ch;

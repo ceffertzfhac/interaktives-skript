@@ -144,9 +144,25 @@
     <body>
         <div id="header">
             <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation" data-tip="Kapitelnavigation">☰</button>
+            <!-- Emblem des Lehr- und Forschungsgebiets Physik (physik-design-system,
+                 G1: im Kopf -- keine Fusszeilenmarke, keine Wiederholung je
+                 Seite). Es steht VOR der Wortmarke, weil es hier das einzige
+                 Bildzeichen der Leiste ist: src/assets/logo.png (die
+                 FH-Wortmarke) liegt zwar im Ordner, wird aber nirgends
+                 verwendet.
+                 Die Datei ist 144 px hoch und wird per CSS auf 48 px (hier)
+                 bzw. 72 px (Kontakt-Kasten) gebracht -- eine Datei statt
+                 srcset: bei 15 KB lohnt der zweite Download nicht, und drei-
+                 fache Aufloesung ist auf jedem Display scharf. Eine
+                 Vektorfassung gibt es nicht (G3). -->
+            <img id="header_logo"
+                 src="src/assets/logo_physik.png"
+                 width="46" height="48"
+                 decoding="async"
+                 alt="Lehr- und Forschungsgebiet Physik, Fachbereich 8">
             <div id="header_brand">
                 <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
-                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.47.1</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
+                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.48.0</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
                      (Nutzervorgabe). Details im Kontakt-Kasten und in DISCLAIMER.md. --><span id="header_prototyp" title="Prototyp: Umsetzung und Inhalte sind vorlaeufig und ungeprueft">Prototyp</span></span>
                 <span id="header_author">Prof. Dr. rer. nat. C. Effertz</span>
             </div>
@@ -307,6 +323,15 @@
             </div>
         </div>
         <div id="kontakt" class="hidden">
+            <!-- Das Emblem ein zweites Mal, groesser, ueber dem Kontakttext
+                 (Nutzervorgabe 2026-09-03). Bewusste Abweichung von G1
+                 ("einmal je Dokument"): der Kontakt-Kasten ist das Impressum
+                 dieses Artefakts -- eine einzelne, auf Klick geoeffnete
+                 Ansicht, nicht die Wiederholung je Seite, die G1 verhindern
+                 will. Dieselbe Datei wie im Kopf, nur groesser gesetzt. -->
+            <img id="kontakt_logo" src="src/assets/logo_physik.png"
+                 width="69" height="72" decoding="async"
+                 alt="Lehr- und Forschungsgebiet Physik, Fachbereich 8">
             Bei fachlichen Fragen, Kommentaren oder fa<span data-action="test">ll</span>s Sie einen Bug gefunden haben, schreiben Sie bi<span data-action="reload-mathjax">tt</span>e kurz eine E-Mail an <a id="kontakt_mail" href="mailto:c.effertz@fh-aachen.de?subject=%5BInteraktives%20Skript%5D">c.effertz(at)fh-aachen.de</a>.
 
             <!-- Prototyp- und Haftungshinweis dort, wo er gelesen wird: in der
