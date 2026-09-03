@@ -96,10 +96,34 @@
   --font-serif: 'TeX Gyre Pagella', Palatino, 'Palatino Linotype', Georgia, serif;
   --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
 
+  /* ACHTUNG: --c1..--c4 sind KEINE Kastenfarben mehr (s. Rollenpalette unten),
+     aber weiterhin die Farben der Abbildungslegenden und Vektoren (Z. ~940 ff).
+     Nicht umdefinieren, um Kastentoene zu aendern -- dann faerben sich die
+     Figuren mit um. */
   --c1: #005eb1;
   --c2: #d17d00;
   --c3: #4db100;
   --c4: #7000b1;
+
+  /* ── Rollenpalette der Kaesten ────────────────────────────────────────────
+     physik-design-system, KONVERGENZ_ENTSCHEIDUNGEN.md B5/B6: der Farbton
+     benennt die ROLLE, nicht den Typ. Dieselben fuenf Toene bedeuten in allen
+     fuenf Artefakten dasselbe; mehrere Typen duerfen sich einen Ton teilen und
+     werden ueber das Piktogramm unterschieden.
+     Blau und Amber sind gegenueber --c1/--c2 gedaempft (B5, Variante 01): laut
+     waren die beiden, weil sie hell UND gesaettigt sind. Die Grauwert-
+     Staffelung 63/97/109/124/142 bleibt erhalten -- sie ist die Bedingung
+     dafuer, dass der Balken im Schwarzweissdruck noch traegt.
+
+     --box-ton ist der Flaechenton je Rolle, normiert auf gleiche wahrgenommene
+     Helligkeit (B1): t = 8 / (255 - Grauwert), Zielhelligkeit 247 auf weissem
+     Grund. Eine feste Prozentzahl fuer alle Toene gibt es bewusst NICHT --
+     Mint bei 4 % wirkt blass, Amber bei 4 % steht zu dunkel. */
+  --rolle-demo:    #00595c;   /* demonstrierend -- Beispiel            Grauwert  63 */
+  --rolle-rechnen: #3f6b8a;   /* mitrechnend    -- Rechenbeispiel      Grauwert  97 */
+  --rolle-neben:   #666d80;   /* nebenbei       -- Bemerkung/Anmerkung Grauwert 109 */
+  --rolle-merken:  #00b1ac;   /* merken, Ziel   -- Wichtig/Zusfsg/Lz   Grauwert 124 */
+  --rolle-loesen:  #b08a4a;   /* selbst loesen  -- Aufgabe             Grauwert 142 */
 
   /* Info-Blau fuer Fussnoten-Pictogramm und -Panel (ILIAS-Anmutung) */
   --info: #1f6fb2;
@@ -280,6 +304,7 @@ mjx-container[display="true"] > svg { max-width: 100%; height: auto; }
 .motivation mjx-container[display="true"],
 .wiederholung mjx-container[display="true"],
 .beispiel mjx-container[display="true"],
+.rechenbeispiel mjx-container[display="true"],
 .zusammenfassung mjx-container[display="true"],
 .aufgabe mjx-container[display="true"],
 .anmerkung mjx-container[display="true"],
@@ -1121,37 +1146,59 @@ line, ellipse, polyline, circle {
    .bemerkung/.wichtig (v0.13-Namen) muessen hier mitgefuehrt werden: ohne sie
    fehlt der 50px-Freiraum links, in dem .highlight_box_img sitzt -- das Icon
    landete sonst ausserhalb von #paper in der Schiene. */
-.lernziel     { --box-accent: var(--c4); }   /* violett  -- Lernziel     */
-.beispiel     { --box-accent: var(--teal); } /* teal     -- Beispiel     */
-.aufgabe      { --box-accent: var(--c1); }   /* blau     -- Aufgabe      */
-.wichtig      { --box-accent: var(--c2); }   /* amber    -- Wichtig      */
-.zusammenfassung { --box-accent: var(--teal-darker); }
-.bemerkung    { --box-accent: var(--ink-3); } /* graublau -- Bemerkung (haeufigster Typ, bleibt am leisesten) */
-.anmerkung, .motivation, .wiederholung { --box-accent: var(--ink-3); }
+/* Ton + Flaechenton je Typ. Der Ton benennt die ROLLE (B6), nicht den Typ --
+   Wichtig, Zusammenfassung und Lernziel teilen sich Mint, weil sie inhaltlich
+   dieselbe Geste sind ("merken, Ziel"); unterschieden werden sie ueber Stern,
+   lesende Person und Zielscheibe. */
+.beispiel        { --box-accent: var(--rolle-demo);    --box-ton: 4.2%; }
+.rechenbeispiel  { --box-accent: var(--rolle-rechnen); --box-ton: 5.1%; }
+.wichtig,
+.zusammenfassung,
+.lernziel        { --box-accent: var(--rolle-merken);  --box-ton: 6.1%; }
+.aufgabe         { --box-accent: var(--rolle-loesen);  --box-ton: 7.1%; }
+.bemerkung,
+.anmerkung       { --box-accent: var(--rolle-neben);   --box-ton: 5.5%; }
+/* motivation/wiederholung sind Altlast-Namen ohne Aufruf (s.u.) und laufen
+   mit "nebenbei" mit, bis ueber sie entschieden ist. */
+.motivation, .wiederholung { --box-accent: var(--rolle-neben); --box-ton: 5.5%; }
 
-.lernziel, .motivation, .wiederholung, .beispiel, .zusammenfassung, .aufgabe, .anmerkung, .bemerkung, .wichtig {
+.lernziel, .motivation, .wiederholung, .beispiel, .rechenbeispiel,
+.zusammenfassung, .aufgabe, .anmerkung, .bemerkung, .wichtig {
     position: relative;
     border: 1px solid var(--border);
-    border-left: 3px solid var(--box-accent, var(--teal));
+    /* B2 setzt 1,5 mm; das sind bei den 96 dpi, mit denen CSS rechnet,
+       5,67 px. Browser zeichnen Rahmen aber nur in GANZEN Pixeln und schneiden
+       ab -- sowohl "5.7px" als auch "1.5mm" landen gemessen bei 5 px (1,32 mm,
+       -12 %). 6 px liegt naeher am Sollwert (1,59 mm, +6 %) und ist ausserdem
+       ueber alle Browser derselbe Wert. Das ist dieselbe Groessenordnung an
+       Toleranz, mit der D2 den Eckenradius von 10 px als die kanonischen
+       2,5 mm durchgehen laesst.
+       Vorher 3 px. Der Balken ist der staerkste Wiedererkennungswert des
+       Kastensystems und laut B0 nicht verhandelbar -- deshalb wird
+       Sichtbarkeit hier gekauft und nicht ueber die Flaeche. */
+    border-left: 6px solid var(--box-accent, var(--rolle-merken));
     border-radius: 10px;
     padding: 00px 30px 15px 30px;
     margin: 20px 00px 20px 50px;
     background-color: var(--surface);
-    background-color: color-mix(in srgb, var(--box-accent, var(--teal)) 4%, var(--surface));
+    background-color: color-mix(in srgb, var(--box-accent, var(--rolle-merken)) var(--box-ton, 4.2%), var(--surface));
     box-shadow: 0 2px 8px rgba(24,27,33,.03);
 
 }
-/* Bemerkung ist der haeufigste Typ (14x allein in 1.4) und soll den Lesefluss
-   am wenigsten stoeren: kein Flaechenton, duennerer Akzent. */
+/* Bemerkung ist der haeufigste Typ (15x im Bestand) und soll den Lesefluss am
+   wenigsten stoeren. Das Signal dafuer ist ab v1.46.0 die FLAECHE, nicht mehr
+   die Balkenbreite: der Balken laeuft wie bei allen anderen auf den
+   kanonischen 1,5 mm mit (Autorentscheidung 2026-09-03 -- "ein Wert, keine
+   Ausnahme"), dafuer bleibt die Bemerkung als einzige ohne Flaechenton.
+   Bewusste Abweichung von der Normierung in B1, die auch fuer Graublau einen
+   Wert (5,5 %) vorsaehe. */
 .bemerkung {
     background-color: var(--surface);
-    border-left-width: 2px;
 }
-/* Zusammenfassung darf als Rekapitulation etwas praesenter sein. */
-.zusammenfassung {
-    background-color: color-mix(in srgb, var(--box-accent) 7%, var(--surface));
-}
-#print_container .lernziel, #print_container .motivation,#print_container .wiederholung, #print_container .beispiel, #print_container .zusammenfassung,#print_container .aufgabe, #print_container .anmerkung, #print_container .bemerkung, #print_container .wichtig {
+#print_container .lernziel, #print_container .motivation, #print_container .wiederholung,
+#print_container .beispiel, #print_container .rechenbeispiel, #print_container .zusammenfassung,
+#print_container .aufgabe, #print_container .anmerkung, #print_container .bemerkung,
+#print_container .wichtig {
     background-color: #fff;
     box-shadow: none;
 }
