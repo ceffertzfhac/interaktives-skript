@@ -8,7 +8,11 @@
              Ohne deklariertes Icon fordert der Browser von sich aus /favicon.ico
              an und faengt sich einen 404. -->
         <link rel="icon" href="favicon.svg" type="image/svg+xml">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+        <!-- Keine Google-Fonts-Zeile mehr: alle Schriften liegen selbst gehostet
+             unter src/fonts/ und werden per @font-face in styles.css geladen
+             (Herkunft/Lizenz: src/fonts/README.md). Damit ruft die Seite beim
+             Laden keine Fremdsite mehr auf, und Pagella/Heros sind dieselben
+             Schnitte, mit denen das Druckskript gesetzt wird. -->
         <link rel="stylesheet" href="src/styles.css">
         <link rel="stylesheet" href="src/figures/aspekt_kreisbahn.css">
         <link rel="stylesheet" href="src/figures/aspekt_weg_zeit.css">
@@ -98,15 +102,27 @@
             // 2026-09-01: "formeln und zahlen, die in der formelumgebung
             // stehen[,] sind scheinbar groesser als fliesstextbuchstaben und
             // zahlen"). MathJax bemisst sein SVG in ex und trifft damit die
-            // x-HOEHE der Fliesstextschrift genau -- aber die TeX-Schrift baut
-            // ueber der x-Hoehe hoeher als Source Serif 4. Gemessen bei 16 px
-            // Fliesstext: Ziffer "1" in der Formel 11,46 px, im Fliesstext
-            // 10,50 px (+9 %); Versalhoehe +12 %, x-Hoehe +4 %. 0,92 bringt die
-            // ZIFFERN zur Deckung (11,46 x 0,92 = 10,54) -- die Ziffern sind
-            // der auffaelligste Vergleich, weil sie in beiden Welten aufrecht
-            // stehen. Die x-Hoehe liegt danach 4 % unter der des Fliesstextes,
-            // was im Formelsatz ueblich ist.
-            svg: { scale: 0.92 },
+            // x-HOEHE der Fliesstextschrift -- die Ziffern- und Versalhoehe
+            // darueber gehoert aber der jeweiligen Schrift, der Faktor haengt
+            // also an der Fliesstextschrift und muss mit ihr neu bestimmt
+            // werden. Kriterium sind die ZIFFERN: sie stehen in beiden Welten
+            // aufrecht und sind der auffaelligste Vergleich.
+            //
+            //   Source Serif 4 (bis v1.44.5): Ziffer "1" im Fliesstext
+            //     10,50 px, in der Formel 11,46 px -> Faktor 0,92.
+            //   TeX Gyre Pagella (ab v1.45.0): Ziffer "1" im Fliesstext
+            //     11,375 px -- Palatino hat den deutlich groesseren
+            //     Ziffernkoerper. Mit 0,92 waere die Formel 6,6 % ZU KLEIN.
+            //     Gemessen (Pixelmessung an einer Testziffer, dsf 8):
+            //     0,985 bringt beide auf exakt 11,375 px.
+            //
+            // Dass der Faktor jetzt fast 1 ist, ist die eigentliche Nachricht:
+            // die TeX-Matheschrift und Palatino sind einander so nahe, dass es
+            // kaum noch etwas zu korrigieren gibt -- das ist derselbe Grund,
+            // aus dem mathpazo im Druckskript ueberhaupt gewaehlt wurde.
+            // Wird die Fliesstextschrift erneut gewechselt, ist dieser Wert
+            // neu zu messen.
+            svg: { scale: 0.985 },
             // KEIN Auto-Typeset beim Laden (BACKLOG P22-3a). MathJax setzt sonst
             // beim Start von sich aus das gesamte Dokument -- ein voller
             // Durchgang ueber alle ~4900 Formeln (gemessen 5,4 s), dessen
@@ -130,7 +146,7 @@
             <button type="button" id="chapter_hamburger" data-action="toggle_drawer" aria-label="Kapitelnavigation" data-tip="Kapitelnavigation">☰</button>
             <div id="header_brand">
                 <span id="header_eyebrow">FH Aachen · FB 8 · Physik</span>
-                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.44.5</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
+                <span id="span_title">Interaktives <br class="title-narrow-br">Skript <span id="header_version">v1.45.0</span><!-- Deutlich sichtbarer Hinweis, dass Umsetzung UND Inhalte Prototyp sind
                      (Nutzervorgabe). Details im Kontakt-Kasten und in DISCLAIMER.md. --><span id="header_prototyp" title="Prototyp: Umsetzung und Inhalte sind vorlaeufig und ungeprueft">Prototyp</span></span>
                 <span id="header_author">Prof. Dr. rer. nat. C. Effertz</span>
             </div>

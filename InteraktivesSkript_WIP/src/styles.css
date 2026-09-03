@@ -1,3 +1,66 @@
+/* Schriften: SELBST GEHOSTET aus src/fonts/ (Herkunft, Lizenz und Pruefsummen
+   in src/fonts/README.md). TeX Gyre Pagella und TeX Gyre Heros sind dieselben
+   Familien, die mathpazo (URW Palladio) und helvet (Nimbus Sans) im Druck-
+   skript setzen -- die Angleichung ist damit Identitaet, keine Annaeherung
+   (physik-design-system, KONVERGENZ_ENTSCHEIDUNGEN.md C2). Vorher kamen
+   Source Serif 4 und IBM Plex Sans von Google Fonts.
+   font-display:swap -- der Text steht sofort in der Fallback-Schrift und
+   springt nach, statt unsichtbar zu bleiben. */
+@font-face {
+    font-family: 'TeX Gyre Pagella';
+    src: url('fonts/texgyrepagella-regular.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: 'TeX Gyre Pagella';
+    src: url('fonts/texgyrepagella-italic.woff2') format('woff2');
+    font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+    font-family: 'TeX Gyre Pagella';
+    src: url('fonts/texgyrepagella-bold.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: 'TeX Gyre Pagella';
+    src: url('fonts/texgyrepagella-bolditalic.woff2') format('woff2');
+    font-weight: 700; font-style: italic; font-display: swap;
+}
+/* Heros ohne bold-italic: die Grotesk traegt hier nur Labels, Ueberschriften
+   und Bedienelemente -- fett-kursiv kommt darin nicht vor. */
+@font-face {
+    font-family: 'TeX Gyre Heros';
+    src: url('fonts/texgyreheros-regular.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: 'TeX Gyre Heros';
+    src: url('fonts/texgyreheros-italic.woff2') format('woff2');
+    font-weight: 400; font-style: italic; font-display: swap;
+}
+/* Heros hat keinen eigenen Halbfetten; 500/600/700 laufen alle auf Bold.
+   Ohne die 500/600-Zeilen synthetisiert der Browser sie aus Regular und
+   setzt die Kopfleiste sichtbar duenner als den Rest. */
+@font-face {
+    font-family: 'TeX Gyre Heros';
+    src: url('fonts/texgyreheros-bold.woff2') format('woff2');
+    font-weight: 500 700; font-style: normal; font-display: swap;
+}
+/* IBM Plex Mono bleibt (--font-mono hat im Druck keine Entsprechung), wandert
+   aber ebenfalls ins Repo -- damit faellt der Google-Fonts-<link> in
+   index.html ganz weg und die Seite ruft beim Laden keine Fremdsite mehr auf.
+   Auch diese beiden Schnitte stammen lokal aus TeX Live (Paket `plex`). */
+@font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('fonts/ibmplexmono-regular.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('fonts/ibmplexmono-medium.woff2') format('woff2');
+    font-weight: 500; font-style: normal; font-display: swap;
+}
+
 /* Design-Tokens (v2.1): 1:1 aus dem Claude-Design-Mockup uebernommen
    ("Interaktives Skript.dc.html", Projekt e8dd98b4-...) -- nicht neu erfunden,
    s. CLAUDE.md. --fh bleibt als Alias fuer --teal erhalten (viele bestehende
@@ -25,8 +88,12 @@
   --surface-3: #f0eee6;
   --border: #e3e1d7;
   --border-2: #d1cebf;
-  --font-ui: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-serif: 'Source Serif 4', 'Times New Roman', serif;
+  /* Fallback-Ketten nennen die Druck-Originale zuerst (Palatino/Helvetica sind
+     auf macOS und Windows vorhanden), bevor auf Georgia/Arial zurueckgefallen
+     wird -- so bleibt die Anmutung auch dann nah dran, wenn die WOFF2 nicht
+     laedt. --font-mono bleibt: im Druck gibt es dafuer keine Entsprechung. */
+  --font-ui: 'TeX Gyre Heros', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-serif: 'TeX Gyre Pagella', Palatino, 'Palatino Linotype', Georgia, serif;
   --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
 
   --c1: #005eb1;
