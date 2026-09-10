@@ -27,6 +27,12 @@ Sinn ergeben (Regler-Hinweise, mitlaufende Zahlenwerte, „diese Bildunterschrif
 läuft mit"). Dokumentiert wird die Abweichung vollständig; nachgezogen wird nur
 der Teil, der auch gedruckt trägt.
 
+> *Stand 2026-09-10:* die unten in A3/A5 unter „nicht nachziehen" zitierte
+> Wendung „diese Bildunterschrift läuft mit" **steht so nicht mehr im WIP** —
+> v1.43.3 (`a57dc39`) hat den Selbstbezug aus allen Unterschriften entfernt
+> (s. `chapters/CLAUDE.md`, „Bildunterschriften: über die Sache reden"). Die
+> Regel bleibt richtig, die wörtliche Suche danach ist vergeblich.
+
 **Wo die Arbeit stattfindet.** Nicht in diesem Repo: die LaTeX-Quelle liegt im
 privaten Repository `Project_Script`, `Input/v0.13` ist nur ein lesender
 Symlink-Checkout ([[reference-input-v013-git-checkout]]).
@@ -45,6 +51,12 @@ Status: `offen` · `entschieden: bewusst` (bleibt dauerhaft, mit Begründung) ·
 `erledigt`. Zieldatei aller 1.1-Einträge:
 `Input/v0.13/pskript_mech_kinematik_gmni_v4.tex`.
 
+> **HTML-`id` ist nicht LaTeX-`\label`.** Die Fragmente benennen ihre
+> Abbildungen nach der Bilddatei (`fig-feder_masse_pendel_kinematik`,
+> `fig-freierfall_1`), die Quelle nach dem Gegenstand
+> (`fig:feder_masse_pendel`, `fig:freier_fall_1`). Beim Schreiben eines
+> Eintrags immer das **`.tex`-Label** nachsehen, nicht die id abschreiben.
+>
 > **Vorsicht bei den Labels der vier Wurf-Abbildungen:** sie heißen in der Quelle
 > `fig:senkrechter_wurf_start` / `_aufstieg` / `_umkehr` / `_abstieg`, meinen
 > aber **nicht** Flugphasen, sondern die vier Koordinatensysteme (in dieser
@@ -170,7 +182,10 @@ Voreinstellung angelegt.
   die übrigen Kapitel-1.1-Figuren — mit dem Koordinatensystem und nennt die
   Werte als mitlaufende Größen. Die gedruckte Unterschrift ist unverändert v0.13.
 - **Zu tun:** in `pskript_mech_kinematik_gmni_v4.tex` der Unterschrift von
-  `fig:feder_masse_pendel_kinematik` voranstellen:
+  `fig:feder_masse_pendel` voranstellen (**korrigiert 2026-09-10:** hier
+  stand vorher `fig:feder_masse_pendel_kinematik` — das ist die HTML-`id`,
+  nicht das LaTeX-Label; im `.tex` heißt nur die *Bilddatei*
+  `feder_masse_pendel_kinematik.png`):
 
   ```latex
   \textbf{Koordinatensystem:} die $y$-Achse zeigt entlang der Bewegungsrichtung
@@ -202,6 +217,55 @@ Voreinstellung angelegt.
   liefert 1.0 bzw. 2.0). Danach stimmen beide Fassungen ohne weiteres Zutun
   überein.
 
+#### P21-A7 · „Beispiel" ist in zwei Kastentypen geteilt (Rechenbeispiel, D5)
+
+- **Status:** **offen — zuerst upstream prüfen** (die Zuordnung wurde *nicht*
+  hier getroffen, s. u.; gut möglich, dass die Druckseite schon weiter ist als
+  der Checkout vom 2026-07-26) · *entstanden 2026-09-03 (`cee6cf1`, v1.47.0),
+  hier nachgetragen 2026-09-10* · HTML: **9 Fragmente**, 28 Kästen
+- **Abweichung:** v0.13 kennt **einen** Beispieltyp: `\bbsp`/`\bbspe` zählen
+  beide auf `beispielcounter` (`\numberwithin{beispielcounter}{section}`) und
+  schreiben „Beispiel~N" bzw. „Beispiele~N" mit `pen.png`. Das WIP führt seit
+  v1.47.0 **zwei** Typen — `.beispiel` (64 Kästen, Label „Beispiel") und
+  `.rechenbeispiel` (28 Kästen, Label „**Rechenbeispiel**", Taschenrechner-Icon,
+  Blau-Ton „mitrechnend") — mit **eigenem Zähler je Typ**.
+- **Folge (wichtig):** die **Beispielnummern beider Fassungen laufen
+  auseinander**, weil die 28 herausgelösten Kästen im WIP nicht mehr im
+  Beispiel-Zähler mitzählen. Das ist keine Optik-, sondern eine
+  Nummern-Abweichung — sie trifft jeden `\ref` auf einen Beispielkasten.
+- **Die Zuordnung ist NICHT neu zu treffen.** Sie stammt Kasten für Kasten aus
+  `Project_Script/scripts/classification_report.md` (Druckseite) und wurde über
+  die **Position** abgebildet, nicht über den Titel. Kontrollzahlen: **64
+  Beispiel / 28 Rechenbeispiel**, je Quelldatei
+  `11/17/11/12/6/1/12/3/4/1/6/5/3 = 92`. Eine zweite Heuristik wäre nur eine
+  Gelegenheit, die beiden Fassungen auseinanderlaufen zu lassen.
+- **Zu tun (Druckseite):**
+  1. In `Physik_skript_header_gmni_v3.tex` Zähler und Box anlegen — Muster der
+     bestehenden Definitionen (Zeilen ~124/132/184–187):
+
+     ```latex
+     \newcounter{rechenbeispielcounter}
+     \numberwithin{rechenbeispielcounter}{section}
+     \newtcolorbox{rechenbeispielbox}{mainboxstyle, colback=mutedBlue!30}
+     \newcommand{\bbrsp}[1]{\refstepcounter{rechenbeispielcounter}\begin{rechenbeispielbox}\textbf{\icon{calculator.png}Rechenbeispiel~\therechenbeispielcounter: #1}\begin{quotation}}
+     \newcommand{\ebrsp}{\end{quotation}\end{rechenbeispielbox}}
+     ```
+
+     *Zwei Dinge dort entscheiden, nicht hier:* der Farbton (`mutedBlue!30`
+     kollidiert mit `lernzielbox` — die Design-Seite hat für „mitrechnend"
+     einen eigenen Blau-Ton) und das Icon (`\icon{}` lädt **PNG** per
+     `\includegraphics`; laut `cee6cf1` liegt `calculator.svg` in
+     `v0.13/assets/` — ob eine PNG-Fassung daneben liegt, dort prüfen).
+  2. Die 28 im Bericht als Rechenbeispiel geführten Kästen von `\bbsp`/`\bbspe`
+     auf `\bbrsp` umstellen (Ende jeweils `\ebrsp`).
+  3. `\ref`-Ketten auf Beispielkästen gegenprüfen — die Nummern verschieben
+     sich auf beiden Seiten.
+- **Herkunft der Entscheidung:** D5 der Design-System-Konvergenz
+  (`physik-design-system/KONVERGENZ_ENTSCHEIDUNGEN.md`, in dieser VM nicht
+  erreichbar — auf dem Mac nachlesen). Begründung: zwei verschiedene Objekte
+  standen unter einem Namen — Kästen, die Theorie demonstrieren, und Kästen, in
+  denen mitgerechnet wird.
+
 ---
 
 ### Medienbedingte Unterschiede (dokumentiert, nichts nachzuziehen)
@@ -217,6 +281,13 @@ des Fragments.
 - `ch_01_03`: Bildunterschrift „Abbildung zum Beispiel …" ohne Nummer — der
   HTML-Resolver kennt keine Box-Referenz; die Abbildung steht inline in der Box,
   der Verweis ist dadurch eindeutig.
+- `ch_01_01`, Abb. 1.9 (schräger Wurf, interaktiv seit v1.43.0): die Formelkarte
+  zeigt \(x(t)\) und \(y(t)\) — beides Komponenten der bereits gedruckten
+  nummerierten Vektorgleichung, also **kein** Zusatz im Sinn von A3(b). Der
+  didaktische Satz der Unterschrift („beide Kurven beschreiben dieselbe Bewegung
+  mit demselben Parameter \(t\)") steht im Druck schon im Fließtext direkt vor
+  der Abbildung. Offen ist dort nur der **Quellfehler** „links … und links" →
+  `QUELLEN_FEHLER.md` (1.1, Nr. 6).
 - `ch_04_02`: Wellen-Stub — die Quelle enthält selbst nur den Vermerk, dass das
   Kapitel nicht behandelt wurde; treu transkribiert.
 
@@ -241,10 +312,19 @@ des Fragments.
   Figuren festgelegt und in `chapters/CLAUDE.md` verankert. Damit ist die Frage
   nicht mehr pro Figur zu stellen; neue Einträge entstehen mit dieser
   Voreinstellung.
+- [x] **P21-1a Übergabedokument** *(S)* — **erledigt 2026-09-10**: Export des
+  Registers als `../UEBERGABE_Druckskript.md` (Arbeitspakete AP1–AP7 mit dem
+  wörtlichen LaTeX, den Zieldateien, den Leitplanken und dem Prompt für die
+  Session im LaTeX-Repo). Bei Widersprüchen gilt dieses Register; das
+  Übergabedokument ist bei jeder neuen Abweichung mitzuziehen.
 - [ ] **P21-2 Angleichung im LaTeX-Repo** — die entschiedenen Punkte in
   `Project_Script` umsetzen (die Einträge oben sind so geschrieben, dass sie
   direkt abgearbeitet werden können), `Input/v0.13` per `git pull` aktualisieren,
-  PDF neu bauen. *(M, außerhalb dieses Repos)*
+  PDF neu bauen. *(M, außerhalb dieses Repos)* — Anleitung:
+  `../UEBERGABE_Druckskript.md`. **Zuerst A7 upstream prüfen:** der Checkout ist
+  vom 2026-07-26, die Druckseite hat seither mindestens
+  `scripts/classification_report.md` und `v0.13/assets/calculator.svg`
+  bekommen.
 - [ ] **P21-3 Gegenprüfung** — nach der Angleichung Abbildungs-/Gleichungs-
   nummern und Querverweise beider Fassungen vergleichen. *(S)*
 
