@@ -32,6 +32,7 @@ nächstliegenden Konsumenten.
 | `InteraktivesSkript_WIP/CHANGES_aspekt_1.38_1.40_und_grundgeruest.md` | Änderungshistorie seit der ersten (Singleton-)Aspekt-Figur | verstanden werden muss, *warum* eine Aspekt-Struktur so aussieht |
 | (Skill `v013-verifikation`) | phasenweiser Prüfplan mit Abnahmekriterien, kapitelagnostisch (inkl. Browser-Phasen Stufe 5) | ein migriertes Kapitel geprüft wird — pro-Kapitel-**Ergebnis** steht im jeweiligen Backlog-Item (P3/P12) + Fragmentkopf, nicht in einer eigenen Datei |
 | `InteraktivesSkript_WIP/QUELLEN_FEHLER.md` | Verzeichnis der Tipp-/Sprach-/Sachfehler in `Input/v0.13/` + die Konvention „1:1 übernehmen, nicht still korrigieren" und je Fund der Ist-Zustand im WIP (**erhalten** / **korrigiert**) | etwas in der Quelle falsch aussieht, oder entschieden wird, ob ein Fehler übernommen oder behoben wird |
+| `UEBERGABE_Druckskript.md` | Arbeitsanweisung für eine Session im LaTeX-Repo: die Arbeitspakete AP1–AP7 aus dem P21-Register, mit dem wörtlich einzusetzenden LaTeX, den Zieldateien/Labels, den Leitplanken und dem fertigen Prompt | das Druckskript an den Stand des interaktiven Skripts nachgezogen werden soll (Register der Wahrheit bleibt `backlog/P21-…`) |
 | `InteraktivesSkript_WIP/src/vendor/README.md` | Herkunft, Lizenz und Prüfsumme von qrjs2 + warum es nicht per CDN kommt | die Vendor-Bibliothek angefasst oder aktualisiert wird |
 
 ## Planung, Außendarstellung, Recht
