@@ -9,6 +9,12 @@ Hintergrund und Fallstricke: `InteraktivesSkript_WIP/MIGRATION_v0.13_nach_HTML.m
 Abschnitte 10 und 11. Die Regeln, gegen die geprüft wird (Zähler-Scopes, Offsets,
 MathJax-Gleichungsnummern, Querverweis-Deskriptoren): `InteraktivesSkript_WIP/chapters/CLAUDE.md`.
 
+> **Schritt 0 — Quelle prüfen.** `bash .claude/skills/_lib/quelle_pruefen.sh`
+> Sagt, ob `Input/v0.13` auf den maßgeblichen Stand zeigt und ob er von dem
+> Stand abweicht, gegen den das WIP verifiziert ist. Regel und Anker:
+> `QUELLE_v013.md`. Ohne diesen Schritt arbeitet man womöglich gegen einen
+> Altstand, ohne es zu merken.
+
 ## Der zentrale Denkfehler, den dieses Skill verhindern soll
 
 > **„Lückenlos" ist nicht „richtig".**

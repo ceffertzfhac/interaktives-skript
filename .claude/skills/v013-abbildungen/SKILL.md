@@ -13,6 +13,12 @@ Abschnitt „Bildgrößen folgen v0.13".
 Ziel: `InteraktivesSkript_WIP/bilder/` enthält alle Abbildungen des Kapitels,
 in verlässlichem Format, mit den Breiten aus der Quelle.
 
+> **Schritt 0 — Quelle prüfen.** `bash .claude/skills/_lib/quelle_pruefen.sh`
+> Sagt, ob `Input/v0.13` auf den maßgeblichen Stand zeigt und ob er von dem
+> Stand abweicht, gegen den das WIP verifiziert ist. Regel und Anker:
+> `QUELLE_v013.md`. Ohne diesen Schritt arbeitet man womöglich gegen einen
+> Altstand, ohne es zu merken.
+
 ## 1. Welche Bilder, welche Breiten?
 
 ```bash

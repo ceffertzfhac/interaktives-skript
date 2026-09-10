@@ -10,6 +10,12 @@ Dieses Skill ist die Arbeitsanweisung, das Runbook die Referenz.
 
 Zwei Schwester-Skills: **v013-abbildungen** (Bilder) und **v013-verifikation** (Prüfen).
 
+> **Schritt 0 — Quelle prüfen.** `bash .claude/skills/_lib/quelle_pruefen.sh`
+> Sagt, ob `Input/v0.13` auf den maßgeblichen Stand zeigt und ob er von dem
+> Stand abweicht, gegen den das WIP verifiziert ist. Regel und Anker:
+> `QUELLE_v013.md`. Ohne diesen Schritt arbeitet man womöglich gegen einen
+> Altstand, ohne es zu merken.
+
 ## Grundsatz
 
 > Die `.tex`-Datei ist die Wahrheit für den **Inhalt**, das **PDF** ist die

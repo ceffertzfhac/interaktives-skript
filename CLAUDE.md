@@ -67,6 +67,10 @@ python3 -m http.server 8000
     app in one 2787-line file — lives only here now.)*
   - `Input/v0.13/` — LaTeX source of the **complete target script** (`.tex` +
     compiled `.pdf`). This is the content target the WIP is being scaled toward.
+    **Der einzige erlaubte Zugriffspfad auf die Quelle**; der Symlink ist
+    git-ignoriert, also nicht erzwingbar — Zielort, Commit-Anker und
+    Prüfskript stehen in `QUELLE_v013.md`. Auf dieser VM liegen zwei
+    Altstand-Klone; **keiner davon wird angesprochen**.
   - `Input/Simulationen/` — standalone simulation projects; candidate source
     material for future interactive figures. Welche davon bereits als
     Figuren-Motor portiert sind (und mit welchen Port-Änderungen), steht in

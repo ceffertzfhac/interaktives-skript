@@ -27,16 +27,18 @@ Querverweise der beiden Fassungen auf **verschiedene** Objekte.
 Die andere Session **im LaTeX-Repo** starten — nicht in diesem Repo:
 
 ```
-cd /home/chris/shared/VM_Exchange/Project_InteraktivesSkript/Input/physik_skript_repo
+cd /home/chris/shared/VM_Exchange/Project_Script
 claude
 ```
 
-Das ist der einzige Klon von `ceffertzfhac/Project_Script` auf dieser VM (er
-liegt aus historischen Gründen unter `Input/`, ist dort aber ein
-vollwertiges Repo mit Push-Recht; für *dieses* Repo ist er unsichtbar, weil
-`Input/` git-ignoriert ist). Er hat **keine `CLAUDE.md`** — nur eine
-`GEMINI.md`, die Claude Code nicht automatisch lädt. Deshalb trägt der Prompt
-unten die Konventionen selbst.
+Das ist der **maßgebliche** Arbeitsordner — der, aus dem nach GitHub gepusht
+wird (Remote `ceffertzfhac/Project_Script`). Auf der VM liegen zwei weitere
+Klone desselben Repos, `Project_InteraktivesSkript/Input/physik_skript_repo`
+(Stand 26.07.2026) und `Share/Project_Script` (Stand 04.03.2026) — **beide sind
+Altstände und nicht die Referenz** (s. `QUELLE_v013.md`). Der maßgebliche
+Ordner hat **keine `CLAUDE.md`** — nur eine `GEMINI.md`, die Claude Code nicht
+automatisch lädt, und die zudem veraltet ist (sie nennt `v0.12/` als aktuelle
+Arbeitsversion). Deshalb trägt der Prompt unten die Konventionen selbst.
 
 Dann diesen Prompt eingeben:
 
