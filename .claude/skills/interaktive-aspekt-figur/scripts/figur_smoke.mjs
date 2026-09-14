@@ -63,6 +63,14 @@ fig.className = 'aspekt-figur';
 fig.id = 'aspekt-test';
 fig.dataset.aspekt = 'test';
 fig.dataset.caption = 'Smoke-Test-Caption';
+// Familien-Module (eine Fabrik, mehrere Skriptstellen) lesen ihre Variante aus
+// data-Attributen am Platzhalter. Ohne die hier baut der Smoke-Test immer nur
+// die Default-Variante -- die andere bliebe ungetestet:
+//   --data=kontext=kinematik --data=periode=6
+for (const a of args.filter(x => x.startsWith('--data='))) {
+    const [k, ...rest] = a.slice('--data='.length).split('=');
+    if (k) fig.dataset[k] = rest.join('=');
+}
 document.body.appendChild(fig);
 tryStep(`${initName}(fig) baut ohne Ausnahme`, () => mod[initName](fig));
 
