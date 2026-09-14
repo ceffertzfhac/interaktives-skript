@@ -57,6 +57,14 @@ def aspekt_factories() -> list[str]:
     return re.findall(r"'([a-z0-9_-]+)'\s*:", body)
 
 
+def chapter_aspekt_platzierungen() -> list[str]:
+    """Jedes data-aspekt-Vorkommen einzeln -- so viele Figuren stehen im Text."""
+    out: list[str] = []
+    for f in sorted(CHAPTERS.glob("ch_*.html")):
+        out += re.findall(r'data-aspekt="([^"]+)"', read(f))
+    return out
+
+
 def chapter_aspekt_keys() -> set[str]:
     """Alle in chapters/*.html genutzten data-aspekt-Werte."""
     keys: set[str] = set()
@@ -74,17 +82,26 @@ def check_aspekt_count() -> None:
     m = re.search(r"(\d+)\s+interaktive[ns]?\s+Aspekt-Figur", readme)
     readme_n = int(m.group(1)) if m else None
 
-    n_files, n_fac = len(files), len(factory_keys)
-    if not (n_files == n_fac == readme_n == 16):
-        fail(
-            "Check 1 (Aspekt-Figuren-Zahl): aspekt_*.js=%d · "
-            "ASPEKT_FACTORIES=%d · README=%r — erwartet überall 16."
-            % (n_files, n_fac, readme_n)
-        )
-        return
-    # Dubletten im Factory-Objekt?
+    # Drei Zahlen, die NICHT gleich sein muessen -- das war der Denkfehler der
+    # ersten Fassung (sie verlangte ueberall "16" und stand seit dem dritten
+    # Familien-Modul auf Rot, ohne dass etwas kaputt war):
+    #   * aspekt_*.js  = Dateien; ein Familien-Modul bedient MEHRERE Aspekte
+    #   * FACTORIES    = registrierte Aspekt-Schluessel
+    #   * README-Zahl  = interaktive Figuren, die im Text STEHEN (data-aspekt),
+    #                    und derselbe Aspekt darf an zwei Stellen stehen
+    # Verglichen wird deshalb je Groesse mit ihrer eigenen Quelle, und keine
+    # Zahl ist im Pruefskript festgeschrieben (P18: Mengen nicht zaehlen).
+    n_fac = len(factory_keys)
+    platzierungen = len(chapter_aspekt_platzierungen())
+    if readme_n is None:
+        fail("Check 1: README nennt keine Zahl interaktiver Aspekt-Figuren.")
+    elif readme_n != platzierungen:
+        fail("Check 1 (Aspekt-Figuren-Zahl): README=%d · data-aspekt in chapters=%d"
+             % (readme_n, platzierungen))
     if len(set(factory_keys)) != n_fac:
         fail("Check 1: ASPEKT_FACTORIES hat Duplikat-Schlüssel: %r" % factory_keys)
+    if not files:
+        fail("Check 1: keine aspekt_*.js gefunden — stimmt der Pfad?")
 
 
 # === Check 2: data-aspekt in chapters ⊆ ASPEKT_FACTORIES ===================
@@ -104,8 +121,9 @@ def check_chapter_keys_subset() -> None:
 
 # === Check 3: Motor-Ordner == Motoren-Tabelle in figures/CLAUDE.md ==========
 
-EXPECTED_MOTORS = {"bus_weg_zeit", "federpendel", "grundbegriffe", "kreis_spiral",
-                   "kreisbewegung"}
+# Keine Liste der erwarteten Motoren mehr: sie war eine zweite Quelle derselben
+# Menge und stand nach jedem neuen Motor auf Rot. Geprueft wird nur noch, dass
+# Ordner und Tabelle dasselbe sagen.
 
 
 def check_motors() -> None:
@@ -117,9 +135,9 @@ def check_motors() -> None:
     # nicht in Prosa zaehlen).
     section = re.search(r"## Die Motoren(.*?)(\n## |\Z)", text, re.S)
     table_names = set(re.findall(r"`([a-z_]+)/`", section.group(1))) if section else set()
-    if not (dirs == table_names == EXPECTED_MOTORS):
-        fail("Check 3 (Motoren): Ordner=%s · Tabelle=%s · erwartet=%s"
-             % (sorted(dirs), sorted(table_names), sorted(EXPECTED_MOTORS)))
+    if dirs != table_names:
+        fail("Check 3 (Motoren): Ordner=%s · Tabelle in figures/CLAUDE.md=%s"
+             % (sorted(dirs), sorted(table_names)))
 
 
 # === Check 4: README „Kapitel-Fragmente" == ch_*.html-Count; TK-Zahl =======
@@ -129,8 +147,8 @@ def check_chapter_count() -> None:
     readme = read(README)
     m = re.search(r"(\d+)\s+Kapitel-Fragment", readme)
     readme_n = int(m.group(1)) if m else None
-    if not (n_html == readme_n == 17):
-        fail("Check 4 (Kapitel-Fragmente): ch_*.html=%d · README=%r — erwartet 17."
+    if n_html != readme_n:
+        fail("Check 4 (Kapitel-Fragmente): ch_*.html=%d · README=%r"
              % (n_html, readme_n))
     # Themenkomplexe: README sagt „Vier Themenkomplexe"; index.html data-tk-num.
     if not re.search(r"Vier\s+Themenkomplexe", readme):
