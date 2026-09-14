@@ -82,8 +82,23 @@ die Bewegung ohnehin in der Nähe endet.
   deutlich mehr Aufwand.
 
   Seitenwechsel landet weiterhin bei `scrollY = 0` (der Snap zieht die erste
-  Figur nicht nach oben). **Offen:** `sprung_ziele.mjs` (läuft), eine Figur
-  höher als das Fenster, und zwei Figuren auf einer Seite.
+  Figur nicht nach oben).
+
+  **Mehrere Figuren auf einer Seite:** geprüft an `p-1-1-7` mit **neun**
+  Figuren. Jede rastet für sich ein, die Punkte arbeiten nicht gegeneinander;
+  zwölf Schritte `scrollBy(+500)` durch die Seite ergaben 500 500 370 500 500
+  500 410 500 500 500 366 500 — die drei verkürzten Schritte sind genau das
+  gewollte Einfangen, kein Schritt blieb stecken.
+
+  **Figur höher als das Fenster:** bei 1400×600 rastet sie **gar nicht** ein
+  (angefordert 1579, gelandet 1579 — keine Bewegung). Das ist
+  Spezifikationsverhalten und kein Fehler: ist der Snap-Bereich größer als der
+  Sichtbereich, gilt jede Position, in der er den Sichtbereich füllt, bereits
+  als ausgerichtet — es gibt also nichts zu korrigieren. **Wichtig ist, was
+  nicht passiert:** die Figur hält niemanden fest. Beim üblichen Lesefenster
+  (1400×900) tritt der Fall nicht auf, die höchste Figur misst dort 812 px.
+
+  **Offen:** `sprung_ziele.mjs` (läuft).
 
   **Fallstrick beim Messen** (hat mich zuerst erwischt): die Kapitelbilder laden
   `lazy` und schieben das Layout. Wer die Zielposition VOR dem Scrollen misst
