@@ -56,9 +56,15 @@ an und pruefe selbst nach, statt mir das zu glauben.
 
 Zwei Dinge, bevor du anfaengst:
 - Im Arbeitsbaum liegen drei geaenderte, nicht committete Dateien
-  (Physik_pskript_v0.13.tex, pskript_grundlagen_gmni_v2.tex und das PDF). Sag
-  mir zuerst, was da drin steht, und frag mich, ob das committet oder
-  verworfen wird. Nicht einfach mitcommitten.
+  (Physik_pskript_v0.13.tex, pskript_grundlagen_gmni_v2.tex und das PDF). Die
+  sind von mir und kommen mit rein — aber als EIGENER Commit VOR AP8, nicht
+  vermischt. Inhalt: die beiden Beispielzahlen im Abschnitt "Rechnen mit
+  Zehnerpotenzen" stehen jetzt ausgeschrieben in Dezimalschreibweise statt als
+  \SI{...e...}{...} (mit Kommentar im .tex, dass das so bleiben muss — sie
+  sind das Beispiel dafuer, warum man Zehnerpotenzen braucht), dazu ein paar
+  \ Abstands-Korrekturen nach "ca." . Schau dir das Ganze vorher an und sag
+  mir, was drin ist; in Physik_pskript_v0.13.tex steht ein fuehrendes
+  Leerzeichen vor \documentclass, frag mich, ob das absichtlich ist.
 - Der Makroname fuer die Rechenbeispiele ist \brbsp, nicht \bbrsp. Der
   Vorschlag im AP7-Abschnitt traegt den falschen Namen; wer danach sucht, haelt
   AP7 faelschlich fuer offen.
