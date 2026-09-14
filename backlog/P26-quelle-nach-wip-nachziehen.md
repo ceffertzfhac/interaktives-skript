@@ -20,7 +20,11 @@ im WIP steht *und* der Anker nachgezogen ist.
 
 ---
 
-### Runde 1 — Quellstand `c6faf10` (03.09.2026) → `1c64edd` (14.09.2026, gepusht)
+### Runde `c6faf10` → `1c64edd` (14.09.2026, gepusht)
+
+*(In `QUELLE_v013.md` heißt dieselbe Runde die „zweite" — die erste lief vor
+diesem Register. Runden werden hier über die Commit-Spanne benannt, nicht
+nummeriert.)*
 
 **Ohne WIP-Anteil, geprüft am 2026-09-14** (hier nur, damit niemand sie ein
 zweites Mal prüft):
@@ -42,7 +46,7 @@ zweites Mal prüft):
   Die Quelle war beim Nachziehen korrigiert (`1c64edd`, zehn Nullergruppen,
   im PDF nachgerechnet 9,1090E-31).
   **Quelle:** `pskript_grundlagen_gmni_v2.tex`, § „Rechnen mit Zehnerpotenzen"
-  (Nutzeränderung vom 14.09.2026, Commit `155587c` — noch nicht gepusht).
+  (Nutzeränderung vom 14.09.2026, Commits `155587c` + `1c64edd`).
   **Ziel:** `InteraktivesSkript_WIP/chapters/ch_00_grundlagen.html`, direkt unter
   `<h2 …>0.1 Rechnen mit Zehnerpotenzen</h2>`.
 
@@ -77,15 +81,11 @@ zweites Mal prüft):
   Entwurf dieses Eintrags ging noch von unnummerierten `\[…\]` aus — das ist
   erledigt, hier ist nichts mehr zu entscheiden.)
 
-  **Zahlendreher in der Quelle, bestätigt und noch zu beheben** (Stand
-  14.09.2026, Commit `155587c`): die Elektronenmasse steht mit **27** Nullen
-  nach dem Komma da (neun Dreiergruppen) — das ist
-  \(9{,}109\cdot 10^{-28}\,\mathrm{kg}\), Faktor 1000 zu groß. **Es fehlt
-  genau eine Dreiergruppe**; richtig sind 30 Nullen, also zehn Gruppen — so
-  steht es im Block oben. Der Nutzer hat den Befund am 14.09. bestätigt, die
-  Korrektur erfolgt im Quell-Repo. **Erst nachziehen, wenn sie dort drin ist**,
-  sonst wandert der Fehler ins WIP. (Die Sonnenmasse stimmt: 1989 + 27 Nullen
-  = \(1{,}989\cdot 10^{30}\).)
+  **Zahlendreher, erledigt.** Die erste Fassung (`155587c`) hatte 27 Nullen
+  nach dem Komma, also \(9{,}109\cdot 10^{-28}\) — eine Dreiergruppe fehlte.
+  Mit `1c64edd` sind es zehn Gruppen; im neu gebauten PDF nachgerechnet
+  9,1090E-31 bzw. 1,9890E+30. Nachgezogen wurde erst danach, der Fehler war
+  also nie im WIP.
 
   **Erledigt, wenn:** beide Zahlen ausgeschrieben in Dezimalschreibweise
   stehen, die Elektronenmasse zehn Nullergruppen hat, Abschnitt 0.1 weiterhin
