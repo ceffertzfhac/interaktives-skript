@@ -118,6 +118,7 @@ nachgemessen über `Input/v0.13` dieses Repos — der Symlink zeigt auf
 | AP8 | **umgesetzt** | `54304e1`, `6b5566c`, `4063250`, Neubau `830dcf9`; Log ohne „multiply-defined labels" |
 | AP9 | **offen**, neu am 2026-09-14 | Unterschrift von Abb. 1.10 ohne den erklärenden Zusatz |
 | AP10 | **offen**, neu am 2026-09-14 | Unterschrift von Abb. 1.14 ohne den Satz, der die beiden Parabeln unterscheidet |
+| AP11 | **offen**, neu am 2026-09-14 | Unterschrift von Abb. 1.15: Zuspitzung fehlt, ILIAS-Verweis zu entscheiden |
 | Quellfehler 5 und 6 | **mitkorrigiert** | `bdb4229` |
 
 Die beiden Neubauten (`65c798d`, `8b1ac66`, 421 Seiten, 0 Fehler) liegen danach.
@@ -565,6 +566,36 @@ Zeitpunkt dort zeigen lässt, samt Regler-Hinweisen.
 
 ---
 
+## AP11 — Unterschrift von Abb. 1.15 (P21-A11)
+
+**Entstanden 2026-09-14.** Zwei Punkte, davon einer mit Entscheidungsbedarf.
+**Nummernneutral.**
+
+**Zieldatei:** `v0.13/pskript_mech_kinematik_gmni_v4.tex`, die `figure` mit
+`kinematik_geschwindigkeit_unterschied_durchschnitt_momentan.png`.
+
+**1. Zuspitzung — nachziehen.** Im Anschluss an den Tangenten-Satz einsetzen:
+
+```latex
+Die beiden Größen haben hier nicht einmal dasselbe Vorzeichen.
+```
+
+Die gedruckte Unterschrift nennt beide Vorzeichen, sagt aber nicht, was daran
+der Punkt ist. Genau das ist der Grund für die Abbildung.
+
+**2. ILIAS-Verweis — Entscheidung.** Die Unterschrift endet mit „Eine
+interaktive Animation hierzu finden Sie im ILIAS Lernraum …". Im interaktiven
+Skript ist der Satz weggelassen: die Figur daneben **ist** diese Animation.
+Fürs Druckskript ist zu entscheiden, ob der Verweis stehen bleibt (das Papier
+hat die Animation nicht) oder auf das interaktive Skript umgelenkt wird.
+**Das betrifft jede Stelle, an der v0.13 auf ILIAS-Animationen verweist** — bitte
+einmal grundsätzlich entscheiden, nicht pro Abbildung. Bis dahin nichts ändern.
+
+**Nicht übernehmen:** Regler-Hinweise und die Aufforderung „Ziehen Sie Δt gegen
+null" — auf Papier gibt es nichts zu ziehen.
+
+---
+
 ## Quellfehler, die beim Nachziehen mitzukorrigieren sind
 
 **Nr. 5 und 6 sind am 2026-09-14 erledigt** (`bdb4229`, Eintrag in
@@ -612,7 +643,7 @@ Korrekturen an Rechtschreibung/Grammatik werden im Quell-Repo in
 
 ## Fertig ist es, wenn …
 
-1. AP1–AP10 umgesetzt (oder als „upstream schon erledigt" bzw. „bewusst offen"
+1. AP1–AP11 umgesetzt (oder als „upstream schon erledigt" bzw. „bewusst offen"
    begründet) sind,
 2. das PDF fehlerfrei **und ohne die Warnung „multiply-defined labels"** baut,
 3. die Abschnittsnummern in TK 3 als 3.0 / 3.1 / 3.2 erscheinen,
