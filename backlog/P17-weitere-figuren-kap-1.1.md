@@ -32,15 +32,27 @@ pixel-identisch.**
   **Motor: `ableitung_simulation` neu portieren** (`src/figures/ableitung/`,
   reuse `../kreisbewegung/lib/*`; deckt auch P12-E8-Hilfssim). Caption verweist
   selbst auf eine ILIAS-Animation, die ersetzt wird. *(L — Motor + Figur)*
-- [ ] **P17-2 Aspekt-Figur Abb. 1.10 — Kreisbewegung x(t)/y(t)-Komponenten +
-  Bahn** (Unterabschnitt 1.1.7 „Die Strecke"). Statisches `fig-kreisbewegung_1`
-  interaktiv nachbauen: gestapelte x(t)/y(t)-Komponenten (Slider R, T) + Toggle
-  zum Bahn-View (x-y-Plot) — schließt exactly die Lücke, die der Text selbst
-  nennt („nicht leicht zu sehen, dass es eine Kreisbahn ist") und ist die Brücke
-  zu Abschnitt 1.1.8 „Die Bahn". **Motor: `kreisbewegung` bereits portiert** — nur
-  Aspekt-Figur per `createRuntime()`, kein neuer Motor. Vorlagen-Hierarchie:
-  `aspekt_weg_zeit` (gestapelte x/y) + `aspekt_kreisbahn` (Bahn) kombinieren.
-  *(M — nur Figur)*
+- [x] **P17-2 Aspekt-Figur Abb. 1.10 — Kreisbewegung x(t)/y(t)-Komponenten +
+  Bahn** (Unterabschnitt 1.1.7 „Die Strecke") — **erledigt 2026-09-14**
+  (`b14f750`, v1.50.0). **Entscheidung des Nutzers vorab:** Bahn **dauerhaft
+  daneben** statt umschaltbar (der Zusammenhang soll ohne Bedienhandlung
+  sichtbar sein — genau das sagt der Fließtext darunter), Zeitsteuerung mit
+  **Play/Pause + Zeitregler wie Abb. 1.39**.
+  **Kein neues Modul:** `aspekt_weg_zeit.js` zeigt dieselbe Kombination bereits
+  und wurde zum **Familien-Modul** erweitert (Muster wie `aspekt_federpendel`
+  für 1.8/3.1.5); die Unterschiede hängen an `data-kontext="kinematik"`,
+  `data-radius`, `data-periode`. Gegating: kein ω-Regler, kein Winkelbogen,
+  keine φ-Zeile — beide Größen sind in 1.1 noch nicht eingeführt; der Ortsvektor
+  heißt dort `\vec s`.
+  **Beim Bauen gefunden:** die CSS war exakt auf `[data-aspekt="weg-zeit"]`
+  gescopt, die zweite Figur bekam dadurch weder Layout noch Kurvenfarben
+  (beide Kurven schwarz, Szene über statt neben dem Diagramm) → Präfix-Selektor
+  `[data-aspekt^="weg-zeit"]`. **Lehre für das nächste Familien-Modul:** beim
+  Aufteilen einer Fabrik in zwei Aspekt-Namen ist die CSS die zweite Stelle, die
+  mitwandern muss.
+  Geprüft: `figur_smoke` beide Varianten, `dom_harness` unverändert,
+  `breiten_check` 81/67/47 %, Screenshots normal + breit gesichtet.
+  Bildunterschrift-Zusatz → **P21-A9**.
 - [x] **P17-3 Aspekt-Figur Abb. 1.8 — Feder-Masse-Pendel** — **erledigt
   2026-08-28 (v1.38.0)**: `data-aspekt="federpendel-kinematik"` auf DERSELBEN
   Fabrik wie die Figur zu 3.1.5 (`aspekt_federpendel.js` ist damit ein

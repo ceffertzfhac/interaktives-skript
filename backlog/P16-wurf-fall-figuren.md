@@ -86,7 +86,7 @@ gemeinsam:
 | 1.4–1.7 | `senkrechter_wurf_1…4` | P16-4 | A | nein → P16-1 |
 | 1.8 | `feder_masse_pendel_kinematik` | **P17-3** | `federpendel` | **ja** (P12-E6) |
 | 1.9 | `schraeger_wurf` | P16-6 | B `schraeger_wurf` | nein → P16-2 |
-| 1.10 | `kreisbewegung_1` | **P17-2** | `kreisbewegung` | **ja** |
+| 1.10 | `kreisbewegung_1` | **P17-2** | `kreisbewegung` | **ja** — erledigt 14.09.2026 |
 | 1.11–1.13 | `rutsche`, `schraubenbahn`, `spur_im_schnee` | — | — | bleiben statisch (P17-Entscheidung) |
 | 1.14 | `bahnkurve_schraeger_wurf` | P16-7 | B | nein |
 | 1.15 | `…unterschied_durchschnitt_momentan` | **P17-1** | `ableitung` | nein |
@@ -95,10 +95,12 @@ gemeinsam:
 | 1.19 | `…zeit_diagramm_senkr_wurf` | P16-5 | A | nein |
 | 1.20 | `…zeit_diagramm_schraeger_wurf` | P16-9 | B | nein |
 
-**Stand 2026-08-28: P16-1 (Motor A), P16-3 (Abb. 1.3) und P16-4 (Abb. 1.4–1.7)
-sind erledigt — die ersten fuenf Abbildungen des Kapitels laufen.** Naechster
-Schritt in der Abbildungsreihenfolge ist **Abb. 1.8** (P17-3, Federpendel-Motor
-steht bereits), danach **Abb. 1.9** und damit P16-2 (Motor B portieren).
+**Stand 2026-09-14:** erledigt sind Abb. 1.3–1.7 (P16-1/-3/-4), 1.8 (P17-3),
+1.9 (P16-2/-6) und 1.10 (P17-2). Der Faden laeuft in der Abbildungsreihenfolge
+weiter — **als Naechstes Abb. 1.14** (P16-7, Motor B steht). Danach 1.15
+(P17-1, braucht den `ableitung`-Motor), 1.18a/b (P16-8, davor die offene
+Nummern-Frage), 1.19 und 1.20 (P16-5/-9, beide billig: derselbe Motor).
+*(Frueherer Stand 2026-08-28: nach 1.3–1.7 war 1.8 der naechste Schritt.)*
 P16-5 (Abb. 1.19, v-t) ist dagegen billig geworden: derselbe Motor, dieselbe
 Fabrik — dort waere nur der Diagrammtyp 'geschw' statt 'weg' zu setzen und der
 v-Pfeil einzuschalten.

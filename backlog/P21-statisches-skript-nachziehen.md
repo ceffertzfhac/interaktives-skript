@@ -344,6 +344,50 @@ Voreinstellung angelegt.
   WIP bereits disambiguiert hat.
 
 
+#### P21-A9 · Erklärender Zusatz in der Unterschrift von Abb. 1.10
+
+- **Status:** **offen — entstanden 2026-09-14** beim Bau der interaktiven Figur
+  zu Abb. 1.10 (P17-2, WIP `b14f750`, v1.50.0). Entscheidung steht schon fest:
+  **nachziehen** (Grundsatzregel „didaktischer Zusatz", P21-1).
+- **Zieldatei:** `Input/v0.13/pskript_mech_kinematik_gmni_v4.tex`, Abschnitt 1.1.
+- **Stelle:** die `figure`-Umgebung mit
+  `\includegraphics[width=0.85\textwidth]{kreisbewegung_1.png}` (im `.tex`
+  ohne `\label`; sie folgt auf den Satz „Eine Kreisbewegung wird beschrieben
+  durch:" und die zugehörige `equation`).
+- **Bisher steht dort:**
+
+  ```latex
+  \caption{Weg-Zeit-Diagramme der Kreisbewegung mit $R=\SI{1,5}{\meter}$ und $T=\SI{6,0}{\second}$.}
+  ```
+
+- **Einzusetzen:**
+
+  ```latex
+  \caption{\textbf{Koordinatensystem:} die $x$- und die $y$-Achse spannen die
+  Ebene auf, in der die Bewegung verläuft; ihr Nullpunkt liegt im Mittelpunkt
+  der Kreisbahn. Der Ortsvektor $\vec s(t)$ zeigt vom Mittelpunkt zum Objekt,
+  und seine beiden Komponenten $x(t)$ und $y(t)$ sind genau die beiden Kurven
+  der Diagramme. Weg-Zeit-Diagramme der Kreisbewegung mit $R=\SI{1,5}{\meter}$
+  und $T=\SI{6,0}{\second}$: oben $x(t)$, unten $y(t)$. Beide Kurven
+  beschreiben \textbf{dieselbe} Bewegung mit demselben Parameter $t$ -- einzeln
+  betrachtet sieht keine von beiden nach einer Kreisbahn aus, erst
+  zusammengenommen ergeben sie eine.}
+  ```
+
+  **Vor dem Einsetzen einmal hinsehen:** ob die gedruckte Abbildung wirklich
+  $x(t)$ oben und $y(t)$ unten zeigt, ist an der Bilddatei
+  (`kreisbewegung_1.png`) zu prüfen — der Teilsatz „oben $x(t)$, unten $y(t)$"
+  beschreibt die interaktive Figur und wird nur übernommen, wenn die statische
+  dieselbe Reihenfolge hat; sonst entfällt er oder wird gedreht.
+
+- **Was NICHT nachgezogen wird** (Sonderregel Bildunterschriften): der Satz
+  „Interaktiv: der Zeit-Regler …" samt Regler-Hinweisen. Auf Papier gibt es
+  keine Regler.
+- **Nummern:** **keine.** Die Figur ersetzt am Bildschirm nur die Anzeige; die
+  statische Abbildung bleibt an derselben Stelle (`.nur-druck`), alle
+  Abbildungs- und Gleichungsnummern sind unverändert (nachgemessen mit
+  `dom_harness.mjs`: 88 Abbildungen, gleiche Lücken).
+
 ---
 
 ### Medienbedingte Unterschiede (dokumentiert, nichts nachzuziehen)
