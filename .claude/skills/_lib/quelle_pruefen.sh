@@ -62,4 +62,19 @@ else
     [ "$fehler" -eq 0 ] && fehler=2
 fi
 
+# Zweiter Anker: bis wohin der INHALT nachgezogen ist. Er beantwortet die andere
+# Frage -- "fehlt dem WIP etwas aus der Quelle?" -- und kann weiter sein als der
+# Verifikationsanker, weil Nachziehen (Posten uebertragen) und Verifizieren
+# (Skill v013-verifikation ueber Nummern und Verweise) zwei Arbeitsgaenge sind.
+NACHGEZOGEN=$(grep -m1 '^ANKER_NACHGEZOGEN=' "$ROOT/QUELLE_v013.md" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]')
+if [ -n "$NACHGEZOGEN" ]; then
+    if [ "$NACHGEZOGEN" = "$HEAD_KURZ" ]; then
+        echo "Nachgezogen  :  $NACHGEZOGEN -- kein offenes Inhalts-Delta Quelle -> WIP."
+    else
+        m=$(git -C "$REPO" rev-list --count "$NACHGEZOGEN..HEAD" 2>/dev/null)
+        echo "Nachgezogen  :  $NACHGEZOGEN  !=  $HEAD_KURZ (aktuell)"
+        [ -n "$m" ] && echo "  $m Quell-Commits sind noch nicht ins WIP uebertragen."
+    fi
+fi
+
 exit $fehler
