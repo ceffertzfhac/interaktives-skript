@@ -6,15 +6,22 @@
 // (Sekanten-/Tangentensteigung) zu den aktuellen Parametern berechnet.
 
 import { FUNCS, X_MIN, X_MAX, NUM_POINTS, DELTA_LIMIT } from './constants.js'
+import { store } from './state.js'
 
 // Funktionskurve über den Definitionsbereich abtasten
+// PORT-AENDERUNG (P17-1): Definitionsbereich pro Instanz ueberschreibbar.
+// Die Sim zeigt fest 0...25; Abb. 1.15 zeigt 0...20 s. Ohne das muesste die
+// Figur die Konstante aendern -- und damit fuer alle Figuren dieses Motors.
+export const xVon = () => (Number.isFinite(store.xMin) ? store.xMin : X_MIN)
+export const xBis = () => (Number.isFinite(store.xMax) ? store.xMax : X_MAX)
+
 export function sampleCurve(funcKey) {
   const f = FUNCS[funcKey].f
   const xs = new Array(NUM_POINTS)
   const ys = new Array(NUM_POINTS)
-  const step = (X_MAX - X_MIN) / (NUM_POINTS - 1)
+  const step = (xBis() - xVon()) / (NUM_POINTS - 1)
   for (let i = 0; i < NUM_POINTS; i++) {
-    const x = X_MIN + i * step
+    const x = xVon() + i * step
     xs[i] = x
     ys[i] = f(x)
   }
@@ -39,7 +46,7 @@ export function yRange(ys) {
 // zentrierten (δ/2 ≤ min) ab. So bleibt δ beim Umschalten zentriert↔vorwärts
 // unverändert (kein Klemm-Sprung).
 export function maxAbsDelta(x0) {
-  return Math.min(x0 - X_MIN, X_MAX - x0, DELTA_LIMIT)
+  return Math.min(x0 - xVon(), xBis() - x0, DELTA_LIMIT)
 }
 
 // Grenzwert-Analyse: Stützpunkte P₁, P₂, Differenzenquotient (Sekantensteigung)

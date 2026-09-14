@@ -34,6 +34,8 @@ export const store = {
 
   // PORT-AENDERUNG: Prefix dieser Instanz (runtime.js setzt ihn).
   idPrefix: '',
+  // PORT-AENDERUNG: Definitionsbereich je Figur (undefined = Konstanten).
+  xMin: undefined, xMax: undefined,
 }
 
 // ── DOM-Cache ────────────────────────────────────────────────────────────────

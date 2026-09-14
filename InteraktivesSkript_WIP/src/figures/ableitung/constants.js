@@ -52,6 +52,22 @@ export const FUNCS = {
     f:  x => -5 * Math.sin(x / 2) + 0.03 * x ** 2,
     fp: x => -2.5 * Math.cos(x / 2) + 0.06 * x,
   },
+  // PORT-ERGAENZUNG (2026-09-14, BACKLOG P17-1): die Kurve der gedruckten
+  // Abb. 1.15. Die Abbildung nennt ihre Funktionsgleichung im Titel:
+  //   x(t) = 1/1000 * (-4 m/s^2 (t+2s)^2 - 4 m/s (t+2s) - 20 m) * sin(t / 1s)
+  // Sie ist der Grund, warum die Abbildung existiert: auf [8 s; 16 s] ist die
+  // SEKANTE positiv (+0,11 m/s), die TANGENTE bei t = 12 s aber negativ
+  // (-0,66 m/s) -- Durchschnitts- und Momentangeschwindigkeit haben dort nicht
+  // einmal dasselbe Vorzeichen. Keine der vier Funktionen oben leistet das.
+  // Nachgerechnet gegen die Abbildung: x(12) = 0,4615 m (dort 0,46),
+  // x'(12) = -0,6635 m/s (dort -0,66), Sekante 0,1068 m/s (dort 0,11).
+  // Ableitung analytisch (Produktregel), nicht numerisch -- wie bei den anderen.
+  skript: {
+    label: 'Ort x(t) aus Abb. 1.15',
+    f:  t => 0.001 * (-4 * (t + 2) ** 2 - 4 * (t + 2) - 20) * Math.sin(t),
+    fp: t => 0.001 * ((-8 * (t + 2) - 4) * Math.sin(t)
+                      + (-4 * (t + 2) ** 2 - 4 * (t + 2) - 20) * Math.cos(t)),
+  },
 }
 export const DEFAULT_FUNC = 'gerade'
 
