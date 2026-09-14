@@ -173,8 +173,14 @@ const SVG_SCENE = `
 // oberen Plot (210 px hoch) der Titel des unteren Platz hat.
 // KEIN display:none auf den Stapel-Gruppen — updateGraphs() schaltet ueber
 // style.visibility (s. Kopfkommentar).
-const SVG_GRAPH = `
-<svg id="sw_graph_svg" viewBox="0 0 560 545" preserveAspectRatio="xMidYMid meet" class="aspekt-graph-svg">
+// Die viewBox-HOEHE haengt am Diagramm-Zuschnitt: gestapelt (Abb. 1.9) fuellen
+// zwei Diagramme die 545; im Einzelmodus (Abb. 1.14) endet die Zeichnung bei
+// y = 431, die restlichen 114 Einheiten waren leerer Raum UNTERHALB des
+// Diagramms — bei "xMidYMid meet" wird er mitskaliert und schiebt sich als
+// Weissraum in die Figur (Nutzerbefund 2026-09-14). 455 laesst 24 Einheiten
+// Luft unter der x-Achsenbeschriftung, so viel wie oben ueber dem Titel.
+const SVG_GRAPH = (cfg) => `
+<svg id="sw_graph_svg" viewBox="0 0 560 ${cfg.bahn ? 455 : 545}" preserveAspectRatio="xMidYMid meet" class="aspekt-graph-svg">
   <g id="sw_graph_group_single" style="visibility:hidden" transform="translate(56, 48)">
     <g id="sw_grid_group"></g>
     <polyline id="sw_graph_line" fill="none" stroke-width="2" points=""/>
@@ -362,7 +368,7 @@ export function buildSchraegerWurfFig(fig) {
       `<div class="aspekt-body">${panelLeft(cfg)}` +
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE}</div>` +
-      `<div class="aspekt-graph">${SVG_GRAPH}</div></div></div>` +
+      `<div class="aspekt-graph">${SVG_GRAPH(cfg)}</div></div></div>` +
       `${panelRight(cfg)}</div>${hiddenStub}`
     ).replace(/sw_/g, p);
     rt.bindDom();
