@@ -39,17 +39,22 @@ Zeichenaufgabe des Design-Systems.
 
 ---
 
-### P25-2 — Vier Kastentypen ohne Aufruf *(S, bewusst offen)*
+### P25-2 — Kastentypen ohne Aufruf *(S, bewusst offen; einer davon erledigt)*
 
-`lernziel`, `motivation`, `wiederholung` und `anmerkung` haben null Aufrufe.
-**Autorentscheidung 2026-09-03: alle vier bleiben** — dieselbe Begründung, mit
-der `\bueb` und `\hinweis` im Druckskript definiert und unbenutzt bleiben (D4).
+Eingetragen als *vier* Typen ohne Aufruf: `lernziel`, `motivation`,
+`wiederholung`, `anmerkung`. **Autorentscheidung 2026-09-03: alle vier
+bleiben** — dieselbe Begründung, mit der `\bueb` und `\hinweis` im Druckskript
+definiert und unbenutzt bleiben (D4).
 
-Kein Handlungsbedarf, aber zwei Dinge sind zu wissen:
+- [x] **`lernziel` ist seit 14.09.2026 in Gebrauch** (v1.49.0): die 13 Kästen,
+  die das Druckskript nach D4 wiederbelebt hat, sind transkribiert — je einer am
+  Abschnittseinstieg von 0.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 2.1, 2.2, 2.3 und
+  drei weitere innerhalb 1.4. Wie hier vermutet war nichts zu gestalten: Mint,
+  Zielscheibe, 6,1 % Fläche standen fertig bereit, die Kästen brauchten nur den
+  Text. Details: `../QUELLE_v013.md`.
 
-- `lernziel` wird im Druckskript nach D4 **wiederbelebt** (13 Kästen, an die
-  Zusammenfassung gekoppelt). Wenn das hierher transkribiert wird, ist der Typ
-  gestalterisch schon fertig (Mint, Zielscheibe, 6,1 % Fläche).
+Es bleiben **drei** Typen ohne Aufruf. Kein Handlungsbedarf, aber zu wissen:
+
 - `anmerkung` ist kein toter Name wie die beiden anderen: für sie existiert
   gebaute Infrastruktur — sie ist der einzige Typ, den `shell.js` in die
   Marginalienspalte verschiebt und `print.js` vor dem Drucken zurückholt.
