@@ -426,7 +426,33 @@ des Fragments.
     Beispielnummern haben sich auf der Druckseite verschoben, dort muss die
     Gegenprüfung ansetzen. A8 ist nummernneutral (421 Seiten vor und nach).
 
-- [ ] **P21-3 Gegenprüfung** — nach der Angleichung Abbildungs-/Gleichungs-
-  nummern und Querverweise beider Fassungen vergleichen. *(S)*
+- [x] **P21-3 Gegenprüfung** — **erledigt 2026-09-14**, gemessen gegen das
+  PDF von `1c64edd` (421 Seiten). Ergebnis: **deckungsgleich in allen vier
+  Größen**, keine Abweichung.
+
+  | Was | PDF | WIP | Befund |
+  |---|---|---|---|
+  | Kästen Beispiel / Rechenbeispiel | 64 / 28 | 64 / 28 | **Typ, Nummer und Reihenfolge aller 92 identisch** — die Verschiebung aus A7 ist damit beidseitig angekommen |
+  | Gleichungsnummern | 947 | 947 | identisch in **Wert und Reihenfolge**, über alle 22 Abschnitte |
+  | Abbildungsnummern | 88 | 88 | identisch in Reihenfolge (23 Doppeleinträge = interaktive Figur + statisches Pendant unter derselben Nummer) |
+  | Querverweise | — | 173 | 54 Abbildungs- + 24 Abschnitts-Verweise aufgelöst, 101 Formel-Verweise im Browser alle als `(X.Y.Z)` — kein „??" |
+
+  **Wie gemessen.** Kästen und Abbildungen über `pdftotext` gegen die im
+  Browser gerenderten Titel; Gleichungen seitenweise im echten Browser, weil
+  MathJax pro Seite setzt (P22-3) — je Seite gegengeprüft, dass so viele Tags
+  gelesen wurden, wie MathJax `mlabeledtr`-Zeilen angelegt hat (sonst zählt man
+  bei `align`-Blöcken nur die erste Nummer und bekommt stillschweigend zu
+  wenig: 802 statt 947). Dazu die Stufen 3, 4, 4b, 4c und 6 des Skills:
+  DOM-Harness ohne Befund, 98 Bildpfade alle HTTP 200, 0 Formel-Übersteher in
+  allen drei Breiten-Modi, 451 Sprungziele in Toleranz, `node --check` über
+  alle Module, CSS-Klammern balanciert.
+
+  **Dabei gefunden und behoben** (zwei Fehler, die nichts mit der Angleichung
+  zu tun hatten): die abgeschnittene Bildunterschrift zu Abb. 1.58 (`4042021`)
+  und das rohe `<` in Inline-Mathe, das in 2.2.7 eine Formel samt Satzrest
+  verschluckte (`ee25b44`, P5).
+
+  **Offen bleibt Stufe 5 (Sicht):** Prosa Wort für Wort gegen das PDF,
+  Druckfluss, Optik — das braucht einen Menschen.
 
 ---

@@ -31,20 +31,23 @@ gegen eine veraltete Vorlage, ohne es zu merken.
 | | Commit | Datum |
 |---|---|---|
 | WIP **inhaltlich nachgezogen bis** | `1c64edd` | 14.09.2026 |
-| WIP **vollständig verifiziert gegen** | `3122514` | 26.07.2026 |
+| WIP **vollständig verifiziert gegen** | `1c64edd` | 14.09.2026 |
 | Quelle **aktuell** | `1c64edd` | 14.09.2026 |
 
 ```
-ANKER_VERIFIZIERT=3122514
+ANKER_VERIFIZIERT=1c64edd
 ANKER_NACHGEZOGEN=1c64edd
 ```
 
 **Die beiden Anker sagen Verschiedenes.** *Nachgezogen* heißt: das inhaltliche
 Delta zwischen den Ständen ist Posten für Posten ins WIP übertragen.
 *Verifiziert* heißt: der Skill `v013-verifikation` ist über Nummern, Verweise,
-Formelsatz und Bildbestand gelaufen. Das erste ist am 14.09.2026 geschehen, das
-zweite nicht — deshalb bleibt `ANKER_VERIFIZIERT` stehen, bis ein
-Verifikationslauf gegen das heutige Quell-PDF ihn nachzieht.
+Formelsatz und Bildbestand gelaufen. Beides ist am 14.09.2026 gegen `1c64edd`
+geschehen (Messwerte in `backlog/P21-statisches-skript-nachziehen.md`, P21-3).
+
+**Was der Anker nicht einschließt:** die Sicht (Stufe 5 des Skills — Prosa
+Wort für Wort gegen das PDF, Druckfluss, Optik). Sie braucht einen Menschen und
+steht weiter aus; der Anker sagt nur, dass die *messbaren* Größen stimmen.
 
 Was am 14.09.2026 (zweite Runde, Quelle `c6faf10` → `1c64edd`, gepusht)
 nachgezogen wurde:
