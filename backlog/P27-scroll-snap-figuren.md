@@ -46,13 +46,47 @@ die Bewegung ohnehin in der Nähe endet.
 
 ### Sub-Tasks
 
-- [ ] **P27-1 `--kopf-h` als CSS-Variable** *(S)* — beim Init und bei
-  Textgrößen-/Breitenwechsel setzen; `scrollToAnchor` liest denselben Wert,
-  damit es nur noch EINE Quelle für die Kopfhöhe gibt.
-- [ ] **P27-2 Snap einschalten** *(S)* — `proximity` auf `html`,
-  `scroll-snap-align: start` + `scroll-margin-top: calc(var(--kopf-h) + 12px)`
-  auf den Figuren im Fließtext.
-- [ ] **P27-3 Gegenmessung** *(S)* — `sprung_ziele.mjs` unverändert grün;
-  von Hand über eine Seite mit zwei Figuren scrollen (dass nicht zwei Snap-
-  Punkte gegeneinander arbeiten) und eine Figur prüfen, die höher ist als das
-  Fenster.
+- [x] **P27-1 `--kopf-h` als CSS-Variable** *(S)* — **erledigt 2026-09-14**:
+  `core.js::kopf_hoehe()` misst die Leiste und schreibt `--kopf-h` **und**
+  `--anker-luft` an die Wurzel; `ANKER_LUFT` ist von `ui.js` nach `core.js`
+  gewandert, weil dasselbe Maß jetzt zwei Verwendungen hat.
+  Aufgerufen wird sie beim Init (nach `init_shell()`, vorher steht die Höhe
+  nicht), bei `resize`, in `apply_text_size()` (die Leiste wächst mit der
+  Schrift) und in `set_width_mode()` (der schmale Header ist anders hoch).
+  `scrollToAnchor` misst nicht mehr selbst, sondern ruft dieselbe Funktion —
+  damit **kann** der Sprung nicht mehr einen anderen Abstand meinen als das
+  Einrasten.
+- [x] **P27-2 Snap einschalten** *(S)* — **erledigt 2026-09-14** in
+  `styles.css`: `scroll-snap-type: y proximity` auf `html`,
+  `.aspekt-figur:not(.aspekt-im-overlay)` mit `scroll-snap-align: start` und
+  `scroll-margin-top: calc(var(--kopf-h, 64px) + var(--anker-luft, 12px))`.
+  Die Fallbacks greifen nur, falls JS (noch) nicht lief.
+- [ ] **P27-3 Gegenmessung** *(S)* — **teilweise**: gemessen im Browser
+  (1400×900, Abb. 1.10), Abstand der Figur-Oberkante zur Leistenunterkante nach
+  dem Scrollen:
+
+  | Start daneben | Ergebnis |
+  |---|---|
+  | ±35 px | **12 px — eingerastet** |
+  | +90 px | 12 px — eingerastet |
+  | +150 px | 12 px — eingerastet |
+  | +250 px | 12 px — eingerastet |
+  | +400 px | frei stehen geblieben |
+  | +600 px | frei stehen geblieben |
+
+  **Chromiums Fangbereich ist also ~250–400 px breit** und in CSS nicht
+  einstellbar. Weiterscrollen bleibt leicht (+600 px landet frei), aber wer
+  zufällig 150 px neben der Figur zum Stehen kommt, wird ausgerichtet. Ob das
+  beim Lesen als hilfreich oder als Ziehen empfunden wird, entscheidet die
+  Praxis — die Alternative wäre eine eigene JS-Lösung mit engerer Schwelle,
+  deutlich mehr Aufwand.
+
+  Seitenwechsel landet weiterhin bei `scrollY = 0` (der Snap zieht die erste
+  Figur nicht nach oben). **Offen:** `sprung_ziele.mjs` (läuft), eine Figur
+  höher als das Fenster, und zwei Figuren auf einer Seite.
+
+  **Fallstrick beim Messen** (hat mich zuerst erwischt): die Kapitelbilder laden
+  `lazy` und schieben das Layout. Wer die Zielposition VOR dem Scrollen misst
+  und danach nicht neu misst, sieht „nicht eingerastet", wo in Wahrheit die
+  Seite unter der Figur gewachsen ist. Erst Ruhe abwarten (~2,5 s), dann messen
+  — dieselbe Lehre steht schon im Kopf von `sprung_ziele.mjs`.

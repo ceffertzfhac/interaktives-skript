@@ -8,7 +8,7 @@ import { ge, interaktiv, generate_highlight_boxes, safari_bug, make_static,
          update_all, toggle_darkmode, test, reload_mathjax, reset, hide,
          init_text_size_controls, adjust_text_size, set_width_mode,
          init_width_mode, toggle_settings, close_settings, set_palette,
-         init_palette, typeset_seite } from './core.js';
+         init_palette, typeset_seite, kopf_hoehe } from './core.js';
 import { generate_toc, offsetAnchor, scrollToAnchor, toc, toc_filter, kontakt, close_zoom, zoom, pause } from './ui.js';
 import { init_print, check_print, from_qr, toggle_print_menu, close_print_menu, print_scope } from './print.js';
 import { paginate, showPage, getCurrentPage } from './pages.js';
@@ -436,6 +436,12 @@ async function init() {
     // damit auch alles ab, was init_aspekt_figuren() erst zur Laufzeit baut.
     init_tooltips();
     init_center();
+    // Kopfhoehe als CSS-Variable bereitstellen (core.js::kopf_hoehe). Nach
+    // init_shell(), weil die Leiste erst dann ihre endgueltige Hoehe hat; bei
+    // Groessenaenderung nachziehen, damit das Einrasten der Figuren (P27) und
+    // die Sprungziele denselben Abstand behalten.
+    kopf_hoehe();
+    window.addEventListener("resize", kopf_hoehe, { passive: true });
     // Injizierte Formeln re-typesetzen, sobald MathJax bereit ist (Gate wie
     // numbering.js). renumber laeuft ueber reload_mathjax mit.
     // Die Ladeblende faellt, wenn dieser Lauf durch ist -- dann steht die

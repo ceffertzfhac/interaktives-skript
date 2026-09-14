@@ -2373,3 +2373,31 @@ input[type="range"]::-moz-range-track {
 }
 .rail-num { font-variant-numeric: tabular-nums; color: var(--ink-3); }
 .rail-onpage a.rail-item:hover .rail-ico { color: var(--teal-dark); }
+
+/* ── Interaktive Figuren rasten beim Scrollen ein (BACKLOG P27) ──────────────
+   Nutzerwunsch: „ein kleines Haken", wenn eine interaktive Grafik die Oberkante
+   des Sichtbereichs erreicht — leicht auszurichten, aber auch leicht wieder
+   loszuwerden.
+
+   WARUM `proximity` UND NICHT `mandatory`: mandatory zwingt JEDEN Scrollvorgang,
+   auf einem Snap-Punkt zu enden; an einer Figur kaeme man dann kaum vorbei und
+   beim Lesen mitten in einem Abschnitt wuerde es reissen. proximity rastet nur
+   ein, wenn die Bewegung ohnehin in der Naehe endet — genau das gewuenschte
+   Anbieten statt Festhalten. `scroll-snap-stop` bleibt auf `normal` (Default),
+   sonst muesste jede Figur einzeln angesteuert werden.
+
+   DER ABSTAND kommt aus derselben Quelle wie die Sprungziele:
+   core.js::kopf_hoehe() misst die klebende Kopfleiste und schreibt --kopf-h,
+   ANKER_LUFT dort liefert --anker-luft. Beide Werte aendern sich mit der
+   Textgroesse und dem Breiten-Modus, deshalb werden sie gemessen und nicht
+   festgeschrieben; die Fallbacks greifen nur, falls JS (noch) nicht lief.
+
+   NUR IM FLIESSTEXT: im Lupe-Overlay scrollt die Figur selbst, dort waere ein
+   Snap-Punkt sinnlos. */
+html {
+    scroll-snap-type: y proximity;
+}
+.aspekt-figur:not(.aspekt-im-overlay) {
+    scroll-snap-align: start;
+    scroll-margin-top: calc(var(--kopf-h, 64px) + var(--anker-luft, 12px));
+}

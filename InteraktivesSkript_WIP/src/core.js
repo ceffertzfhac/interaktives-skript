@@ -394,6 +394,9 @@ function apply_text_size() {
     paper.style.setProperty("--paper-graphics-scale", graphics_scale.toFixed(3));
     paper.style.setProperty("--paper-graphics-line-scale", graphics_line_scale.toFixed(3));
     sync_text_size_ui();
+    // Die Kopfleiste traegt den Titel in derselben Schriftgroessen-Familie und
+    // waechst mit — der Snap-Abstand (P27) muss mitwachsen.
+    kopf_hoehe();
     if (window.relayout_eq_numbers) window.relayout_eq_numbers();
 }
 
@@ -407,6 +410,28 @@ export function init_text_size_controls() {
     } catch (_) {}
     read_paper_metrics();
     apply_text_size();
+}
+
+// ── Hoehe der klebenden Kopfleiste — EINE Quelle fuer JS und CSS ────────────
+// WARUM: die Kopfleiste ist nicht konstant hoch (64 px im Normalfall, waechst
+// mit der Textgroesse und veraendert sich im schmalen Header). Bisher hat nur
+// ui.js::scrollToAnchor sie gemessen; CSS hatte keinen Zugriff darauf. Fuer
+// P27 (Figuren rasten unter der Leiste ein) braucht `scroll-margin-top` genau
+// diesen Wert — und zwei getrennte Quellen liefen frueher oder spaeter
+// auseinander. Diese Funktion MISST und schreibt das Ergebnis als
+// `--kopf-h` an die Wurzel; sie ist damit die einzige Stelle, die es weiss.
+// Luft zwischen Leistenunterkante und Zielelement. Gehoert hierher und nicht
+// in ui.js: dasselbe Mass gilt fuer den Sprung (scrollToAnchor) UND fuer das
+// Einrasten (P27) -- eine Zahl, zwei Verwendungen.
+export const ANKER_LUFT = 12;
+
+export function kopf_hoehe() {
+    const kopf = ge("header");
+    const h = kopf ? kopf.getBoundingClientRect().height : 0;
+    const wurzel = document.documentElement.style;
+    wurzel.setProperty("--kopf-h", h.toFixed(1) + "px");
+    wurzel.setProperty("--anker-luft", ANKER_LUFT + "px");
+    return h;
 }
 
 export function adjust_text_size(step) {
@@ -439,6 +464,8 @@ export function set_width_mode(mode, persist = true) {
     // Breiten-Modus abhaengt.
     document.documentElement.dataset.widthMode = mode;
     mark_active_width_segment(mode);
+    // Der schmale Header (<= 1024 px, P11) ist anders hoch als der breite.
+    kopf_hoehe();
     if (persist) {
         try { localStorage.setItem(WIDTH_STORAGE_KEY, mode); } catch (_) {}
     }

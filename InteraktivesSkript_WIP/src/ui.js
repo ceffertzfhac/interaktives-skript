@@ -5,7 +5,7 @@
 // showPage() statt per Anker-Sprung -- andere Seiten sind per Paginierung
 // display:none, ein reiner Anker-Sprung wuerde ins Leere zeigen.
 
-import { ge, show, hide, toggle_visibility, update_all } from './core.js';
+import { ge, show, hide, toggle_visibility, update_all, kopf_hoehe, ANKER_LUFT } from './core.js';
 import { getPages, showPage, getCurrentPage } from './pages.js';
 
 export let zoom_enabled = false;
@@ -315,7 +315,7 @@ export function kontakt() {
 // Jetzt wird die Oberkante des Ziels bewusst dicht unter die Kopfleiste
 // gesetzt, mit deren TATSAECHLICHER Hoehe statt der Konstanten 70 (der Kopf
 // ist 64 px hoch und aendert sich mit der Textgroesse).
-const ANKER_LUFT = 12;
+// ANKER_LUFT liegt in core.js: dasselbe Mass steuert das Einrasten (P27).
 // Wie lange nach dem Sprung noch nachgefasst wird (s.u.). 2,5 s deckt das
 // Nachladen der Bilder auch ueber eine langsame Leitung ab; abgebrochen wird
 // ohnehin, sobald der Nutzer selbst etwas tut.
@@ -325,9 +325,10 @@ let anker_laeuft = null;     // beendet den vorigen Sprung, wenn ein neuer kommt
 export function scrollToAnchor(el) {
     if (!el) return;
     if (anker_laeuft) anker_laeuft();
-    const kopf = ge("header");
-    const hoehe = () => (kopf ? kopf.getBoundingClientRect().height : 0);
-    const ziel = () => Math.max(0, el.getBoundingClientRect().top + window.scrollY - hoehe() - ANKER_LUFT);
+    // Dieselbe Quelle wie die CSS-Variable --kopf-h (core.js::kopf_hoehe): der
+    // Sprung hier und das Einrasten aus P27 muessen denselben Abstand meinen,
+    // sonst springt ein Verweis an eine andere Stelle, als das Scrollen einrastet.
+    const ziel = () => Math.max(0, el.getBoundingClientRect().top + window.scrollY - kopf_hoehe() - ANKER_LUFT);
 
     window.scrollTo(window.scrollX, ziel());
     // Gemerkt wird die ERREICHTE Position, nicht die gewuenschte: liegt das
