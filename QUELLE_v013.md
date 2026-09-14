@@ -30,13 +30,13 @@ gegen eine veraltete Vorlage, ohne es zu merken.
 
 | | Commit | Datum |
 |---|---|---|
-| WIP **inhaltlich nachgezogen bis** | `c6faf10` | 03.09.2026 |
+| WIP **inhaltlich nachgezogen bis** | `1c64edd` | 14.09.2026 |
 | WIP **vollständig verifiziert gegen** | `3122514` | 26.07.2026 |
-| Quelle **aktuell** | `830dcf9` | 14.09.2026 |
+| Quelle **aktuell** | `1c64edd` | 14.09.2026 |
 
 ```
 ANKER_VERIFIZIERT=3122514
-ANKER_NACHGEZOGEN=c6faf10
+ANKER_NACHGEZOGEN=1c64edd
 ```
 
 **Die beiden Anker sagen Verschiedenes.** *Nachgezogen* heißt: das inhaltliche
@@ -46,15 +46,21 @@ Formelsatz und Bildbestand gelaufen. Das erste ist am 14.09.2026 geschehen, das
 zweite nicht — deshalb bleibt `ANKER_VERIFIZIERT` stehen, bis ein
 Verifikationslauf gegen das heutige Quell-PDF ihn nachzieht.
 
-**Offene Sync-Schuld Quelle → WIP (Runde 2, seit 14.09.2026):** die Quelle ist
-auf `830dcf9` weitergelaufen. Der einzige Posten mit WIP-Anteil ist die
-Dezimalschreibweise der beiden Beispielzahlen in 0.1 (`155587c`) — er liegt als
-**P26-1** in `backlog/P26-quelle-nach-wip-nachziehen.md`, zusammen mit der
-Liste dessen, was aus dieser Runde *keinen* WIP-Anteil hat. Deshalb bleibt
-`ANKER_NACHGEZOGEN` auf `c6faf10` stehen, bis P26-1 im WIP ist. Die fünf
-Commits dieser Runde sind zudem **noch nicht gepusht**.
+Was am 14.09.2026 (zweite Runde, Quelle `c6faf10` → `1c64edd`, gepusht)
+nachgezogen wurde:
 
-Was am 14.09.2026 nachgezogen wurde (Sync-Schuld **Quelle → WIP** aus Runde 1):
+| Quell-Commit | Was | Wohin im WIP |
+|---|---|---|
+| `155587c`, `1c64edd` | die beiden Beispielzahlen in 0.1 ausgeschrieben (Elektronen-/Sonnenmasse) | `ch_00_grundlagen.html`, WIP `e46d382` (v1.49.3) |
+| `54304e1`, `6b5566c`, `4063250` | AP8a–c, fünf doppelte `\label` | **kein WIP-Anteil** — stammen aus P21-A8, im WIP waren die Labels nie doppelt |
+| `6c3b90f`…`541c997`, `bdb4229` | AP1–AP6 und zwei Quellfehler | **kein WIP-Anteil** — das WIP ist dort die Quelle (P21) |
+| `e5afc53` | fünf fehlende Bilder ins Quell-Repo | **kein WIP-Anteil** — alle vier Abbildungen liegen im WIP bereits, das Logo hat es eigenständig (`d2db3fb`) |
+| `65c798d`, `8b1ac66`, `830dcf9` | Neubauten des PDF | kein Inhalt — aber neue Verifikationsgrundlage (421 Seiten) |
+
+Der Arbeitsvorrat dieser Richtung steht in
+`backlog/P26-quelle-nach-wip-nachziehen.md`.
+
+Erste Runde (Quelle → `c6faf10`):
 
 | Quell-Commit | Was | Wohin im WIP |
 |---|---|---|
@@ -96,7 +102,7 @@ Stand zu **beiden** Ankern liegt (`ANKER_VERIFIZIERT`, `ANKER_NACHGEZOGEN`). Es
 - **Fragmentköpfe** in `chapters/` — nennen Quelldatei und Verifikationsdatum.
   Das Datum bezieht sich auf den damaligen Quellstand, nicht auf den heutigen.
 - **Skill `v013-verifikation`** — vergleicht Nummern gegen das PDF der Quelle.
-  Das PDF ist **mitversioniert** und wurde zuletzt in `830dcf9` erneuert (gebaut
+  Das PDF ist **mitversioniert** und wurde zuletzt in `1c64edd` erneuert (gebaut
   14.09.2026, **421 Seiten**) — es passt also zum aktuellen Quellstand, nicht
   mehr zu `ANKER_VERIFIZIERT`. Nach dem
   nächsten Quell-Commit ist es das nicht mehr automatisch. **Vorsicht bei einem

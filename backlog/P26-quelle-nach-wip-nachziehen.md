@@ -20,7 +20,7 @@ im WIP steht *und* der Anker nachgezogen ist.
 
 ---
 
-### Runde 1 — Quellstand `c6faf10` (03.09.2026) → `830dcf9` (14.09.2026)
+### Runde 1 — Quellstand `c6faf10` (03.09.2026) → `1c64edd` (14.09.2026, gepusht)
 
 **Ohne WIP-Anteil, geprüft am 2026-09-14** (hier nur, damit niemand sie ein
 zweites Mal prüft):
@@ -35,7 +35,12 @@ zweites Mal prüft):
 
 ### Sub-Tasks
 
-- [ ] **P26-1 Zehnerpotenzen 0.1: die beiden Beispielzahlen ausschreiben** *(S)*.
+- [x] **P26-1 Zehnerpotenzen 0.1: die beiden Beispielzahlen ausschreiben** *(S)*
+  — **erledigt 2026-09-14** (`e46d382`, v1.49.3). Beide Gleichungen bleiben
+  nummeriert, 0.1 führt weiter 12 Nummern; `formel_ueberstand.mjs` über alle
+  drei Breiten-Modi: 0 Übersteher, die 31-stellige Zahl passt in die Spalte.
+  Die Quelle war beim Nachziehen korrigiert (`1c64edd`, zehn Nullergruppen,
+  im PDF nachgerechnet 9,1090E-31).
   **Quelle:** `pskript_grundlagen_gmni_v2.tex`, § „Rechnen mit Zehnerpotenzen"
   (Nutzeränderung vom 14.09.2026, Commit `155587c` — noch nicht gepusht).
   **Ziel:** `InteraktivesSkript_WIP/chapters/ch_00_grundlagen.html`, direkt unter
@@ -87,15 +92,15 @@ zweites Mal prüft):
   12 Gleichungsnummern führt und der Absatz in beiden Fassungen dasselbe
   zeigt.
 
-- [ ] **P26-2 Anker und Verifikationsgrundlage nachziehen** *(S)* — nach der
-  Sitzung im LaTeX-Repo (AP8, s. P21-2): in `QUELLE_v013.md` die Tabelle
-  „Was nachgezogen wurde" um Runde 1 ergänzen, `ANKER_NACHGEZOGEN` auf den
-  dann aktuellen Quell-Commit setzen. Dabei beachten: das mitversionierte
-  Quell-PDF ist neu gebaut (**421 Seiten** statt 419), der Hinweis zum
-  `v013-verifikation`-Skill in `QUELLE_v013.md` nennt noch `4d83870`/419 Seiten.
-  `ANKER_VERIFIZIERT` bleibt stehen, bis ein Verifikationslauf ihn nachzieht.
+- [x] **P26-2 Anker und Verifikationsgrundlage nachziehen** *(S)* —
+  **erledigt 2026-09-14**: `ANKER_NACHGEZOGEN` steht auf `1c64edd`, die
+  Runde-2-Tabelle in `QUELLE_v013.md` nennt den einen Posten mit WIP-Anteil.
+  `ANKER_VERIFIZIERT` bleibt auf `3122514`, bis ein Verifikationslauf gegen das
+  neue PDF (421 Seiten, `1c64edd`) ihn nachzieht — das ist P21-3 bzw. P12-G.
+  Auch der Hinweis zum `v013-verifikation`-Skill zeigt jetzt auf das neue PDF
+  (vorher `4d83870`/419 Seiten).
 
-- [ ] **P26-3 Routine festhalten** *(S)* — wenn Runde 1 durch ist: in einem Satz
+- [ ] **P26-3 Routine festhalten** *(S)* — jetzt, wo zwei Runden durch sind: in einem Satz
   in `QUELLE_v013.md` verankern, dass ein Quell-Update immer diesen Weg geht
   (Delta ansehen → Posten hier → Anker setzen), damit die nächste Runde nicht
   wieder ad hoc läuft.
