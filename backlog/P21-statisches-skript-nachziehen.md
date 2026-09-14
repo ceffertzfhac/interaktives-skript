@@ -268,9 +268,23 @@ Voreinstellung angelegt.
 
 #### P21-A8 · Fünf mehrfach vergebene `\label` im Druckskript
 
-- **Status:** **offen — Befund 2026-09-14**, aufgefallen beim Abarbeiten von
-  AP1–AP6 im LaTeX-Repo (Warnung „There were multiply-defined labels" im
-  TeX-Log). Entscheidung nötig, Umsetzung gehört zu P21-2.
+- **Status:** **erledigt 2026-09-14** im LaTeX-Repo, drei Commits
+  (`54304e1` AP8a, `6b5566c` AP8b, `4063250` AP8c, Neubau `830dcf9`).
+  Befund am selben Tag beim Abarbeiten von AP1–AP6 (Warnung „There were
+  multiply-defined labels" im TeX-Log). Ergebnis der Rückmeldung:
+  - `formel_freierfall4` heißt an der zweiten Stelle jetzt
+    `formel_freierfall_fallzeit`, wörtlich wie im WIP. Die beiden falschen
+    Verweise drucken wieder 1.1.6–1.1.9 bzw. 1.1.9, der dritte weiter 1.1.14.
+  - Die drei Kreisbahn-Labels drucken wieder 1.4.5 / 1.4.7 / 1.4.8 statt
+    1.4.1 / 1.4.1 / 1.4.9. Die Dopplung der Passage steht unverändert —
+    gegengezählt: `equation`/`align`/`\[…\]`/`figure` vor und nach der
+    Änderung 63/8/35/25.
+  - Die drei Abbildungen haben eigene Labels; die Zuordnung Zeile→Nummer kam
+    aus der `.aux`, nicht aus den Labelnamen (die Anweisung benennt je
+    Abbildung das zweite Teilbild, die neuen Namen das erste — eine Falle, die
+    dort nicht stand).
+  - Log: `multiply` **0×** (vorher 6 Warnungen über 5 Labels), 0 Fehler,
+    421 Seiten wie vor AP8 — also keine Nummer verschoben.
 - **Warum das hierher gehört und nicht nur in `QUELLEN_FEHLER.md`:** eines der
   fünf Labels ist unten unter „Medienbedingte Unterschiede" schon aufgeführt —
   das WIP hat `formel_freierfall4` disambiguiert und der Druck nicht. Damit
@@ -384,38 +398,34 @@ des Fragments.
   wörtlichen LaTeX, den Zieldateien, den Leitplanken und dem Prompt für die
   Session im LaTeX-Repo). Bei Widersprüchen gilt dieses Register; das
   Übergabedokument ist bei jeder neuen Abweichung mitzuziehen.
-- [ ] **P21-2 Angleichung im LaTeX-Repo** — die entschiedenen Punkte in
-  `Project_Script` umsetzen (die Einträge oben sind so geschrieben, dass sie
-  direkt abgearbeitet werden können), `Input/v0.13` per `git pull` aktualisieren,
-  PDF neu bauen. *(M, außerhalb dieses Repos)* — Anleitung:
-  `../UEBERGABE_Druckskript.md`.
-  **Zwischenstand 2026-09-14**, nachgemessen über `Input/v0.13` → dem
-  maßgeblichen Arbeitsordner `Project_Script` (Stand `8b1ac66`, deckungsgleich
-  mit `origin/main`):
-  - **A1–A6 umgesetzt und committet** (`6c3b90f`, `3e0be3e`, `40cabda`,
-    `ba1fc7d`, `e4e87e5`, `541c997`), danach zwei Neubauten — 421 Seiten,
-    0 Fehler.
-  - **A7 vollständig umgesetzt:** `Physik_skript_header_gmni_v3.tex` definiert
-    `rechenbeispielcounter`, `rechenbeispielbox` und `\brbsp`/`\erbsp`
-    (+ Plural) mit `calculator`-Icon in `skriptblau` — die beiden im
-    Übergabedokument offen gelassenen Entscheidungen (Farbton, Icon) sind damit
-    getroffen —, und die Kästen sind umgestellt: **64 Beispiel / 28
-    Rechenbeispiel**, je eingebundener Datei `11/17/11/12/6/1/12/3/4/1/6/5/3
-    = 92`, Zahl für Zahl die Kontrollzahlen aus
-    `scripts/classification_report.md`. *Für P21-3: A7 ist der einzige nicht
-    nummernneutrale Punkt — die Beispielnummern haben sich auf der Druckseite
-    verschoben, die Gegenprüfung muss dort ansetzen.*
-    (Achtung beim Nachmessen: der Makroname ist `\brbsp`, **nicht** `\bbrsp`
-    wie im ursprünglichen Vorschlag des Übergabedokuments. Mit dem falschen
-    Namen findet `grep` nichts und A7 sieht offen aus.)
-  - **A8 offen** (neu, s. o.).
-  - Die beiden Quellfehler 5 und 6 (Abschnitt 1.1) sind auf der Druckseite
-    mitkorrigiert (`bdb4229`). In `QUELLEN_FEHLER.md` steht das noch nicht — die
-    Tabelle führt nur eine Spalte „WIP", keine für den Druckstand; bei der
-    Gegenprüfung ist zu entscheiden, ob die beiden Einträge einen Vermerk
-    „Druck: korrigiert 2026-09-14" bekommen.
-  - `Input/v0.13` ist bereits aktuell — ein weiterer `git pull` ist erst nach
-    der nächsten Sitzung im LaTeX-Repo nötig.
+- [x] **P21-2 Angleichung im LaTeX-Repo** — **erledigt 2026-09-14**: A1–A8
+  stehen druckseitig. Anleitung war `../UEBERGABE_Druckskript.md`.
+  - **A1–A6** je ein Commit (`6c3b90f`, `3e0be3e`, `40cabda`, `ba1fc7d`,
+    `e4e87e5`, `541c997`), dazu zwei Neubauten (`65c798d`, `8b1ac66`).
+  - **A7** vollständig: Header definiert `rechenbeispielcounter`,
+    `rechenbeispielbox` und `\brbsp`/`\erbsp` (+ Plural) mit
+    `calculator`-Icon in `skriptblau` — die beiden im Übergabedokument offen
+    gelassenen Entscheidungen (Farbton, Icon) sind damit getroffen —, und die
+    Kästen sind umgestellt: **64 Beispiel / 28 Rechenbeispiel**, je
+    eingebundener Datei `11/17/11/12/6/1/12/3/4/1/6/5/3 = 92`, Zahl für Zahl
+    die Kontrollzahlen aus `scripts/classification_report.md`.
+    *(Beim Nachmessen: der Makroname ist `\brbsp`, **nicht** `\bbrsp` wie im
+    ursprünglichen Vorschlag des Übergabedokuments — mit dem falschen Namen
+    findet `grep` nichts und A7 sieht offen aus.)*
+  - **A8** drei Commits (`54304e1`, `6b5566c`, `4063250`), Neubau `830dcf9`,
+    Log ohne „multiply-defined labels". Details oben bei P21-A8.
+  - Die beiden Quellfehler 5 und 6 (Abschnitt 1.1) sind mitkorrigiert
+    (`bdb4229`) und in `CORRECTIONS.md` des Quell-Repos eingetragen. In
+    `QUELLEN_FEHLER.md` steht das noch nicht — die Tabelle führt nur eine
+    Spalte „WIP", keine für den Druckstand; bei der Gegenprüfung ist zu
+    entscheiden, ob die Einträge einen Vermerk „Druck: korrigiert 2026-09-14"
+    bekommen.
+  - **Offen: die fünf Commits sind noch nicht gepusht** (Stand 14.09.2026) —
+    solange gibt es die Angleichung nur lokal.
+  - **Für P21-3:** A7 ist der einzige nicht nummernneutrale Punkt; die
+    Beispielnummern haben sich auf der Druckseite verschoben, dort muss die
+    Gegenprüfung ansetzen. A8 ist nummernneutral (421 Seiten vor und nach).
+
 - [ ] **P21-3 Gegenprüfung** — nach der Angleichung Abbildungs-/Gleichungs-
   nummern und Querverweise beider Fassungen vergleichen. *(S)*
 
