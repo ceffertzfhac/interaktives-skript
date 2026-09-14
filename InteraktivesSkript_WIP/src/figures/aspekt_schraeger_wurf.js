@@ -93,6 +93,10 @@ const SVG_SCENE = `
     <marker id="sw_arrow-vel" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
     <marker id="sw_arrow-acc" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
     <marker id="sw_arrow-coord" markerWidth="15" markerHeight="10.5" refX="0" refY="5.25" orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
+    <!-- Spitze der DIAGRAMM-Achsen (BACKLOG P5). Geometrie wie in den
+         kreisbewegung-Figuren (kb_graph-arrowhead), damit die Diagramme aller
+         Kapitel dieselbe Achsenspitze tragen. -->
+    <marker id="sw_graph-arrowhead" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
   </defs>
   <g id="sw_animation_group">
     <rect id="sw_building" x="80" width="80"/>

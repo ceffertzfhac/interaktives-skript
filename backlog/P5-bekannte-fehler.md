@@ -20,9 +20,10 @@
   **Gegenmessung** (`scratchpad/rohtex.mjs`, im Commit beschrieben): ueber alle
   137 Seiten 0 Stellen mit rohem TeX im Text, 0 verdaechtige Attributnamen
   (vorher 3).
-- [ ] **Abb. 1.8 und 1.9: die Diagramm-Achsen haben keine Pfeilspitzen.**
-  **Nutzerbefund 2026-09-14, Ursache gefunden, Fix nicht umgesetzt** (wartet auf
-  Freigabe). Alle Figuren des `kreisbewegung`-Motors zeigen Pfeile an Zeit- und
+- [x] **Abb. 1.8 und 1.9: die Achsen hatten keine Pfeilspitzen.**
+  **Nutzerbefund 2026-09-14, behoben am selben Tag (v1.50.2).** Betroffen waren
+  nicht nur die Diagramm-Achsen: in Abb. 1.9 fehlten sie auch am
+  Koordinatensystem der Szene. Alle Figuren des `kreisbewegung`-Motors zeigen Pfeile an Zeit- und
   Werteachse, die beiden anderen nicht.
   **Ursache — derselbe Port-Fehler in zwei Motoren:** die Marker-Referenz im
   Motor traegt den Instanz-Prefix nicht mit, den die Aspekt-Figur den IDs gibt.
@@ -38,11 +39,15 @@
   **Das ist derselbe Fehler, der bei P16-3 fuer die SZENEN-Pfeile behoben wurde**
   („sonst zeigen die Achsenpfeile jeder zweiten Figur ins Leere") — nur fuer die
   DIAGRAMM-Achsen und in zwei weiteren Motoren nachgeblieben.
-  **Zu tun:** je Motor die Referenz auf `store.idPrefix` umstellen, bei
-  `schraeger_wurf` zusaetzlich den Marker ins Figuren-Skelett aufnehmen.
-  Danach `figur_smoke` + ein Screenshot je betroffener Figur. *(S)*
-  **Beim Fix mitpruefen:** ob noch weitere unprefixte `url(#…)` in den Motoren
-  stehen — `grep -rn "url(#" src/figures/*/render.js | grep -v idPrefix`.
+  **Umgesetzt:** beide Motoren referenzieren jetzt über `store.idPrefix`; im
+  `schraeger_wurf`-Skelett ist ein eigener `sw_graph-arrowhead` ergänzt (die Sim
+  nahm für Szene und Diagramm denselben Marker, den die Figur gar nicht kennt)
+  plus die CSS-Füllung. Geprüft: `figur_smoke` beide Figuren fehlerfrei,
+  Screenshots beider Figuren gesichtet — Spitzen an Zeit- und Werteachse, in
+  1.9 auch an den Szenen-Achsen.
+  **Gegenprobe über alle Motoren:**
+  `grep -rn "url(#" src/figures/*/render.js | grep -v idPrefix` findet nur noch
+  Kommentare. Die Prüfung gehört in die Checkliste jedes künftigen Ports.
 
 - [ ] **Formeln im Fliesstext fehlen sporadisch, Formeln in Boxen sind da.**
   **Ursache mit hoher Wahrscheinlichkeit beseitigt (2026-08-31, v1.38.3/1.39.0)

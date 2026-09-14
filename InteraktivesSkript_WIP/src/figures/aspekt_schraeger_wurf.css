@@ -72,6 +72,8 @@
     font-size: calc(12px * var(--kb-text-scale) * var(--kb-fs));
 }
 .aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="arrow-coord"] polygon { fill: var(--kb-text); }
+/* Spitze der Diagramm-Achsen (BACKLOG P5) -- wie in den uebrigen Figuren. */
+.aspekt-figur[data-motor="schraeger_wurf"] [id$="graph-arrowhead"] polygon { fill: var(--kb-text); }
 
 /* Zoom-Anzeige: der Massstab aendert sich mit h0/v0/alpha, die Skalen-Angabe
    muss deshalb sichtbar sein. Dezent, oben links in der Szene. */

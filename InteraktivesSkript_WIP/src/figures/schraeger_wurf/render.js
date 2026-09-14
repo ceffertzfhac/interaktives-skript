@@ -144,7 +144,10 @@ export function drawAnimationCoordSystem() {
   const ox = BALL_START_X_PX
   const oy = store.yAxisConfig.origin === 'start' ? scaleY(store.h0) : scaleY(0)
   const yDir = store.yAxisConfig.direction === 'up' ? -1 : 1
-  const attrs = { class: 'coord-axis', 'stroke-width': 2, 'marker-end': 'url(#arrowhead)', 'stroke-dasharray': '2,2' }
+  // PORT-AENDERUNG (2026-09-14, BACKLOG P5): Marker-Referenz MIT Instanz-Prefix
+  // (die Figur definiert sw_arrow-coord -> sw<n>_arrow-coord). Ohne Prefix zeigt
+  // sie ins Leere und SVG zeichnet stillschweigend keine Spitze.
+  const attrs = { class: 'coord-axis', 'stroke-width': 2, 'marker-end': `url(#${store.idPrefix}arrow-coord)`, 'stroke-dasharray': '2,2' }
   DOM.animationCoordSystem.appendChild(el('line', { ...attrs, x1: ox, y1: oy, x2: ox + axisLen, y2: oy }))
   const xLab = el('text', { x: ox + axisLen + 5, y: oy + 14, class: 'coord-label' })
   setAxisLabel(xLab, 'x / m')
@@ -368,8 +371,14 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
     gridEl.appendChild(t)
   }
 
-  gridEl.appendChild(el('line', { x1: padL, y1: y0, x2: padL + plotW, y2: y0, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': 'url(#arrowhead)' }))
-  gridEl.appendChild(el('line', { x1: padL, y1: padT + plotH, x2: padL, y2: padT, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': 'url(#arrowhead)' }))
+  // PORT-AENDERUNG (2026-09-14, BACKLOG P5): eigener, geprefixter Marker fuer die
+  // DIAGRAMM-Achsen. Die Sim nahm hier denselben url(#arrowhead) wie die Szene;
+  // in der Aspekt-Figur gab es diese ID gar nicht (das Skelett kennt
+  // sw_arrow-coord/-vel/-acc), die Achsen standen also ohne Spitze da. Der
+  // Marker sw_graph-arrowhead ist im Skelett ergaenzt.
+  const graphArrow = `url(#${store.idPrefix}graph-arrowhead)`
+  gridEl.appendChild(el('line', { x1: padL, y1: y0, x2: padL + plotW, y2: y0, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': graphArrow }))
+  gridEl.appendChild(el('line', { x1: padL, y1: padT + plotH, x2: padL, y2: padT, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': graphArrow }))
 
   // PORT-AENDERUNG (P16-6): Abstand der Achsenbeschriftung von y0+30 auf y0+44,
   // der Achsenzahlen von y0+15 auf y0+18. Die Werte der Sim sind fuer ihre

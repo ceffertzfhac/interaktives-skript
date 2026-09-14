@@ -534,9 +534,16 @@ export function updateGraph(time, offset = 0, showCurrent = true) {
   // Hintergrund-Rect (Plot-Bereich)
   DOM.gridGroup.appendChild(el('rect', { x: padL, y: padT, width: plotW, height: plotH, class: 'graph-bg' }))
 
-  // Achsen (mit Pfeilspitzen): Abszisse am Nulldurchgang, Ordinate volle Höhe
-  DOM.gridGroup.appendChild(el('line', { x1: x0, y1: xAxisY, x2: padL + plotW, y2: xAxisY, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': 'url(#graph-arrowhead)' }))
-  DOM.gridGroup.appendChild(el('line', { x1: x0, y1: plotBottom, x2: x0, y2: padT, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': 'url(#graph-arrowhead)' }))
+  // Achsen (mit Pfeilspitzen): Abszisse am Nulldurchgang, Ordinate volle Höhe.
+  // PORT-AENDERUNG (2026-09-14, BACKLOG P5): Marker-Referenz MIT Instanz-Prefix.
+  // Die Stand-alone-Sim hat genau ein Diagramm im Dokument und darf die feste ID
+  // nehmen; die Aspekt-Figur prefixt jede ID (kb_graph-arrowhead -> fp<n>_...),
+  // sodass url(#graph-arrowhead) ins Leere zeigte -- SVG zeichnet dann
+  // stillschweigend NICHTS, die Achsen standen ohne Spitze da (Nutzerbefund an
+  // Abb. 1.8). Gleiche Ursache wie bei den Szenen-Pfeilen in P16-3.
+  const graphArrow = `url(#${store.idPrefix}graph-arrowhead)`
+  DOM.gridGroup.appendChild(el('line', { x1: x0, y1: xAxisY, x2: padL + plotW, y2: xAxisY, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': graphArrow }))
+  DOM.gridGroup.appendChild(el('line', { x1: x0, y1: plotBottom, x2: x0, y2: padT, class: 'axis-line', 'stroke-width': 1.5, 'marker-end': graphArrow }))
 
   // Y-Ticks: feine 1-2-4-5-Folge, ≥4 beschriftete Ticks inkl. 0 (5–9 Ticks)
   const yStep = niceStepLE(valRng, 4)
