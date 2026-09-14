@@ -32,7 +32,7 @@ gegen eine veraltete Vorlage, ohne es zu merken.
 |---|---|---|
 | WIP **inhaltlich nachgezogen bis** | `c6faf10` | 03.09.2026 |
 | WIP **vollständig verifiziert gegen** | `3122514` | 26.07.2026 |
-| Quelle **aktuell** | `c6faf10` | 03.09.2026 |
+| Quelle **aktuell** | `830dcf9` | 14.09.2026 |
 
 ```
 ANKER_VERIFIZIERT=3122514
@@ -46,7 +46,15 @@ Formelsatz und Bildbestand gelaufen. Das erste ist am 14.09.2026 geschehen, das
 zweite nicht — deshalb bleibt `ANKER_VERIFIZIERT` stehen, bis ein
 Verifikationslauf gegen das heutige Quell-PDF ihn nachzieht.
 
-Was am 14.09.2026 nachgezogen wurde (Sync-Schuld **Quelle → WIP**, jetzt leer):
+**Offene Sync-Schuld Quelle → WIP (Runde 2, seit 14.09.2026):** die Quelle ist
+auf `830dcf9` weitergelaufen. Der einzige Posten mit WIP-Anteil ist die
+Dezimalschreibweise der beiden Beispielzahlen in 0.1 (`155587c`) — er liegt als
+**P26-1** in `backlog/P26-quelle-nach-wip-nachziehen.md`, zusammen mit der
+Liste dessen, was aus dieser Runde *keinen* WIP-Anteil hat. Deshalb bleibt
+`ANKER_NACHGEZOGEN` auf `c6faf10` stehen, bis P26-1 im WIP ist. Die fünf
+Commits dieser Runde sind zudem **noch nicht gepusht**.
+
+Was am 14.09.2026 nachgezogen wurde (Sync-Schuld **Quelle → WIP** aus Runde 1):
 
 | Quell-Commit | Was | Wohin im WIP |
 |---|---|---|
@@ -63,7 +71,9 @@ Nebenbefund aus demselben Abgleich: zwei Unterschriften in
 
 Die Gegenrichtung (**WIP → Quelle**) führt
 `backlog/P21-statisches-skript-nachziehen.md`; sie ist von diesem Anker
-unberührt.
+unberührt. Die Arbeitsposten **dieser** Richtung stehen seit dem 14.09.2026 in
+`backlog/P26-quelle-nach-wip-nachziehen.md` — diese Datei führt den Stand, P26
+die Posten.
 
 ## Die Prüfung
 
@@ -86,8 +96,9 @@ Stand zu **beiden** Ankern liegt (`ANKER_VERIFIZIERT`, `ANKER_NACHGEZOGEN`). Es
 - **Fragmentköpfe** in `chapters/` — nennen Quelldatei und Verifikationsdatum.
   Das Datum bezieht sich auf den damaligen Quellstand, nicht auf den heutigen.
 - **Skill `v013-verifikation`** — vergleicht Nummern gegen das PDF der Quelle.
-  Das PDF ist **mitversioniert** und wurde zuletzt in `4d83870` erneuert (gebaut
-  03.09.2026, 419 Seiten) — es passt also zum aktuellen Quellstand. Nach dem
+  Das PDF ist **mitversioniert** und wurde zuletzt in `830dcf9` erneuert (gebaut
+  14.09.2026, **421 Seiten**) — es passt also zum aktuellen Quellstand, nicht
+  mehr zu `ANKER_VERIFIZIERT`. Nach dem
   nächsten Quell-Commit ist es das nicht mehr automatisch. **Vorsicht bei einem
   laufenden LaTeX-Lauf im Quellordner:** ein abgebrochener Build hinterlässt dort
   eine winzige, unbrauchbare PDF-Datei. `quelle_pruefen.sh` meldet den Ordner
