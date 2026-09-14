@@ -1,9 +1,14 @@
 'use strict'
 
 import {
-  X_MIN, X_MAX, GRAPH_W, GRAPH_H, PAD_L, PAD_R, PAD_T, PAD_B,
+  GRAPH_W, GRAPH_H, PAD_L, PAD_R, PAD_T, PAD_B,
 } from './constants.js'
 import { store, DOM } from './state.js'
+// PORT-AENDERUNG (P17-1): der Definitionsbereich ist je Figur ueberschreibbar
+// (store.xMin/xMax, s. physics.js). ALLE Stellen hier rechnen deshalb mit
+// xVon()/xBis() statt mit den Konstanten -- sonst liefe die Achse weiter als
+// die Kurve (in Abb. 1.15 bis 25 s, obwohl die Bewegung bei 20 s endet).
+import { xVon, xBis } from './physics.js'
 // PORT-AENDERUNG: die gemeinsamen Helfer liegen im WIP unter kreisbewegung/lib
 // (erste Portierung), nicht unter ../../shared/js.
 import { fmt } from '../kreisbewegung/lib/format.js'
@@ -43,7 +48,7 @@ const plotBottom = PAD_T + plotH
 
 // Zentrale Koordinaten-Transformation Physik → Bildschirm (Pixel im viewBox)
 export function physToScreen(x, y) {
-  const sx = PAD_L + ((x - X_MIN) / (X_MAX - X_MIN)) * plotW
+  const sx = PAD_L + ((x - xVon()) / (xBis() - xVon())) * plotW
   const sy = PAD_T + plotH - ((y - store.yMin) / ((store.yMax - store.yMin) || 1)) * plotH
   return { x: sx, y: sy }
 }
@@ -78,10 +83,10 @@ export function drawGraph() {
   }
 
   // x-Gitter + Ticks
-  const xStep = niceStepLE(X_MAX - X_MIN, 4)
+  const xStep = niceStepLE(xBis() - xVon(), 4)
   const xDec = xStep % 1 === 0 ? 0 : 1
-  const x0px = physToScreen(X_MIN, 0).x
-  for (let v = X_MIN; v <= X_MAX + 1e-9; v = Math.round((v + xStep) * 1e6) / 1e6) {
+  const x0px = physToScreen(xVon(), 0).x
+  for (let v = xVon(); v <= xBis() + 1e-9; v = Math.round((v + xStep) * 1e6) / 1e6) {
     const xp = physToScreen(v, 0).x
     if (Math.abs(xp - x0px) > 2)
       DOM.gridGroup.appendChild(el('line', { x1: xp, y1: PAD_T, x2: xp, y2: plotBottom, class: 'grid-line' }))
@@ -99,11 +104,14 @@ export function drawGraph() {
   DOM.gridGroup.appendChild(el('line', { x1: PAD_L, y1: plotBottom, x2: PAD_L, y2: PAD_T, class: 'axis-line', 'marker-end': achsPfeil }))
 
   // Achsenbeschriftungen (Symbole kursiv, unit-los)
-  const xl = el('text', { x: PAD_L + plotW + 14, y: y0px + 4, 'text-anchor': 'start', class: 'axis-label' })
-  setAxisLabel(xl, 'x')
+  // PORT-AENDERUNG (P17-1): Label AM Achsenende statt dahinter -- bei PAD_R=26
+  // ragten die 14 px plus Textbreite aus der viewBox, in der Figur war "t / s"
+  // rechts abgeschnitten. Jetzt endet es buendig mit der Achse.
+  const xl = el('text', { x: PAD_L + plotW + 10, y: y0px + 20, 'text-anchor': 'end', class: 'axis-label' })
+  setAxisLabel(xl, store.achsX || 'x')
   DOM.gridGroup.appendChild(xl)
   const yl = el('text', { x: PAD_L - 4, y: PAD_T - 12, 'text-anchor': 'middle', class: 'axis-label' })
-  setAxisLabel(yl, 'y')
+  setAxisLabel(yl, store.achsY || 'y')
   DOM.gridGroup.appendChild(yl)
 
   // Funktionskurve
@@ -132,8 +140,8 @@ export function updateOverlay() {
 
   // Tangente über den gesamten Definitionsbereich (Clip beschneidet vertikal)
   if (store.showTangent) {
-    const tA = physToScreen(X_MIN, a.mTan * (X_MIN - a.x0) + a.y0)
-    const tB = physToScreen(X_MAX, a.mTan * (X_MAX - a.x0) + a.y0)
+    const tA = physToScreen(xVon(), a.mTan * (xVon() - a.x0) + a.y0)
+    const tB = physToScreen(xBis(), a.mTan * (xBis() - a.x0) + a.y0)
     DOM.tangentLine.setAttribute('points', `${tA.x},${tA.y} ${tB.x},${tB.y}`)
     show(DOM.tangentLine)
   } else {
@@ -146,8 +154,8 @@ export function updateOverlay() {
   const p1 = physToScreen(a.x1, a.y1)
   const p2 = physToScreen(a.x2, a.y2)
   if (secValid) {
-    const sA = physToScreen(X_MIN, a.mSec * (X_MIN - a.x1) + a.y1)
-    const sB = physToScreen(X_MAX, a.mSec * (X_MAX - a.x1) + a.y1)
+    const sA = physToScreen(xVon(), a.mSec * (xVon() - a.x1) + a.y1)
+    const sB = physToScreen(xBis(), a.mSec * (xBis() - a.x1) + a.y1)
     DOM.secantLine.setAttribute('points', `${sA.x},${sA.y} ${sB.x},${sB.y}`)
 
     DOM.p1Dot.setAttribute('cx', p1.x); DOM.p1Dot.setAttribute('cy', p1.y)
@@ -169,12 +177,12 @@ export function updateOverlay() {
     const midH = physToScreen((a.x1 + a.x2) / 2, a.y1)
     DOM.dxText.setAttribute('x', midH.x)
     DOM.dxText.setAttribute('y', p1.y + (a.dy >= 0 ? 15 : -8))
-    createStyledSvgText(DOM.dxText, `Δ<i>x</i> = ${fmt(a.dx)}`)
+    createStyledSvgText(DOM.dxText, `Δ<i>${store.symX || 'x'}</i> = ${fmt(a.dx)}`)
     const midV = physToScreen(a.x2, (a.y1 + a.y2) / 2)
     DOM.dyText.setAttribute('x', p2.x + (a.dx >= 0 ? 6 : -6))
     DOM.dyText.setAttribute('y', midV.y)
     DOM.dyText.setAttribute('text-anchor', a.dx >= 0 ? 'start' : 'end')
-    createStyledSvgText(DOM.dyText, `Δ<i>y</i> = ${fmt(a.dy)}`)
+    createStyledSvgText(DOM.dyText, `Δ<i>${store.symY || 'y'}</i> = ${fmt(a.dy)}`)
     show(DOM.dxText, DOM.dyText)
   } else {
     hide(DOM.dxText, DOM.dyText)
@@ -186,7 +194,7 @@ export function updateOverlay() {
   if (store.showTangentSlope) {
     DOM.tanSlopeText.setAttribute('x', rx)
     DOM.tanSlopeText.setAttribute('y', ry0 + slot * rlh)
-    createStyledSvgText(DOM.tanSlopeText, `Tangente: <i>m</i> = ${fmt(a.mTan, 3)}`)
+    createStyledSvgText(DOM.tanSlopeText, `Tangente: <i>m</i> = ${fmt(a.mTan, 3)}${store.steigEinheit || ''}`)
     show(DOM.tanSlopeText); slot++
   } else {
     hide(DOM.tanSlopeText)
@@ -194,7 +202,7 @@ export function updateOverlay() {
   if (store.showSecantSlope && !Number.isNaN(a.mSec)) {
     DOM.secSlopeText.setAttribute('x', rx)
     DOM.secSlopeText.setAttribute('y', ry0 + slot * rlh)
-    createStyledSvgText(DOM.secSlopeText, `Sekante: <i>m</i>${sub('s')} = ${fmt(a.mSec, 3)}`)
+    createStyledSvgText(DOM.secSlopeText, `Sekante: <i>m</i>${sub('s')} = ${fmt(a.mSec, 3)}${store.steigEinheit || ''}`)
     show(DOM.secSlopeText); slot++
   } else {
     hide(DOM.secSlopeText)

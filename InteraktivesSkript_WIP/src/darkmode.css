@@ -318,6 +318,17 @@ input[type="range"]::-moz-range-track {
        und immer noch dieselbe Farbfamilie wie im Hellmodus. */
     --k11-kurve: #ff7777;
 }
+/* Farb-Palette der Ableitungs-Figur (Abb. 1.15, --ab-*, s.
+   aspekt_ableitung.css): eigene Tokenfamilie, daher eigener Dunkel-Zweig.
+   Werte 1:1 aus dem Dunkel-Set der Stand-alone-Sim; es ist dieselbe
+   CVD-sichere Familie, nur aufgehellt, damit sie auf dem dunklen Diagrammgrund
+   genug Kontrast hat. */
+.aspekt-figur[data-motor="ableitung"] {
+    --ab-kurve: #8894b8;
+    --ab-tan:   #56b4e9;
+    --ab-sec:   #f0b23e;
+    --ab-punkt: #e078c3;
+}
 /* Farb-Palette der Federpendel-Figuren (Abschnitt 3.1.5 und Abb. 1.8, --fp-*,
    s. aspekt_federpendel.css): eigene Tokenfamilie, daher eigener Dunkel-Zweig.
    Auf den MOTOR gescopt, nicht auf einen Aspekt-Namen — beide Figuren des

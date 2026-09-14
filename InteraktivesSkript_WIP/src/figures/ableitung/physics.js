@@ -46,7 +46,8 @@ export function yRange(ys) {
 // zentrierten (δ/2 ≤ min) ab. So bleibt δ beim Umschalten zentriert↔vorwärts
 // unverändert (kein Klemm-Sprung).
 export function maxAbsDelta(x0) {
-  return Math.min(x0 - xVon(), xBis() - x0, DELTA_LIMIT)
+  const grenze = Number.isFinite(store.deltaLimit) ? store.deltaLimit : DELTA_LIMIT
+  return Math.min(x0 - xVon(), xBis() - x0, grenze)
 }
 
 // Grenzwert-Analyse: Stützpunkte P₁, P₂, Differenzenquotient (Sekantensteigung)

@@ -36,6 +36,16 @@ export const store = {
   idPrefix: '',
   // PORT-AENDERUNG: Definitionsbereich je Figur (undefined = Konstanten).
   xMin: undefined, xMax: undefined,
+  // PORT-AENDERUNG: Beschriftung je Figur. Die Sim zeigt eine abstrakte
+  // Funktion y(x); Abb. 1.15 zeigt einen ORT ueber der ZEIT, dort heissen die
+  // Achsen t und x, die Differenzen Δt und Δx, und die Steigung ist eine
+  // Geschwindigkeit in m/s. Ohne diese Felder stuende in der Figur „Δy" an
+  // einer Groesse, die im Text x heisst.
+  achsX: 'x', achsY: 'y',        // fuer setAxisLabel ('Symbol / Einheit')
+  symX: 'x', symY: 'y',          // Symbole in den Δ-Beschriftungen
+  steigEinheit: '',              // an die Steigungswerte, z. B. ' m/s'
+  // PORT-AENDERUNG: Betragsgrenze fuer δ je Figur (Sim: DELTA_LIMIT = 5).
+  deltaLimit: undefined,
 }
 
 // ── DOM-Cache ────────────────────────────────────────────────────────────────

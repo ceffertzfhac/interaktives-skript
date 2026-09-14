@@ -1,0 +1,80 @@
+/* aspekt_ableitung.css — Optik der Figur zu Abb. 1.15 (Durchschnitts- vs.
+   Momentangeschwindigkeit, s. aspekt_ableitung.js).
+
+   Die Graph-STRUKTUR (Hintergrund, Gitter, Achsen, Ticks, Titel) kommt aus
+   aspekt_kreisbahn.css — die Figur ist ebenfalls .aspekt-figur. Hier stehen nur
+   die eigene Farbfamilie und die Elemente, die es sonst nirgends gibt.
+
+   EIGENE PALETTE (--ab-*): die Werte stammen 1:1 aus der Stand-alone-Sim und
+   sind bewusst CVD-sicher (Okabe-Ito: Blau #0072b2, Orange #e69f00, Mauve
+   #cc79a7). Sie weichen von den Farben der GEDRUCKTEN Abbildung ab (dort
+   Tangente violett, Sekante grün, Stützpunkt rot): Grün/Rot nebeneinander ist
+   genau die Paarung, die bei Rotgrünblindheit zusammenfällt — und die beiden
+   Linien tragen hier die ganze Aussage. Die Unterscheidung stützt sich
+   zusätzlich auf die Strichart (Tangente lang gestrichelt, Sekante gepunktet),
+   sie funktioniert also auch in Graustufen. */
+.aspekt-figur[data-motor="ableitung"] {
+    --ab-kurve: #8890a8;
+    --ab-tan:   #0072b2;
+    --ab-sec:   #e69f00;
+    --ab-punkt: #cc79a7;
+}
+
+.aspekt-figur[data-motor="ableitung"] [id$="func_line"] {
+    stroke: var(--ab-kurve); stroke-width: calc(2.5px * var(--kb-lw, 1)); fill: none;
+    stroke-linejoin: round; stroke-linecap: round;
+}
+.aspekt-figur[data-motor="ableitung"] [id$="tangent_line"] {
+    stroke: var(--ab-tan); stroke-width: calc(2px * var(--kb-lw, 1)); fill: none;
+    stroke-dasharray: 6 4;
+}
+.aspekt-figur[data-motor="ableitung"] [id$="secant_line"] {
+    stroke: var(--ab-sec); stroke-width: calc(2px * var(--kb-lw, 1)); fill: none;
+    stroke-dasharray: 3 3;
+}
+.aspekt-figur[data-motor="ableitung"] [id$="tri_h"],
+.aspekt-figur[data-motor="ableitung"] [id$="tri_v"] {
+    stroke: var(--ab-sec); stroke-width: calc(1.25px * var(--kb-lw, 1));
+}
+.aspekt-figur[data-motor="ableitung"] [id$="p1_dot"],
+.aspekt-figur[data-motor="ableitung"] [id$="p2_dot"] { fill: var(--ab-sec); }
+.aspekt-figur[data-motor="ableitung"] [id$="_point"] { fill: var(--ab-punkt); }
+.aspekt-figur[data-motor="ableitung"] [id$="graph-arrowhead"] polygon { fill: var(--kb-text); }
+
+/* Δt-/Δx-Beschriftung am Steigungsdreieck und die beiden Steigungs-Anzeigen
+   oben links im Plot. Groesse ueber --kb-fs mitskaliert wie alle Graph-Texte. */
+.aspekt-figur[data-motor="ableitung"] .ab-delta-text {
+    fill: var(--ab-sec); stroke: none; font-family: var(--kb-font);
+    font-size: calc(12px * var(--kb-text-scale, 1) * var(--kb-fs, 1));
+}
+.aspekt-figur[data-motor="ableitung"] .ab-slope-text {
+    stroke: none; font-family: var(--kb-font); font-weight: 500;
+    font-size: calc(13px * var(--kb-text-scale, 1) * var(--kb-fs, 1));
+}
+.aspekt-figur[data-motor="ableitung"] .ab-slope-tan { fill: var(--ab-tan); }
+.aspekt-figur[data-motor="ableitung"] .ab-slope-sec { fill: var(--ab-sec); }
+
+/* Die beiden Schalter tragen die Farbe der Linie, die sie ein- und ausblenden. */
+.aspekt-figur[data-motor="ableitung"] .ab-label-sec { color: var(--ab-sec); }
+.aspekt-figur[data-motor="ableitung"] .ab-label-tan { color: var(--ab-tan); }
+.aspekt-figur[data-motor="ableitung"] .legend-swatch[data-c="ab-kurve"] { background: var(--ab-kurve); }
+.aspekt-figur[data-motor="ableitung"] .legend-swatch[data-c="ab-sec"]   { background: var(--ab-sec); }
+.aspekt-figur[data-motor="ableitung"] .legend-swatch[data-c="ab-tan"]   { background: var(--ab-tan); }
+.aspekt-figur[data-motor="ableitung"] .legend-swatch[data-c="ab-punkt"] { background: var(--ab-punkt); }
+
+/* Layout: EIN Diagramm, keine Szene — die Figur ist einspaltig. */
+.aspekt-figur[data-motor="ableitung"] .aspekt-main-content {
+    display: flex; flex-direction: column; align-items: stretch; min-width: 0;
+    position: relative;
+}
+.aspekt-figur[data-motor="ableitung"] .aspekt-main-content .aspekt-graph {
+    padding: 8px; min-width: 0;
+}
+.aspekt-figur[data-motor="ableitung"] .aspekt-graph-svg {
+    display: block; width: 100%; height: auto; max-width: none; max-height: 62vh;
+    margin: 0 auto;
+}
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-motor="ableitung"] .aspekt-graph-svg {
+    max-height: 46vh;
+}
+.aspekt-figur.aspekt-im-overlay[data-motor="ableitung"] .aspekt-graph-svg { max-height: 72vh; }
