@@ -2,6 +2,24 @@
 ## P5 — Bekannte Fehler (Interaktivitaet / Shell)
 
 - [x] **Schiene „Auf dieser Seite" zeigt beim ERSTEN Laden nur den Box-Typ.** Nach dem Neuladen steht in der linken Schiene oft nur „Wichtig", „Beispiel" … ohne Titel; nach Hin-und-Herspringen dann korrekt „Beispiel: …". **Ursache:** `main.js::init()` ruft `init_shell()` (baut die Schiene, liest `.highlight_box_title`) **vor** `init_numbering()`, das die Box-Titel erst auf „Beispiel 1.4.1: Titel" setzt. **Fix-Richtung:** `init_shell()` nach `init_numbering()` aufrufen oder nach der Nummerierung einen Schienen-Refresh ausloesen. *(S)* — *Fix (quick-wins, 2026-07-23, Commit `d0c53d1`): `init_shell()` in `init()` hinter `init_numbering()`+`label_aspekt_figuren()` verschoben; `paginate()` bleibt vorher (Seitenregister). Zwischenschritte (figure panels/footnotes/aspekt) brauchen die Schiene nicht.*
+- [x] **Eine Formel im Fliesstext fehlte dauerhaft — rohes `<` in Inline-Mathe.**
+  **Gefunden und behoben 2026-09-14 (v1.49.5)** beim Verifikationslauf P21-3.
+  In 2.2.7 stand `\(r_B<r_A\)`. Der HTML-Parser liest `<r_A\)` als
+  Tag-Anfang: im Browser endete der Absatz nach „… im Abstand \(r_B", die
+  Formel blieb roher Quelltext und der Rest des Satzes verschwand im
+  Pseudo-Element. **Gleiches Symptom wie beim Eintrag darunter, andere
+  Ursache** — hier deterministisch, nicht sporadisch, und nicht von MathJax
+  abhaengig.
+  **Warum es so lange unentdeckt blieb:** der Browser repariert stillschweigend,
+  die Seite sieht „nur etwas kurz" aus. Aufgefallen ist es erst, weil der
+  lite-Parser von MathJax beim Einlesen des Fragments abbricht (Stufe 2 des
+  Verifikations-Skills) und `jsdom` drei unmoegliche Attributnamen meldete.
+  **Regel daraus:** `<` in Inline-Mathe immer als `&lt;`; ein `<` bricht nur,
+  wenn direkt ein Buchstabe folgt, also sind `\(k<0\)` & Co. heute harmlos und
+  morgen eine Falle. Alle sieben Fundstellen sind umgestellt.
+  **Gegenmessung** (`scratchpad/rohtex.mjs`, im Commit beschrieben): ueber alle
+  137 Seiten 0 Stellen mit rohem TeX im Text, 0 verdaechtige Attributnamen
+  (vorher 3).
 - [ ] **Formeln im Fliesstext fehlen sporadisch, Formeln in Boxen sind da.**
   **Ursache mit hoher Wahrscheinlichkeit beseitigt (2026-08-31, v1.38.3/1.39.0)
   — Beobachtung läuft weiter, s. „Was jetzt anders ist" am Ende.**
