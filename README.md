@@ -31,8 +31,8 @@ mitlaufen. Entstanden für die Physik-Vorlesung im Fachbereich 8 der
   Formeln in LaTeX-Satz (MathJax), Kästen für Lernziel, Beispiel,
   Rechenbeispiel, Wichtig, Zusammenfassung, Aufgabe und Bemerkung — wo die
   Vorlage ein Lernziel setzt, steht es am Anfang des Abschnitts.
-- **24 interaktive Aspekt-Figuren** auf sieben Motoren: `kreisbewegung`
-  (2D, Abb. 1.38–1.51), `kreis_spiral` (ISO-3D, Abb. 1.57–1.59),
+- **25 interaktive Aspekt-Figuren** auf sieben Motoren: `kreisbewegung`
+  (2D, Abb. 1.10 und 1.38–1.51), `kreis_spiral` (ISO-3D, Abb. 1.57–1.59),
   `grundbegriffe` (2D, Abb. 1.1), `bus_weg_zeit` (Abb. 1.2),
   `federpendel` (harmonische Schwingung, Abb. 1.8 und Abschnitt 3.1.5),
   `freier_fall` (freier Fall und senkrechter Wurf, Abb. 1.3–1.7) und
