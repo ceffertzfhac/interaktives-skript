@@ -389,8 +389,9 @@ des Fragments.
   direkt abgearbeitet werden können), `Input/v0.13` per `git pull` aktualisieren,
   PDF neu bauen. *(M, außerhalb dieses Repos)* — Anleitung:
   `../UEBERGABE_Druckskript.md`.
-  **Zwischenstand 2026-09-14**, nachgemessen im Checkout `Input/physik_skript_repo`
-  (Stand `8b1ac66`, deckungsgleich mit `origin/main`):
+  **Zwischenstand 2026-09-14**, nachgemessen über `Input/v0.13` → dem
+  maßgeblichen Arbeitsordner `Project_Script` (Stand `8b1ac66`, deckungsgleich
+  mit `origin/main`):
   - **A1–A6 umgesetzt und committet** (`6c3b90f`, `3e0be3e`, `40cabda`,
     `ba1fc7d`, `e4e87e5`, `541c997`), danach zwei Neubauten — 421 Seiten,
     0 Fehler.

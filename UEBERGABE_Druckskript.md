@@ -82,9 +82,11 @@ ich P21 in meinem anderen Repo abhaken kann.
 
 Geschrieben wurde die Anweisung gegen `3122514` („Bilder 2.3 nachgeliefert.",
 2026-07-26). **Am 2026-09-14 ist ein großer Teil davon umgesetzt worden**;
-nachgemessen im Checkout `Input/physik_skript_repo` dieses Repos, der auf dem
-Stand `8b1ac66` („Dokument auf dem Mac neu gebaut", 2026-09-14) steht und mit
-`origin/main` übereinstimmt:
+nachgemessen über `Input/v0.13` dieses Repos — der Symlink zeigt auf
+`../../Project_Script/v0.13`, also auf **diesen** maßgeblichen Arbeitsordner
+(nicht auf den Altstand `Input/physik_skript_repo`) —, Stand `8b1ac66`
+(„Dokument auf dem Mac neu gebaut", 2026-09-14), deckungsgleich mit
+`origin/main`:
 
 | AP | Stand am 2026-09-14 | woran erkennbar |
 |---|---|---|
