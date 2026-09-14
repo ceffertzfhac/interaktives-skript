@@ -24,8 +24,14 @@ pixel-identisch.**
 
 ### Sub-Tasks
 
-- [ ] **P17-4 Abb. 1.8: das Diagramm ist das schmalste aller Figuren** *(S–M)*
-  — **Nutzerbeobachtung 2026-09-14**, nachgemessen mit `breiten_check.mjs`
+- [x] **P17-4 Abb. 1.8: das Diagramm ist das schmalste aller Figuren** *(S–M)*
+  — **erledigt 2026-09-14** (Breite v1.50.1, Beschriftung
+  v1.50.3). Nutzerentscheidung: **Weg (2)**, die viewBox des Diagramms wird
+  breiter (GRAPH_W_VERT = 560 statt 410), die Höhenbindung bleibt. Ergebnis
+  nachgemessen: Diagramm 41 % → 51 % (normal), 32 % → 44 % (breit); die Figur
+  ist in keinem Modus mehr die schmalste. Die Figur zu 3.1.5 ist unverändert
+  (86/76 %), es war nur der vertikale Aufbau betroffen.
+  **Ursprünglicher Befund**, nachgemessen mit `breiten_check.mjs`
   (gezeichnete Breite des Diagramms, Anteil an der verfügbaren Breite):
 
   | Figur | schmal | normal | breit |
@@ -56,10 +62,19 @@ pixel-identisch.**
   3. **Im Breit-Modus über die Breite bemessen** und die größere Höhe in Kauf
      nehmen — bricht die Höhenbindung genau dort, wo am meisten Platz ist.
 
-  **Nebenbefund aus demselben Screenshot** (eigene Figur, normal-Modus): in der
-  Szene überlappt die Beschriftung „\(y=0\) (Ruhelage)" den Achsenpfeil der
-  \(y\)-Achse; darunter steht viel Leerraum bis zur \(-y_0\)-Linie. Getrennt
-  vom Breitenpunkt zu behandeln.
+  **Nebenbefund, erledigt 2026-09-14 (v1.50.3):** die Beschriftung
+  „\(y=0\) (Ruhelage)" überlappte eine Linie — nachgemessen war es **nicht**
+  der Achsenpfeil, sondern die **Ruhelage-Linie selbst**: die 155 px breite
+  Beschriftung war mit `text-anchor:middle` auf `animCenterX+120` zentriert und
+  begann damit bei +27, während die Linie erst bei +80 endet. Ihr linkes Drittel
+  lag also auf der Linie — es sah aus wie durchgestrichen. Jetzt steht sie mit
+  `text-anchor:start` am Linienende + 8 px; dieselbe Korrektur für die
+  Umkehrpunkt-Beschriftungen \(\pm y_0\), die mit derselben Zentrierung 3 px
+  über ihr Linienende ragten.
+  Damit die volle Beschriftung rechts Platz hat, ist die Szenen-viewBox von
+  300 auf 345 verbreitert (sie endet bei x≈469, die alte rechte Kante lag bei
+  435). Nebenwirkung, die hier willkommen ist: die Szene füllt ihre Spalte
+  besser — 44 % → 51 % gezeichnete Breite in normal.
 
 - [ ] **P17-1 Aspekt-Figur Abb. 1.15 — Sekante vs. Tangente** (Durchschnitts- vs.
   Momentangeschwindigkeit, Unterabschnitt 1.1.10 „Geschwindigkeit"). Statisches

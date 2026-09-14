@@ -286,7 +286,12 @@ export function setupScene() {
     // Oszillator (y-Achse bei x≈145, Equilibrium-Label bis x≈405) plus Stoppuhr
     // oben-rechts (bis x≈429) füllen so die hohe, schmale Zelle aus, statt im
     // 450-breiten viewBox mit großem linken Leerraum winzig zu skalieren.
-    DOM.mainSvg.setAttribute('viewBox', '135 5 300 475')
+    // PORT-AENDERUNG (2026-09-14, BACKLOG P17-4): Breite 300 -> 345. Die
+    // Beschriftung "y = 0 (Ruhelage)" steht jetzt rechts neben der Linie und
+    // endet bei x ~ 469; mit der alten rechten Kante (135+300 = 435) waere sie
+    // abgeschnitten. Die Szene wird dadurch zugleich etwas breiter und fuellt
+    // ihre Spalte besser (sie war dort das Schmalste der Figur).
+    DOM.mainSvg.setAttribute('viewBox', '135 5 345 475')
     DOM.stopwatch.setAttribute('transform', 'translate(220, 60) scale(0.595)')
     DOM.pos0Label.innerHTML = 'Anfangsauslenkung <i>y</i>₀:'
     const deltaL = (store.m * G) / store.k
@@ -314,8 +319,15 @@ export function setupScene() {
     DOM.equilibriumLine.setAttribute('y1', animCenterY)
     DOM.equilibriumLine.setAttribute('x2', animCenterX + 80)
     DOM.equilibriumLine.setAttribute('y2', animCenterY)
-    DOM.equilibriumLabel.setAttribute('x', animCenterX + 120)
+    // PORT-AENDERUNG (2026-09-14, BACKLOG P17-4): Beschriftung RECHTS NEBEN die
+    // Linie statt darauf zentriert. Vorher stand sie mit text-anchor:middle auf
+    // animCenterX+120, war aber 155 px breit -- ihr linkes Drittel lag damit
+    // ueber der Ruhelage-Linie (Ende bei animCenterX+80), was wie ein
+    // Durchstreichen aussah (Nutzerbefund an Abb. 1.8). Mit text-anchor:start
+    // am Linienende + 8 px beginnt sie dort, wo die Linie aufhoert.
+    DOM.equilibriumLabel.setAttribute('x', animCenterX + 88)
     DOM.equilibriumLabel.setAttribute('y', animCenterY + 4)
+    DOM.equilibriumLabel.setAttribute('text-anchor', 'start')
     DOM.equilibriumLabel.textContent = 'y = 0 (Ruhelage)'
 
     const unstretchedY = springAttachY + scale(L0)
@@ -337,11 +349,16 @@ export function setupScene() {
     DOM.maxPosLine.setAttribute('x2', animCenterX + 70)
     DOM.maxPosLine.setAttribute('y1', animCenterY + scale(Math.abs(A)))
     DOM.maxPosLine.setAttribute('y2', animCenterY + scale(Math.abs(A)))
-    DOM.minPosLabel.setAttribute('x', animCenterX + 80)
+    // Umkehrpunkt-Beschriftungen aus demselben Grund wie die Ruhelage rechts
+    // ANGESETZT statt zentriert (P17-4): zentriert auf +80 ragten sie mit ihrer
+    // linken Haelfte ueber das Linienende bei +70.
+    DOM.minPosLabel.setAttribute('x', animCenterX + 78)
     DOM.minPosLabel.setAttribute('y', animCenterY - scale(Math.abs(A)) - 5)
+    DOM.minPosLabel.setAttribute('text-anchor', 'start')
     DOM.minPosLabel.textContent = '+y₀'
-    DOM.maxPosLabel.setAttribute('x', animCenterX + 80)
+    DOM.maxPosLabel.setAttribute('x', animCenterX + 78)
     DOM.maxPosLabel.setAttribute('y', animCenterY + scale(Math.abs(A)) + 15)
+    DOM.maxPosLabel.setAttribute('text-anchor', 'start')
     DOM.maxPosLabel.textContent = '−y₀'
 
     DOM.yAxisArrow.setAttribute('x1', animCenterX - massSize / 2 - 50)

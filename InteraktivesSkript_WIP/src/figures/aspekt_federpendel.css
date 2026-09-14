@@ -250,7 +250,7 @@
 
 /* ── VERTIKALER Aufbau (Abb. 1.8) ────────────────────────────────────────────
    Szene und Diagramm sind hier BEIDE hochformatig — die Szene ist ein schmaler
-   hoher Streifen (viewBox 300x475, von setupScene gesetzt), das Diagramm stellt
+   hoher Streifen (viewBox 345x475, von setupScene gesetzt), das Diagramm stellt
    der Motor im vertikalen Aufbau ins Hochformat (560x700, s. GRAPH_W_VERT --
    frueher 410x700, was die Zeitachse erstickte, BACKLOG P17-4). Gestapelt wuerde
    die Figur doppelt so hoch wie breit; nebeneinander fuellen die beiden die
