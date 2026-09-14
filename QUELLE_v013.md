@@ -84,6 +84,28 @@ unberührt. Die Arbeitsposten **dieser** Richtung stehen seit dem 14.09.2026 in
 `backlog/P26-quelle-nach-wip-nachziehen.md` — diese Datei führt den Stand, P26
 die Posten.
 
+## Wenn die Quelle sich bewegt hat — der Weg
+
+Immer dieselben vier Schritte, in dieser Reihenfolge. Ad hoc gemacht kostet das
+jedes Mal die halbe Rekonstruktion, welche Commits schon drin sind (so lief es
+am 14.09.2026, daher diese Liste):
+
+1. **Delta ansehen:** `git log --oneline <ANKER_NACHGEZOGEN>..HEAD` im
+   Quellordner. Jeden Commit einzeln einsortieren — *hat WIP-Anteil* oder
+   *hat keinen*.
+2. **Posten anlegen** in `backlog/P26-quelle-nach-wip-nachziehen.md`, einen je
+   Commit mit WIP-Anteil: Zieldatei, Stelle, einzusetzender Text. **Auch die
+   ohne WIP-Anteil werden dort notiert** — mit dem Grund; sonst prüft sie die
+   nächste Sitzung noch einmal.
+3. **Nachziehen und commiten**, je Posten eine Einheit, Version mitziehen.
+4. **Anker setzen:** `ANKER_NACHGEZOGEN` auf den Quellstand, gegen den das
+   Delta abgearbeitet wurde, und die Runde in der Tabelle oben eintragen.
+   `ANKER_VERIFIZIERT` bewegt sich **nur** nach einem Lauf des Skills
+   `v013-verifikation` — nicht mit.
+
+Die Gegenrichtung (WIP → Quelle) läuft spiegelbildlich über P21 und
+`UEBERGABE_Druckskript.md`.
+
 ## Die Prüfung
 
 Vor jeder Migration, Abbildungsübernahme oder Verifikation:

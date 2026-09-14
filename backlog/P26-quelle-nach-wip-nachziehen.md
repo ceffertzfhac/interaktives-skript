@@ -100,7 +100,8 @@ zweites Mal prüft):
   Auch der Hinweis zum `v013-verifikation`-Skill zeigt jetzt auf das neue PDF
   (vorher `4d83870`/419 Seiten).
 
-- [ ] **P26-3 Routine festhalten** *(S)* — jetzt, wo zwei Runden durch sind: in einem Satz
-  in `QUELLE_v013.md` verankern, dass ein Quell-Update immer diesen Weg geht
-  (Delta ansehen → Posten hier → Anker setzen), damit die nächste Runde nicht
-  wieder ad hoc läuft.
+- [x] **P26-3 Routine festhalten** *(S)* — **erledigt 2026-09-14**: der Abschnitt
+  „Wenn die Quelle sich bewegt hat — der Weg" in `QUELLE_v013.md` nennt die vier
+  Schritte (Delta ansehen → Posten hier anlegen, auch die *ohne* WIP-Anteil mit
+  Grund → nachziehen → Anker setzen) und hält fest, dass `ANKER_VERIFIZIERT`
+  sich dabei **nicht** mitbewegt.
