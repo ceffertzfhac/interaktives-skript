@@ -105,6 +105,8 @@ Quelle: `pskript_mech_dyn_kraft_impuls_gmni_v3.tex` · WIP: `ch_01_02_dynamik_im
 | # | Art | Quelle (Abschnitt) | Stelle | Befund | Korrekt | WIP |
 |---|-----|----------------|--------|--------|---------|-----|
 | 1 | S | § Die Seilkraft | „Das **heisst**, dass das Seil …" | „ss" statt „ß" | heißt | erhalten |
+| 2 | S | § Kiste auf schiefer Ebene mit Reibung | Bildunterschrift „Abbildung zum **Beispiel**: Kiste auf einer schiefen Ebene mit Reibung" | Der Kasten ist seit der Aufteilung D5 (Quell-Commit 1aceec7) ein `\brbsp`, wird also als „Rechenbeispiel" gesetzt; das Wort in der Unterschrift hat die Quelle nur in `pskript_mech_dyn_energie_arbeit_gmni_v3.tex` nachgezogen (Commit 2e6b8b7), hier nicht. | „Abbildung zum **Rechenbeispiel**: …" | erhalten |
+| 3 | S | § Kiste auf schiefer Ebene mit Reibung | Bildunterschrift „Abbildung **zum Lösung des Beispiels**: Kiste auf einer schiefen Ebene mit Reibung, mit eingezeichneten Kräften …" | Zwei Fehler in einer Unterschrift: falscher Kasus („zum Lösung") und dasselbe nicht nachgezogene Wort wie in Nr. 2. | „Abbildung **zur Lösung des Rechenbeispiels**: …" | erhalten |
 
 ### 1.3 Dynamik: Arbeit, Leistung, Energie
 
