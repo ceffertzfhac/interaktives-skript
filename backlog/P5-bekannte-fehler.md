@@ -20,6 +20,30 @@
   **Gegenmessung** (`scratchpad/rohtex.mjs`, im Commit beschrieben): ueber alle
   137 Seiten 0 Stellen mit rohem TeX im Text, 0 verdaechtige Attributnamen
   (vorher 3).
+- [ ] **Abb. 1.8 und 1.9: die Diagramm-Achsen haben keine Pfeilspitzen.**
+  **Nutzerbefund 2026-09-14, Ursache gefunden, Fix nicht umgesetzt** (wartet auf
+  Freigabe). Alle Figuren des `kreisbewegung`-Motors zeigen Pfeile an Zeit- und
+  Werteachse, die beiden anderen nicht.
+  **Ursache — derselbe Port-Fehler in zwei Motoren:** die Marker-Referenz im
+  Motor traegt den Instanz-Prefix nicht mit, den die Aspekt-Figur den IDs gibt.
+  Die Referenz zeigt damit ins Leere, und SVG zeichnet stillschweigend nichts.
+  - `federpendel/render.js` (2×): `url(#graph-arrowhead)` — die Figur definiert
+    `<marker id="kb_graph-arrowhead">`, aus dem beim Bau `fp<n>_graph-arrowhead`
+    wird.
+  - `schraeger_wurf/render.js` (3×): `url(#arrowhead)` — die Figur definiert
+    `sw_arrow-vel` / `sw_arrow-acc` / `sw_arrow-coord`; ein Marker fuer die
+    Diagramm-Achsen fehlt dort ganz und muss ergaenzt werden.
+  - Richtig macht es `kreisbewegung/render.js`:
+    `url(#${store.idPrefix}graph-arrowhead)`.
+  **Das ist derselbe Fehler, der bei P16-3 fuer die SZENEN-Pfeile behoben wurde**
+  („sonst zeigen die Achsenpfeile jeder zweiten Figur ins Leere") — nur fuer die
+  DIAGRAMM-Achsen und in zwei weiteren Motoren nachgeblieben.
+  **Zu tun:** je Motor die Referenz auf `store.idPrefix` umstellen, bei
+  `schraeger_wurf` zusaetzlich den Marker ins Figuren-Skelett aufnehmen.
+  Danach `figur_smoke` + ein Screenshot je betroffener Figur. *(S)*
+  **Beim Fix mitpruefen:** ob noch weitere unprefixte `url(#…)` in den Motoren
+  stehen — `grep -rn "url(#" src/figures/*/render.js | grep -v idPrefix`.
+
 - [ ] **Formeln im Fliesstext fehlen sporadisch, Formeln in Boxen sind da.**
   **Ursache mit hoher Wahrscheinlichkeit beseitigt (2026-08-31, v1.38.3/1.39.0)
   — Beobachtung läuft weiter, s. „Was jetzt anders ist" am Ende.**
