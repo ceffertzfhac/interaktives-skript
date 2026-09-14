@@ -10,8 +10,9 @@ auch von jemandem, der bei keiner der Änderungen dabei war.
 **Woher das kommt.** Register der Wahrheit ist
 `backlog/P21-statisches-skript-nachziehen.md` in diesem Repo; dort steht auch
 die Begründung je Eintrag. Diese Datei ist der **Export daraus** (Stand
-2026-09-10, WIP-Version v1.48.0) plus die beiden Quellfehler, die beim
-Nachziehen mitzukorrigieren sind. Bei Widersprüchen gilt P21.
+2026-09-10, WIP-Version v1.48.0; **AP8 nachgetragen 2026-09-14**) plus die
+beiden Quellfehler, die beim Nachziehen mitzukorrigieren sind. Bei
+Widersprüchen gilt P21.
 
 **Warum das kritisch ist** (Nutzervorgabe 2026-08-28): *„Druckskript und
 interaktives Skript müssen synchron bleiben; die Dokumentation der Abweichungen
@@ -48,14 +49,14 @@ Ziehe das Druckskript an das interaktive Skript nach.
 Die vollständige Arbeitsanweisung liegt hier — lies sie zuerst ganz:
 /home/chris/shared/VM_Exchange/Project_InteraktivesSkript/UEBERGABE_Druckskript.md
 
-Sie enthält sieben Arbeitspakete (AP1-AP7) mit dem wörtlich einzusetzenden
+Sie enthält acht Arbeitspakete (AP1-AP8) mit dem wörtlich einzusetzenden
 LaTeX, die Zieldateien, die Stellen (als LaTeX-Label, nicht als Zeilennummer)
 und die Leitplanken. Arbeite sie in dieser Reihenfolge ab.
 
 Rahmen für diese Session:
 - Schritt 0 der Anweisung zuerst: `git pull`, dann prüfen, was auf der
-  Druckseite schon erledigt ist. Der Stand, gegen den die Anweisung geschrieben
-  wurde, ist vom 2026-07-26 -- AP7 ist moeglicherweise upstream schon getan.
+  Druckseite schon erledigt ist. AP1-AP6 sind am 2026-09-14 umgesetzt und
+  committet, von AP7 steht die Haelfte (Header ja, Kaesten nein), AP8 ist neu.
   Nicht doppelt umsetzen.
 - Sprache von Inhalt und Kommentaren: Deutsch.
 - Kleinschrittig committen: ein Commit je Arbeitspaket, vorher die betroffenen
@@ -80,29 +81,44 @@ ich P21 in meinem anderen Repo abhaken kann.
 
 ## Schritt 0 — Quellstand herstellen (immer zuerst)
 
-Der Stand, gegen den diese Anweisung geschrieben wurde, ist
-`3122514` („Bilder 2.3 nachgeliefert.", 2026-07-26). Seither ist auf der
-Druckseite offensichtlich gearbeitet worden: das interaktive Skript hat am
-2026-09-03 die Dateien `scripts/classification_report.md` und
-`v0.13/assets/calculator.svg` **von dort** übernommen — in diesem Checkout gibt
-es beide nicht.
+Geschrieben wurde die Anweisung gegen `3122514` („Bilder 2.3 nachgeliefert.",
+2026-07-26). **Am 2026-09-14 ist ein großer Teil davon umgesetzt worden**;
+nachgemessen im Checkout `Input/physik_skript_repo` dieses Repos, der auf dem
+Stand `8b1ac66` („Dokument auf dem Mac neu gebaut", 2026-09-14) steht und mit
+`origin/main` übereinstimmt:
+
+| AP | Stand am 2026-09-14 | woran erkennbar |
+|---|---|---|
+| AP1–AP5 | **umgesetzt**, je ein Commit | `6c3b90f`, `3e0be3e`, `40cabda`, `ba1fc7d`, `e4e87e5` |
+| AP6 | **umgesetzt** | `541c997` |
+| AP7 | **halb** — Zähler, Box, Makros und Icon stehen im Header, aber **kein einziger Kasten** ist umgestellt | `\brbsp`/`\erbsp` in `Physik_skript_header_gmni_v3.tex` definiert, `grep -c '\\brbsp{'` über die Kapitel-`.tex` ergibt **0** |
+| AP8 | **offen**, neu am 2026-09-14 | Warnung „multiply-defined labels" im TeX-Log |
+| Quellfehler 5 und 6 | **mitkorrigiert** | `bdb4229` |
+
+Die beiden Neubauten (`65c798d`, `8b1ac66`, 421 Seiten, 0 Fehler) liegen danach.
+Deshalb vor dem Anfangen **immer** selbst nachsehen — der Stand kann sich seit
+diesem Eintrag wieder bewegt haben:
 
 ```
 git pull
+git log --oneline -15
+grep -c '\\brbsp{' v0.13/*.tex | grep -v ':0'   # AP7 Schritt 2: leer = offen
+grep -n 'multiply' *.log v0.13/*.log 2>/dev/null  # AP8
 ls scripts/classification_report.md v0.13/assets/calculator*
-grep -rn 'Rechenbeispiel' v0.13/*.tex
 ```
 
-- Findet `grep` schon eine `Rechenbeispiel`-Umgebung → **AP7 überspringen**
-  (oder nur gegenprüfen) und das in der Rückmeldung sagen.
-- Fehlt `classification_report.md` auch nach dem Pull → AP7 **nicht** nach
-  eigener Einschätzung umsetzen, sondern zurückfragen. Die Zuordnung der 92
-  Kästen darf nicht zum zweiten Mal getroffen werden (Begründung in AP7).
+- `\brbsp` schon in den Kapitel-`.tex` → **AP7 überspringen** (oder nur
+  gegenprüfen) und das in der Rückmeldung sagen.
+- Fehlt `classification_report.md` → AP7 **nicht** nach eigener Einschätzung
+  umsetzen, sondern zurückfragen. Die Zuordnung der 92 Kästen darf nicht zum
+  zweiten Mal getroffen werden (Begründung in AP7).
 
 **Zieldatei für AP1–AP5:** `v0.13/pskript_mech_kinematik_gmni_v4.tex`
 (Abschnitt 1.1 „Kinematik").
 **Für AP6:** `v0.13/Physik_pskript_v0.13.tex` (Master).
 **Für AP7:** `v0.13/Physik_skript_header_gmni_v3.tex` + die Kapitel-`.tex`.
+**Für AP8:** `v0.13/pskript_mech_kinematik_gmni_v4.tex` (ein Label) +
+`v0.13/pskript_mech_kin_dreh_und_kreis_v1.tex` (vier Labels).
 
 > **Fallstrick bei den vier Wurf-Abbildungen.** Ihre Labels heißen
 > `fig:senkrechter_wurf_start` / `_aufstieg` / `_umkehr` / `_abstieg`, meinen
@@ -297,10 +313,21 @@ und „Schlitten an Leine" kommt im Energiekapitel zweimal vor, je einmal pro
 Sorte). Kontrollzahlen: **64 Beispiel / 28 Rechenbeispiel**, je Quelldatei
 `11/17/11/12/6/1/12/3/4/1/6/5/3 = 92`.
 
+**Stand 2026-09-14: Schritt 1 ist upstream erledigt, Schritt 2 nicht.** Im
+Header stehen `\newcounter{rechenbeispielcounter}`,
+`\numberwithin{…}{section}`, `\newtcolorbox{rechenbeispielbox}{skriptbox=…}`
+sowie `\brbsp`/`\erbsp` und `\brbspe`/`\erbspe` (Plural) mit dem
+`calculator`-Icon — die beiden unten offen gelassenen Entscheidungen (Farbton,
+Icon-Format) sind dort also schon getroffen; **der Makroname lautet `\brbsp`,
+nicht `\bbrsp` wie im Vorschlag unten.** In den Kapitel-`.tex` ist dagegen
+**kein einziger Kasten umgestellt** (`\bbsp` 94×, `\bbspe` 7×, `\brbsp` 0×).
+Das eigentliche Paket ist damit Schritt 2 und 3.
+
 **Zu tun:**
 
-1. In `Physik_skript_header_gmni_v3.tex` Zähler und Box anlegen, nach dem Muster
-   der bestehenden Definitionen (Zeilen ~124 / 132 / 184–187):
+1. ~~In `Physik_skript_header_gmni_v3.tex` Zähler und Box anlegen~~ *(erledigt,
+   s. o. — der Vorschlag bleibt nur als Beleg stehen, wonach gesucht wurde)*,
+   nach dem Muster der bestehenden Definitionen (Zeilen ~124 / 132 / 184–187):
 
    ```latex
    \newcounter{rechenbeispielcounter}
@@ -325,6 +352,103 @@ Sorte). Kontrollzahlen: **64 Beispiel / 28 Rechenbeispiel**, je Quelldatei
 iCloud, nicht auf dieser VM). Begründung: zwei verschiedene Objekte standen
 unter einem Namen — Kästen, die Theorie demonstrieren, und Kästen, in denen
 mitgerechnet werden soll.
+
+---
+
+## AP8 — Fünf mehrfach vergebene `\label` (P21-A8)
+
+**Befund vom 2026-09-14**, aufgefallen an der Warnung „There were
+multiply-defined labels" im TeX-Log beim Bauen nach AP6. LaTeX nimmt bei
+doppeltem `\label` stillschweigend die **letzte** Definition; `\ref` zeigt dann
+auf ein anderes Objekt als gemeint. **Nummernneutral:** ein Label umzubenennen
+verschiebt kein Objekt, es ändert nur, welche Nummer der Verweis *druckt* —
+dieses Paket ist deshalb unabhängig von allen anderen umsetzbar.
+
+| Label | Datei | definiert als | `\ref` druckt |
+|---|---|---|---|
+| `formel_freierfall4` | `pskript_mech_kinematik_gmni_v4.tex` (2×) | Gl. **1.1.9** (Fallgesetz) und Gl. **1.1.14** (Fallzeit) | 1.1.14 |
+| `eq_kreisbahn_position_zeit` | `pskript_mech_kin_dreh_und_kreis_v1.tex` (2×) | Gl. **1.4.5** und ein `\[…\]` ohne Nummer | **1.4.1** |
+| `eq_kreisbahn_winkel_zeit_vereinfachte_form` | ebd. (2×) | Gl. **1.4.7** und ein `\[…\]` ohne Nummer | **1.4.1** |
+| `eq_kreisbahn_position_zeit_vereinfachte_form` | ebd. (2×) | Gl. **1.4.8** und Gl. **1.4.9** | 1.4.9 |
+| `fig_kreisbewegung_dphi_dr_pair` | ebd. (3×) | Abb. **1.57**, **1.58**, **1.59** | 1.59 |
+
+### AP8a — `formel_freierfall4` (Abschnitt 1.1)
+
+Das Label steht zweimal: an der Streckengleichung
+`y(t) = -\frac{1}{2} g t^2 + h_0` (Gl. 1.1.9, im Fließtext-`\begin{equation}`
+direkt vor `\begin{figure}` mit `\label{fig:freier_fall_1}`) **und** an der
+letzten Zeile der `align`-Umgebung, die die Fallzeit herleitet
+(`t = \sqrt{2 h_0/g}`, Gl. 1.1.14). Drei Verweise hängen daran, **zwei davon
+drucken heute die falsche Nummer**:
+
+| Stelle | gemeint | druckt |
+|---|---|---|
+| „Den Streckengleichungen (Formel (`\ref{formel_freierfall1}`) bis (`\ref{formel_freierfall4}`))" | 1.1.6–**1.1.9** | bis 1.1.14 — zieht die ganze Herleitung mit hinein |
+| „Wir können uns z.~B. anhand von (`\ref{formel_freierfall4}`) … wie lange das Objekt braucht" | **1.1.9** | 1.1.14 — das Ergebnis, das erst zehn Zeilen später hergeleitet wird |
+| „Mit Formel (`\ref{formel_freierfall4}`) … Fallzeit von ungefähr \SI{2}{\s}" | **1.1.14** | 1.1.14 — als einziger richtig |
+
+**Zu tun:** das **zweite** Vorkommen (in der `align`, neben dem schon
+vorhandenen `\label{formel_freierfall4a}`) umbenennen in
+**`formel_freierfall_fallzeit`** und den dritten Verweis („Mit Formel …
+Fallzeit") darauf umstellen. Die ersten beiden Verweise bleiben unverändert und
+zeigen dann auf 1.1.9.
+
+> Der Name ist **nicht frei wählbar**: das interaktive Skript hat denselben
+> Quellfehler beim Migrieren gesehen und exakt so disambiguiert
+> (`ch_01_01_kinematik.html`, `data-ref-eq="formel_freierfall_fallzeit"`).
+> Ein anderer Name hier lässt die beiden Fassungen wieder auseinanderlaufen.
+
+*(Achtung: `pskript_mech_kinematik_gmni_v3.tex` enthält denselben Verweis noch
+einmal. Das ist der **abgelöste** Vorgängerstand der Datei und nicht im Master
+eingebunden — dort nichts ändern.)*
+
+### AP8b — die drei Kreisbahn-Gleichungen (Abschnitt 1.4)
+
+Ursache ist hier eine andere: die Passage „Ersetzen wir … $\varphi(t)$ …" steht
+in `pskript_mech_kin_dreh_und_kreis_v1.tex` **zweimal** — einmal mit
+nummerierten `equation`-Umgebungen, danach noch einmal als Wiederholung, in der
+die Zwischenschritte als unnummerierte `\[…\]` gesetzt sind. In dieser
+Wiederholung stehen die Labels ein zweites Mal.
+
+1. Die **drei `\label` in den `\[…\]`-Blöcken ersatzlos streichen.** Eine
+   unnummerierte Umgebung hat keine Gleichungsnummer; das Label hängt sich an
+   den zuletzt hochgezählten Zähler — hier an den Abschnitt, weshalb die
+   Verweise „1.4.1" drucken. Nach dem Streichen zeigen die drei Verweise im
+   Fließtext wieder auf 1.4.5 bzw. 1.4.7.
+2. Das **zweite `\label{eq_kreisbahn_position_zeit_vereinfachte_form}`** an der
+   wiederholten `equation` (Gl. 1.4.9) streichen; auf dieses Label verweist
+   niemand, gemeint ist die erste Fassung (1.4.8).
+
+> **Die Dopplung selbst hier nicht anfassen.** Ob die Passage wirklich zweimal
+> im Skript stehen soll, ist eine Autorenentscheidung; das interaktive Skript
+> hat sie **1:1 mit übernommen** (beide Fassungen, beide Gleichungen 1.4.8 und
+> 1.4.9) und nur die Labels weggelassen. Eine der beiden zu streichen würde
+> also eine nummerierte Gleichung entfernen und damit **auf beiden Seiten**
+> alle folgenden Nummern verschieben — das wäre ein eigener Vorgang mit
+> Gegenstück im interaktiven Skript, kein Teil von AP8.
+
+### AP8c — die drei Abbildungen 1.57–1.59
+
+`fig_kreisbewegung_dphi_dr_pair` steht an drei verschiedenen
+`figure`-Umgebungen (Copy-Paste, Label nicht mitgezogen):
+`skript_kreisbewegung_omega_neg.png` (1.57),
+`skript_kreisbewegung_zentripetalkreuz1.png` (1.58) und
+`skript_kreisbewegung_alphavecnegomegapos.png` (1.59). **Auf das Label
+verweist bisher nichts** (`\ref` = 0×), das Umbenennen ist also risikofrei.
+
+**Zu tun:** drei eigene Labels vergeben, nach den IDs, die das interaktive
+Skript für dieselben drei Abbildungen führt:
+
+| Abb. | neues Label | ID im interaktiven Skript |
+|---|---|---|
+| 1.57 | `fig_kreisbewegung_omegavecpos` | `fig-skript-kreisbewegung-omegavecpos` |
+| 1.58 | `fig_kreisbewegung_zentripetalkreuz2` | `fig-skript-kreisbewegung-zentripetalkreuz2` |
+| 1.59 | `fig_kreisbewegung_alphavecpos` | `fig-skript-kreisbewegung-alphavecpos` |
+
+### Fertig, wenn
+
+`grep -c 'multiply' ` über das TeX-Log **0** ergibt und die fünf Verweisstellen
+oben im PDF die Nummern drucken, die in den Tabellen als „gemeint" stehen.
 
 ---
 
@@ -362,9 +486,9 @@ Korrekturen an Rechtschreibung/Grammatik werden in diesem Repo in
 
 ## Fertig ist es, wenn …
 
-1. AP1–AP7 umgesetzt (oder als „upstream schon erledigt" bzw. „bewusst offen"
+1. AP1–AP8 umgesetzt (oder als „upstream schon erledigt" bzw. „bewusst offen"
    begründet) sind,
-2. das PDF fehlerfrei baut,
+2. das PDF fehlerfrei **und ohne die Warnung „multiply-defined labels"** baut,
 3. die Abschnittsnummern in TK 3 als 3.0 / 3.1 / 3.2 erscheinen,
 4. die Beispiel-/Rechenbeispiel-Zählung dem Klassifikationsbericht entspricht
    (64/28), und

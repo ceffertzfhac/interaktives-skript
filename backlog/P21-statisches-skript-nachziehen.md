@@ -314,6 +314,11 @@ Voreinstellung angelegt.
   („Ersetzen wir nun $\varphi(t)$ in der Gleichung …") auf **1.4.1** statt auf
   1.4.5 bzw. 1.4.7.
 
+- **Export:** als **AP8** (Teilpakete AP8a/b/c) in `../UEBERGABE_Druckskript.md`
+  — dort mit den Ankern im `.tex`, den vorgegebenen Ersatznamen (sie müssen zu
+  den IDs des interaktiven Skripts passen) und der Warnung, die Dopplung der
+  Kreisbahn-Passage nicht mitzuentfernen (das verschöbe Nummern auf beiden
+  Seiten).
 - **Zu tun:** je Fall das zweite (bzw. dritte) Label umbenennen oder streichen
   und die Verweise auf das gemeinte Objekt richten. Bei den drei Abbildungen
   1.57–1.59 entscheidet der Autor, welche das Label behalten soll bzw. ob drei
