@@ -97,8 +97,8 @@ gemeinsam:
 
 **Stand 2026-09-14:** erledigt sind Abb. 1.3–1.7 (P16-1/-3/-4), 1.8 (P17-3),
 1.9 (P16-2/-6) und 1.10 (P17-2). Der Faden laeuft in der Abbildungsreihenfolge
-weiter — **als Naechstes Abb. 1.14** (P16-7, Motor B steht). Danach 1.15
-(P17-1, braucht den `ableitung`-Motor), 1.18a/b (P16-8, davor die offene
+weiter. 1.14 steht seit dem 14.09.2026; **als Naechstes Abb. 1.15** (P17-1,
+braucht den `ableitung`-Motor), dann 1.18a/b (P16-8, davor die offene
 Nummern-Frage), 1.19 und 1.20 (P16-5/-9, beide billig: derselbe Motor).
 *(Frueherer Stand 2026-08-28: nach 1.3–1.7 war 1.8 der naechste Schritt.)*
 P16-5 (Abb. 1.19, v-t) ist dagegen billig geworden: derselbe Motor, dieselbe
@@ -304,8 +304,25 @@ allein der Kontrast die Pruefung).
   beide Kurven im Gleichschritt wachsend (t=1,2 s: je 73 Punkte), Rückfall auf
   t=0 bei Parameterwechsel, keine Konsolenfehler, Physik gegen Handrechnung
   deckungsgleich.
-- [ ] **P16-7 Aspekt-Figur Abb. 1.14** — Bahnkurve y(x) + Schema (Motor B, keine
-  Zeitachse → neuer Interaktionsmuster-Zweig). *(M)*
+- [x] **P16-7 Aspekt-Figur Abb. 1.14** — Bahnkurve y(x) + Schema (Motor B).
+  **erledigt 2026-09-14** (`033f2d3`, v1.52.0). **Kein neuer
+  Interaktionsmuster-Zweig und kein neues Modul:** der Motor kann die Bahnkurve
+  nativ (`graphType 'yx'`), `aspekt_schraeger_wurf.js` ist damit Familien-Modul
+  für 1.9 **und** 1.14 (`data-kontext="bahn"` → Einzeldiagramm statt gestapelt).
+  **Nutzerentscheidung vorab:** *mit* Zeitlauf, bedienungsgleich mit 1.9 —
+  obwohl die gedruckte Unterschrift sagt, in der Bahnkurve sei nicht erkennbar,
+  wo das Objekt zu einem Zeitpunkt ist. Die Bildunterschrift der interaktiven
+  Figur benennt diesen Unterschied ausdrücklich (→ P21-A10).
+  **Eine Abweichung von 1.9 war nötig:** nach einem Regler-Zug springt die Zeit
+  ans **Ende** der Flugzeit statt auf 0. Fallstrick #20 verlangt den Rücksprung,
+  damit die Kugel nicht mitten in einer Bahn steht, die es nie gab — am Ende der
+  *neuen* Bahn ist das gewahrt, und das Diagramm zeigt die vollständige Kurve.
+  Bei einer Figur, deren Gegenstand die Kurve **ist**, wäre ein leeres Diagramm
+  nach jeder Parameteränderung das falsche Bild. *(Lehre: #20 sagt „Zeit
+  zurücksetzen", gemeint ist „nicht in einem ungültigen Zustand stehen bleiben" —
+  bei zeitlosen Darstellungen ist das Ende die richtige Stelle.)*
+  Geprüft: `figur_smoke` beide Varianten, `dom_harness` unverändert,
+  `breiten_check` deckungsgleich mit 1.9 (41/76, 34/63, 34/64).
 - [ ] **P16-8 Aspekt-Figuren Abb. 1.18a/b** — Tangentialgeschwindigkeit + v⃗/
   Ortsvektor, 2 Koordinatensysteme (Motor B); **2 separate Figuren** (1:1). *(M)*
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*

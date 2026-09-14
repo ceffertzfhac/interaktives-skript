@@ -388,6 +388,39 @@ Voreinstellung angelegt.
   Abbildungs- und Gleichungsnummern sind unverändert (nachgemessen mit
   `dom_harness.mjs`: 88 Abbildungen, gleiche Lücken).
 
+#### P21-A10 · Erklärender Zusatz in der Unterschrift von Abb. 1.14
+
+- **Status:** **offen — entstanden 2026-09-14** beim Bau der interaktiven Figur
+  zu Abb. 1.14 (P16-7, WIP `033f2d3`, v1.52.0). Entscheidung steht fest:
+  **nachziehen** (Grundsatzregel „didaktischer Zusatz").
+- **Zieldatei:** `Input/v0.13/pskript_mech_kinematik_gmni_v4.tex`.
+- **Stelle:** die `figure` mit `\includegraphics[width=0.99\textwidth]{bahnkurve_schraeger_wurf.png}`
+  (ohne `\label`), direkt nach dem Absatz „Wir sehen: Die Flug**bahn** … ist
+  auch eine Parabel!".
+- **Einzusetzen** — an die vorhandene Unterschrift anschließen:
+
+  ```latex
+  Diese Parabel ist eine \textbf{andere} als die von $y(t)$ in
+  Abbildung~\ref{fig:schraeger_wurf}: sie beschreibt den Verlauf der Flugkurve
+  durch den Raum -- die Spur im Schnee --, nicht den zeitlichen Verlauf der Höhe.
+  ```
+
+  Der Satz steht so schon im Fließtext **darüber**; in der Unterschrift steht er
+  bisher nicht. Er ist der Grund, warum es diese Abbildung überhaupt gibt.
+- **Was NICHT nachgezogen wird:** der Hinweis der interaktiven Fassung, dass
+  sich der Zeitpunkt dort zeigen lässt (samt Regler-Hinweisen). Er benennt genau
+  das, was Papier **nicht** kann.
+- **Der eine Punkt, der zu prüfen ist:** die gedruckte Unterschrift sagt, wo das
+  Objekt zu einem Zeitpunkt ist, sei „nicht mehr erkennbar". Die interaktive
+  Figur zeigt es (Nutzerentscheidung 2026-09-14, Wiedergabe wie in Abb. 1.9).
+  Der gedruckte Satz bleibt richtig — er gilt für die gedruckte Darstellung —,
+  sollte aber nicht als Aussage über *jede* Bahnkurven-Darstellung gelesen
+  werden. Wenn der Autor das schärfen will, wäre „In dieser (statischen)
+  Darstellung ist nicht erkennbar …" die kleinste Änderung. **Keine Pflicht**,
+  nur ein Hinweis aus dem Bau.
+- **Nummern:** **keine.** Die statische Abbildung bleibt an derselben Stelle
+  (`.nur-druck`), `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
+
 ---
 
 ### Medienbedingte Unterschiede (dokumentiert, nichts nachzuziehen)
