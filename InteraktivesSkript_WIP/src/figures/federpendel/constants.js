@@ -39,6 +39,16 @@ export const POS0_MIN = -1.5, POS0_MAX = 1.5  // Slider-Grenzen Anfangsauslenkun
 // ── Diagramm-Geometrie ───────────────────────────────────────────────────────
 export const GRAPH_W = 700
 export const GRAPH_H = 410
+// PORT-AENDERUNG (2026-09-14, BACKLOG P17-4): im VERTIKALEN Aufbau (Abb. 1.8)
+// stand das Diagramm bisher im gespiegelten Format GRAPH_H x GRAPH_W, also
+// 410x700. Szene und Diagramm werden dort ueber die HOEHE bemessen (s.
+// aspekt_federpendel.css), damit die y-Achse des Diagramms auf derselben Hoehe
+// liegt wie die Bewegung in der Szene; die gezeichnete Breite haengt damit am
+// Seitenverhaeltnis. Mit 410 Breite kam die Figur auf 41 % (normal) bzw. 32 %
+// (breit) der verfuegbaren Breite -- das Minimum ueber alle Figuren, gemessen
+// mit breiten_check.mjs. 560 behaelt die Hoehenbindung und gibt der Zeitachse
+// Platz (+37 % gezeichnete Breite bei gleicher Hoehe).
+export const GRAPH_W_VERT = 560
 
 // ── Stoppuhr (Gruppen-Transform: translate(250,60) scale(0.595)) ─────────────
 export const WATCH_CX = 280, WATCH_CY = 120, WATCH_R = 72

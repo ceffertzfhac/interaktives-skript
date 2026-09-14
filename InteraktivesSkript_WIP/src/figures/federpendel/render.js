@@ -16,7 +16,7 @@ import {
   INITIAL_MASS_SIZE, MIN_MASS_SIZE, MASS_MIN, MASS_MAX, K_MIN, K_MAX,
   PIXELS_PER_VELOCITY_UNIT, PIXELS_PER_ACCELERATION_UNIT,
   VEC_MARKER_LEN,
-  GRAPH_W, GRAPH_H,
+  GRAPH_W, GRAPH_H, GRAPH_W_VERT,
   WATCH_CX, WATCH_CY, WATCH_R, SDIAL_CX, SDIAL_CY, SDIAL_R,
   SEG_THICK, SEG_LEN, DIGIT_SPACING, COLON_WIDTH, LCD_FRAME_PADDING,
   DIGIT_WIDTH, DIGIT_HEIGHT, COLON_DOT_SIZE,
@@ -361,10 +361,11 @@ export function setupScene() {
   })
 
   // Diagramm-Format pro Aufbau: horizontal → Landscape (700×410), vertikal →
-  // Portrait (410×700), damit der Graph in die hohe, schmale Zelle neben dem
-  // vertikalen Oszillator paßt statt als flacher Streifen winzig zu skalieren.
+  // Hochformat (560×700, s. GRAPH_W_VERT), damit der Graph in die hohe, schmale
+  // Zelle neben dem vertikalen Oszillator paßt statt als flacher Streifen winzig
+  // zu skalieren — aber breit genug, dass die Zeitachse nicht erstickt.
   DOM.graphSvg.setAttribute('viewBox',
-    store.oscillationMode === 'vertical' ? `0 0 ${GRAPH_H} ${GRAPH_W}` : `0 0 ${GRAPH_W} ${GRAPH_H}`)
+    store.oscillationMode === 'vertical' ? `0 0 ${GRAPH_W_VERT} ${GRAPH_W}` : `0 0 ${GRAPH_W} ${GRAPH_H}`)
 
   return { animCenterX, animCenterY, springAttachX, springAttachY }
 }
@@ -506,12 +507,12 @@ export function updateGraph(time, offset = 0, showCurrent = true) {
   if (!limits) return
 
   // Diagramm-Geometrie pro Aufbau: horizontal → Landscape (GRAPH_W×GRAPH_H),
-  // vertikal → Portrait (GRAPH_H×GRAPH_W). Gepaddetes Plot-Gebiet: links Platz
+  // vertikal → Hochformat (GRAPH_W_VERT×GRAPH_W). Gepaddetes Plot-Gebiet: links Platz
   // für y-Ticks + y-Achsenlabel, unten Platz für t-Ticks + t-Achsenlabel, oben
   // Platz für Titel. So ist das gesamte Diagramm sichtbar — nichts wird am
   // viewBox-Rand beschnitten.
   const isVertical = store.oscillationMode === 'vertical'
-  const graphW = isVertical ? GRAPH_H : GRAPH_W
+  const graphW = isVertical ? GRAPH_W_VERT : GRAPH_W
   const graphH = isVertical ? GRAPH_W : GRAPH_H
   const padL = 60, padR = 18, padT = 30, padB = 42
   const plotW = graphW - padL - padR
