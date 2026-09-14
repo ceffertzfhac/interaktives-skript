@@ -313,6 +313,19 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
       yMin = store.axisLimits.yt_display.min; yMax = store.axisLimits.yt_display.max
       xLabel = 'Wurfweite <i>x</i> / m'; yLabel = 'Höhe <i>y</i> / m'
       plotX = currentX; plotY = currentY !== null ? getDisplayY(currentY) : null
+      // PORT-AENDERUNG (2026-09-14, BACKLOG P16-7): MASSSTABSGLEICHE BAHN.
+      // Setzt eine Aspekt-Figur store.bahnAchse, gibt sie die Achsenbereiche
+      // vor, statt sie aus den Datengrenzen zu nehmen. Damit laesst sich das
+      // Diagramm auf denselben Bildschirm-Massstab bringen wie die Szene: die
+      // Parabel links und die Parabel rechts sind dann gleich gross und gleich
+      // geformt, man koennte sie durch blosses Verschieben zur Deckung bringen
+      // (Nutzerwunsch). Voraussetzung dafuer ist, dass x und y DENSELBEN
+      // Massstab haben -- die Figur rechnet beides aus, weil nur sie die
+      // tatsaechlichen Elementbreiten kennt.
+      if (store.bahnAchse) {
+        xMax = store.bahnAchse.xMax
+        yMin = store.bahnAchse.yMin; yMax = store.bahnAchse.yMax
+      }
     } else {
       xData = yDisplay; yData = store.xtData
       xMax = store.axisLimits.yt_display.max
@@ -337,9 +350,16 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
   }
 
   if (Math.abs(yMin - yMax) < 1e-9) { yMin -= 1; yMax += 1 }
+  // Vorgegebene Bahn-Achsen werden NICHT auf glatte Schritte gerundet: das
+  // Runden veraendert den Bereich um bis zu einen Schritt, und genau der
+  // Bereich ist hier der Massstab. Die Teilstriche fallen trotzdem auf glatte
+  // Werte, sie werden unten aus dem Bereich abgeleitet.
+  const achseVorgegeben = isTraj && !!store.bahnAchse
   const yStep = niceStepLE(yMax - yMin, isStacked ? 4 : 6)
-  yMin = Math.floor(yMin / yStep) * yStep
-  yMax = Math.ceil(yMax / yStep) * yStep
+  if (!achseVorgegeben) {
+    yMin = Math.floor(yMin / yStep) * yStep
+    yMax = Math.ceil(yMax / yStep) * yStep
+  }
   if (Math.abs(yMin - yMax) < 1e-9) { yMin -= yStep; yMax += yStep }
 
   // Hover-Werte (I5): einzige Quelle der Wahrheit für updateGraphHover().
@@ -363,7 +383,10 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
     t.textContent = xv.toFixed(xStep % 1 === 0 ? 0 : 1)
     gridEl.appendChild(t)
   }
-  for (let v = yMin; v <= yMax + 1e-9; v += yStep) {
+  // Beim ersten glatten Vielfachen ANFANGEN, nicht bei yMin: ist die Achse
+  // vorgegeben (massstabsgleiche Bahn), ist yMin kein Vielfaches von yStep und
+  // die Teilstriche saessen auf krummen Werten.
+  for (let v = Math.ceil(yMin / yStep - 1e-9) * yStep; v <= yMax + 1e-9; v += yStep) {
     const yp = scY(v)
     gridEl.appendChild(el('line', { x1: padL, y1: yp, x2: padL + plotW, y2: yp, class: 'grid-line' }))
     const t = el('text', { x: padL - 8, y: yp + 4, 'text-anchor': 'end', class: 'tick-label' })

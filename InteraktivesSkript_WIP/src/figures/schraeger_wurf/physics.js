@@ -34,8 +34,14 @@ export function recomputeDerived() {
     xMax = Math.max(xMax, Math.max(...store.frozenTraj.x))
     yMax = Math.max(yMax, Math.max(...store.frozenTraj.y))
   }
+  // PORT-AENDERUNG (2026-09-14, BACKLOG P16-7): die Hoehe des sichtbaren Feldes
+  // ist nicht mehr fest GROUND_PX. Eine Aspekt-Figur darf die Szene oben
+  // beschneiden (store.animTopPx), und der Zoom MUSS dasselbe Feld meinen wie
+  // die viewBox -- sonst rechnet er mit Platz, den niemand sieht, und der Wurf
+  // wird unnoetig klein gezeichnet. Default 0 = Verhalten der Sim.
+  const sichtbareHoehe = GROUND_PX - (store.animTopPx || 0)
   const sx = xMax > 0 ? (ANIM_W - BALL_START_X_PX) / (xMax * 1.1) : Infinity
-  const sy = yMax > 0 ? GROUND_PX / (yMax * 1.1) : Infinity
+  const sy = yMax > 0 ? sichtbareHoehe / (yMax * 1.1) : Infinity
   store.currentPixelsPerMeter = Math.min(Math.min(sx, sy), DEFAULT_PIXELS_PER_METER * 2.0)
   store.zoomFactor = store.currentPixelsPerMeter / DEFAULT_PIXELS_PER_METER
 }

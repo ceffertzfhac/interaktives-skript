@@ -198,6 +198,14 @@
     display: block; width: 100%; height: auto; max-height: 56vh; max-width: none; margin: 0 auto;
 }
 
+/* Abb. 1.14: die beschnittene Szene (350x350, s. ANIM_TOP_BAHN) ist deutlich
+   flacher als das Diagramm daneben. Oben buendig blieben darunter gut 100 px
+   Leerraum stehen; mittig gesetzt verteilt er sich auf beide Seiten und liest
+   sich als Rand statt als Loch. */
+.aspekt-figur[data-aspekt="schraeger-wurf-bahn"] .aspekt-main-content {
+    align-items: center;
+}
+
 /* ── Breiten-Modi ──────────────────────────────────────────────────────────
    NUR schmal stapelt (Nutzervorgabe 2026-08-31: „animation neben diagramm
    ausser schmal"). Breit: mehr Hoehe. align-items in der Spalte auf stretch —

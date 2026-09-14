@@ -26,6 +26,10 @@ export const store = {
   yAxisConfig: { direction: 'up', origin: 'ground' },
   // Zwei unabhängige Diagramm-Picker (→ BACKLOG I12.9); graphType2 nur im
   // Zwei-Diagramm-Modus (isStacked) relevant.
+  // Oberer Beschnitt der Szene in Pixeln (0 = ganze Hoehe wie in der Sim). Eine
+  // Aspekt-Figur setzt ihn zusammen mit der viewBox ihres Szenen-SVG; physics.js
+  // rechnet den Zoom gegen dasselbe Feld (s. dort).
+  animTopPx: 0,
   graphType1: 'yt',
   graphType2: 'xt',
   isStacked: false,

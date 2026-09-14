@@ -73,7 +73,7 @@ import { updateScene, updateGraphs, updateKennwerte, updateZoomDisplay,
          drawAnimationCoordSystem, drawStopwatchMarks, drawSubdialMarks,
          fmt } from './schraeger_wurf/render.js';
 import { BALL_START_X_PX, GROUND_PX, BALL_RADIUS_BASE_PX,
-         SF_ARM_LENGTH_M } from './schraeger_wurf/constants.js';
+         SF_ARM_LENGTH_M, GRAPH_W, GRAPH_H } from './schraeger_wurf/constants.js';
 import { createRuntime } from './schraeger_wurf/runtime.js';
 
 // ── Regler-Bereiche ─────────────────────────────────────────────────────────
@@ -108,8 +108,18 @@ function leseKonfig(fig) {
 // (CSS setzt sie). Der Ausschnitt ist der Szenen-Teil ihrer viewBox: x 20…370
 // (Lineal links, Haus, Kugel bei x=136, Stoppuhr 208…352), Erdboden bei 440,
 // Hoehe bis 500 fuer das Weiten-Lineal unter dem Boden.
-const SVG_SCENE = `
-<svg id="sw_main_svg" viewBox="20 0 350 500" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
+// ANIM_TOP_BAHN: oberer Beschnitt der Szene in Abb. 1.14. Die Szene der Sim ist
+// hochformatig (350x500 mit Lineal und Haus), ein flacher Wurf ist querformatig
+// — bei h0=10 m, v0=10 m/s, alpha=45 Grad nutzt er 150 der 440 px ueber dem
+// Boden, also ein Drittel. Der Rest war leeres Lineal (Nutzerbefund 2026-09-14).
+// Mit dem Beschnitt ist das Feld 290 px hoch; physics.js rechnet den Zoom gegen
+// DASSELBE Feld (store.animTopPx), sonst wuerde er weiter mit unsichtbarem
+// Platz rechnen. Nichts wird abgeschnitten: ein steiler Wurf skaliert einfach
+// kleiner, weil sy jetzt frueher bindet.
+const ANIM_TOP_BAHN = 150;
+
+const SVG_SCENE = (cfg) => `
+<svg id="sw_main_svg" viewBox="20 ${cfg.bahn ? ANIM_TOP_BAHN : 0} 350 ${500 - (cfg.bahn ? ANIM_TOP_BAHN : 0)}" preserveAspectRatio="xMidYMid meet" class="aspekt-svg">
   <defs>
     <marker id="sw_arrow-vel" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
     <marker id="sw_arrow-acc" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
@@ -136,7 +146,7 @@ const SVG_SCENE = `
     <!-- Zoom-Anzeige in der freien Luecke zwischen Hoehenlineal (endet rund
          x=155) und Stoppuhr (beginnt rund x=277). Oben links lag sie auf dem
          Lineal, oben rechts unter der Uhr — beides im Screenshot aufgefallen. -->
-    <text id="sw_zoom_text_display" x="175" y="16" text-anchor="start" class="aspekt-zoom-text"></text>
+    <text id="sw_zoom_text_display" x="175" y="${cfg.bahn ? ANIM_TOP_BAHN + 16 : 16}" text-anchor="start" class="aspekt-zoom-text"></text>
     <!-- Stoppuhr verkleinert in die rechte obere Ecke (Nutzervorgabe 2026-08-31:
          „der uhr verkleinern, aber immer noch oben rechts in der animation").
          Der Motor zeichnet Zifferblatt, Marken und Zeiger in ABSOLUTEN
@@ -147,7 +157,7 @@ const SVG_SCENE = `
          der Wurf anders als der senkrechte Fall die Mitte der Szene fuellt: die
          Uhr sitzt damit um (320,50) statt um (251,47) und laesst den Bahnscheitel
          (rund x=234) frei. Ohne das lag die Kugel im Zifferblatt. -->
-    <g id="sw_stopwatch" transform="translate(153, -21) scale(0.595)">
+    <g id="sw_stopwatch" transform="translate(153, -21) scale(0.595)"${cfg.bahn ? ' style="display:none"' : ''}>
       <circle id="sw_stopwatch_circle" cx="280" cy="120" r="72" stroke-width="2"/>
       <g id="sw_stopwatch_marks"></g>
       <g id="sw_subdial">
@@ -367,7 +377,7 @@ export function buildSchraegerWurfFig(fig) {
     scene.innerHTML = (
       `<div class="aspekt-body">${panelLeft(cfg)}` +
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
-      `<div class="aspekt-scene">${SVG_SCENE}</div>` +
+      `<div class="aspekt-scene">${SVG_SCENE(cfg)}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH(cfg)}</div></div></div>` +
       `${panelRight(cfg)}</div>${hiddenStub}`
     ).replace(/sw_/g, p);
@@ -425,17 +435,71 @@ export function buildSchraegerWurfFig(fig) {
 
     // Szene + beide Diagramme zum Zeitpunkt t zeichnen. IMMER inside
     // rt.withStore(), damit der Motor auf dem Zustand DIESER Instanz arbeitet.
+    // ── Massstabsgleiche Bahn (Nutzerwunsch 2026-09-14) ─────────────────────
+    // Ziel: die Parabel in der Szene und die Parabel im Diagramm sind gleich
+    // gross und gleich geformt — man koennte sie durch blosses VERSCHIEBEN zur
+    // Deckung bringen, ohne zu skalieren. Dafuer braucht es zweierlei:
+    //   1. x und y im Diagramm mit DEMSELBEN Massstab (isotrop) — sonst ist
+    //      schon die Form verschieden, egal wie gross gezeichnet wird;
+    //   2. denselben Bildschirm-Massstab wie die Szene.
+    // Punkt 2 kann nur hier gerechnet werden: er haengt an den tatsaechlichen
+    // Elementbreiten, die erst das Layout kennt (und die sich mit dem
+    // Breiten-Modus aendern). Beide SVGs skalieren ihre viewBox auf ihre
+    // Elementbreite; aus dem Verhaeltnis ergibt sich, wie viele Graph-Einheiten
+    // ein Meter haben muss, damit er auf dem Schirm so lang ist wie in der Szene.
+    const GRAPH_PAD_L = 45, GRAPH_PAD_R = 10, GRAPH_PAD_T = 10, GRAPH_PAD_B = 35;
+    function bahnAchseSetzen() {
+        if (!cfg.bahn) { store.bahnAchse = null; return; }
+        const svgS = q('main_svg'), svgG = q('graph_svg');
+        if (!svgS || !svgG) return;
+        const bS = svgS.getBoundingClientRect(), bG = svgG.getBoundingClientRect();
+        if (!bS.width || !bG.width) return;                    // noch nicht im Layout
+        const fS = bS.width / 350;                             // Schirm-px je Szenen-Einheit
+        const fG = bG.width / 560;                             // Schirm-px je Graph-Einheit
+        // Zeichenflaeche des Motors (GRAPH_W x GRAPH_H), NICHT die viewBox-Breite:
+        // die Gruppe ist in der 560 breiten viewBox versetzt eingehaengt. Mit 560
+        // gerechnet war die Bahn im Diagramm 19 % zu schmal, waehrend die Hoehe
+        // stimmte — der Fehler faellt nur in EINER Achse auf.
+        const plotW = GRAPH_W - GRAPH_PAD_L - GRAPH_PAD_R;
+        const plotH = GRAPH_H - GRAPH_PAD_T - GRAPH_PAD_B;
+        const einheitenProMeter = (store.currentPixelsPerMeter * fS) / fG;
+        if (!(einheitenProMeter > 0)) return;
+        let xSpanne = plotW / einheitenProMeter;
+        let ySpanne = plotH / einheitenProMeter;
+
+        // Nichts abschneiden: reicht die Spanne nicht fuer die Bahn, werden
+        // BEIDE Achsen um denselben Faktor aufgeweitet. Der Massstab stimmt dann
+        // nicht mehr exakt mit der Szene, die Form bleibt aber richtig (isotrop)
+        // — und sichtbar zu sein geht vor massstabsgleich.
+        const xNoetig = store.axisLimits.xt.max * 1.02;
+        const yLo = Math.min(0, store.axisLimits.yt_display.min);
+        const yHi = store.axisLimits.yt_display.max;
+        const yNoetig = (yHi - yLo) * 1.08;
+        const faktor = Math.max(1, xNoetig / xSpanne, yNoetig / ySpanne);
+        xSpanne *= faktor; ySpanne *= faktor;
+
+        // y so legen, dass die Bahn mittig im Feld steht (der Boden y=0 bleibt
+        // dabei fast immer sichtbar, weil yLo <= 0 in die Mitte eingeht).
+        const mitte = (yLo + yHi) / 2;
+        store.bahnAchse = {
+            xMax: xSpanne,
+            yMin: mitte - ySpanne / 2,
+            yMax: mitte + ySpanne / 2,
+        };
+    }
+
     function zeichne() {
         rt.withStore(() => {
             const s = interpolateAt(t);
             if (!s) return;
             updateScene(s.t, s.x, s.y, s.vx, s.vy);
-            // updateGraphs(plotTime, wert1, wert2): Slot 1 ist y(t), Slot 2
-            // x(t) — die Reihenfolge der Bildunterschrift von v0.13. Die
-            // beiden weiteren Parameter (currentX/currentY) wertet der Motor
-            // nur im EINZEL-Modus fuer die Bahnkurve aus; hier immer gestapelt,
-            // also weggelassen.
-            updateGraphs(s.t, s.y, s.x);
+            bahnAchseSetzen();     // vor dem Zeichnen: Achsen = Massstab der Szene
+            // updateGraphs(plotTime, wert1, wert2, currentX, currentY): Slot 1
+            // ist y(t), Slot 2 x(t) — die Reihenfolge der Bildunterschrift von
+            // v0.13. currentX/currentY wertet der Motor nur im EINZEL-Modus aus
+            // — dort sind sie der mitlaufende Punkt AUF der Bahnkurve, ohne sie
+            // waere die Bahn-Figur nur eine Kurve ohne Objekt.
+            updateGraphs(s.t, s.y, s.x, s.x, s.y);
             updateKennwerte();
         });
         tValue.textContent = `${fmt(t, 2)} s`;
@@ -548,6 +612,8 @@ export function buildSchraegerWurfFig(fig) {
         // keine Vergleichsbahn. graphType2 bleibt gesetzt, im Einzelmodus liest
         // updateGraphs() ihn nicht.
         Object.assign(store, {
+            // Der Zoom muss dasselbe Feld meinen wie die viewBox (s. ANIM_TOP_BAHN).
+            animTopPx: cfg.bahn ? ANIM_TOP_BAHN : 0,
             isStacked: !cfg.bahn,
             graphType1: cfg.bahn ? 'yx' : 'yt',
             graphType2: 'xt',
@@ -559,4 +625,23 @@ export function buildSchraegerWurfFig(fig) {
         drawSubdialMarks();
     });
     rebuild(false);
+
+    // Der Massstabsabgleich braucht die TATSAECHLICHEN Elementbreiten; beim
+    // ersten rebuild() steht das Layout noch nicht (die Figur wird gebaut,
+    // bevor sie ihre Breite hat) und die Achsen blieben die des Motors. Einmal
+    // nach dem naechsten Frame nachziehen — und danach bei jeder Breiten-
+    // aenderung, denn mit ihr aendert sich der Massstab beider Bilder.
+    // Ohne ResizeObserver (jsdom im Smoke-Test) passiert schlicht nichts.
+    if (cfg.bahn) {
+        requestAnimationFrame(() => zeichne());
+        if (typeof ResizeObserver !== 'undefined') {
+            let letzteBreite = 0;
+            new ResizeObserver(() => {
+                const b = q('graph_svg') && q('graph_svg').getBoundingClientRect();
+                if (!b || Math.abs(b.width - letzteBreite) < 1) return;   // kein Echo
+                letzteBreite = b.width;
+                zeichne();
+            }).observe(scene);
+        }
+    }
 }
