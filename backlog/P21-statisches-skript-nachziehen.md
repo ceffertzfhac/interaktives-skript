@@ -421,6 +421,41 @@ Voreinstellung angelegt.
 - **Nummern:** **keine.** Die statische Abbildung bleibt an derselben Stelle
   (`.nur-druck`), `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
 
+#### P21-A11 · Unterschrift von Abb. 1.15: ILIAS-Verweis und Zuspitzung
+
+- **Status:** **offen — entstanden 2026-09-14** beim Bau der interaktiven Figur
+  zu Abb. 1.15 (P17-1, WIP `263c105`, v1.53.0). Zwei Punkte, einer davon
+  **entscheidungsbedürftig**.
+- **Zieldatei:** `Input/v0.13/pskript_mech_kinematik_gmni_v4.tex`, die `figure`
+  mit `\includegraphics[width=0.8\textwidth]{kinematik_geschwindigkeit_unterschied_durchschnitt_momentan.png}`.
+
+1. **Zuspitzung (nachziehen).** Die gedruckte Unterschrift sagt, die Sekante sei
+   „offensichtilch positiv" und die Tangente negativ, benennt aber nicht, was
+   daran der Punkt ist. Einzusetzen, im Anschluss an den Tangenten-Satz:
+
+   ```latex
+   Die beiden Größen haben hier nicht einmal dasselbe Vorzeichen.
+   ```
+
+   *(Dass die gedruckte Fassung „offensichtilch" schreibt, ist ein Tippfehler
+   der Quelle — er steht in `QUELLEN_FEHLER.md` 1.1 Nr. 3 und wird dort
+   mitkorrigiert, nicht hier.)*
+
+2. **ILIAS-Verweis (Entscheidung nötig).** Die gedruckte Unterschrift endet mit
+   „Eine interaktive Animation hierzu finden Sie im ILIAS Lernraum unter
+   *Zusatzmaterialieren - Interaktive Animationen zur Physik am FB 8*". Im
+   interaktiven Skript ist dieser Satz **weggelassen**: die Figur daneben *ist*
+   diese Animation, der Verweis zeigt vom Ziel weg.
+   **Für das Druckskript ist zu entscheiden:** stehen lassen (das Papier hat die
+   Animation nicht), oder auf das interaktive Skript umlenken, sobald es
+   veröffentlicht ist. Das ist dieselbe Frage für **jede** Stelle, an der v0.13
+   auf ILIAS-Animationen verweist — sie sollte einmal grundsätzlich entschieden
+   werden, nicht pro Abbildung.
+- **Was NICHT nachgezogen wird:** die Regler-Hinweise und die Aufforderung
+  „Ziehen Sie \(\Delta t\) gegen null" — auf Papier gibt es nichts zu ziehen.
+- **Nummern:** **keine.** Statische Abbildung bleibt an Ort und Stelle
+  (`.nur-druck`), `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
+
 ---
 
 ### Medienbedingte Unterschiede (dokumentiert, nichts nachzuziehen)

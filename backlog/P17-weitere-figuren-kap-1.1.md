@@ -76,7 +76,17 @@ pixel-identisch.**
   435). Nebenwirkung, die hier willkommen ist: die Szene füllt ihre Spalte
   besser — 44 % → 51 % gezeichnete Breite in normal.
 
-- [ ] **P17-1 Aspekt-Figur Abb. 1.15 — Sekante vs. Tangente** (Durchschnitts- vs.
+- [x] **P17-1 Aspekt-Figur Abb. 1.15 — Sekante vs. Tangente** — **erledigt
+  2026-09-14** (Motor `4e02b28`, Kurve `2580d54`, Figur `263c105`, v1.53.0).
+  **Achter Motor** (`src/figures/ableitung/`, 527 Zeilen, der erste zeitlose).
+  Die Kurve ist die der gedruckten Abbildung: sie nennt ihre Funktionsgleichung
+  im Titel, und die Figur trifft deren Werte (Tangente −0,663 m/s, Sekante
+  +0,107 m/s, Δt = 8,00 s, Δx = 0,85 m). Δt gegen null gezogen laufen die
+  Zahlen zusammen — bei Δt = 1,2 s steht die Sekante schon bei −0,633.
+  **Nutzerfreigabe** zur Analyse der Original-Abbildung eingeholt; ohne sie wäre
+  die Kurve geraten worden (keine der vier Sim-Funktionen erfüllt die Aussage
+  der Bildunterschrift). Bildunterschrift → P21-A11.
+  *(Ursprüngliche Beschreibung:)* — Sekante vs. Tangente (Durchschnitts- vs.
   Momentangeschwindigkeit, Unterabschnitt 1.1.10 „Geschwindigkeit"). Statisches
   `fig-kinematik_geschwindigkeit_unterschied_durchschnitt_momentan` interaktiv
   nachbauen. Slider: Intervallgrenzen t₁/t₂ für die Sekante + Zeitpunkt t für die
