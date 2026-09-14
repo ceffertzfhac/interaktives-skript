@@ -386,6 +386,13 @@ mitgerechnet werden soll.
 
 ## AP8 — Fünf mehrfach vergebene `\label` (P21-A8)
 
+> **Erledigt am 2026-09-14** — `54304e1` (AP8a), `6b5566c` (AP8b),
+> `4063250` (AP8c), Neubau `830dcf9`: Log ohne „multiply-defined labels",
+> 421 Seiten wie vorher. Der Abschnitt bleibt als Beleg stehen. **Eine Falle,
+> die hier nicht stand:** die Tabelle in AP8c benennt je Abbildung das
+> **zweite** Teilbild, die neuen Labelnamen das **erste** — die Zuordnung
+> Zeile→Nummer gehört aus der `.aux` gelesen, nicht aus den Namen erschlossen.
+
 **Befund vom 2026-09-14**, aufgefallen an der Warnung „There were
 multiply-defined labels" im TeX-Log beim Bauen nach AP6. LaTeX nimmt bei
 doppeltem `\label` stillschweigend die **letzte** Definition; `\ref` zeigt dann
@@ -483,18 +490,31 @@ oben im PDF die Nummern drucken, die in den Tabellen als „gemeint" stehen.
 
 ## Quellfehler, die beim Nachziehen mitzukorrigieren sind
 
-Beide sind in `InteraktivesSkript_WIP/QUELLEN_FEHLER.md` (Abschnitt 1.1)
-erfasst und im interaktiven Skript **schon korrigiert**; im `.tex` stehen sie
-noch. Sie betreffen genau die Unterschriften, die in AP3 ohnehin angefasst
-werden.
+**Nr. 5 und 6 sind am 2026-09-14 erledigt** (`bdb4229`, Eintrag in
+`CORRECTIONS.md`); sie stehen unten nur noch als Beleg. Alle Einträge hier sind
+in `InteraktivesSkript_WIP/QUELLEN_FEHLER.md` erfasst und im interaktiven
+Skript schon behandelt; im `.tex` stehen sie noch.
 
 | Nr. | Stelle | Befund | Korrekt |
 |---|---|---|---|
 | 5 | Unterschriften der **vier** Wurf-Abbildungen | „Das Objekt wird aus der Höhe $h_0=\SI{20}{\meter}$ **losgelassen**" — es wird nicht losgelassen, sondern mit $v_0=\SI{10}{\meter\per\second}$ nach oben **geworfen**; dieselbe Unterschrift nennt die Anfangsgeschwindigkeit einen Satz davor (Wortlaut aus der Freier-Fall-Unterschrift übernommen, wo er richtig ist) | „**abgeworfen**" (oder „geworfen") |
 | 6 | Unterschrift Abb. 1.9 (`fig:schraeger_wurf`) | „Zu sehen ist **links** die Flugbahn …, und **links** die beiden Weg-Zeit-Diagramme" — zweimal „links" | „… und **rechts** die beiden Weg-Zeit-Diagramme" |
 
-Korrekturen an Rechtschreibung/Grammatik werden in diesem Repo in
-`CORRECTIONS.md` geführt — die beiden dort mit eintragen.
+**Offen — zwei undefinierte Verweise in `pskript_sw_schwingungen.tex`**
+(Abschnitt 3.1, in `QUELLEN_FEHLER.md` als Nr. 7 und 8 erfasst). Sie stehen
+seit jeher im Log; das interaktive Skript hat beide umschifft, das Druckskript
+druckt zwei leere Verweise:
+
+| Nr. | Stelle | Befund | Korrekt |
+|---|---|---|---|
+| 7 | § Horizontales Feder-Masse-System | „(siehe Abbildung `\ref{fig:feder_masse_schwingung_horizontal}`)" — die Abbildung **existiert nicht** (es gibt nur das vertikale Feder-Masse-Pendel, Abb. 3.3) | Klammerzusatz streichen (so macht es das WIP) oder eine Abbildung ergänzen — Autorenentscheidung |
+| 8 | § Harmonische Schwingungen | „die Funktion `\ref{eq:allg_loesung_harmonische_schwingung2}`" — Label-Tippfehler, der Unterstrich vor der 2 fehlt, also undefiniert | `eq:allg_loesung_harmonische_schwingung_2` (die Kosinus-Form; dieselbe Stelle wird ein paar Zeilen später korrekt so referenziert) |
+
+Nr. 8 ist ein Tippfehler und damit nummernneutral; Nr. 7 ist eine
+Autorenentscheidung. Beide erst angehen, wenn sie beauftragt sind.
+
+Korrekturen an Rechtschreibung/Grammatik werden im Quell-Repo in
+`CORRECTIONS.md` geführt — jede hier erledigte dort mit eintragen.
 
 ---
 
