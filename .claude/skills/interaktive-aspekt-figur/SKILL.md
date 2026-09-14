@@ -166,6 +166,12 @@ node .claude/skills/interaktive-aspekt-figur/scripts/figur_smoke.mjs \
 node .claude/skills/interaktive-aspekt-figur/scripts/figur_smoke.mjs \
      InteraktivesSkript_WIP/src/figures/aspekt_weg_zeit.js --init=buildWegZeitFig
 
+# Marker-Referenzen: JEDE url(#...) im Motor muss den Instanz-Prefix tragen,
+# sonst zeigt sie ins Leere und SVG zeichnet STILLSCHWEIGEND nichts (keine
+# Konsolenmeldung, nur eine Achse ohne Spitze). Dreimal passiert: P16-3 (Szene),
+# P5 2026-09-14 (Diagramm-Achsen in federpendel UND schraeger_wurf).
+grep -rn "url(#" InteraktivesSkript_WIP/src/figures/*/render.js | grep -v idPrefix
+
 node --input-type=module --check < <figur>.js   # Syntax ALLER geaenderten Module:
                                                # ein Fehler killt ueber main.js alle Figuren
 # CSS-Klammern balanciert (Kommentare vorher entfernen -- ein */ im Kommentar beendet ihn)
