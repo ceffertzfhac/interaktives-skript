@@ -44,38 +44,48 @@ Arbeitsversion). Deshalb trägt der Prompt unten die Konventionen selbst.
 Dann diesen Prompt eingeben:
 
 ```text
-Ziehe das Druckskript an das interaktive Skript nach.
+Setze AP8 der Uebergabe um: die fuenf mehrfach vergebenen \label im
+Druckskript.
 
-Die vollständige Arbeitsanweisung liegt hier — lies sie zuerst ganz:
+Die vollstaendige Arbeitsanweisung liegt hier — lies sie zuerst ganz:
 /home/chris/shared/VM_Exchange/Project_InteraktivesSkript/UEBERGABE_Druckskript.md
 
-Sie enthält acht Arbeitspakete (AP1-AP8) mit dem wörtlich einzusetzenden
-LaTeX, die Zieldateien, die Stellen (als LaTeX-Label, nicht als Zeilennummer)
-und die Leitplanken. Arbeite sie in dieser Reihenfolge ab.
+Stand: AP1-AP7 sind am 14.09.2026 umgesetzt und committet, offen ist nur AP8
+(Abschnitt "AP8" der Datei, Teilpakete AP8a/b/c). Fang trotzdem mit Schritt 0
+an und pruefe selbst nach, statt mir das zu glauben.
 
-Rahmen für diese Session:
-- Schritt 0 der Anweisung zuerst: `git pull`, dann prüfen, was auf der
-  Druckseite schon erledigt ist. AP1-AP7 sind am 2026-09-14 umgesetzt und
-  committet; offen ist nur AP8. Nicht doppelt umsetzen.
+Zwei Dinge, bevor du anfaengst:
+- Im Arbeitsbaum liegen drei geaenderte, nicht committete Dateien
+  (Physik_pskript_v0.13.tex, pskript_grundlagen_gmni_v2.tex und das PDF). Sag
+  mir zuerst, was da drin steht, und frag mich, ob das committet oder
+  verworfen wird. Nicht einfach mitcommitten.
+- Der Makroname fuer die Rechenbeispiele ist \brbsp, nicht \bbrsp. Der
+  Vorschlag im AP7-Abschnitt traegt den falschen Namen; wer danach sucht, haelt
+  AP7 faelschlich fuer offen.
+
+Rahmen fuer diese Session:
 - Sprache von Inhalt und Kommentaren: Deutsch.
-- Kleinschrittig committen: ein Commit je Arbeitspaket, vorher die betroffenen
-  Dateien gezielt `git add`-en und `git diff --cached` pruefen. Nicht pushen
-  ohne ausdrueckliche Freigabe.
-- Keine nummerierte Gleichung hinzufuegen. Zusaetzliche Gleichungen kommen
-  unnummeriert als \[...\] -- eine nummerierte verschiebt jede folgende Nummer
-  des Abschnitts und damit auch die des interaktiven Skripts.
-- Bildunterschriften: nur den Teil uebernehmen, der auf Papier traegt. Was die
-  interaktive Figur ueber ihre Regler, mitlaufende Werte oder Kurvenfarben
-  sagt, gehoert nicht ins Druckskript.
-- Nach jedem Arbeitspaket das PDF neu bauen und pruefen, dass die
-  Abbildungs-, Gleichungs- und Kastennummern des betroffenen Abschnitts sich
-  nicht unbeabsichtigt verschoben haben.
+- Kleinschrittig committen: ein Commit je Teilpaket (AP8a, AP8b, AP8c), vorher
+  die betroffenen Dateien gezielt `git add`-en und `git diff --cached` pruefen.
+  Nicht pushen ohne ausdrueckliche Freigabe.
+- AP8 ist nummernneutral: ein Label umzubenennen verschiebt kein Objekt. Wenn
+  sich doch eine Nummer bewegt, hast du zu viel angefasst.
+- Die doppelte Kreisbahn-Passage in pskript_mech_kin_dreh_und_kreis_v1.tex
+  NICHT entfernen, auch wenn sie offensichtlich redundant ist — das
+  interaktive Skript hat sie 1:1 mit uebernommen, eine Gleichung dort zu
+  streichen verschoebe die Nummern auf beiden Seiten. Nur die Labels anfassen.
+- Die Ersatznamen aus der Anweisung woertlich uebernehmen — sie sind so
+  gewaehlt, dass sie zu den IDs des interaktiven Skripts passen.
+- Danach das PDF neu bauen und pruefen: im Log keine Warnung
+  "multiply-defined labels" mehr, und die fuenf Verweisstellen drucken die
+  Nummern, die in den Tabellen der Anweisung als "gemeint" stehen.
 
-Melde am Ende: was umgesetzt ist, was upstream schon erledigt war, welche
-Nummern sich verschoben haben und was offen bleibt -- als Liste je AP, damit
+Melde am Ende je Teilpaket: umgesetzt / schon erledigt / offen (mit Grund),
+welche Verweise jetzt welche Nummer drucken und ob das Log sauber ist — damit
 ich P21 in meinem anderen Repo abhaken kann.
 ```
 
+---
 ---
 
 ## Schritt 0 — Quellstand herstellen (immer zuerst)
