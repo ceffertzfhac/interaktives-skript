@@ -6,12 +6,15 @@
      eine Zusammenfassung (1.3). KEIN Offset am h2: 1.3 folgt lueckenlos auf 1.2
      (Abb. 1.30 -> 1.31, Zusammenfassung 1.2 -> 1.3); damit sind 1.1–1.3
      contiguous und die kapitelweiten Zaehler laufen durch. 1.4-h2 behaelt 37/3.
-     Bewusste Abweichung: die v0.13-Bildunterschriften "Abbildung zum Beispiel
-     [Verweis auf die Beispiel-Nummer]" nutzen einen Box-Verweis; die
-     HTML-Nummerierung kennt aber keine
-     Box-Referenz (nur fig/sec/eq). Da die Abbildung hier INNERHALB der Beispiel-Box
+     Bewusste Abweichung: die v0.13-Bildunterschriften "Abbildung zum
+     [Rechen]beispiel [Verweis auf die Box-Nummer]" nutzen einen Box-Verweis;
+     die HTML-Nummerierung kennt aber keine
+     Box-Referenz (nur fig/sec/eq). Da die Abbildung hier INNERHALB der Box
      inline steht, ist der Verweis eindeutig -> Unterschrift ohne Nummer
-     ("Abbildung zum Beispiel"), wie schon in 1.2. -->
+     ("Abbildung zum Beispiel" / "Abbildung zum Rechenbeispiel"), wie schon
+     in 1.2. Das Wort folgt dem Kastentyp: die beiden Schlitten-Abbildungen
+     sitzen seit D5 in einem Rechenbeispiel, die drei uebrigen in einem
+     Beispiel -- so auch in der Quelle (Commit 2e6b8b7, 03.09.2026). -->
 
 
 <section>
@@ -113,7 +116,7 @@
     <div class="rechenbeispiel" data-title="Arbeit beim Ziehen eines Schlittens">
         <figure class="abbildung" id="fig-skript_schlitten">
             <img class="grafik" style="width:40%" src="bilder/skript_schlitten.png" alt="">
-            <figcaption>Abbildung zum Beispiel.</figcaption>
+            <figcaption>Abbildung zum Rechenbeispiel.</figcaption>
         </figure>
         <p>Ein Schlitten wird geradlinig über eine ebene, horizontale Fläche gezogen. Der zurückgelegte Weg beträgt \(5{,}0\,\mathrm{m}\). Die ziehende Kraft ist nicht parallel zur Ebene, sondern wirkt in einem Winkel. Die Vektoren lauten:</p>
 
@@ -152,7 +155,7 @@
     <div class="rechenbeispiel" data-title="Ziehen eine Schlittens über eine schräge Ebene">
         <figure class="abbildung" id="fig-skript_schlitten_schiefe_ebene">
             <img class="grafik" style="width:40%" src="bilder/skript_schlitten_schiefe_ebene.png" alt="">
-            <figcaption>Abbildung zum Beispiel.</figcaption>
+            <figcaption>Abbildung zum Rechenbeispiel.</figcaption>
         </figure>
         <p>In diesem Beispiel wird der Schlitten entlang einer schiefen Ebene gezogen. Das Koordinatensystem ist so ausgerichtet, dass die \(x\)-Achse parallel zum Erdboden, die \(y\)-Achse senkrecht zum Erdboden nach oben zeigt. Die Kraft, mit der am Schlitten gezogen wird, ist:</p>
         \begin{equation}
