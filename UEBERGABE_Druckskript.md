@@ -115,7 +115,8 @@ nachgemessen über `Input/v0.13` dieses Repos — der Symlink zeigt auf
 | AP1–AP5 | **umgesetzt**, je ein Commit | `6c3b90f`, `3e0be3e`, `40cabda`, `ba1fc7d`, `e4e87e5` |
 | AP6 | **umgesetzt** | `541c997` |
 | AP7 | **umgesetzt und vollständig** — Header **und** alle Kästen; die Kontrollzahlen stimmen auf die Datei genau | `\brbsp`/`\erbsp` (+ Plural) im Header, in den eingebundenen `.tex` **64 Beispiel / 28 Rechenbeispiel**, je Datei `11/17/11/12/6/1/12/3/4/1/6/5/3 = 92` |
-| AP8 | **offen**, neu am 2026-09-14 | Warnung „multiply-defined labels" im TeX-Log |
+| AP8 | **umgesetzt** | `54304e1`, `6b5566c`, `4063250`, Neubau `830dcf9`; Log ohne „multiply-defined labels" |
+| AP9 | **offen**, neu am 2026-09-14 | Unterschrift von Abb. 1.10 ohne den erklärenden Zusatz |
 | Quellfehler 5 und 6 | **mitkorrigiert** | `bdb4229` |
 
 Die beiden Neubauten (`65c798d`, `8b1ac66`, 421 Seiten, 0 Fehler) liegen danach.
@@ -488,6 +489,48 @@ oben im PDF die Nummern drucken, die in den Tabellen als „gemeint" stehen.
 
 ---
 
+## AP9 — Erklärender Zusatz in der Unterschrift von Abb. 1.10 (P21-A9)
+
+**Entstanden 2026-09-14**, nachdem zu Abb. 1.10 (Kreisbewegung, Abschnitt 1.1)
+eine interaktive Figur gebaut wurde. Entscheidung steht fest: **nachziehen**
+(Grundsatzregel „didaktischer Zusatz"). **Nummernneutral** — die statische
+Abbildung bleibt, wo sie ist.
+
+**Zieldatei:** `v0.13/pskript_mech_kinematik_gmni_v4.tex`.
+**Stelle:** die `figure` mit `\includegraphics[width=0.85\textwidth]{kreisbewegung_1.png}`
+(hat kein `\label`; sie folgt auf „Eine Kreisbewegung wird beschrieben durch:"
+und die zugehörige `equation`).
+
+**Statt:**
+
+```latex
+\caption{Weg-Zeit-Diagramme der Kreisbewegung mit $R=\SI{1,5}{\meter}$ und $T=\SI{6,0}{\second}$.}
+```
+
+**Einsetzen:**
+
+```latex
+\caption{\textbf{Koordinatensystem:} die $x$- und die $y$-Achse spannen die
+Ebene auf, in der die Bewegung verläuft; ihr Nullpunkt liegt im Mittelpunkt
+der Kreisbahn. Der Ortsvektor $\vec s(t)$ zeigt vom Mittelpunkt zum Objekt,
+und seine beiden Komponenten $x(t)$ und $y(t)$ sind genau die beiden Kurven
+der Diagramme. Weg-Zeit-Diagramme der Kreisbewegung mit $R=\SI{1,5}{\meter}$
+und $T=\SI{6,0}{\second}$: oben $x(t)$, unten $y(t)$. Beide Kurven
+beschreiben \textbf{dieselbe} Bewegung mit demselben Parameter $t$ -- einzeln
+betrachtet sieht keine von beiden nach einer Kreisbahn aus, erst
+zusammengenommen ergeben sie eine.}
+```
+
+> **Einmal hinsehen:** ob die gedruckte Abbildung wirklich $x(t)$ oben zeigt,
+> steht in der Bilddatei `kreisbewegung_1.png` — der Teilsatz „oben $x(t)$,
+> unten $y(t)$" beschreibt bisher nur die interaktive Figur. Stimmt die
+> Reihenfolge dort nicht, den Teilsatz drehen oder weglassen.
+
+**Nicht übernehmen** (Sonderregel Bildunterschriften): der Satz „Interaktiv:
+der Zeit-Regler …" samt Regler-Hinweisen.
+
+---
+
 ## Quellfehler, die beim Nachziehen mitzukorrigieren sind
 
 **Nr. 5 und 6 sind am 2026-09-14 erledigt** (`bdb4229`, Eintrag in
@@ -535,7 +578,7 @@ Korrekturen an Rechtschreibung/Grammatik werden im Quell-Repo in
 
 ## Fertig ist es, wenn …
 
-1. AP1–AP8 umgesetzt (oder als „upstream schon erledigt" bzw. „bewusst offen"
+1. AP1–AP9 umgesetzt (oder als „upstream schon erledigt" bzw. „bewusst offen"
    begründet) sind,
 2. das PDF fehlerfrei **und ohne die Warnung „multiply-defined labels"** baut,
 3. die Abschnittsnummern in TK 3 als 3.0 / 3.1 / 3.2 erscheinen,
