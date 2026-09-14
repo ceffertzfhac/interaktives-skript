@@ -63,8 +63,14 @@ Zwei Dinge, bevor du anfaengst:
   \SI{...e...}{...} (mit Kommentar im .tex, dass das so bleiben muss — sie
   sind das Beispiel dafuer, warum man Zehnerpotenzen braucht), dazu ein paar
   \ Abstands-Korrekturen nach "ca." . Schau dir das Ganze vorher an und sag
-  mir, was drin ist; in Physik_pskript_v0.13.tex steht ein fuehrendes
-  Leerzeichen vor \documentclass, frag mich, ob das absichtlich ist.
+  mir, was drin ist. Zwei Sachen dabei pruefen und mit mir klaeren, BEVOR du
+  committest:
+  (a) Die ausgeschriebene Elektronenmasse hat 27 Nullen nach dem Komma
+      (9 Dreiergruppen) und ist damit 9,109e-28 statt 9,109e-31 -- Faktor 1000
+      zu gross. Fuer 9,109e-31 braucht es 30 Nullen, also 10 Dreiergruppen.
+      Die Sonnenmasse (1989 + 27 Nullen = 1,989e30) stimmt.
+  (b) In Physik_pskript_v0.13.tex steht ein fuehrendes Leerzeichen vor
+      \documentclass -- Absicht?
 - Der Makroname fuer die Rechenbeispiele ist \brbsp, nicht \bbrsp. Der
   Vorschlag im AP7-Abschnitt traegt den falschen Namen; wer danach sucht, haelt
   AP7 faelschlich fuer offen.

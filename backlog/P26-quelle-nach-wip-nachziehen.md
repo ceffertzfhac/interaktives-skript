@@ -63,6 +63,15 @@ zweites Mal prüft):
   \]
   ```
 
+  **Achtung, die Quelle hat dort einen Zahlendreher** (Stand 14.09.2026,
+  uncommitted): die Elektronenmasse steht mit **27** Nullen nach dem Komma da,
+  das ist \(9{,}109\cdot 10^{-28}\,\mathrm{kg}\) — Faktor 1000 zu groß.
+  Für \(9{,}109\cdot 10^{-31}\) braucht es **30** Nullen, also **zehn**
+  Dreiergruppen statt neun. Der Block oben ist bereits korrigiert. Ist die
+  Quelle beim Nachziehen noch falsch, zuerst **dort** richtigstellen — das WIP
+  darf den Fehler nicht übernehmen. (Die Sonnenmasse stimmt: 1989 + 27 Nullen
+  = \(1{,}989\cdot 10^{30}\).)
+
   **Nicht übersehen — das ist der eigentliche Punkt:** die Quelle setzt sie als
   **unnummerierte** `\[…\]`, das WIP hat dort zwei **nummerierte** `equation`.
   Werden sie im WIP nummeriert gelassen, laufen die Gleichungsnummern in 0.1
