@@ -388,10 +388,33 @@ des Fragments.
   `Project_Script` umsetzen (die Einträge oben sind so geschrieben, dass sie
   direkt abgearbeitet werden können), `Input/v0.13` per `git pull` aktualisieren,
   PDF neu bauen. *(M, außerhalb dieses Repos)* — Anleitung:
-  `../UEBERGABE_Druckskript.md`. **Zuerst A7 upstream prüfen:** der Checkout ist
-  vom 2026-07-26, die Druckseite hat seither mindestens
-  `scripts/classification_report.md` und `v0.13/assets/calculator.svg`
-  bekommen.
+  `../UEBERGABE_Druckskript.md`.
+  **Zwischenstand 2026-09-14**, nachgemessen im Checkout `Input/physik_skript_repo`
+  (Stand `8b1ac66`, deckungsgleich mit `origin/main`):
+  - **A1–A6 umgesetzt und committet** (`6c3b90f`, `3e0be3e`, `40cabda`,
+    `ba1fc7d`, `e4e87e5`, `541c997`), danach zwei Neubauten — 421 Seiten,
+    0 Fehler.
+  - **A7 vollständig umgesetzt:** `Physik_skript_header_gmni_v3.tex` definiert
+    `rechenbeispielcounter`, `rechenbeispielbox` und `\brbsp`/`\erbsp`
+    (+ Plural) mit `calculator`-Icon in `skriptblau` — die beiden im
+    Übergabedokument offen gelassenen Entscheidungen (Farbton, Icon) sind damit
+    getroffen —, und die Kästen sind umgestellt: **64 Beispiel / 28
+    Rechenbeispiel**, je eingebundener Datei `11/17/11/12/6/1/12/3/4/1/6/5/3
+    = 92`, Zahl für Zahl die Kontrollzahlen aus
+    `scripts/classification_report.md`. *Für P21-3: A7 ist der einzige nicht
+    nummernneutrale Punkt — die Beispielnummern haben sich auf der Druckseite
+    verschoben, die Gegenprüfung muss dort ansetzen.*
+    (Achtung beim Nachmessen: der Makroname ist `\brbsp`, **nicht** `\bbrsp`
+    wie im ursprünglichen Vorschlag des Übergabedokuments. Mit dem falschen
+    Namen findet `grep` nichts und A7 sieht offen aus.)
+  - **A8 offen** (neu, s. o.).
+  - Die beiden Quellfehler 5 und 6 (Abschnitt 1.1) sind auf der Druckseite
+    mitkorrigiert (`bdb4229`). In `QUELLEN_FEHLER.md` steht das noch nicht — die
+    Tabelle führt nur eine Spalte „WIP", keine für den Druckstand; bei der
+    Gegenprüfung ist zu entscheiden, ob die beiden Einträge einen Vermerk
+    „Druck: korrigiert 2026-09-14" bekommen.
+  - `Input/v0.13` ist bereits aktuell — ein weiterer `git pull` ist erst nach
+    der nächsten Sitzung im LaTeX-Repo nötig.
 - [ ] **P21-3 Gegenprüfung** — nach der Angleichung Abbildungs-/Gleichungs-
   nummern und Querverweise beider Fassungen vergleichen. *(S)*
 

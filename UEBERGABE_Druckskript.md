@@ -55,9 +55,8 @@ und die Leitplanken. Arbeite sie in dieser Reihenfolge ab.
 
 Rahmen für diese Session:
 - Schritt 0 der Anweisung zuerst: `git pull`, dann prüfen, was auf der
-  Druckseite schon erledigt ist. AP1-AP6 sind am 2026-09-14 umgesetzt und
-  committet, von AP7 steht die Haelfte (Header ja, Kaesten nein), AP8 ist neu.
-  Nicht doppelt umsetzen.
+  Druckseite schon erledigt ist. AP1-AP7 sind am 2026-09-14 umgesetzt und
+  committet; offen ist nur AP8. Nicht doppelt umsetzen.
 - Sprache von Inhalt und Kommentaren: Deutsch.
 - Kleinschrittig committen: ein Commit je Arbeitspaket, vorher die betroffenen
   Dateien gezielt `git add`-en und `git diff --cached` pruefen. Nicht pushen
@@ -91,7 +90,7 @@ Stand `8b1ac66` („Dokument auf dem Mac neu gebaut", 2026-09-14) steht und mit
 |---|---|---|
 | AP1–AP5 | **umgesetzt**, je ein Commit | `6c3b90f`, `3e0be3e`, `40cabda`, `ba1fc7d`, `e4e87e5` |
 | AP6 | **umgesetzt** | `541c997` |
-| AP7 | **halb** — Zähler, Box, Makros und Icon stehen im Header, aber **kein einziger Kasten** ist umgestellt | `\brbsp`/`\erbsp` in `Physik_skript_header_gmni_v3.tex` definiert, `grep -c '\\brbsp{'` über die Kapitel-`.tex` ergibt **0** |
+| AP7 | **umgesetzt und vollständig** — Header **und** alle Kästen; die Kontrollzahlen stimmen auf die Datei genau | `\brbsp`/`\erbsp` (+ Plural) im Header, in den eingebundenen `.tex` **64 Beispiel / 28 Rechenbeispiel**, je Datei `11/17/11/12/6/1/12/3/4/1/6/5/3 = 92` |
 | AP8 | **offen**, neu am 2026-09-14 | Warnung „multiply-defined labels" im TeX-Log |
 | Quellfehler 5 und 6 | **mitkorrigiert** | `bdb4229` |
 
@@ -102,16 +101,20 @@ diesem Eintrag wieder bewegt haben:
 ```
 git pull
 git log --oneline -15
-grep -c '\\brbsp{' v0.13/*.tex | grep -v ':0'   # AP7 Schritt 2: leer = offen
-grep -n 'multiply' *.log v0.13/*.log 2>/dev/null  # AP8
-ls scripts/classification_report.md v0.13/assets/calculator*
+grep -c '\\brbspe\?{' v0.13/*.tex | grep -v ':0'   # AP7: Kaesten umgestellt?
+grep -n 'multiply' *.log v0.13/*.log 2>/dev/null     # AP8
 ```
+
+**Der Makroname ist `\brbsp`, nicht `\bbrsp`** — der Vorschlag in AP7 unten
+trägt den anderen Namen, umgesetzt wurde `\brbsp`. Wer nach `bbrsp` sucht,
+findet nichts und hält AP7 fälschlich für offen.
 
 - `\brbsp` schon in den Kapitel-`.tex` → **AP7 überspringen** (oder nur
   gegenprüfen) und das in der Rückmeldung sagen.
-- Fehlt `classification_report.md` → AP7 **nicht** nach eigener Einschätzung
-  umsetzen, sondern zurückfragen. Die Zuordnung der 92 Kästen darf nicht zum
-  zweiten Mal getroffen werden (Begründung in AP7).
+- Wäre AP7 doch noch offen und fehlte `scripts/classification_report.md` → AP7
+  **nicht** nach eigener Einschätzung umsetzen, sondern zurückfragen. Die
+  Zuordnung der 92 Kästen darf nicht zum zweiten Mal getroffen werden
+  (Begründung in AP7).
 
 **Zieldatei für AP1–AP5:** `v0.13/pskript_mech_kinematik_gmni_v4.tex`
 (Abschnitt 1.1 „Kinematik").
@@ -313,21 +316,23 @@ und „Schlitten an Leine" kommt im Energiekapitel zweimal vor, je einmal pro
 Sorte). Kontrollzahlen: **64 Beispiel / 28 Rechenbeispiel**, je Quelldatei
 `11/17/11/12/6/1/12/3/4/1/6/5/3 = 92`.
 
-**Stand 2026-09-14: Schritt 1 ist upstream erledigt, Schritt 2 nicht.** Im
-Header stehen `\newcounter{rechenbeispielcounter}`,
-`\numberwithin{…}{section}`, `\newtcolorbox{rechenbeispielbox}{skriptbox=…}`
-sowie `\brbsp`/`\erbsp` und `\brbspe`/`\erbspe` (Plural) mit dem
-`calculator`-Icon — die beiden unten offen gelassenen Entscheidungen (Farbton,
-Icon-Format) sind dort also schon getroffen; **der Makroname lautet `\brbsp`,
-nicht `\bbrsp` wie im Vorschlag unten.** In den Kapitel-`.tex` ist dagegen
-**kein einziger Kasten umgestellt** (`\bbsp` 94×, `\bbspe` 7×, `\brbsp` 0×).
-Das eigentliche Paket ist damit Schritt 2 und 3.
+> **Stand 2026-09-14: dieses Paket ist upstream vollständig erledigt.** Im
+> Header stehen `\newcounter{rechenbeispielcounter}`,
+> `\numberwithin{…}{section}`,
+> `\newtcolorbox{rechenbeispielbox}{skriptbox={skriptblau}{5.1}}` sowie
+> `\brbsp`/`\erbsp` und `\brbspe`/`\erbspe` (Plural) mit dem
+> `calculator`-Icon — die beiden unten offen gelassenen Entscheidungen (Farbton,
+> Icon-Format) sind also getroffen. **Der Makroname lautet `\brbsp`, nicht
+> `\bbrsp` wie im Vorschlag unten.** Auch die Kästen sind umgestellt: in den
+> eingebundenen `.tex` **64 `\bbsp`/`\bbspe` und 28 `\brbsp`/`\brbspe`**, je
+> Datei `11/17/11/12/6/1/12/3/4/1/6/5/3 = 92` — Zahl für Zahl die
+> Kontrollzahlen unten. Der Rest dieses Abschnitts bleibt als Beleg stehen,
+> wonach gesucht wurde und warum die Zuordnung nicht neu zu treffen ist.
 
 **Zu tun:**
 
-1. ~~In `Physik_skript_header_gmni_v3.tex` Zähler und Box anlegen~~ *(erledigt,
-   s. o. — der Vorschlag bleibt nur als Beleg stehen, wonach gesucht wurde)*,
-   nach dem Muster der bestehenden Definitionen (Zeilen ~124 / 132 / 184–187):
+1. In `Physik_skript_header_gmni_v3.tex` Zähler und Box anlegen, nach dem Muster
+   der bestehenden Definitionen (Zeilen ~124 / 132 / 184–187):
 
    ```latex
    \newcounter{rechenbeispielcounter}
