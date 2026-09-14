@@ -28,8 +28,9 @@ mitlaufen. Entstanden für die Physik-Vorlesung im Fachbereich 8 der
   `v0.13` transkribiert): **TK 0** Grundlagen, **TK 1** Mechanik (Kinematik,
   Dynamik, Bezugssysteme/Scheinkräfte, Stöße, Gravitation, Drehbewegung/
   Kreisbahnen), **TK 2** Elektromagnetismus, **TK 3** Schwingungen & Wellen —
-  Formeln in LaTeX-Satz (MathJax), Kästen für Beispiel, Rechenbeispiel,
-  Wichtig, Zusammenfassung, Aufgabe und Bemerkung.
+  Formeln in LaTeX-Satz (MathJax), Kästen für Lernziel, Beispiel,
+  Rechenbeispiel, Wichtig, Zusammenfassung, Aufgabe und Bemerkung — wo die
+  Vorlage ein Lernziel setzt, steht es am Anfang des Abschnitts.
 - **24 interaktive Aspekt-Figuren** auf sieben Motoren: `kreisbewegung`
   (2D, Abb. 1.38–1.51), `kreis_spiral` (ISO-3D, Abb. 1.57–1.59),
   `grundbegriffe` (2D, Abb. 1.1), `bus_weg_zeit` (Abb. 1.2),
