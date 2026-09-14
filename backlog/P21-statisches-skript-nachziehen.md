@@ -266,6 +266,65 @@ Voreinstellung angelegt.
   standen unter einem Namen — Kästen, die Theorie demonstrieren, und Kästen, in
   denen mitgerechnet wird.
 
+#### P21-A8 · Fünf mehrfach vergebene `\label` im Druckskript
+
+- **Status:** **offen — Befund 2026-09-14**, aufgefallen beim Abarbeiten von
+  AP1–AP6 im LaTeX-Repo (Warnung „There were multiply-defined labels" im
+  TeX-Log). Entscheidung nötig, Umsetzung gehört zu P21-2.
+- **Warum das hierher gehört und nicht nur in `QUELLEN_FEHLER.md`:** eines der
+  fünf Labels ist unten unter „Medienbedingte Unterschiede" schon aufgeführt —
+  das WIP hat `formel_freierfall4` disambiguiert und der Druck nicht. Damit
+  **zeigen die Querverweise der beiden Fassungen auf verschiedene Gleichungen**,
+  und das ist genau der Fall, für den dieses Register da ist. Die vier anderen
+  sind bisher nirgends erfasst.
+- **Befund.** LaTeX nimmt bei doppeltem `\label` stillschweigend die **letzte**
+  Definition; `\ref` zeigt dann auf ein anderes Objekt als gemeint. Betroffen:
+
+  | Label | Datei | definiert als | `\ref` druckt |
+  |---|---|---|---|
+  | `formel_freierfall4` | `pskript_mech_kinematik_gmni_v4.tex` (Z. 184 und 209) | Gl. **1.1.9** (Fallgesetz) und Gl. **1.1.14** (Fallzeit) | 1.1.14 |
+  | `eq_kreisbahn_position_zeit` | `pskript_mech_kin_dreh_und_kreis_v1.tex` (Z. 80 und 113) | Gl. **1.4.5** und ein `\[…\]` ohne Nummer | **1.4.1** |
+  | `eq_kreisbahn_winkel_zeit_vereinfachte_form` | ebd. (Z. 92 und 118) | Gl. **1.4.7** und ein `\[…\]` ohne Nummer | **1.4.1** |
+  | `eq_kreisbahn_position_zeit_vereinfachte_form` | ebd. (Z. 100 und 126) | Gl. **1.4.8** und Gl. **1.4.9** | 1.4.9 |
+  | `fig_kreisbewegung_dphi_dr_pair` | ebd. (Z. 963, 1021, 1045) | Abb. **1.57**, **1.58**, **1.59** | 1.59 |
+
+- **Zwei verschiedene Ursachen**, die getrennt zu behandeln sind:
+  1. **`\label` in einer unnummerierten `\[…\]`-Umgebung** (die beiden
+     Kreisbahn-Fälle mit „1.4.1"). Dort gibt es keine Gleichungsnummer, also
+     hängt sich das Label an den zuletzt hochgezählten Zähler — hier an den
+     Abschnitt. Das ist kein Tippfehler, sondern ein stiller Totalausfall des
+     Verweises. In `pskript_mech_kin_dreh_und_kreis_v1.tex` steht die Passage ab
+     Z. 105 ohnehin ein **zweites Mal** da (einmal nummeriert, einmal als
+     `\[…\]`); die Dopplung selbst ist zu prüfen.
+  2. **Dasselbe Label auf zwei bzw. drei wirklich nummerierten Objekten**
+     (`formel_freierfall4`, `…vereinfachte_form`, `fig_…dphi_dr_pair`).
+
+- **Schadwirkung, gemessen.** Bei `formel_freierfall4` sind **zwei von drei**
+  Verweisen falsch:
+  - Z. 202 „Den Streckengleichungen (Formel (1.1.6) bis (\ref{formel_freierfall4}))"
+    meint die vier Fallgesetze 1.1.6–**1.1.9**, druckt aber „bis 1.1.14" und
+    zieht damit die ganze Herleitung mit hinein.
+  - Z. 204 „anhand von (\ref{formel_freierfall4}) … wie lange das Objekt braucht"
+    meint **1.1.9**, druckt **1.1.14** — also das Ergebnis, das erst zehn Zeilen
+    später hergeleitet wird.
+  - Z. 214 „Mit Formel (\ref{formel_freierfall4}) … Fallzeit von 2 s" meint
+    **1.1.14** und ist als einziger richtig.
+
+  Bei den Kreisbahn-Gleichungen zeigen die drei Verweise im Fließtext
+  („Ersetzen wir nun $\varphi(t)$ in der Gleichung …") auf **1.4.1** statt auf
+  1.4.5 bzw. 1.4.7.
+
+- **Zu tun:** je Fall das zweite (bzw. dritte) Label umbenennen oder streichen
+  und die Verweise auf das gemeinte Objekt richten. Bei den drei Abbildungen
+  1.57–1.59 entscheidet der Autor, welche das Label behalten soll bzw. ob drei
+  eigene Labels gebraucht werden.
+- **Nummern:** **keine.** Ein Label umzubenennen verschiebt kein Objekt — es
+  ändert nur, welche Nummer der Verweis *druckt*. Dieser Punkt ist damit
+  nummernneutral und kann unabhängig von allem anderen umgesetzt werden. Nach
+  der Korrektur stimmen Druck und WIP bei `formel_freierfall4` überein, weil das
+  WIP bereits disambiguiert hat.
+
+
 ---
 
 ### Medienbedingte Unterschiede (dokumentiert, nichts nachzuziehen)
@@ -276,8 +335,11 @@ unverändert; im `.tex` gibt es nichts zu tun. Details jeweils im Kopfkommentar
 des Fragments.
 
 - `ch_01_01`: `\bbspe` (Plural-Beispielbox) → einzelne `beispiel`-Boxen ·
-  Doppel-Label `formel_freierfall4` disambiguiert (Quellfehler-Workaround) ·
   Quell-Artefakt „code/Code" in der Zusammenfassung übersprungen.
+  *(Korrigiert 2026-09-14: das Doppel-Label `formel_freierfall4` stand hier
+  als medienbedingt und „nichts nachzuziehen". Das war falsch — das WIP hat
+  disambiguiert, der Druck nicht, also weichen die Querverweise beider
+  Fassungen voneinander ab. Der Fall ist jetzt **P21-A8**.)*
 - `ch_01_03`: Bildunterschrift „Abbildung zum Beispiel …" ohne Nummer — der
   HTML-Resolver kennt keine Box-Referenz; die Abbildung steht inline in der Box,
   der Verweis ist dadurch eindeutig.
