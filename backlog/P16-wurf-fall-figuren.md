@@ -140,6 +140,41 @@ allein der Kontrast die Pruefung).
 - **P17-3 ist billiger geworden:** der `federpendel`-Motor ist seit P12-E6
   portiert, P17-3 ist damit *(M — nur Figur)* statt *(L — Motor + Figur)*.
 
+### Offen zu Abb. 1.14 (nach dem Bau)
+
+- [ ] **P16-7a Fenster, Nulllinien und Ausnutzung in Abb. 1.14** *(M)* —
+  **Nutzerbefund 2026-09-14**, drei Punkte, die zusammengehören:
+  1. die **Nulllinien** beider Bilder sollten ungefähr auf gleicher Höhe liegen;
+  2. das Diagramm braucht im Modus „x-Achse auf dem Boden, y-Achse nach oben"
+     **keinen Bereich unter Null** (aktuell bis −10 m) — das kostet Platz;
+  3. **nach oben ist die Szene zu klein**, während im Diagramm oben Platz frei
+     bleibt.
+
+  **Stand:** Maßstabsgleichheit ist erreicht (v1.52.2, Parabeln in Szene und
+  Diagramm pixelgleich, 0 % Abweichung in allen drei Breiten-Modi). Die drei
+  Punkte oben sind damit **nicht** erledigt.
+
+  **Ein erster Umbau am 14.09.2026 wurde wieder verworfen** — der Befund
+  daraus ist die eigentliche Erkenntnis und gehört festgehalten:
+
+  > Alle drei Punkte laufen auf **ein gemeinsames Fenster in Metern** hinaus,
+  > das beide Bilder zeigen. Der Versuch, das umzusetzen, indem die Szene ihre
+  > Breite aus dem Maßstab des Diagramms ableitet, ist **zirkulär**: die Szene
+  > steht mit dem Diagramm in derselben Flex-Zeile, ihre Breite nimmt dem
+  > Diagramm also Platz weg, worauf dessen Maßstab kleiner wird, worauf die
+  > Szene neu rechnet. Im Versuch hat die Szene das Diagramm vollständig
+  > verdrängt, und die Beschriftungen der Szene wuchsen mit (sie skalieren mit
+  > dem SVG). Gemessen: Parabel 130 px → 228 px breit, aber das Diagramm war
+  > weg.
+
+  **Was stattdessen zu tun ist** (Vorschlag, vor der Umsetzung zu entscheiden):
+  die Breiten **fest** aufteilen (z. B. 45 % Szene / 55 % Diagramm) und *beide*
+  Bilder über die **Höhe** bemessen, wie es `aspekt_federpendel.css` im
+  vertikalen Aufbau vormacht. Dann ist der Maßstab beider Bilder allein durch
+  die Zeilenhöhe bestimmt, die Zirkularität entfällt, und das gemeinsame
+  Fenster lässt sich sauber setzen. Die Schriftgrößen der Szene brauchen dabei
+  eine eigene Regel, sonst wachsen sie mit dem Maßstab.
+
 ### Sub-Tasks
 
 - [x] **P16-0 Klärung** — Granularität: **1:1 pro Abbildung** (keine Konsolidierung);
