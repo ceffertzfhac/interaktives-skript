@@ -18,7 +18,13 @@
      (getippt, s. ch_01-Konvention); Zusammenfassung/Beispiele/Gleichungen
      behalten ihr „0." (0.1, 0.1.1, (0.1.1) usw.). siunitx (\SI/\si/\num) ist
      nicht geladen → manuell aufgeloest; Inline-Math immer \(…\), nie $…$
-     (MathJax inlineMath ist nur \(…\)). -->
+     (MathJax inlineMath ist nur \(…\)).
+
+     Quellstand: nachgezogen bis v0.13-Commit c6faf10 (03.09.2026) — Lernziel-
+     Kasten am h2 und die sechs Einleitungssaetze in den Beispiel-Kaesten
+     (Baustein D6: kein Boxkoerper beginnt mit einer abgesetzten Formel) sind
+     juenger als das PDF im Quell-Repo (gebaut 16.07.2026). Beim Abgleich gegen
+     jenes PDF fehlen sie dort, nicht hier (s. ../../QUELLE_v013.md). -->
 
 <section>
     <!-- Startwerte fuer die kapitelweit laufenden Zaehler (v0.13: figure ohne
@@ -103,6 +109,7 @@
     \end{equation}
 
     <div class="beispiel" data-title="Große Zahlen in Exponentialschreibweise">
+        <p>Angewandt auf konkrete Zahlen sieht das so aus:</p>
         \begin{align*}
         1\,000\,000\,000 &= 10^9 \\
         2\,400\,000\,000 &= 2{,}4 \cdot 10^9 \\
@@ -142,6 +149,7 @@
     <p>Verallgemeinert ergibt eine Zahl, die mit \(0{,}\) anfängt und bei der dann \(n\) Nullen folgen und die mit \(xyz\) aufhört, \(x{,}yz\cdot 10^{-(n+1)}\).</p>
 
     <div class="beispiel" data-title="Kleine Zahlen in Exponentialschreibweise">
+        <p>Für Zahlen kleiner als eins ergibt sich entsprechend:</p>
         \begin{align*}
         0{,}000123       &= 1{,}23\cdot 10^{-4} \\
         0{,}00000056     &= 5{,}6\cdot 10^{-7} \\
@@ -158,6 +166,7 @@
     \end{align*}
 
     <div class="beispiel" data-title="Rechenoperationen">
+        <p>Mit Zahlenwerten eingesetzt ergeben diese Regeln:</p>
         \begin{align*}
         2{,}2\cdot 10^{7} \cdot 5{,}0\cdot 10^{13} = 11\cdot 10^{20} &= 1{,}1\cdot 10^{21} \\
         \frac{6{,}6\cdot 10^{-9}}{3{,}3\cdot 10^{8}} &= 2{,}0\cdot 10^{-17}\\
@@ -185,6 +194,7 @@
     <p>Die Einheit gibt der Maßzahl ihren Sinninhalt. So ergibt die Angabe \(4{,}23\cdot 10^{-3}\) in Wissenschaft und Technik für sich allein genommen wenig Sinn. Erst mit der Einheit wird die Angabe zu einer greifbaren und verständlichen Größe: \(4{,}23\cdot 10^{-3}\,\mathrm{g}\) ist eine Masse, \(4{,}23\cdot 10^{-3}\,\mathrm{km}\) ist eine Länge.</p>
 
     <div class="beispiel" data-title="Physikalische Größen">
+        <p>Maßzahl und Einheit gehören dabei immer zusammen:</p>
         \begin{align*}
         \text{Masse}\quad &= \quad 4{,}23\cdot 10^{-3}\,\mathrm{g}\\
         \text{Länge}\quad &= \quad 4{,}23\cdot 10^{-3}\,\mathrm{km}
@@ -196,6 +206,7 @@
     <p>So ist es also gängiger im Falle des vorherigen Beispiels zu schreiben:</p>
 
     <div class="beispiel" data-title="Formelzeichen">
+        <p>Dieselben beiden Größen, nun mit Formelzeichen geschrieben:</p>
         \begin{align*}
         m &= 4{,}23\cdot 10^{-3}\,\mathrm{g}\\
         l &= 4{,}23\cdot 10^{-3}\,\mathrm{km}
@@ -341,6 +352,7 @@
     <p>Bei allen Beispielen sehen Sie, was ich schon weiter oben erwähnt hatte: Einheiten werden immer nur durch Multiplikation oder Division verknüpft. Die Konsequenz ist, dass man in der Physik zwar physikalische Größen mit unterschiedlichen Einheiten multiplizieren kann (wie z. B. im 2. Newton'schen Gesetz: \(F=m\cdot a\)), jedoch eine Addition oder Subtraktion von zwei physikalischen Größen nur dann sinnhaft ist, wenn beide Größen dieselbe Einheit haben.</p>
 
     <div class="beispiel" data-title="Gültigkeit von Rechenoperationen">
+        <p>Zulässig ist demnach das eine, nicht aber das andere:</p>
         \begin{align*}
         17\,\mathrm{kg} \cdot 3{,}0\,\mathrm{km/h} = 51\,\mathrm{kg\,km/h} &\quad \text{✓} \\
         17\,\mathrm{kg} + 3{,}0\,\mathrm{km/h} = ? &\quad \text{✗}
