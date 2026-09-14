@@ -62,6 +62,33 @@ meist `\be…\ee`-Stellen, die zu Inline-Mathe degradiert wurden.
 **Grenze:** läuft mit `AllPackages` und sieht Konfigurationsfehler der echten
 Seite nicht (siehe Stufe 4).
 
+**Zwei Grenzen, an denen dieser Weg ganz ausfällt** (gemessen 14.09.2026):
+*ein* Abschnitts-Präfix je Aufruf — ein Fragment mit mehreren `h2` (etwa
+`ch_00_grundlagen`) lässt sich damit nicht prüfen —, und der lite-Parser von
+MathJax bricht an benannten Entities (`&uuml;` & Co.) mit „MathJax retry" ab,
+weil er die Entity-Tabelle asynchron nachladen will. Betroffen sind mehrere
+Fragmente. In beiden Fällen **Stufe 2b nehmen**, sie misst dasselbe am echten
+Dokument.
+
+## Stufe 2b — Gleichungsnummern aus dem echten Browser
+
+```bash
+node .claude/skills/v013-verifikation/scripts/gleichungsnummern.mjs --zaehlung
+node .claude/skills/v013-verifikation/scripts/gleichungsnummern.mjs > ist.txt
+```
+
+Geht Seite für Seite über den Anker (MathJax setzt **seitenweise**, P22-3 —
+wer alle Seiten einblendet und einmal liest, findet zwei Formeln statt
+tausend) und liest jede gerenderte Nummer. `--zaehlung` gibt Anzahl und höchste
+Nummer je Abschnitt aus: genau die Tabelle, die Stufe 1 als Soll liefert.
+
+**Der Fallstrick, der hier eine Abweichung vortäuscht:** ein `align`-Block ist
+EIN `mjx-container` mit MEHREREN Nummern. Wer je Container nur die erste liest,
+zählt im ganzen Skript 802 statt 947 und hält das für einen Fehler des WIP.
+Das Skript liest darum alle Treffer je Container und prüft je Seite gegen die
+Zahl der von MathJax angelegten `mlabeledtr`-Zeilen; **Exit-Code 1**, sobald
+beides auseinanderläuft.
+
 ## Stufe 3 — Laufzeit ohne Browser
 
 ```bash
@@ -164,6 +191,23 @@ die vom Nutzer beschriebenen Symptome.
 **Zählweise:** die Schiene wird **zweimal** gerendert (Desktop-Spalte und
 Tablet-Schublade), das Skript klickt beide. Die Zahl der gemessenen Sprünge ist
 darum doppelt so groß wie die Zahl der Einträge im Skript.
+
+## Stufe 4d — Roher TeX im Fließtext (echter Browser)
+
+```bash
+node .claude/skills/v013-verifikation/scripts/roher_tex.mjs
+```
+
+Prüft jede Seite darauf, dass nach dem Setzen **kein** TeX-Quelltext mehr im
+Text steht (`\(`, `\[`, `\begin{`). Zwei verschiedene Fehler enden in diesem
+Symptom, beide schon vorgekommen (P5): ein überholter MathJax-Lauf, der
+Quelltext liegen lässt — und ein rohes `<` in Inline-Mathe wie `\(r_B<r_A\)`,
+das der HTML-Parser als Tag-Anfang liest, wodurch die Formel ungesetzt bleibt
+und der Rest des Satzes im Pseudo-Element verschwindet. **Regel: `<` in
+Inline-Mathe immer als `&lt;`** — es bricht nur, wenn direkt ein Buchstabe
+folgt, `\(k<0\)` ist also heute harmlos und morgen eine Falle.
+
+Selbsttest wie bei 4b (Exit-Code 2), **Exit-Code 1** bei jedem Fund.
 
 ## Stufe 5 — Nur im Browser
 
