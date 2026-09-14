@@ -410,14 +410,14 @@ Voreinstellung angelegt.
 - **Was NICHT nachgezogen wird:** der Hinweis der interaktiven Fassung, dass
   sich der Zeitpunkt dort zeigen lässt (samt Regler-Hinweisen). Er benennt genau
   das, was Papier **nicht** kann.
-- **Der eine Punkt, der zu prüfen ist:** die gedruckte Unterschrift sagt, wo das
-  Objekt zu einem Zeitpunkt ist, sei „nicht mehr erkennbar". Die interaktive
-  Figur zeigt es (Nutzerentscheidung 2026-09-14, Wiedergabe wie in Abb. 1.9).
-  Der gedruckte Satz bleibt richtig — er gilt für die gedruckte Darstellung —,
-  sollte aber nicht als Aussage über *jede* Bahnkurven-Darstellung gelesen
-  werden. Wenn der Autor das schärfen will, wäre „In dieser (statischen)
-  Darstellung ist nicht erkennbar …" die kleinste Änderung. **Keine Pflicht**,
-  nur ein Hinweis aus dem Bau.
+- **Am gedruckten Satz ist nichts zu ändern.** Kurz erwogen und wieder
+  verworfen: die gedruckte Unterschrift sagt, wo das Objekt zu einem Zeitpunkt
+  ist, sei „nicht mehr erkennbar", während die interaktive Figur es zeigt — das
+  klang zunächst nach einem Widerspruch. Ist es nicht (Nutzerformulierung
+  2026-09-14): sichtbar ist es dort **während der Wiedergabe**, im Nachhinein
+  auch dort nicht mehr, denn die fertige Kurve trägt die Zeit nicht in sich.
+  Der gedruckte Satz gilt also uneingeschränkt; die interaktive Fassung fügt
+  nur den Moment hinzu, und genau so steht es in ihrer Bildunterschrift.
 - **Nummern:** **keine.** Die statische Abbildung bleibt an derselben Stelle
   (`.nur-druck`), `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
 

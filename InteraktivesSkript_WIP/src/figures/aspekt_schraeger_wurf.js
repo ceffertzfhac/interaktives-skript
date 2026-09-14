@@ -14,12 +14,12 @@
 //
 // ZEITLAUF AUCH IN 1.14 (Nutzerentscheidung 2026-09-14): die gedruckte
 // Unterschrift sagt, in der Bahnkurve sei „nicht mehr erkennbar", wo das Objekt
-// zu einem Zeitpunkt ist. Die interaktive Figur zeigt es trotzdem — mit
-// Wiedergabe und mitlaufendem Punkt, bedienungsgleich mit 1.9. Begruendung:
-// Zeitlosigkeit der BAHN und Sichtbarkeit des Zeitpunkts widersprechen sich
-// nicht; die Kurve selbst bleibt dieselbe, egal wann man hinsieht, und genau
-// das laesst sich am laufenden Punkt zeigen. Die Bildunterschrift der
-// interaktiven Figur sagt beides ausdruecklich (s. Kapitel-Platzhalter, P21-A10).
+// zu einem Zeitpunkt ist. Die interaktive Figur laesst es trotzdem sehen — aber
+// nur WAEHREND der Wiedergabe. Genau so steht es in der Bildunterschrift
+// (Nutzerformulierung 2026-09-14): waehrend der Animation sieht man es, im
+// Nachhinein auch hier nicht mehr, denn die fertige Kurve traegt die Zeit nicht
+// in sich. Der gedruckte Satz bleibt damit uneingeschraenkt richtig; die
+// interaktive Fassung widerspricht ihm nicht, sie fuegt den Moment hinzu.
 //
 // Links die Wurfszene (Strichmaennchen auf dem Haus, Kugel, Flugbahn, Hoehen-
 // und Weiten-Lineal, Stoppuhr), rechts ZWEI gestapelte Weg-Zeit-Diagramme:
@@ -315,7 +315,7 @@ const panelRight = (cfg) => `
 ${cfg.bahn ? `        <div class="formula-box-cap">Die Bahn — eine Gleichung ohne \\(t\\)</div>
         <div>\\[y(x) = -\\tfrac{1}{2}\\,\\frac{g}{v_0^2\\cos^2(\\alpha)}\\,x^2 + \\tan(\\alpha)\\,x + h_0\\]</div>
         <div class="ff-formel-note">Diese Parabel ist eine <em>andere</em> als die von \\(y(t)\\): sie beschreibt den Verlauf der Flugkurve durch den Raum — die Spur im Schnee —, nicht den zeitlichen Verlauf der Höhe. Entstanden ist sie, indem \\(t\\) aus \\(x(t)\\) und \\(y(t)\\) eliminiert wurde.</div>
-        <div class="ff-formel-note">Die Kurve selbst ändert sich nicht mit der Zeit. Wiedergabe und Zeit-Regler zeigen nur, <em>wo auf ihr</em> das Objekt gerade ist — die gedruckte Abbildung kann das nicht.</div>`
+        <div class="ff-formel-note">Die Kurve selbst ändert sich nicht mit der Zeit. Wiedergabe und Zeit-Regler zeigen, <em>wo auf ihr</em> das Objekt gerade ist — an der fertigen Kurve ist das hinterher nicht mehr abzulesen.</div>`
  : `        <div class="formula-box-cap">Zwei Gleichungen, ein Parameter \\(t\\)</div>
         <div>\\[x(t) = v_0\\cos(\\alpha)\\,t\\]</div>
         <div>\\[y(t) = -\\tfrac{1}{2}\\,g\\,t^2 + v_0\\sin(\\alpha)\\,t + h_0\\]</div>

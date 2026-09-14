@@ -557,11 +557,11 @@ nicht — dabei ist er der Grund, warum es diese Abbildung gibt.
 **Nicht übernehmen:** der Hinweis der interaktiven Fassung, dass sich der
 Zeitpunkt dort zeigen lässt, samt Regler-Hinweisen.
 
-> **Ein Hinweis ohne Pflicht:** die gedruckte Unterschrift sagt, wo das Objekt
-> zu einem Zeitpunkt ist, sei „nicht mehr erkennbar". Das stimmt für die
-> gedruckte Darstellung; die interaktive zeigt es (Nutzerentscheidung). Wer den
-> Satz schärfen will, schreibt „In dieser (statischen) Darstellung ist nicht
-> erkennbar …" — die kleinste mögliche Änderung.
+> **Am vorhandenen Satz ist nichts zu ändern.** Dass die interaktive Figur
+> zeigt, wo das Objekt zu einem Zeitpunkt ist, widerspricht ihm nicht: sichtbar
+> ist es dort nur **während der Wiedergabe**: im Nachhinein trägt auch die
+> interaktive Kurve die Zeit nicht in sich. Der gedruckte Satz gilt also
+> uneingeschränkt.
 
 ---
 
