@@ -72,7 +72,7 @@ import { buildSchraegerWurfFig } from './figures/aspekt_schraeger_wurf.js';
 // zugeordnet, die ihre EIGENE Motor-Instanz (Prefix + storeInstance) baut
 // (s. kreisbewegung/runtime.js) -> beliebig viele Figuren, auch auf derselben
 // Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
-const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig, 'federpendel': buildFederpendelFig, 'federpendel-kinematik': buildFederpendelFig, 'freier-fall': buildFreierFallFig, 'senkrechter-wurf': buildFreierFallFig, 'schraeger-wurf': buildSchraegerWurfFig };
+const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'weg-zeit-kinematik': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig, 'federpendel': buildFederpendelFig, 'federpendel-kinematik': buildFederpendelFig, 'freier-fall': buildFreierFallFig, 'senkrechter-wurf': buildFreierFallFig, 'schraeger-wurf': buildSchraegerWurfFig };
 
 // Stand-alone-Simulationen je Aspekt-Figur (P7-Rest, Nutzervorgabe 2026-07-30).
 // Die Sims leben unter SIM_BASE (die Index-Datei dort listet alle 16); eine
@@ -84,6 +84,7 @@ const ASPEKT_SIM_URLS = {
     // kreisbewegung-Motor -> „Ebene Kreisbewegung"
     'kreisbahn': SIM_BASE + 'sim_kreisbewegung/index.html',
     'weg-zeit':  SIM_BASE + 'sim_kreisbewegung/index.html',
+    'weg-zeit-kinematik': SIM_BASE + 'sim_kreisbewegung/index.html',
     'winkel-zeit': SIM_BASE + 'sim_kreisbewegung/index.html',
     'vxvy-zeit': SIM_BASE + 'sim_kreisbewegung/index.html',
     'axay-zeit': SIM_BASE + 'sim_kreisbewegung/index.html',

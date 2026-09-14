@@ -1,10 +1,30 @@
-// aspekt_weg_zeit.js — interaktive Aspekt-Figur zu Abbildung 1.39 (1.4.2
-// „Die Geschwindigkeit …", Weg-Zeit-Diagramm / x,y-Diagramm). Zeigt die beiden
-// Komponenten-Zeit-Diagramme x(t) (oben/links) und y(t) (unten/rechts) ueber
-// drei Perioden (0 … 12 s) sowie die Kreisbahn-Szene mit Ortsvektor r und
-// dessen Komponenten rx/ry — genau die Projektionen, deren Zeitverlauf die
-// Diagramme zeigen.
-// Regler: Zeit t (0 … 12 s), Radius R, Periodendauer T (→ ω = 2π/T).
+// aspekt_weg_zeit.js — interaktive Aspekt-Figuren des Weg-Zeit-Aspekts. EINE
+// Fabrik fuer ZWEI Skriptstellen (Regel „eine Fabrik darf mehrere Abbildungen
+// tragen", s. figures/CLAUDE.md); was sie unterscheidet, steht als
+// data-Attribut am Platzhalter im Kapitel:
+//
+//   Abb. 1.39 in 1.4.2 „Die Geschwindigkeit …"   (ohne Zusatzattribute)
+//     die DREHBEWEGUNGS-Sicht: Ortsvektor r mit Komponenten rx/ry, Winkelbogen
+//     φ, ω-Regler neben T. Vorgabe R=1,5 m, T=4 s (0…12 s = drei Perioden).
+//   Abb. 1.10 in 1.1.7 „Die Strecke"   (data-kontext="kinematik")
+//     die KINEMATIK-Sicht: derselbe Aufbau, aber mit dem Vokabular, das
+//     Abschnitt 1.1 zu diesem Zeitpunkt hat. Dort heisst der Ortsvektor
+//     \vec s(t), und WEDER Winkel φ NOCH Winkelgeschwindigkeit ω sind
+//     eingefuehrt (beide kommen erst in 1.4). Genau deshalb entfallen hier
+//     ω-Regler, Winkelbogen und die φ-Zeile der Analyse — eine Figur darf
+//     nicht mit Symbolen argumentieren, die der Text noch nicht kennt.
+//     Vorgabe R=1,5 m, T=6,0 s (Werte der Bildunterschrift in v0.13;
+//     0…12 s = zwei Perioden).
+//
+//   data-kontext="kinematik"           -> Vokabular/Gating s. o.
+//   data-radius="<m>" / data-periode="<s>"  -> Startwerte
+//
+// Beide zeigen die Komponenten-Zeit-Diagramme x(t) (oben) und y(t) (unten)
+// sowie die Kreisbahn-Szene mit dem Ortsvektor und dessen Komponenten — genau
+// die Projektionen, deren Zeitverlauf die Diagramme zeigen. In 1.1.7 ist das
+// die Bruecke, die der Fliesstext direkt darunter ankuendigt („Da es nicht so
+// einfach ist, zu sehen, dass die … Gleichungen … eine Kreisbahn beschreiben").
+// Regler: Zeit t (0 … 12 s), Radius R, Periodendauer T (+ ω nur in 1.39).
 //
 // TECHNIK: kein eigener Zeichencode. Der Motor der grossen Kreisbewegungs-
 // Simulation (src/figures/kreisbewegung/) zeichnet Szene (updateScene) UND
@@ -62,8 +82,7 @@ const T_MIN = 2, T_MAX = 8, T_DEFAULT = 4;
 const T_STEP = 0.1;
 // ω = 2π/T, bidirektional an den T-Regler gekoppelt (P-AF-1). Der ω-Bereich ist der
 // reziproke des T-Bereichs: T_MAX -> kleinstes ω, T_MIN -> größtes ω.
-const OMEGA_MIN = 2 * Math.PI / T_MAX, OMEGA_MAX = 2 * Math.PI / T_MIN,
-      OMEGA_DEFAULT = 2 * Math.PI / T_DEFAULT, OMEGA_STEP = 0.01;
+const OMEGA_MIN = 2 * Math.PI / T_MAX, OMEGA_MAX = 2 * Math.PI / T_MIN, OMEGA_STEP = 0.01;
 const R_DEFAULT = 1.5;
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 
@@ -183,7 +202,9 @@ const SVG_GRAPH = `
 </svg>`;
 
 // -- Linkes Bedien-Panel (Parameter + Legende) -- Klassen wie die Stand-alone.
-const PANEL_LEFT = `
+//    Funktion statt Konstante: die Kinematik-Variante (Abb. 1.10) laesst den
+//    ω-Regler weg und beschriftet den Ortsvektor als \vec s (s. Kopf).
+const PANEL_LEFT = (cfg) => `
 <div class="aspekt-panel aspekt-panel-left">
   <div class="panel-section">
     <div class="panel-label">Parameter</div>
@@ -194,19 +215,19 @@ const PANEL_LEFT = `
     </div>
     <div class="slider-label">Radius \\(R\\)</div>
     <div class="slider-row">
-      <input id="ak_r" type="range" min="${R_MIN}" max="${R_MAX}" step="0.05" value="${R_DEFAULT}">
+      <input id="ak_r" type="range" min="${R_MIN}" max="${R_MAX}" step="0.05" value="${cfg.R0}">
       <span class="slider-val" id="ak_r_out"></span>
     </div>
     <div class="slider-label">Periodendauer \\(T\\)</div>
     <div class="slider-row">
-      <input id="ak_T" type="range" min="${T_MIN}" max="${T_MAX}" step="${T_STEP}" value="${T_DEFAULT}">
+      <input id="ak_T" type="range" min="${T_MIN}" max="${T_MAX}" step="${T_STEP}" value="${cfg.T0}">
       <span class="slider-val" id="ak_T_out"></span>
     </div>
-    <div class="slider-label">Winkelgeschw. \\(\\omega = \\tfrac{2\\pi}{T}\\)</div>
+${cfg.kinematik ? '' : `    <div class="slider-label">Winkelgeschw. \\(\\omega = \\tfrac{2\\pi}{T}\\)</div>
     <div class="slider-row">
-      <input id="ak_omega" type="range" min="${OMEGA_MIN}" max="${OMEGA_MAX}" step="${OMEGA_STEP}" value="${OMEGA_DEFAULT}">
+      <input id="ak_omega" type="range" min="${OMEGA_MIN}" max="${OMEGA_MAX}" step="${OMEGA_STEP}" value="${2 * Math.PI / cfg.T0}">
       <span class="slider-val" id="ak_omega_out"></span>
-    </div>
+    </div>`}
   </div>
   <div class="panel-section">
     <div class="panel-label">Tempo</div>
@@ -220,10 +241,10 @@ const PANEL_LEFT = `
   <div class="panel-section">
     <div class="panel-label">Legende</div>
     <div class="legend-grid">
-      <div class="legend-swatch" data-c="r"></div>   <div class="legend-label">Ortsvektor \\(\\vec{r}\\)</div>
-      <div class="legend-swatch" data-c="rx"></div>  <div class="legend-label">Komponente \\(r_x = x(t)\\)</div>
-      <div class="legend-swatch" data-c="ry"></div>  <div class="legend-label">Komponente \\(r_y = y(t)\\)</div>
-      <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\varphi\\)</div>
+      <div class="legend-swatch" data-c="r"></div>   <div class="legend-label">Ortsvektor \\(${cfg.vec}\\)</div>
+      <div class="legend-swatch" data-c="rx"></div>  <div class="legend-label">Komponente \\(${cfg.comp('x')}\\)</div>
+      <div class="legend-swatch" data-c="ry"></div>  <div class="legend-label">Komponente \\(${cfg.comp('y')}\\)</div>
+${cfg.kinematik ? '' : `      <div class="legend-swatch" data-c="phi"></div> <div class="legend-label">Winkel \\(\\varphi\\)</div>`}
       <div class="legend-swatch" data-c="traj"></div><div class="legend-label">durchlaufener Bogen</div>
     </div>
   </div>
@@ -247,7 +268,7 @@ const RUNBAR = `
 
 // -- Rechtes Analyse-Panel (breit + Lupe). Kopf-Leiste + Body wie die
 //    Stand-alone (panel-header mit ph-label + Doppel-Chevron, panel-body). ----
-const PANEL_RIGHT = `
+const PANEL_RIGHT = (cfg) => `
 <div class="aspekt-panel aspekt-panel-right">
   <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" data-tip="Analyse ein-/ausklappen">
     <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
@@ -258,7 +279,7 @@ const PANEL_RIGHT = `
       <div class="panel-label">Live-Analyse</div>
       <div class="analysis-grid">
         <div class="analysis-cell key">Zeit \\(t\\)</div>            <div class="analysis-cell val" id="ak_val_t"></div>
-        <div class="analysis-cell key">Winkel \\(\\varphi\\)</div>    <div class="analysis-cell val" id="ak_val_phi"></div>
+${cfg.kinematik ? '' : `        <div class="analysis-cell key">Winkel \\(\\varphi\\)</div>    <div class="analysis-cell val" id="ak_val_phi"></div>`}
         <div class="analysis-cell key">Radius \\(R\\)</div>          <div class="analysis-cell val" id="ak_val_r"></div>
         <div class="analysis-cell key">Periodendauer \\(T\\)</div>    <div class="analysis-cell val" id="ak_val_T"></div>
         <div class="analysis-cell key">Position \\(x\\)</div>         <div class="analysis-cell val" id="ak_val_x"></div>
@@ -268,9 +289,10 @@ const PANEL_RIGHT = `
     <div class="panel-section">
       <div class="panel-label">Physik</div>
       <div class="formula-box">
-        <div class="formula-box-cap">Ort und Winkel auf der Kreisbahn:</div>
+${cfg.kinematik ? `        <div class="formula-box-cap">Ort auf der Kreisbahn:</div>
+        <div>\\[\\vec{s}(t) = \\begin{pmatrix} x(t) \\\\ y(t) \\end{pmatrix} = \\begin{pmatrix} R\\cos\\!\\left(\\tfrac{2\\pi}{T}t\\right) \\\\ R\\sin\\!\\left(\\tfrac{2\\pi}{T}t\\right) \\end{pmatrix}\\]</div>` : `        <div class="formula-box-cap">Ort und Winkel auf der Kreisbahn:</div>
         <div>\\[\\vec{r}(t) = \\begin{pmatrix} R\\cos(\\varphi(t)) \\\\ R\\sin(\\varphi(t)) \\end{pmatrix}\\]</div>
-        <div>\\[\\varphi(t) = \\tfrac{2\\pi}{T}\\,t\\]</div>
+        <div>\\[\\varphi(t) = \\tfrac{2\\pi}{T}\\,t\\]</div>`}
       </div>
     </div>
   </div>
@@ -295,6 +317,21 @@ export function buildWegZeitFig(fig) {
     if (fig.dataset.built) return;
     fig.dataset.built = '1';
 
+    // Variante aus dem Platzhalter lesen (s. Kopf). Alles, was die beiden
+    // Skriptstellen unterscheidet, haengt an diesem Objekt — nicht an
+    // verstreuten if-Abfragen auf fig.dataset.
+    const kinematik = fig.dataset.kontext === 'kinematik';
+    const cfg = {
+        kinematik,
+        R0: parseFloat(fig.dataset.radius) || R_DEFAULT,
+        T0: parseFloat(fig.dataset.periode) || T_DEFAULT,
+        // In 1.1 heisst der Ortsvektor \vec s (so fuehrt ihn der Text dort ein),
+        // ab 1.4 \vec r. Die Komponenten heissen entsprechend x(t)/y(t) bzw.
+        // r_x/r_y — dieselbe Groesse, anderes Vokabular.
+        vec: kinematik ? '\\vec{s}' : '\\vec{r}',
+        comp: a => kinematik ? `${a}(t)` : `r_${a} = ${a}(t)`,
+    };
+
     const rt = createRuntime();
     const p = rt.prefix;
 
@@ -307,11 +344,11 @@ export function buildWegZeitFig(fig) {
     // HIER prefixen, sonst passt querySelectorAll('input[name="${p}speed"]') auf
     // nichts und Slow-Mo bleibt wirkungslos (speedFactor stets 1,0).
     scene.innerHTML =
-      `<div class="aspekt-body">${PANEL_LEFT.replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`)}` +
+      `<div class="aspekt-body">${PANEL_LEFT(cfg).replace(/id="ak_/g, `id="${p}ak_`).replace(/name="ak_speed"/g, `name="${p}speed"`)}` +
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE.replace(/kb_/g, p)}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH.replace(/kb_/g, p)}</div></div></div>` +
-        `${PANEL_RIGHT.replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
+        `${PANEL_RIGHT(cfg).replace(/id="ak_/g, `id="${p}ak_`)}</div>${LIVE_STUB.replace(/kb_/g, p)}`;
     rt.bindDom();
 
     // Lupe-Button: oben rechts in der HAUPTSPALTE (Grid-Spalte 2 des .aspekt-body),
@@ -346,6 +383,10 @@ export function buildWegZeitFig(fig) {
     }
 
     // Per-Instanz-Regler + Zustand (Closure, nicht Modul-Ebene).
+    // ak_omega ist in der Kinematik-Variante NICHT im DOM (s. cfg) -> null;
+    // jeder Zugriff darauf ist unten mit `ak_omega &&` bzw. Optional Chaining
+    // abgesichert. Ein ungeschuetzter Zugriff legt ueber main.js alle Figuren
+    // still (Fallstrick #21), nicht nur diese.
     const ak_t = ge(p + 'ak_t'), ak_r = ge(p + 'ak_r'), ak_T = ge(p + 'ak_T'), ak_omega = ge(p + 'ak_omega');
     const ak_keep = ge(p + 'ak_keep');
     const speedRadios = scene.querySelectorAll(`input[name="${p}speed"]`);
@@ -555,7 +596,9 @@ export function buildWegZeitFig(fig) {
         updateScene(t, position(t), velocity(t), acceleration(t), sceneCenters);
         updateGraph(t);
         renderPrev();   // nach updateGraph: store.graphScale ist dann aktuell
-        drawAngle((store.omega * t) * 180 / Math.PI);
+        // Winkelbogen nur, wo der Text den Winkel kennt: in 1.1.7 ist φ noch
+        // nicht eingefuehrt (s. Kopf), dort bleibt die Szene beim Ortsvektor.
+        if (!cfg.kinematik) drawAngle((store.omega * t) * 180 / Math.PI);
     }
 
     // -- Analyse-/Slider-Werte (deutsches Dezimalkomma wie die Vorlage). --------
@@ -566,12 +609,14 @@ export function buildWegZeitFig(fig) {
         const td = ge(p + 'time_display'); if (td) td.textContent = `t = ${n(t, 2)} s`;
         ge(p + 'ak_r_out').textContent = n(store.R, 2) + ' m';
         ge(p + 'ak_T_out').textContent = n(T, 1) + ' s';
-        ge(p + 'ak_omega_out').textContent = n(omegaOf(T), 3) + ' rad/s';
+        const oOut = ge(p + 'ak_omega_out');
+        if (oOut) oOut.textContent = n(omegaOf(T), 3) + ' rad/s';
         const vt = ge(p + 'ak_val_t');
         if (vt) {
             const phiDeg = ((store.omega * t) * 180 / Math.PI) % 360;
             vt.textContent = n(t, 2) + ' s';
-            ge(p + 'ak_val_phi').textContent = n(phiDeg, 0) + ' °';
+            const vphi = ge(p + 'ak_val_phi');
+            if (vphi) vphi.textContent = n(phiDeg, 0) + ' °';
             ge(p + 'ak_val_r').textContent = n(store.R, 2) + ' m';
             ge(p + 'ak_val_T').textContent = n(T, 2) + ' s';
             const pos = position(t);
@@ -631,7 +676,7 @@ export function buildWegZeitFig(fig) {
         // ω-Schieber gezogen: T = 2π/ω ableiten, auf T_STEP quantisieren und auf
         // [T_MIN, T_MAX] beschränken, dann den T-Schieber mitführen. Kein Snap-Back
         // auf den ω-Schieber während des Ziehens — sonst springt er unter dem Zeiger.
-        if (e.target === ak_omega) {
+        if (ak_omega && e.target === ak_omega) {
             const T = Math.min(T_MAX, Math.max(T_MIN, snapT(2 * Math.PI / parseFloat(ak_omega.value))));
             ak_T.value = String(T);
         }
@@ -655,12 +700,12 @@ export function buildWegZeitFig(fig) {
         rebuild(true);
         // War nicht der ω-Schieber die Quelle (R- oder T-Zug) -> ω-Schieber
         // nachführen, damit beide gekoppelt sichtbar bleiben.
-        if (e.target !== ak_omega) {
+        if (ak_omega && e.target !== ak_omega) {
             ak_omega.value = String(omegaOf(parseFloat(ak_T.value)));
         }
     }
     let paramGesture = false;
-    [ak_r, ak_T, ak_omega].forEach(inp => inp.addEventListener('change', () => { paramGesture = false; }));
+    [ak_r, ak_T, ak_omega].forEach(inp => inp && inp.addEventListener('change', () => { paramGesture = false; }));
 
     // -- Automatischer Ablauf (Sim-Zeit 0 … 12 s, Slow-Mo via Tempo-Pills, Auto-
     //    Stopp am Ende — kein Umbrechen). Pro Instanz im Closure; Knoepfe/Pills
@@ -727,7 +772,7 @@ export function buildWegZeitFig(fig) {
         if (!keepPrev) clearPrev();
     });
 
-    [ak_t, ak_r, ak_T, ak_omega].forEach(inp => inp.addEventListener('input', onInput));
+    [ak_t, ak_r, ak_T, ak_omega].forEach(inp => inp && inp.addEventListener('input', onInput));
     rebuild();
 
     // Beim Oeffnen/Schliessen der Lupe sofort neu zeichnen: so greift der

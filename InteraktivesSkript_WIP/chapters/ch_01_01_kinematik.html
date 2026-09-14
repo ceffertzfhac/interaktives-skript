@@ -26,7 +26,15 @@
      ueberleitender Absatz dazu, dass Aussehen UND Formel vom Koordinatensystem
      abhaengen. Abbildungsnummern bleiben unveraendert (relative Reihenfolge
      erhalten, keine andere Abbildung dazwischen). Das Druckskript ist
-     entsprechend nachzuziehen -> P21. -->
+     entsprechend nachzuziehen -> P21.
+     Abweichung 2026-09-14 (BACKLOG P17-2): zu Abb. 1.10 (Kreisbewegung) gibt es
+     am Bildschirm eine interaktive Figur; die statische Abbildung traegt jetzt
+     .nur-druck. Ihre Bildunterschrift bekommt dabei einen erklaerenden Zusatz
+     (Koordinatensystem + der Satz, dass beide Kurven dieselbe Bewegung
+     beschreiben und erst zusammen eine Kreisbahn ergeben). Nach der
+     Grundsatzregel "didaktischer Zusatz" ist dieser erklaerende Teil ins
+     Druckskript nachzuziehen -> P21-A9; die Regler-Hinweise nicht.
+     Abbildungs- und Gleichungsnummern bleiben unveraendert. -->
 
 
 <section>
@@ -375,7 +383,9 @@
         \vec s(t) = \left(\begin{matrix}x(t)\\y(t) \end{matrix}\right)=\left(\begin{matrix}R\cdot \cos{(\frac{2\pi}{T}t)} \\R \cdot \sin{(\frac{2\pi}{T}t)} \end{matrix} \right)
         \end{equation}
 
-        <figure class="abbildung" id="fig-kreisbewegung_1">
+        <div class="aspekt-figur nur-bildschirm" id="aspekt-kreisbewegung-komponenten" data-aspekt="weg-zeit-kinematik" data-motor="kreisbewegung" data-kontext="kinematik" data-radius="1.5" data-periode="6" data-title="Kreisbewegung: die Komponenten \(x(t)\) und \(y(t)\) und die Bahn (interaktiv)" data-figref="fig-kreisbewegung_1" data-caption="<strong>Koordinatensystem:</strong> die \(x\)- und die \(y\)-Achse spannen die Ebene auf, in der die Bewegung verl&auml;uft; ihr Nullpunkt liegt im Mittelpunkt der Kreisbahn. Der Ortsvektor \(\vec{s}(t)\) zeigt vom Mittelpunkt zum Objekt, und seine beiden Komponenten \(x(t)\) und \(y(t)\) sind genau die beiden Kurven der Diagramme. Weg-Zeit-Diagramme der Kreisbewegung mit \(R=1{,}5\,\mathrm{m}\) und \(T=6{,}0\,\mathrm{s}\): oben \(x(t)\), unten \(y(t)\). Beide Kurven beschreiben <strong>dieselbe</strong> Bewegung mit demselben Parameter \(t\) &mdash; einzeln betrachtet sieht keine von beiden nach einer Kreisbahn aus, erst zusammengenommen ergeben sie eine. Interaktiv: der Zeit-Regler \(t\) oder die Wiedergabe l&auml;sst das Objekt umlaufen; der Punkt wandert dabei gleichzeitig auf der Bahn und auf beiden Kurven. Die Regler \(R\) und \(T\) &auml;ndern Radius und Periodendauer."></div>
+
+        <figure class="abbildung nur-druck" id="fig-kreisbewegung_1">
             <img class="grafik" style="width:85%" src="bilder/kreisbewegung_1.png" alt="">
             <figcaption>Weg-Zeit-Diagramme der Kreisbewegung mit \(R=1{,}5\,\mathrm{m}\) und \(T=6{,}0\,\mathrm{s}\).</figcaption>
         </figure>
