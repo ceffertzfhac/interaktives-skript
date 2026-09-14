@@ -1,6 +1,25 @@
-// aspekt_schraeger_wurf.js — interaktive Aspekt-Figur Abb. 1.9 (BACKLOG P16-6),
-// Abschnitt 1.1.7 („Die Strecke"): der schraege Wurf als Bewegung, die sich in
-// ZWEI Ort-Zeit-Gleichungen zerlegt.
+// aspekt_schraeger_wurf.js — interaktive Aspekt-Figuren des schraegen Wurfs.
+// EINE Fabrik fuer ZWEI Abbildungen desselben Abschnitts 1.1.7 („Die Strecke");
+// was sie unterscheidet, steht als data-Attribut am Platzhalter im Kapitel:
+//
+//   Abb. 1.9  (ohne Zusatzattribut)      — die Bewegung zerlegt sich in ZWEI
+//     Ort-Zeit-Gleichungen: gestapelt y(t) oben, x(t) unten.
+//   Abb. 1.14 (data-kontext="bahn")      — dieselbe Bewegung als BAHNKURVE:
+//     EIN Diagramm y(x), die Zeit ist keine Achse mehr. Der Fliesstext davor
+//     stellt genau das gegenueber („diese Parabel ist eine andere Parabel als
+//     die Parabel der Komponente y(t)").
+//
+// Beide teilen Szene, Regler, Ablaufsteuerung und Analyse — nur der
+// Diagramm-Zuschnitt und zwei Texte unterscheiden sich.
+//
+// ZEITLAUF AUCH IN 1.14 (Nutzerentscheidung 2026-09-14): die gedruckte
+// Unterschrift sagt, in der Bahnkurve sei „nicht mehr erkennbar", wo das Objekt
+// zu einem Zeitpunkt ist. Die interaktive Figur zeigt es trotzdem — mit
+// Wiedergabe und mitlaufendem Punkt, bedienungsgleich mit 1.9. Begruendung:
+// Zeitlosigkeit der BAHN und Sichtbarkeit des Zeitpunkts widersprechen sich
+// nicht; die Kurve selbst bleibt dieselbe, egal wann man hinsieht, und genau
+// das laesst sich am laufenden Punkt zeigen. Die Bildunterschrift der
+// interaktiven Figur sagt beides ausdruecklich (s. Kapitel-Platzhalter, P21-A10).
 //
 // Links die Wurfszene (Strichmaennchen auf dem Haus, Kugel, Flugbahn, Hoehen-
 // und Weiten-Lineal, Stoppuhr), rechts ZWEI gestapelte Weg-Zeit-Diagramme:
@@ -78,6 +97,8 @@ function leseKonfig(fig) {
         h0: zahl('h0', H0_DEFAULT),
         v0: zahl('v0', V0_DEFAULT),
         alpha: zahl('alpha', ALPHA_DEFAULT),
+        // Abb. 1.14: EIN Diagramm, die Bahnkurve y(x) (s. Kopf).
+        bahn: fig.dataset.kontext === 'bahn',
     };
 }
 
@@ -239,7 +260,7 @@ const panelLeft = (cfg) => `
   <div class="panel-section">
     <div class="panel-label">Legende</div>
     <div class="legend-grid">
-      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel, Flugbahn und beide Kurven</div>
+      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel, Flugbahn und ${cfg.bahn ? 'Bahnkurve' : 'beide Kurven'}</div>
       <div class="legend-swatch" data-c="sw-ruler"></div><div class="legend-label">Höhen- und Weitenskala in \\(\\mathrm{m}\\)</div>
     </div>
   </div>
@@ -264,7 +285,7 @@ const RUNBAR = `
 // dass BEIDE Gleichungen nebeneinander stehen — genau die Aussage des
 // Fliesstextes davor. data-eqs (main.js::fill_physik_panels) koennte nur EINE
 // Gleichung aus dem Text zeigen.
-const panelRight = () => `
+const panelRight = (cfg) => `
 <div class="aspekt-panel aspekt-panel-right">
   <button type="button" class="panel-header" data-action="toggle_analyse" aria-expanded="true" data-tip="Analyse ein-/ausklappen">
     <svg class="ph-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 L8 8 L3 12"/><path d="M8 4 L13 8 L8 12"/></svg>
@@ -285,11 +306,15 @@ const panelRight = () => `
     <div class="panel-section">
       <div class="panel-label">Physik</div>
       <div class="formula-box">
-        <div class="formula-box-cap">Zwei Gleichungen, ein Parameter \\(t\\)</div>
+${cfg.bahn ? `        <div class="formula-box-cap">Die Bahn — eine Gleichung ohne \\(t\\)</div>
+        <div>\\[y(x) = -\\tfrac{1}{2}\\,\\frac{g}{v_0^2\\cos^2(\\alpha)}\\,x^2 + \\tan(\\alpha)\\,x + h_0\\]</div>
+        <div class="ff-formel-note">Diese Parabel ist eine <em>andere</em> als die von \\(y(t)\\): sie beschreibt den Verlauf der Flugkurve durch den Raum — die Spur im Schnee —, nicht den zeitlichen Verlauf der Höhe. Entstanden ist sie, indem \\(t\\) aus \\(x(t)\\) und \\(y(t)\\) eliminiert wurde.</div>
+        <div class="ff-formel-note">Die Kurve selbst ändert sich nicht mit der Zeit. Wiedergabe und Zeit-Regler zeigen nur, <em>wo auf ihr</em> das Objekt gerade ist — die gedruckte Abbildung kann das nicht.</div>`
+ : `        <div class="formula-box-cap">Zwei Gleichungen, ein Parameter \\(t\\)</div>
         <div>\\[x(t) = v_0\\cos(\\alpha)\\,t\\]</div>
         <div>\\[y(t) = -\\tfrac{1}{2}\\,g\\,t^2 + v_0\\sin(\\alpha)\\,t + h_0\\]</div>
         <div class="ff-formel-note">Beide Gleichungen beschreiben <em>dieselbe</em> Bewegung — deshalb braucht es zwei Ort-Zeit-Diagramme. Sie gelten vom Abwurf bis zum Aufschlag, also für \\(0 \\le t \\le t_{\\mathrm{fall}}\\).</div>
-        <div class="ff-formel-note">Die Achse \\(y\\) zeigt nach oben und hat ihren Nullpunkt auf dem Erdboden; \\(x\\) zählt waagerecht ab dem Abwurfpunkt. \\(\\alpha\\) ist der Abwurfwinkel zum Erdboden.</div>
+        <div class="ff-formel-note">Die Achse \\(y\\) zeigt nach oben und hat ihren Nullpunkt auf dem Erdboden; \\(x\\) zählt waagerecht ab dem Abwurfpunkt. \\(\\alpha\\) ist der Abwurfwinkel zum Erdboden.</div>`}
       </div>
     </div>
   </div>
@@ -338,7 +363,7 @@ export function buildSchraegerWurfFig(fig) {
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH}</div></div></div>` +
-      `${panelRight()}</div>${hiddenStub}`
+      `${panelRight(cfg)}</div>${hiddenStub}`
     ).replace(/sw_/g, p);
     rt.bindDom();
 
@@ -447,7 +472,13 @@ export function buildSchraegerWurfFig(fig) {
         // stuende die Kugel nach einer Parameteraenderung mitten in einer
         // Bahn, die es so nie gab.
         tSlider.max = String(tEnd.toFixed(2));
-        if (!behalteZeit) { stop(); t = 0; tSlider.value = '0'; }
+        // Abb. 1.14 springt ans ENDE statt auf 0: dort ist die Bahnkurve
+        // vollstaendig gezeichnet, und sie IST der Gegenstand dieser Abbildung.
+        // Auf 0 zurueckzuspringen hiesse, nach jedem Regler-Zug ein leeres
+        // Diagramm zu zeigen. Der Grund von Fallstrick #20 bleibt gewahrt: die
+        // Kugel steht am Ende der NEUEN Bahn, nicht mitten in einer alten.
+        const tNachParam = cfg.bahn ? tEnd : 0;
+        if (!behalteZeit) { stop(); t = tNachParam; tSlider.value = String(t); }
         else if (t > tEnd) { t = tEnd; tSlider.value = String(tEnd); }
         zeichne();
     }
@@ -507,10 +538,12 @@ export function buildSchraegerWurfFig(fig) {
 
     // ── Erststand ───────────────────────────────────────────────────────────
     rt.withStore(() => {
-        // Aspekt-Gating: zwei Diagramme fest, Achse fest, keine Vergleichsbahn.
+        // Aspekt-Gating: Diagramm-Zuschnitt je Abbildung (s. Kopf), Achse fest,
+        // keine Vergleichsbahn. graphType2 bleibt gesetzt, im Einzelmodus liest
+        // updateGraphs() ihn nicht.
         Object.assign(store, {
-            isStacked: true,
-            graphType1: 'yt',
+            isStacked: !cfg.bahn,
+            graphType1: cfg.bahn ? 'yx' : 'yt',
             graphType2: 'xt',
             yAxisConfig: { direction: 'up', origin: 'ground' },
             frozenTraj: null,
