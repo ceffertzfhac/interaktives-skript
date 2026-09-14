@@ -29,7 +29,7 @@ die Links hier zeigen auf den Pfad.
 | [P26 — Sync-Schuld Quelle → WIP nachziehen](backlog/P26-quelle-nach-wip-nachziehen.md) | 3/0 | **Gegenrichtung zu P21:** Änderungen, die im Druckskript entstanden sind und die das WIP nachziehen muss; Runde 2 ist nachgezogen (Anker `1c64edd`), der Weg für die nächste Runde steht in `QUELLE_v013.md` |
 | [P13 — Text- & Formel-Marker für Studierende](backlog/P13-marker-und-notizbuch.md) | 0/16 | 4 Farben, persistent; plus begleitendes Notizbuch (P13-N) |
 | [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 6/5 | beide Motoren + Abb. 1.3–1.7 und 1.9 stehen; offen: Abb. 1.14, 1.18a/b, 1.19, 1.20 + Verifikation — in der Abbildungsreihenfolge ist als Nächstes **Abb. 1.14** dran (1.10 ist seit v1.50.0 erledigt) |
-| [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 2/2 | Abb. 1.8 und 1.10 stehen; offen: 1.15 Sekante/Tangente (braucht den `ableitung`-Motor) |
+| [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 2/3 | Abb. 1.8 und 1.10 stehen; offen: 1.15 Sekante/Tangente (braucht den `ableitung`-Motor) und P17-4 (Diagrammbreite in Abb. 1.8, Entscheidung offen) |
 | [P15 — Weiße Hintergründe aus Nicht-Foto-Abbildungen entfernen](backlog/P15-weisse-hintergruende.md) | 0/7 | Darkmode-Verträglichkeit der statischen Bilder |
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |
 | [P6 — Cross-Referenzing & Verweissystem („Karte der Physik")](backlog/P6-cross-referenzing.md) | — | großes Paket, noch Vision: einheitliches datengetriebenes Verweismodell statt heutiger Ad-hoc-Mechanismen |

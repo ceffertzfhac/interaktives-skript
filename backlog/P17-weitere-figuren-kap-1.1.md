@@ -24,6 +24,43 @@ pixel-identisch.**
 
 ### Sub-Tasks
 
+- [ ] **P17-4 Abb. 1.8: das Diagramm ist das schmalste aller Figuren** *(S–M)*
+  — **Nutzerbeobachtung 2026-09-14**, nachgemessen mit `breiten_check.mjs`
+  (gezeichnete Breite des Diagramms, Anteil an der verfügbaren Breite):
+
+  | Figur | schmal | normal | breit |
+  |---|---|---|---|
+  | `aspekt-federpendel-kinematik` (Abb. 1.8) | 49 % | **41 %** | **32 %** |
+  | nächstschmalere Figur | 38 % | 52 % | 38 % |
+  | `aspekt-federpendel` (3.1.5, waagerecht) | 80 % | 76 % | 56 % |
+  | Median der übrigen Figuren | ~54 % | ~55 % | ~52 % |
+
+  In **normal** und **breit** ist sie damit das Minimum über alle 25 Figuren,
+  in normal mit 11 Punkten Abstand zur nächsten.
+
+  **Ursache (gelesen, nicht geraten):** im vertikalen Aufbau werden Szene *und*
+  Diagramm über die **Höhe** bemessen (`height: min(52vh, 480px)`,
+  `width: auto`, s. Block „VERTIKALER Aufbau" in `aspekt_federpendel.css`).
+  Das Diagramm-SVG ist dort hochformatig (viewBox 410×700), seine gezeichnete
+  Breite ist also an die Höhe gekoppelt und kann waagerechten Platz nicht
+  nutzen. Das ist kein Versehen: die Höhenbindung stellt die \(y\)-Achse des
+  Diagramms **auf dieselbe Höhe wie die Bewegung in der Szene** — Auslenkung
+  links und Auslenkung rechts liegen auf einer Linie. Die Zeitachse bezahlt das.
+
+  **Zu entscheiden** (Autorenfrage, nicht technisch):
+  1. **So lassen** — die Kopplung der beiden \(y\)-Achsen ist das didaktische
+     Argument der Figur.
+  2. **Diagramm-viewBox im vertikalen Aufbau breiter** (z. B. 560×700): die
+     \(y\)-Achsen bleiben auf gleicher Höhe, die Zeitachse bekommt Platz.
+     Kleinster Eingriff, wirkt in allen Modi.
+  3. **Im Breit-Modus über die Breite bemessen** und die größere Höhe in Kauf
+     nehmen — bricht die Höhenbindung genau dort, wo am meisten Platz ist.
+
+  **Nebenbefund aus demselben Screenshot** (eigene Figur, normal-Modus): in der
+  Szene überlappt die Beschriftung „\(y=0\) (Ruhelage)" den Achsenpfeil der
+  \(y\)-Achse; darunter steht viel Leerraum bis zur \(-y_0\)-Linie. Getrennt
+  vom Breitenpunkt zu behandeln.
+
 - [ ] **P17-1 Aspekt-Figur Abb. 1.15 — Sekante vs. Tangente** (Durchschnitts- vs.
   Momentangeschwindigkeit, Unterabschnitt 1.1.10 „Geschwindigkeit"). Statisches
   `fig-kinematik_geschwindigkeit_unterschied_durchschnitt_momentan` interaktiv
