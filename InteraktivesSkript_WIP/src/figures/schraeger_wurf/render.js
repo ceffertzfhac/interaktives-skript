@@ -65,7 +65,13 @@ export function drawRuler() {
   const rx = 45, rw = 15
   const ppm = store.currentPixelsPerMeter
   const zoom = store.zoomFactor
-  const maxM = Math.ceil(GROUND_PX / ppm)
+  // PORT-AENDERUNG (2026-09-16): das Lineal endet am OBEREN RAND DES SICHTBAREN
+  // Feldes, nicht bei GROUND_PX. Beschneidet eine Aspekt-Figur die Szene oben
+  // (store.animTopPx, s. physics.js), zeichnete die Sim-Fassung weiter bis zur
+  // vollen Feldhoehe -- Meter, die niemand sieht. Das kostete nicht nur
+  // Zeichenarbeit: der graue Linealkasten lief oben aus dem Bild heraus, statt
+  // mit dem Feld abzuschliessen. Default 0 = Verhalten der Sim.
+  const maxM = Math.ceil((GROUND_PX - (store.animTopPx || 0)) / ppm)
   DOM.rulerGroup.appendChild(el('rect', {
     x: rx, y: scaleY(maxM), width: rw, height: maxM * ppm,
     class: 'ruler-bg',
@@ -77,7 +83,11 @@ export function drawRuler() {
     const yp = scaleY(m)
     const isMajor = Math.abs(m % majorInt) < 0.1
     const lineLen = (isMajor ? 10 : 5) * zoom
-    if (isMajor) {
+    // Die oberste Marke sitzt auf dem Feldrand; ihre Zahl wuerde dort zur
+    // Haelfte abgeschnitten. Striche und grauer Kasten reichen trotzdem bis
+    // ganz hinauf — ein Lineal, das oben am Bildrand endet, liest sich richtig,
+    // eine halbe Ziffer nicht (an Abb. 1.14 aufgefallen, 2026-09-16).
+    if (isMajor && yp > (store.animTopPx || 0) + 9) {
       const t = el('text', { x: rx - 5, y: yp + 4, 'text-anchor': 'end', class: 'ruler-text' })
       t.textContent = `${Math.round(m)}`
       DOM.rulerGroup.appendChild(t)
@@ -276,8 +286,18 @@ function getGraphTitleText(type) {
 function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
                            plotTime, plotValue, useYAxisConfig, currentX, currentY }) {
   const isStacked = store.isStacked
-  const graphWidth = GRAPH_W
-  const graphHeight = isStacked ? GRAPH_H_STACKED : GRAPH_H
+  // PORT-AENDERUNG (2026-09-16, BACKLOG P16-7): die Zeichenflaeche des
+  // EINZEL-Diagramms darf die Figur vorgeben (store.graphSize). Die Sim hat nur
+  // ein Seitenverhaeltnis, weil sie nur Zeitreihen zeigt -- da ist die Achse
+  // beliebig skalierbar. Die Bahnkurve y(x) ist das nicht: x und y tragen
+  // dieselbe Einheit und muessen denselben Massstab haben (s. store.bahnAchse),
+  // und dann bestimmt die FORM DES WURFS, welches Seitenverhaeltnis das Feld
+  // braucht. Ein festes Feld hat bei einem steilen Wurf vier Fuenftel der
+  // Breite leer stehen lassen, bei einem flachen zwei Drittel der Hoehe.
+  // Gestapelt (Abb. 1.9) bleibt alles wie in der Sim.
+  const graphWidth = (!isStacked && store.graphSize) ? store.graphSize.w : GRAPH_W
+  const graphHeight = isStacked ? GRAPH_H_STACKED
+    : (store.graphSize ? store.graphSize.h : GRAPH_H)
   const padL = 45, padB = 35, padT = 10, padR = 10
   const plotW = graphWidth - padL - padR
   const plotH = graphHeight - padT - padB
@@ -355,7 +375,16 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
   // Bereich ist hier der Massstab. Die Teilstriche fallen trotzdem auf glatte
   // Werte, sie werden unten aus dem Bereich abgeleitet.
   const achseVorgegeben = isTraj && !!store.bahnAchse
-  const yStep = niceStepLE(yMax - yMin, isStacked ? 4 : 6)
+  // PORT-AENDERUNG (2026-09-16): die Zahl der Teilstriche haengt an der HOEHE
+  // des Feldes, nicht mehr fest an 6. Seit die Figur die Zeichenflaeche
+  // vorgeben darf (store.graphSize), kann das Feld 130 Einheiten hoch sein —
+  // sechs Marken saessen dort bei rund 17 Einheiten Schrifthoehe aufeinander
+  // (bei einem flachen Wurf real passiert). Ein Teilstrich je 60 Einheiten
+  // ergibt fuer das Vorgabefeld (365) wieder genau 6: unveraendert fuer
+  // Abb. 1.9 und fuer jedes Diagramm ohne graphSize.
+  const yDivs = isStacked ? 4
+    : Math.max(3, Math.min(8, Math.round(plotH / 60)))
+  const yStep = niceStepLE(yMax - yMin, yDivs)
   if (!achseVorgegeben) {
     yMin = Math.floor(yMin / yStep) * yStep
     yMax = Math.ceil(yMax / yStep) * yStep
@@ -422,6 +451,10 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
   createStyledSvgText(yLab, yLabel)
   gridEl.appendChild(yLab)
 
+  // Der Titel steht mittig ueber der Zeichenflaeche. Im Skelett ist sein x auf
+  // die Vorgabebreite gesetzt; mit variabler Feldbreite (s. o.) muss es
+  // mitwandern, sonst sitzt er bei schmalem Feld rechts daneben.
+  titleEl.setAttribute('x', graphWidth / 2)
   setGraphTitle(titleEl, getGraphTitleText(type))
 
   const idx = linePlotIndex(plotTime)

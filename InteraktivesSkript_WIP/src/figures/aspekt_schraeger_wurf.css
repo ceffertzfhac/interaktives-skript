@@ -198,12 +198,38 @@
     display: block; width: 100%; height: auto; max-height: 56vh; max-width: none; margin: 0 auto;
 }
 
-/* Abb. 1.14: die beschnittene Szene (350x350, s. ANIM_TOP_BAHN) ist deutlich
-   flacher als das Diagramm daneben. Oben buendig blieben darunter gut 100 px
-   Leerraum stehen; mittig gesetzt verteilt er sich auf beide Seiten und liest
-   sich als Rand statt als Loch. */
+/* ── Abb. 1.14: Format und Aufteilung kommen aus dem JS ─────────────────────
+   Bei der Bahnkurve haengt beides an der FORM DES WURFS, nicht an der Figur:
+   massstabAbgleichen() in aspekt_schraeger_wurf.js rechnet je Reglerstellung
+   den Zuschnitt der Szene, das Seitenverhaeltnis der Diagrammflaeche und die
+   Breitenaufteilung der Zeile aus und setzt sie inline (flex-basis am
+   Szenenkasten, viewBox an beiden SVGs). Hier steht deshalb nur noch, was
+   diese Rechnung VORAUSSETZT.
+
+   1. Beide Bilder breitengetrieben (width 100 %, height auto) — dann ist die
+      Breite des Kastens die Stellgroesse, und genau die misst das JS.
+   2. BEIDE mit DEMSELBEN Hoehendeckel. Greift er, schrumpfen beide um
+      denselben Faktor und der Massstab bleibt gleich; zwei verschiedene
+      Deckel wuerden ihn kippen (die Deckel je Breiten-Modus stehen unten,
+      Szene und Diagramm jeweils mit demselben Wert).
+   3. Mittige Ausrichtung: bei einem sehr steilen Wurf entscheidet die Szene
+      ueber die Zeilenhoehe, bei allen anderen das Diagramm — die niedrigere
+      Seite bekommt den Rest als Rand oben und unten statt als Loch unten. */
 .aspekt-figur[data-aspekt="schraeger-wurf-bahn"] .aspekt-main-content {
     align-items: center;
+}
+/* Gestapelt (schmal): das JS teilt hier keine Breite zu, beide Kaesten sind
+   gleich breit. Dann muessen sie es auch wirklich sein — die hoehengetriebenen
+   Regeln der Figurenfamilie (height: min(38vh, 340px) usw.) wuerden die
+   tatsaechliche Bildbreite vom Seitenverhaeltnis abhaengig machen, und die
+   Messung des JS ginge ins Leere. */
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="schraeger-wurf-bahn"] .aspekt-svg,
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="schraeger-wurf-bahn"] .aspekt-graph-svg {
+    width: 100%; height: auto; max-width: none; max-height: 54vh; margin: 0;
+}
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="schraeger-wurf-bahn"] .aspekt-svg,
+:root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-aspekt="schraeger-wurf-bahn"] .aspekt-graph-svg {
+    width: 100%; height: auto; max-width: none; max-height: 42vh; margin: 0;
 }
 
 /* ── Breiten-Modi ──────────────────────────────────────────────────────────

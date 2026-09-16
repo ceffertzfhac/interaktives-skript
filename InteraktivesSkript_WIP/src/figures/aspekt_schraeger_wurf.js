@@ -72,8 +72,8 @@ import { updateScene, updateGraphs, updateKennwerte, updateZoomDisplay,
          drawRuler, drawHorizontalRuler, drawStickFigure,
          drawAnimationCoordSystem, drawStopwatchMarks, drawSubdialMarks,
          fmt } from './schraeger_wurf/render.js';
-import { BALL_START_X_PX, GROUND_PX, BALL_RADIUS_BASE_PX,
-         SF_ARM_LENGTH_M, GRAPH_W, GRAPH_H } from './schraeger_wurf/constants.js';
+import { BALL_START_X_PX, GROUND_PX, BALL_RADIUS_BASE_PX, ANIM_W,
+         SF_ARM_LENGTH_M, DEFAULT_PIXELS_PER_METER } from './schraeger_wurf/constants.js';
 import { createRuntime } from './schraeger_wurf/runtime.js';
 
 // ── Regler-Bereiche ─────────────────────────────────────────────────────────
@@ -112,10 +112,11 @@ function leseKonfig(fig) {
 // hochformatig (350x500 mit Lineal und Haus), ein flacher Wurf ist querformatig
 // — bei h0=10 m, v0=10 m/s, alpha=45 Grad nutzt er 150 der 440 px ueber dem
 // Boden, also ein Drittel. Der Rest war leeres Lineal (Nutzerbefund 2026-09-14).
-// Mit dem Beschnitt ist das Feld 290 px hoch; physics.js rechnet den Zoom gegen
-// DASSELBE Feld (store.animTopPx), sonst wuerde er weiter mit unsichtbarem
-// Platz rechnen. Nichts wird abgeschnitten: ein steiler Wurf skaliert einfach
-// kleiner, weil sy jetzt frueher bindet.
+// Seit 2026-09-16 ist dies nur noch der STARTWERT fuer den ersten Aufbau:
+// massstabAbgleichen() schneidet die Szene danach bei jedem rebuild() auf ihren
+// Inhalt zu (und setzt store.animTopPx mit, gegen das physics.js und drawRuler
+// rechnen). Ein fester Beschnitt konnte es nicht richtig machen — er passt
+// immer nur zu EINER Reglerstellung.
 const ANIM_TOP_BAHN = 150;
 
 const SVG_SCENE = (cfg) => `
@@ -435,57 +436,217 @@ export function buildSchraegerWurfFig(fig) {
 
     // Szene + beide Diagramme zum Zeitpunkt t zeichnen. IMMER inside
     // rt.withStore(), damit der Motor auf dem Zustand DIESER Instanz arbeitet.
-    // ── Massstabsgleiche Bahn (Nutzerwunsch 2026-09-14) ─────────────────────
-    // Ziel: die Parabel in der Szene und die Parabel im Diagramm sind gleich
-    // gross und gleich geformt — man koennte sie durch blosses VERSCHIEBEN zur
-    // Deckung bringen, ohne zu skalieren. Dafuer braucht es zweierlei:
-    //   1. x und y im Diagramm mit DEMSELBEN Massstab (isotrop) — sonst ist
-    //      schon die Form verschieden, egal wie gross gezeichnet wird;
-    //   2. denselben Bildschirm-Massstab wie die Szene.
-    // Punkt 2 kann nur hier gerechnet werden: er haengt an den tatsaechlichen
-    // Elementbreiten, die erst das Layout kennt (und die sich mit dem
-    // Breiten-Modus aendern). Beide SVGs skalieren ihre viewBox auf ihre
-    // Elementbreite; aus dem Verhaeltnis ergibt sich, wie viele Graph-Einheiten
-    // ein Meter haben muss, damit er auf dem Schirm so lang ist wie in der Szene.
+    // ── Massstab, Zuschnitt und Breitenaufteilung (Abb. 1.14) ───────────────
+    // Zwei Anforderungen, die diese Funktion zusammenbringt:
+    //
+    //   MASSSTABSGLEICH (Nutzerwunsch 2026-09-14): die Parabel in der Szene und
+    //   die Parabel im Diagramm sind gleich gross und gleich geformt — man
+    //   koennte sie durch blosses VERSCHIEBEN zur Deckung bringen. Das verlangt
+    //   x und y im Diagramm mit DEMSELBEN Massstab (isotrop) UND denselben
+    //   Bildschirm-Massstab wie die Szene.
+    //
+    //   FLAECHE NUTZEN (Nutzerwunsch 2026-09-16): beide Bilder sollen ihr Feld
+    //   fuellen. Die erste Fassung hat nur den Massstab abgeglichen und beide
+    //   Felder fest gelassen — die Bahn klebte im Diagramm in der linken oberen
+    //   Ecke (x-Achse bis 40 m fuer einen Wurf von 16 m), und ueber der Bahn in
+    //   der Szene stand die halbe Feldhoehe leeres Lineal. Bei einem steilen
+    //   Wurf blieben vier Fuenftel des Diagramms leer, bei einem flachen zwei
+    //   Drittel der Hoehe.
+    //
+    // DER KNIFF: BEIDE SVGs RECHNEN IN DERSELBEN EINHEIT. Ein Meter ist links
+    // wie rechts dieselbe Zahl von viewBox-Einheiten (store.currentPixelsPerMeter,
+    // hier P), und die Zeilenbreite wird im Verhaeltnis der beiden viewBox-
+    // Breiten aufgeteilt. Dann bildet jedes SVG seine Einheiten mit DEMSELBEN
+    // Faktor auf den Schirm ab, und daraus folgt beides auf einmal:
+    //   * derselbe Bildschirm-Massstab — Massstabsgleichheit, ohne Nachrechnen;
+    //   * dieselbe Schrift- und Strichgroesse links wie rechts. Das ist nicht
+    //     nur Kosmetik: alle Beschriftungen sind in viewBox-EINHEITEN bemessen,
+    //     ein Diagrammfeld mit vielen Einheiten auf wenig Bildschirmbreite
+    //     schrumpft seine Achsenbeschriftung mit. Genau daran ist der erste
+    //     Anlauf dieser Umstellung gescheitert: Massstab und Hoehen stimmten
+    //     auf den Pixel, aber das Diagramm bildete 0,51 px je Einheit ab und
+    //     die Szene 1,10 — die Achsenzahlen waren halb so gross wie die des
+    //     Lineals daneben und kaum lesbar.
+    //
+    // Damit bleiben nur noch die FORMATE zu bestimmen, und die kommen direkt
+    // aus der Bounding-Box des Wurfs: die Zeichenflaeche des Diagramms ist so
+    // gross wie die Bahn (in Einheiten), die Szene wird auf ihren Inhalt
+    // zugeschnitten. Was danach an Hoehe fehlt, bekommt die niedrigere Seite
+    // als Zugabe — bis zu einem Deckel, damit daraus kein leeres Feld wird.
+    //
+    // Warum nicht einfach jede Achse fuer sich an ihre Daten legen? Das fuellt
+    // das Diagramm perfekt, verzerrt die Parabel aber — und genau das duerfen
+    // wir hier nicht: die Gegenueberstellung mit Abb. 1.9 lebt davon, dass die
+    // Form stimmt.
+
     const GRAPH_PAD_L = 45, GRAPH_PAD_R = 10, GRAPH_PAD_T = 10, GRAPH_PAD_B = 35;
-    function bahnAchseSetzen() {
-        if (!cfg.bahn) { store.bahnAchse = null; return; }
+    // Raender der Diagramm-viewBox um die Zeichenflaeche des Motors herum:
+    // links y-Marken + gedrehte Achsenbeschriftung, oben der Titel, rechts die
+    // Achsenspitze und das letzte x-Label, unten die x-Achsenbeschriftung.
+    // Bemessen an der SKALIERTEN Schrift (--kb-fs = 1,5), s. SVG_GRAPH.
+    const VB_L = 56, VB_T = 48, VB_R = 24, VB_B = 12, VB_X_LABEL = 58;
+    // Szene: die viewBox beginnt bei x=20, die Kugel startet bei x=136 — davor
+    // liegen Hoehenlineal und Haus. Dieser Vorspann ist FEST in Szeneneinheiten
+    // und der Grund, warum die Szene breiter ist als das Diagramm.
+    const SZ_X0 = 20, SZ_VORSPANN = BALL_START_X_PX - SZ_X0, SZ_RAND_R = 24;
+    const SZ_RAND_O = 16;                  // Luft ueber dem hoechsten Punkt
+    const SZ_UNTER_BODEN = 26;             // Platz fuer "x / m" unter dem Boden
+    const SZ_BAHN_MAX = ANIM_W + SZ_X0 - BALL_START_X_PX - SZ_RAND_R;  // = 210
+    const P_MAX = DEFAULT_PIXELS_PER_METER * 2.0;   // Deckel wie in der Sim:
+    // darueber wuerden Linealbreite und Schriftgroessen (feste Szeneneinheiten)
+    // gegenueber der Bahn zu klein.
+    // Untergrenze der Zeichenflaeche: bei einem sehr flachen Wurf waere das
+    // Diagrammfeld sonst 55 Einheiten hoch — bei 17 Einheiten Schrifthoehe
+    // saessen die y-Marken uebereinander. Die betroffene Achse bekommt dann
+    // mehr Bereich als noetig; isotrop bleibt es, weil nur eine Seite waechst
+    // und die andere Achse denselben Massstab behaelt.
+    const PLOT_MIN = 130;
+    // Wie viel leere Zugabe die niedrigere Seite hoechstens bekommt, um die
+    // Zeilenhoehe zu fuellen. Zwei Masse, es gilt das groessere: ein Anteil der
+    // Bahnhoehe (bei den ueblichen Wuerfen das bindende) und ein Anteil der
+    // Feldbreite. Ohne das zweite bekaeme ein sehr kleiner Wurf fast keine
+    // Zugabe — eine 50 px hohe Szene neben einem 300 px hohen Diagramm, weil
+    // der Deckel an einer Bahnhoehe nahe null haengt.
+    const ZUGABE_BAHN = 0.45, ZUGABE_BREITE = 0.22;
+    const klemm = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+    // Waagerechte Polsterung eines Kastens. Sie ist links und rechts
+    // verschieden (Szene 8/0, Diagramm 8/8, in der Lupe 12) und geht in die
+    // Breitenaufteilung ein: aufgeteilt wird die Breite der BILDER, nicht die
+    // der Kaesten — sonst bekommt die Seite mit mehr Polsterung zu wenig.
+    function polsterung(elm) {
+        const cs = getComputedStyle(elm);
+        return parseFloat(cs.paddingLeft || 0) + parseFloat(cs.paddingRight || 0);
+    }
+
+    function massstabAbgleichen() {
+        if (!cfg.bahn) { store.bahnAchse = null; store.graphSize = null; return; }
         const svgS = q('main_svg'), svgG = q('graph_svg');
-        if (!svgS || !svgG) return;
-        const bS = svgS.getBoundingClientRect(), bG = svgG.getBoundingClientRect();
-        if (!bS.width || !bG.width) return;                    // noch nicht im Layout
-        const fS = bS.width / 350;                             // Schirm-px je Szenen-Einheit
-        const fG = bG.width / 560;                             // Schirm-px je Graph-Einheit
-        // Zeichenflaeche des Motors (GRAPH_W x GRAPH_H), NICHT die viewBox-Breite:
-        // die Gruppe ist in der 560 breiten viewBox versetzt eingehaengt. Mit 560
-        // gerechnet war die Bahn im Diagramm 19 % zu schmal, waehrend die Hoehe
-        // stimmte — der Fehler faellt nur in EINER Achse auf.
-        const plotW = GRAPH_W - GRAPH_PAD_L - GRAPH_PAD_R;
-        const plotH = GRAPH_H - GRAPH_PAD_T - GRAPH_PAD_B;
-        const einheitenProMeter = (store.currentPixelsPerMeter * fS) / fG;
-        if (!(einheitenProMeter > 0)) return;
-        let xSpanne = plotW / einheitenProMeter;
-        let ySpanne = plotH / einheitenProMeter;
+        const kastenS = scene.querySelector('.aspekt-scene');
+        const zeile = scene.querySelector('.aspekt-main-content');
+        if (!svgS || !svgG || !kastenS || !zeile) return;
 
-        // Nichts abschneiden: reicht die Spanne nicht fuer die Bahn, werden
-        // BEIDE Achsen um denselben Faktor aufgeweitet. Der Massstab stimmt dann
-        // nicht mehr exakt mit der Szene, die Form bleibt aber richtig (isotrop)
-        // — und sichtbar zu sein geht vor massstabsgleich.
-        const xNoetig = store.axisLimits.xt.max * 1.02;
-        const yLo = Math.min(0, store.axisLimits.yt_display.min);
-        const yHi = store.axisLimits.yt_display.max;
-        const yNoetig = (yHi - yLo) * 1.08;
-        const faktor = Math.max(1, xNoetig / xSpanne, yNoetig / ySpanne);
-        xSpanne *= faktor; ySpanne *= faktor;
+        // ── Bounding-Box des Wurfs ─────────────────────────────────────────
+        // Aus den DATEN, nicht aus axisLimits.{min,max}: die tragen bereits
+        // 10 % Rand des Motors, und diese Funktion legt ihren Rand selbst fest.
+        // Mit den gepolsterten Werten gerechnet kam ein knappes Zehntel zu
+        // wenig Zoom heraus (0,92x statt 1,02x).
+        const xs = store.axisLimits.xt.fullData;
+        const ys = store.axisLimits.yt_display.fullData;
+        if (!xs || !xs.length || !ys || !ys.length) return;
+        const bx = Math.max(0.01, Math.max(...xs));
+        const yLo = Math.min(0, Math.min(...ys));
+        const yHi = Math.max(...ys);
+        const by = Math.max(0.01, yHi - yLo);
+        const xNoetig = bx * 1.06;         // etwas Luft hinter dem Aufschlag
+        const yNoetig = by * 1.10;         // Luft ueber Scheitel und unter Boden
 
-        // y so legen, dass die Bahn mittig im Feld steht (der Boden y=0 bleibt
-        // dabei fast immer sichtbar, weil yLo <= 0 in die Mitte eingeht).
-        const mitte = (yLo + yHi) / 2;
-        store.bahnAchse = {
-            xMax: xSpanne,
-            yMin: mitte - ySpanne / 2,
-            yMax: mitte + ySpanne / 2,
+        // ── Die gemeinsame Einheit ─────────────────────────────────────────
+        // P = viewBox-Einheiten je Meter, in BEIDEN SVGs. Der Wurf soll die
+        // Szene ausfuellen; begrenzt wird nur durch deren Breite und den Deckel.
+        const P = Math.min(P_MAX, SZ_BAHN_MAX / xNoetig);
+        store.currentPixelsPerMeter = P;
+        store.zoomFactor = P / DEFAULT_PIXELS_PER_METER;
+
+        // ── Formate ────────────────────────────────────────────────────────
+        // Zeichenflaeche des Diagramms = die Bahn, in derselben Einheit.
+        const plotW = Math.max(PLOT_MIN, xNoetig * P);
+        let plotH = Math.max(PLOT_MIN, yNoetig * P);
+
+        // Szenenbreite: Vorspann + Wurf + Rand. Das Achsenkreuz zeichnet
+        // 60 * zoom Einheiten nach rechts und schreibt "x / m" dahinter — bei
+        // kurzer Wurfweite ist ES das breiteste Element, nicht die Bahn.
+        const szW = SZ_VORSPANN + Math.max(xNoetig * P, 60 * store.zoomFactor + 34)
+                    + SZ_RAND_R;
+        const vbW = VB_L + GRAPH_PAD_L + plotW + GRAPH_PAD_R + VB_R;
+
+        // ── Hoehen angleichen ──────────────────────────────────────────────
+        // y-Bereich zu einer gegebenen Feldhoehe: die Bahn sitzt darin, der
+        // Ueberschuss geht ueberwiegend nach OBEN. Mittig zentriert stuende
+        // unter dem Erdboden genauso viel negative Hoehe wie ueber dem Scheitel
+        // Himmel — bei einem flachen Wurf, wo die Mindesthoehe des Feldes
+        // greift, reichte die Achse bis -13 m. Unterhalb von 0 braucht es nur
+        // so viel, dass die Nulllinie nicht auf dem Feldrand klebt.
+        const bahnAchse = (ph) => {
+            const spanne = ph / P;
+            const unten = Math.min((spanne - by) / 2, 0.08 * spanne);
+            return { xMax: plotW / P, yMin: yLo - unten, yMax: yLo - unten + spanne };
         };
+        // Die x-Achse liegt bei y = 0 der Bahnachse, also nicht zwangslaeufig
+        // am Feldboden; liegt sie hoeher, braucht die viewBox unten weniger.
+        const vbHoehe = (ph) => {
+            const a = bahnAchse(ph);
+            const y0 = GRAPH_PAD_T + ph * klemm(a.yMax / (a.yMax - a.yMin || 1), 0, 1);
+            return VB_T + Math.max(GRAPH_PAD_T + ph, y0 + VB_X_LABEL) + VB_B;
+        };
+        const szHNoetig = by * P + SZ_RAND_O + SZ_UNTER_BODEN;
+        const zugabe = Math.max(ZUGABE_BAHN * by * P, ZUGABE_BREITE * szW);
+        let vbH = vbHoehe(plotH);
+        let szH = szHNoetig;
+        if (vbH > szH) {
+            // Der Regelfall: das Diagramm traegt Titel und Achsenbeschriftung
+            // und ist damit hoeher. Die Szene zeigt so viel mehr Himmel, wie
+            // der Deckel zulaesst; was dann noch fehlt, verteilt
+            // align-items:center als Rand ueber und unter der Szene.
+            szH = Math.min(vbH, szHNoetig + zugabe);
+        } else if (szH > vbH) {
+            // Sehr steiler Wurf: die Szene ist die hoehere Seite. Dann waechst
+            // die Zeichenflaeche des Diagramms mit — die y-Achse bekommt
+            // Bereich dazu, der Massstab bleibt derselbe.
+            plotH += Math.min(szH - vbH, zugabe);
+            vbH = vbHoehe(plotH);
+        }
+
+        // ── Breitenaufteilung ──────────────────────────────────────────────
+        const gestapelt = getComputedStyle(zeile).flexDirection.startsWith('column');
+        let vbWeff = vbW, szWeff = szW;
+        if (!gestapelt) {
+            // Im Verhaeltnis der viewBox-Breiten aufteilen: dann bildet jede
+            // Seite ihre Einheiten mit demselben Faktor ab (s. Kopf). Die
+            // Polsterung beider Kaesten geht vorher ab und danach wieder drauf.
+            const polS = polsterung(kastenS);
+            const bilder = zeile.getBoundingClientRect().width
+                         - polS - polsterung(scene.querySelector('.aspekt-graph'));
+            if (bilder > 0) {
+                // In Pixeln, nicht in Prozent: flex-basis meint bei
+                // content-box die INNENbreite, und die ist es, die sich zur
+                // viewBox-Breite verhaelt. Mit einem Prozentwert der
+                // Zeilenbreite gerechnet wanderte die Polsterung zusaetzlich
+                // in den Kasten und die beiden Faktoren liefen 5 % auseinander.
+                const basis = bilder * szW / (szW + vbW)
+                            + (getComputedStyle(kastenS).boxSizing === 'border-box' ? polS : 0);
+                kastenS.style.flex = `0 0 ${basis.toFixed(1)}px`;
+            }
+        } else {
+            // Gestapelt (schmaler Breiten-Modus) sind beide Kaesten gleich
+            // breit — dann muessen es auch die beiden viewBoxen sein, sonst
+            // faellt der gemeinsame Faktor auseinander. Die schmalere Seite
+            // bekommt den Unterschied als symmetrischen Rand; als Nebeneffekt
+            // stehen die beiden Bilder genau uebereinander.
+            kastenS.style.flex = '';
+            vbWeff = szWeff = Math.max(szW, vbW);
+        }
+
+        // ── viewBoxen und Achsen setzen ────────────────────────────────────
+        store.graphSize = { w: GRAPH_PAD_L + plotW + GRAPH_PAD_R,
+                            h: GRAPH_PAD_T + plotH + GRAPH_PAD_B };
+        store.bahnAchse = bahnAchse(plotH);
+        svgG.setAttribute('viewBox',
+            `${(-(vbWeff - vbW) / 2).toFixed(1)} 0 ${vbWeff.toFixed(1)} ${vbH.toFixed(1)}`);
+
+        const szTop = GROUND_PX + SZ_UNTER_BODEN - szH;
+        // Auch NEGATIV weitergeben: bei einem Wurf ueber 18 m reicht das Feld
+        // hoeher hinauf als die viewBox der Sim (Erdboden bei 440 px). Auf 0
+        // geklemmt endete das Hoehenlineal dann mitten im Bild, unterhalb des
+        // Bahnscheitels — es rechnet gegen dieselbe Groesse (s. drawRuler).
+        store.animTopPx = szTop;
+        svgS.setAttribute('viewBox',
+            `${(SZ_X0 - (szWeff - szW) / 2).toFixed(1)} ${szTop.toFixed(1)} ` +
+            `${szWeff.toFixed(1)} ${szH.toFixed(1)}`);
+        // Die Zoom-Anzeige sitzt in der Luecke ueber dem Hoehenlineal und muss
+        // mit dem Zuschnitt mitwandern.
+        const zt = q('zoom_text_display');
+        if (zt) zt.setAttribute('y', (szTop + 16).toFixed(1));
     }
 
     function zeichne() {
@@ -493,7 +654,9 @@ export function buildSchraegerWurfFig(fig) {
             const s = interpolateAt(t);
             if (!s) return;
             updateScene(s.t, s.x, s.y, s.vx, s.vy);
-            bahnAchseSetzen();     // vor dem Zeichnen: Achsen = Massstab der Szene
+            // Der Massstab haengt nicht von t ab: er wird in rebuild() gesetzt
+            // (und bei Breitenaenderung), nicht je Frame. Frueher stand hier
+            // bahnAchseSetzen(), das zwei getBoundingClientRect() pro Frame kostete.
             // updateGraphs(plotTime, wert1, wert2, currentX, currentY): Slot 1
             // ist y(t), Slot 2 x(t) — die Reihenfolge der Bildunterschrift von
             // v0.13. currentX/currentY wertet der Motor nur im EINZEL-Modus aus
@@ -516,6 +679,11 @@ export function buildSchraegerWurfFig(fig) {
             recomputeDerived();          // v0x/v0y + Zoom — s. physics.js
             precompute();
             tEnd = flightTime();
+
+            // Abb. 1.14 rechnet Zoom, Zuschnitt und Achsen selbst — VOR den
+            // statischen Szenenteilen, die alle am Zoom haengen (Lineale,
+            // Strichmaennchen, Ballradius, Achsenkreuz).
+            massstabAbgleichen();
 
             // Statische Szenenteile neu zeichnen (Reihenfolge wie ui.js der Sim)
             updateZoomDisplay();
@@ -633,14 +801,18 @@ export function buildSchraegerWurfFig(fig) {
     // aenderung, denn mit ihr aendert sich der Massstab beider Bilder.
     // Ohne ResizeObserver (jsdom im Smoke-Test) passiert schlicht nichts.
     if (cfg.bahn) {
-        requestAnimationFrame(() => zeichne());
+        requestAnimationFrame(() => rebuild(true));
         if (typeof ResizeObserver !== 'undefined') {
             let letzteBreite = 0;
             new ResizeObserver(() => {
-                const b = q('graph_svg') && q('graph_svg').getBoundingClientRect();
+                // Gemessen wird die ZEILE, nicht eines der beiden SVGs: deren
+                // Breite setzt diese Funktion selbst (flex-basis), ein Echo
+                // waere eine Endlosschleife.
+                const z = scene.querySelector('.aspekt-main-content');
+                const b = z && z.getBoundingClientRect();
                 if (!b || Math.abs(b.width - letzteBreite) < 1) return;   // kein Echo
                 letzteBreite = b.width;
-                zeichne();
+                rebuild(true);
             }).observe(scene);
         }
     }
