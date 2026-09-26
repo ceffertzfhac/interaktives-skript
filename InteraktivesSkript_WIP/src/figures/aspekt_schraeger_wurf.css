@@ -304,6 +304,23 @@
    Die Formelkarte fuehrt beide Ortsvektor-Gleichungen, sichtbar ist die zum
    aktiven Ursprung (fig.dataset.ursprungAktiv, s. ursprungSetzen()). */
 .aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-graph { display: none; }
+/* P16-8a (Nutzerbefund 2026-09-26: „die vektoren sind mir ein hauch zu
+   prominent"): Hauptvektoren duenner als der Kapitel-Standard 4px — derselbe
+   Wert wie in 1.42/1.8, ueber das Token, die kapitelweite Regel bleibt. Die
+   Pfeilspitze skaliert mit (markerUnits = strokeWidth), die Verkuerzung des
+   Ortsvektors misst die Strichstaerke und zieht mit. */
+.aspekt-figur[data-aspekt="schraeger-wurf-vektor"] { --kb-vec-hw: 2.5px; }
+/* Die ganze Bahn als Vorschau: gestrichelt, halbtransparent, duenner als die
+   mitwachsende Spur (2px). Tangente: neutral, duenn — sie ist Hilfslinie, der
+   Geschwindigkeitspfeil liegt auf ihr und bleibt die farbige Aussage. */
+.aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-scene [id$="bahn_vorschau"] {
+    stroke: var(--sw-bahn); stroke-width: calc(1.4px * var(--kb-lw, 1));
+    stroke-dasharray: 5 4; opacity: 0.45; fill: none;
+}
+.aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-scene [id$="tangente"] {
+    stroke: var(--kb-text2); stroke-width: calc(1.2px * var(--kb-lw, 1));
+}
+.aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-tangente"] { background: var(--kb-text2); height: 2px; align-self: center; }
 .aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-main .aspekt-main-content .aspekt-scene {
     flex: 1 1 auto; padding: 0 8px 8px;
 }

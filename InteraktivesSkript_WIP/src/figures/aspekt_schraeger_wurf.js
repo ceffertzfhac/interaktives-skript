@@ -36,6 +36,12 @@
 //     „nicht in einem ungueltigen Zustand stehen bleiben").
 //   * Stoppuhr aus (wie 1.14): ohne Zeitdiagramm hat sie nichts zu erklaeren
 //     und stand dem Bahnscheitel im Weg.
+//   * Nachbesserung P16-8a (Nutzerbefund 2026-09-26): die GANZE Bahn steht von
+//     Anfang an als Vorschau da (gestrichelt, halbtransparent, duenner als die
+//     mitwachsende Spur), dazu eine TANGENTE durch die Kugel (Checkbox, Vorgabe
+//     an) — die Gerade, auf der der Geschwindigkeitsvektor liegt. Die Vektoren
+//     sind etwas duenner als in den Kreisbewegungs-Figuren (figur-eigenes
+//     --kb-vec-hw, s. aspekt_schraeger_wurf.css), sie waren zu praesent.
 //
 // ZEITLAUF AUCH IN 1.14 (Nutzerentscheidung 2026-09-14): die gedruckte
 // Unterschrift sagt, in der Bahnkurve sei „nicht mehr erkennbar", wo das Objekt
@@ -167,6 +173,10 @@ const SVG_SCENE = (cfg) => `
     <g id="sw_horizontal_ruler_group"></g>
     <g id="sw_stick_figure"></g>
     <polyline id="sw_frozen_trajectory_line" fill="none" stroke-width="2" stroke-dasharray="5 4" points=""/>
+    <!-- Abb. 1.18 (P16-8a): die ganze Bahn als Vorschau und die Tangente
+         durch die Kugel — figur-eigen, unter Spur, Vektoren und Kugel. -->
+    <polyline id="sw_bahn_vorschau" fill="none" points=""${cfg.vektor ? '' : ' style="display:none"'}/>
+    <line id="sw_tangente" x1="0" y1="0" x2="0" y2="0" visibility="hidden"/>
     <polyline id="sw_trajectory_line" fill="none" stroke-width="2" points=""/>
     <!-- Ortsvektor (Abb. 1.18): figur-eigen, s. Kopfkommentar. UNTER der
          Kugel: seine Spitze endet im Kugelmittelpunkt, die Kugel („roter
@@ -317,10 +327,15 @@ ${cfg.vektor ? `  <div class="panel-section">
     </div>
     <div class="ff-formel-note">Wo liegt der Ursprung? \\(x\\) zählt in beiden Fällen ab dem Abwurfpunkt, \\(y\\) zeigt nach oben.</div>
   </div>
+  <div class="panel-section">
+    <div class="panel-label">Anzeige</div>
+    <label class="aspekt-check"><input type="checkbox" id="sw_tangente_an" checked><span>Tangente an die Bahn einblenden</span></label>
+  </div>
 ` : ''}  <div class="panel-section">
     <div class="panel-label">Legende</div>
     <div class="legend-grid">
-${cfg.vektor ? `      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel und Flugbahn</div>
+${cfg.vektor ? `      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel und Flugbahn (gestrichelt: die ganze Bahn)</div>
+      <div class="legend-swatch" data-c="sw-tangente"></div><div class="legend-label">Tangente an die Bahn</div>
       <div class="legend-swatch" data-c="sw-ort"></div><div class="legend-label">Ortsvektor \\(\\vec s(t)\\)</div>
       <div class="legend-swatch" data-c="sw-vel"></div><div class="legend-label">Geschwindigkeit \\(\\vec v(t)\\)</div>`
     : `      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel, Flugbahn und ${cfg.bahn ? 'Bahnkurve' : 'beide Kurven'}</div>`}
@@ -715,6 +730,21 @@ export function buildSchraegerWurfFig(fig) {
     // ueber den Ursprung hinausragt, waere falsch. Inside withStore aufrufen.
     const ortLinie = q('position_vector');
     const PFEIL_LAENGE = 4.95;                 // markerWidth von sw_arrow-ort
+    // Tangente: Gerade durch die Kugel in Richtung der Geschwindigkeit, nach
+    // beiden Seiten gleich lang (TANG_HALB Szeneneinheiten). Richtung aus
+    // (vx, vy) — dieselbe Groesse, die den Geschwindigkeitspfeil bestimmt,
+    // also liegt der Pfeil garantiert auf ihr. y waechst im SVG nach unten.
+    const tangLinie = q('tangente'), tangAn = q('tangente_an');
+    const TANG_HALB = 70;
+    function tangente(x, y, vx, vy) {
+        const b = Math.hypot(vx, vy);
+        if (!tangAn.checked || b < 1e-6) { tangLinie.setAttribute('visibility', 'hidden'); return; }
+        const cx = scaleX(x), cy = scaleY(y), ux = vx / b * TANG_HALB, uy = -vy / b * TANG_HALB;
+        tangLinie.setAttribute('visibility', 'visible');
+        tangLinie.setAttribute('x1', cx - ux); tangLinie.setAttribute('y1', cy - uy);
+        tangLinie.setAttribute('x2', cx + ux); tangLinie.setAttribute('y2', cy + uy);
+    }
+
     function ortsvektor(x, y) {
         const x1 = scaleX(0), y1 = scaleY(store.yAxisConfig.origin === 'start' ? store.h0 : 0);
         const dx = scaleX(x) - x1, dy = scaleY(y) - y1;
@@ -757,7 +787,7 @@ export function buildSchraegerWurfFig(fig) {
             const s = interpolateAt(t);
             if (!s) return;
             updateScene(s.t, s.x, s.y, s.vx, s.vy);
-            if (cfg.vektor) { ortsvektor(s.x, s.y); return; }   // kein Diagramm
+            if (cfg.vektor) { ortsvektor(s.x, s.y); tangente(s.x, s.y, s.vx, s.vy); return; }   // kein Diagramm
             // Der Massstab haengt nicht von t ab: er wird in rebuild() gesetzt
             // (und bei Breitenaenderung), nicht je Frame. Frueher stand hier
             // bahnAchseSetzen(), das zwei getBoundingClientRect() pro Frame kostete.
@@ -783,6 +813,11 @@ export function buildSchraegerWurfFig(fig) {
             recomputeDerived();          // v0x/v0y + Zoom — s. physics.js
             if (cfg.vektor) szeneZuschneiden();
             precompute();
+            if (cfg.vektor) {
+                // Die ganze Bahn (P16-8a): aus denselben Zeitreihen wie die Spur.
+                q('bahn_vorschau').setAttribute('points',
+                    store.xtData.map((xm, k) => `${scaleX(xm).toFixed(1)},${scaleY(store.ytData[k]).toFixed(1)}`).join(' '));
+            }
             tEnd = flightTime();
 
             // Abb. 1.14 rechnet Zoom, Zuschnitt und Achsen selbst — VOR den
@@ -897,6 +932,7 @@ export function buildSchraegerWurfFig(fig) {
         zeichne();
     }
     ursprungRadios.forEach(r => r.addEventListener('change', () => { if (r.checked) ursprungSetzen(r.value); }));
+    if (cfg.vektor) q('tangente_an').addEventListener('change', zeichne);
 
     // ── Erststand ───────────────────────────────────────────────────────────
     rt.withStore(() => {
