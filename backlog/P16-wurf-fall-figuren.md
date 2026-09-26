@@ -460,6 +460,11 @@ allein der Kontrast die Pruefung).
   1. Der Zoom berücksichtigt die Spitze des Geschwindigkeitspfeils über die
      ganze Flugzeit (rechts, unten und oben), nicht nur die Bahn.
   2. Tangente strichpunktiert (`-.-.-`) und weiter leicht transparent.
+- [ ] **P16-8d Abb. 1.18: beide Vektoren quantitativ in der Live-Analyse** *(S)* —
+  **Nutzerbefund 2026-09-26** (Wortlaut: *„in der live analyse die beiden
+  vektoren (ort und geschwindkeit live anzeigen [quantitativ])."*). Heute
+  stehen dort die vier Komponenten als Einzelzeilen plus \(|\vec v|\); gewünscht
+  ist \(\vec s(t)\) und \(\vec v(t)\) als Vektoren mit Zahlen.
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
