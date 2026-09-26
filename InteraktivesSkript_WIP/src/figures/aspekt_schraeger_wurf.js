@@ -489,8 +489,6 @@ export function buildSchraegerWurfFig(fig) {
     // liegen Hoehenlineal und Haus. Dieser Vorspann ist FEST in Szeneneinheiten
     // und der Grund, warum die Szene breiter ist als das Diagramm.
     const SZ_X0 = 20, SZ_VORSPANN = BALL_START_X_PX - SZ_X0, SZ_RAND_R = 24;
-    const SZ_RAND_O = 16;                  // Luft ueber dem hoechsten Punkt
-    const SZ_UNTER_BODEN = 26;             // Platz fuer "x / m" unter dem Boden
     const SZ_BAHN_MAX = ANIM_W + SZ_X0 - BALL_START_X_PX - SZ_RAND_R;  // = 210
     const P_MAX = DEFAULT_PIXELS_PER_METER * 2.0;   // Deckel wie in der Sim:
     // darueber wuerden Linealbreite und Schriftgroessen (feste Szeneneinheiten)
@@ -501,13 +499,6 @@ export function buildSchraegerWurfFig(fig) {
     // mehr Bereich als noetig; isotrop bleibt es, weil nur eine Seite waechst
     // und die andere Achse denselben Massstab behaelt.
     const PLOT_MIN = 130;
-    // Wie viel leere Zugabe die niedrigere Seite hoechstens bekommt, um die
-    // Zeilenhoehe zu fuellen. Zwei Masse, es gilt das groessere: ein Anteil der
-    // Bahnhoehe (bei den ueblichen Wuerfen das bindende) und ein Anteil der
-    // Feldbreite. Ohne das zweite bekaeme ein sehr kleiner Wurf fast keine
-    // Zugabe — eine 50 px hohe Szene neben einem 300 px hohen Diagramm, weil
-    // der Deckel an einer Bahnhoehe nahe null haengt.
-    const ZUGABE_BAHN = 0.45, ZUGABE_BREITE = 0.22;
     const klemm = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
     // Waagerechte Polsterung eines Kastens. Sie ist links und rechts
@@ -551,7 +542,7 @@ export function buildSchraegerWurfFig(fig) {
         // ── Formate ────────────────────────────────────────────────────────
         // Zeichenflaeche des Diagramms = die Bahn, in derselben Einheit.
         const plotW = Math.max(PLOT_MIN, xNoetig * P);
-        let plotH = Math.max(PLOT_MIN, yNoetig * P);
+        const plotH = Math.max(PLOT_MIN, yNoetig * P);
 
         // Szenenbreite: Vorspann + Wurf + Rand. Das Achsenkreuz zeichnet
         // 60 * zoom Einheiten nach rechts und schreibt "x / m" dahinter — bei
@@ -574,28 +565,27 @@ export function buildSchraegerWurfFig(fig) {
         };
         // Die x-Achse liegt bei y = 0 der Bahnachse, also nicht zwangslaeufig
         // am Feldboden; liegt sie hoeher, braucht die viewBox unten weniger.
-        const vbHoehe = (ph) => {
+        // nullLinie() ist ihre Hoehe in viewBox-Einheiten des Diagramms.
+        const nullLinie = (ph) => {
             const a = bahnAchse(ph);
-            const y0 = GRAPH_PAD_T + ph * klemm(a.yMax / (a.yMax - a.yMin || 1), 0, 1);
-            return VB_T + Math.max(GRAPH_PAD_T + ph, y0 + VB_X_LABEL) + VB_B;
+            return VB_T + GRAPH_PAD_T + ph * klemm(a.yMax / (a.yMax - a.yMin || 1), 0, 1);
         };
-        const szHNoetig = by * P + SZ_RAND_O + SZ_UNTER_BODEN;
-        const zugabe = Math.max(ZUGABE_BAHN * by * P, ZUGABE_BREITE * szW);
-        let vbH = vbHoehe(plotH);
-        let szH = szHNoetig;
-        if (vbH > szH) {
-            // Der Regelfall: das Diagramm traegt Titel und Achsenbeschriftung
-            // und ist damit hoeher. Die Szene zeigt so viel mehr Himmel, wie
-            // der Deckel zulaesst; was dann noch fehlt, verteilt
-            // align-items:center als Rand ueber und unter der Szene.
-            szH = Math.min(vbH, szHNoetig + zugabe);
-        } else if (szH > vbH) {
-            // Sehr steiler Wurf: die Szene ist die hoehere Seite. Dann waechst
-            // die Zeichenflaeche des Diagramms mit — die y-Achse bekommt
-            // Bereich dazu, der Massstab bleibt derselbe.
-            plotH += Math.min(szH - vbH, zugabe);
-            vbH = vbHoehe(plotH);
-        }
+        const vbH = VB_T + Math.max(GRAPH_PAD_T + plotH, nullLinie(plotH) - VB_T + VB_X_LABEL) + VB_B;
+
+        // ── Szene auf die Diagrammhoehe, Erdboden auf die Nulllinie ────────
+        // P16-7a, Punkt 1 (Nutzerbefund 2026-09-14): die Nulllinien beider
+        // Bilder sollen auf gleicher Hoehe liegen. Beide viewBoxen bilden mit
+        // demselben Faktor ab (s. Breitenaufteilung) — ist die Szene also
+        // genauso hoch wie das Diagramm und liegt ihr Erdboden genauso weit
+        // unter der Oberkante wie dessen Nulllinie, stehen beide Linien auf
+        // demselben Pixel. Platz ist immer da: ueber der Nulllinie hat das
+        // Diagramm Titel und Rand PLUS die ganze Bahnhoehe, unter ihr die
+        // x-Beschriftung — beides mehr, als die Szene braucht (Bahn + Luft
+        // bzw. "x / m" unter dem Boden). Bis 2026-09-26 bekam die Szene nur eine
+        // begrenzte Zugabe an Himmel und wurde mittig ausgerichtet; der Boden
+        // lag dadurch 30-80 px unter der Nulllinie.
+        const szH = vbH;
+        const bodenAbstand = nullLinie(plotH);      // Oberkante -> Erdboden
 
         // ── Breitenaufteilung ──────────────────────────────────────────────
         const gestapelt = getComputedStyle(zeile).flexDirection.startsWith('column');
@@ -634,7 +624,7 @@ export function buildSchraegerWurfFig(fig) {
         svgG.setAttribute('viewBox',
             `${(-(vbWeff - vbW) / 2).toFixed(1)} 0 ${vbWeff.toFixed(1)} ${vbH.toFixed(1)}`);
 
-        const szTop = GROUND_PX + SZ_UNTER_BODEN - szH;
+        const szTop = GROUND_PX - bodenAbstand;
         // Auch NEGATIV weitergeben: bei einem Wurf ueber 18 m reicht das Feld
         // hoeher hinauf als die viewBox der Sim (Erdboden bei 440 px). Auf 0
         // geklemmt endete das Hoehenlineal dann mitten im Bild, unterhalb des
