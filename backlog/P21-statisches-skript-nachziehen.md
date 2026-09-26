@@ -456,6 +456,34 @@ Voreinstellung angelegt.
 - **Nummern:** **keine.** Statische Abbildung bleibt an Ort und Stelle
   (`.nur-druck`), `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
 
+#### P21-A12 · Unterschrift von Abb. 1.19: Pfeil-Satz und korrigierte Formel
+
+- **Status:** **entschieden: bewusst — nichts nachzuziehen** (bis auf den
+  Quellfehler, s. u.). Entstanden 2026-09-26 beim Bau der interaktiven Figur
+  zu Abb. 1.19 (P16-5, WIP `c15b70a`, v1.54.0).
+- **Zieldatei:** `Input/v0.13/pskript_mech_kinematik_gmni_v4.tex`, die
+  `figure` mit `\label{fig:geschw_zeit_diagramm_senkr_wurf}`.
+- **Was anders ist:** die interaktive Unterschrift ist die gedruckte, Wort für
+  Wort, mit drei Unterschieden:
+  1. \(v_0\), \(h_0\), \(t_\mathrm{max}\) und \(t_\textrm{Wurf}\) sind
+     mitlaufende Zahlen — **nicht nachziehen** (Sonderregel Bildunterschriften).
+  2. Ein angehängter Satz zum Geschwindigkeitspfeil an der Kugel („er wird zum
+     Scheitel hin kürzer, ist bei \(t_\mathrm{max}\) verschwunden und zeigt
+     danach nach unten — im selben Moment, in dem die Gerade \(v(t)\) die
+     \(t\)-Achse kreuzt") und ein Regler-Hinweis — **nicht nachziehen**: die
+     gedruckte Abbildung ist ein reines v-t-Diagramm ohne Szene, der Satz hätte
+     dort keinen Gegenstand.
+  3. Die \(t_\textrm{Wurf}\)-Formel ist korrigiert — das ist **kein
+     didaktischer Zusatz, sondern ein Quellfehler**: `QUELLEN_FEHLER.md`
+     Abschnitt 1.1 Nr. 7. Druckseitig einzusetzen (an der Stelle von
+     `\left(\frac{v_0}{g}^2 \right)`):
+
+     ```latex
+     \left(\frac{v_0}{g}\right)^2
+     ```
+- **Nummern:** **keine.** Statische Abbildung bleibt an Ort und Stelle
+  (`.nur-druck`), `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
+
 ---
 
 ### Medienbedingte Unterschiede (dokumentiert, nichts nachzuziehen)
