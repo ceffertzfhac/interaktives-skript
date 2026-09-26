@@ -446,7 +446,13 @@ allein der Kontrast die Pruefung).
   3. Unterschrift: ergänzen, dass die Tangente in der Figur eingezeichnet ist
      und sich ausblenden lässt. Das ist ein Regler-Hinweis, also P21-A13
      nachtragen: nicht nachzuziehen.
-- [ ] **P16-8c Abb. 1.18: v-Pfeil bleibt im Bild, Tangente strichpunktiert** *(S)* —
+- [x] **P16-8c Abb. 1.18: v-Pfeil bleibt im Bild, Tangente strichpunktiert** *(S)* —
+  **erledigt 2026-09-26 (v1.55.3)**: `szeneZuschneiden()` tastet die Spitze des
+  v-Pfeils über die ganze Flugzeit ab. Nach rechts deckelt sie den Zoom, nach
+  unten verlängert sie die Szene unter dem Erdboden. Ein Zoom-Deckel auch nach
+  unten hätte bei h₀ = v₀ = 10 den Zoom von 1,00 auf 0,60 gedrückt, der Wurf
+  hätte nur noch die halbe Breite gefüllt (verworfen, im Code begründet).
+  Tangente `stroke-dasharray: 8 3 1.5 3`, Deckkraft 0,55, Legende passend. —
   **Nutzerbefund 2026-09-26** (Wortlaut: *„am ende der animation läuft der
   geschwindigkeitsvektor aus der simultionsdarstellung raus, bitte durch
   angepassten zoom verhindern, tangente auch leich transparent und durhc -.-.-
