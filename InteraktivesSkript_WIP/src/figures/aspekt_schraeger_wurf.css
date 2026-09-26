@@ -312,7 +312,8 @@
 .aspekt-figur[data-aspekt="schraeger-wurf-vektor"] { --kb-vec-hw: 2.5px; }
 /* Die ganze Bahn als Vorschau: gestrichelt, halbtransparent, duenner als die
    mitwachsende Spur (2px). Tangente: neutral, duenn, halbtransparent (P16-8b:
-   „in der darstellung dezenter") — sie ist Hilfslinie, der
+   „in der darstellung dezenter"), strichpunktiert (P16-8c) — sie ist
+   Hilfslinie, der
    Geschwindigkeitspfeil liegt auf ihr und bleibt die farbige Aussage. */
 .aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-scene [id$="bahn_vorschau"] {
     stroke: var(--sw-bahn); stroke-width: calc(1.4px * var(--kb-lw, 1));
@@ -320,8 +321,12 @@
 }
 .aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-scene [id$="tangente"] {
     stroke: var(--kb-text2); stroke-width: calc(1px * var(--kb-lw, 1)); opacity: 0.55;
+    stroke-dasharray: 8 3 1.5 3;    /* strichpunktiert -.-.- (P16-8c) */
 }
-.aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-tangente"] { background: var(--kb-text2); opacity: 0.55; height: 2px; align-self: center; }
+.aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-tangente"] {
+    background: repeating-linear-gradient(90deg, var(--kb-text2) 0 6px, transparent 6px 8px, var(--kb-text2) 8px 9px, transparent 9px 11px);
+    opacity: 0.55; height: 2px; align-self: center;
+}
 .aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-main .aspekt-main-content .aspekt-scene {
     flex: 1 1 auto; padding: 0 8px 8px;
 }

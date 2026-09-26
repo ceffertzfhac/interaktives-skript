@@ -105,7 +105,8 @@ import { updateScene, updateGraphs, updateKennwerte, updateZoomDisplay,
          drawAnimationCoordSystem, drawStopwatchMarks, drawSubdialMarks,
          fmt } from './schraeger_wurf/render.js';
 import { BALL_START_X_PX, GROUND_PX, BALL_RADIUS_BASE_PX, ANIM_W,
-         SF_ARM_LENGTH_M, DEFAULT_PIXELS_PER_METER } from './schraeger_wurf/constants.js';
+         SF_ARM_LENGTH_M, DEFAULT_PIXELS_PER_METER, G,
+         PIXELS_PER_VELOCITY_UNIT } from './schraeger_wurf/constants.js';
 import { createRuntime } from './schraeger_wurf/runtime.js';
 
 // ── Regler-Bereiche ─────────────────────────────────────────────────────────
@@ -770,17 +771,66 @@ export function buildSchraegerWurfFig(fig) {
     // kleinere Feld noch einmal; weil das Feld gerade so hoch ist wie noetig,
     // kommt derselbe Zoom heraus. Inside withStore aufrufen.
     const ZS_LUFT_OBEN = 34;        // Zoom-Anzeige + Luft ueber dem Scheitel
+    // Rechter Rand, bis zu dem eine Pfeilspitze reichen darf, und der untere
+    // Rand der Szene ohne Pfeil (viewBox x 20…370, y bis 500; etwas Luft).
+    const ZS_RECHTS = 364, ZS_UNTEN = 496;
+
+    // Wie weit reicht der Geschwindigkeitspfeil ueber die ganze Flugzeit? In
+    // METERN ausgedrueckt: der Motor zeichnet v mit PIXELS_PER_VELOCITY_UNIT
+    // * zoom Einheiten je m/s, das sind k = 4 / DEFAULT_PIXELS_PER_METER Meter
+    // je m/s — die Pfeilspitze skaliert also mit dem Zoom wie die Bahn. Nur die
+    // Marker-Spitze (4,95 Strichstaerken) ist fest und kommt als Einheiten
+    // dazu. Abgetastet statt geschlossen gerechnet: die Extremstelle liegt je
+    // nach Wurf am Anfang, am Ende oder dazwischen. Inside withStore.
+    function pfeilReichweite() {
+        const k = PIXELS_PER_VELOCITY_UNIT / DEFAULT_PIXELS_PER_METER;
+        const tf = flightTime();
+        let rechts = 0, unten = 0, oben = 0;
+        for (let i = 0; i <= 120; i++) {
+            const ts = tf * i / 120;
+            const x = store.v0x * ts, y = store.h0 + store.v0y * ts - 0.5 * G * ts * ts;
+            const vy = store.v0y - G * ts;
+            rechts = Math.max(rechts, x + store.v0x * k);
+            unten = Math.max(unten, -(y + vy * k));      // unter dem Erdboden
+            oben = Math.max(oben, y + vy * k);
+        }
+        return { rechts, unten, oben };
+    }
+
     function szeneZuschneiden() {
+        // P16-8c (Nutzerbefund 2026-09-26): der Geschwindigkeitspfeil lief
+        // beim Aufschlag aus der Szene. Der Zoom der Sim kennt nur die Bahn.
+        // Nach RECHTS wird er deshalb so gedeckelt, dass die Pfeilspitze ueber
+        // die ganze Flugzeit im Bild bleibt. Nach UNTEN nicht: dort bindet der
+        // Pfeil beim Aufschlag, und ein Deckel drueckte den Zoom bei h0 = v0 =
+        // 10 von 1,00 auf 0,60 — der Wurf fuellte nur noch die halbe Breite
+        // und Lineal und Beschriftung (feste Einheiten) wirkten uebergross.
+        // Unten bekommt die Szene stattdessen so viel Rand unter dem
+        // Erdboden, wie die Pfeilspitze beim Aufschlag braucht.
+        const vel = q('velocity_vector');
+        const spitze = 4.95 * ((vel && parseFloat(getComputedStyle(vel).strokeWidth)) || 4);
+        const pf = pfeilReichweite();
+        const pMax = pf.rechts > 0 ? (ZS_RECHTS - BALL_START_X_PX - spitze) / pf.rechts : Infinity;
+        const deckeln = () => {
+            if (store.currentPixelsPerMeter > pMax) {
+                store.currentPixelsPerMeter = pMax;
+                store.zoomFactor = pMax / DEFAULT_PIXELS_PER_METER;
+            }
+        };
         store.animTopPx = 0;
         recomputeDerived();
+        deckeln();
         const P = store.currentPixelsPerMeter;
         const noetig = Math.max(maxHeight() * 1.1 * P,
-                                store.h0 * P + 60 * store.zoomFactor + 24)  // Achsenskizze in (b)
+                                pf.oben * P + spitze,                           // v-Pfeil beim Abwurf
+                                store.h0 * P + 60 * store.zoomFactor + 24)      // Achsenskizze in (b)
                      + ZS_LUFT_OBEN;
         const top = Math.max(0, GROUND_PX - noetig);
         store.animTopPx = top;
         recomputeDerived();
-        q('main_svg').setAttribute('viewBox', `20 ${top.toFixed(1)} 350 ${(500 - top).toFixed(1)}`);
+        deckeln();
+        const unten = Math.max(ZS_UNTEN, GROUND_PX + pf.unten * store.currentPixelsPerMeter + spitze) + 4;
+        q('main_svg').setAttribute('viewBox', `20 ${top.toFixed(1)} 350 ${(unten - top).toFixed(1)}`);
         const zt = q('zoom_text_display');
         if (zt) zt.setAttribute('y', (top + 16).toFixed(1));
     }
