@@ -484,6 +484,34 @@ Voreinstellung angelegt.
 - **Nummern:** **keine.** Statische Abbildung bleibt an Ort und Stelle
   (`.nur-druck`), `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
 
+#### P21-A13 · Unterschrift von Abb. 1.18: ein Bild statt zwei
+
+- **Status:** **entschieden: bewusst — nichts nachzuziehen** (bis auf die
+  Quellfehler, s. u.). Entstanden 2026-09-26 beim Bau der interaktiven Figur
+  zu Abb. 1.18 (P16-8, WIP `54b374a`, v1.55.0).
+- **Zieldatei:** `Input/v0.13/pskript_mech_kinematik_gmni_v4.tex`, die
+  `figure` mit `\label{fig:geschwindigkeit_tangential}` (Teilbilder
+  `fig:geschwindigkeit_tangential_1`/`_2`).
+- **Was anders ist:** die gedruckte Abbildung hat zwei Teilbilder, die
+  interaktive ist **eine** Figur mit Umschalter (Nutzerentscheidung
+  2026-09-26). Deshalb heißt es interaktiv statt „Im Vergleich der beiden
+  **Bilder**" nun „Im Vergleich der beiden **Koordinatensysteme** — (a) mit
+  Ursprung am Boden, (b) mit Ursprung im Abwurfpunkt —". Dazu ein
+  Regler-Hinweis am Ende. **Nicht nachziehen:** gedruckt gibt es zwei Bilder,
+  dort stimmt „der beiden Bilder"; der Regler-Hinweis gehört nicht aufs Papier.
+- **Quellfehler — druckseitig mitzukorrigieren:** `QUELLEN_FEHLER.md`
+  Abschnitt 1.1 Nr. 4 („abhänt") und Nr. 8 (fehlender Punkt nach
+  „Bahnkurve", „vom Wahl"). Der korrigierte Wortlaut der betroffenen Stelle:
+
+  ```latex
+  Der Geschwindigkeitsvektor ist immer eine Tangente an die Bahnkurve. Im
+  Vergleich der beiden Bilder sieht man auch, dass der Ortsvektor von der Wahl
+  des Koordinatensystems abhängt, während der Geschwindigkeitsvektor in beiden
+  Koordinatensystemen gleich ist.
+  ```
+- **Nummern:** **keine.** Die statische Doppelabbildung bleibt an Ort und
+  Stelle (`.nur-druck`), `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
+
 ---
 
 ### Medienbedingte Unterschiede (dokumentiert, nichts nachzuziehen)

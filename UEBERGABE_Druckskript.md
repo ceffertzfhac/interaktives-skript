@@ -608,6 +608,7 @@ Skript schon behandelt; im `.tex` stehen sie noch.
 | 5 | Unterschriften der **vier** Wurf-Abbildungen | „Das Objekt wird aus der Höhe $h_0=\SI{20}{\meter}$ **losgelassen**" — es wird nicht losgelassen, sondern mit $v_0=\SI{10}{\meter\per\second}$ nach oben **geworfen**; dieselbe Unterschrift nennt die Anfangsgeschwindigkeit einen Satz davor (Wortlaut aus der Freier-Fall-Unterschrift übernommen, wo er richtig ist) | „**abgeworfen**" (oder „geworfen") |
 | 6 | Unterschrift Abb. 1.9 (`fig:schraeger_wurf`) | „Zu sehen ist **links** die Flugbahn …, und **links** die beiden Weg-Zeit-Diagramme" — zweimal „links" | „… und **rechts** die beiden Weg-Zeit-Diagramme" |
 | 1.1-7 | Unterschrift Abb. 1.19 (`fig:geschw_zeit_diagramm_senkr_wurf`) | `\left(\frac{v_0}{g}^2 \right)` — das Quadrat sitzt am Bruch innerhalb der Klammer; nur $(v_0/g)^2$ ergibt die angegebenen $\SI{2,77}{\s}$ (entdeckt 2026-09-26, P21-A12) | `\left(\frac{v_0}{g}\right)^2` |
+| 1.1-4, 1.1-8 | Unterschrift Abb. 1.18 (`fig:geschwindigkeit_tangential`) | „… Tangente an die Bahnkurve Im Vergleich … dass der Ortsvektor vom Wahl des Koordinatensystems abhänt“ — Satzpunkt fehlt, falscher Kasus, Buchstabe fehlt (P21-A13) | „… Tangente an die Bahnkurve. Im Vergleich … dass der Ortsvektor von der Wahl des Koordinatensystems abhängt“ |
 
 **Offen — zwei undefinierte Verweise in `pskript_sw_schwingungen.tex`**
 (Abschnitt 3.1, in `QUELLEN_FEHLER.md` als Nr. 7 und 8 erfasst). Sie stehen
