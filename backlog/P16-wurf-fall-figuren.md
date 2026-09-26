@@ -100,7 +100,7 @@ gemeinsam:
 
 **Stand 2026-09-26:** erledigt sind Abb. 1.3–1.7 (P16-1/-3/-4), 1.8 (P17-3),
 1.9 (P16-2/-6), 1.10 (P17-2), 1.14 (P16-7 + P16-7a) und 1.15 (P17-1, v1.53.0).
-**Als Naechstes 1.19 und 1.20** (P16-5/-9), dann 1.18 (P16-8, Nummern-Frage
+**1.19 steht seit dem 26.09.2026 (P16-5). Als Naechstes 1.20** (P16-9), dann 1.18 (P16-8, Nummern-Frage
 am 2026-09-26 geklärt: eine Figur). *(Stand 2026-09-14 war: als Naechstes 1.15,
 dann 1.18, 1.19 und 1.20.)* 1.19 und 1.20 sind billig: derselbe Motor.
 *(Frueherer Stand 2026-08-28: nach 1.3–1.7 war 1.8 der naechste Schritt.)*
@@ -344,7 +344,19 @@ allein der Kontrast die Pruefung).
   Flugzeit/Scheitelhoehe als bewusst physikalische (achsenunabhaengige) Groessen
   mit entsprechender Beschriftung, `getDisplayV` liefert bereits die
   Achsenkomponente (damit ist Abb. 1.19 vorbereitet), Achsenname y ueberall.
-- [ ] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
+- [x] **P16-5 Aspekt-Figur Abb. 1.19** — senkrechter Wurf v-t (Motor A). *(S–M)*
+  **erledigt 2026-09-26 (`c15b70a`, v1.54.0)**: sechste Variante der
+  freier_fall-Fabrik über `data-diagramm="geschw"`, `data-ort="x"` (die
+  Beispielbox nennt die Ortsachse x), `data-v0min="0"`. v-Pfeil an
+  (`--kb-vlat`, wie v in Kap. 1.4), Analyse mit v(t) und t_max = v0/g,
+  Formelkarte mit v(t) = −g t + v0 und Verweis auf die Textformel. Motor:
+  Port-Änderung 4 erweitert (Achsen-Miniatur folgt posChar auch bei v-t), 5 neu
+  („t / s“ unter dem Feld statt mitten darin, nur v-t). Doku: P21-A12,
+  QUELLEN_FEHLER 1.1 Nr. 7 (t_Wurf-Formel).
+  **Beobachtet, nicht behoben:** in den Weg-Diagrammen mit nach unten
+  zeigender Achse (Abb. 1.6/1.7) steht „t / s" ebenfalls mitten im Feld (unter
+  der oben liegenden Nulllinie), und die t-Marke „0,00" stößt an die „0" der
+  y-Achse — Verhalten der Quelle, bei 1.6/1.7 bewusst nicht angefasst.
 - [x] **P16-6 Aspekt-Figur Abb. 1.9** *(M)* — **erledigt 2026-08-31 (v1.43.0)**:
   schräger Wurf, Flugbahn + zwei gestapelte Weg-Zeit-Diagramme y(t)/x(t).
   Erste Figur mit **gestapelten** Diagrammen auf dieser Motor-Familie; Vorlage
