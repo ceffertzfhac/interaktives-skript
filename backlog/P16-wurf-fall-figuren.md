@@ -476,12 +476,14 @@ allein der Kontrast die Pruefung).
   alone simulation des schrägen wurfs. dort allerdings tangente default off."*).
   Im Repo `Projects_InteraktiveSimulation`, **Branch
   `feat/schraeger-wurf-ortsvektor`** (`34b583a` + `267e639`, dort BACKLOG FW8,
-  Sim v1.7.0), **nicht gemergt, nicht gepusht**. Übertragen: Ortsvektor mit
+  Sim v1.7.0), am 2026-09-26 **nach `main` gemergt** (`669803d`, Branch
+  gelöscht), **nicht gepusht**. Davor der dort offene Kopfzeilen-Umbau in
+  20 kleinen Commits festgehalten (global, Doku, Vorlage, je Sim einer). Übertragen: Ortsvektor mit
   Ursprung, Tangente (Vorgabe aus), Live-Spaltenvektoren. Nicht übertragen
   (Nutzerauswahl): Vorschau der ganzen Bahn, Zoom für den v-Pfeil.
   Ortsvektor dort **grau** (Bernstein ist in der Sim schon \(v_x\)).
-  Beim Mergen: Konflikt in `index.html` (Versionszeile) und `CHANGELOG.md` mit
-  dem dort offenen Kopfzeilen-Umbau (v1.6.2) zu erwarten.
+  Merge-Konflikte (Versionszeile, CHANGELOG) aufgelöst: v1.7.0 im neuen
+  zweizeiligen Header, CHANGELOG v1.7.0 über v1.6.2.
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
