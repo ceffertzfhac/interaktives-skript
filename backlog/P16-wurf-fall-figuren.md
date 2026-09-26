@@ -415,7 +415,7 @@ allein der Kontrast die Pruefung).
     dagegen grau (`--kb-rlat`). Kapitelübergreifend zu entscheiden.
   - `--kb-omega` bleibt im Darkmode der Normalpalette #1555A2 — auf dunklem
     Grund knapp; gilt ebenso für ω in Kap. 1.4 (kapitelweite Einstellung).
-- [ ] **P16-8a Abb. 1.18 zurücknehmen und ergänzen** *(S–M)* — **Nutzerbefund
+- [x] **P16-8a Abb. 1.18 zurücknehmen und ergänzen** *(S–M)* — **erledigt 2026-09-26 (v1.55.1)**. **Nutzerbefund
   2026-09-26** (Wortlaut: *„die vektoren sind mir ein hauch zu prominent.
   default gestrichelt, etwas transparent und etwas dünner als die aktuelle bahn
   die ganze bahn einbauen. per checkbox eine variable tangente an die bahn
@@ -427,6 +427,12 @@ allein der Kontrast die Pruefung).
      **gestrichelt, etwas transparent, etwas dünner** als die mitwachsende Spur.
   3. **Tangente an die Bahn** — eine Gerade durch den momentanen Ort, tangential
      zur Bahn (wandert mit der Zeit mit), per **Checkbox, Vorgabe an**.
+  Umgesetzt: Lesart per Rückfrage bestätigt (gestrichelt/transparent/dünner
+  gilt der Vorschau der ganzen Bahn, nicht den Vektoren). Vektoren über
+  `--kb-vec-hw: 2.5px` (wie 1.42/1.8), Vorschau als figur-eigene Polyline aus
+  denselben Zeitreihen wie die Spur (1,4 px, Strich 5/4, Deckkraft 0,45),
+  Tangente als neutrale dünne Gerade (`--kb-text2`) durch die Kugel in
+  v-Richtung, Checkbox „Tangente an die Bahn einblenden" im Bedienfeld.
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
