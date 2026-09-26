@@ -415,6 +415,18 @@ allein der Kontrast die Pruefung).
     dagegen grau (`--kb-rlat`). Kapitelübergreifend zu entscheiden.
   - `--kb-omega` bleibt im Darkmode der Normalpalette #1555A2 — auf dunklem
     Grund knapp; gilt ebenso für ω in Kap. 1.4 (kapitelweite Einstellung).
+- [ ] **P16-8a Abb. 1.18 zurücknehmen und ergänzen** *(S–M)* — **Nutzerbefund
+  2026-09-26** (Wortlaut: *„die vektoren sind mir ein hauch zu prominent.
+  default gestrichelt, etwas transparent und etwas dünner als die aktuelle bahn
+  die ganze bahn einbauen. per checkbox eine variable tangente an die bahn
+  einbauen, default on."*). Drei Punkte:
+  1. **Vektoren dezenter** — Orts- und Geschwindigkeitsvektor etwas dünner
+     (figur-eigener Wert für `--kb-vec-hw`, wie 1.42 es vormacht; die
+     kapitelweite Regel bleibt).
+  2. **Ganze Bahn von Anfang an** — die vollständige Flugbahn als Vorschau,
+     **gestrichelt, etwas transparent, etwas dünner** als die mitwachsende Spur.
+  3. **Tangente an die Bahn** — eine Gerade durch den momentanen Ort, tangential
+     zur Bahn (wandert mit der Zeit mit), per **Checkbox, Vorgabe an**.
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
