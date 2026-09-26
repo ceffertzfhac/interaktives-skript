@@ -15,6 +15,14 @@
 //     Erdboden (a) oder in den Abwurfpunkt (b) — die beiden Teilbilder der
 //     gedruckten Abbildung sind zwei Zustaende DIESER einen Figur
 //     (Nutzerentscheidung 2026-09-26, BACKLOG P16-8).
+//   Abb. 1.20 (data-kontext="geschw")    — wie 1.9, aber die GESCHWINDIGKEIT:
+//     gestapelt v_y(t) oben, v_x(t) unten (Reihenfolge wie 1.9). In der Szene
+//     der v-Pfeil, per Checkbox (Vorgabe an) in v_x/v_y zerlegt — Pfeile und
+//     Kurven in denselben Komponentenfarben (--kb-vx blau, --kb-vy gruen, wie
+//     Abb. 1.42). Man sieht, was die Diagramme sagen: v_x bleibt gleich lang,
+//     v_y schrumpft bis zum Scheitel auf null und zeigt danach nach unten.
+//     Zoom wie 1.18 (Pfeile bleiben bis zum Aufschlag im Bild), aber OHNE
+//     Zuschnitt oben — die Stoppuhr bleibt, die Diagramme haben Zeitachsen.
 //
 // Alle teilen Szene, Regler, Ablaufsteuerung und Analyse — nur der
 // Diagramm-Zuschnitt und einige Texte unterscheiden sich.
@@ -134,6 +142,8 @@ function leseKonfig(fig) {
         bahn: fig.dataset.kontext === 'bahn',
         // Abb. 1.18: nur Szene, Orts- und Geschwindigkeitsvektor (s. Kopf).
         vektor: fig.dataset.kontext === 'vektor',
+        // Abb. 1.20: v_y(t)/v_x(t) gestapelt, v-Pfeil zerlegt (s. Kopf).
+        geschw: fig.dataset.kontext === 'geschw',
         // Ursprung beim Aufbau: 'ground' = (a), 'start' = (b).
         ursprung: fig.dataset.ursprung === 'start' ? 'start' : 'ground',
     };
@@ -162,6 +172,8 @@ const SVG_SCENE = (cfg) => `
     <marker id="sw_arrow-vel" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
     <marker id="sw_arrow-acc" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
     <marker id="sw_arrow-ort" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
+    <marker id="sw_arrow-vx" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
+    <marker id="sw_arrow-vy" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
     <marker id="sw_arrow-coord" markerWidth="15" markerHeight="10.5" refX="0" refY="5.25" orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
     <!-- Spitze der DIAGRAMM-Achsen (BACKLOG P5). Geometrie wie in den
          kreisbewegung-Figuren (kb_graph-arrowhead), damit die Diagramme aller
@@ -187,8 +199,8 @@ const SVG_SCENE = (cfg) => `
     <line id="sw_position_vector" x1="0" y1="0" x2="0" y2="0" stroke-width="2.5" marker-end="url(#sw_arrow-ort)" visibility="hidden"/>
     <circle id="sw_ball" r="${BALL_RADIUS_BASE_PX}" cx="${BALL_START_X_PX}"/>
     <line id="sw_acceleration_vector" x1="0" y1="0" x2="0" y2="0" stroke-width="2.5" marker-end="url(#sw_arrow-acc)" visibility="hidden"/>
-    <line id="sw_velocity_vector_x" x1="0" y1="0" x2="0" y2="0" stroke-width="2" marker-end="url(#sw_arrow-vel)" visibility="hidden"/>
-    <line id="sw_velocity_vector_y" x1="0" y1="0" x2="0" y2="0" stroke-width="2" marker-end="url(#sw_arrow-vel)" visibility="hidden"/>
+    <line id="sw_velocity_vector_x" x1="0" y1="0" x2="0" y2="0" stroke-width="2" marker-end="url(#sw_arrow-vx)" visibility="hidden"/>
+    <line id="sw_velocity_vector_y" x1="0" y1="0" x2="0" y2="0" stroke-width="2" marker-end="url(#sw_arrow-vy)" visibility="hidden"/>
     <line id="sw_velocity_vector" x1="0" y1="0" x2="0" y2="0" stroke-width="2.5" marker-end="url(#sw_arrow-vel)" visibility="hidden"/>
     <g id="sw_animation_coord_system"></g>
     <!-- Zoom-Anzeige in der freien Luecke zwischen Hoehenlineal (endet rund
@@ -333,6 +345,10 @@ ${cfg.vektor ? `  <div class="panel-section">
     <div class="panel-label">Anzeige</div>
     <label class="aspekt-check"><input type="checkbox" id="sw_tangente_an" checked><span>Tangente an die Bahn einblenden</span></label>
   </div>
+` : ''}${cfg.geschw ? `  <div class="panel-section">
+    <div class="panel-label">Anzeige</div>
+    <label class="aspekt-check"><input type="checkbox" id="sw_toggle_velocity_components" checked><span>Geschwindigkeit in \\(v_x\\)/\\(v_y\\) zerlegen</span></label>
+  </div>
 ` : ''}  <div class="panel-section">
     <div class="panel-label">Legende</div>
     <div class="legend-grid">
@@ -340,6 +356,10 @@ ${cfg.vektor ? `      <div class="legend-swatch" data-c="sw-bahn"></div><div cla
       <div class="legend-swatch" data-c="sw-tangente"></div><div class="legend-label">Tangente an die Bahn</div>
       <div class="legend-swatch" data-c="sw-ort"></div><div class="legend-label">Ortsvektor \\(\\vec s(t)\\)</div>
       <div class="legend-swatch" data-c="sw-vel"></div><div class="legend-label">Geschwindigkeit \\(\\vec v(t)\\)</div>`
+    : cfg.geschw ? `      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel und Flugbahn</div>
+      <div class="legend-swatch" data-c="sw-vel"></div><div class="legend-label">Geschwindigkeit \\(\\vec v(t)\\)</div>
+      <div class="legend-swatch" data-c="sw-vx"></div><div class="legend-label">\\(v_x\\): Pfeil und Kurve \\(v_x(t)\\)</div>
+      <div class="legend-swatch" data-c="sw-vy"></div><div class="legend-label">\\(v_y\\): Pfeil und Kurve \\(v_y(t)\\)</div>`
     : `      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel, Flugbahn und ${cfg.bahn ? 'Bahnkurve' : 'beide Kurven'}</div>`}
       <div class="legend-swatch" data-c="sw-ruler"></div><div class="legend-label">Höhen- und Weitenskala in \\(\\mathrm{m}\\)</div>
     </div>
@@ -390,6 +410,14 @@ ${cfg.vektor ? `      <div class="analysis-grid">
         <span class="sw-lv-betrag">\\(\\vert\\vec v\\vert =\\) <span id="sw_lv_vb"></span></span>
       </div>
       <div class="ff-formel-note">Beim Umschalten zwischen (a) und (b) ändert sich \\(\\vec s\\) (seine \\(y\\)-Komponente um \\(h_0\\)), \\(\\vec v\\) nicht.</div>`
+ : cfg.geschw ? `      <div class="analysis-grid">
+        <div class="analysis-cell key">Zeit \\(t\\)</div>                          <div class="analysis-cell val" id="sw_live_t"></div>
+        <div class="analysis-cell key">\\(v_x(t)\\)</div>                         <div class="analysis-cell val" id="sw_live_vx"></div>
+        <div class="analysis-cell key">\\(v_y(t)\\)</div>                         <div class="analysis-cell val" id="sw_live_vy"></div>
+        <div class="analysis-cell key">\\(\\vert \\vec v(t) \\vert\\)</div>      <div class="analysis-cell val" id="sw_live_vabs"></div>
+        <div class="analysis-cell key">Scheitel bei \\(t_{\\mathrm{max}}\\)</div>  <div class="analysis-cell val" id="sw_live_tscheitel"></div>
+        <div class="analysis-cell key">Flugzeit \\(t_{\\mathrm{fall}}\\)</div>     <div class="analysis-cell val" id="sw_live_tfall"></div>
+      </div>`
  : `      <div class="analysis-grid">
         <div class="analysis-cell key">Zeit \\(t\\)</div>                          <div class="analysis-cell val" id="sw_live_t"></div>
         <div class="analysis-cell key">Höhe \\(y(t)\\)</div>                       <div class="analysis-cell val" id="sw_live_y"></div>
@@ -408,6 +436,11 @@ ${cfg.vektor ? `        <div class="formula-box-cap">Ortsvektor — hängt vom U
         <div class="formula-box-cap">Geschwindigkeit — in (a) und (b) dieselbe</div>
         <div>\\[\\vec v(t) = \\dot{\\vec s}(t) = \\begin{pmatrix} v_0\\cos(\\alpha) \\\\ -g\\,t + v_0\\sin(\\alpha) \\end{pmatrix}\\]</div>
         <div class="ff-formel-note">Den Ursprung zu verschieben ändert den Ortsvektor um einen konstanten Vektor — hier um \\(h_0\\) in \\(y\\). Beim Ableiten nach \\(t\\) fällt eine Konstante weg, deshalb bleibt \\(\\vec v\\) gleich.</div>`
+ : cfg.geschw ? `        <div class="formula-box-cap">Zwei Komponenten, ein Parameter \\(t\\)</div>
+        <div>\\[v_x(t) = \\dot x(t) = v_0\\cos(\\alpha)\\]</div>
+        <div>\\[v_y(t) = \\dot y(t) = -g\\,t + v_0\\sin(\\alpha)\\]</div>
+        <div class="ff-formel-note">\\(v_x\\) hängt nicht von \\(t\\) ab: in \\(x\\)-Richtung ist die Bewegung gleichförmig, das Diagramm eine waagerechte Gerade. \\(v_y\\) ist eine fallende Gerade mit der Steigung \\(-g\\), wie beim senkrechten Wurf.</div>
+        <div class="ff-formel-note">\\(v_y = 0\\) beim Scheitel: \\(t_{\\mathrm{max}} = v_0\\sin(\\alpha)/g\\) — dort kreuzt die \\(v_y\\)-Kurve die \\(t\\)-Achse.</div>`
  : cfg.bahn ? `        <div class="formula-box-cap">Die Bahn — eine Gleichung ohne \\(t\\)</div>
         <div>\\[y(x) = -\\tfrac{1}{2}\\,\\frac{g}{v_0^2\\cos^2(\\alpha)}\\,x^2 + \\tan(\\alpha)\\,x + h_0\\]</div>
         <div class="ff-formel-note">Diese Parabel ist eine <em>andere</em> als die von \\(y(t)\\): sie beschreibt den Verlauf der Flugkurve durch den Raum — die Spur im Schnee —, nicht den zeitlichen Verlauf der Höhe. Entstanden ist sie, indem \\(t\\) aus \\(x(t)\\) und \\(y(t)\\) eliminiert wurde.</div>
@@ -430,15 +463,17 @@ ${cfg.vektor ? `        <div class="formula-box-cap">Ortsvektor — hängt vom U
 // Abb. 1.18 zeigt Orts- und Geschwindigkeitsvektor als eigene Spaltenvektoren
 // (P16-8d) und hat keine Kennwert-Zellen — die Motor-Zellen, die dort fehlen,
 // stehen hier (doppelte IDs waeren ein stiller Fehler).
-const hiddenStub = (cfg) => `
+// Generisch (seit Abb. 1.20): jede Motor-Zelle, die das Analyse-Panel der
+// jeweiligen Variante NICHT zeigt, steht hier — so kann keine fehlen und keine
+// doppelt vorkommen. Ebenso die Zerlegen-Checkbox, die 1.20 sichtbar fuehrt.
+const MOTOR_ZELLEN = ['live_x', 'live_y', 'live_vx', 'live_vy', 'live_vabs', 'live_ay',
+                      'live_vimpact', 'live_aimpact', 'live_ymax', 'live_xmax', 'live_tfall'];
+const hiddenStub = (cfg, sichtbar) => `
 <div style="display:none">
-  ${cfg.vektor ? '<span id="sw_live_ymax"></span><span id="sw_live_xmax"></span><span id="sw_live_tfall"></span>'
-               + '<span id="sw_live_x"></span><span id="sw_live_y"></span><span id="sw_live_vx"></span><span id="sw_live_vy"></span><span id="sw_live_vabs"></span>'
-               : '<span id="sw_live_vx"></span><span id="sw_live_vy"></span><span id="sw_live_vabs"></span>'}
-  <span id="sw_live_ay"></span><span id="sw_live_vimpact"></span><span id="sw_live_aimpact"></span>
+  ${MOTOR_ZELLEN.filter(id => !sichtbar.includes(`id="sw_${id}"`)).map(id => `<span id="sw_${id}"></span>`).join('')}
   <input type="checkbox" id="sw_toggle_trajectory" checked>
-  <input type="checkbox" id="sw_toggle_velocity_vector"${cfg.vektor ? ' checked' : ''}>
-  <input type="checkbox" id="sw_toggle_velocity_components">
+  <input type="checkbox" id="sw_toggle_velocity_vector"${cfg.vektor || cfg.geschw ? ' checked' : ''}>
+  ${cfg.geschw ? '' : '<input type="checkbox" id="sw_toggle_velocity_components">'}
   <input type="checkbox" id="sw_toggle_acceleration_vector">
   <input type="checkbox" id="sw_toggle_compare_traj">
 </div>`;
@@ -470,7 +505,7 @@ export function buildSchraegerWurfFig(fig) {
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE(cfg)}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH(cfg)}</div></div></div>` +
-      `${panelRight(cfg)}</div>${hiddenStub(cfg)}`
+      `${panelRight(cfg)}</div>${hiddenStub(cfg, panelRight(cfg) + panelLeft(cfg))}`
     ).replace(/sw_/g, p);
     rt.bindDom();
 
@@ -848,7 +883,9 @@ export function buildSchraegerWurfFig(fig) {
                                 pf.oben * P + spitze,                           // v-Pfeil beim Abwurf
                                 store.h0 * P + 60 * store.zoomFactor + 24)      // Achsenskizze in (b)
                      + ZS_LUFT_OBEN;
-        const top = Math.max(0, GROUND_PX - noetig);
+        // Abb. 1.20 behaelt die volle Hoehe (Stoppuhr oben, s. Kopf) — nur
+        // Zoom-Deckel und Rand unten gelten dort.
+        const top = cfg.vektor ? Math.max(0, GROUND_PX - noetig) : 0;
         store.animTopPx = top;
         recomputeDerived();
         deckeln();
@@ -876,7 +913,10 @@ export function buildSchraegerWurfFig(fig) {
             // v0.13. currentX/currentY wertet der Motor nur im EINZEL-Modus aus
             // — dort sind sie der mitlaufende Punkt AUF der Bahnkurve, ohne sie
             // waere die Bahn-Figur nur eine Kurve ohne Objekt.
-            updateGraphs(s.t, s.y, s.x, s.x, s.y);
+            // Abb. 1.20: Slot 1 v_y, Slot 2 v_x (Werte in derselben
+            // Reihenfolge wie die Diagrammtypen, s. Erststand).
+            if (cfg.geschw) updateGraphs(s.t, s.vy, s.vx, s.x, s.y);
+            else updateGraphs(s.t, s.y, s.x, s.x, s.y);
             updateKennwerte();
         });
         tValue.textContent = `${fmt(t, 2)} s`;
@@ -891,7 +931,7 @@ export function buildSchraegerWurfFig(fig) {
             store.v0 = parseFloat(v0Slider.value);
             store.alphaDeg = parseFloat(alphaSlider.value);
             recomputeDerived();          // v0x/v0y + Zoom — s. physics.js
-            if (cfg.vektor) szeneZuschneiden();
+            if (cfg.vektor || cfg.geschw) szeneZuschneiden();
             precompute();
             if (cfg.vektor) {
                 // Die ganze Bahn (P16-8a): aus denselben Zeitreihen wie die Spur.
@@ -920,6 +960,9 @@ export function buildSchraegerWurfFig(fig) {
             drawHorizontalRuler();
             drawAnimationCoordSystem();
 
+            // Scheitelzeit (nur 1.20): v_y = 0 bei v0 sin(alpha) / g.
+            const tsZelle = q('live_tscheitel');
+            if (tsZelle) tsZelle.textContent = `${fmt(Math.max(0, store.v0y) / G, 2)} s`;
             q('h0_value').textContent = `${fmt(store.h0, 1)} m`;
             q('v0_value').textContent = `${fmt(store.v0, 1)} m/s`;
             q('alpha_value').textContent = `${fmt(store.alphaDeg, 0)} °`;
@@ -1023,8 +1066,8 @@ export function buildSchraegerWurfFig(fig) {
             // Der Zoom muss dasselbe Feld meinen wie die viewBox (s. ANIM_TOP_BAHN).
             animTopPx: cfg.bahn ? ANIM_TOP_BAHN : 0,
             isStacked: !cfg.bahn,
-            graphType1: cfg.bahn ? 'yx' : 'yt',
-            graphType2: 'xt',
+            graphType1: cfg.bahn ? 'yx' : cfg.geschw ? 'vyt' : 'yt',
+            graphType2: cfg.geschw ? 'vxt' : 'xt',
             yAxisConfig: { direction: 'up', origin: cfg.vektor ? cfg.ursprung : 'ground' },
             frozenTraj: null,
             isDigitalDisplay: false,

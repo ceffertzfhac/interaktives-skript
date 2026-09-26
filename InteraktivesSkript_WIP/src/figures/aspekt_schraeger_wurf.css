@@ -28,6 +28,8 @@
     --sw-vel: var(--kb-vlat); /* v-Pfeil (Abb. 1.18, 1.20) — orange wie v in
                                 Abb. 1.19 und Kapitel 1.4; dasselbe Token faerbt
                                 das Farbwort der Unterschrift. */
+    --sw-vx: var(--kb-vx);   /* v_x-Komponente (Abb. 1.20) — blau wie in 1.42 */
+    --sw-vy: var(--kb-vy);   /* v_y-Komponente (Abb. 1.20) — gruen wie in 1.42 */
     --sw-ort: var(--kb-omega); /* Ortsvektor (Abb. 1.18) — die Quelle nennt
                                 ihn blau; das Blau der Kreisbewegungs-Figuren,
                                 Paletten und Farbwort laufen daran mit. */
@@ -127,6 +129,8 @@
 .aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-bahn"]  { background: var(--sw-bahn); }
 .aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-ort"]   { background: var(--sw-ort); }
 .aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-vel"]   { background: var(--sw-vel); }
+.aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-vx"]    { background: var(--sw-vx); }
+.aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-vy"]    { background: var(--sw-vy); }
 .aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-ruler"] {
     background: var(--sw-ruler-bg); border: 1px solid var(--sw-ruler-stroke);
 }
@@ -362,3 +366,18 @@
     flex-basis: 100%; padding-left: 2px; color: var(--kb-text2);
     font-family: var(--kb-font-mono); font-variant-numeric: tabular-nums;
 }
+
+/* ── Abb. 1.20: Geschwindigkeits-Zeit-Diagramme v_y(t) / v_x(t) ────────────
+   Komponenten in den Kapitelfarben (--kb-vx blau, --kb-vy gruen, wie 1.42) —
+   Pfeil in der Szene und Kurve im Diagramm tragen DIESELBE Farbe, damit man
+   sieht, welcher Pfeil welche Kurve ist. Slot oben = v_y, unten = v_x.
+   Vektoren so dezent wie in 1.18 (--kb-vec-hw 2,5 px). */
+.aspekt-figur[data-aspekt="schraeger-wurf-geschw"] { --kb-vec-hw: 2.5px; }
+.aspekt-figur[data-aspekt="schraeger-wurf-geschw"] .aspekt-scene [id$="velocity_vector_x"] { stroke: var(--sw-vx); }
+.aspekt-figur[data-aspekt="schraeger-wurf-geschw"] .aspekt-scene [id$="velocity_vector_y"] { stroke: var(--sw-vy); }
+.aspekt-figur[data-aspekt="schraeger-wurf-geschw"] .aspekt-scene [id$="arrow-vx"] polygon { fill: var(--sw-vx); }
+.aspekt-figur[data-aspekt="schraeger-wurf-geschw"] .aspekt-scene [id$="arrow-vy"] polygon { fill: var(--sw-vy); }
+.aspekt-figur[data-aspekt="schraeger-wurf-geschw"] [id$="graph_line_top"]    { stroke: var(--sw-vy); }
+.aspekt-figur[data-aspekt="schraeger-wurf-geschw"] [id$="graph_line_bottom"] { stroke: var(--sw-vx); }
+.aspekt-figur[data-aspekt="schraeger-wurf-geschw"] [id$="graph_point_top"]    { fill: var(--sw-vy); }
+.aspekt-figur[data-aspekt="schraeger-wurf-geschw"] [id$="graph_point_bottom"] { fill: var(--sw-vx); }

@@ -64,7 +64,13 @@
      ist zu „Im Vergleich der beiden Koordinatensysteme — (a) …, (b) …"
      geworden (es gibt nur ein Bild), drei Tippfehler der Quelle sind
      korrigiert (QUELLEN_FEHLER 1.1 Nr. 4 und 8), dazu ein Regler-Hinweis
-     samt Satz zur eingezeichneten Tangente -> P21-A13. Nummern unveraendert. -->
+     samt Satz zur eingezeichneten Tangente -> P21-A13. Nummern unveraendert.
+     Abweichung 2026-09-26 (BACKLOG P16-9): zu Abb. 1.20 (v_y(t)/v_x(t) des
+     schraegen Wurfs) gibt es am Bildschirm eine interaktive Figur; die
+     statische Abbildung traegt jetzt .nur-druck. Unterschrift: mitlaufende
+     Zahlen, ein Satz zu den Komponentenpfeilen, ein Regler-Hinweis und der
+     fehlende Bindestrich in „Geschwindigkeits-Zeit-Diagramm" (QUELLEN_FEHLER
+     1.1 Nr. 9) -> P21-A14. Nummern unveraendert. -->
 
 
 <section>
@@ -785,7 +791,9 @@
 
         <p>Vergleichen wir den Geschwindigkeitsvektor des schrägen Wurfes mit der Geschwindigkeit des senkrechten Wurfes, so erkennen wir, dass die \(v_y(t)\)-Komponente des schrägen Wurfes und \(v(t)\) des senkrechten Wurfes sich sehr ähnlich sehen. Lediglich die Benennung des konstanten Summanden \(v_0\) bzw. \(v_{0,y}\) ist unterschiedlich. Daraus können wir schlussfolgern: bei einem schrägen Wurf erreicht das Objekt genau dann seinen höchsten Punkt (die größte Höhe über dem Erdboden), wenn die \(y\)-Komponente der Geschwindigkeit gleich Null ist. Wir können etwas weiteres erkennen: Die \(y\)-Komponente der Geschwindigkeit des schrägen Wurfes hängt von \(t\) ab, wird sich also mit der Zeit ändern. Dahingegen ist die \(x\)-Komponente der Geschwindigkeit für alle \(t\) aus dem physikalischen Definitionsbereich konstant. Die Bewegung in \(y\)-Richtung entspricht also einer beschleunigten Bewegung während die Bewegung in \(x\)-Richtung einer gleichförmigen Bewegung entspricht.</p>
 
-        <figure class="abbildung" id="fig-kinematik_geschwindigkeit_zeit_diagramm_schraeger_wurf">
+        <div class="aspekt-figur nur-bildschirm" id="aspekt-schraeger-wurf-geschw" data-aspekt="schraeger-wurf-geschw" data-motor="schraeger_wurf" data-kontext="geschw" data-h0="10" data-v0="10" data-alpha="70" data-title="Schr&auml;ger Wurf: die Geschwindigkeits-Zeit-Diagramme \(v_y(t)\) und \(v_x(t)\) (interaktiv)" data-figref="fig-kinematik_geschwindigkeit_zeit_diagramm_schraeger_wurf" data-caption="Beispiel f&uuml;r Geschwindigkeits-Zeit-Diagramme eines schr&auml;gen Wurfes mit \(\vert v_{0}\vert=\) <span class=&quot;ff-wert&quot; data-wert=&quot;v0&quot;>10,0 m/s</span>, Abwurfwinkel \(\alpha=\) <span class=&quot;ff-wert&quot; data-wert=&quot;alpha&quot;>70 °</span> und \(h_0=\) <span class=&quot;ff-wert&quot; data-wert=&quot;h0&quot;>10,0 m</span>. Statt nur einem Geschwindigkeits-Zeit-Diagramm, wie wir es z.&nbsp;B. beim senkrechten Wurf hatten, gibt es bei einer zweidimensionalen Bewegung wie dem schr&auml;gen Wurf zwei Diagramme, eines f&uuml;r die \(x\)-, eines f&uuml;r die \(y\)-Komponente. Analog zum senkrechten Wurf kann man aus dem Schnittpunkt der \(v_y\)-\(t\)-Kurve mit der \(t\)-Achse die Zeit \(t_\mathrm{max}\) ablesen, die das Objekt ben&ouml;tigt, um seine maximale H&ouml;he zu erreichen. Die beiden Pfeile an der Kugel sind die Komponenten der Geschwindigkeit, jeweils in der Farbe ihrer Kurve: \(v_x\) bleibt w&auml;hrend des ganzen Flugs gleich lang, \(v_y\) wird bis zum Scheitel k&uuml;rzer und zeigt danach nach unten. Interaktiv: der Zeit-Regler \(t\) oder die Wiedergabe l&auml;sst das Objekt fliegen, beide Kurven entstehen dabei gleichzeitig; die Zerlegung l&auml;sst sich im Bedienfeld ausschalten, dann zeigt der Pfeil \(\vec v\) selbst. Die Regler \(h_0\), \(v_0\) und \(\alpha\) &auml;ndern den Wurf."></div>
+
+        <figure class="abbildung nur-druck" id="fig-kinematik_geschwindigkeit_zeit_diagramm_schraeger_wurf">
             <img class="grafik" style="width:95%" src="bilder/kinematik_geschwindigkeit_zeit_diagramm_schraeger_wurf.png" alt="">
             <figcaption>Beispiel für Geschwindigkeits-Zeit-Diagramme eines schrägen Wurfes mit \(\vert v_{0}\vert=10{,}0\,\mathrm{m/s}\), Abwurfwinkel \(\alpha=70^\circ\) und \(h_0=10{,}0\,\mathrm{m}\). Statt nur einem Geschwindigkeits-Zeit Diagramm, wie wir es z.&nbsp;B. beim senkrechten Wurf hatten, gibt es bei einer zweidimensionalen Bewegung wie dem schrägen Wurf zwei Diagramme, eines für die \(x\)-, eines für die \(y\)-Komponente. Analog zum senkrechten Wurf kann man aus dem Schnittpunkt der \(v_y\)-\(t\)-Kurve mit der \(t\)-Achse die Zeit \(t_\mathrm{max}\) ablesen, die das Objekt benötigt, um seine maximale Höhe zu erreichen.</figcaption>
         </figure>
