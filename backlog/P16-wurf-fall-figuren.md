@@ -446,6 +446,14 @@ allein der Kontrast die Pruefung).
   3. Unterschrift: ergänzen, dass die Tangente in der Figur eingezeichnet ist
      und sich ausblenden lässt. Das ist ein Regler-Hinweis, also P21-A13
      nachtragen: nicht nachzuziehen.
+- [ ] **P16-8c Abb. 1.18: v-Pfeil bleibt im Bild, Tangente strichpunktiert** *(S)* —
+  **Nutzerbefund 2026-09-26** (Wortlaut: *„am ende der animation läuft der
+  geschwindigkeitsvektor aus der simultionsdarstellung raus, bitte durch
+  angepassten zoom verhindern, tangente auch leich transparent und durhc -.-.-
+  darstellen"*):
+  1. Der Zoom berücksichtigt die Spitze des Geschwindigkeitspfeils über die
+     ganze Flugzeit (rechts, unten und oben), nicht nur die Bahn.
+  2. Tangente strichpunktiert (`-.-.-`) und weiter leicht transparent.
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
