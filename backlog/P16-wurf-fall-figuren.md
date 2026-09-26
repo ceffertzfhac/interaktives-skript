@@ -460,7 +460,13 @@ allein der Kontrast die Pruefung).
   1. Der Zoom berücksichtigt die Spitze des Geschwindigkeitspfeils über die
      ganze Flugzeit (rechts, unten und oben), nicht nur die Bahn.
   2. Tangente strichpunktiert (`-.-.-`) und weiter leicht transparent.
-- [ ] **P16-8d Abb. 1.18: beide Vektoren quantitativ in der Live-Analyse** *(S)* —
+- [x] **P16-8d Abb. 1.18: beide Vektoren quantitativ in der Live-Analyse** *(S)* —
+  **erledigt 2026-09-26 (v1.55.4)**: Form per Rückfrage gewählt
+  (Spaltenvektoren). \(\vec s(t)\) und \(\vec v(t)\) als Spaltenvektor mit
+  Betrag, Klammern und Name in der Farbe des Pfeils, Werte im
+  Koordinatensystem des aktiven Ursprungs; Klammern als CSS-Ränder, weil
+  MathJax das Panel nur einmal setzt. Die Einzelzeilen des Motors sind in
+  den versteckten Stub gewandert. —
   **Nutzerbefund 2026-09-26** (Wortlaut: *„in der live analyse die beiden
   vektoren (ort und geschwindkeit live anzeigen [quantitativ])."*). Heute
   stehen dort die vier Komponenten als Einzelzeilen plus \(|\vec v|\); gewünscht
