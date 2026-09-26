@@ -497,6 +497,13 @@ allein der Kontrast die Pruefung).
   vᵧ(t)") nutzen das Unicode-Zeichen ᵧ (tiefgestelltes Gamma), das in der
   Schrift nicht tiefgestellt erscheint und wie „vy" aussieht — Erbstück der
   Stand-alone-Sim (dort identisch).
+- [ ] **P16-9a Diagrammtitel/Achsen mit echtem Index v_x, v_y** *(S)* —
+  **Nutzerbefund 2026-09-26** (Wortlaut: *„Diagrammtitel: es ist V index x und
+  index y ... das sollte sowohl hier als auch stand alone behoben werden"*).
+  Der `schraeger_wurf`-Motor schreibt „vₓ"/„vᵧ" als Unicode (ᵧ ist ein
+  tiefgestelltes **Gamma**, ein tiefgestelltes y gibt es in Unicode nicht).
+  In SVG-Titeln und -Achsen echte Tiefstellung per `<tspan>`; gleiche Korrektur
+  in der Stand-alone-Sim (dort BACKLOG FW9).
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
   Regression), CVD-Palette (P-AF-2 — neue Vektor-Tokens für v⃗/vₓ/vᵧ/a⃗ kapitel-
