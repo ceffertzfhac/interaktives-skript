@@ -68,6 +68,9 @@ Vorbilder prüfen): (1) nächste Aspekt-Figur *nach Interaktionsmuster, nicht Th
   Stand-alone-Simulation"), im Skript wird *schrittweise granular* erweitert.
   **Keine Konsolidierung** (kein Achs-Konfig-Toggle für 1.4–1.7, kein Koordinaten-
   system-Toggle für 1.18a/b) — jede der 11 Abbildungen = eine Figur.
+  *(Für 1.18 am 2026-09-26 präzisiert: 1.18 ist **eine** Abbildung, (a)/(b)
+  sind zwei Zustände derselben Animation → eine Figur, die beide Zustände
+  zeigen kann, s. P16-8.)*
 - **Motor-Wahl: beide Motoren** portieren (Empfehlung gefolgt) — Motor A
   `freier_fall` für 1.3/1.4–1.7/1.19, Motor B `schraeger_wurf` für 1.9/1.14/
   1.18a/b/1.20.
@@ -91,15 +94,15 @@ gemeinsam:
 | 1.14 | `bahnkurve_schraeger_wurf` | P16-7 | B | nein |
 | 1.15 | `…unterschied_durchschnitt_momentan` | **P17-1** | `ableitung` | nein |
 | 1.16–1.17 | `…tachometer`, `…vorwaerts_rueckwaerts` | — | — | bleiben statisch |
-| 1.18 | `…tangentiale_geschwindigkeit_schraeger_wurf` | P16-8 | B | nein |
+| 1.18 | `…tangentiale_geschwindigkeit_schraeger_wurf` | P16-8 (eine Figur, a/b umschaltbar) | B | ja |
 | 1.19 | `…zeit_diagramm_senkr_wurf` | P16-5 | A | nein |
 | 1.20 | `…zeit_diagramm_schraeger_wurf` | P16-9 | B | nein |
 
 **Stand 2026-09-14:** erledigt sind Abb. 1.3–1.7 (P16-1/-3/-4), 1.8 (P17-3),
 1.9 (P16-2/-6) und 1.10 (P17-2). Der Faden laeuft in der Abbildungsreihenfolge
 weiter. 1.14 steht seit dem 14.09.2026; **als Naechstes Abb. 1.15** (P17-1,
-braucht den `ableitung`-Motor), dann 1.18a/b (P16-8, davor die offene
-Nummern-Frage), 1.19 und 1.20 (P16-5/-9, beide billig: derselbe Motor).
+braucht den `ableitung`-Motor), dann 1.18 (P16-8, Nummern-Frage am
+2026-09-26 geklärt: eine Figur), 1.19 und 1.20 (P16-5/-9, beide billig: derselbe Motor).
 *(Frueherer Stand 2026-08-28: nach 1.3–1.7 war 1.8 der naechste Schritt.)*
 P16-5 (Abb. 1.19, v-t) ist dagegen billig geworden: derselbe Motor, dieselbe
 Fabrik — dort waere nur der Diagrammtyp 'geschw' statt 'weg' zu setzen und der
@@ -134,7 +137,7 @@ allein der Kontrast die Pruefung).
 - **Abb. 1.18 ist EINE `<figure>` mit ZWEI `<img>`** (`…_schraeger_wurf.png` +
   `…_2.png` nebeneinander), also *eine* Abbildungsnummer. P16-8 plant dort „2
   separate Figuren (1:1)" — beide haetten per `data-figref` dieselbe Nummer
-  „Abb. 1.18". Vor P16-8 zu klaeren: zwei Figuren mit geteilter Nummer, eine
+  „Abb. 1.18". **Geklärt 2026-09-26: eine Figur, s. P16-8.** Die Optionen waren: zwei Figuren mit geteilter Nummer, eine
   Figur mit Koordinatensystem-Umschalter (widerspricht dem 1:1-Beschluss), oder
   a/b-Suffix in der Beschriftung.
 - **P17-3 ist billiger geworden:** der `federpendel`-Motor ist seit P12-E6
@@ -358,8 +361,15 @@ allein der Kontrast die Pruefung).
   bei zeitlosen Darstellungen ist das Ende die richtige Stelle.)*
   Geprüft: `figur_smoke` beide Varianten, `dom_harness` unverändert,
   `breiten_check` deckungsgleich mit 1.9 (41/76, 34/63, 34/64).
-- [ ] **P16-8 Aspekt-Figuren Abb. 1.18a/b** — Tangentialgeschwindigkeit + v⃗/
-  Ortsvektor, 2 Koordinatensysteme (Motor B); **2 separate Figuren** (1:1). *(M)*
+- [ ] **P16-8 Aspekt-Figur Abb. 1.18** — Tangentialgeschwindigkeit + v⃗/
+  Ortsvektor, 2 Koordinatensysteme (Motor B). *(M)*
+  **Entschieden 2026-09-26 (Nutzer):** *„es braucht nur eine animation dazu.
+  die statische abbildung zeigt zwei abbildungen der selben animation."* —
+  also **eine** interaktive Figur mit **einer** Nummer (Abb. 1.18); (a) und (b)
+  sind zwei Zustände derselben Animation (Ursprung am Boden / im Abwurfpunkt),
+  umschaltbar in der Figur. Die statische Doppelabbildung bleibt als
+  `.nur-druck` unverändert stehen. Löst den früheren Plan „2 separate Figuren"
+  und die offene Nummern-Frage oben ab.
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
