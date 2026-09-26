@@ -493,11 +493,12 @@ allein der Kontrast die Pruefung).
   Checkbox (Vorgabe an) in Komponenten zerlegt, Pfeile und Kurven in
   `--kb-vx`/`--kb-vy` wie 1.42; Zoom wie 1.18 ohne Zuschnitt oben.
   Doku: P21-A14, QUELLEN_FEHLER 1.1 Nr. 9.
-  **Beobachtet, nicht behoben:** die Diagrammtitel des Motors („Geschw.
-  vᵧ(t)") nutzen das Unicode-Zeichen ᵧ (tiefgestelltes Gamma), das in der
-  Schrift nicht tiefgestellt erscheint und wie „vy" aussieht — Erbstück der
-  Stand-alone-Sim (dort identisch).
-- [ ] **P16-9a Diagrammtitel/Achsen mit echtem Index v_x, v_y** *(S)* —
+  *(Beobachtung zu den Diagrammtiteln → behoben in P16-9a.)*
+- [x] **P16-9a Diagrammtitel/Achsen mit echtem Index v_x, v_y** *(S)* — **erledigt
+  2026-09-26 (v1.56.1; Sim v1.8.1, FW9)**: `createStyledSvgText` im Motor kennt
+  `<sub>` (kursiv, 75 %, `baseline-shift=sub`), Titel werden wie die Achsen
+  aus dem HTML-Label gesetzt, Labels schreiben `<sub>x</sub>`/`<sub>y</sub>`
+  statt ₓ/ᵧ. Gegengeprüft 1.9, 1.14, 1.20. —
   **Nutzerbefund 2026-09-26** (Wortlaut: *„Diagrammtitel: es ist V index x und
   index y ... das sollte sowohl hier als auch stand alone behoben werden"*).
   Der `schraeger_wurf`-Motor schreibt „vₓ"/„vᵧ" als Unicode (ᵧ ist ein
