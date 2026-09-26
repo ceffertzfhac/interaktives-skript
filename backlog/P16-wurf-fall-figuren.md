@@ -477,7 +477,8 @@ allein der Kontrast die Pruefung).
   Im Repo `Projects_InteraktiveSimulation`, **Branch
   `feat/schraeger-wurf-ortsvektor`** (`34b583a` + `267e639`, dort BACKLOG FW8,
   Sim v1.7.0), am 2026-09-26 **nach `main` gemergt** (`669803d`, Branch
-  gelöscht), **nicht gepusht**. Davor der dort offene Kopfzeilen-Umbau in
+  gelöscht), am selben Tag **gepusht** und über GitHub Pages veröffentlicht
+  (Deploy grün, Live-Seite zeigt v1.7.0). Davor der dort offene Kopfzeilen-Umbau in
   20 kleinen Commits festgehalten (global, Doku, Vorlage, je Sim einer). Übertragen: Ortsvektor mit
   Ursprung, Tangente (Vorgabe aus), Live-Spaltenvektoren. Nicht übertragen
   (Nutzerauswahl): Vorschau der ganzen Bahn, Zoom für den v-Pfeil.
