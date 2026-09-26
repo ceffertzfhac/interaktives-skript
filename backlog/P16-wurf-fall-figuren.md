@@ -100,8 +100,8 @@ gemeinsam:
 
 **Stand 2026-09-26:** erledigt sind Abb. 1.3–1.7 (P16-1/-3/-4), 1.8 (P17-3),
 1.9 (P16-2/-6), 1.10 (P17-2), 1.14 (P16-7 + P16-7a) und 1.15 (P17-1, v1.53.0).
-**1.19 steht seit dem 26.09.2026 (P16-5). Als Naechstes 1.20** (P16-9), dann 1.18 (P16-8, Nummern-Frage
-am 2026-09-26 geklärt: eine Figur). *(Stand 2026-09-14 war: als Naechstes 1.15,
+**1.18 und 1.19 stehen seit dem 26.09.2026 (P16-8, P16-5). Als Naechstes 1.20** (P16-9),
+dann die Verifikation P16-10. *(Stand 2026-09-14 war: als Naechstes 1.15,
 dann 1.18, 1.19 und 1.20.)* 1.19 und 1.20 sind billig: derselbe Motor.
 *(Frueherer Stand 2026-08-28: nach 1.3–1.7 war 1.8 der naechste Schritt.)*
 P16-5 (Abb. 1.19, v-t) ist dagegen billig geworden: derselbe Motor, dieselbe
@@ -391,7 +391,7 @@ allein der Kontrast die Pruefung).
   bei zeitlosen Darstellungen ist das Ende die richtige Stelle.)*
   Geprüft: `figur_smoke` beide Varianten, `dom_harness` unverändert,
   `breiten_check` deckungsgleich mit 1.9 (41/76, 34/63, 34/64).
-- [ ] **P16-8 Aspekt-Figur Abb. 1.18** — Tangentialgeschwindigkeit + v⃗/
+- [x] **P16-8 Aspekt-Figur Abb. 1.18** — Tangentialgeschwindigkeit + v⃗/
   Ortsvektor, 2 Koordinatensysteme (Motor B). *(M)*
   **Entschieden 2026-09-26 (Nutzer):** *„es braucht nur eine animation dazu.
   die statische abbildung zeigt zwei abbildungen der selben animation."* —
@@ -400,6 +400,21 @@ allein der Kontrast die Pruefung).
   umschaltbar in der Figur. Die statische Doppelabbildung bleibt als
   `.nur-druck` unverändert stehen. Löst den früheren Plan „2 separate Figuren"
   und die offene Nummern-Frage oben ab.
+  **Erledigt 2026-09-26 (`54b374a`, v1.55.0):** dritte Variante der
+  schraeger_wurf-Fabrik (`data-kontext="vektor"`), nur Szene; Ortsvektor als
+  figur-eigene Linie (blau, `--kb-omega`, Kapitelstrichstärke über
+  `[id$="position_vector"]`, Spitze im Kugelmittelpunkt), Geschwindigkeit
+  orange (`--kb-vlat`); Umschalter (a)/(b) lässt die Zeit laufen; Szene oben
+  auf den Wurf zugeschnitten. Doku: P21-A13, QUELLEN_FEHLER 1.1 Nr. 4/8.
+  **Offen gelassen / beobachtet:**
+  - Das statische Doppelbild der Quelle ist **nicht** gesichtet (Bildanalyse
+    nur mit „JA"); Aufbau, Farben und (a)/(b) stammen aus Unter- und
+    Teilunterschriften. Startwerte h₀ = v₀ = 10, α = 45° sind gewählt, nicht
+    aus dem Bild abgelesen.
+  - Ortsvektor **blau** wie die Quelle sagt — in Kap. 1.4 ist der Ortsvektor
+    dagegen grau (`--kb-rlat`). Kapitelübergreifend zu entscheiden.
+  - `--kb-omega` bleibt im Darkmode der Normalpalette #1555A2 — auf dunklem
+    Grund knapp; gilt ebenso für ω in Kap. 1.4 (kapitelweite Einstellung).
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
