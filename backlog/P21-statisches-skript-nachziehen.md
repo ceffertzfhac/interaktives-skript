@@ -515,6 +515,29 @@ Voreinstellung angelegt.
 - **Nummern:** **keine.** Die statische Doppelabbildung bleibt an Ort und
   Stelle (`.nur-druck`), `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
 
+#### P21-A14 · Unterschrift von Abb. 1.20: Komponentenpfeile
+
+- **Status:** **entschieden: bewusst — nichts nachzuziehen** (bis auf den
+  Quellfehler, s. u.). Entstanden 2026-09-26 beim Bau der interaktiven Figur
+  zu Abb. 1.20 (P16-9, WIP `939d2f7`, v1.56.0).
+- **Zieldatei:** `Input/v0.13/pskript_mech_kinematik_gmni_v4.tex`, die
+  `figure` mit `\includegraphics[width=0.95\textwidth]{kinematik_geschwindigkeit_zeit_diagramm_schraeger_wurf.png}`
+  (ohne `\label`).
+- **Was anders ist:** die interaktive Unterschrift ist die gedruckte mit
+  mitlaufenden Zahlen (\(|v_0|\), \(\alpha\), \(h_0\)), einem Satz zu den
+  Komponentenpfeilen an der Kugel („\(v_x\) bleibt … gleich lang, \(v_y\) wird
+  bis zum Scheitel kürzer und zeigt danach nach unten") und einem
+  Regler-Hinweis. **Nicht nachziehen:** die gedruckte Abbildung zeigt nur die
+  beiden Diagramme, keine Szene mit Pfeilen.
+- **Quellfehler — druckseitig mitzukorrigieren:** `QUELLEN_FEHLER.md`
+  Abschnitt 1.1 Nr. 9. Einzusetzen statt „Geschwindigkeits-Zeit Diagramm":
+
+  ```latex
+  Geschwindigkeits-Zeit-Diagramm
+  ```
+- **Nummern:** **keine.** Statische Abbildung bleibt (`.nur-druck`),
+  `dom_harness.mjs` zeigt unverändert 88 Abbildungen.
+
 ---
 
 ### Medienbedingte Unterschiede (dokumentiert, nichts nachzuziehen)

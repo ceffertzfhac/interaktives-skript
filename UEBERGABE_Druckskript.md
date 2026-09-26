@@ -609,6 +609,7 @@ Skript schon behandelt; im `.tex` stehen sie noch.
 | 6 | Unterschrift Abb. 1.9 (`fig:schraeger_wurf`) | „Zu sehen ist **links** die Flugbahn …, und **links** die beiden Weg-Zeit-Diagramme" — zweimal „links" | „… und **rechts** die beiden Weg-Zeit-Diagramme" |
 | 1.1-7 | Unterschrift Abb. 1.19 (`fig:geschw_zeit_diagramm_senkr_wurf`) | `\left(\frac{v_0}{g}^2 \right)` — das Quadrat sitzt am Bruch innerhalb der Klammer; nur $(v_0/g)^2$ ergibt die angegebenen $\SI{2,77}{\s}$ (entdeckt 2026-09-26, P21-A12) | `\left(\frac{v_0}{g}\right)^2` |
 | 1.1-4, 1.1-8 | Unterschrift Abb. 1.18 (`fig:geschwindigkeit_tangential`) | „… Tangente an die Bahnkurve Im Vergleich … dass der Ortsvektor vom Wahl des Koordinatensystems abhänt“ — Satzpunkt fehlt, falscher Kasus, Buchstabe fehlt (P21-A13) | „… Tangente an die Bahnkurve. Im Vergleich … dass der Ortsvektor von der Wahl des Koordinatensystems abhängt“ |
+| 1.1-9 | Unterschrift Abb. 1.20 (`figure` mit `kinematik_geschwindigkeit_zeit_diagramm_schraeger_wurf.png`) | „Statt nur einem Geschwindigkeits-Zeit Diagramm“ — Bindestrich fehlt (P21-A14) | „Geschwindigkeits-Zeit-Diagramm“ |
 
 **Offen — zwei undefinierte Verweise in `pskript_sw_schwingungen.tex`**
 (Abschnitt 3.1, in `QUELLEN_FEHLER.md` als Nr. 7 und 8 erfasst). Sie stehen
