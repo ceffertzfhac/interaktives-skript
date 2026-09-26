@@ -338,3 +338,27 @@
 .aspekt-figur.aspekt-im-overlay[data-aspekt="schraeger-wurf-vektor"] .aspekt-svg { max-height: min(70vh, 680px); }
 .aspekt-figur[data-aspekt="schraeger-wurf-vektor"][data-ursprung-aktiv="ground"] .sw-nur-ursprung[data-ursprung="start"],
 .aspekt-figur[data-aspekt="schraeger-wurf-vektor"][data-ursprung-aktiv="start"] .sw-nur-ursprung[data-ursprung="ground"] { display: none; }
+
+/* Live-Vektoren (Abb. 1.18, P16-8d): Orts- und Geschwindigkeitsvektor als
+   Spaltenvektor mit laufenden Zahlen. Die runden Klammern sind Raender (die
+   Zahlen aendern sich pro Frame, MathJax setzt das Panel nur einmal). Farbe
+   von Klammern und Namen = Farbe des Pfeils in der Szene. */
+.aspekt-figur .sw-livevektor {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px;
+    margin: 8px 0 2px; font-size: calc(12px * var(--kb-text-scale));
+}
+.aspekt-figur .sw-livevektor[data-vec="ort"] { --sw-lv-farbe: var(--sw-ort); }
+.aspekt-figur .sw-livevektor[data-vec="vel"] { --sw-lv-farbe: var(--sw-vel); }
+.aspekt-figur .sw-lv-name { color: var(--sw-lv-farbe); }
+.aspekt-figur .sw-lv-spalte {
+    display: inline-flex; flex-direction: column; align-items: flex-end;
+    min-width: 4.2em; padding: 1px 7px;
+    border-left: 1.5px solid var(--sw-lv-farbe); border-right: 1.5px solid var(--sw-lv-farbe);
+    border-radius: 9px / 50%;
+    font-family: var(--kb-font-mono); font-variant-numeric: tabular-nums; line-height: 1.35;
+}
+.aspekt-figur .sw-lv-einheit { color: var(--kb-text2); }
+.aspekt-figur .sw-lv-betrag {
+    flex-basis: 100%; padding-left: 2px; color: var(--kb-text2);
+    font-family: var(--kb-font-mono); font-variant-numeric: tabular-nums;
+}

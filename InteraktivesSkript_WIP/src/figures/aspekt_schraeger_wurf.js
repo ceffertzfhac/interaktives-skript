@@ -99,7 +99,7 @@
 
 import { store, DOM } from './schraeger_wurf/state.js';
 import { recomputeDerived, precompute, interpolateAt, flightTime, maxHeight,
-         scaleX, scaleY } from './schraeger_wurf/physics.js';
+         scaleX, scaleY, getDisplayY, getDisplayV } from './schraeger_wurf/physics.js';
 import { updateScene, updateGraphs, updateKennwerte, updateZoomDisplay,
          drawRuler, drawHorizontalRuler, drawStickFigure,
          drawAnimationCoordSystem, drawStopwatchMarks, drawSubdialMarks,
@@ -376,13 +376,20 @@ const panelRight = (cfg) => `
       <div class="panel-label">Live-Analyse</div>
 ${cfg.vektor ? `      <div class="analysis-grid">
         <div class="analysis-cell key">Zeit \\(t\\)</div>                          <div class="analysis-cell val" id="sw_live_t"></div>
-        <div class="analysis-cell key">\\(s_x = x(t)\\)</div>                     <div class="analysis-cell val" id="sw_live_x"></div>
-        <div class="analysis-cell key">\\(s_y = y(t)\\)</div>                     <div class="analysis-cell val" id="sw_live_y"></div>
-        <div class="analysis-cell key">\\(v_x(t)\\)</div>                         <div class="analysis-cell val" id="sw_live_vx"></div>
-        <div class="analysis-cell key">\\(v_y(t)\\)</div>                         <div class="analysis-cell val" id="sw_live_vy"></div>
-        <div class="analysis-cell key">\\(\\vert \\vec v(t) \\vert\\)</div>      <div class="analysis-cell val" id="sw_live_vabs"></div>
       </div>
-      <div class="ff-formel-note">Beim Umschalten zwischen (a) und (b) ändert sich \\(s_y\\), die Geschwindigkeit nicht.</div>`
+      <div class="sw-livevektor" data-vec="ort">
+        <span class="sw-lv-name">\\(\\vec s(t) =\\)</span>
+        <span class="sw-lv-spalte"><span id="sw_lv_sx"></span><span id="sw_lv_sy"></span></span>
+        <span class="sw-lv-einheit">m</span>
+        <span class="sw-lv-betrag">\\(\\vert\\vec s\\vert =\\) <span id="sw_lv_sb"></span></span>
+      </div>
+      <div class="sw-livevektor" data-vec="vel">
+        <span class="sw-lv-name">\\(\\vec v(t) =\\)</span>
+        <span class="sw-lv-spalte"><span id="sw_lv_vx"></span><span id="sw_lv_vy"></span></span>
+        <span class="sw-lv-einheit">m/s</span>
+        <span class="sw-lv-betrag">\\(\\vert\\vec v\\vert =\\) <span id="sw_lv_vb"></span></span>
+      </div>
+      <div class="ff-formel-note">Beim Umschalten zwischen (a) und (b) ändert sich \\(\\vec s\\) (seine \\(y\\)-Komponente um \\(h_0\\)), \\(\\vec v\\) nicht.</div>`
  : `      <div class="analysis-grid">
         <div class="analysis-cell key">Zeit \\(t\\)</div>                          <div class="analysis-cell val" id="sw_live_t"></div>
         <div class="analysis-cell key">Höhe \\(y(t)\\)</div>                       <div class="analysis-cell val" id="sw_live_y"></div>
@@ -420,11 +427,13 @@ ${cfg.vektor ? `        <div class="formula-box-cap">Ortsvektor — hängt vom U
 // Nur die Flugbahn ist checked — sie ist der linke Teil der Abbildung. Der
 // Motor schreibt in alle diese Elemente unbedingt; fehlt eins, gibt es einen
 // Null-Zugriff (Runbook-Fallstrick #1).
-// Abb. 1.18 zeigt vx/vy/|v| im Panel und hat keine Kennwert-Zellen — die
-// jeweils fehlenden stehen hier (doppelte IDs waeren ein stiller Fehler).
+// Abb. 1.18 zeigt Orts- und Geschwindigkeitsvektor als eigene Spaltenvektoren
+// (P16-8d) und hat keine Kennwert-Zellen — die Motor-Zellen, die dort fehlen,
+// stehen hier (doppelte IDs waeren ein stiller Fehler).
 const hiddenStub = (cfg) => `
 <div style="display:none">
   ${cfg.vektor ? '<span id="sw_live_ymax"></span><span id="sw_live_xmax"></span><span id="sw_live_tfall"></span>'
+               + '<span id="sw_live_x"></span><span id="sw_live_y"></span><span id="sw_live_vx"></span><span id="sw_live_vy"></span><span id="sw_live_vabs"></span>'
                : '<span id="sw_live_vx"></span><span id="sw_live_vy"></span><span id="sw_live_vabs"></span>'}
   <span id="sw_live_ay"></span><span id="sw_live_vimpact"></span><span id="sw_live_aimpact"></span>
   <input type="checkbox" id="sw_toggle_trajectory" checked>
@@ -749,6 +758,20 @@ export function buildSchraegerWurfFig(fig) {
         tangLinie.setAttribute('x2', cx + ux); tangLinie.setAttribute('y2', cy + uy);
     }
 
+    // Live-Vektoren (P16-8d): beide Vektoren als Spaltenvektor mit Betrag, im
+    // Koordinatensystem des aktiven Ursprungs (getDisplayY — dieselbe
+    // Umrechnung, die der Motor fuer seine Anzeigen nimmt). Plain Text, nicht
+    // LaTeX: MathJax setzt das Panel nur einmal. Echtes Minuszeichen.
+    const lv = id => q('lv_' + id);
+    const zahl = v => fmt(v).replace('-', '\u2212');
+    function liveVektoren(x, y, vx, vy) {
+        const sy = getDisplayY(y), vyA = getDisplayV(vy);
+        lv('sx').textContent = zahl(x);  lv('sy').textContent = zahl(sy);
+        lv('sb').textContent = `${zahl(Math.hypot(x, sy))} m`;
+        lv('vx').textContent = zahl(vx); lv('vy').textContent = zahl(vyA);
+        lv('vb').textContent = `${zahl(Math.hypot(vx, vyA))} m/s`;
+    }
+
     function ortsvektor(x, y) {
         const x1 = scaleX(0), y1 = scaleY(store.yAxisConfig.origin === 'start' ? store.h0 : 0);
         const dx = scaleX(x) - x1, dy = scaleY(y) - y1;
@@ -840,7 +863,11 @@ export function buildSchraegerWurfFig(fig) {
             const s = interpolateAt(t);
             if (!s) return;
             updateScene(s.t, s.x, s.y, s.vx, s.vy);
-            if (cfg.vektor) { ortsvektor(s.x, s.y); tangente(s.x, s.y, s.vx, s.vy); return; }   // kein Diagramm
+            if (cfg.vektor) {                                     // kein Diagramm
+                ortsvektor(s.x, s.y); tangente(s.x, s.y, s.vx, s.vy);
+                liveVektoren(s.x, s.y, s.vx, s.vy);
+                return;
+            }
             // Der Massstab haengt nicht von t ab: er wird in rebuild() gesetzt
             // (und bei Breitenaenderung), nicht je Frame. Frueher stand hier
             // bahnAchseSetzen(), das zwei getBoundingClientRect() pro Frame kostete.
