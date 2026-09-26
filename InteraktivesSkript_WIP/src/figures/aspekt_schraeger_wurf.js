@@ -38,8 +38,9 @@
 //     und stand dem Bahnscheitel im Weg.
 //   * Nachbesserung P16-8a (Nutzerbefund 2026-09-26): die GANZE Bahn steht von
 //     Anfang an als Vorschau da (gestrichelt, halbtransparent, duenner als die
-//     mitwachsende Spur), dazu eine TANGENTE durch die Kugel (Checkbox, Vorgabe
-//     an) — die Gerade, auf der der Geschwindigkeitsvektor liegt. Die Vektoren
+//     mitwachsende Spur), dazu ein Stueck der TANGENTE durch die Kugel
+//     (Checkbox, Vorgabe an) — die Linie, auf der der Geschwindigkeitsvektor
+//     liegt; dezent gehalten (P16-8b), sie ist Hilfslinie. Die Vektoren
 //     sind etwas duenner als in den Kreisbewegungs-Figuren (figur-eigenes
 //     --kb-vec-hw, s. aspekt_schraeger_wurf.css), sie waren zu praesent.
 //
@@ -730,12 +731,14 @@ export function buildSchraegerWurfFig(fig) {
     // ueber den Ursprung hinausragt, waere falsch. Inside withStore aufrufen.
     const ortLinie = q('position_vector');
     const PFEIL_LAENGE = 4.95;                 // markerWidth von sw_arrow-ort
-    // Tangente: Gerade durch die Kugel in Richtung der Geschwindigkeit, nach
-    // beiden Seiten gleich lang (TANG_HALB Szeneneinheiten). Richtung aus
+    // Tangente: ein Stueck der Tangente (eine LINIE, keine unendliche Gerade —
+    // so heisst sie auch in der Unterschrift) durch die Kugel in Richtung der
+    // Geschwindigkeit, nach beiden Seiten gleich lang (TANG_HALB
+    // Szeneneinheiten; 91 = 70 + 30 %, Nutzerbefund P16-8b). Richtung aus
     // (vx, vy) — dieselbe Groesse, die den Geschwindigkeitspfeil bestimmt,
     // also liegt der Pfeil garantiert auf ihr. y waechst im SVG nach unten.
     const tangLinie = q('tangente'), tangAn = q('tangente_an');
-    const TANG_HALB = 70;
+    const TANG_HALB = 91;
     function tangente(x, y, vx, vy) {
         const b = Math.hypot(vx, vy);
         if (!tangAn.checked || b < 1e-6) { tangLinie.setAttribute('visibility', 'hidden'); return; }
