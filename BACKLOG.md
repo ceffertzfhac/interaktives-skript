@@ -29,7 +29,7 @@ die Links hier zeigen auf den Pfad.
 | [P26 — Sync-Schuld Quelle → WIP nachziehen](backlog/P26-quelle-nach-wip-nachziehen.md) | 3/0 | **Gegenrichtung zu P21:** Änderungen, die im Druckskript entstanden sind und die das WIP nachziehen muss; Runde 2 ist nachgezogen (Anker `1c64edd`), der Weg für die nächste Runde steht in `QUELLE_v013.md` |
 | [P27 — Interaktive Figuren rasten beim Scrollen ein](backlog/P27-scroll-snap-figuren.md) | 2/1 | Scroll-Snap `proximity` an der Oberkante unter der Kopfleiste — anbieten, nicht festhalten |
 | [P13 — Text- & Formel-Marker für Studierende](backlog/P13-marker-und-notizbuch.md) | 0/16 | 4 Farben, persistent; plus begleitendes Notizbuch (P13-N) |
-| [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 11/2 | beide Motoren + Abb. 1.3–1.7, 1.9, 1.14, 1.18 und 1.19 stehen; offen: Abb. 1.20 + Verifikation |
+| [P16 — Wurf-/Fall-Figuren interaktiv (Kap. 1.1)](backlog/P16-wurf-fall-figuren.md) | 11/3 | beide Motoren + Abb. 1.3–1.7, 1.9, 1.14, 1.18 und 1.19 stehen; offen: Tangente 1.18 (P16-8b), Abb. 1.20 + Verifikation |
 | [P17 — Weitere interaktive Figuren aus Kap. 1.1](backlog/P17-weitere-figuren-kap-1.1.md) | 4/0 | **durch**: Abb. 1.8, 1.10 und 1.15 stehen (1.15 auf dem neuen `ableitung`-Motor), Breite und Beschriftung in 1.8 korrigiert |
 | [P15 — Weiße Hintergründe aus Nicht-Foto-Abbildungen entfernen](backlog/P15-weisse-hintergruende.md) | 0/7 | Darkmode-Verträglichkeit der statischen Bilder |
 | [P-Aspekt-Bus — Abb. 1.2 Strichmännchen als Mitfahrer](backlog/PA-aspekt-bus-strichmaennchen.md) | 0/3 | Ausbau der Busfahrt-Figur (Kap. 1.1) |

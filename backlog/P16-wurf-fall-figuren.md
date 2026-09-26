@@ -433,6 +433,16 @@ allein der Kontrast die Pruefung).
   denselben Zeitreihen wie die Spur (1,4 px, Strich 5/4, Deckkraft 0,45),
   Tangente als neutrale dünne Gerade (`--kb-text2`) durch die Kugel in
   v-Richtung, Checkbox „Tangente an die Bahn einblenden" im Bedienfeld.
+- [ ] **P16-8b Tangente in Abb. 1.18: länger, dezenter, in der Unterschrift** *(S)* —
+  **Nutzerbefund 2026-09-26** (Wortlaut: *„tangente ca 30% länger in beide
+  richtungen, aber in der darstellung dezenter. die tangente muss in der caption
+  erwähnt werden (wird sie schon - nur dass die auch dargestellt ist und
+  ausgeschaltet werden kann)"*):
+  1. Tangente je Seite rund 30 % länger (70 → 91 Szeneneinheiten).
+  2. Darstellung dezenter (dünner und/oder blasser).
+  3. Unterschrift: ergänzen, dass die Tangente in der Figur eingezeichnet ist
+     und sich ausblenden lässt. Das ist ein Regler-Hinweis, also P21-A13
+     nachtragen: nicht nachzuziehen.
 - [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
