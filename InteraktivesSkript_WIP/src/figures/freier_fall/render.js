@@ -11,7 +11,14 @@
 //     statt dokumentweit — sonst schalten mehrere Figuren auf einer Seite
 //     einander die Formeln um.
 //  4. store.posChar (P16-4): Name der Ortsachse, s. state.js. Ohne den Wert
-//     bleibt es beim Verhalten der Quelle.
+//     bleibt es beim Verhalten der Quelle. Seit P16-5 gilt er auch fuer die
+//     Achsen-Miniatur der Szene, wenn das Diagramm v(t) zeigt (die Quelle
+//     schreibt dort fest 'y'; Abb. 1.19 nennt die Ortsachse x).
+//  5. Beschriftung "t / s" im v-t-Diagramm (P16-5): unter dem Feld statt
+//     unter der Nulllinie. Die Quelle setzt sie immer 32 px unter die
+//     Nulllinie — bei v(t) liegt die mitten im Feld, und die Beschriftung
+//     stand zwischen Gitter und Kurve. Nur fuer 'geschw'; die Weg-Diagramme
+//     (Abb. 1.3-1.7) bleiben pixelgleich.
 //  3. Die Pfeilspitzen-Marker werden ueber url(id) = url(#<idPrefix><id>)
 //     referenziert statt ueber die festen Dokument-IDs #arrowhead / #arrow-y
 //     der Stand-alone-Sim. Dort gibt es genau EIN Marker-Paar im Dokument; im
@@ -102,7 +109,7 @@ export function drawYAxisDisplay() {
 
   const tipY  = direction === 'up' ? yEnd - 17 : yEnd + 17
   const angle = direction === 'up' ? -90 : 90
-  const axCh  = graphType === 'weg' ? posChar() : 'y'
+  const axCh  = store.posChar || (graphType === 'weg' ? posChar() : 'y')
   const tl = el('text', {
     x: ax + 20, y: tipY,
     transform: `rotate(${angle} ${ax + 20} ${tipY})`,
@@ -214,7 +221,7 @@ function drawGraphSlot({ slot, gridEl, lineEl, pointEl, titleEl, type, graphHeig
   gridEl.appendChild(el('line', { x1: x0, y1: graphHeight - 5, x2: x0, y2: 5, class: 'axis-line', 'stroke-width': 2, 'marker-end': url('arrowhead') }))
 
   // Achsenbeschriftung
-  const tlX = el('text', { x: GRAPH_W / 2, y: y0 + 32, 'text-anchor': 'middle', class: 'axis-label' })
+  const tlX = el('text', { x: GRAPH_W / 2, y: (type === 'geschw' ? Math.max(y0, scY(axMin)) : y0) + 32, 'text-anchor': 'middle', class: 'axis-label' })
   setAxisLabel(tlX, 't / s')
   gridEl.appendChild(tlX)
   const tlY = el('text', { x: x0 - 40, y: graphHeight / 2, transform: `rotate(-90 ${x0 - 40} ${graphHeight / 2})`, 'text-anchor': 'middle', class: 'axis-label' })

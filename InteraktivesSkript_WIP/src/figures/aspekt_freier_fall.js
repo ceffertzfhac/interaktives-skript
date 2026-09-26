@@ -7,6 +7,8 @@
 //   Abb. 1.5  senkrechter Wurf,  y↑, Null Abwurfpunkt
 //   Abb. 1.6  senkrechter Wurf,  y↓, Null Erdboden
 //   Abb. 1.7  senkrechter Wurf,  y↓, Null Abwurfpunkt
+//   Abb. 1.19 senkrechter Wurf,  y↑, Null Erdboden, GESCHWINDIGKEITS-Zeit-
+//             Diagramm v(t) + v-Pfeil (h0 = 10 m, v0 = 10 m/s; P16-5)
 //
 // Links die Fallszene (Haus, Strichmaennchen, Kugel, Hoehenskala, Stoppuhr und
 // die kleine Achsen-Miniatur), rechts das Weg-Zeit-Diagramm y(t): waehrend die
@@ -28,6 +30,8 @@
 //                     (s. u. „Vorzeichen von v0"), fuer 1.6/1.7 also -10 fuer
 //                     denselben Wurf nach oben, den 1.4/1.5 mit +10 zeigen.
 //   data-h0="<m>"     Startwert der Fallhoehe (Vorgabe 10)
+//   data-diagramm="weg|geschw"   Diagrammtyp (Vorgabe weg); geschw = Abb. 1.19
+//   data-v0min="<m/s>"  untere Grenze des v0-Reglers (Vorgabe -10), s. u.
 //
 // und eine weitere Variante desselben Motors kostet EINE Zeile HTML. Die
 // 1:1-Granularitaet des Skripts bleibt davon unberuehrt: jede Abbildung hat
@@ -37,9 +41,9 @@
 //
 // ASPEKT-GATING (granulare Reduktion; der Motor kann deutlich mehr):
 //   * Achsenkonfiguration je Figur FEST — sie IST der Aspekt von 1.4-1.7.
-//   * Nur EIN Diagramm, Typ 'weg' (isStacked=false, graphType1='weg'). v-t ist
-//     der Aspekt von Abb. 1.19, a-t kommt in 1.1 gar nicht vor.
-//   * v- und a-Vektor AUS. Dieser Motor kennt keine show*-Flags — updateScene()
+//   * Nur EIN Diagramm (isStacked=false), Typ 'weg' — bzw. 'geschw' in
+//     Abb. 1.19, deren Aspekt v-t ist. a-t kommt in 1.1 gar nicht vor.
+//   * v- und a-Vektor AUS (1.3-1.7; in 1.19 ist der v-Pfeil AN, s. u.). Dieser Motor kennt keine show*-Flags — updateScene()
 //     liest die Sichtbarkeit direkt von den Checkboxen (DOM.togVel/.togAcc),
 //     gegatet wird also ueber versteckte Checkboxen ohne checked (Muster wie
 //     aspekt_federpendel.js). An dieser Skriptstelle sind Geschwindigkeit und
@@ -51,6 +55,17 @@
 //   * Achsenname 'y' in allen fuenf Figuren (store.posChar) — v0.13 benennt die
 //     Achse auch dann y, wenn ihr Nullpunkt im Abwurfpunkt liegt; die
 //     Stand-alone-Sim schriebe dort 's'. S. PORT-AENDERUNG 4 in render.js.
+//
+// ABB. 1.19 (Variante 'geschw', P16-5): dieselbe Szene, im Diagramm v(t) statt
+// y(t). Der v-Pfeil an der Kugel ist hier AN — die Beispielbox fuehrt die
+// Geschwindigkeit gerade ein, und der Pfeil zeigt, was die Gerade im Diagramm
+// bedeutet: er schrumpft zum Scheitel hin auf null und kehrt dann die Richtung
+// um, genau dort, wo v(t) die t-Achse schneidet. Farbe = --kb-vel (orange, wie
+// der Geschwindigkeitsvektor in Abb. 1.18 der Quelle), damit v in Kapitel 1.1
+// und 1.4 dieselbe Farbe hat und die CVD-Paletten mitlaufen.
+// Der v0-Regler beginnt hier bei 0 (data-v0min="0"): die Bildunterschrift
+// spricht von der Zeit t_max = v0/g, zu der die Geschwindigkeit null wird —
+// bei v0 < 0 gibt es diesen Zeitpunkt nicht, der Satz waere falsch.
 //
 // VORZEICHEN VON v0 (Abweichung von der Stand-alone-Sim, bewusst):
 // Der Motor rechnet intern IMMER physikalisch (y nach oben, v0 > 0 = nach
@@ -176,22 +191,43 @@ const BEWEGUNGSGLEICHUNG = {
 // Formel des Fliesstextes an dieser Stelle.
 const BEWEGUNGSGLEICHUNG_FALL = 'y(t) = -\\tfrac{1}{2}\\,g\\,t^2 + h_0';
 
+// Abb. 1.19: Geschwindigkeit statt Ort. Sie haengt nur von der RICHTUNG der
+// Achse ab, nicht vom Nullpunkt (h0 faellt beim Ableiten weg) — und v0 zaehlt
+// wie oben in der Achse der Figur.
+const GESCHW_GLEICHUNG = {
+    up:   'v(t) = \\dot y(t) = -g\\,t + v_0',
+    down: 'v(t) = \\dot y(t) = +g\\,t + v_0',
+    // (y wird je Figur durch den Achsnamen ersetzt, s. achsname())
+};
+
 // Quell-Gleichung des Fliesstextes je Figurentyp (fuer den Querverweis in der
 // Fussnote der Formelkarte).
-const QUELLFORMEL = { fall: 'formel_freierfall4', wurf: 'formel_senkrechterwurf1' };
+const QUELLFORMEL = { fall: 'formel_freierfall4', wurf: 'formel_senkrechterwurf1',
+                      geschw: 'kin_senkr_wurf_geschw' };
+
+// Gleichung auf den Achsnamen der Figur umschreiben (y(t) -> x(t), \dot y -> \dot x).
+const achsname = (tex, ort) => tex.replace(/\by\(t\)/g, `${ort}(t)`).replace(/\\dot y/g, `\\dot ${ort}`);
 
 // Konfiguration einer Figur aus ihrem Platzhalter lesen (s. Kopfkommentar).
 function leseKonfig(fig) {
     const achse = ACHSEN_TEXT[fig.dataset.achse] ? fig.dataset.achse : 'up_ground';
     const [direction, origin] = achse.split('_');
     const hatV0 = fig.dataset.v0 !== undefined && fig.dataset.v0 !== '';
+    const v0min = parseFloat(fig.dataset.v0min);
+    // Name der Ortsachse. v0.13 nennt sie in 1.3-1.7 y, in der Beispielbox zu
+    // Abb. 1.19 aber x (x(t) = -½gt² + v0 t + h0) — die Figur spricht wie der
+    // Text daneben.
+    const ort = /^[a-z]$/.test(fig.dataset.ort || '') ? fig.dataset.ort : 'y';
     return {
         achse, direction, origin,
-        achseText: ACHSEN_TEXT[achse],
+        achseText: ACHSEN_TEXT[achse].replace('\\(y\\)', `\\(${ort}\\)`),
         h0: parseFloat(fig.dataset.h0 || H0_DEFAULT),
         v0: hatV0 ? parseFloat(fig.dataset.v0) : 0,
         v0Regler: hatV0,          // Wurf-Figuren: v0 einstellbar; freier Fall: fest 0
         wurf: hatV0,              // steuert Beschriftungen (Ort statt Hoehe, Flugzeit)
+        v0Min: Number.isFinite(v0min) ? v0min : V0_MIN,
+        geschw: fig.dataset.diagramm === 'geschw',   // Abb. 1.19: v(t), v-Pfeil an
+        ort,
     };
 }
 
@@ -317,10 +353,10 @@ const panelLeft = (cfg) => `
     </div>
 ${cfg.v0Regler ? `    <div class="slider-label">Anfangsgeschw. \\(v_0\\)</div>
     <div class="slider-row">
-      <input id="ff_v0_slider" type="range" min="${V0_MIN}" max="${V0_MAX}" step="${V0_STEP}" value="${cfg.v0}">
+      <input id="ff_v0_slider" type="range" min="${cfg.v0Min}" max="${V0_MAX}" step="${V0_STEP}" value="${cfg.v0}">
       <span class="slider-val" id="ff_v0_value"></span>
     </div>
-    <div class="ff-hinweis">In diesem Koordinatensystem: \\(v_0>0\\) heißt <em>${cfg.direction === 'down' ? 'nach unten' : 'nach oben'}</em>, \\(v_0&lt;0\\) heißt <em>${cfg.direction === 'down' ? 'nach oben' : 'nach unten'}</em>, \\(v_0=0\\) ist der freie Fall.</div>` : ''}
+    <div class="ff-hinweis">In diesem Koordinatensystem: \\(v_0>0\\) heißt <em>${cfg.direction === 'down' ? 'nach unten' : 'nach oben'}</em>${cfg.v0Min < 0 ? `, \\(v_0&lt;0\\) heißt <em>${cfg.direction === 'down' ? 'nach oben' : 'nach unten'}</em>` : ''}, \\(v_0=0\\) ist der freie Fall.</div>` : ''}
   </div>
   <div class="panel-section">
     <div class="panel-label">Ablauf</div>
@@ -346,7 +382,10 @@ ${cfg.v0Regler ? `    <div class="slider-label">Anfangsgeschw. \\(v_0\\)</div>
   <div class="panel-section">
     <div class="panel-label">Legende</div>
     <div class="legend-grid">
-      <div class="legend-swatch" data-c="ff-fall"></div><div class="legend-label">Kugel und Kurve \\(y(t)\\)</div>
+${cfg.geschw
+    ? `      <div class="legend-swatch" data-c="ff-fall"></div><div class="legend-label">Kugel und Kurve \\(v(t)\\)</div>
+      <div class="legend-swatch" data-c="ff-vel"></div><div class="legend-label">Geschwindigkeit \\(\\vec v\\)</div>`
+    : `      <div class="legend-swatch" data-c="ff-fall"></div><div class="legend-label">Kugel und Kurve \\(${cfg.ort}(t)\\)</div>`}
       <div class="legend-swatch" data-c="ff-ruler"></div><div class="legend-label">Höhenskala in \\(\\mathrm{m}\\)</div>
     </div>
   </div>
@@ -390,7 +429,9 @@ const panelRight = (cfg) => `
       <div class="panel-label">Live-Analyse</div>
       <div class="analysis-grid">
         <div class="analysis-cell key">Zeit \\(t\\)</div>                              <div class="analysis-cell val" id="ff_live_t"></div>
-        <div class="analysis-cell key">${cfg.wurf ? 'Ort' : 'Höhe'} \\(y(t)\\)</div>   <div class="analysis-cell val" id="ff_live_y"></div>
+        <div class="analysis-cell key">${cfg.wurf ? 'Ort' : 'Höhe'} \\(${cfg.ort}(t)\\)</div>   <div class="analysis-cell val" id="ff_live_y"></div>
+${cfg.geschw ? `        <div class="analysis-cell key">Geschwindigkeit \\(v(t)\\)</div>          <div class="analysis-cell val" id="ff_live_v"></div>
+        <div class="analysis-cell key">Scheitel bei \\(t_{\\mathrm{max}} = v_0/g\\)</div> <div class="analysis-cell val" id="ff_live_tmax"></div>` : ''}
 ${cfg.wurf ? `        <div class="analysis-cell key">Scheitelhöhe über Boden</div>          <div class="analysis-cell val" id="ff_live_ymax"></div>
         <div class="analysis-cell key">Flugzeit \\(t_{\\mathrm{fall}}\\)</div>         <div class="analysis-cell val" id="ff_live_tfall"></div>`
             : `        <div class="analysis-cell key">Fallzeit \\(t_{\\mathrm{fall}}\\)</div>         <div class="analysis-cell val" id="ff_live_tfall"></div>`}
@@ -400,13 +441,18 @@ ${cfg.wurf ? `        <div class="analysis-cell key">Scheitelhöhe über Boden</
       <div class="panel-label">Physik</div>
       <div class="formula-box">
         <div class="formula-box-cap">Bewegungsgleichung in diesem Koordinatensystem</div>
-        <div>\\[${cfg.wurf ? BEWEGUNGSGLEICHUNG[cfg.achse] : BEWEGUNGSGLEICHUNG_FALL}\\]</div>
+        <div>\\[${achsname(cfg.wurf ? BEWEGUNGSGLEICHUNG[cfg.achse] : BEWEGUNGSGLEICHUNG_FALL, cfg.ort)}\\]</div>
         <div class="ff-formel-note">${cfg.achse === 'up_ground'
             ? `Das ist Formel <a class="xref" data-ref-eq="${cfg.wurf ? QUELLFORMEL.wurf : QUELLFORMEL.fall}"></a> des Fließtextes.`
             : `Formel <a class="xref" data-ref-eq="${QUELLFORMEL.wurf}"></a> des Fließtextes, umgerechnet auf dieses Koordinatensystem.`} Sie gilt vom Abwurf bis zum Aufschlag, also für \\(0 \\le t \\le t_{\\mathrm{fall}}\\).</div>
         <div class="ff-formel-note">${cfg.origin === 'start'
             ? `\\(h_0\\) steht nicht in der Gleichung — der Nullpunkt der Achse liegt ja im Abwurfpunkt. Der Regler \\(h_0\\) bestimmt hier nur, wie hoch der Abwurfpunkt über dem Erdboden liegt und damit, wann der Boden erreicht ist.`
             : `\\(h_0\\) ist die Abwurfhöhe über dem Erdboden; weil der Nullpunkt der Achse ebenfalls auf dem Erdboden liegt, ist \\(h_0\\) hier zugleich die Startkoordinate.`}${cfg.wurf ? ` \\(v_0\\) zählt in der Achse dieser Abbildung, also so wie der Regler links.` : ''}</div>
+${cfg.geschw ? `        <div class="formula-box-cap">Ihre Ableitung: die Geschwindigkeit</div>
+        <div>\\[${achsname(GESCHW_GLEICHUNG[cfg.direction], cfg.ort)}\\]</div>
+        <div class="ff-formel-note">${cfg.direction === 'up'
+            ? `Das ist Formel <a class="xref" data-ref-eq="${QUELLFORMEL.geschw}"></a> des Fließtextes.`
+            : `Formel <a class="xref" data-ref-eq="${QUELLFORMEL.geschw}"></a> des Fließtextes, umgerechnet auf dieses Koordinatensystem.`} Eine Gerade mit der Steigung \\(${cfg.direction === 'up' ? '-g' : '+g'}\\) und dem Achsenabschnitt \\(v_0\\); \\(h_0\\) fällt beim Ableiten weg.</div>` : ''}
       </div>
     </div>
   </div>
@@ -420,9 +466,9 @@ ${cfg.wurf ? `        <div class="analysis-cell key">Scheitelhöhe über Boden</
 // eins, gibt es einen Null-Zugriff (Runbook-Fallstrick #1).
 const hiddenStub = (cfg) => `
 <div style="display:none">
-  <span id="ff_live_v"></span><span id="ff_live_a"></span><span id="ff_live_vimpact"></span>
+  ${cfg.geschw ? '' : '<span id="ff_live_v"></span>'}<span id="ff_live_a"></span><span id="ff_live_vimpact"></span>
   ${cfg.wurf ? '' : '<span id="ff_live_ymax"></span>'}
-  <input type="checkbox" id="ff_tog_vel">
+  <input type="checkbox" id="ff_tog_vel"${cfg.geschw ? ' checked' : ''}>
   <input type="checkbox" id="ff_tog_acc">
 </div>`;
 
@@ -520,6 +566,9 @@ export function buildFreierFallFig(fig) {
                     : `${vorz > 0 ? '+' : '\u2212'}${zahl(store.h0, 1)}\u00a0m`,
             yboden: cfg.origin === 'ground' ? '0'
                     : `${vorz > 0 ? '\u2212' : '+'}${zahl(store.h0, 1)}\u00a0m`,
+            // Abb. 1.19: Scheitel- und Flugzeit (s. Bildunterschrift)
+            tmax: `${zahl(Math.max(0, store.v0) / G, 2)}\u00a0s`,
+            twurf: `${zahl(tFall, 2)}\u00a0s`,
         };
         wertSpans.forEach(el => {
             const v = werte[el.dataset.wert];
@@ -584,9 +633,9 @@ export function buildFreierFallFig(fig) {
         rt.withStore(() => {
             if (paramChange) { stop(); curT = 0; }
             Object.assign(store, {
-                graphType1: 'weg',
+                graphType1: cfg.geschw ? 'geschw' : 'weg',
                 isStacked: false,
-                posChar: 'y',                  // v0.13 nennt die Achse immer y
+                posChar: cfg.ort,              // y in 1.3-1.7, x in 1.19 (wie v0.13)
                 yAxisConfig: { direction: cfg.direction, origin: cfg.origin },
             });
             store.h0 = parseFloat(sl_h0.value);
@@ -605,6 +654,10 @@ export function buildFreierFallFig(fig) {
             drawSubdialMarks();
             drawYAxisDisplay();
             updateKennwerte();
+            // Scheitelzeit (nur 1.19): v0/g in der physikalischen Konvention —
+            // nach oben geworfen heisst v0 > 0, dort liegt der Nulldurchgang.
+            const tmaxZelle = ge(p + 'live_tmax');
+            if (tmaxZelle) tmaxZelle.textContent = store.v0 > 0 ? `${fmt(store.v0 / G)} s` : '—';
 
             ge(p + 'h0_value').textContent = `${fmt(store.h0, 1)} m`;
             if (sl_v0) ge(p + 'v0_value').textContent = `${fmt(v0Achse(store.v0), 0)} m/s`;

@@ -42,8 +42,11 @@
 .aspekt-figur[data-motor="freier_fall"] {
     --ff-fall: var(--k11-kurve);  /* Kugel UND Kurve y(t) — die gemeinsame
                                      Kapitel-1.1-Bewegungsfarbe (s. o.) */
-    --ff-vel: #2060d0;       /* v-Pfeil  — aus, s. aspekt_freier_fall.js; die
-                                Tokens stehen fuer Abb. 1.19 (v-t) bereit */
+    --ff-vel: var(--kb-vlat); /* v-Pfeil — nur in Abb. 1.19 an. Das
+                                Geschwindigkeits-Token der Kreisbewegungs-
+                                Figuren (orange wie v in Abb. 1.18 der Quelle;
+                                dasselbe Token färbt das Farbwort der Caption);
+                                Darkmode und CVD-Paletten ziehen daran mit. */
     --ff-acc: #c03030;       /* a-Pfeil  — aus, s. o. */
     --ff-building: color-mix(in srgb, var(--kb-text) 12%, var(--kb-surface));
     --ff-ruler-bg: color-mix(in srgb, var(--kb-text) 6%, var(--kb-surface));
@@ -109,6 +112,7 @@
 
 /* ── Legenden-Farbflecke (Bedienpanel) ─────────────────────────────────────── */
 .aspekt-figur[data-motor="freier_fall"] .legend-swatch[data-c="ff-fall"]  { background: var(--ff-fall); }
+.aspekt-figur[data-motor="freier_fall"] .legend-swatch[data-c="ff-vel"]   { background: var(--ff-vel); }
 .aspekt-figur[data-motor="freier_fall"] .legend-swatch[data-c="ff-ruler"] {
     background: var(--ff-ruler-bg); border: 1px solid var(--ff-ruler-stroke);
 }
