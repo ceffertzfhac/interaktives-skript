@@ -95,14 +95,14 @@ gemeinsam:
 | 1.15 | `…unterschied_durchschnitt_momentan` | **P17-1** | `ableitung` | nein |
 | 1.16–1.17 | `…tachometer`, `…vorwaerts_rueckwaerts` | — | — | bleiben statisch |
 | 1.18 | `…tangentiale_geschwindigkeit_schraeger_wurf` | P16-8 (eine Figur, a/b umschaltbar) | B | ja |
-| 1.19 | `…zeit_diagramm_senkr_wurf` | P16-5 | A | nein |
-| 1.20 | `…zeit_diagramm_schraeger_wurf` | P16-9 | B | nein |
+| 1.19 | `…zeit_diagramm_senkr_wurf` | P16-5 | A | ja |
+| 1.20 | `…zeit_diagramm_schraeger_wurf` | P16-9 | B | ja |
 
-**Stand 2026-09-14:** erledigt sind Abb. 1.3–1.7 (P16-1/-3/-4), 1.8 (P17-3),
-1.9 (P16-2/-6) und 1.10 (P17-2). Der Faden laeuft in der Abbildungsreihenfolge
-weiter. 1.14 steht seit dem 14.09.2026; **als Naechstes Abb. 1.15** (P17-1,
-braucht den `ableitung`-Motor), dann 1.18 (P16-8, Nummern-Frage am
-2026-09-26 geklärt: eine Figur), 1.19 und 1.20 (P16-5/-9, beide billig: derselbe Motor).
+**Stand 2026-09-26:** erledigt sind Abb. 1.3–1.7 (P16-1/-3/-4), 1.8 (P17-3),
+1.9 (P16-2/-6), 1.10 (P17-2), 1.14 (P16-7 + P16-7a) und 1.15 (P17-1, v1.53.0).
+**Als Naechstes 1.19 und 1.20** (P16-5/-9), dann 1.18 (P16-8, Nummern-Frage
+am 2026-09-26 geklärt: eine Figur). *(Stand 2026-09-14 war: als Naechstes 1.15,
+dann 1.18, 1.19 und 1.20.)* 1.19 und 1.20 sind billig: derselbe Motor.
 *(Frueherer Stand 2026-08-28: nach 1.3–1.7 war 1.8 der naechste Schritt.)*
 P16-5 (Abb. 1.19, v-t) ist dagegen billig geworden: derselbe Motor, dieselbe
 Fabrik — dort waere nur der Diagrammtyp 'geschw' statt 'weg' zu setzen und der
@@ -145,7 +145,8 @@ allein der Kontrast die Pruefung).
 
 ### Offen zu Abb. 1.14 (nach dem Bau)
 
-- [ ] **P16-7a Fenster, Nulllinien und Ausnutzung in Abb. 1.14** *(M)* —
+- [x] **P16-7a Fenster, Nulllinien und Ausnutzung in Abb. 1.14** *(M)* — **erledigt
+  2026-09-26 (`f0ac366` v1.53.1 + `69939ca` v1.53.2)**, Ergebnis s. unten. —
   **Nutzerbefund 2026-09-14**, drei Punkte, die zusammengehören:
   1. die **Nulllinien** beider Bilder sollten ungefähr auf gleicher Höhe liegen;
   2. das Diagramm braucht im Modus „x-Achse auf dem Boden, y-Achse nach oben"
@@ -170,6 +171,23 @@ allein der Kontrast die Pruefung).
   > dem SVG). Gemessen: Parabel 130 px → 228 px breit, aber das Diagramm war
   > weg.
 
+  **Umgesetzt (2026-09-16/-26), anders als unten vorgeschlagen:** keine feste
+  Breitenaufteilung, sondern EINE Einheit (viewBox-Einheiten je Meter) für
+  beide SVGs und Aufteilung der Zeilenbreite im Verhältnis der viewBox-Breiten
+  (`massstabAbgleichen()`) — damit ist der Faktor beider Seiten gleich, ohne
+  Zirkularität. Punkt 2: y-Achse beginnt bei 0 (unter null nur 8 % Luft).
+  Punkt 3: Diagrammfeld = Bounding-Box des Wurfs. Punkt 1 (v1.53.2): Szene so
+  hoch wie das Diagramm, Erdboden im Abstand der Nulllinie von der Oberkante —
+  gemessen deckungsgleich (Boden = Nulllinie auf den Pixel) in normal/breit,
+  flach/steil/hoch; gestapelt (schmal) entfällt die Forderung.
+  *Messfalle:* die Nulllinie liegt in `graph_group_single` mit
+  `translate(56, 48)` — wer ihre `y1` über die CTM des SVG umrechnet statt über
+  `getBoundingClientRect()` der Linie, misst 48 Einheiten zu hoch.
+  **Beobachtet, nicht behoben:** bei h₀ = 0 steht das Strichmännchen unter dem
+  Erdboden, und bei Zoom 2,00x (sehr flacher Wurf) wirkt die Kugel übergroß —
+  beides schon vor v1.53.2 so.
+
+  *(Ursprünglicher Vorschlag, nicht umgesetzt:)*
   **Was stattdessen zu tun ist** (Vorschlag, vor der Umsetzung zu entscheiden):
   die Breiten **fest** aufteilen (z. B. 45 % Szene / 55 % Diagramm) und *beide*
   Bilder über die **Höhe** bemessen, wie es `aspekt_federpendel.css` im
