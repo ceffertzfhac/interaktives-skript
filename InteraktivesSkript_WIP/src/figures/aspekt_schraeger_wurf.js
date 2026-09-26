@@ -239,18 +239,19 @@ const SVG_SCENE = (cfg) => `
 // einen eigenen Rand — bemessen an der SKALIERTEN Schrift (--kb-fs vergroessert
 // die Beschriftungen um 1,5), wie in aspekt_freier_fall.js begruendet: 56 px
 // links fuer y-Marken und gedrehte Achsenbeschriftung, 48 px oben fuer den
-// Titel. Der Abstand der beiden Slots ist der der Sim (235 px), damit unter dem
-// oberen Plot (210 px hoch) der Titel des unteren Platz hat.
+// Titel. Der Abstand der beiden Slots ist 252 (Sim: 235): seit die t-Marken am
+// unteren Plotrand stehen (FW9/P16-9a), brauchen sie bei der 1,5-fach
+// skalierten Schrift Luft bis zum Titel des unteren Diagramms.
 // KEIN display:none auf den Stapel-Gruppen — updateGraphs() schaltet ueber
 // style.visibility (s. Kopfkommentar).
 // Die viewBox-HOEHE haengt am Diagramm-Zuschnitt: gestapelt (Abb. 1.9) fuellen
-// zwei Diagramme die 545; im Einzelmodus (Abb. 1.14) endet die Zeichnung bei
+// zwei Diagramme die 562; im Einzelmodus (Abb. 1.14) endet die Zeichnung bei
 // y = 431, die restlichen 114 Einheiten waren leerer Raum UNTERHALB des
 // Diagramms — bei "xMidYMid meet" wird er mitskaliert und schiebt sich als
 // Weissraum in die Figur (Nutzerbefund 2026-09-14). 455 laesst 24 Einheiten
 // Luft unter der x-Achsenbeschriftung, so viel wie oben ueber dem Titel.
 const SVG_GRAPH = (cfg) => `
-<svg id="sw_graph_svg" viewBox="0 0 560 ${cfg.bahn ? 455 : 545}" preserveAspectRatio="xMidYMid meet" class="aspekt-graph-svg">
+<svg id="sw_graph_svg" viewBox="0 0 560 ${cfg.bahn ? 455 : 562}" preserveAspectRatio="xMidYMid meet" class="aspekt-graph-svg">
   <g id="sw_graph_group_single" style="visibility:hidden" transform="translate(56, 48)">
     <g id="sw_grid_group"></g>
     <polyline id="sw_graph_line" fill="none" stroke-width="2" points=""/>
@@ -277,7 +278,7 @@ const SVG_GRAPH = (cfg) => `
     </g>
     <rect id="sw_graph_hit_rect_top" class="graph-hit-rect"/>
   </g>
-  <g id="sw_graph_group_stacked_bottom" transform="translate(56, 283)">
+  <g id="sw_graph_group_stacked_bottom" transform="translate(56, 300)">
     <g id="sw_grid_group_bottom"></g>
     <polyline id="sw_graph_line_bottom" fill="none" stroke-width="2" points=""/>
     <circle id="sw_graph_point_bottom" r="4" visibility="hidden"/>
