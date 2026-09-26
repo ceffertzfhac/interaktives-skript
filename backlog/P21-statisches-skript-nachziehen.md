@@ -497,7 +497,10 @@ Voreinstellung angelegt.
   2026-09-26). Deshalb heißt es interaktiv statt „Im Vergleich der beiden
   **Bilder**" nun „Im Vergleich der beiden **Koordinatensysteme** — (a) mit
   Ursprung am Boden, (b) mit Ursprung im Abwurfpunkt —". Dazu ein
-  Regler-Hinweis am Ende. **Nicht nachziehen:** gedruckt gibt es zwei Bilder,
+  Regler-Hinweis am Ende, seit P16-8b (v1.55.2) mit dem Satz „die graue Linie
+  durch das Objekt ist diese Tangente, sie lässt sich im Bedienfeld
+  ausblenden" — ebenfalls nicht nachzuziehen (die gedruckten Teilbilder haben
+  keine eingezeichnete Tangente; wenn doch, wäre das beim Nachziehen zu prüfen). **Nicht nachziehen:** gedruckt gibt es zwei Bilder,
   dort stimmt „der beiden Bilder"; der Regler-Hinweis gehört nicht aufs Papier.
 - **Quellfehler — druckseitig mitzukorrigieren:** `QUELLEN_FEHLER.md`
   Abschnitt 1.1 Nr. 4 („abhänt") und Nr. 8 (fehlender Punkt nach
