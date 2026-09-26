@@ -100,8 +100,8 @@ gemeinsam:
 
 **Stand 2026-09-26:** erledigt sind Abb. 1.3–1.7 (P16-1/-3/-4), 1.8 (P17-3),
 1.9 (P16-2/-6), 1.10 (P17-2), 1.14 (P16-7 + P16-7a) und 1.15 (P17-1, v1.53.0).
-**1.18 und 1.19 stehen seit dem 26.09.2026 (P16-8, P16-5). Als Naechstes 1.20** (P16-9),
-dann die Verifikation P16-10. *(Stand 2026-09-14 war: als Naechstes 1.15,
+**1.18, 1.19 und 1.20 stehen seit dem 26.09.2026 (P16-8, -5, -9). Als Naechstes die
+Verifikation P16-10.** *(Stand 2026-09-14 war: als Naechstes 1.15,
 dann 1.18, 1.19 und 1.20.)* 1.19 und 1.20 sind billig: derselbe Motor.
 *(Frueherer Stand 2026-08-28: nach 1.3–1.7 war 1.8 der naechste Schritt.)*
 P16-5 (Abb. 1.19, v-t) ist dagegen billig geworden: derselbe Motor, dieselbe
@@ -485,7 +485,18 @@ allein der Kontrast die Pruefung).
   Ortsvektor dort **grau** (Bernstein ist in der Sim schon \(v_x\)).
   Merge-Konflikte (Versionszeile, CHANGELOG) aufgelöst: v1.7.0 im neuen
   zweizeiligen Header, CHANGELOG v1.7.0 über v1.6.2.
-- [ ] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
+- [x] **P16-9 Aspekt-Figur Abb. 1.20** — schräger Wurf 2× v-t (vx/vy) (Motor B). *(S–M)*
+  **erledigt 2026-09-26 (`939d2f7`, v1.56.0)**: vierte Variante der
+  schraeger_wurf-Fabrik (`data-kontext="geschw"`), gestapelt v_y(t) oben,
+  v_x(t) unten (Reihenfolge wie 1.9; das statische Bild ist **nicht**
+  gesichtet — falls es umgekehrt stapelt, ist das eine Zeile). v-Pfeil per
+  Checkbox (Vorgabe an) in Komponenten zerlegt, Pfeile und Kurven in
+  `--kb-vx`/`--kb-vy` wie 1.42; Zoom wie 1.18 ohne Zuschnitt oben.
+  Doku: P21-A14, QUELLEN_FEHLER 1.1 Nr. 9.
+  **Beobachtet, nicht behoben:** die Diagrammtitel des Motors („Geschw.
+  vᵧ(t)") nutzen das Unicode-Zeichen ᵧ (tiefgestelltes Gamma), das in der
+  Schrift nicht tiefgestellt erscheint und wie „vy" aussieht — Erbstück der
+  Stand-alone-Sim (dort identisch).
 - [ ] **P16-10 Verifikation** — pro Figur: Static `.nur-druck` + `data-figref`-
   Übertrag (Abb.-Nummer unverändert), `node --check`, Smoke, Nummerierung (keine
   Regression), CVD-Palette (P-AF-2 — neue Vektor-Tokens für v⃗/vₓ/vᵧ/a⃗ kapitel-
