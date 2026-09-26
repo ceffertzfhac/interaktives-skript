@@ -9,8 +9,33 @@
 //     stellt genau das gegenueber („diese Parabel ist eine andere Parabel als
 //     die Parabel der Komponente y(t)").
 //
-// Beide teilen Szene, Regler, Ablaufsteuerung und Analyse — nur der
-// Diagramm-Zuschnitt und zwei Texte unterscheiden sich.
+//   Abb. 1.18 (data-kontext="vektor")    — KEIN Diagramm, nur die Szene: der
+//     Ortsvektor (vom Ursprung zur Kugel) und der Geschwindigkeitsvektor
+//     (Tangente an die Bahn). Ein Umschalter setzt den Ursprung auf den
+//     Erdboden (a) oder in den Abwurfpunkt (b) — die beiden Teilbilder der
+//     gedruckten Abbildung sind zwei Zustaende DIESER einen Figur
+//     (Nutzerentscheidung 2026-09-26, BACKLOG P16-8).
+//
+// Alle teilen Szene, Regler, Ablaufsteuerung und Analyse — nur der
+// Diagramm-Zuschnitt und einige Texte unterscheiden sich.
+//
+// ABB. 1.18 IM EINZELNEN (P16-8):
+//   * Der Umschalter ist KEIN kurvenformender Regler: die Zeit laeuft weiter,
+//     auch waehrend der Wiedergabe. Genau so sieht man den Kern der
+//     Abbildung — der Ortsvektor springt, der Geschwindigkeitsvektor bleibt.
+//   * Den Ortsvektor zeichnet die Figur SELBST (eigene <line>, der Motor kennt
+//     ihn nicht). Er beginnt am Ursprung der Achsenskizze, die der Motor ueber
+//     yAxisConfig.origin ohnehin mitverschiebt (drawAnimationCoordSystem).
+//   * Farben wie die Unterschrift der Quelle: Ortsvektor blau (--kb-omega,
+//     das Blau der Kreisbewegungs-Figuren samt Paletten), Geschwindigkeit orange
+//     (--kb-vlat, wie v in 1.19 und Kapitel 1.4). Beide Farbwoerter der
+//     Unterschrift laufen ueber apply_farbwoerter mit.
+//   * Nach einem Parameterwechsel springt die Zeit nicht auf 0, sondern auf
+//     40 % der Flugzeit: bei t = 0 hat der Ortsvektor in (b) die Laenge null
+//     und die Figur zeigte ihren Gegenstand nicht (Lehre aus #20 wie bei 1.14:
+//     „nicht in einem ungueltigen Zustand stehen bleiben").
+//   * Stoppuhr aus (wie 1.14): ohne Zeitdiagramm hat sie nichts zu erklaeren
+//     und stand dem Bahnscheitel im Weg.
 //
 // ZEITLAUF AUCH IN 1.14 (Nutzerentscheidung 2026-09-14): die gedruckte
 // Unterschrift sagt, in der Bahnkurve sei „nicht mehr erkennbar", wo das Objekt
@@ -66,8 +91,8 @@
 // sonst bleiben sie unsichtbar, obwohl der Motor sie auf visible setzt.
 
 import { store, DOM } from './schraeger_wurf/state.js';
-import { recomputeDerived, precompute, interpolateAt, flightTime,
-         scaleY } from './schraeger_wurf/physics.js';
+import { recomputeDerived, precompute, interpolateAt, flightTime, maxHeight,
+         scaleX, scaleY } from './schraeger_wurf/physics.js';
 import { updateScene, updateGraphs, updateKennwerte, updateZoomDisplay,
          drawRuler, drawHorizontalRuler, drawStickFigure,
          drawAnimationCoordSystem, drawStopwatchMarks, drawSubdialMarks,
@@ -99,6 +124,10 @@ function leseKonfig(fig) {
         alpha: zahl('alpha', ALPHA_DEFAULT),
         // Abb. 1.14: EIN Diagramm, die Bahnkurve y(x) (s. Kopf).
         bahn: fig.dataset.kontext === 'bahn',
+        // Abb. 1.18: nur Szene, Orts- und Geschwindigkeitsvektor (s. Kopf).
+        vektor: fig.dataset.kontext === 'vektor',
+        // Ursprung beim Aufbau: 'ground' = (a), 'start' = (b).
+        ursprung: fig.dataset.ursprung === 'start' ? 'start' : 'ground',
     };
 }
 
@@ -124,6 +153,7 @@ const SVG_SCENE = (cfg) => `
   <defs>
     <marker id="sw_arrow-vel" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
     <marker id="sw_arrow-acc" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
+    <marker id="sw_arrow-ort" markerWidth="4.95" markerHeight="3.465" refX="0" refY="1.7325" orient="auto"><polygon points="0 0, 4.95 1.7325, 0 3.465"/></marker>
     <marker id="sw_arrow-coord" markerWidth="15" markerHeight="10.5" refX="0" refY="5.25" orient="auto"><polygon points="0 0, 15 5.25, 0 10.5"/></marker>
     <!-- Spitze der DIAGRAMM-Achsen (BACKLOG P5). Geometrie wie in den
          kreisbewegung-Figuren (kb_graph-arrowhead), damit die Diagramme aller
@@ -138,6 +168,11 @@ const SVG_SCENE = (cfg) => `
     <g id="sw_stick_figure"></g>
     <polyline id="sw_frozen_trajectory_line" fill="none" stroke-width="2" stroke-dasharray="5 4" points=""/>
     <polyline id="sw_trajectory_line" fill="none" stroke-width="2" points=""/>
+    <!-- Ortsvektor (Abb. 1.18): figur-eigen, s. Kopfkommentar. UNTER der
+         Kugel: seine Spitze endet im Kugelmittelpunkt, die Kugel („roter
+         Kreis" der Unterschrift) bleibt sichtbar. Strichstaerke aus der
+         kapitelweiten Regel fuer [id$="position_vector"] (aspekt_kreisbahn.css). -->
+    <line id="sw_position_vector" x1="0" y1="0" x2="0" y2="0" stroke-width="2.5" marker-end="url(#sw_arrow-ort)" visibility="hidden"/>
     <circle id="sw_ball" r="${BALL_RADIUS_BASE_PX}" cx="${BALL_START_X_PX}"/>
     <line id="sw_acceleration_vector" x1="0" y1="0" x2="0" y2="0" stroke-width="2.5" marker-end="url(#sw_arrow-acc)" visibility="hidden"/>
     <line id="sw_velocity_vector_x" x1="0" y1="0" x2="0" y2="0" stroke-width="2" marker-end="url(#sw_arrow-vel)" visibility="hidden"/>
@@ -158,7 +193,7 @@ const SVG_SCENE = (cfg) => `
          der Wurf anders als der senkrechte Fall die Mitte der Szene fuellt: die
          Uhr sitzt damit um (320,50) statt um (251,47) und laesst den Bahnscheitel
          (rund x=234) frei. Ohne das lag die Kugel im Zifferblatt. -->
-    <g id="sw_stopwatch" transform="translate(153, -21) scale(0.595)"${cfg.bahn ? ' style="display:none"' : ''}>
+    <g id="sw_stopwatch" transform="translate(153, -21) scale(0.595)"${cfg.bahn || cfg.vektor ? ' style="display:none"' : ''}>
       <circle id="sw_stopwatch_circle" cx="280" cy="120" r="72" stroke-width="2"/>
       <g id="sw_stopwatch_marks"></g>
       <g id="sw_subdial">
@@ -274,10 +309,21 @@ const panelLeft = (cfg) => `
       <label class="speed-pill"><input type="radio" name="sw_speed" value="0.125"><span>⅛×</span></label>
     </div>
   </div>
-  <div class="panel-section">
+${cfg.vektor ? `  <div class="panel-section">
+    <div class="panel-label">Koordinatensystem</div>
+    <div class="speed-pills sw-ursprung">
+      <label class="speed-pill"><input type="radio" name="sw_ursprung" value="ground"${cfg.ursprung === 'ground' ? ' checked' : ''}><span>(a) Boden</span></label>
+      <label class="speed-pill"><input type="radio" name="sw_ursprung" value="start"${cfg.ursprung === 'start' ? ' checked' : ''}><span>(b) Abwurfpunkt</span></label>
+    </div>
+    <div class="ff-formel-note">Wo liegt der Ursprung? \\(x\\) zählt in beiden Fällen ab dem Abwurfpunkt, \\(y\\) zeigt nach oben.</div>
+  </div>
+` : ''}  <div class="panel-section">
     <div class="panel-label">Legende</div>
     <div class="legend-grid">
-      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel, Flugbahn und ${cfg.bahn ? 'Bahnkurve' : 'beide Kurven'}</div>
+${cfg.vektor ? `      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel und Flugbahn</div>
+      <div class="legend-swatch" data-c="sw-ort"></div><div class="legend-label">Ortsvektor \\(\\vec s(t)\\)</div>
+      <div class="legend-swatch" data-c="sw-vel"></div><div class="legend-label">Geschwindigkeit \\(\\vec v(t)\\)</div>`
+    : `      <div class="legend-swatch" data-c="sw-bahn"></div><div class="legend-label">Kugel, Flugbahn und ${cfg.bahn ? 'Bahnkurve' : 'beide Kurven'}</div>`}
       <div class="legend-swatch" data-c="sw-ruler"></div><div class="legend-label">Höhen- und Weitenskala in \\(\\mathrm{m}\\)</div>
     </div>
   </div>
@@ -311,19 +357,34 @@ const panelRight = (cfg) => `
   <div class="panel-body">
     <div class="panel-section">
       <div class="panel-label">Live-Analyse</div>
-      <div class="analysis-grid">
+${cfg.vektor ? `      <div class="analysis-grid">
+        <div class="analysis-cell key">Zeit \\(t\\)</div>                          <div class="analysis-cell val" id="sw_live_t"></div>
+        <div class="analysis-cell key">\\(s_x = x(t)\\)</div>                     <div class="analysis-cell val" id="sw_live_x"></div>
+        <div class="analysis-cell key">\\(s_y = y(t)\\)</div>                     <div class="analysis-cell val" id="sw_live_y"></div>
+        <div class="analysis-cell key">\\(v_x(t)\\)</div>                         <div class="analysis-cell val" id="sw_live_vx"></div>
+        <div class="analysis-cell key">\\(v_y(t)\\)</div>                         <div class="analysis-cell val" id="sw_live_vy"></div>
+        <div class="analysis-cell key">\\(\\vert \\vec v(t) \\vert\\)</div>      <div class="analysis-cell val" id="sw_live_vabs"></div>
+      </div>
+      <div class="ff-formel-note">Beim Umschalten zwischen (a) und (b) ändert sich \\(s_y\\), die Geschwindigkeit nicht.</div>`
+ : `      <div class="analysis-grid">
         <div class="analysis-cell key">Zeit \\(t\\)</div>                          <div class="analysis-cell val" id="sw_live_t"></div>
         <div class="analysis-cell key">Höhe \\(y(t)\\)</div>                       <div class="analysis-cell val" id="sw_live_y"></div>
         <div class="analysis-cell key">Weite \\(x(t)\\)</div>                      <div class="analysis-cell val" id="sw_live_x"></div>
         <div class="analysis-cell key">Scheitelhöhe</div>                          <div class="analysis-cell val" id="sw_live_ymax"></div>
         <div class="analysis-cell key">Wurfweite</div>                             <div class="analysis-cell val" id="sw_live_xmax"></div>
         <div class="analysis-cell key">Flugzeit \\(t_{\\mathrm{fall}}\\)</div>     <div class="analysis-cell val" id="sw_live_tfall"></div>
-      </div>
+      </div>`}
     </div>
     <div class="panel-section">
       <div class="panel-label">Physik</div>
       <div class="formula-box">
-${cfg.bahn ? `        <div class="formula-box-cap">Die Bahn — eine Gleichung ohne \\(t\\)</div>
+${cfg.vektor ? `        <div class="formula-box-cap">Ortsvektor — hängt vom Ursprung ab</div>
+        <div class="sw-nur-ursprung" data-ursprung="ground">\\[\\vec s(t) = \\begin{pmatrix} v_0\\cos(\\alpha)\\,t \\\\ -\\tfrac{1}{2}\\,g\\,t^2 + v_0\\sin(\\alpha)\\,t + h_0 \\end{pmatrix}\\]</div>
+        <div class="sw-nur-ursprung" data-ursprung="start">\\[\\vec s(t) = \\begin{pmatrix} v_0\\cos(\\alpha)\\,t \\\\ -\\tfrac{1}{2}\\,g\\,t^2 + v_0\\sin(\\alpha)\\,t \\end{pmatrix}\\]</div>
+        <div class="formula-box-cap">Geschwindigkeit — in (a) und (b) dieselbe</div>
+        <div>\\[\\vec v(t) = \\dot{\\vec s}(t) = \\begin{pmatrix} v_0\\cos(\\alpha) \\\\ -g\\,t + v_0\\sin(\\alpha) \\end{pmatrix}\\]</div>
+        <div class="ff-formel-note">Den Ursprung zu verschieben ändert den Ortsvektor um einen konstanten Vektor — hier um \\(h_0\\) in \\(y\\). Beim Ableiten nach \\(t\\) fällt eine Konstante weg, deshalb bleibt \\(\\vec v\\) gleich.</div>`
+ : cfg.bahn ? `        <div class="formula-box-cap">Die Bahn — eine Gleichung ohne \\(t\\)</div>
         <div>\\[y(x) = -\\tfrac{1}{2}\\,\\frac{g}{v_0^2\\cos^2(\\alpha)}\\,x^2 + \\tan(\\alpha)\\,x + h_0\\]</div>
         <div class="ff-formel-note">Diese Parabel ist eine <em>andere</em> als die von \\(y(t)\\): sie beschreibt den Verlauf der Flugkurve durch den Raum — die Spur im Schnee —, nicht den zeitlichen Verlauf der Höhe. Entstanden ist sie, indem \\(t\\) aus \\(x(t)\\) und \\(y(t)\\) eliminiert wurde.</div>
         <div class="ff-formel-note">Die Kurve selbst ändert sich nicht mit der Zeit. Wiedergabe und Zeit-Regler zeigen, <em>wo auf ihr</em> das Objekt gerade ist — an der fertigen Kurve ist das hinterher nicht mehr abzulesen.</div>`
@@ -342,12 +403,15 @@ ${cfg.bahn ? `        <div class="formula-box-cap">Die Bahn — eine Gleichung o
 // Nur die Flugbahn ist checked — sie ist der linke Teil der Abbildung. Der
 // Motor schreibt in alle diese Elemente unbedingt; fehlt eins, gibt es einen
 // Null-Zugriff (Runbook-Fallstrick #1).
-const hiddenStub = `
+// Abb. 1.18 zeigt vx/vy/|v| im Panel und hat keine Kennwert-Zellen — die
+// jeweils fehlenden stehen hier (doppelte IDs waeren ein stiller Fehler).
+const hiddenStub = (cfg) => `
 <div style="display:none">
-  <span id="sw_live_vx"></span><span id="sw_live_vy"></span><span id="sw_live_vabs"></span>
+  ${cfg.vektor ? '<span id="sw_live_ymax"></span><span id="sw_live_xmax"></span><span id="sw_live_tfall"></span>'
+               : '<span id="sw_live_vx"></span><span id="sw_live_vy"></span><span id="sw_live_vabs"></span>'}
   <span id="sw_live_ay"></span><span id="sw_live_vimpact"></span><span id="sw_live_aimpact"></span>
   <input type="checkbox" id="sw_toggle_trajectory" checked>
-  <input type="checkbox" id="sw_toggle_velocity_vector">
+  <input type="checkbox" id="sw_toggle_velocity_vector"${cfg.vektor ? ' checked' : ''}>
   <input type="checkbox" id="sw_toggle_velocity_components">
   <input type="checkbox" id="sw_toggle_acceleration_vector">
   <input type="checkbox" id="sw_toggle_compare_traj">
@@ -380,7 +444,7 @@ export function buildSchraegerWurfFig(fig) {
       `<div class="aspekt-main">${RUNBAR}<div class="aspekt-main-content">` +
       `<div class="aspekt-scene">${SVG_SCENE(cfg)}</div>` +
       `<div class="aspekt-graph">${SVG_GRAPH(cfg)}</div></div></div>` +
-      `${panelRight(cfg)}</div>${hiddenStub}`
+      `${panelRight(cfg)}</div>${hiddenStub(cfg)}`
     ).replace(/sw_/g, p);
     rt.bindDom();
 
@@ -639,11 +703,61 @@ export function buildSchraegerWurfFig(fig) {
         if (zt) zt.setAttribute('y', (szTop + 16).toFixed(1));
     }
 
+    // Ortsvektor (nur Abb. 1.18): vom Ursprung der Achsenskizze zur Kugel.
+    // Der Ursprung liegt wie in drawAnimationCoordSystem() bei x = Abwurfpunkt
+    // und y = Erdboden (a) bzw. Abwurfhoehe (b).
+    // Die SPITZE soll im Kugelmittelpunkt enden: der Marker (refX = 0) setzt
+    // sie HINTER das Linienende, 4,95 Strichstaerken lang — die Linie endet
+    // also um genau diese Laenge vorher (dieselbe Kopplung wie ARROW_LEN in den
+    // Kreisbewegungs-Figuren, s. aspekt_kreisbahn.css). Die Strichstaerke kommt
+    // aus dem CSS und wird deshalb gemessen. Ist der Vektor kuerzer als seine
+    // Spitze (kurz nach dem Start in (b)), bleibt er aus — eine Spitze, die
+    // ueber den Ursprung hinausragt, waere falsch. Inside withStore aufrufen.
+    const ortLinie = q('position_vector');
+    const PFEIL_LAENGE = 4.95;                 // markerWidth von sw_arrow-ort
+    function ortsvektor(x, y) {
+        const x1 = scaleX(0), y1 = scaleY(store.yAxisConfig.origin === 'start' ? store.h0 : 0);
+        const dx = scaleX(x) - x1, dy = scaleY(y) - y1;
+        const len = Math.hypot(dx, dy);
+        const spitze = PFEIL_LAENGE * (parseFloat(getComputedStyle(ortLinie).strokeWidth) || 2.5);
+        if (len <= spitze) { ortLinie.setAttribute('visibility', 'hidden'); return; }
+        const k = (len - spitze) / len;
+        ortLinie.setAttribute('visibility', 'visible');
+        ortLinie.setAttribute('x1', x1); ortLinie.setAttribute('y1', y1);
+        ortLinie.setAttribute('x2', x1 + dx * k); ortLinie.setAttribute('y2', y1 + dy * k);
+    }
+
+    // Zuschnitt der Szene (nur Abb. 1.18). Ohne Diagramm ist die Szene das
+    // ganze Bild; ungeschnitten nutzte ein ueblicher Wurf (h0 = v0 = 10,
+    // 45 Grad) nur das untere Drittel, darueber stand leeres Lineal bis 35 m.
+    // Einfacher als bei 1.14 (dort muss die Szene zum Diagramm passen): der
+    // Zoom der Sim bleibt, wie er ist, nur der Himmel ueber dem Wurf wird
+    // abgeschnitten — so weit, dass Scheitel, Achsenskizze in (b) und die
+    // Zoom-Anzeige Platz haben. Danach rechnet recomputeDerived() gegen das
+    // kleinere Feld noch einmal; weil das Feld gerade so hoch ist wie noetig,
+    // kommt derselbe Zoom heraus. Inside withStore aufrufen.
+    const ZS_LUFT_OBEN = 34;        // Zoom-Anzeige + Luft ueber dem Scheitel
+    function szeneZuschneiden() {
+        store.animTopPx = 0;
+        recomputeDerived();
+        const P = store.currentPixelsPerMeter;
+        const noetig = Math.max(maxHeight() * 1.1 * P,
+                                store.h0 * P + 60 * store.zoomFactor + 24)  // Achsenskizze in (b)
+                     + ZS_LUFT_OBEN;
+        const top = Math.max(0, GROUND_PX - noetig);
+        store.animTopPx = top;
+        recomputeDerived();
+        q('main_svg').setAttribute('viewBox', `20 ${top.toFixed(1)} 350 ${(500 - top).toFixed(1)}`);
+        const zt = q('zoom_text_display');
+        if (zt) zt.setAttribute('y', (top + 16).toFixed(1));
+    }
+
     function zeichne() {
         rt.withStore(() => {
             const s = interpolateAt(t);
             if (!s) return;
             updateScene(s.t, s.x, s.y, s.vx, s.vy);
+            if (cfg.vektor) { ortsvektor(s.x, s.y); return; }   // kein Diagramm
             // Der Massstab haengt nicht von t ab: er wird in rebuild() gesetzt
             // (und bei Breitenaenderung), nicht je Frame. Frueher stand hier
             // bahnAchseSetzen(), das zwei getBoundingClientRect() pro Frame kostete.
@@ -667,6 +781,7 @@ export function buildSchraegerWurfFig(fig) {
             store.v0 = parseFloat(v0Slider.value);
             store.alphaDeg = parseFloat(alphaSlider.value);
             recomputeDerived();          // v0x/v0y + Zoom — s. physics.js
+            if (cfg.vektor) szeneZuschneiden();
             precompute();
             tEnd = flightTime();
 
@@ -705,7 +820,9 @@ export function buildSchraegerWurfFig(fig) {
         // Auf 0 zurueckzuspringen hiesse, nach jedem Regler-Zug ein leeres
         // Diagramm zu zeigen. Der Grund von Fallstrick #20 bleibt gewahrt: die
         // Kugel steht am Ende der NEUEN Bahn, nicht mitten in einer alten.
-        const tNachParam = cfg.bahn ? tEnd : 0;
+        // Abb. 1.18 springt auf 40 % der Flugzeit: dort sind Orts- und
+        // Geschwindigkeitsvektor beide deutlich zu sehen (s. Kopf).
+        const tNachParam = cfg.bahn ? tEnd : cfg.vektor ? 0.4 * tEnd : 0;
         if (!behalteZeit) { stop(); t = tNachParam; tSlider.value = String(t); }
         else if (t > tEnd) { t = tEnd; tSlider.value = String(tEnd); }
         zeichne();
@@ -764,6 +881,23 @@ export function buildSchraegerWurfFig(fig) {
         zeichne();
     });
 
+    // ── Ursprung (a)/(b), nur Abb. 1.18 ────────────────────────────────────
+    // Kein kurvenformender Regler: Zeit und Wiedergabe laufen weiter (s. Kopf).
+    // Die Formelkarte zeigt die zum Ursprung passende Gleichung; beide sind
+    // einmal gesetzt, umgeschaltet wird nur die Sichtbarkeit (MathJax setzt
+    // die Karte nur einmal).
+    const ursprungRadios = [...scene.querySelectorAll(`input[name="${p}ursprung"]`)];
+    function ursprungSetzen(wert) {
+        fig.dataset.ursprungAktiv = wert;
+        ursprungRadios.forEach(r => r.closest('.speed-pill').classList.toggle('active', r.value === wert));
+        rt.withStore(() => {
+            store.yAxisConfig = { direction: 'up', origin: wert };
+            drawAnimationCoordSystem();
+        });
+        zeichne();
+    }
+    ursprungRadios.forEach(r => r.addEventListener('change', () => { if (r.checked) ursprungSetzen(r.value); }));
+
     // ── Erststand ───────────────────────────────────────────────────────────
     rt.withStore(() => {
         // Aspekt-Gating: Diagramm-Zuschnitt je Abbildung (s. Kopf), Achse fest,
@@ -775,7 +909,7 @@ export function buildSchraegerWurfFig(fig) {
             isStacked: !cfg.bahn,
             graphType1: cfg.bahn ? 'yx' : 'yt',
             graphType2: 'xt',
-            yAxisConfig: { direction: 'up', origin: 'ground' },
+            yAxisConfig: { direction: 'up', origin: cfg.vektor ? cfg.ursprung : 'ground' },
             frozenTraj: null,
             isDigitalDisplay: false,
         });
@@ -783,6 +917,7 @@ export function buildSchraegerWurfFig(fig) {
         drawSubdialMarks();
     });
     rebuild(false);
+    if (cfg.vektor) ursprungSetzen(cfg.ursprung);
 
     // Der Massstabsabgleich braucht die TATSAECHLICHEN Elementbreiten; beim
     // ersten rebuild() steht das Layout noch nicht (die Figur wird gebaut,

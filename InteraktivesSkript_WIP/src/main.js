@@ -73,7 +73,7 @@ import { buildAbleitungFig } from './figures/aspekt_ableitung.js';
 // zugeordnet, die ihre EIGENE Motor-Instanz (Prefix + storeInstance) baut
 // (s. kreisbewegung/runtime.js) -> beliebig viele Figuren, auch auf derselben
 // Seite, sind vollstaendig unabhaengig. Eager-Bau aller Figuren beim Init.
-const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'weg-zeit-kinematik': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig, 'federpendel': buildFederpendelFig, 'federpendel-kinematik': buildFederpendelFig, 'freier-fall': buildFreierFallFig, 'senkrechter-wurf': buildFreierFallFig, 'schraeger-wurf': buildSchraegerWurfFig, 'schraeger-wurf-bahn': buildSchraegerWurfFig, 'ableitung': buildAbleitungFig };
+const ASPEKT_FACTORIES = { 'kreisbahn': buildKreisbahnFig, 'weg-zeit': buildWegZeitFig, 'weg-zeit-kinematik': buildWegZeitFig, 'winkel-zeit': buildWinkelZeitFig, 'vxvy-zeit': buildVxVyZeitFig, 'axay-zeit': buildAxAyZeitFig, 'betragv-zeit': buildBetragVZeitFig, 'betrag-a-zeit': buildBetragAZeitFig, 'omega-zeit': buildOmegaZeitFig, 'periodendauer': buildPeriodendauerFig, 'axay-winkelbeschl': buildAxAyWinkelbeschlFig, 'arat-winkelbeschl': buildAratWinkelbeschlFig, 'alpha-omega': buildAlphaOmegaFig, 'omega-vektor': buildOmegaVektorFig, 'zentripetalkreuz': buildZentripetalkreuzFig, 'grundbegriffe': buildGrundbegriffeFig, 'bus_weg_zeit': buildBusWegZeitFig, 'federpendel': buildFederpendelFig, 'federpendel-kinematik': buildFederpendelFig, 'freier-fall': buildFreierFallFig, 'senkrechter-wurf': buildFreierFallFig, 'schraeger-wurf': buildSchraegerWurfFig, 'schraeger-wurf-bahn': buildSchraegerWurfFig, 'schraeger-wurf-vektor': buildSchraegerWurfFig, 'ableitung': buildAbleitungFig };
 
 // Stand-alone-Simulationen je Aspekt-Figur (P7-Rest, Nutzervorgabe 2026-07-30).
 // Die Sims leben unter SIM_BASE (die Index-Datei dort listet alle 16); eine
@@ -110,6 +110,7 @@ const ASPEKT_SIM_URLS = {
     // schraeger_wurf-Motor -> „Schräger Wurf"
     'schraeger-wurf': SIM_BASE + 'sim_schraeger_wurf/index.html',
     'schraeger-wurf-bahn': SIM_BASE + 'sim_schraeger_wurf/index.html',
+    'schraeger-wurf-vektor': SIM_BASE + 'sim_schraeger_wurf/index.html',
     // ableitung-Motor: KEIN Eintrag. Die Stand-alone-Sim ist unter SIM_BASE
     // noch nicht veroeffentlicht (sie steht als Hilfs-Sim in P12-E8); ein
     // geratener Pfad waere ein toter Link. Sobald sie dort liegt, hier

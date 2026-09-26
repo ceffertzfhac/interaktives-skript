@@ -25,8 +25,12 @@
 .aspekt-figur[data-motor="schraeger_wurf"] {
     --sw-bahn: var(--k11-kurve);  /* Kugel, Flugbahn UND beide Kurven — eine
                                      Farbe, s. Kopfkommentar des Moduls */
-    --sw-vel: #2060d0;       /* v-Pfeil  — aus, s. aspekt_schraeger_wurf.js; die
-                                Tokens stehen fuer Abb. 1.20 (v-t) bereit */
+    --sw-vel: var(--kb-vlat); /* v-Pfeil (Abb. 1.18, 1.20) — orange wie v in
+                                Abb. 1.19 und Kapitel 1.4; dasselbe Token faerbt
+                                das Farbwort der Unterschrift. */
+    --sw-ort: var(--kb-omega); /* Ortsvektor (Abb. 1.18) — die Quelle nennt
+                                ihn blau; das Blau der Kreisbewegungs-Figuren,
+                                Paletten und Farbwort laufen daran mit. */
     --sw-acc: #c03030;       /* a-Pfeil  — aus, s. o. */
     --sw-building: color-mix(in srgb, var(--kb-text) 12%, var(--kb-surface));
     --sw-ruler-bg: color-mix(in srgb, var(--kb-text) 6%, var(--kb-surface));
@@ -92,8 +96,10 @@
 .aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="stopwatch_main_hand"] { stroke: var(--kb-text); }
 .aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="stopwatch_sub_hand"] { stroke: var(--sw-bahn); }
 
-/* Vektoren: in dieser Figur dauerhaft ausgeblendet (s. Kopfkommentar des
-   Moduls). Die Regeln stehen hier, damit Abb. 1.20 sie nur einschalten muss. */
+/* Vektoren: in 1.9/1.14 ausgeblendet, in 1.18 an (Geschwindigkeit + der
+   figur-eigene Ortsvektor), s. Kopfkommentar des Moduls. */
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="position_vector"] { stroke: var(--sw-ort); }
+.aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="arrow-ort"] polygon { fill: var(--sw-ort); }
 .aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="velocity_vector"],
 .aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="velocity_vector_x"],
 .aspekt-figur[data-motor="schraeger_wurf"] .aspekt-scene [id$="velocity_vector_y"] { stroke: var(--sw-vel); }
@@ -119,6 +125,8 @@
 
 /* ── Legenden-Farbflecke (Bedienpanel) ────────────────────────────────────── */
 .aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-bahn"]  { background: var(--sw-bahn); }
+.aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-ort"]   { background: var(--sw-ort); }
+.aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-vel"]   { background: var(--sw-vel); }
 .aspekt-figur[data-motor="schraeger_wurf"] .legend-swatch[data-c="sw-ruler"] {
     background: var(--sw-ruler-bg); border: 1px solid var(--sw-ruler-stroke);
 }
@@ -287,3 +295,23 @@
 :root[data-width-mode="schmal"] .aspekt-figur.aspekt-im-overlay[data-motor="schraeger_wurf"] .aspekt-graph-svg {
     height: auto; max-height: min(40vh, 360px); width: 92%; margin: 0 auto;
 }
+
+/* ── Abb. 1.18: nur die Szene ───────────────────────────────────────────────
+   Kein Diagramm — das Diagramm-SVG steht nur als DOM-Vertrag im Skelett
+   (initDOM fasst es an) und bleibt verborgen. Die Szene bekommt die Zeile,
+   breitengetrieben mit Hoehendeckel: ihr Seitenverhaeltnis haengt am Wurf
+   (szeneZuschneiden() im JS schneidet den Himmel ab).
+   Die Formelkarte fuehrt beide Ortsvektor-Gleichungen, sichtbar ist die zum
+   aktiven Ursprung (fig.dataset.ursprungAktiv, s. ursprungSetzen()). */
+.aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-graph { display: none; }
+.aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-main .aspekt-main-content .aspekt-scene {
+    flex: 1 1 auto; padding: 0 8px 8px;
+}
+.aspekt-figur[data-aspekt="schraeger-wurf-vektor"] .aspekt-main .aspekt-svg {
+    width: 100%; height: auto; max-width: none; max-height: min(56vh, 520px); margin: 0 auto;
+}
+:root[data-width-mode="breit"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="schraeger-wurf-vektor"] .aspekt-svg { max-height: min(62vh, 600px); }
+:root[data-width-mode="schmal"] .aspekt-figur:not(.aspekt-im-overlay)[data-aspekt="schraeger-wurf-vektor"] .aspekt-svg { width: 100%; height: auto; max-height: min(50vh, 440px); }
+.aspekt-figur.aspekt-im-overlay[data-aspekt="schraeger-wurf-vektor"] .aspekt-svg { max-height: min(70vh, 680px); }
+.aspekt-figur[data-aspekt="schraeger-wurf-vektor"][data-ursprung-aktiv="ground"] .sw-nur-ursprung[data-ursprung="start"],
+.aspekt-figur[data-aspekt="schraeger-wurf-vektor"][data-ursprung-aktiv="start"] .sw-nur-ursprung[data-ursprung="ground"] { display: none; }
