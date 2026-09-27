@@ -58,7 +58,10 @@
 .aspekt-figur .ab-point     { fill: var(--kb-text); }
 
 /* Vektor-Labels — eigene Klasse OHNE stroke (kein Faux-Bold). */
-.aspekt-figur .vector-label { stroke: none; font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); }
+/* fill: Grundfarbe fuer Labels ohne eigene Farbklasse (|Δs⃗_BA| an der
+   Bemassung) -- ohne sie galt das SVG-Default Schwarz, im Darkmode unsichtbar.
+   Die Farbklassen darunter ueberschreiben sie (gleiche Spezifitaet, spaeter). */
+.aspekt-figur .vector-label { fill: var(--kb-text); stroke: none; font-family: var(--kb-font); font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); }
 .aspekt-figur .pos-vector-label { fill: var(--gk-pos); }
 .aspekt-figur .dba-vector-label { fill: var(--gk-dba); }
 .aspekt-figur .dab-vector-label { fill: var(--gk-dab); }
