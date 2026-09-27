@@ -18,16 +18,15 @@
 //      multipliziert (NUR der Schaft). Spitzen sind fest (userSpaceOnUse,
 //      HEAD_LEN/HEAD_H) mit refX=HEAD_LEN, der Schaft laeuft ungekuerzt bis
 //      ans Ziel — Strichstaerke, Spitzen und Vektorlaenge sind entkoppelt.
-//   5. Vektor-Labels werden per createElementNS als SVG-Knoten gebaut (nicht
-//      ueber innerHTML), damit der tiefgestellte Index (tspan dy/font-size)
-//      zuverlaessig greift.
+//   5. Alle Beschriftungen (Achsen, Titel, Vektor-Labels) per Formelsatz
+//      (lib/tex-label.js, BACKLOG P28) statt Unicode-Pfeil + tspan-Index.
 // Sonst 1:1 die Quelle — insbesondere die Geometrie (Label-Platzierung,
 // Bemassungslinie) bleibt unangetastet, weil sie die Optik der Vorlage ausmacht.
 
 import { T_MAX, PAD_L, PAD_T, PAD_B, PLOT_W, WIDE, HEAD_LEN } from './constants.js'
 import { store, DOM } from './state.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
-import { setAxisLabel, setGraphTitle } from '../kreisbewegung/lib/svg-text.js'
+import { setTexLabel } from '../kreisbewegung/lib/tex-label.js'
 
 const NS = 'http://www.w3.org/2000/svg'
 
@@ -114,62 +113,24 @@ export function drawGrid() {
 
   // Achsformat „Symbol / Einheit" wie in allen Sims/Figuren des Skripts.
   const xLabel = el('text', { x: physToScreen(store.xMaxBound, 0).x, y: y0 + 35, 'text-anchor': 'end', class: 'axis-label' })
-  setAxisLabel(xLabel, 'x / m')
+  setTexLabel(xLabel, 'x\\,/\\,\\mathrm{m}')
   DOM.gridGroup.appendChild(xLabel)
   const yLabel = el('text', { x: x0 + 10, y: physToScreen(0, store.yMaxBound).y - 20, 'text-anchor': 'start', class: 'axis-label' })
-  setAxisLabel(yLabel, 'y / m')
+  setTexLabel(yLabel, 'y\\,/\\,\\mathrm{m}')
   DOM.gridGroup.appendChild(yLabel)
 
   const title = el('text', { id: pid('graph_title'), x: PAD_L + PLOT_W / 2, y: PAD_T - 15, 'text-anchor': 'middle', class: 'graph-title-text' })
-  setGraphTitle(title, 'Bahndiagramm x-y-Diagramm')
+  setTexLabel(title, '\\text{Bahndiagramm }x\\text{-}y\\text{-Diagramm}')
   DOM.gridGroup.appendChild(title)
 }
 
-// Kombiniertes Symbol-Label „s⃗" mit tiefgestelltem Index (Original-Unicode-
-// Trick: Combining-Arrow U+20D7 auf 's', Index als <tspan>). Die Labels werden
-// als SVG-Knoten gebaut (createElementNS), NICHT ueber label.innerHTML: das
-// innerHTML-Parsen auf SVG-<text> erzeugt <tspan> nicht zuverlaessig im
-// SVG-Namespace, worauf weder baseline-shift noch dy/font-size greifen wuerden
-// — der Index erschiene ungestellt (hoch). Der Index wird per dy in Nutzer-
-// Einheiten gesenkt; auf Following-Inhalt (das schliessende „|" des Abstands-
-// Labels) hebt ein resetTspan die Verschiebung wieder auf.
-function subTspan(text) {
-  const t = document.createElementNS(NS, 'tspan')
-  t.setAttribute('dy', '4')
-  t.setAttribute('font-size', '0.7em')
-  t.textContent = text
-  return t
-}
-function resetTspan(text) {
-  const t = document.createElementNS(NS, 'tspan')
-  t.setAttribute('dy', '-4')
-  t.textContent = text
-  return t
-}
-function vectorLabel(sub) {
-  const f = document.createDocumentFragment()
-  f.appendChild(document.createTextNode('s⃗'))
-  f.appendChild(subTspan(sub))
-  return f
-}
-function deltaLabel(sub) {
-  const f = document.createDocumentFragment()
-  f.appendChild(document.createTextNode('Δs⃗'))
-  f.appendChild(subTspan(sub))
-  return f
-}
-// |Δs⃗_BA| — oeffnendes „|", Δs⃗, tiefgestelltes BA, zurueckgesetztes „|".
-// Die beiden Betragstriche je im EIGENEN Knoten (nicht im selben Textknoten wie
-// Δs⃗), damit der Combining-Arrow U+20D7 ueber dem s die Striche nicht
-// mitverschiebt — sonst stünden die Striche auf unterschiedlicher Höhe.
-function abstandLabel() {
-  const f = document.createDocumentFragment()
-  f.appendChild(document.createTextNode('|'))
-  f.appendChild(document.createTextNode('Δs⃗'))
-  f.appendChild(subTspan('BA'))
-  f.appendChild(resetTspan('|'))
-  return f
-}
+// Vektor-Labels als Formelsatz (P28): \\vec s_A, \\Delta\\vec s_{BA} und
+// |\\Delta\\vec s_{BA}| in derselben Schreibweise wie der Fliesstext. Ersetzt den
+// frueheren Nachbau aus Combining-Arrow U+20D7 + per dy gesenktem <tspan>, der
+// fuer die Betragsstriche eigene Knoten und einen Rueck-tspan brauchte.
+const vectorLabel = sub => `\\vec s_${sub}`
+const deltaLabel = sub => `\\Delta\\vec s_{${sub}}`
+const ABSTAND_LABEL = '|\\Delta\\vec s_{BA}|'
 
 // ── Dynamischer Overlay: Punkte A/B, Vektoren, Verschiebung, Abstand, Weg ───
 // highlightId: beim Hover ueber eine Steuerzeile hervorgehobenes Element
@@ -240,15 +201,15 @@ export function updateVisualization(highlightId = null) {
   if (t.sA) {
     DOM.plotArea.appendChild(vecLine('vector_sA', 'pos-vector', x0, y0, xA, yA, highlightId === 'sA' ? 4 : 2, 'arrowhead-pos'))
     const label = el('text', { class: 'pos-vector-label vector-label', 'text-anchor': 'middle' })
-    label.appendChild(vectorLabel('A'))
     placeSideLabel(label, x0, y0, xA, yA, xB, yB)
+    setTexLabel(label, vectorLabel('A'))
     labels.push(label)
   }
   if (t.sB) {
     DOM.plotArea.appendChild(vecLine('vector_sB', 'pos-vector', x0, y0, xB, yB, highlightId === 'sB' ? 4 : 2, 'arrowhead-pos'))
     const label = el('text', { class: 'pos-vector-label vector-label', 'text-anchor': 'middle' })
-    label.appendChild(vectorLabel('B'))
     placeSideLabel(label, x0, y0, xB, yB, xA, yA)
+    setTexLabel(label, vectorLabel('B'))
     labels.push(label)
   }
   if (t.verschiebung_BA) {
@@ -256,8 +217,8 @@ export function updateVisualization(highlightId = null) {
     line.setAttribute('stroke-dasharray', '5,5')
     DOM.plotArea.appendChild(line)
     const label = el('text', { class: 'dba-vector-label vector-label', 'text-anchor': 'middle' })
-    label.appendChild(deltaLabel('BA'))
     placeAlongLabel(label, xA, yA, xB, yB)
+    setTexLabel(label, deltaLabel('BA'))
     labels.push(label)
   }
   if (t.verschiebung_AB) {
@@ -265,8 +226,8 @@ export function updateVisualization(highlightId = null) {
     line.setAttribute('stroke-dasharray', '5,5')
     DOM.plotArea.appendChild(line)
     const label = el('text', { class: 'dab-vector-label vector-label', 'text-anchor': 'middle' })
-    label.appendChild(deltaLabel('AB'))
     placeAlongLabel(label, xB, yB, xA, yA)
+    setTexLabel(label, deltaLabel('AB'))
     labels.push(label)
   }
   if (t.abstand) {
@@ -332,16 +293,12 @@ function drawAbstandDimension(xA, yA, xB, yB, x0, y0) {
     const angle = Math.atan2(dy, dx) * 180 / Math.PI
     const readableAngle = (angle > 90 || angle < -90) ? angle + 180 : angle
     const tx = (xAo + xBo) / 2, ty = (yAo + yBo) / 2
-    // KEIN dominant-baseline:hanging (das ankert y am OBEREN Rand, sodass der
-    // per dy gesenkte Index BA nur 4 Einheiten unterhalb der Oberkante — also
-    // auf Hoehe des Pfeils ⃗ — erschiene, statt tiefgestellt). Default-Baseline
-    // (alphabetisch) + translate(0,22) wie placeAlongLabel: die Schriftbasis
-    // liegt 22 Einheiten jenseits der Bemassungslinie (etwas mehr Abstand als
-    // frueher, Nutzervorgabe), der Index sinkt per dy sauber ab.
-    // text-anchor:middle zentriert das ganze |Δs⃗_BA|.
+    // Grundlinie (Default) + translate(0,22) wie placeAlongLabel: die
+    // Schriftbasis liegt 22 Einheiten jenseits der Bemassungslinie (Abstand
+    // nach Nutzervorgabe). text-anchor:middle zentriert das ganze |Δs⃗_BA|.
     label = el('text', { 'text-anchor': 'middle', transform: `rotate(${readableAngle} ${tx} ${ty}) translate(0, 22)`, class: 'vector-label' })
     label.setAttribute('x', tx); label.setAttribute('y', ty)
-    label.appendChild(abstandLabel())
+    setTexLabel(label, ABSTAND_LABEL)
   }
   DOM.plotArea.appendChild(group)
   return label
