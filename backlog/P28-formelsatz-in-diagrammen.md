@@ -299,6 +299,17 @@ in Abb. 1.1 im Darkmode unsichtbar (v1.57.2).
   > per MathJax gesetzt — Computer Modern wie die Formeln im Fließtext, auch
   > für die Wörter (`\text{…}`); Titel normal statt halbfett. Tick-Zahlen,
   > Zeitanzeigen und Tooltips bleiben TeX Gyre Heros bzw. IBM Plex Mono.
+- [ ] **P28-6 Abszissen-Beschriftung ans Pfeilende** *(S)* — Nutzerbefund
+  2026-09-27: *„insbesondere bei zwei diagrammen übereinander [ist] die
+  beschriftung der abszisse mittig unter der unteren absizee plaziert […]. da
+  wirkt sie etwas verloren.“* Fünf Motoren zentrieren das Label unter der Achse
+  (`freier_fall`, `federpendel`, `kreis_spiral`, `schraeger_wurf`,
+  `kreisbewegung`, je `render.js`, Label `tlX`/`xLab`/`xLabel`); drei nutzen
+  schon den Haus-Stil **rechtsbündig unter dem Pfeilende** (`bus_weg_zeit`,
+  `grundbegriffe`, `ableitung`). Älter als P28, fällt mit dem Formelsatz
+  aber stärker auf. Ziel: alle Motoren wie der Haus-Stil; Prüfung per
+  3×-Screenshot, v. a. gestapelte Diagramme (Abb. 1.20, 1.51) und Kollision
+  mit den Tick-Zahlen.
 - [ ] **Sim-Repo (I18):** `tex-label.js` ist abhängigkeitsfrei und geht 1:1
   als `shared/js/tex-label.js` hinüber; dort in eigener Sitzung. Achtung:
   die Sims laden `mathjax@3` unversioniert und teils mit `fontCache:'global'`
