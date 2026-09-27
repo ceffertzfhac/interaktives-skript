@@ -23,7 +23,7 @@ import { store, DOM } from './state.js'
 import { scaleX, scaleY, getDisplayY, getDisplayV, getDisplayA,
          flightTime, maxHeight, range, impactAngle, linePlotIndex, interpolateAt } from './physics.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
-import { setTexLabel } from '../kreisbewegung/lib/tex-label.js'
+import { setTexLabel, texEinheit } from '../kreisbewegung/lib/tex-label.js'
 import { tAxisStep, niceStepLE } from '../kreisbewegung/lib/ticks.js'
 export { fmt }
 
@@ -240,11 +240,6 @@ export function updateDigitalDisplay(totalSeconds) {
 }
 
 // ── Diagramm-Titel ───────────────────────────────────────────────────────────
-// Einheit aus einem TeX-Achsenlabel („…\,/\,(\mathrm{m/s^2})“) als
-// Klartext fuer den Hover-Tooltip, der Text bleibt: „(m/s²)“.
-function einheitAusTex(s) {
-  return s.split('\\,/\\,').pop().replace(/\\mathrm\{([^}]*)\}/g, '$1').replace(/\^2/g, '²')
-}
 
 function getGraphTitleText(type) {
   if (['yx', 'xy'].includes(type)) {
@@ -510,7 +505,7 @@ function drawHoverAtT(slot, gs, t) {
   DOM.hoverPoint[slot].setAttribute('cy', scY(val))
   DOM.hoverPoint[slot].setAttribute('visibility', 'visible')
 
-  const unit = einheitAusTex(yLabel)
+  const unit = texEinheit(yLabel)
   renderHoverTooltip(slot, t, val, unit, xPix, padL, plotW, padT)
 }
 

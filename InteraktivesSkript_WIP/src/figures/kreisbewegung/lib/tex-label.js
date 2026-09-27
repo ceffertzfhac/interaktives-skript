@@ -140,7 +140,7 @@ function ausCss(textEl) {
     let w = cssWerte.get(textEl);
     if (!w) {
         const cs = getComputedStyle(textEl);
-        w = { anker: cs.textAnchor, basis: cs.dominantBaseline };
+        w = { anker: cs.textAnchor, basis: cs.dominantBaseline, aus: cs.display === 'none' };
         cssWerte.set(textEl, w);
     }
     return w;
@@ -150,13 +150,15 @@ function ausCss(textEl) {
 // (style.visibility/display, Klassen) und setzen mitunter Groesse oder Farbe
 // als Attribut statt ueber eine Klasse. Die <g> daneben folgt dem hier, damit
 // kein Motor davon wissen muss.
-const GESPIEGELT = ['display', 'font-size', 'fill'];
+const GESPIEGELT = ['display', 'visibility', 'font-size', 'fill'];
 function spiegle(textEl) {
     const g = gruppe.get(textEl);
     if (!g) return;
     g.setAttribute('class', ('tex-label ' + (textEl.getAttribute('class') || '')).trim());
     g.style.visibility = textEl.style.visibility;
-    g.style.display = textEl.style.display;
+    // display:none kann auch aus einer Stilregel auf die ANKER-ID kommen
+    // ([id$="…_label"] { display: none }) — die trifft die <g> ohne ID nicht.
+    g.style.display = ausCss(textEl).aus ? 'none' : textEl.style.display;
     for (const a of GESPIEGELT) {
         const w = textEl.getAttribute(a);
         if (w) g.setAttribute(a, w); else g.removeAttribute(a);
@@ -166,8 +168,8 @@ function spiegle(textEl) {
 function beobachte(textEl) {
     if (beobachtet.has(textEl)) return;
     beobachtet.add(textEl);
-    new MutationObserver(() => spiegle(textEl))
-        .observe(textEl, { attributes: true, attributeFilter: ['style', 'class', 'visibility', ...GESPIEGELT] });
+    new MutationObserver(() => { cssWerte.delete(textEl); spiegle(textEl); })
+        .observe(textEl, { attributes: true, attributeFilter: ['style', 'class', ...GESPIEGELT] });
 }
 
 function entferneGruppe(textEl) {
@@ -276,6 +278,16 @@ export function texZahl(s) {
     s = String(s);
     if (!/^-?[0-9]+(,[0-9]+)?$/.test(s)) return s.replace(/—/g, '\\text{—}');
     return Z_AUF + s.replace(/,/g, '{,}') + Z_ZU;
+}
+
+// Einheit aus einem TeX-Achsenlabel („…\,/\,(\mathrm{m/s^2})“) als Klartext
+// fuer Hover-Tooltips, die Text bleiben: „m/s²“ (ohne die Klammern, die nur
+// im Achsenlabel stehen — hinter einer Zahl hiesse es „1,23 m/s“). Ohne Trenner: ''.
+export function texEinheit(tex) {
+    const i = tex.lastIndexOf('\\,/\\,');
+    if (i < 0) return '';
+    return tex.slice(i + 5).replace(/\\mathrm\{([^}]*)\}/g, '$1').replace(/\^2/g, '²')
+        .replace(/^\((.*)\)$/, '$1');
 }
 
 // ── Klartext (Rueckfall + aria-label) ────────────────────────────────────────
