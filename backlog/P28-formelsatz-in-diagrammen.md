@@ -286,7 +286,10 @@ in Abb. 1.1 im Darkmode unsichtbar (v1.57.2).
 
 **Bewusst Text geblieben:** Tick-Zahlen, Zeit-/Ablese-Anzeigen, Hover-Tooltips.
 
-- [ ] **P28-4 Restbefunde (nicht Teil von P28, beim Migrieren gesehen)**
+- [x] **P28-4 Restbefunde (nicht Teil von P28, beim Migrieren gesehen)** —
+  erledigt 2026-09-27: Tooltip-Symbole über `tspansAusTex` aus derselben
+  TeX-Quelle wie die Achsen (v1.57.16), ±x₀ in Abb. 1.8 unter die Linien
+  (v1.57.17)
   - Tooltip-Texte tragen noch Unicode-Indizes: `kreis_spiral/constants.js::
     quantitySymbols` (`vᵧ`/`aᵧ` = Gamma) und `federpendel/render.js::
     LINE_LABELS` (`E_kin` wörtlich).
