@@ -59,8 +59,10 @@ Phase 3. Keine Umsetzung vor dem freigegebenen Plan.
   Schriftwahl (UI-Schrift vs. Mathe-Schrift — Mischung bewusst entscheiden),
   Migrationsreihenfolge über die acht Motoren, Teststrategie (3-fach-Screenshot
   je Motor, Export, Darkmode, Druck). **Nutzerfreigabe vor Phase 3.**
-- [ ] **P28-3 Umsetzung** — erst nach Freigabe; Motor für Motor, klein
-  committen, in beiden Repos synchron.
+- [x] **P28-3 Umsetzung** — im WIP erledigt 2026-09-27 (v1.57.0–v1.57.14,
+  Branch `p28-formelsatz-diagramme`), Ergebnis unten („P28-3 — Ergebnis“).
+  Offen nur noch, was außerhalb dieses Repos liegt: Sim-Repo (I18) und
+  Design-System `## 4`, s. dort.
 
 ### P28-1 — Ergebnis (2026-09-27)
 
@@ -252,6 +254,56 @@ Branch: `p28-formelsatz-diagramme`.
 - **Verifikation je Schritt:** 3×-Screenshot hell/dunkel, keine
   `foreignObject`/`[id^=MJX]` im Motor-SVG, Konsole sauber, Label-Zeit je
   Neuzeichnen < 0,5 ms, CDN blockiert → Klartext, Lupe und Druck.
+
+### P28-3 — Ergebnis (2026-09-27)
+
+Alle acht Motoren und die Szenen-Labels der Kap.-1.4-Figuren setzen ihre
+Beschriftungen über `setTexLabel` (`src/figures/kreisbewegung/lib/tex-label.js`);
+`svg-text.js` ist entfernt, im Figuren-Code steht **kein `foreignObject`** mehr.
+Pilot `bus_weg_zeit` vom Nutzer abgenommen („Bus proto looks good“).
+Abschlussprüfung (headless Chromium): 30 Figuren, jedes Label typographisch
+gesetzt, 0 Rückfalltexte, 0 MathJax-IDs in Labels, Konsole fehlerfrei.
+
+**Was der Helfer bei der Migration dazugelernt hat** (je ein realer Fund; die
+Gründe stehen im Kopf von `tex-label.js`): Sichtbarkeit, Klassen, Lage
+(x/y/transform/Anker/Grundlinie) und `font-size`/`fill`-Attribute des Ankers
+werden per MutationObserver auf die Formel-`<g>` gespiegelt; die `<g>` heißt
+`tex_<Anker-ID>`, damit `[id$="…"]`-Stilregeln greifen; `display:none` aus einer
+ID-Regel wird ebenfalls übernommen; `setTexLabel(el, '')` blendet aus.
+Grenze: Regeln über den Elementtyp (`text { … }`) treffen die `<g>` nicht
+(Runbook-Fallstrick #28).
+
+**Leistung:** statische Labels 0,013 ms je erneutem Setzen (nur Neuausrichten);
+Wert-Labels (Abb. 1.15, Zahlen ändern sich je Reglerschritt) werden aus
+gecachten Einzelglyphen gesetzt (`texZahl()`): 1,4–1,7 ms je Ziehschritt für
+die ganze Figur, vorher 0,6 ms; ohne Glyphen-Cache waren es 6,5 ms.
+
+**Nebenbei behoben:** `vᵧ`/`aᵧ` (tiefgestelltes Gamma) in kreisbewegung und
+kreis_spiral; wörtliche Unterstriche in `E_kin`-Titeln (federpendel) und
+`|a_r(t)|` (kreis_spiral); Tooltip-Einheit „s)“ statt „m/s“ (federpendel);
+Bindestrich statt Minus in negativen Steigungen (ableitung); Abstands-Label
+in Abb. 1.1 im Darkmode unsichtbar (v1.57.2).
+
+**Bewusst Text geblieben:** Tick-Zahlen, Zeit-/Ablese-Anzeigen, Hover-Tooltips.
+
+- [ ] **P28-4 Restbefunde (nicht Teil von P28, beim Migrieren gesehen)**
+  - Tooltip-Texte tragen noch Unicode-Indizes: `kreis_spiral/constants.js::
+    quantitySymbols` (`vᵧ`/`aᵧ` = Gamma) und `federpendel/render.js::
+    LINE_LABELS` (`E_kin` wörtlich).
+  - Abb. 1.8 (federpendel, horizontal): „x = 0 (Ruhelage)“ überlappt die
+    Labels ±x₀ — schon vor P28 so.
+- [ ] **P28-5 Design-System `## 4` nachziehen** (iCloud,
+  `…/Physik Home/physik-design-system/DESIGN_SYSTEM.md`, aus der VM nicht
+  erreichbar). Einzusetzen im Abschnitt dieses Repos unter Schrift/Diagramme:
+  > Diagramm-Beschriftungen (Titel, Achsen, Szenen-Labels) werden seit v1.57
+  > per MathJax gesetzt — Computer Modern wie die Formeln im Fließtext, auch
+  > für die Wörter (`\text{…}`); Titel normal statt halbfett. Tick-Zahlen,
+  > Zeitanzeigen und Tooltips bleiben TeX Gyre Heros bzw. IBM Plex Mono.
+- [ ] **Sim-Repo (I18):** `tex-label.js` ist abhängigkeitsfrei und geht 1:1
+  als `shared/js/tex-label.js` hinüber; dort in eigener Sitzung. Achtung:
+  die Sims laden `mathjax@3` unversioniert und teils mit `fontCache:'global'`
+  (der Helfer nutzt ein eigenes Dokument, das ist davon unabhängig);
+  `ui.js::stripLabel` (CSV) erwartet Klartext-Labels.
 
 ### Nicht-Ziele (vorerst)
 
