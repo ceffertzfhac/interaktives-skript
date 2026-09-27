@@ -52,7 +52,8 @@ Phase 3. Keine Umsetzung vor dem freigegebenen Plan.
   - Barrierefreiheit (Screenreader, `aria-label`), Druck, Dark Mode/`currentColor`,
     CVD-Paletten, SVG/PNG-Export der Sims.
   Ergebnis: kurzer Bericht mit Quellen und einer Bewertungsmatrix.
-- [ ] **P28-2 Plan für unseren Fall** *(M)* — im Plan-Modus: Entscheidung mit
+- [x] **P28-2 Plan für unseren Fall** *(M)* — erledigt 2026-09-27, freigegeben;
+  Ergebnis unten („P28-2 — Plan") — im Plan-Modus: Entscheidung mit
   Begründung, Architektur (z. B. gemeinsame Hilfsfunktion `texLabel(el, tex)`
   mit tspan-Rückfallebene), Leistungsbudget (Neuzeichnen pro Reglerzug!),
   Schriftwahl (UI-Schrift vs. Mathe-Schrift — Mischung bewusst entscheiden),
@@ -216,6 +217,41 @@ Quellen:
 [JSXGraph Text](https://jsxgraph.org/docs/symbols/Text.html) ·
 [PhET Scenery #457](https://github.com/phetsims/scenery/issues/457) ·
 [matplotlib Fonts / svg.fonttype](https://matplotlib.org/stable/users/explain/text/fonts.html)
+
+### P28-2 — Plan (freigegeben 2026-09-27)
+
+**Nutzerentscheidung Schrift: Variante C, alles Serif.** Titel, Achsen und
+Szenen-Labels setzt MathJax vollständig (`\text{…}` + Formel), wie Formeln im
+Fließtext. Verglichen wurden A (heute, Heros + tspan), B (Wort Heros, Formel
+MathJax) und C, jeweils hell und dunkel. Tick-Zahlen bleiben Text.
+Branch: `p28-formelsatz-diagramme`.
+
+- **Helfer** `src/figures/kreisbewegung/lib/tex-label.js`, API
+  `setTexLabel(textEl, tex, {aria})`. Das `<text>` der Motoren bleibt als Anker
+  (Position, Anker, Rotation, Klasse, `aria-label`). Dahinter hängt eine
+  `<g class="tex-label …">` mit den MathJax-Pfaden, Grundlinie y = 0, Maßstab
+  `font-size/1000`. Kein `getBBox`, kein `foreignObject`.
+- **Eigenes MathDocument** mit `fontCache:'none'` (gemessen: 0 IDs, 1,2 ms je
+  Label, `physics` verfügbar). Cache je TeX-String + `cloneNode`. Das
+  Seitendokument und die Gleichungsnummerierung bleiben unberührt.
+- **Farbe** über die bestehenden Klassenregeln: eine Regel
+  `g.tex-label g { fill: inherit }`, keine CSS-Änderung je Motor.
+- **Ladereihenfolge:** Solange MathJax nicht bereit ist, steht ein
+  Klartext-Rückfall im `<text>`, dann folgt die Hochstufung bei
+  `MathJax.startup.promise`. Ohne CDN bleibt der Klartext stehen.
+- **Titel** normal statt semibold (`\text` kennt kein 600) → Design-System `## 4`.
+- **MathJax bleibt 3.2.1** (v4 in der Messung 3–20× langsamer).
+- **Reihenfolge P28-3:** Helfer + Pilot `bus_weg_zeit` (v1.57.0, Nutzerblick) →
+  grundbegriffe → ableitung → freier_fall → schraeger_wurf → federpendel →
+  kreis_spiral → kreisbewegung → φ-`foreignObject` der Aspekt-Figuren →
+  `svg-text.js` entfernen → Doku (Runbook #8/#17, `src/figures/CLAUDE.md`,
+  Design-System). Kein P21-Eintrag (keine inhaltliche Abweichung von v0.13).
+- **Sim-Repo (I18):** Der Helfer ist abhängigkeitsfrei und geht 1:1 als
+  `shared/js/tex-label.js` hinüber, in einer eigenen Sitzung dort. Achtung:
+  Die Sims laden `mathjax@3` unversioniert und teils mit `fontCache:'global'`.
+- **Verifikation je Schritt:** 3×-Screenshot hell/dunkel, keine
+  `foreignObject`/`[id^=MJX]` im Motor-SVG, Konsole sauber, Label-Zeit je
+  Neuzeichnen < 0,5 ms, CDN blockiert → Klartext, Lupe und Druck.
 
 ### Nicht-Ziele (vorerst)
 
