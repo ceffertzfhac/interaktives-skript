@@ -41,12 +41,24 @@ export const TEX_LABEL_SCALE = 1.0;
 const em = (einheiten) => `${(einheiten / 1000 * TEX_LABEL_SCALE).toFixed(4)}em`;
 
 const gruppe = new WeakMap();    // Anker-<text> -> eingehaengte <g>
+const beobachtet = new WeakSet(); // Anker mit Sichtbarkeits-Spiegel
 const vorgemerkt = new Set();    // Anker, die auf MathJax warten
 const cache = new Map();         // tex -> { nodes: Node[], vb: number[] }
+// Obergrenze: Wert-Labels („Δt = 1,23“) erzeugen beim Ziehen laufend neue
+// Strings. Map haelt die Einfuegereihenfolge, also fliegt der aelteste raus.
+const CACHE_MAX = 400;
 let mjDoc = null;
 let wartet = false;
 
 export function setTexLabel(textEl, tex, { aria } = {}) {
+    // Gleicher Inhalt, Gruppe steht schon: nur neu ausrichten (Motoren setzen
+    // viele Labels in jedem Frame neu, meist unveraendert).
+    const alt = gruppe.get(textEl);
+    if (alt && textEl.__tex === tex && alt.isConnected) {
+        if (aria) textEl.setAttribute('aria-label', aria);
+        richteAus(textEl, alt, alt.__vb);
+        return;
+    }
     textEl.__tex = tex;
     textEl.setAttribute('aria-label', aria || texZuText(tex));
     entferneGruppe(textEl);
@@ -76,40 +88,80 @@ function wennVerbunden(textEl, tex, frame) {
 function platziere(textEl) {
     const tex = textEl.__tex;
     let satz;
-    try { satz = setze(tex); }
+    try { satz = satzFuer(tex); }
     catch (err) {
         console.warn('tex-label: MathJax-Fehler bei', tex, err);
         textEl.textContent = texZuText(tex);
         return;
     }
-    const cs = getComputedStyle(textEl);
-    const [, vbY, vbW, vbH] = satz.vb;
-    const anker = textEl.getAttribute('text-anchor') || cs.textAnchor;
-    const basis = textEl.getAttribute('dominant-baseline') || cs.dominantBaseline;
-    // Oberkante relativ zur Grundlinie: vbY (= -Oberlaenge). Bei middle/central
-    // die sichtbare Box (viewBox) um y zentrieren statt auf die Grundlinie.
-    const oben = (basis === 'middle' || basis === 'central') ? -vbH / 2 : vbY;
-    const links = anker === 'middle' ? -vbW / 2 : anker === 'end' ? -vbW : 0;
-
-    const x = parseFloat(textEl.getAttribute('x')) || 0;
-    const y = parseFloat(textEl.getAttribute('y')) || 0;
-    const tf = textEl.getAttribute('transform') || '';
-
     const g = document.createElementNS(SVGNS, 'g');
-    g.setAttribute('class', ('tex-label ' + (textEl.getAttribute('class') || '')).trim());
     g.setAttribute('aria-hidden', 'true');
-    g.setAttribute('transform', `${tf} translate(${x} ${y})`.trim());
     const svg = document.createElementNS(SVGNS, 'svg');
-    svg.setAttribute('x', em(links));
-    svg.setAttribute('y', em(oben));
-    svg.setAttribute('width', em(vbW));
-    svg.setAttribute('height', em(vbH));
+    svg.setAttribute('width', em(satz.vb[2]));
+    svg.setAttribute('height', em(satz.vb[3]));
     svg.setAttribute('viewBox', satz.vb.join(' '));
     svg.setAttribute('overflow', 'visible');
     for (const n of satz.nodes) svg.appendChild(n.cloneNode(true));
     g.appendChild(svg);
+    g.__vb = satz.vb;
+    richteAus(textEl, g, satz.vb);
     textEl.after(g);
     gruppe.set(textEl, g);
+    spiegle(textEl);
+    beobachte(textEl);
+}
+
+// Lage der Gruppe aus dem Anker: Position/Rotation als Transformation in
+// Nutzereinheiten, Anker und Grundlinie als em-Versatz des inneren <svg>.
+function richteAus(textEl, g, vb) {
+    const [, vbY, vbW, vbH] = vb;
+    const anker = textEl.getAttribute('text-anchor') || ausCss(textEl).anker;
+    const basis = textEl.getAttribute('dominant-baseline') || ausCss(textEl).basis;
+    // Oberkante relativ zur Grundlinie: vbY (= -Oberlaenge). Bei middle/central
+    // die sichtbare Box (viewBox) um y zentrieren statt auf die Grundlinie.
+    const oben = (basis === 'middle' || basis === 'central') ? -vbH / 2 : vbY;
+    const links = anker === 'middle' ? -vbW / 2 : anker === 'end' ? -vbW : 0;
+    const x = parseFloat(textEl.getAttribute('x')) || 0;
+    const y = parseFloat(textEl.getAttribute('y')) || 0;
+    const tf = textEl.getAttribute('transform') || '';
+    g.setAttribute('transform', `${tf} translate(${x} ${y})`.trim());
+    const svg = g.firstChild;
+    svg.setAttribute('x', em(links));
+    svg.setAttribute('y', em(oben));
+}
+
+// text-anchor/dominant-baseline aus einer Klassenregel: getComputedStyle
+// erzwingt eine Stil-Neuberechnung, beim Ziehen also einmal je Label und
+// Schritt. Deshalb nur, wenn das Attribut fehlt, und je Anker gemerkt.
+const cssWerte = new WeakMap();
+function ausCss(textEl) {
+    let w = cssWerte.get(textEl);
+    if (!w) {
+        const cs = getComputedStyle(textEl);
+        w = { anker: cs.textAnchor, basis: cs.dominantBaseline };
+        cssWerte.set(textEl, w);
+    }
+    return w;
+}
+
+// Die Motoren blenden Labels ueber das ANKER-<text> ein und aus
+// (style.visibility/display, Klassen). Die <g> daneben folgt dem hier, damit
+// kein Motor davon wissen muss.
+function spiegle(textEl) {
+    const g = gruppe.get(textEl);
+    if (!g) return;
+    g.setAttribute('class', ('tex-label ' + (textEl.getAttribute('class') || '')).trim());
+    g.style.visibility = textEl.style.visibility;
+    g.style.display = textEl.style.display;
+    const d = textEl.getAttribute('display');
+    if (d) g.setAttribute('display', d); else g.removeAttribute('display');
+}
+
+function beobachte(textEl) {
+    if (beobachtet.has(textEl)) return;
+    beobachtet.add(textEl);
+    new MutationObserver(() => spiegle(textEl))
+        .observe(textEl, { attributes: true, attributeFilter: ['style', 'class', 'display', 'visibility'] });
 }
 
 function entferneGruppe(textEl) {
@@ -124,6 +176,36 @@ function mathjaxBereit() {
     return !!(MJ && MJ._ && MJ._.mathjax && MJ.startup && MJ.startup.output);
 }
 
+// Zahlen in Wert-Labels („Δt = 1,23“) aendern sich bei jedem Reglerschritt.
+// Jeder neue String hiesse eine volle MathJax-Umwandlung (gemessen ~6 ms je
+// Schritt bei drei Labels statt 0,6 ms vorher). texZahl() markiert die Zahl
+// deshalb; hier wird nur der feste Teil umgewandelt (einmal, dann Cache), die
+// Zahl wird aus einzeln gecachten Glyphen (0-9, Komma, Minus) nebeneinander
+// gesetzt. Das ist in TeX dasselbe: Ziffern sind gewoehnliche Zeichen ohne
+// Abstand dazwischen. Die leeren {} an den Fugen halten die Abstaende um
+// Relationen/Operatoren so, wie sie im Ganzen waeren („m = {}“).
+const Z_AUF = '\u0001', Z_ZU = '\u0002';
+
+function satzFuer(tex) {
+    if (!tex.includes(Z_AUF)) return setze(tex);
+    const teile = [];
+    for (const [i, stueck] of tex.split(new RegExp(`[${Z_AUF}${Z_ZU}]`)).entries()) {
+        if (i % 2 === 0) { if (stueck) teile.push(setze(`{}${stueck}{}`)); continue; }
+        for (const z of stueck.replace(/\{,\}/g, ',')) teile.push(setze(z === '-' ? '{-}' : `{${z}}`));
+    }
+    let x = 0, oben = 0, unten = 0;
+    const nodes = [];
+    for (const t of teile) {
+        const [, vbY, vbW, vbH] = t.vb;
+        const g = document.createElementNS(SVGNS, 'g');
+        g.setAttribute('transform', `translate(${x} 0)`);
+        for (const n of t.nodes) g.appendChild(n.cloneNode(true));
+        nodes.push(g);
+        x += vbW; oben = Math.min(oben, vbY); unten = Math.max(unten, vbY + vbH);
+    }
+    return { nodes, vb: [0, oben, x, unten - oben] };
+}
+
 function setze(tex) {
     let satz = cache.get(tex);
     if (satz) return satz;
@@ -134,6 +216,7 @@ function setze(tex) {
         vb: svg.getAttribute('viewBox').split(/\s+/).map(Number),
     };
     cache.set(tex, satz);
+    if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value);
     return satz;
 }
 
@@ -180,6 +263,15 @@ function vormerken(textEl) {
     }).catch(() => { wartet = false; });
 }
 
+// Zahl aus fmt() (Dezimalkomma) fuer TeX: {,} verhindert den Abstand, den TeX
+// nach einem Komma im Mathe-Modus setzt; der Gedankenstrich fuer „kein Wert“
+// wird Text.
+export function texZahl(s) {
+    s = String(s);
+    if (!/^-?[0-9]+(,[0-9]+)?$/.test(s)) return s.replace(/—/g, '\\text{—}');
+    return Z_AUF + s.replace(/,/g, '{,}') + Z_ZU;
+}
+
 // ── Klartext (Rueckfall + aria-label) ────────────────────────────────────────
 
 const GRIECHISCH = {
@@ -191,6 +283,7 @@ const GRIECHISCH = {
 
 export function texZuText(tex) {
     return tex
+        .replace(/[\u0001\u0002]/g, '')
         .replace(/\\(?:text|mathrm|mathit|mathbf|operatorname)\{([^{}]*)\}/g, '$1')
         .replace(/\\(?:vec|overrightarrow|hat|bar)\s*/g, '')
         .replace(/\\([A-Za-z]+)/g, (m, n) => GRIECHISCH[n] ?? (n === 'cdot' ? '·' : ''))
