@@ -60,8 +60,10 @@ export function setTexLabel(textEl, tex, { aria } = {}) {
         return;
     }
     textEl.__tex = tex;
-    textEl.setAttribute('aria-label', aria || texZuText(tex));
     entferneGruppe(textEl);
+    // Leerer Inhalt = Label aus (z. B. Titel im Zwei-Diagramm-Modus).
+    if (!tex) { textEl.textContent = ''; textEl.removeAttribute('aria-label'); vorgemerkt.delete(textEl); return; }
+    textEl.setAttribute('aria-label', aria || texZuText(tex));
     if (!mathjaxBereit()) {
         textEl.textContent = texZuText(tex);
         vormerken(textEl);
@@ -145,23 +147,27 @@ function ausCss(textEl) {
 }
 
 // Die Motoren blenden Labels ueber das ANKER-<text> ein und aus
-// (style.visibility/display, Klassen). Die <g> daneben folgt dem hier, damit
+// (style.visibility/display, Klassen) und setzen mitunter Groesse oder Farbe
+// als Attribut statt ueber eine Klasse. Die <g> daneben folgt dem hier, damit
 // kein Motor davon wissen muss.
+const GESPIEGELT = ['display', 'font-size', 'fill'];
 function spiegle(textEl) {
     const g = gruppe.get(textEl);
     if (!g) return;
     g.setAttribute('class', ('tex-label ' + (textEl.getAttribute('class') || '')).trim());
     g.style.visibility = textEl.style.visibility;
     g.style.display = textEl.style.display;
-    const d = textEl.getAttribute('display');
-    if (d) g.setAttribute('display', d); else g.removeAttribute('display');
+    for (const a of GESPIEGELT) {
+        const w = textEl.getAttribute(a);
+        if (w) g.setAttribute(a, w); else g.removeAttribute(a);
+    }
 }
 
 function beobachte(textEl) {
     if (beobachtet.has(textEl)) return;
     beobachtet.add(textEl);
     new MutationObserver(() => spiegle(textEl))
-        .observe(textEl, { attributes: true, attributeFilter: ['style', 'class', 'display', 'visibility'] });
+        .observe(textEl, { attributes: true, attributeFilter: ['style', 'class', 'visibility', ...GESPIEGELT] });
 }
 
 function entferneGruppe(textEl) {
