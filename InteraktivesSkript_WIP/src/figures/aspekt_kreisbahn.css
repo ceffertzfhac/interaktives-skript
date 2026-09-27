@@ -272,6 +272,12 @@
 .aspekt-figur .tick-label { fill: var(--kb-text3); font-size: calc(11px * var(--kb-text-scale) * var(--kb-fs)); font-family: var(--kb-font-mono); }
 .aspekt-figur .graph-title-text { fill: var(--kb-text); font-size: calc(15px * var(--kb-text-scale) * var(--kb-fs)); font-family: var(--kb-font); font-weight: 600; }
 .aspekt-figur .graph-title-text.small { font-size: calc(13px * var(--kb-text-scale) * var(--kb-fs)); }
+/* Formelsatz-Labels (kreisbewegung/lib/tex-label.js, BACKLOG P28): die <g>
+   traegt die Klassen ihres Anker-<text> und bekommt so dessen fill und
+   font-size (die Groesse laeuft ueber em). MathJax setzt fill="currentColor"
+   als Attribut auf seine Wurzel-<g> -- die Regel hier sticht das Attribut und
+   reicht stattdessen die Klassenfarbe durch (Darkmode/Paletten ohne Re-Render). */
+.aspekt-figur g.tex-label g { fill: inherit; stroke: none; }
 .aspekt-figur .graph-hover-line { stroke: var(--kb-text3); stroke-width: calc(1.5px * var(--kb-lw)); stroke-dasharray: 4,3; pointer-events: none; }
 .aspekt-figur .graph-hover-point { fill: none; stroke-width: calc(2px * var(--kb-lw)); pointer-events: none; }
 .aspekt-figur .graph-hover-tooltip-bg { fill: var(--kb-surface2); fill-opacity: .85; stroke: var(--kb-border2); stroke-width: 1; rx: 4; }

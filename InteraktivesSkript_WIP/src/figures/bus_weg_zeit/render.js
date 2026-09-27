@@ -25,7 +25,7 @@ import {
 import { store, DOM } from './state.js'
 import { xAt, stateAt } from './physics.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
-import { setAxisLabel } from '../kreisbewegung/lib/svg-text.js'
+import { setTexLabel } from '../kreisbewegung/lib/tex-label.js'
 
 const NS = 'http://www.w3.org/2000/svg'
 
@@ -106,22 +106,23 @@ export function drawGrid() {
   // (rightEdge+17, text-anchor=end), „x(t) / m" 10 px nach links (x0-5) und
   // 2 px nach oben (yTop-22). Beide bleiben innerhalb des viewBox.
   const xLabel = el('text', { x: rightEdge + 17, y: y0 + 35, 'text-anchor': 'end', class: 'axis-label' })
-  setAxisLabel(xLabel, 't / s')
+  setTexLabel(xLabel, 't\\,/\\,\\mathrm{s}')
   DOM.gridGroup.appendChild(xLabel)
   const yLabel = el('text', { x: x0 - 5, y: yTop - 22, 'text-anchor': 'start', class: 'axis-label' })
-  setAxisLabel(yLabel, 'x(t) / m')
+  setTexLabel(yLabel, 'x(t)\\,/\\,\\mathrm{m}')
   DOM.gridGroup.appendChild(yLabel)
 
-  // Titel (plain — kein Symbol, daher nicht setGraphTitle).
+  // Titel: reiner Text, aber wie alle Diagrammtitel per Formelsatz (P28,
+  // Variante C „alles Serif“), damit er zu den Achsen passt.
   const title = el('text', { id: pid('graph_title'), x: PAD_L + PLOT_W / 2, y: PAD_T - 16, 'text-anchor': 'middle', class: 'graph-title-text' })
-  title.textContent = 'Weg-Zeit-Diagramm einer Busfahrt'
+  setTexLabel(title, '\\text{Weg-Zeit-Diagramm einer Busfahrt}')
   DOM.gridGroup.appendChild(title)
 
   // Legende „Linie 42" (kleiner Farbfleck + Text, oben links im Plot).
   const lg = el('g', { class: 'bw-legend', transform: `translate(${PAD_L + 8}, ${PAD_T + 8})` })
   lg.appendChild(el('rect', { x: 0, y: 0, width: 18, height: 10, rx: 2, class: 'bw-curve' }))
   const lt = el('text', { x: 24, y: 9, class: 'bw-legend-text' })
-  lt.textContent = 'Linie 42'
+  setTexLabel(lt, '\\text{Linie 42}')
   lg.appendChild(lt)
   DOM.gridGroup.appendChild(lg)
 }
@@ -153,7 +154,7 @@ export function drawStreetStatic() {
     const hg = el('g', { class: 'bw-haltestelle' })
     hg.appendChild(el('line', { x1: rx - 18, y1: sy, x2: rx - 38, y2: sy, class: 'bw-stop-post' }))
     const lbl = el('text', { x: rx - 44, y: sy, 'text-anchor': 'end', 'dominant-baseline': 'middle', class: 'bw-stop-label' })
-    lbl.textContent = STOP_LABELS[i]
+    setTexLabel(lbl, `\\text{${STOP_LABELS[i]}}`)
     hg.appendChild(lbl)
     g.appendChild(hg)
   }
@@ -200,7 +201,7 @@ export function updateVisualization(t) {
         x1: x0, y1: p.y, x2: rightEdge, y2: p.y, class: 'bw-stop-line',
       }))
       const lbl = el('text', { x: rightEdge + 10, y: p.y, 'text-anchor': 'start', 'dominant-baseline': 'middle', class: 'bw-stop-line-label' })
-      lbl.textContent = STOP_LABELS[i]
+      setTexLabel(lbl, `\\text{${STOP_LABELS[i]}}`)
       DOM.plotArea.appendChild(lbl)
     }
   }
