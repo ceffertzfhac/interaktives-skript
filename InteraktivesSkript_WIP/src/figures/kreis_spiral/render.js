@@ -15,13 +15,13 @@ import {
   WATCH_SUBDIAL_R, WATCH_SUBDIAL_OFFSET,
   ZOOM_TEXT_X, ZOOM_TEXT_Y,
   PAD_L, PAD_R, PAD_T, PAD_B,
-  quantities, quantityUnits, quantitySymbols, graphOptions, graphTitles,
+  quantities, quantityUnits, quantitySymbols, quantityTex, graphOptions, graphTitles,
 } from './constants.js'
 import { store, DOM } from './state.js'
 import { interpolateAt, linePlotIndex, radiusAt } from './physics.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
 import { shortenEnd } from '../kreisbewegung/lib/vectors.js'
-import { setAxisLabel, setGraphTitle } from '../kreisbewegung/lib/svg-text.js'
+import { setTexLabel } from '../kreisbewegung/lib/tex-label.js'
 import { tAxisStep, niceStepLE } from '../kreisbewegung/lib/ticks.js'
 export { fmt }
 
@@ -33,21 +33,6 @@ function el(tag, attrs) {
   return e
 }
 
-// SVG-Text aus HTML-<i>-Tags (Symbol kursiv, Rest upright)
-function createStyledSvgText(svgEl, text) {
-  while (svgEl.firstChild) svgEl.removeChild(svgEl.firstChild)
-  const regex = /<i>(.*?)<\/i>|([^<>&]+)/g
-  let m
-  while ((m = regex.exec(text)) !== null) {
-    if (m[1]) {
-      const t = el('tspan', { 'font-style': 'italic' })
-      t.textContent = m[1]
-      svgEl.appendChild(t)
-    } else if (m[2]) {
-      svgEl.appendChild(document.createTextNode(m[2]))
-    }
-  }
-}
 
 const ARROW_LEN_MAIN = 5 * 2.5    // Hauptvektoren sw=2,5 → 12,5 px
 const ARROW_LEN_ACC = 5 * 3       // Beschleunigung sw=3 → 15 px
@@ -120,6 +105,8 @@ export function drawBackground() {
     DOM.isoLabelX.setAttribute('x', X.x - 15); DOM.isoLabelX.setAttribute('y', X.y + 10)
     DOM.isoLabelY.setAttribute('x', Y.x + 10); DOM.isoLabelY.setAttribute('y', Y.y + 10)
     DOM.isoLabelZ.setAttribute('x', Z.x - 10); DOM.isoLabelZ.setAttribute('y', Z.y - 5)
+    // Formelsatz (P28); gleicher Inhalt = nur neu ausrichten, also billig.
+    setTexLabel(DOM.isoLabelX, 'x'); setTexLabel(DOM.isoLabelY, 'y'); setTexLabel(DOM.isoLabelZ, 'z')
     // Iso-Kreis (Bahn in der Höhenebene h)
     const R_circ = store.motionMode === 'spirale' ? (store.R0 > 0 ? store.R0 : 0) : store.R0
     let d = ''
@@ -135,11 +122,11 @@ export function drawBackground() {
     const attrs = { stroke: 'var(--text)', 'stroke-opacity': '0.5', 'stroke-width': 1.5, 'marker-end': `url(#${store.idPrefix}arrowhead)` }
     DOM.coordSystem2d.appendChild(el('line', { ...attrs, x1: ANIM_CX - COORD_AXIS_LEN, y1: ANIM_CY, x2: ANIM_CX + COORD_AXIS_LEN, y2: ANIM_CY }))
     const xLab = el('text', { x: ANIM_CX + COORD_AXIS_LEN + 10, y: ANIM_CY + 4, class: 'axis-label' })
-    createStyledSvgText(xLab, '<i>x</i>')
+    setTexLabel(xLab, 'x')
     DOM.coordSystem2d.appendChild(xLab)
     DOM.coordSystem2d.appendChild(el('line', { ...attrs, x1: ANIM_CX, y1: ANIM_CY + COORD_AXIS_LEN, x2: ANIM_CX, y2: ANIM_CY - COORD_AXIS_LEN }))
     const yLab = el('text', { x: ANIM_CX - 10, y: ANIM_CY - COORD_AXIS_LEN - 5, class: 'axis-label' })
-    createStyledSvgText(yLab, '<i>y</i>')
+    setTexLabel(yLab, 'y')
     DOM.coordSystem2d.appendChild(yLab)
   }
 
@@ -214,6 +201,8 @@ function drawPhiArc(phiRad, R_t) {
     const p = projectISO(lr * Math.cos(la), lr * Math.sin(la), store.h)
     DOM.phiLabel.setAttribute('x', p.x); DOM.phiLabel.setAttribute('y', p.y)
   }
+  // \varphi = das geschwungene φ des Fliesstexts (Runbook-Fallstrick #8).
+  setTexLabel(DOM.phiLabel, '\\varphi')
 }
 
 // ── Vektoren + Zerlegung ─────────────────────────────────────────────────────
@@ -417,6 +406,18 @@ function yUnitString(qq) {
   return ''
 }
 
+// Dieselbe Einheit als TeX fuers Achsenlabel; zusammengesetzte Einheiten in
+// Klammern („ω / (°/s)“ statt des mehrdeutigen „ω / °/s“).
+const EINHEIT_TEX = {
+  'm': '\\mathrm{m}', 'm/s': '\\mathrm{m/s}', 'm/s²': '\\mathrm{m/s^2}',
+  '°': '{}^\\circ', '°/s': '{}^\\circ/\\mathrm{s}', '°/s²': '{}^\\circ/\\mathrm{s^2}',
+  'rad': '\\mathrm{rad}', 'rad/s': '\\mathrm{rad/s}', 'rad/s²': '\\mathrm{rad/s^2}',
+}
+function yUnitTex(qq) {
+  const tex = EINHEIT_TEX[yUnitString(qq)] ?? ''
+  return tex.includes('/') ? `(${tex})` : tex
+}
+
 // Auto-Range für Y: min/max über den bisher geplotteten Daten-Abschnitt [0..n),
 // mit derselben typspezifischen Padding wie computeAxisLimits (Beteiligung von 0
 // bei Betrags-/Symmetrie-Größen, kleiner Bereich um konstante Werte). cf = rad-Faktor.
@@ -557,10 +558,10 @@ function drawGraph(idx, time, geom) {
     transform: `rotate(-90, ${PAD_L - 40}, ${PAD_T + plotH / 2})`,
     x: PAD_L - 40, y: PAD_T + plotH / 2, 'text-anchor': 'middle', class: 'axis-label',
   })
-  setAxisLabel(yLabel, `${quantitySymbols[qq]} / ${yUnitString(qq)}`)
+  setTexLabel(yLabel, `${quantityTex[qq]}\\,/\\,${yUnitTex(qq)}`)
   group.appendChild(yLabel)
   const xLabel = el('text', { x: PAD_L + plotW / 2, y: xAxisY + PAD_B - 10, 'text-anchor': 'middle', class: 'axis-label' })
-  setAxisLabel(xLabel, 't / s')
+  setTexLabel(xLabel, 't\\,/\\,\\mathrm{s}')
   group.appendChild(xLabel)
 
   // Datenlinie + aktueller Punkt
@@ -587,7 +588,7 @@ function drawGraph(idx, time, geom) {
 
   // Titel (letztes Kind → über Datenlinien + bg)
   const title = el('text', { x: G_W / 2, y: 20, 'text-anchor': 'middle', class: 'graph-title-text' })
-  setGraphTitle(title, graphTitles[qq])
+  setTexLabel(title, graphTitles[qq])
   group.appendChild(title)
 }
 

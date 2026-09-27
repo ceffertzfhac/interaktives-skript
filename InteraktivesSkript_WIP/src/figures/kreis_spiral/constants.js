@@ -100,14 +100,22 @@ export const graphOptions = {
   },
 }
 
-// Kurze Graph-Titel (TextContent-Variante ohne Einheit — setGraphTitle)
+// Graph-Titel und Achsensymbole als TeX (setTexLabel, P28), Schreibweise wie
+// im Fliesstext: \varphi, \vec a_\text{r}, Betraege mit Pfeil und (t) innen.
+// Vorher Unicode-Indizes — vᵧ war ein tiefgestelltes GAMMA (ein
+// tiefgestelltes y gibt es in Unicode nicht), |a_r(t)| stand woertlich da.
 export const graphTitles = {
-  phi: 'Winkel φ(t)', omega: 'Winkelgeschw. ω(t)', alpha: 'Winkelbeschl. α(t)',
-  x: 'Ort x(t)', y: 'Ort y(t)',
-  vx: 'Geschw. vₓ(t)', vy: 'Geschw. vᵧ(t)',
-  ax: 'Beschl. aₓ(t)', ay: 'Beschl. aᵧ(t)',
-  vabs: 'Geschwindigkeitsbetrag |v(t)|', aabs: 'Beschleunigungsbetrag |a(t)|',
-  ar: '|a_r(t)|', at: '|a_t(t)|',
+  phi: '\\text{Winkel }\\varphi(t)', omega: '\\text{Winkelgeschw. }\\omega(t)', alpha: '\\text{Winkelbeschl. }\\alpha(t)',
+  x: '\\text{Ort }x(t)', y: '\\text{Ort }y(t)',
+  vx: '\\text{Geschw. }v_x(t)', vy: '\\text{Geschw. }v_y(t)',
+  ax: '\\text{Beschl. }a_x(t)', ay: '\\text{Beschl. }a_y(t)',
+  vabs: '\\text{Geschwindigkeitsbetrag }|\\vec v(t)|', aabs: '\\text{Beschleunigungsbetrag }|\\vec a(t)|',
+  ar: '|\\vec a_\\text{r}(t)|', at: '|\\vec a_\\text{t}(t)|',
+}
+export const quantityTex = {
+  phi: '\\varphi', omega: '\\omega', alpha: '\\alpha',
+  x: 'x', y: 'y', vx: 'v_x', vy: 'v_y', ax: 'a_x', ay: 'a_y',
+  ar: '|\\vec a_\\text{r}|', at: '|\\vec a_\\text{t}|', vabs: '|\\vec v|', aabs: '|\\vec a|',
 }
 
 // CSV-Header je Größe (Winkelgrößen immer in Grad — Vergleichbarkeit)
