@@ -41,9 +41,9 @@ export const store = {
   // Achsen t und x, die Differenzen Δt und Δx, und die Steigung ist eine
   // Geschwindigkeit in m/s. Ohne diese Felder stuende in der Figur „Δy" an
   // einer Groesse, die im Text x heisst.
-  achsX: 'x', achsY: 'y',        // fuer setAxisLabel ('Symbol / Einheit')
-  symX: 'x', symY: 'y',          // Symbole in den Δ-Beschriftungen
-  steigEinheit: '',              // an die Steigungswerte, z. B. ' m/s'
+  achsX: 'x', achsY: 'y',        // Achsen-Labels als TeX (setTexLabel)
+  symX: 'x', symY: 'y',          // Symbole in den Δ-Beschriftungen (TeX)
+  steigEinheit: '',              // TeX an die Steigungswerte, z. B. '\\,\\mathrm{m/s}'
   // PORT-AENDERUNG: Betragsgrenze fuer δ je Figur (Sim: DELTA_LIMIT = 5).
   deltaLimit: undefined,
 }

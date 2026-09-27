@@ -12,7 +12,7 @@ import { xVon, xBis } from './physics.js'
 // PORT-AENDERUNG: die gemeinsamen Helfer liegen im WIP unter kreisbewegung/lib
 // (erste Portierung), nicht unter ../../shared/js.
 import { fmt } from '../kreisbewegung/lib/format.js'
-import { setAxisLabel } from '../kreisbewegung/lib/svg-text.js'
+import { setTexLabel, texZahl } from '../kreisbewegung/lib/tex-label.js'
 import { niceStepLE } from '../kreisbewegung/lib/ticks.js'
 
 const NS = 'http://www.w3.org/2000/svg'
@@ -22,24 +22,6 @@ function el(tag, attrs) {
   for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v))
   return e
 }
-
-// SVG-Text mit gemischter Formatierung aus HTML-<i>-Tags (Symbol kursiv, Rest
-// aufrecht) — für dynamische Wert-Labels (kein statisches MathJax möglich).
-function createStyledSvgText(textEl, text) {
-  while (textEl.firstChild) textEl.removeChild(textEl.firstChild)
-  const re = /<i>(.*?)<\/i>|([^<]+)/g
-  let m
-  while ((m = re.exec(text)) !== null) {
-    if (m[1]) {
-      const t = el('tspan', { 'font-style': 'italic' })
-      t.textContent = m[1]
-      textEl.appendChild(t)
-    } else if (m[2]) {
-      textEl.appendChild(document.createTextNode(m[2]))
-    }
-  }
-}
-
 
 // ── Plot-Geometrie ────────────────────────────────────────────────────────────
 const plotW = GRAPH_W - PAD_L - PAD_R
@@ -103,15 +85,15 @@ export function drawGraph() {
   DOM.gridGroup.appendChild(el('line', { x1: PAD_L, y1: y0px, x2: PAD_L + plotW, y2: y0px, class: 'axis-line', 'marker-end': achsPfeil }))
   DOM.gridGroup.appendChild(el('line', { x1: PAD_L, y1: plotBottom, x2: PAD_L, y2: PAD_T, class: 'axis-line', 'marker-end': achsPfeil }))
 
-  // Achsenbeschriftungen (Symbole kursiv, unit-los)
+  // Achsenbeschriftungen (TeX aus dem Store, Formelsatz P28)
   // PORT-AENDERUNG (P17-1): Label AM Achsenende statt dahinter -- bei PAD_R=26
   // ragten die 14 px plus Textbreite aus der viewBox, in der Figur war "t / s"
   // rechts abgeschnitten. Jetzt endet es buendig mit der Achse.
   const xl = el('text', { x: PAD_L + plotW + 10, y: y0px + 20, 'text-anchor': 'end', class: 'axis-label' })
-  setAxisLabel(xl, store.achsX || 'x')
+  setTexLabel(xl, store.achsX || 'x')
   DOM.gridGroup.appendChild(xl)
   const yl = el('text', { x: PAD_L - 4, y: PAD_T - 12, 'text-anchor': 'middle', class: 'axis-label' })
-  setAxisLabel(yl, store.achsY || 'y')
+  setTexLabel(yl, store.achsY || 'y')
   DOM.gridGroup.appendChild(yl)
 
   // Funktionskurve
@@ -177,12 +159,12 @@ export function updateOverlay() {
     const midH = physToScreen((a.x1 + a.x2) / 2, a.y1)
     DOM.dxText.setAttribute('x', midH.x)
     DOM.dxText.setAttribute('y', p1.y + (a.dy >= 0 ? 15 : -8))
-    createStyledSvgText(DOM.dxText, `Δ<i>${store.symX || 'x'}</i> = ${fmt(a.dx)}`)
+    setTexLabel(DOM.dxText, `\\Delta ${store.symX || 'x'} = ${texZahl(fmt(a.dx))}`)
     const midV = physToScreen(a.x2, (a.y1 + a.y2) / 2)
     DOM.dyText.setAttribute('x', p2.x + (a.dx >= 0 ? 6 : -6))
     DOM.dyText.setAttribute('y', midV.y)
     DOM.dyText.setAttribute('text-anchor', a.dx >= 0 ? 'start' : 'end')
-    createStyledSvgText(DOM.dyText, `Δ<i>${store.symY || 'y'}</i> = ${fmt(a.dy)}`)
+    setTexLabel(DOM.dyText, `\\Delta ${store.symY || 'y'} = ${texZahl(fmt(a.dy))}`)
     show(DOM.dxText, DOM.dyText)
   } else {
     hide(DOM.dxText, DOM.dyText)
@@ -194,7 +176,7 @@ export function updateOverlay() {
   if (store.showTangentSlope) {
     DOM.tanSlopeText.setAttribute('x', rx)
     DOM.tanSlopeText.setAttribute('y', ry0 + slot * rlh)
-    createStyledSvgText(DOM.tanSlopeText, `Tangente: <i>m</i> = ${fmt(a.mTan, 3)}${store.steigEinheit || ''}`)
+    setTexLabel(DOM.tanSlopeText, `\\text{Tangente: }m = ${texZahl(fmt(a.mTan, 3))}${store.steigEinheit || ''}`)
     show(DOM.tanSlopeText); slot++
   } else {
     hide(DOM.tanSlopeText)
@@ -202,7 +184,7 @@ export function updateOverlay() {
   if (store.showSecantSlope && !Number.isNaN(a.mSec)) {
     DOM.secSlopeText.setAttribute('x', rx)
     DOM.secSlopeText.setAttribute('y', ry0 + slot * rlh)
-    createStyledSvgText(DOM.secSlopeText, `Sekante: <i>m</i>${sub('s')} = ${fmt(a.mSec, 3)}${store.steigEinheit || ''}`)
+    setTexLabel(DOM.secSlopeText, `\\text{Sekante: }m_{\\mathrm{s}} = ${texZahl(fmt(a.mSec, 3))}${store.steigEinheit || ''}`)
     show(DOM.secSlopeText); slot++
   } else {
     hide(DOM.secSlopeText)
@@ -210,8 +192,6 @@ export function updateOverlay() {
 }
 
 // Kleiner tiefgestellter Index (Unicode-Fallback: 's' → 'ₛ')
-function sub(ch) { return ch === 's' ? 'ₛ' : ch }
-
 // ── Analyse-Panel (rechts) ───────────────────────────────────────────────────
 export function updateAnalysis() {
   const a = store.analysis

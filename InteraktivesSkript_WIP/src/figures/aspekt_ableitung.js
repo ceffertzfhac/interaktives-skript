@@ -219,9 +219,9 @@ export function buildAbleitungFig(fig) {
             centered: true,
             xMin: X_VON, xMax: X_BIS,
             deltaLimit: DT_MAX,
-            achsX: 't / s', achsY: 'x / m',
+            achsX: 't\\,/\\,\\mathrm{s}', achsY: 'x\\,/\\,\\mathrm{m}',
             symX: 't', symY: 'x',
-            steigEinheit: ' m/s',
+            steigEinheit: '\\,\\mathrm{m/s}',
         });
         store.curve = sampleCurve(store.funcKey);
         const r = yRange(store.curve.ys);
