@@ -17,13 +17,13 @@ import {
     DIGIT_WIDTH, DIGIT_HEIGHT, COLON_DOT_SIZE,
     DIGITAL_FRAME_X, DIGITAL_FRAME_Y, DIGITAL_FRAME_W, DIGITAL_FRAME_H,
     DIGIT_SEGMENTS_MAP,
-    graphTitles,
+    graphTitles, graphAxisLabels, graphXAxisLabels,
 } from './constants.js';
 import { store, DOM } from './state.js';
 import { linePlotIndex, frequency } from './physics.js';
 import { fmt } from './lib/format.js';
 import { shortenEnd } from './lib/vectors.js';
-import { setAxisLabel, setGraphTitle } from './lib/svg-text.js';
+import { setTexLabel } from './lib/tex-label.js';
 import { tAxisStep, niceStepLE } from './lib/ticks.js';
 export { fmt };
 
@@ -85,7 +85,7 @@ export function drawCoordSystem() {
         stroke: 'var(--text)', 'stroke-width': 1.2, 'marker-end': `url(#${store.idPrefix}anim-arrowhead)`,
     }));
     const xl = el('text', { x: ANIM_CX + axLen + 8, y: cy + 4, 'font-size': 13, fill: 'var(--text)' });
-    xl.textContent = 'x';
+    setTexLabel(xl, 'x');
     DOM.animationCoordSystem.appendChild(xl);
     const ayEnd = shortenEnd(ANIM_CX, cy + 10, ANIM_CX, cy - axLen, ARROW_LEN_AXIS);
     DOM.animationCoordSystem.appendChild(el('line', {
@@ -93,7 +93,7 @@ export function drawCoordSystem() {
         stroke: 'var(--text)', 'stroke-width': 1.2, 'marker-end': `url(#${store.idPrefix}anim-arrowhead)`,
     }));
     const yl = el('text', { x: ANIM_CX - 14, y: cy - axLen - 4, 'font-size': 13, fill: 'var(--text)' });
-    yl.textContent = 'y';
+    setTexLabel(yl, 'y');
     DOM.animationCoordSystem.appendChild(yl);
 }
 
@@ -365,15 +365,15 @@ function drawGraphSlot(attrs) {
 
     const tlYx = plotL - 42 * fs;
     const tlY = el('text', { x: tlYx, y: plotT + plotH / 2, transform: `rotate(-90 ${tlYx} ${plotT + plotH / 2})`, 'text-anchor': 'middle', class: 'axis-label' });
-    setAxisLabel(tlY, limits.yLabel);
+    setTexLabel(tlY, graphAxisLabels[type] ?? limits.yLabel);
     gridEl.appendChild(tlY);
     const tlX = el('text', { x: plotL + plotW / 2, y: plotBottom + 32 * fs, 'text-anchor': 'middle', class: 'axis-label' });
-    setAxisLabel(tlX, limits.xLabel);
+    setTexLabel(tlX, limits.xIsTime ? 't\\,/\\,\\mathrm{s}' : (graphXAxisLabels[type] ?? limits.xLabel));
     gridEl.appendChild(tlX);
 
     titleEl.setAttribute('x', plotL + plotW / 2);
     titleEl.setAttribute('y', plotT - 10 * fs);
-    setGraphTitle(titleEl, graphTitles[type] ?? type);
+    setTexLabel(titleEl, graphTitles[type] ?? type);
 
     if (!limits.xIsTime) {
         store.graphScale[slot] = null;

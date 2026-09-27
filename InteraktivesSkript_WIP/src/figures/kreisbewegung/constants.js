@@ -79,31 +79,34 @@ export const graphOptions = {
     },
 };
 
+// Titel und Achsen der Diagramme als TeX (setTexLabel, P28), Schreibweise wie
+// im Fliesstext (\varphi, \vec a_\text{t}, Betraege mit Pfeil und (t) innen).
+// Vorher Unicode-Indizes: vᵧ/aᵧ waren tiefgestellte GAMMAS (ein tiefgestelltes
+// y gibt es in Unicode nicht). Die Achsen-Strings in physics.js (xLabel/yLabel)
+// bleiben Klartext — sie speisen den CSV-Export (ui.js::stripLabel).
 export const graphTitles = {
-    yx: 'Bahnkurve y(x)', xy: 'Bahnkurve x(y)',
-    xt: 'x-Koordinate x(t)', yt: 'y-Koordinate y(t)',
-    vxt: 'Geschwindigkeit vₓ(t)', vyt: 'Geschwindigkeit vᵧ(t)',
-    axt: 'Beschleunigung aₓ(t)', ayt: 'Beschleunigung aᵧ(t)',
-    vabs: 'Betrag |v|(t)', aabs: 'Betrag |a|(t)', phit: 'Winkel φ(t)',
-    omega: 'Winkelgeschwindigkeit ω(t)',
-    // Betrags-Vergleich bei veränderlichem ω (Aspekt-Figur 1.51): |a⃗ₜ(t)| oben
-    // (Tangentialbeschleunigung, konstant für konst. α), a⃗ᵣ unten (Zentripetal-
-    // beschleunigung, wächst mit ω(t)²). Echte Unicode-Subskripte ₜ (U+209C) /
-    // ᵣ (U+1D63) statt Unterstrich (wie vₓ/vᵧ oben); Betrags-Schreibweise
-    // |a⃗(t)| (Pfeil + (t) innen) per Nutzervorgabe.
-    att: 'Tangentialbeschl. |a⃗ₜ(t)|', art: 'Zentripetalbeschl. |a⃗ᵣ(t)|',
+    yx: '\\text{Bahnkurve }y(x)', xy: '\\text{Bahnkurve }x(y)',
+    xt: 'x\\text{-Koordinate }x(t)', yt: 'y\\text{-Koordinate }y(t)',
+    vxt: '\\text{Geschwindigkeit }v_x(t)', vyt: '\\text{Geschwindigkeit }v_y(t)',
+    axt: '\\text{Beschleunigung }a_x(t)', ayt: '\\text{Beschleunigung }a_y(t)',
+    vabs: '\\text{Betrag }|\\vec v(t)|', aabs: '\\text{Betrag }|\\vec a(t)|', phit: '\\text{Winkel }\\varphi(t)',
+    omega: '\\text{Winkelgeschwindigkeit }\\omega(t)',
+    // Betrags-Vergleich bei veraenderlichem ω (Aspekt-Figur 1.51): |a⃗_t(t)| oben
+    // (Tangentialbeschleunigung, konstant fuer konst. α), a⃗_r unten (Zentripetal-
+    // beschleunigung, waechst mit ω(t)²).
+    att: '\\text{Tangentialbeschl. }|\\vec a_\\text{t}(t)|', art: '\\text{Zentripetalbeschl. }|\\vec a_\\text{r}(t)|',
 };
 
 export const graphAxisLabels = {
-    yx: 'y / m', xy: 'x / m', xt: 'x / m', yt: 'y / m',
-    vxt: 'vₓ / (m/s)', vyt: 'vᵧ / (m/s)',
-    axt: 'aₓ / (m/s²)', ayt: 'aᵧ / (m/s²)',
-    vabs: '|v| / (m/s)', aabs: '|a| / (m/s²)', phit: 'φ / °',
-    omega: 'ω / (rad/s)',
-    att: '|a⃗ₜ| / (m/s²)', art: '|a⃗ᵣ| / (m/s²)',
+    yx: 'y\\,/\\,\\mathrm{m}', xy: 'x\\,/\\,\\mathrm{m}', xt: 'x\\,/\\,\\mathrm{m}', yt: 'y\\,/\\,\\mathrm{m}',
+    vxt: 'v_x\\,/\\,(\\mathrm{m/s})', vyt: 'v_y\\,/\\,(\\mathrm{m/s})',
+    axt: 'a_x\\,/\\,(\\mathrm{m/s^2})', ayt: 'a_y\\,/\\,(\\mathrm{m/s^2})',
+    vabs: '|\\vec v|\\,/\\,(\\mathrm{m/s})', aabs: '|\\vec a|\\,/\\,(\\mathrm{m/s^2})', phit: '\\varphi\\,/\\,{}^\\circ',
+    omega: '\\omega\\,/\\,(\\mathrm{rad/s})',
+    att: '|\\vec a_\\text{t}|\\,/\\,(\\mathrm{m/s^2})', art: '|\\vec a_\\text{r}|\\,/\\,(\\mathrm{m/s^2})',
 };
 
-export const graphXAxisLabels = { yx: 'x / m', xy: 'y / m' };
+export const graphXAxisLabels = { yx: 'x\\,/\\,\\mathrm{m}', xy: 'y\\,/\\,\\mathrm{m}' };
 
 export const timeSeriesTypes = ['xt', 'yt', 'vxt', 'vyt', 'axt', 'ayt', 'vabs', 'aabs', 'phit', 'omega', 'att', 'art'];
 export const trajectoryTypes = ['yx', 'xy'];
