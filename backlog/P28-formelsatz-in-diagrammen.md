@@ -299,7 +299,11 @@ in Abb. 1.1 im Darkmode unsichtbar (v1.57.2).
   > per MathJax gesetzt — Computer Modern wie die Formeln im Fließtext, auch
   > für die Wörter (`\text{…}`); Titel normal statt halbfett. Tick-Zahlen,
   > Zeitanzeigen und Tooltips bleiben TeX Gyre Heros bzw. IBM Plex Mono.
-- [ ] **P28-6 Abszissen-Beschriftung ans Pfeilende** *(S)* — Nutzerbefund
+- [x] **P28-6 Abszissen-Beschriftung ans Pfeilende** *(S)* — erledigt
+  2026-09-27 (v1.57.15): alle fünf Motoren rechtsbündig unter der
+  Pfeilspitze; wo die Beschriftung damit unter die letzte Tick-Zahl rückt,
+  6–9 px tiefer und `padB` entsprechend größer (gemessen: +3 bis +9 px Luft
+  zu den Zahlen, vorher bis −3 px). — Nutzerbefund
   2026-09-27: *„insbesondere bei zwei diagrammen übereinander [ist] die
   beschriftung der abszisse mittig unter der unteren absizee plaziert […]. da
   wirkt sie etwas verloren.“* Fünf Motoren zentrieren das Label unter der Achse
