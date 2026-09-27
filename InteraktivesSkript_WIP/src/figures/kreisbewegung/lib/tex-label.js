@@ -98,6 +98,11 @@ function platziere(textEl) {
     }
     const g = document.createElementNS(SVGNS, 'g');
     g.setAttribute('aria-hidden', 'true');
+    // Figuren-Stile adressieren Labels oft ueber die ID-Endung
+    // ([id$="phi_label"] { fill: var(--kb-phi) }). Mit „tex_“ + Anker-ID
+    // greifen dieselben Regeln auf die <g> — eindeutig, und der Anker
+    // bleibt das erste Element mit dieser Endung (querySelector findet ihn).
+    if (textEl.id) g.id = 'tex_' + textEl.id;
     const svg = document.createElementNS(SVGNS, 'svg');
     svg.setAttribute('width', em(satz.vb[2]));
     svg.setAttribute('height', em(satz.vb[3]));
@@ -165,11 +170,24 @@ function spiegle(textEl) {
     }
 }
 
+// Lage-Attribute: viele Motoren verschieben ein Label je Frame nur ueber x/y
+// (φ am Drehwinkel), ohne setTexLabel erneut zu rufen — die <g> zieht mit.
+const LAGE = ['x', 'y', 'transform', 'text-anchor', 'dominant-baseline'];
+
 function beobachte(textEl) {
     if (beobachtet.has(textEl)) return;
     beobachtet.add(textEl);
-    new MutationObserver(() => { cssWerte.delete(textEl); spiegle(textEl); })
-        .observe(textEl, { attributes: true, attributeFilter: ['style', 'class', ...GESPIEGELT] });
+    new MutationObserver((eintraege) => {
+        const g = gruppe.get(textEl);
+        if (!g) return;
+        // Stil nur bei Stil-Aenderungen neu lesen: x/y aendern sich je Frame,
+        // ein getComputedStyle dort hiesse eine Stil-Neuberechnung je Frame.
+        if (eintraege.some(e => !LAGE.includes(e.attributeName))) {
+            cssWerte.delete(textEl);
+            spiegle(textEl);
+        }
+        richteAus(textEl, g, g.__vb);
+    }).observe(textEl, { attributes: true, attributeFilter: ['style', 'class', ...GESPIEGELT, ...LAGE] });
 }
 
 function entferneGruppe(textEl) {
