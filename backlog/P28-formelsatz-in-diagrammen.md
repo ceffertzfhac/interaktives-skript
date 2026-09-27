@@ -32,7 +32,8 @@ Phase 3. Keine Umsetzung vor dem freigegebenen Plan.
 
 ### Sub-Tasks
 
-- [ ] **P28-1 Recherche (state of the art / best practice)** *(M)* — echte
+- [x] **P28-1 Recherche (state of the art / best practice)** *(M)* — erledigt
+  2026-09-27, Bericht unten („P28-1 — Ergebnis") — echte
   Quellenrecherche, nicht aus dem Gedächtnis. Mindestens zu prüfen und zu
   belegen:
   - MathJax 3/4: `tex2svg` bzw. `tex2svgPromise` → SVG-Knoten direkt ins
@@ -59,6 +60,162 @@ Phase 3. Keine Umsetzung vor dem freigegebenen Plan.
   je Motor, Export, Darkmode, Druck). **Nutzerfreigabe vor Phase 3.**
 - [ ] **P28-3 Umsetzung** — erst nach Freigabe; Motor für Motor, klein
   committen, in beiden Repos synchron.
+
+### P28-1 — Ergebnis (2026-09-27)
+
+**Kurzfassung:** Der Stand der Technik für *Formeln in SVG-Diagrammen* ist
+**MathJax-Pfade direkt ins Diagramm-SVG** (so macht es Plotly.js). Alle Wege über
+`foreignObject` (KaTeX, MathJax-HTML, natives MathML) scheitern in Safari an
+einem seit 2009 offenen WebKit-Fehler; bei uns war das Fallstrick #17.
+Vorgerendert (PhET, matplotlib) passt nicht, weil es kein Build-System gibt und
+die Beschriftungen dynamisch sind. Unser eigener Messversuch bestätigt:
+**machbar, schnell genug, Grundlinie exakt, ohne `foreignObject`.**
+
+#### Befunde aus den Quellen
+
+- **Plotly.js** (`src/lib/svg_text_utils.js`) erkennt `$…$` in Titeln und
+  Achsen, wandelt über ein eigenes MathJax-`MathDocument` mit
+  `fontCache: 'local'` in SVG, setzt das Ergebnis als verschachteltes `<svg>` an
+  die Stelle des `<text>`, misst es mit `getBoundingClientRect`, schätzt die
+  Grundlinie („dy = −textHeight/4") und übernimmt die Farbe per
+  `fill`/`stroke` auf die Wurzel-`<g>`. Seit v3 braucht es **MathJax 3 oder 4 +
+  `tex-svg`**, MathJax 2 wird nicht mehr unterstützt. → Das Muster ist
+  etabliert, die Grundlinien-Schätzung können wir besser machen (s. u.).
+- **MathJax** (`docs.mathjax.org`, Output/SVG-Optionen und „convert"):
+  `tex2svg(math, {display, em, ex, containerWidth, scale})` liefert synchron
+  einen `mjx-container` mit `<svg>`. **`fontCache`**: `local` (Standard, Glyphen
+  je Formel in eigenen `<defs>`, das SVG ist in sich geschlossen), `global`
+  (ein seitenweiter Cache, das SVG hängt an fremden `<defs>` → **bricht Export
+  und Klon**), `none` (explizite Pfade je Zeichen, keine IDs). Für
+  eigenständige SVGs empfiehlt die Doku `local` oder `none`. In **v4** soll
+  `tex2svgPromise` verwendet werden, weil Glyphendaten nachgeladen werden können.
+  Glyphen sind Pfade, also kein Kopieren/Einfügen des Textes.
+- **MathJax-Versionen:** aktuell 4.1.3 (Jul. 2026); v4.0.0 erschien am
+  4. Aug. 2025. v4 wechselt die Standardschrift auf `mathjax-newcm`
+  (New Computer Modern, etwas kräftiger) und nennt `internalSpeechTitles` als
+  entfallen. Wir laden **3.2.1**.
+- **KaTeX** gibt nur HTML/MathML aus; ein Maintainer sagt ausdrücklich, dass
+  KaTeX nicht *in* SVG rendert. Khan Academy legt stattdessen HTML **über** das
+  SVG (`position:absolute`). In `foreignObject` zeichnet Safari
+  KaTeX-Beschriftungen an der falschen Stelle, weil `position:relative` außerhalb
+  der SVG-Transformation gemalt wird (WebKit 23113, 291732).
+- **WebKit-Bug 23113** („HTML in foreignObject mit eigenem RenderLayer wird an
+  falscher Stelle gezeichnet": Opacity, Transform, `position`, Zoom) ist **seit
+  2009 offen** und hat 13 Duplikate. Chrome und Firefox sind korrekt. → Jede
+  `foreignObject`-Lösung trägt ein bekanntes Safari-Risiko, gerade bei unserer
+  Lupe (Skalierung) und bei animierten Beschriftungen.
+- **Natives MathML (Core)** ist seit **Chrome 109** (Jan. 2023, Igalia) in allen
+  Evergreen-Browsern vorhanden. Im Diagramm geht es aber **nur über
+  `foreignObject`** (MathML Core: `<switch>`/`foreignObject` mit
+  Text-Rückfall) → dasselbe WebKit-Risiko. Dazu kommt eine offene Schriftfrage
+  (Mathe-Schrift nötig), und die A11y-Kombination SVG+MathML ist laut W3C
+  (`w3c/mathml#469`) noch nicht standardisiert.
+- **JSXGraph:** Beschriftungen als SVG-`<text>` gelten als schnell, können aber
+  kein MathJax/KaTeX. Formeln gehen nur mit `display:'html'`, also als HTML
+  **über** der Geometrie, oder als `ForeignObject`. Es gibt also denselben
+  Zielkonflikt, gelöst über eine HTML-Ebene.
+- **PhET (Scenery):** hat MathJax geprüft und für **statische** Beschriftungen
+  **Bilder** (auch aus LaTeX) als beste Lösung gewählt, dynamische Texte
+  laufen über `RichText` mit Sub-/Sup-Tags, also dem Äquivalent unseres
+  tspan-Wegs. Bilder setzen einen Build-Schritt voraus und bringen keine
+  `currentColor`-Farbe mit, **für uns ungeeignet**.
+- **matplotlib:** mathtext wird im SVG standardmäßig als **Pfade** geschrieben
+  (`svg.fonttype='path'`, sieht überall gleich aus, ist nicht editierbar).
+  `'none'` schreibt echten Text und hängt von installierten Schriften ab.
+  Derselbe Grundsatz wie bei MathJax-SVG: **Pfade sind die robuste
+  Exportform.**
+- **Desmos / GeoGebra:** eigene Satz-Engines (GeoGebra: JLaTeXMath auf Canvas),
+  nicht übertragbar.
+
+#### Eigene Messung (headless Chromium 1228, 2026-09-27)
+
+Beschriftungen wie `v_x(t)`, `|\vec a_r(t)|`, `\varphi`, `a_y\,/\,\mathrm{m\,s^{-2}}`,
+je 200 Umwandlungen:
+
+| | MathJax 3.2.1 `local` | 3.2.1 `none` | 4.1.3 `local` | 4.1.3 `none` |
+|---|---|---|---|---|
+| erste Umwandlung | 23 ms | 15 ms | 363 ms | 600 ms |
+| je Beschriftung, `tex2svg` synchron | **0,9 ms** | 1,1 ms | 2,6 ms | 4,5 ms |
+| je Beschriftung, Promise-Variante | 1,5 ms | 0,6 ms | 24 ms | 29 ms |
+| `cloneNode` einer fertigen Beschriftung | **0,02 ms** | 0,02 ms | 0,16 ms | 0,04 ms |
+| Größe `v_x(t)` | 3,6 KB | 3,2 KB | 5,9 KB | 5,5 KB |
+
+Folgerungen:
+
+1. **Cache nach TeX-String + `cloneNode`** macht das Neuzeichnen pro Reglerzug
+   praktisch kostenlos (0,02 ms). Umgewandelt wird nur einmal je
+   unterschiedlicher Beschriftung, bei 3.2.1 in ~1 ms.
+2. **MathJax 3.2.1 ist hier klar schneller als v4.** Ein Umstieg auf v4 ist
+   kein Voraussetzungsschritt für P28 (in P28-2 als eigene Frage führen).
+3. **Grundlinie exakt, ohne Messen:** Im MathJax-SVG liegt die **Grundlinie bei
+   y = 0** des `viewBox` (`0 −750 w 1000`, 1000 Einheiten = 1 em;
+   `vertical-align:−0,566ex` ist genau die Unterlänge). Deshalb reicht es, die
+   Kinder des MathJax-`<svg>` in ein
+   `<g transform="translate(x, y_Grundlinie) scale(px/1000)">` zu hängen. Die
+   Beschriftung sitzt dann auf derselben Grundlinie wie ein `<text y=…>`
+   (Screenshot-Beleg im Test, rote Hilfslinie). Die Breite für
+   `text-anchor` = `viewBox[2]·px/1000`, **kein `getBBox` und kein
+   Layout-Reflow**. Das ist besser als Plotlys Schätzung.
+4. **Farbe:** Die Wurzel-`<g>` trägt `fill="currentColor"
+   stroke="currentColor"` → Darkmode, CVD-Paletten und Hervorhebungen greifen
+   über CSS-`color` am Elternelement. `fill` am `<text>` wirkt dagegen nicht,
+   das muss die Migration beachten.
+5. **Kein `foreignObject`** → kein WebKit-23113-Risiko, keine Zeilenbox wie in
+   Fallstrick #17, Transform/Lupe/Druck verhalten sich wie jede andere
+   SVG-Geometrie.
+6. **Export** (`shared/js/export-image.js` klont und serialisiert das SVG):
+   mit `fontCache:'none'` oder `'local'` in sich geschlossen, mit `'global'`
+   kaputt. Die Seite läuft heute auf `local` (Standard), `local` erzeugt aber
+   **IDs** (`MJX-n-TEX-…`), die beim Klonen doppelt vorkämen. → Für
+   Diagramm-Beschriftungen ein **eigenes MathDocument mit `fontCache:'none'`**
+   (Plotly-Muster) oder die `<defs>` beim Einhängen auflösen.
+7. **A11y:** Das MathJax-SVG trägt `aria-hidden`, v3 hängt ein
+   `mjx-assistive-mml` an, das beim Einhängen der Pfade verloren geht. →
+   Ein `aria-label` (Klartext, z. B. „v x von t") bzw. `<title>` an der `<g>`
+   ist nötig. Heute liest der Screenreader die tspan-Texte.
+8. **Schriftmischung (offene Designfrage für P28-2):** Die Diagrammtexte laufen
+   heute in **IBM Plex Sans** (`--kb-font`), MathJax setzt **Computer Modern**
+   (Serifen). Die Mischung „Plex-Wort + CM-Formel" sieht im Test deutlich
+   anders aus als die reine tspan-Zeile. Optionen: nur das Formelzeichen per
+   MathJax (Wort bleibt Plex), ganze Titel per MathJax (`\text{…}` in CM), oder
+   Diagrammtexte generell auf die Fließtext-Serifenschrift umstellen
+   (Design-System `## 4` betroffen).
+
+#### Bewertungsmatrix
+
+| Weg | Typografie | Safari/Lupe | Tempo bei Neuzeichnen | Export | Darkmode/Paletten | Aufwand | Urteil |
+|---|---|---|---|---|---|---|---|
+| tspan-Nachbau (heute) | ≈ LaTeX, Index geschätzt | ✔ | ✔ | ✔ | ✔ `fill` | je Sonderfall neu | Rückfallebene |
+| **MathJax-Pfade direkt ins SVG** | **= Fließtext** | **✔** | ✔ mit Cache | ✔ (`none`) | ✔ `currentColor` | eine Hilfsfunktion | **empfohlen** |
+| MathJax/KaTeX in `foreignObject` | = LaTeX | ✘ WebKit 23113, #17 | ✔ | ✘ HTML im SVG-Export | ✔ | mittel | verworfen |
+| natives MathML in `foreignObject` | Schrift-abhängig | ✘ wie oben | ✔ | ✘ | ✔ | mittel | verworfen |
+| HTML-Ebene über dem SVG (Khan, JSXGraph) | = LaTeX | ✔ | ✔ | ✘ nicht im SVG | ✔ | hoch (Koordinaten doppelt) | verworfen |
+| vorgerenderte Bilder (PhET) | = LaTeX | ✔ | ✔ | ✔ | ✘ | Build-Schritt | verworfen |
+
+**Empfehlung für P28-2:** eine gemeinsame Hilfsfunktion (Arbeitstitel
+`texLabel(parent, tex, {x, y, px, anchor, ariaLabel})`), die
+MathJax-3-Pfade mit Grundlinie y = 0 ins Diagramm hängt, mit einem Cache je
+TeX-String, eigenem `fontCache:'none'`-Dokument und **tspan-Rückfall**, solange
+MathJax noch lädt oder fehlt (CDN offline). Offen für P28-2 sind
+Schriftmischung, Ladereihenfolge (Figuren zeichnen ggf. vor MathJax → später
+neu setzen), das Sim-Repo (lädt dort MathJax überhaupt?) und die
+Migrationsreihenfolge.
+
+Quellen:
+[Plotly.js `svg_text_utils.js`](https://github.com/plotly/plotly.js/blob/master/src/lib/svg_text_utils.js) ·
+[Plotly: LaTeX in JavaScript](https://plotly.com/javascript/LaTeX/) ·
+[MathJax: SVG-Optionen (fontCache)](https://docs.mathjax.org/en/latest/options/output/svg.html) ·
+[MathJax: Umwandlungsfunktionen](https://docs.mathjax.org/en/latest/web/convert.html) ·
+[MathJax: Neu in v4 / Schriften](https://docs.mathjax.org/en/v4.0/upgrading/whats-new-4.0/fonts.html) ·
+[MathJax Releases](https://github.com/mathjax/MathJax/releases) ·
+[KaTeX-Diskussion #3288](https://github.com/KaTeX/KaTeX/discussions/3288) ·
+[WebKit-Bug 23113](https://bugs.webkit.org/show_bug.cgi?id=23113) ·
+[MathML Core](https://w3c.github.io/mathml-core/) ·
+[Igalia: MathML in Chrome 109](https://www.igalia.com/2023/01/10/Igalia-Brings-MathML-Back-to-Chromium.html) ·
+[w3c/mathml#469 (SVG+MathML A11y)](https://github.com/w3c/mathml/issues/469) ·
+[JSXGraph Text](https://jsxgraph.org/docs/symbols/Text.html) ·
+[PhET Scenery #457](https://github.com/phetsims/scenery/issues/457) ·
+[matplotlib Fonts / svg.fonttype](https://matplotlib.org/stable/users/explain/text/fonts.html)
 
 ### Nicht-Ziele (vorerst)
 
