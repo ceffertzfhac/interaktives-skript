@@ -31,6 +31,18 @@
 // MathJax.startup.promise werden alle vorgemerkten Anker hochgestuft. Fehlt
 // MathJax ganz, bleibt der Klartext stehen.
 //
+// Der Anker bleibt die Schnittstelle — die <g> folgt ihm, ohne dass ein Motor
+// davon weiss (je ein Fehlerfund bei der Migration, s. Kommentare unten):
+//   * Sichtbarkeit: style.visibility/display, Attribute visibility/display,
+//     Klassen, und display:none aus einer Stilregel auf die Anker-ID;
+//   * Lage: x, y, transform, text-anchor, dominant-baseline (φ wandert je
+//     Frame nur per x/y);
+//   * font-size/fill als Attribut;
+//   * ID-Regeln: die <g> heisst „tex_“ + Anker-ID, [id$="…"] trifft beide.
+// setTexLabel(el, '') blendet aus. Wert-Labels: Zahl in texZahl() packen,
+// dann wird nur der feste Teil umgewandelt, die Zahl aus Glyphen gesetzt.
+// Einheit fuer Klartext-Tooltips: texEinheit().
+//
 // Abhaengigkeitsfrei gehalten: geht 1:1 als shared/js/tex-label.js ins
 // Sim-Repo (dort BACKLOG I18).
 

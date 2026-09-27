@@ -5,7 +5,7 @@ Wurzel-`CLAUDE.md`.
 
 **Runbook für interaktive Aspekt-Figuren: `../../INTERAKTIVE_ASPEKT_FIGUREN.md` —
 vor jeder Arbeit an einer Aspekt-Figur lesen.** Es enthält Konzept,
-Schritt-für-Schritt, einen Katalog von 26 realen Fallstricken (der wertvolle
+Schritt-für-Schritt, einen Katalog realer Fallstricke (der wertvolle
 Teil — die meisten sind still) und eine Checkliste. Änderungshistorie seit der
 ersten (Singleton-)Version: `../../CHANGES_aspekt_1.38_1.40_und_grundgeruest.md`.
 
@@ -115,9 +115,11 @@ bleibt.
 | `ableitung/` | Funktionskurve mit Sekante, Tangente und Steigungsdreieck | `ab<n>_` | erster **zeitloser** Motor der Kinematik-Kapitel: kein rAF, keine Zeitreihen, kein Play/Pause — der Freiheitsgrad ist nicht die Zeit, sondern die Intervallbreite \(\Delta t\). Zeichnet aus einer analytischen Funktion **und ihrer analytischen Ableitung**; der Differenzenquotient wird nicht numerisch genähert, sondern beiden gegenübergestellt. Trägt Abb. 1.15 |
 | `bus_weg_zeit/` | Straßenszene + t-x-Diagramm, stückweise x(t) | `bw<n>_` | figur-only, keine passende Stand-alone-Sim; strukturell auf `grundbegriffe/` modelliert. `store.t` ist ein SKALARer Zeitcursor (kein tA/tB-Paar) — ein Cursor steuert Bus und Kurvenpunkt synchron |
 
-Gemeinsame Bausteine: `kreisbewegung/lib/{format,hover,svg-text,ticks,vectors}.js`
+Gemeinsame Bausteine: `kreisbewegung/lib/{format,hover,tex-label,ticks,vectors}.js`
 werden von **allen** Motoren wiederverwendet (die späteren importieren aus
-`../kreisbewegung/lib/`). Der `kreisbewegung`-Motor ist mehrdateilich
+`../kreisbewegung/lib/`). **Jede Beschriftung im SVG läuft über
+`tex-label.js::setTexLabel`** (MathJax-Pfade direkt im SVG, P28) — Vertrag und
+Grenzen im Kopf der Datei, Stil-Falle im Runbook #28. Der `kreisbewegung`-Motor ist mehrdateilich
 (`constants/state/physics/render/ui.js`), die anderen kommen ohne eigenes
 `ui.js` aus.
 
