@@ -100,38 +100,40 @@ export const graphOptions = {
 // vertikalen Aufbau „x(t)", waehrend die Achse daneben korrekt mit y
 // beschriftet ist — in Abb. 1.8 standen beide Schreibweisen nebeneinander.
 // Es unterscheidet sich nur pos_t; v/a/Energie sind achsenunabhaengig benannt.
+// Als TeX (setTexLabel, P28); E_{\text{kin}} wie im Fliesstext. Vorher standen
+// die Unterstriche woertlich im Titel („E_kin“).
 const _titelBasis = {
-  v_t:        'Geschwindigkeit vs. Zeit v(t)',
-  a_t:        'Beschleunigung vs. Zeit a(t)',
-  ekin:       'Kinetische Energie E_kin(t)',
-  epot:       'Potentielle Energie E_pot(t)',
-  eges:       'Gesamtenergie E_ges(t)',
-  ecomposite: 'Energie (E_kin, E_pot, E_ges)',
+  v_t:        '\\text{Geschwindigkeit vs. Zeit }v(t)',
+  a_t:        '\\text{Beschleunigung vs. Zeit }a(t)',
+  ekin:       '\\text{Kinetische Energie }E_{\\text{kin}}(t)',
+  epot:       '\\text{Potentielle Energie }E_{\\text{pot}}(t)',
+  eges:       '\\text{Gesamtenergie }E_{\\text{ges}}(t)',
+  ecomposite: '\\text{Energie }(E_{\\text{kin}}, E_{\\text{pot}}, E_{\\text{ges}})',
 }
 export const graphTitles = {
-  horizontal: { pos_t: 'Auslenkung vs. Zeit x(t)', ..._titelBasis },
-  vertical:   { pos_t: 'Auslenkung vs. Zeit y(t)', ..._titelBasis },
+  horizontal: { pos_t: '\\text{Auslenkung vs. Zeit }x(t)', ..._titelBasis },
+  vertical:   { pos_t: '\\text{Auslenkung vs. Zeit }y(t)', ..._titelBasis },
 }
 
-// Y-Achsenlabel je Typ (für setAxisLabel: „Größe / Einheit")
+// Y-Achsenlabel je Typ als TeX „Größe \,/\, Einheit“ (setTexLabel, texEinheit)
 export const graphAxisLabels = {
   horizontal: {
-    pos_t: 'Auslenkung x / m',
-    v_t:   'Geschw. v / (m/s)',
-    a_t:   'Beschl. a / (m/s²)',
-    ekin:       'E_kin / J',
-    epot:       'E_pot / J',
-    eges:       'E_ges / J',
-    ecomposite: 'E / J',
+    pos_t: '\\text{Auslenkung }x\\,/\\,\\mathrm{m}',
+    v_t:   '\\text{Geschw. }v\\,/\\,(\\mathrm{m/s})',
+    a_t:   '\\text{Beschl. }a\\,/\\,(\\mathrm{m/s^2})',
+    ekin:       'E_{\\text{kin}}\\,/\\,\\mathrm{J}',
+    epot:       'E_{\\text{pot}}\\,/\\,\\mathrm{J}',
+    eges:       'E_{\\text{ges}}\\,/\\,\\mathrm{J}',
+    ecomposite: 'E\\,/\\,\\mathrm{J}',
   },
   vertical: {
-    pos_t: 'Auslenkung y / m',
-    v_t:   'Geschw. v / (m/s)',
-    a_t:   'Beschl. a / (m/s²)',
-    ekin:       'E_kin / J',
-    epot:       'E_pot / J',
-    eges:       'E_ges / J',
-    ecomposite: 'E / J',
+    pos_t: '\\text{Auslenkung }y\\,/\\,\\mathrm{m}',
+    v_t:   '\\text{Geschw. }v\\,/\\,(\\mathrm{m/s})',
+    a_t:   '\\text{Beschl. }a\\,/\\,(\\mathrm{m/s^2})',
+    ekin:       'E_{\\text{kin}}\\,/\\,\\mathrm{J}',
+    epot:       'E_{\\text{pot}}\\,/\\,\\mathrm{J}',
+    eges:       'E_{\\text{ges}}\\,/\\,\\mathrm{J}',
+    ecomposite: 'E\\,/\\,\\mathrm{J}',
   },
 }
 

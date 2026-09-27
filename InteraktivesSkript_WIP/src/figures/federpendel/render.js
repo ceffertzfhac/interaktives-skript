@@ -28,7 +28,7 @@ import { store, DOM } from './state.js'
 import { linePlotIndex, frequency, kineticEnergy, potentialEnergy, totalEnergy,
          displacement, velocity, acceleration } from './physics.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
-import { setAxisLabel, setGraphTitle } from '../kreisbewegung/lib/svg-text.js'
+import { setTexLabel, texEinheit } from '../kreisbewegung/lib/tex-label.js'
 import { tAxisStep, niceStepLE } from '../kreisbewegung/lib/ticks.js'
 import { shortenEnd } from '../kreisbewegung/lib/vectors.js'
 export { fmt }
@@ -76,21 +76,6 @@ function lineCurrentValue(dataKey, t) {
 
 // fmt() via shared/js/format.js (T6)
 
-// SVG-Text mit gemischter Formatierung aus HTML-<i>-Tags (Symbol kursiv)
-function createStyledSvgText(svgEl, text) {
-  while (svgEl.firstChild) svgEl.removeChild(svgEl.firstChild)
-  const regex = /<i>(.*?)<\/i>|([^<>&]+)/g
-  let m
-  while ((m = regex.exec(text)) !== null) {
-    if (m[1]) {
-      const t = el('tspan', { 'font-style': 'italic' })
-      t.textContent = m[1]
-      svgEl.appendChild(t)
-    } else if (m[2]) {
-      svgEl.appendChild(document.createTextNode(m[2]))
-    }
-  }
-}
 
 
 // ── Feder (Zickzack-Polyline) ────────────────────────────────────────────────
@@ -252,7 +237,7 @@ export function setupScene() {
     DOM.equilibriumLine.setAttribute('y2', animCenterY + 80)
     DOM.equilibriumLabel.setAttribute('x', animCenterX)
     DOM.equilibriumLabel.setAttribute('y', animCenterY - 90)
-    DOM.equilibriumLabel.textContent = 'x = 0 (Ruhelage)'
+    setTexLabel(DOM.equilibriumLabel, 'x = 0\\;\\text{(Ruhelage)}')
 
     DOM.minPosLine.setAttribute('x1', animCenterX - scale(Math.abs(A)))
     DOM.minPosLine.setAttribute('x2', animCenterX - scale(Math.abs(A)))
@@ -264,17 +249,17 @@ export function setupScene() {
     DOM.maxPosLine.setAttribute('y2', animCenterY + 70)
     DOM.minPosLabel.setAttribute('x', animCenterX - scale(Math.abs(A)))
     DOM.minPosLabel.setAttribute('y', animCenterY - 80)
-    DOM.minPosLabel.textContent = '−x₀'
+    setTexLabel(DOM.minPosLabel, '-x_0')
     DOM.maxPosLabel.setAttribute('x', animCenterX + scale(Math.abs(A)))
     DOM.maxPosLabel.setAttribute('y', animCenterY - 80)
-    DOM.maxPosLabel.textContent = '+x₀'
+    setTexLabel(DOM.maxPosLabel, '+x_0')
 
     DOM.xAxisArrow.setAttribute('x1', animCenterX)
     DOM.xAxisArrow.setAttribute('y1', animCenterY + massSize / 2 + 20)
     DOM.xAxisArrow.setAttribute('x2', animCenterX + scale(1.8))
     DOM.xAxisArrow.setAttribute('y2', animCenterY + massSize / 2 + 20)
     DOM.xAxisArrow.style.visibility = 'visible'
-    createStyledSvgText(DOM.xAxisLabelText, '<i>x</i>')
+    setTexLabel(DOM.xAxisLabelText, 'x')
     DOM.xAxisLabelText.setAttribute('x', animCenterX + scale(1.8) + 15)
     DOM.xAxisLabelText.setAttribute('y', animCenterY + massSize / 2 + 25)
     DOM.xAxisLabelText.style.visibility = 'visible'
@@ -328,7 +313,7 @@ export function setupScene() {
     DOM.equilibriumLabel.setAttribute('x', animCenterX + 88)
     DOM.equilibriumLabel.setAttribute('y', animCenterY + 4)
     DOM.equilibriumLabel.setAttribute('text-anchor', 'start')
-    DOM.equilibriumLabel.textContent = 'y = 0 (Ruhelage)'
+    setTexLabel(DOM.equilibriumLabel, 'y = 0\\;\\text{(Ruhelage)}')
 
     const unstretchedY = springAttachY + scale(L0)
     DOM.unstretchedLine.setAttribute('x1', animCenterX - 50)
@@ -337,7 +322,7 @@ export function setupScene() {
     DOM.unstretchedLine.setAttribute('y2', unstretchedY)
     DOM.unstretchedLabel.setAttribute('x', animCenterX + 100)
     DOM.unstretchedLabel.setAttribute('y', unstretchedY + 4)
-    DOM.unstretchedLabel.textContent = 'Feder entspannt'
+    setTexLabel(DOM.unstretchedLabel, '\\text{Feder entspannt}')
     DOM.unstretchedLine.style.visibility = 'visible'
     DOM.unstretchedLabel.style.visibility = 'visible'
 
@@ -355,18 +340,18 @@ export function setupScene() {
     DOM.minPosLabel.setAttribute('x', animCenterX + 78)
     DOM.minPosLabel.setAttribute('y', animCenterY - scale(Math.abs(A)) - 5)
     DOM.minPosLabel.setAttribute('text-anchor', 'start')
-    DOM.minPosLabel.textContent = '+y₀'
+    setTexLabel(DOM.minPosLabel, '+y_0')
     DOM.maxPosLabel.setAttribute('x', animCenterX + 78)
     DOM.maxPosLabel.setAttribute('y', animCenterY + scale(Math.abs(A)) + 15)
     DOM.maxPosLabel.setAttribute('text-anchor', 'start')
-    DOM.maxPosLabel.textContent = '−y₀'
+    setTexLabel(DOM.maxPosLabel, '-y_0')
 
     DOM.yAxisArrow.setAttribute('x1', animCenterX - massSize / 2 - 50)
     DOM.yAxisArrow.setAttribute('y1', animCenterY)
     DOM.yAxisArrow.setAttribute('x2', animCenterX - massSize / 2 - 50)
     DOM.yAxisArrow.setAttribute('y2', animCenterY - scale(1.8))
     DOM.yAxisArrow.style.visibility = 'visible'
-    createStyledSvgText(DOM.yAxisLabelText, '<i>y</i>')
+    setTexLabel(DOM.yAxisLabelText, 'y')
     DOM.yAxisLabelText.setAttribute('x', animCenterX - massSize / 2 - 50)
     DOM.yAxisLabelText.setAttribute('y', animCenterY - scale(1.8) - 15)
     DOM.yAxisLabelText.style.visibility = 'visible'
@@ -590,15 +575,15 @@ export function updateGraph(time, offset = 0, showCurrent = true) {
   // Achsenbeschriftungen
   const yLabel = graphAxisLabels[store.oscillationMode][store.graphType]
   const tlY = el('text', { x: padL - 42, y: padT + plotH / 2, transform: `rotate(-90 ${padL - 42} ${padT + plotH / 2})`, 'text-anchor': 'middle', class: 'axis-label' })
-  setAxisLabel(tlY, yLabel)
+  setTexLabel(tlY, yLabel)
   DOM.gridGroup.appendChild(tlY)
   const tlX = el('text', { x: padL + plotW / 2, y: plotBottom + 32, 'text-anchor': 'middle', class: 'axis-label' })
-  setAxisLabel(tlX, 't / s')
+  setTexLabel(tlX, 't\\,/\\,\\mathrm{s}')
   DOM.gridGroup.appendChild(tlX)
 
   // Titel (als letztes SVG-Kind, oberhalb Plot-Bereich, zentriert pro Format)
   DOM.graphTitle.setAttribute('x', graphW / 2)
-  setGraphTitle(DOM.graphTitle, graphTitles[store.oscillationMode][store.graphType])
+  setTexLabel(DOM.graphTitle, graphTitles[store.oscillationMode][store.graphType])
 
   // Daten-Polylinien bis zum aktuellen Zeitpunkt (I7: je Linie im Typ-Config).
   // store.tData ist absolut indiziert; Punkte vor dem Messstart (< offset)
@@ -653,8 +638,8 @@ const LINE_LABELS = {
 }
 
 function unitFor(type) {
-  const label = graphAxisLabels[store.oscillationMode][type]
-  return label.split('/').pop().trim()
+  // Frueher label.split('/') -- das zerlegte auch „(m/s)“ und lieferte „s)“.
+  return texEinheit(graphAxisLabels[store.oscillationMode][type])
 }
 
 function hideGraphHover() {
