@@ -32,7 +32,7 @@ import { G, PIXELS_PER_METER, GROUND_PX, BALL_X,
 import { store, DOM } from './state.js'
 import { scaleY, getDisplayY, getDisplayV, getDisplayA, flightTime, interpolateAt } from './physics.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
-import { setAxisLabel, setGraphTitle } from '../kreisbewegung/lib/svg-text.js'
+import { setTexLabel } from '../kreisbewegung/lib/tex-label.js'
 import { getNiceTick, tAxisStep } from '../kreisbewegung/lib/ticks.js'
 export { fmt }
 
@@ -115,7 +115,7 @@ export function drawYAxisDisplay() {
     transform: `rotate(${angle} ${ax + 20} ${tipY})`,
     'text-anchor': 'middle', class: 'yad-text', 'font-size': 14,
   })
-  setAxisLabel(tl, `${axCh} / m`)
+  setTexLabel(tl, `${axCh}\\,/\\,\\mathrm{m}`)
   DOM.yAxisDisplay.appendChild(tl)
 }
 
@@ -161,16 +161,16 @@ function drawGraphSlot({ slot, gridEl, lineEl, pointEl, titleEl, type, graphHeig
     const yMaxPhys = h0 + (v0 > 0 ? v0 * v0 / (2 * G) : 0)
     const d0 = getDisplayY(0), dM = getDisplayY(yMaxPhys)
     vMin = Math.min(d0, dM); vMax = Math.max(d0, dM)
-    yLabel = `${posChar()} / m`
+    yLabel = `${posChar()}\\,/\\,\\mathrm{m}`
   } else if (type === 'geschw') {
     const vEnd = v0 - G * tMax
     const dV0 = getDisplayV(v0), dVe = getDisplayV(vEnd)
     vMin = Math.min(dV0, dVe); vMax = Math.max(dV0, dVe)
-    yLabel = 'v / (m/s)'
+    yLabel = 'v\\,/\\,(\\mathrm{m/s})'
   } else {
     const dA = getDisplayA(-G)
     vMin = dA - 0.5; vMax = dA + 0.5
-    yLabel = 'a / (m/s²)'
+    yLabel = 'a\\,/\\,(\\mathrm{m/s^2})'
   }
 
   const rng = vMax - vMin
@@ -222,16 +222,16 @@ function drawGraphSlot({ slot, gridEl, lineEl, pointEl, titleEl, type, graphHeig
 
   // Achsenbeschriftung
   const tlX = el('text', { x: GRAPH_W / 2, y: (type === 'geschw' ? Math.max(y0, scY(axMin)) : y0) + 32, 'text-anchor': 'middle', class: 'axis-label' })
-  setAxisLabel(tlX, 't / s')
+  setTexLabel(tlX, 't\\,/\\,\\mathrm{s}')
   gridEl.appendChild(tlX)
   const tlY = el('text', { x: x0 - 40, y: graphHeight / 2, transform: `rotate(-90 ${x0 - 40} ${graphHeight / 2})`, 'text-anchor': 'middle', class: 'axis-label' })
-  setAxisLabel(tlY, yLabel)
+  setTexLabel(tlY, yLabel)
   gridEl.appendChild(tlY)
 
   // Diagrammtitel
   const posSymbol = `${posChar()}(t)`
-  const titles = { weg: `Weg-Zeit ${posSymbol}`, geschw: 'Geschw.-Zeit v(t)', beschl: 'Beschl.-Zeit a(t)' }
-  setGraphTitle(titleEl, titles[type] || '')
+  const titles = { weg: `\\text{Weg-Zeit }${posSymbol}`, geschw: '\\text{Geschw.-Zeit }v(t)', beschl: '\\text{Beschl.-Zeit }a(t)' }
+  setTexLabel(titleEl, titles[type] || '')
 
   // Datenkurve
   const dArr = type === 'weg' ? y_data : type === 'geschw' ? v_data : a_data
@@ -265,7 +265,7 @@ export function updateGraphs() {
   DOM.graphGroupSingle.style.visibility = isStacked ? 'hidden' : 'visible'
   DOM.graphGroupStackedTop.style.visibility = isStacked ? 'visible' : 'hidden'
   DOM.graphGroupStackedBottom.style.visibility = isStacked ? 'visible' : 'hidden'
-  if (isStacked) DOM.graphTitle.textContent = ''
+  if (isStacked) setTexLabel(DOM.graphTitle, '')
 
   if (isStacked) {
     // Eigene visibility="visible" auf dem Punkt-Element uebersteuert eine per
