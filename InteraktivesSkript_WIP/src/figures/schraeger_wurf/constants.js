@@ -79,27 +79,27 @@ export const DIGIT_SEGMENTS_MAP = {
   8: [0, 1, 2, 3, 4, 5, 6], 9: [0, 1, 2, 3, 5, 6],
 }
 
-// ── Diagramm-Optionen (Nutzerperspektive, HTML-kodiert mit <i> für Symbole) ──
+// ── Diagramm-Optionen (Nutzerperspektive, als TeX fuer setTexLabel, P28) ───
 // Ein Optionsset für beide Picker (Diagramm 1 + 2, → BACKLOG I12.9) — zwei
 // unabhängige, frei kombinierbare Diagramme statt fester x/y-Paarung. Die
 // Bahnkurve (yx/xy) hat keine Zeitachse und wird im Zwei-Diagramm-Modus aus
 // beiden Pickern gefiltert (ui.js::populateGraphSelects).
 export const graphOptions = {
   'Bahnkurve': {
-    yx: 'Bahn <i>y</i>(<i>x</i>)',
-    xy: 'Bahn <i>x</i>(<i>y</i>)',
+    yx: '\\text{Bahn }y(x)',
+    xy: '\\text{Bahn }x(y)',
   },
   'Vertikale Bewegung': {
-    yt: 'Höhe <i>y</i>(<i>t</i>) / m',
-    vyt: 'Geschw. <i>v</i><sub>y</sub>(<i>t</i>) / (m/s)',
-    ayt: 'Beschl. <i>a</i><sub>y</sub>(<i>t</i>) / (m/s²)',
+    yt: '\\text{Höhe }y(t)\\,/\\,\\mathrm{m}',
+    vyt: '\\text{Geschw. }v_y(t)\\,/\\,(\\mathrm{m/s})',
+    ayt: '\\text{Beschl. }a_y(t)\\,/\\,(\\mathrm{m/s^2})',
   },
   'Horizontale Bewegung': {
-    xt: 'Wurfweite <i>x</i>(<i>t</i>) / m',
-    vxt: 'Geschw. <i>v</i><sub>x</sub>(<i>t</i>) / (m/s)',
-    axt: 'Beschl. <i>a</i><sub>x</sub>(<i>t</i>) / (m/s²)',
+    xt: '\\text{Wurfweite }x(t)\\,/\\,\\mathrm{m}',
+    vxt: '\\text{Geschw. }v_x(t)\\,/\\,(\\mathrm{m/s})',
+    axt: '\\text{Beschl. }a_x(t)\\,/\\,(\\mathrm{m/s^2})',
   },
   'Beträge': {
-    vabs: 'Betrag der Geschw. |<i>v</i>(<i>t</i>)| / (m/s)',
+    vabs: '\\text{Betrag der Geschw. }|\\vec v(t)|\\,/\\,(\\mathrm{m/s})',
   },
 }

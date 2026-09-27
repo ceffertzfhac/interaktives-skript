@@ -23,7 +23,7 @@ import { store, DOM } from './state.js'
 import { scaleX, scaleY, getDisplayY, getDisplayV, getDisplayA,
          flightTime, maxHeight, range, impactAngle, linePlotIndex, interpolateAt } from './physics.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
-import { setAxisLabel } from '../kreisbewegung/lib/svg-text.js'
+import { setTexLabel } from '../kreisbewegung/lib/tex-label.js'
 import { tAxisStep, niceStepLE } from '../kreisbewegung/lib/ticks.js'
 export { fmt }
 
@@ -37,40 +37,6 @@ function el(tag, attrs) {
 
 // fmt() via shared/js/format.js (T6)
 
-// SVG-Text mit gemischter Formatierung (normal/kursiv) aus HTML-<i>-Tags.
-// Bleibt lokal (T10): die Graph-Achsenbeschriftungen dieser Sim kombinieren
-// ein beschreibendes Wort + Symbol vor dem Trenner (z. B. "Wurfweite <i>x</i> / m"),
-// das die kanonische shared/js/svg-text.js::setAxisLabel (kursiv = alles vor
-// " / ") fälschlich mit italisieren würde ("Wurfweite" ist kein Symbol).
-// Für reine Symbol-Labels (kein Beschreibungswort) wird weiterhin setAxisLabel
-// verwendet (s. u., Koordinatensystem-Overlay + s. drawSingleGraph-Kommentar).
-function createStyledSvgText(svgEl, text) {
-  // <sub>…</sub> = Index (v_x, v_y, a_x, a_y): kursiv, kleiner, tiefer — ein
-  // echtes Tiefstellen. Früher standen hier Unicode-Zeichen (ₓ, ᵧ); ᵧ ist aber
-  // ein tiefgestelltes GAMMA (ein tiefgestelltes y gibt es in Unicode nicht)
-  // und erschien wie „vy“ (→ BACKLOG FW9 / Skript P16-9a).
-  const regex = /<i>(.*?)<\/i>|<sub>(.*?)<\/sub>|([^<>&]+)/g
-  let m
-  while ((m = regex.exec(text)) !== null) {
-    if (m[1]) {
-      const t = document.createElementNS(NS, 'tspan')
-      t.setAttribute('font-style', 'italic')
-      t.textContent = m[1]
-      svgEl.appendChild(t)
-    } else if (m[2]) {
-      const t = document.createElementNS(NS, 'tspan')
-      t.setAttribute('font-style', 'italic')
-      // Feste, kleine Absenkung statt baseline-shift="sub": das senkt in
-      // Chrome fast um eine ganze Zeile, der Index ragte in die Achsenzahlen.
-      t.setAttribute('baseline-shift', '-0.3em')
-      t.setAttribute('font-size', '70%')
-      t.textContent = m[2]
-      svgEl.appendChild(t)
-    } else if (m[3]) {
-      svgEl.appendChild(document.createTextNode(m[3]))
-    }
-  }
-}
 
 // ── Lineale ──────────────────────────────────────────────────────────────────
 export function drawRuler() {
@@ -173,11 +139,11 @@ export function drawAnimationCoordSystem() {
   const attrs = { class: 'coord-axis', 'stroke-width': 2, 'marker-end': `url(#${store.idPrefix}arrow-coord)`, 'stroke-dasharray': '2,2' }
   DOM.animationCoordSystem.appendChild(el('line', { ...attrs, x1: ox, y1: oy, x2: ox + axisLen, y2: oy }))
   const xLab = el('text', { x: ox + axisLen + 5, y: oy + 14, class: 'coord-label' })
-  setAxisLabel(xLab, 'x / m')
+  setTexLabel(xLab, 'x\\,/\\,\\mathrm{m}')
   DOM.animationCoordSystem.appendChild(xLab)
   DOM.animationCoordSystem.appendChild(el('line', { ...attrs, x1: ox, y1: oy, x2: ox, y2: oy + axisLen * yDir }))
   const yLab = el('text', { x: ox - 40, y: oy + axisLen * yDir - 5 * yDir, class: 'coord-label' })
-  setAxisLabel(yLab, 'y / m')
+  setTexLabel(yLab, 'y\\,/\\,\\mathrm{m}')
   DOM.animationCoordSystem.appendChild(yLab)
 }
 
@@ -274,13 +240,15 @@ export function updateDigitalDisplay(totalSeconds) {
 }
 
 // ── Diagramm-Titel ───────────────────────────────────────────────────────────
-function stripHtml(s) {
-  return s.replace(/<\/?(i|sub)>/g, '')
+// Einheit aus einem TeX-Achsenlabel („…\,/\,(\mathrm{m/s^2})“) als
+// Klartext fuer den Hover-Tooltip, der Text bleibt: „(m/s²)“.
+function einheitAusTex(s) {
+  return s.split('\\,/\\,').pop().replace(/\\mathrm\{([^}]*)\}/g, '$1').replace(/\^2/g, '²')
 }
 
 function getGraphTitleText(type) {
   if (['yx', 'xy'].includes(type)) {
-    return type === 'yx' ? 'Bahnkurve <i>y</i>(<i>x</i>)' : 'Bahnkurve <i>x</i>(<i>y</i>)'
+    return type === 'yx' ? '\\text{Bahnkurve }y(x)' : '\\text{Bahnkurve }x(y)'
   }
   for (const groupLabel in graphOptions) {
     for (const val in graphOptions[groupLabel]) {
@@ -288,7 +256,7 @@ function getGraphTitleText(type) {
         // Nur Einheit-Suffix entfernen (kein "+ vs. Zeit" mehr, T10): der Titel
         // endet dadurch konsistent auf "…(t)".
         return graphOptions[groupLabel][val]
-          .replace(/\s\/\s\(?m.*$/, '')
+          .replace(/\\,\/\\,.*$/, '')
       }
     }
   }
@@ -344,7 +312,7 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
       xData = store.xtData; yData = yDisplay
       xMax = store.axisLimits.xt.max
       yMin = store.axisLimits.yt_display.min; yMax = store.axisLimits.yt_display.max
-      xLabel = 'Wurfweite <i>x</i> / m'; yLabel = 'Höhe <i>y</i> / m'
+      xLabel = '\\text{Wurfweite }x\\,/\\,\\mathrm{m}'; yLabel = '\\text{Höhe }y\\,/\\,\\mathrm{m}'
       plotX = currentX; plotY = currentY !== null ? getDisplayY(currentY) : null
       // PORT-AENDERUNG (2026-09-14, BACKLOG P16-7): MASSSTABSGLEICHE BAHN.
       // Setzt eine Aspekt-Figur store.bahnAchse, gibt sie die Achsenbereiche
@@ -363,7 +331,7 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
       xData = yDisplay; yData = store.xtData
       xMax = store.axisLimits.yt_display.max
       yMin = store.axisLimits.xt.min; yMax = store.axisLimits.xt.max
-      xLabel = 'Höhe <i>y</i> / m'; yLabel = 'Wurfweite <i>x</i> / m'
+      xLabel = '\\text{Höhe }y\\,/\\,\\mathrm{m}'; yLabel = '\\text{Wurfweite }x\\,/\\,\\mathrm{m}'
       plotX = currentY !== null ? getDisplayY(currentY) : null; plotY = currentX
     }
   } else {
@@ -378,7 +346,7 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
     }
     xData = store.tData; yData = limits.fullData
     xMax = limits.tMax; yMin = limits.min; yMax = limits.max
-    xLabel = 'Zeit <i>t</i> / s'; yLabel = limits.yLabelText
+    xLabel = '\\text{Zeit }t\\,/\\,\\mathrm{s}'; yLabel = limits.yLabelText
     plotX = plotTime; plotY = plotValue
   }
 
@@ -462,7 +430,7 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
   // dem unteren — unter dem oberen läge sie auf dem Titel des unteren.
   if (slot !== 'top') {
     const xLab = el('text', { x: padL + plotW / 2, y: tBase + 44, 'text-anchor': 'middle', class: 'axis-label' })
-    createStyledSvgText(xLab, xLabel)
+    setTexLabel(xLab, xLabel)
     gridEl.appendChild(xLab)
   }
 
@@ -471,16 +439,15 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
     'text-anchor': 'middle', transform: `rotate(-90, ${yLabX}, ${yLabY})`,
     x: yLabX, y: yLabY, class: 'axis-label',
   })
-  createStyledSvgText(yLab, yLabel)
+  setTexLabel(yLab, yLabel)
   gridEl.appendChild(yLab)
 
   // Der Titel steht mittig ueber der Zeichenflaeche. Im Skelett ist sein x auf
   // die Vorgabebreite gesetzt; mit variabler Feldbreite (s. o.) muss es
   // mitwandern, sonst sitzt er bei schmalem Feld rechts daneben.
   titleEl.setAttribute('x', graphWidth / 2)
-  // Titel mit echtem Index (<sub>), gesetzt wie die Achsen (FW9)
-  titleEl.textContent = ''
-  createStyledSvgText(titleEl, getGraphTitleText(type))
+  // Titel mit echtem Index, gesetzt wie die Achsen (FW9, Formelsatz P28)
+  setTexLabel(titleEl, getGraphTitleText(type))
 
   const idx = linePlotIndex(plotTime)
   let p = ''
@@ -543,7 +510,7 @@ function drawHoverAtT(slot, gs, t) {
   DOM.hoverPoint[slot].setAttribute('cy', scY(val))
   DOM.hoverPoint[slot].setAttribute('visibility', 'visible')
 
-  const unit = stripHtml(yLabel).split(' / ').pop()
+  const unit = einheitAusTex(yLabel)
   renderHoverTooltip(slot, t, val, unit, xPix, padL, plotW, padT)
 }
 
@@ -648,7 +615,7 @@ export function updateGraphs(plotTime, plotValue1, plotValue2 = null, currentX =
   DOM.graphGroupSingle.style.visibility = isStacked ? 'hidden' : 'visible'
   DOM.graphGroupStackedTop.style.visibility = isStacked ? 'visible' : 'hidden'
   DOM.graphGroupStackedBottom.style.visibility = isStacked ? 'visible' : 'hidden'
-  if (isStacked) DOM.graphTitle.textContent = ''
+  if (isStacked) setTexLabel(DOM.graphTitle, '')
 
   // Hover-Werte (I5): beim Umschalten Single ↔ Stacked verschwindet der
   // jeweils andere Modus komplett aus dem Sichtbereich — dessen Hover-
