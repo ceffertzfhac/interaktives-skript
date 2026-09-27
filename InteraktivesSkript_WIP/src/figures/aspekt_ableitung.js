@@ -57,9 +57,9 @@ const SVG_SCENE = `
   </defs>
   <!-- Gitter, Achsen, Ticks (drawGraph) -->
   <g id="ab_grid_group"></g>
-  <!-- Titel-Platzhalter des Motors: hier ohne Inhalt, die Funktionsgleichung
-       steht in der Physik-Sektion des rechten Panels. -->
-  <foreignObject id="ab_graph_title_fo" height="34" style="overflow:visible"></foreignObject>
+  <!-- Kein Diagrammtitel: die Funktionsgleichung steht in der Physik-Sektion
+       des rechten Panels (der leere foreignObject-Platzhalter des Motors ist
+       mit P28 entfallen). -->
   <g clip-path="url(#ab_plot_clip)">
     <polyline id="ab_func_line" fill="none" points=""/>
     <line id="ab_tri_h"/><line id="ab_tri_v"/>

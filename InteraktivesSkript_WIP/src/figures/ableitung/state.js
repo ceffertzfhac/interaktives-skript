@@ -71,7 +71,6 @@ export function initDOM() {
   DOM.dyText = q('dy_text')
   DOM.secSlopeText = q('sec_slope_text')
   DOM.tanSlopeText = q('tan_slope_text')
-  DOM.titleFo = q('graph_title_fo')
 
   // Statische MathJax-Varianten (Titel: Funktionsgleichung)
   DOM.titleVariants = {

@@ -38,6 +38,7 @@ import { setupScene, updateScene } from './kreisbewegung/render.js';
 import { R_MIN, R_MAX } from './kreisbewegung/constants.js';
 import { createRuntime } from './kreisbewegung/runtime.js';
 import { ge } from '../core.js';
+import { setTexLabel } from './kreisbewegung/lib/tex-label.js';
 
 const OMEGA_DEG = 60;
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
@@ -78,12 +79,6 @@ const SVG_SCENE = `
     <g id="kb_animation_coord_system"></g>
     <circle id="kb_disk" cx="225" cy="260" r="100" fill="none" stroke-width="0" opacity="0.06"/>
     <g id="kb_aspekt_angle"></g>
-    <!-- phi-Label als foreignObject mit MathJax (garantiert das geschwungene
-         \varphi, unabhaengig vom Font). Separat von kb_aspekt_angle, das
-         drawAngle() bei jedem Neuzeichnen leert; hier wird nur x/y gesetzt. -->
-    <foreignObject id="kb_angle_label" width="30" height="30" style="overflow:visible; visibility:hidden">
-      <div xmlns="http://www.w3.org/1999/xhtml" class="aspekt-angle-fo">\\(\\varphi\\)</div>
-    </foreignObject>
     <path id="kb_trajectory_path" fill="none" stroke-width="2" stroke-dasharray="4,4" d=""/>
     <circle id="kb_point" cx="325" cy="260" r="8" stroke-width="1"/>
     <text id="kb_zoom_text_display" x="12" y="20" class="zoom-text"></text>
@@ -251,7 +246,7 @@ export function buildKreisbahnFig(fig) {
             const el = document.createElementNS(NS, 'text');
             el.setAttribute('x', x); el.setAttribute('y', y);
             el.setAttribute('class', 'aspekt-axis-label');
-            el.textContent = t;
+            setTexLabel(el, t);
             g.appendChild(el);
         };
         line(ANIM_CX - len, ANIM_CY, ANIM_CX, ANIM_CY, false);
@@ -271,8 +266,7 @@ export function buildKreisbahnFig(fig) {
         const g = ge(p + 'aspekt_angle');
         if (!g) return;
         g.textContent = '';
-        const lbl0 = ge(p + 'angle_label');
-        if (phiDeg <= 0.5) { if (lbl0) lbl0.style.visibility = 'hidden'; return; }
+        if (phiDeg <= 0.5) return;
         const NS = 'http://www.w3.org/2000/svg';
         const cx = ANIM_CX, cy = ANIM_CY;
         const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42);
@@ -295,22 +289,25 @@ export function buildKreisbahnFig(fig) {
         arc.setAttribute('class', 'aspekt-angle-arc');
         arc.setAttribute('marker-end', `url(#${p}angle_arrow)`);
         g.appendChild(arc);
-        // varphi-Label (foreignObject/MathJax) auf der Winkelhalbierenden. Ob es
+        // varphi-Label (Formelsatz) auf der Winkelhalbierenden. Ob es
         // INNERHALB oder ausserhalb des Bogens sitzt, haengt vom Radius ab: ab
         // R >= 1.2 ist der Bogen gross genug -> Label innen (0.62*rArc); bei
         // kleinerem R ist der Bogen zu klein -> Label knapp ausserhalb (rArc+15).
-        // (30x30-foreignObject -> um 15 zentrieren.)
         const lr = (store.R >= 1.2) ? rArc * 0.62 : rArc + 15;
         const mid = rad / 2;
         // Kleiner Versatz (nach rechts + halb so viel nach unten), damit das Label
         // nicht mit dem Ortsvektor kollidiert (z. B. bei 60 Grad).
         const OFF_X = 6, OFF_Y = 3;
         const lx = cx + lr * Math.cos(mid) + OFF_X, ly = cy - lr * Math.sin(mid) + OFF_Y;
-        if (lbl0) {
-            lbl0.setAttribute('x', (lx - 15).toFixed(2));
-            lbl0.setAttribute('y', (ly - 15).toFixed(2));
-            lbl0.style.visibility = 'visible';
-        }
+        // Formelsatz direkt im SVG (P28) statt foreignObject: .aspekt-angle-label
+        // zentriert per text-anchor/dominant-baseline middle auf (lx, ly) —
+        // dieselbe Stelle, die frueher das 30x30-foreignObject um 15 versetzt traf.
+        const phiLabel = document.createElementNS(NS, 'text');
+        phiLabel.setAttribute('x', lx.toFixed(2));
+        phiLabel.setAttribute('y', ly.toFixed(2));
+        phiLabel.setAttribute('class', 'aspekt-angle-label akzent');
+        setTexLabel(phiLabel, '\\varphi');
+        g.appendChild(phiLabel);
     }
 
     // Zeichnen + Analyse-Werte. Alle Motor-Aufrufe inside withStore.

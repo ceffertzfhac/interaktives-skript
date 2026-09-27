@@ -38,9 +38,6 @@ export function physToScreen(x, y) {
 // ── Hintergrund: Achsen, Gitter, Ticks, Funktionskurve ───────────────────────
 export function drawGraph() {
   DOM.gridGroup.innerHTML = ''
-  // Titel-foreignObject auf das Plot-Gebiet zentrieren (nicht über die ganze SVG)
-  DOM.titleFo.setAttribute('x', PAD_L)
-  DOM.titleFo.setAttribute('width', plotW)
   DOM.plotClipRect.setAttribute('x', PAD_L)
   DOM.plotClipRect.setAttribute('y', PAD_T)
   DOM.plotClipRect.setAttribute('width', plotW)

@@ -75,6 +75,7 @@ import { createRuntime } from './kreisbewegung/runtime.js';
 import { attachGraphHover } from './kreisbewegung/lib/hover.js';
 import { resetOnPlayAfterAutoStop, isAtAutoStopEnd } from './playback.js';
 import { ge } from '../core.js';
+import { setTexLabel } from './kreisbewegung/lib/tex-label.js';
 
 const T_AUTO = 12;            // fester Auto-Stopp nach 12 s — bei Vorgabe T=4 s
                               // sind das drei Perioden (Bereich 0…12 s, wie 1.39)
@@ -93,7 +94,7 @@ const R_DEFAULT = 1.5;
 const ANIM_CX = 225, ANIM_CY = 260;   // = ANIM_CX / ANIM_CY_STACK (render.js)
 
 // -- Szene: exakt die Vorlagen-Geometrie (wie aspekt_kreisbahn, MIT Winkelbogen
-//    und foreignObject-φ-Label, OHNE Stoppuhr — der Aspekt ist der Winkel, nicht
+//    und φ-Label, OHNE Stoppuhr — der Aspekt ist der Winkel, nicht
 //    die Zeit als Uhr). Marker mit fester Länge (s. aspekt_kreisbahn.js für die
 //    Herleitung). Versteckte Stubs (v/a, Stoppuhr), die updateScene() anfasst;
 //    die kb_-IDs werden pro Instanz durch den Prefix ersetzt.
@@ -119,12 +120,6 @@ const SVG_SCENE = `
     <g id="kb_animation_coord_system"></g>
     <circle id="kb_disk" cx="225" cy="260" r="100" fill="none" stroke-width="0" opacity="0.06"/>
     <g id="kb_aspekt_angle"></g>
-    <!-- phi-Label als foreignObject mit MathJax (garantiert das geschwungene
-         \varphi, unabhaengig vom Font). Separat von kb_aspekt_angle, das
-         drawAngle() bei jedem Neuzeichnen leert; hier wird nur x/y gesetzt. -->
-    <foreignObject id="kb_angle_label" width="30" height="30" style="overflow:visible; visibility:hidden">
-      <div xmlns="http://www.w3.org/1999/xhtml" class="aspekt-angle-fo">\\(\\varphi\\)</div>
-    </foreignObject>
     <path id="kb_trajectory_path" fill="none" stroke-width="2" stroke-dasharray="4,4" d=""/>
     <circle id="kb_point" cx="325" cy="260" r="8" stroke-width="1"/>
     <text id="kb_zoom_text_display" x="12" y="20" class="zoom-text"></text>
@@ -441,7 +436,7 @@ export function buildOmegaZeitFig(fig) {
             const el = document.createElementNS(NS, 'text');
             el.setAttribute('x', x); el.setAttribute('y', y);
             el.setAttribute('class', 'aspekt-axis-label');
-            el.textContent = t;
+            setTexLabel(el, t);
             g.appendChild(el);
         };
         line(ANIM_CX - len, ANIM_CY, ANIM_CX, ANIM_CY, false);
@@ -475,8 +470,7 @@ export function buildOmegaZeitFig(fig) {
         const g = ge(p + 'aspekt_angle');
         if (!g) return;
         g.textContent = '';
-        const lbl0 = ge(p + 'angle_label');
-        if (phiDeg <= 0.5) { if (lbl0) lbl0.style.visibility = 'hidden'; return; }
+        if (phiDeg <= 0.5) return;
         const NS = 'http://www.w3.org/2000/svg';
         const cx = ANIM_CX, cy = ANIM_CY;
         const rArc = Math.min(46, store.R * store.currentPixelsPerMeter * 0.42) * 1.3;
@@ -550,12 +544,11 @@ export function buildOmegaZeitFig(fig) {
         // foreignObject/MathJax kann browserabhängig große konstante Offsets
         // erzeugen; in 1.41 daher φ als natives SVG-Textlabel direkt im
         // Winkel-Layer platzieren (gleiche Geometrie-Referenz wie oben).
-        if (lbl0) lbl0.style.visibility = 'hidden';
         const phiLabel = document.createElementNS(NS, 'text');
         phiLabel.setAttribute('x', lx.toFixed(2));
         phiLabel.setAttribute('y', ly.toFixed(2));
         phiLabel.setAttribute('class', 'aspekt-angle-label');
-        phiLabel.textContent = 'φ';
+        setTexLabel(phiLabel, '\\varphi');
         g.appendChild(phiLabel);
     }
 
