@@ -311,7 +311,7 @@ function drawGraphSlot(attrs) {
     // Abstand zur Achse und der letzte Tick rechts nicht abgeschnitten werden;
     // gc10 lässt das Feld weg -> fs=1 -> alle Werte wie zuvor, bit-identisch).
     const fs = store.graphFontScale || 1;
-    const padL = 60 * fs, padR = 18 * fs, padT = 28 * fs, padB = 38 * fs;
+    const padL = 60 * fs, padR = 18 * fs, padT = 28 * fs, padB = 44 * fs;   // padB +6: t-Beschriftung unter der letzten Tick-Zahl (P28-6)
     const fullW = gW - padL - padR;
     const fullH = gH - padT - padB;
 
@@ -367,7 +367,9 @@ function drawGraphSlot(attrs) {
     const tlY = el('text', { x: tlYx, y: plotT + plotH / 2, transform: `rotate(-90 ${tlYx} ${plotT + plotH / 2})`, 'text-anchor': 'middle', class: 'axis-label' });
     setTexLabel(tlY, graphAxisLabels[type] ?? limits.yLabel);
     gridEl.appendChild(tlY);
-    const tlX = el('text', { x: plotL + plotW / 2, y: plotBottom + 32 * fs, 'text-anchor': 'middle', class: 'axis-label' });
+    // Haus-Stil (P28-6, wie Abb. 1.1/1.2/1.15): rechtsbuendig unter der Pfeilspitze
+    // (Linienende + ~5 x Strichstaerke, Marker refX=0), nicht mittig unter der Achse.
+    const tlX = el('text', { x: plotL + plotW + 7.5, y: plotBottom + 38 * fs, 'text-anchor': 'end', class: 'axis-label' });
     setTexLabel(tlX, limits.xIsTime ? 't\\,/\\,\\mathrm{s}' : (graphXAxisLabels[type] ?? limits.xLabel));
     gridEl.appendChild(tlX);
 

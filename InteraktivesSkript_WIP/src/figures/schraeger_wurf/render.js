@@ -424,7 +424,9 @@ function drawSingleGraph({ slot, titleEl, gridEl, lineEl, pointEl, type,
   // Im Stapel teilen beide Diagramme die Zeitachse: „Zeit t / s" nur unter
   // dem unteren — unter dem oberen läge sie auf dem Titel des unteren.
   if (slot !== 'top') {
-    const xLab = el('text', { x: padL + plotW / 2, y: tBase + 44, 'text-anchor': 'middle', class: 'axis-label' })
+    // Haus-Stil (P28-6, wie Abb. 1.1/1.2/1.15): rechtsbuendig unter der Pfeilspitze
+    // (Linienende + ~5 x Strichstaerke, Marker refX=0), nicht mittig unter der Achse.
+    const xLab = el('text', { x: padL + plotW + 7.5, y: tBase + 44, 'text-anchor': 'end', class: 'axis-label' })
     setTexLabel(xLab, xLabel)
     gridEl.appendChild(xLab)
   }

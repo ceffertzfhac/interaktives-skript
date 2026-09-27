@@ -47,7 +47,9 @@ export const WATCH_SUBDIAL_OFFSET = WATCH_R * 25 / 60
 // Graph-Maße liegen in render.js (LAND_*/PORT_*): das Format schaltet je Zell-Form
 // (Landscape gestapelt / Portrait nebeneinander) um, daher nicht mehr fest hier.
 // Plot-Padding (bg-Rect 10 px past arrowheads via refX=0-Ausnahme)
-export const PAD_L = 55, PAD_R = 15, PAD_T = 30, PAD_B = 40
+// PAD_B 40 -> 49 (P28-6): die t-Achsenbeschriftung steht unter der letzten
+// Tick-Zahl am Pfeilende und braucht dort eine Zeile Abstand.
+export const PAD_L = 55, PAD_R = 15, PAD_T = 30, PAD_B = 49
 
 // ── Subjekte & Größen ────────────────────────────────────────────────────────
 export const subjects = ['p']            // einzelner Partikel

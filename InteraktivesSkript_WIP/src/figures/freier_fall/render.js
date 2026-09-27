@@ -221,7 +221,10 @@ function drawGraphSlot({ slot, gridEl, lineEl, pointEl, titleEl, type, graphHeig
   gridEl.appendChild(el('line', { x1: x0, y1: graphHeight - 5, x2: x0, y2: 5, class: 'axis-line', 'stroke-width': 2, 'marker-end': url('arrowhead') }))
 
   // Achsenbeschriftung
-  const tlX = el('text', { x: GRAPH_W / 2, y: (type === 'geschw' ? Math.max(y0, scY(axMin)) : y0) + 32, 'text-anchor': 'middle', class: 'axis-label' })
+  // Haus-Stil (P28-6, wie Abb. 1.1/1.2/1.15): rechtsbuendig unter der Pfeilspitze
+  // (Linienende + ~5 x Strichstaerke, Marker refX=0), nicht mittig unter der Achse.
+  // Die Achse laeuft hier bis GRAPH_W - 5, die Spitze also bis an den Rand.
+  const tlX = el('text', { x: GRAPH_W - 2, y: (type === 'geschw' ? Math.max(y0, scY(axMin)) : y0) + 41, 'text-anchor': 'end', class: 'axis-label' })
   setTexLabel(tlX, 't\\,/\\,\\mathrm{s}')
   gridEl.appendChild(tlX)
   const tlY = el('text', { x: x0 - 40, y: graphHeight / 2, transform: `rotate(-90 ${x0 - 40} ${graphHeight / 2})`, 'text-anchor': 'middle', class: 'axis-label' })

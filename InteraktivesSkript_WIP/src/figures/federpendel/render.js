@@ -516,7 +516,7 @@ export function updateGraph(time, offset = 0, showCurrent = true) {
   const isVertical = store.oscillationMode === 'vertical'
   const graphW = isVertical ? GRAPH_W_VERT : GRAPH_W
   const graphH = isVertical ? GRAPH_W : GRAPH_H
-  const padL = 60, padR = 18, padT = 30, padB = 42
+  const padL = 60, padR = 18, padT = 30, padB = 51   // padB +9 fuer die t-Beschriftung unter der letzten Tick-Zahl (P28-6)
   const plotW = graphW - padL - padR
   const plotH = graphH - padT - padB
   const plotBottom = padT + plotH
@@ -577,7 +577,9 @@ export function updateGraph(time, offset = 0, showCurrent = true) {
   const tlY = el('text', { x: padL - 42, y: padT + plotH / 2, transform: `rotate(-90 ${padL - 42} ${padT + plotH / 2})`, 'text-anchor': 'middle', class: 'axis-label' })
   setTexLabel(tlY, yLabel)
   DOM.gridGroup.appendChild(tlY)
-  const tlX = el('text', { x: padL + plotW / 2, y: plotBottom + 32, 'text-anchor': 'middle', class: 'axis-label' })
+  // Haus-Stil (P28-6, wie Abb. 1.1/1.2/1.15): rechtsbuendig unter der Pfeilspitze
+  // (Linienende + ~5 x Strichstaerke, Marker refX=0), nicht mittig unter der Achse.
+  const tlX = el('text', { x: padL + plotW + 7.5, y: plotBottom + 41, 'text-anchor': 'end', class: 'axis-label' })
   setTexLabel(tlX, 't\\,/\\,\\mathrm{s}')
   DOM.gridGroup.appendChild(tlX)
 

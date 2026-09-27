@@ -560,7 +560,9 @@ function drawGraph(idx, time, geom) {
   })
   setTexLabel(yLabel, `${quantityTex[qq]}\\,/\\,${yUnitTex(qq)}`)
   group.appendChild(yLabel)
-  const xLabel = el('text', { x: PAD_L + plotW / 2, y: xAxisY + PAD_B - 10, 'text-anchor': 'middle', class: 'axis-label' })
+  // Haus-Stil (P28-6, wie Abb. 1.1/1.2/1.15): rechtsbuendig unter der Pfeilspitze
+  // (Linienende + ~5 x Strichstaerke, Marker refX=0), nicht mittig unter der Achse.
+  const xLabel = el('text', { x: PAD_L + plotW + 7.5, y: xAxisY + PAD_B - 10, 'text-anchor': 'end', class: 'axis-label' })
   setTexLabel(xLabel, 't\\,/\\,\\mathrm{s}')
   group.appendChild(xLabel)
 
