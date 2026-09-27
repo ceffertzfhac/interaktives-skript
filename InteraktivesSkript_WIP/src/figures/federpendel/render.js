@@ -247,11 +247,14 @@ export function setupScene() {
     DOM.maxPosLine.setAttribute('x2', animCenterX + scale(Math.abs(A)))
     DOM.maxPosLine.setAttribute('y1', animCenterY - 70)
     DOM.maxPosLine.setAttribute('y2', animCenterY + 70)
+    // ±x₀ UNTER den Linien (P28-4): oben stand die Beschriftung 10 Einheiten
+    // unter „x = 0 (Ruhelage)“ und ueberlappte sie; ueber der Ruhelage ist im
+    // viewBox kein Platz mehr (Oberkante 9 Einheiten).
     DOM.minPosLabel.setAttribute('x', animCenterX - scale(Math.abs(A)))
-    DOM.minPosLabel.setAttribute('y', animCenterY - 80)
+    DOM.minPosLabel.setAttribute('y', animCenterY + 88)
     setTexLabel(DOM.minPosLabel, '-x_0')
     DOM.maxPosLabel.setAttribute('x', animCenterX + scale(Math.abs(A)))
-    DOM.maxPosLabel.setAttribute('y', animCenterY - 80)
+    DOM.maxPosLabel.setAttribute('y', animCenterY + 88)
     setTexLabel(DOM.maxPosLabel, '+x_0')
 
     DOM.xAxisArrow.setAttribute('x1', animCenterX)
