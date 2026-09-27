@@ -64,12 +64,12 @@ export const graphOptions = {
         yt: 'y-Koordinate <i>y</i>(<i>t</i>) / m',
     },
     'Geschwindigkeits-Komponenten': {
-        vxt: 'Geschw. <i>v</i>ₓ(<i>t</i>) / (m/s)',
-        vyt: 'Geschw. <i>v</i>ᵧ(<i>t</i>) / (m/s)',
+        vxt: 'Geschw. <i>v</i><sub>x</sub>(<i>t</i>) / (m/s)',
+        vyt: 'Geschw. <i>v</i><sub>y</sub>(<i>t</i>) / (m/s)',
     },
     'Beschleunigungs-Komponenten': {
-        axt: 'Beschl. <i>a</i>ₓ(<i>t</i>) / (m/s²)',
-        ayt: 'Beschl. <i>a</i>ᵧ(<i>t</i>) / (m/s²)',
+        axt: 'Beschl. <i>a</i><sub>x</sub>(<i>t</i>) / (m/s²)',
+        ayt: 'Beschl. <i>a</i><sub>y</sub>(<i>t</i>) / (m/s²)',
     },
     'Beträge & Winkel': {
         vabs: 'Betrag |<i>v</i>(<i>t</i>)| / (m/s)',

@@ -68,40 +68,6 @@ export const quantityUnits = {
   ar: 'm/s²', at: 'm/s²', vabs: 'm/s', aabs: 'm/s²',
 }
 
-// Symbole für Achsenbeschriftung (Unicode-Subscripts)
-export const quantitySymbols = {
-  phi: 'φ', omega: 'ω', alpha: 'α',
-  x: 'x', y: 'y', vx: 'vₓ', vy: 'vᵧ', ax: 'aₓ', ay: 'aᵧ',
-  ar: '|aᵣ|', at: '|aₜ|', vabs: '|v|', aabs: '|a|',
-}
-
-// Diagramm-Optionen (Nutzerperspektive, HTML-kodiert mit <i> für kursive Symbole)
-export const graphOptions = {
-  'Winkelgrößen': {
-    phi: 'Winkel <i>φ</i>(<i>t</i>)',
-    omega: 'Winkelgeschw. <i>ω</i>(<i>t</i>)',
-    alpha: 'Winkelbeschl. <i>α</i>(<i>t</i>)',
-  },
-  'Orts-Komponenten': {
-    x: 'Ort <i>x</i>(<i>t</i>)',
-    y: 'Ort <i>y</i>(<i>t</i>)',
-  },
-  'Geschwindigkeits-Komponenten': {
-    vx: 'Geschw. <i>v</i>ₓ(<i>t</i>)',
-    vy: 'Geschw. <i>v</i>ᵧ(<i>t</i>)',
-  },
-  'Beschleunigungs-Komponenten': {
-    ax: 'Beschl. <i>a</i>ₓ(<i>t</i>)',
-    ay: 'Beschl. <i>a</i>ᵧ(<i>t</i>)',
-  },
-  'Beträge': {
-    vabs: 'Geschw.-Betrag |<i>v</i>(<i>t</i>)|',
-    aabs: 'Beschl.-Betrag |<i>a</i>(<i>t</i>)|',
-    ar: '|<i>a</i>ᵣ(<i>t</i>)|',
-    at: '|<i>a</i>ₜ(<i>t</i>)|',
-  },
-}
-
 // Graph-Titel und Achsensymbole als TeX (setTexLabel, P28), Schreibweise wie
 // im Fliesstext: \varphi, \vec a_\text{r}, Betraege mit Pfeil und (t) innen.
 // Vorher Unicode-Indizes — vᵧ war ein tiefgestelltes GAMMA (ein

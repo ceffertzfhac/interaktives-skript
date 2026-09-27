@@ -28,7 +28,7 @@ import { store, DOM } from './state.js'
 import { linePlotIndex, frequency, kineticEnergy, potentialEnergy, totalEnergy,
          displacement, velocity, acceleration } from './physics.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
-import { setTexLabel, texEinheit } from '../kreisbewegung/lib/tex-label.js'
+import { setTexLabel, texEinheit, tspansAusTex } from '../kreisbewegung/lib/tex-label.js'
 import { tAxisStep, niceStepLE } from '../kreisbewegung/lib/ticks.js'
 import { shortenEnd } from '../kreisbewegung/lib/vectors.js'
 export { fmt }
@@ -636,7 +636,8 @@ export function updateGraph(time, offset = 0, showCurrent = true) {
 // ── Hover-Werte (I13.1) ──────────────────────────────────────────────────────
 const LINE_LABELS = {
   xData: null, vData: null, aData: null, // Einzellinien-Typen: kein Label-Präfix (wie Zykloide)
-  ekData: 'E_kin', epData: 'E_pot', egesData: 'E_ges',
+  // TeX, im Tooltip per tspansAusTex als echter Index (P28-4; stand woertlich da)
+  ekData: 'E_{\\text{kin}}', epData: 'E_{\\text{pot}}', egesData: 'E_{\\text{ges}}',
 }
 
 function unitFor(type) {
@@ -698,7 +699,7 @@ export function updateGraphHover(localX) {
     pe.style.stroke = ln.color
     pe.setAttribute('visibility', 'visible')
     const label = LINE_LABELS[ln.dataKey]
-    rows.push({ text: `${label ? label + ': ' : ''}${fmt(v, 3)} ${unit}`, color: ln.color })
+    rows.push({ tex: label, text: `${label ? ': ' : ''}${fmt(v, 3)} ${unit}`, color: ln.color })
   })
   for (let i = lines.length; i < pointEls.length; i++) pointEls[i].setAttribute('visibility', 'hidden')
 
@@ -712,7 +713,10 @@ function renderHoverTooltip(rows, xPix, padL, plotW, padT) {
   rows.forEach((row, i) => {
     const tspan = el('tspan', { x: 8, y: 16 + i * lineH })
     if (row.color) tspan.style.fill = row.color
-    if (row.italic) {
+    if (row.tex) {
+      tspansAusTex(tspan, row.tex)
+      tspan.appendChild(document.createTextNode(row.text))
+    } else if (row.italic) {
       const sym = el('tspan', { 'font-style': 'italic' })
       sym.textContent = 't'
       tspan.appendChild(sym)

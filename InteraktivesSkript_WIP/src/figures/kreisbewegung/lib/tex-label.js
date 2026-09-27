@@ -320,6 +320,61 @@ export function texEinheit(tex) {
         .replace(/^\((.*)\)$/, '$1');
 }
 
+// Symbol als TEXT-tspans fuer Stellen, die bewusst Text bleiben (Hover-
+// Tooltips: ihre Box wird per getBBox bemessen, die Werte aendern sich je
+// Mausbewegung). Versteht nur, was dort vorkommt: Buchstaben kursiv, \text{}
+// und \mathrm{} aufrecht, _x bzw. _{…} als echter Index, griechische Makros,
+// \vec entfaellt (im Tooltip steht der Betrag bzw. die Komponente). Index wie
+// P16-9a: 70 %, baseline-shift -0.3em — "sub" senkt in Chrome zu tief.
+export function tspansAusTex(parent, tex) {
+    const NS = SVGNS;
+    const teil = (text, { kursiv = false, index = false } = {}) => {
+        if (!text) return;
+        const t = document.createElementNS(NS, 'tspan');
+        if (kursiv) t.setAttribute('font-style', 'italic');
+        if (index) { t.setAttribute('font-size', '70%'); t.setAttribute('baseline-shift', '-0.3em'); }
+        t.textContent = text;
+        parent.appendChild(t);
+    };
+    // Einzelnes Token lesen: \text{…}/\mathrm{…} (aufrecht), \makro, {…}, Zeichen.
+    const lies = (s, i) => {
+        let m;
+        if ((m = /^\\(?:text|mathrm)\{([^{}]*)\}/.exec(s.slice(i)))) return { text: m[1], kursiv: false, n: m[0].length };
+        if ((m = /^\\([A-Za-z]+)\s*/.exec(s.slice(i)))) {
+            const g = GRIECHISCH[m[1]];
+            return { text: g ?? '', kursiv: !!g && m[1] === m[1].toLowerCase(), n: m[0].length, leer: !g };
+        }
+        if (s[i] === '{') {
+            // passende Klammer suchen (E_{\text{kin}} ist verschachtelt)
+            let tiefe = 0, j = i;
+            for (; j < s.length; j++) {
+                if (s[j] === '{') tiefe++;
+                else if (s[j] === '}' && --tiefe === 0) break;
+            }
+            return { gruppe: s.slice(i + 1, j), n: j - i + 1 };
+        }
+        const c = s[i];
+        return { text: c, kursiv: /[A-Za-z]/.test(c), n: 1 };
+    };
+    let i = 0;
+    while (i < tex.length) {
+        if (tex[i] === '_') {
+            const tok = lies(tex, i + 1);
+            if (tok.gruppe !== undefined) {
+                // {\text{kin}} oder {BA}: Gruppe als Index, Inhalt tokenweise
+                let k = 0; const g = tok.gruppe;
+                while (k < g.length) { const u = lies(g, k); if (!u.leer) teil(u.text, { kursiv: u.kursiv, index: true }); k += Math.max(1, u.n); }
+            } else if (!tok.leer) teil(tok.text, { kursiv: tok.kursiv, index: true });
+            i += 1 + Math.max(1, tok.n);
+            continue;
+        }
+        const tok = lies(tex, i);
+        if (tok.gruppe !== undefined) tspansAusTex(parent, tok.gruppe);
+        else if (!tok.leer) teil(tok.text, { kursiv: tok.kursiv });
+        i += Math.max(1, tok.n);   // Fortschritt erzwingen: kaputtes TeX darf nie haengen
+    }
+}
+
 // ── Klartext (Rueckfall + aria-label) ────────────────────────────────────────
 
 const GRIECHISCH = {

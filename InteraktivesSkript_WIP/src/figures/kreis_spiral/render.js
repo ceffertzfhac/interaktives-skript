@@ -15,13 +15,13 @@ import {
   WATCH_SUBDIAL_R, WATCH_SUBDIAL_OFFSET,
   ZOOM_TEXT_X, ZOOM_TEXT_Y,
   PAD_L, PAD_R, PAD_T, PAD_B,
-  quantities, quantityUnits, quantitySymbols, quantityTex, graphOptions, graphTitles,
+  quantities, quantityUnits, quantityTex, graphTitles,
 } from './constants.js'
 import { store, DOM } from './state.js'
 import { interpolateAt, linePlotIndex, radiusAt } from './physics.js'
 import { fmt } from '../kreisbewegung/lib/format.js'
 import { shortenEnd } from '../kreisbewegung/lib/vectors.js'
-import { setTexLabel } from '../kreisbewegung/lib/tex-label.js'
+import { setTexLabel, tspansAusTex } from '../kreisbewegung/lib/tex-label.js'
 import { tAxisStep, niceStepLE } from '../kreisbewegung/lib/ticks.js'
 export { fmt }
 
@@ -706,11 +706,16 @@ function renderHoverTooltip(idx, qq, t, val, xPix, plotW) {
   const lineH = 15
   const rows = [
     { text: `t = ${fmt(t, 2)} s`, italic: true },
-    { text: `${quantitySymbols[qq]} = ${fmt(val, 2)} ${yUnitString(qq)}` },
+    // Symbol aus derselben TeX-Quelle wie die Achse (P28-4); als Text-tspans,
+    // weil die Box des Tooltips per getBBox bemessen wird.
+    { tex: quantityTex[qq], text: ` = ${fmt(val, 2)} ${yUnitString(qq)}` },
   ]
   rows.forEach((row, i) => {
     const tspan = el('tspan', { x: 8, y: 16 + i * lineH })
-    if (row.italic) {
+    if (row.tex) {
+      tspansAusTex(tspan, row.tex)
+      tspan.appendChild(document.createTextNode(row.text))
+    } else if (row.italic) {
       const sym = el('tspan', { 'font-style': 'italic' })
       sym.textContent = 't'
       tspan.appendChild(sym)
