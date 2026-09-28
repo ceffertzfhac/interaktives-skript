@@ -649,4 +649,28 @@ des Fragments.
   **Offen bleibt Stufe 5 (Sicht):** Prosa Wort für Wort gegen das PDF,
   Druckfluss, Optik — das braucht einen Menschen.
 
+- [x] **P21-4 Zwei undefinierte Verweise in den Schwingungen (Quellfehler
+  Nr. 7 und 8)** — **erledigt 2026-09-28** im LaTeX-Repo. Beide standen als
+  „Offen" in `../UEBERGABE_Druckskript.md`, jetzt beauftragt und umgesetzt:
+  Nr. 8 Label-Tippfehler `…schwingung2` → `…schwingung_2` (`e40973d`), Nr. 7
+  Klammerzusatz „(siehe Abbildung …)" gestrichen wie im WIP (`432d30a`); beide
+  nummernneutral, Neubau `0214009`, Log ohne „undefined". **Nr. 7: keine
+  Abbildung ergänzt** — die Autorenentscheidung „Abbildung zeichnen" steht
+  weiter aus und würde alle folgenden Abbildungsnummern auf einer Seite
+  verschieben. Neu gefunden, nicht behoben: Z. 335 verweist auf die falsche
+  Gleichungsform (definiert, daher ohne Warnung), s. Übergabe.
+- [x] **P21-5 Hinweis für die nächste Gegenprüfung: Anhang A im Druckskript** —
+  **2026-09-28**. Im LaTeX-Repo steht neu ein Anhang „Systematisches Lösen von
+  Physikaufgaben" (`pskript_anhang_loesungsstrategie_v1.tex`, Kapitel **A**,
+  Commits `98e24ac`…`b0f2536`). Er hat **kein Gegenstück im interaktiven Skript**
+  und ist keine P21-Abweichung, verändert aber die Messgrößen von P21-3: das
+  PDF hat jetzt **431 statt 421 Seiten**, und ein `pdftotext`-Zählen der
+  Abbildungen findet **sechs zusätzliche** („Abbildung A.1"–„A.6", TikZ-
+  Entscheidungsbäume) — sie gehören nicht zu den 88. Die Kapitel 0–3 sind
+  unverändert (keine Kapitel-, Abschnitts-, Gleichungs- oder Beispielnummer
+  verschoben; der Anhang enthält keine nummerierte Gleichung), nur Kästen
+  „Wichtig" laufen mit („Wichtig A.1.1–A.1.3"). Beim Zählen also nach dem
+  Buchstaben-Präfix filtern. Sieben Abschnitte darin sind mit rotem
+  „[TODO …]" markiert — noch nicht ausformuliert, mit dem Autor zu klären.
+
 ---

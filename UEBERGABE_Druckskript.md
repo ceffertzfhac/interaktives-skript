@@ -611,18 +611,36 @@ Skript schon behandelt; im `.tex` stehen sie noch.
 | 1.1-4, 1.1-8 | Unterschrift Abb. 1.18 (`fig:geschwindigkeit_tangential`) | „… Tangente an die Bahnkurve Im Vergleich … dass der Ortsvektor vom Wahl des Koordinatensystems abhänt“ — Satzpunkt fehlt, falscher Kasus, Buchstabe fehlt (P21-A13) | „… Tangente an die Bahnkurve. Im Vergleich … dass der Ortsvektor von der Wahl des Koordinatensystems abhängt“ |
 | 1.1-9 | Unterschrift Abb. 1.20 (`figure` mit `kinematik_geschwindigkeit_zeit_diagramm_schraeger_wurf.png`) | „Statt nur einem Geschwindigkeits-Zeit Diagramm“ — Bindestrich fehlt (P21-A14) | „Geschwindigkeits-Zeit-Diagramm“ |
 
-**Offen — zwei undefinierte Verweise in `pskript_sw_schwingungen.tex`**
-(Abschnitt 3.1, in `QUELLEN_FEHLER.md` als Nr. 7 und 8 erfasst). Sie stehen
-seit jeher im Log; das interaktive Skript hat beide umschifft, das Druckskript
-druckt zwei leere Verweise:
+**Erledigt 2026-09-28 — zwei undefinierte Verweise in `pskript_sw_schwingungen.tex`**
+(Abschnitt 3.1, in `QUELLEN_FEHLER.md` als Nr. 7 und 8 erfasst). Sie standen
+seit jeher im Log; das interaktive Skript hatte beide umschifft, das Druckskript
+druckte zwei leere Verweise:
 
 | Nr. | Stelle | Befund | Korrekt |
 |---|---|---|---|
 | 7 | § Horizontales Feder-Masse-System | „(siehe Abbildung `\ref{fig:feder_masse_schwingung_horizontal}`)" — die Abbildung **existiert nicht** (es gibt nur das vertikale Feder-Masse-Pendel, Abb. 3.3) | Klammerzusatz streichen (so macht es das WIP) oder eine Abbildung ergänzen — Autorenentscheidung |
 | 8 | § Harmonische Schwingungen | „die Funktion `\ref{eq:allg_loesung_harmonische_schwingung2}`" — Label-Tippfehler, der Unterstrich vor der 2 fehlt, also undefiniert | `eq:allg_loesung_harmonische_schwingung_2` (die Kosinus-Form; dieselbe Stelle wird ein paar Zeilen später korrekt so referenziert) |
 
-Nr. 8 ist ein Tippfehler und damit nummernneutral; Nr. 7 ist eine
-Autorenentscheidung. Beide erst angehen, wenn sie beauftragt sind.
+Nr. 8 ist ein Tippfehler und damit nummernneutral; Nr. 7 war eine
+Autorenentscheidung.
+
+**Rückmeldung (2026-09-28, Auftrag „die Warnung reparieren!").** Beide sind im
+LaTeX-Repo behoben, beide **nummernneutral**:
+
+| Nr. | Umsetzung | Commit |
+|---|---|---|
+| 8 | `\ref{eq:allg_loesung_harmonische_schwingung2}` → `…schwingung_2` (`pskript_sw_schwingungen.tex`, Z. 334) | `e40973d` |
+| 7 | Klammerzusatz „(siehe Abbildung …)" gestrichen, **keine Abbildung ergänzt** — so wie im WIP; damit verschiebt sich keine Abbildungsnummer. Die Alternative „Abbildung ergänzen" bleibt eine Autorenentscheidung und ist nicht getroffen | `432d30a` |
+
+Beide sind in `CORRECTIONS.md` des LaTeX-Repos eingetragen (`432d30a`).
+Neubau `0214009`: 0 Fehler, **0× „undefined"** im Log, kein „??" im PDF.
+
+**Beim Nachprüfen aufgefallen, nicht angefasst:** Z. 335 derselben Datei
+(„Die erste Ableitung der Funktion `\ref{eq:allg_loesung_harmonische_schwingung}`")
+verweist auf die Sinus-Kosinus-Form, abgeleitet wird aber die Kosinus-Form mit
+Phase (`y_max·cos(ωt+φ₀)`). Das ist ein **inhaltlich** falscher, aber
+**definierter** Verweis — er erzeugt keine Warnung. Vermutlich gehört dort
+`…_2` hin. Im WIP gegenzuprüfen, ob dort dasselbe steht.
 
 Korrekturen an Rechtschreibung/Grammatik werden im Quell-Repo in
 `CORRECTIONS.md` geführt — jede hier erledigte dort mit eintragen.
