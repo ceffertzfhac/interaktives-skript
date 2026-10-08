@@ -122,6 +122,7 @@ ${toggleRow('haltFahrt', 'Halt/Fahrt einfärben')}
       <div class="legend-swatch" data-c="bw-kurve"></div><div class="legend-label">Ort \\(x(t)\\) — Linie 42</div>
       <div class="legend-swatch" data-c="bw-halt"></div>  <div class="legend-label">Halt (eingefärbt)</div>
       <div class="legend-swatch" data-c="bw-bus"></div>   <div class="legend-label">Bus</div>
+      <div class="legend-swatch" data-c="bw-cm">✕</div>   <div class="legend-label">Schwerpunkt des Busses (betrachteter Punkt)</div>
     </div>
   </div>
 </div>`;

@@ -113,18 +113,19 @@ export const STREET_ROAD_X = 118                           // Straßen-Mitte (ve
 export const STREET_Y_TOP = PAD_T                          // = Diagramm-Plot oben  (x=1500)
 export const STREET_Y_BOTTOM = PAD_T + PLOT_H              // = Diagramm-Plot unten (x=0) = H1
 export const STREET_LEN = PLOT_H                           // gleiche Skala wie die Ordinate (316 px / 1500 m)
-// Die Straße reicht ETWAS ueber H1 hinaus nach unten: der Bus haelt mit der
-// FRONT an den Hx-Linien (s. render.js, Bus transform +BUS_W/2), sodass der
-// Buskasten unter die Front (= unter H1) ragt. Damit er an H1 nicht abwrackt,
-// endet das Straßenband unten erst STREET_ROAD_BOTTOM. Skala + Top bleiben
-// wie die Ordinate (STREET_Y_TOP..STREET_Y_BOTTOM = Plot 40..356), nur der
-// untere Rand wird verlaengert — die Front liegt weiterhin pixelgenau auf
-// der Kurvenhoehe. STREET_ROAD_BOTTOM 4 px VOR dem viewBox-Boden (STREET_H),
-// nicht flush damit: sonst wirkt die Straßen-Unterkante am SVG-Rand wie um
-// wenige px abgeschnitten (Container/Subpixel). Der Buskasten reicht an H1
-// bis y = streetY(0)+BUS_W = 356+44 = 400 = STREET_ROAD_BOTTOM — passt genau.
-export const STREET_ROAD_BOTTOM = STREET_H - 4             // 400 — 4 px Rand zum viewBox-Boden
-export const BUS_W = 44   // Bus-Laenge entlang der Fahrtrichtung (vertikal) — passt mit +Front-Offset unter H1
+// Betrachteter Punkt ist der SCHWERPUNKT des Busses (Busmitte, als Kreuz
+// markiert — Massepunkt-Naeherung, s. Prosa vor Abb. 1.2). Er liegt
+// pixelgenau auf der Kurvenhoehe und haelt genau an den Hx-Linien; der
+// Buskasten ragt dort um BUS_W/2 ueber die Haltestelle hinaus — an H1 nach
+// unten, an H4 nach oben. Das Straßenband reicht deshalb an beiden Enden um
+// BUS_W/2 + 4 px ueber die Ordinate (STREET_Y_TOP..STREET_Y_BOTTOM = Plot
+// 40..356) hinaus: 14..382, innerhalb der viewBox 0..404. Skala unveraendert.
+// (Bis v1.57.17 hielt der Bus mit der FRONT an Hx; das Band reichte nur unten
+// bis 400 hinaus.)
+export const BUS_W = 44   // Bus-Laenge entlang der Fahrtrichtung (vertikal)
+export const STREET_ROAD_TOP = STREET_Y_TOP - BUS_W / 2 - 4          // 14
+export const STREET_ROAD_BOTTOM = STREET_Y_BOTTOM + BUS_W / 2 + 4    // 382
+export const BUS_CROSS_R = 4.8   // halbe Armlaenge des (diagonalen) Schwerpunkt-Kreuzes
 export const BUS_H = 30   // Bus-Breite quer
 
 // ── Toggles (Bedienpanel) ──────────────────────────────────────────────────

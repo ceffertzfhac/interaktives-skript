@@ -20,7 +20,7 @@ import {
   PAD_L, PAD_T, PAD_B, PLOT_W, PLOT_H, GRAPH_W,
   T_MAX_BOUND, X_MAX_BOUND, T_TICK_STEP, X_TICK_STEP,
   STOP_POSITIONS, STOP_LABELS,
-  STREET_ROAD_X, STREET_Y_TOP, STREET_Y_BOTTOM, STREET_LEN, STREET_ROAD_BOTTOM, BUS_W, BUS_H,
+  STREET_ROAD_X, STREET_Y_BOTTOM, STREET_LEN, STREET_ROAD_TOP, STREET_ROAD_BOTTOM, BUS_W, BUS_H, BUS_CROSS_R,
 } from './constants.js'
 import { store, DOM } from './state.js'
 import { xAt, stateAt } from './physics.js'
@@ -139,11 +139,11 @@ export function drawStreetStatic() {
   // eigenes <g> HINTER street_bg im SVG und wird beim Bau gefuellt, hier nicht
   // neu erzeugt (z-Order: Straße/Haltestellen unter dem Bus).
   const rx = STREET_ROAD_X
-  // Straßenband + Mittellinie (vertikal). Das Band reicht bis STREET_ROAD_BOTTOM
-  // (etwas unter H1), damit der mit der FRONT an Hx haltende Bus (Kasten ragt
-  // unter die Front) an H1 nicht abwrackt (s. constants.js).
-  g.appendChild(el('rect', { x: rx - 18, y: STREET_Y_TOP, width: 36, height: STREET_ROAD_BOTTOM - STREET_Y_TOP, rx: 4, class: 'bw-road' }))
-  g.appendChild(el('line', { x1: rx, y1: STREET_Y_TOP, x2: rx, y2: STREET_ROAD_BOTTOM, class: 'bw-road-mid' }))
+  // Straßenband + Mittellinie (vertikal). Das Band reicht an beiden Enden eine
+  // halbe Buslaenge ueber H1/H4 hinaus, damit der mit dem SCHWERPUNKT an Hx
+  // haltende Bus dort nicht ueber das Band ragt (s. constants.js).
+  g.appendChild(el('rect', { x: rx - 18, y: STREET_ROAD_TOP, width: 36, height: STREET_ROAD_BOTTOM - STREET_ROAD_TOP, rx: 4, class: 'bw-road' }))
+  g.appendChild(el('line', { x1: rx, y1: STREET_ROAD_TOP, x2: rx, y2: STREET_ROAD_BOTTOM, class: 'bw-road-mid' }))
   // (Kein Fahrtrichtungspfeil oben: der Pfeil an der x-Achse des Diagramms
   //  zeigt bereits nach oben = wachsendes x; ein zweiter am Straßenende wirkte
   //  als abgesetztes Dreieck und ist auf Wunsch entfallen.)
@@ -170,14 +170,23 @@ export function buildBus() {
   if (!bus) return
   bus.innerHTML = ''
   bus.appendChild(el('rect', { x: -BUS_H / 2, y: -BUS_W / 2, width: BUS_H, height: BUS_W, rx: 5, class: 'bw-bus' }))
-  // Fenster (drei uebereinander).
-  for (let i = -1; i <= 1; i++) {
+  // Fenster vorn + hinten; das mittlere entfaellt, damit das Schwerpunkt-
+  // Kreuz in der Busmitte frei steht.
+  for (const i of [-1, 1]) {
     bus.appendChild(el('rect', { x: -5, y: i * 14 - 4.5, width: 10, height: 9, class: 'bw-bus-window' }))
   }
   // Raeder (vorne oben + hinten unten) — Mittelpunkte auf dem RECHTEN Rand des
   // Bus-Kastens (x = +BUS_H/2), nicht auf der Mittellinie.
   bus.appendChild(el('circle', { cx: BUS_H / 2, cy: -BUS_W / 2 + 8, r: 5, class: 'bw-bus-wheel' }))
   bus.appendChild(el('circle', { cx: BUS_H / 2, cy: BUS_W / 2 - 8, r: 5, class: 'bw-bus-wheel' }))
+  // Schwerpunkt-Kreuz in der Busmitte (lokal 0,0) = der betrachtete Punkt.
+  // Diagonal (✕), gelber Kern auf dunklem Halo — farblich klar vom roten
+  // Buslack abgesetzt.
+  const d = BUS_CROSS_R / Math.SQRT2
+  for (const cls of ['bw-cm-halo', 'bw-cm']) {
+    bus.appendChild(el('line', { x1: -d, y1: -d, x2: d, y2: d, class: cls }))
+    bus.appendChild(el('line', { x1: -d, y1: d, x2: d, y2: -d, class: cls }))
+  }
 }
 
 // ── Dynamischer Overlay (pro Frame / pro Reglerbewegung) ─────────────────────
@@ -245,12 +254,12 @@ export function updateVisualization(t) {
   }
   DOM.plotArea.appendChild(el('circle', { cx: pp.x, cy: pp.y, r: 5, class: 'bw-point' }))
 
-  // 5. Bus auf der Straße verschieben — FRONT auf streetY(x) (Bus-Kasten ragt
-  //    UNTER die Front, also +BUS_W/2 nach unten). So liegt die Bus-Front
-  //    pixelgenau auf der Kurvenhoehe (Analogie Front ↔ Kurvenpunkt) und der
-  //    Bus haelt mit der Front an den Hx-Linien.
+  // 5. Bus auf der Straße verschieben — SCHWERPUNKT (Kreuz, Busmitte) auf
+  //    streetY(x). So liegt der betrachtete Punkt pixelgenau auf der
+  //    Kurvenhoehe (Analogie Schwerpunkt ↔ Kurvenpunkt) und der Bus haelt mit
+  //    dem Schwerpunkt an den Hx-Linien.
   if (DOM.streetBus) {
-    DOM.streetBus.setAttribute('transform', `translate(${STREET_ROAD_X}, ${(streetY(xx) + BUS_W / 2).toFixed(1)})`)
+    DOM.streetBus.setAttribute('transform', `translate(${STREET_ROAD_X}, ${streetY(xx).toFixed(1)})`)
   }
 }
 

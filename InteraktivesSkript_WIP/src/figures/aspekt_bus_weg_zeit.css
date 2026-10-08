@@ -106,6 +106,9 @@
 }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-bus-window { fill: #cfe8ff; stroke: none; }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-bus-wheel { fill: #2a2a2a; }
+/* Schwerpunkt-Kreuz (betrachteter Punkt, diagonal): gelber Kern auf dunklem Halo. */
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-cm-halo { stroke: #1a1a1a; stroke-width: 4; stroke-linecap: round; }
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-cm      { stroke: #ffd400; stroke-width: 2; stroke-linecap: round; }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .bw-bus-label {
     fill: #ffffff; font-size: 13px; font-weight: 700; text-anchor: middle;
     dominant-baseline: middle;
@@ -115,6 +118,10 @@
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .legend-swatch[data-c="bw-kurve"] { background: var(--bw-kurve); }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .legend-swatch[data-c="bw-halt"]   { background: var(--bw-halt); }
 .aspekt-figur[data-aspekt="bus_weg_zeit"] .legend-swatch[data-c="bw-bus"]    { background: var(--bw-kurve); }
+.aspekt-figur[data-aspekt="bus_weg_zeit"] .legend-swatch[data-c="bw-cm"]     {
+    background: var(--bw-kurve); color: #ffd400; font-size: 9px; font-weight: 700; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+}
 
 /* Farb-Worte in der Bildunterschrift (analog .gk-sw-* bei Abb. 1.1). Keine
    CVD-Overrides -> das Wort bleibt korrekt, die Einfaerbung genuegt. */
